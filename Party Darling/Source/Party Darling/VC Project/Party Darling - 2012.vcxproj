@@ -42,8 +42,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>vox</RootNamespace>
-    <ProjectName>vox - 2012</ProjectName>
+    <RootNamespace>PartyDarling</RootNamespace>
+    <ProjectName>Party Darling - 2012</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,11 +64,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\voxSettings.props" />
+    <Import Project="..\..\partyDarlingSettings.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\voxSettings.props" />
+    <Import Project="..\..\partyDarlingSettings.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
