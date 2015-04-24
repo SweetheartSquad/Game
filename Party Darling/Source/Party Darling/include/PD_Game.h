@@ -2,10 +2,10 @@
 
 #include <Game.h>
 
-class LD32_Game : public Game{
+class PD_Game : public Game{
 public:
-	LD32_Game();
-	~LD32_Game();
+	PD_Game();
+	~PD_Game();
 
 	enum BOX2D_CATEGORY{
 		kBOUNDARY = 0x0001,

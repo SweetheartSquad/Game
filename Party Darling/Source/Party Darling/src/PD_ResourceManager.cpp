@@ -1,19 +1,19 @@
 #pragma once
 
-#include <LD32_ResourceManager.h>
+#include <PD_ResourceManager.h>
 
-Texture * LD32_ResourceManager::startSplash = new Texture("../assets/startSplash.png", 1024, 1024, true, false);
-Texture * LD32_ResourceManager::endSplash = new Texture("../assets/endSplash.png", 1024, 1024, true, false);
-Texture * LD32_ResourceManager::endSplashBad = new Texture("../assets/endSplashBad.png", 1024, 1024, true, false);
-SoundManager * LD32_ResourceManager::music = new SoundManager(-1);
-SoundManager * LD32_ResourceManager::sfx = new SoundManager(-1);
-SoundManager * LD32_ResourceManager::bumperSfx = new SoundManager(-1);
-SoundManager * LD32_ResourceManager::enemySfx = new SoundManager(-1);
-SoundManager * LD32_ResourceManager::miscSounds = new SoundManager(-1);
-Texture * LD32_ResourceManager::donutTop = new Texture("../assets/donutTop.png", 1024, 1024, true, false);
-Texture * LD32_ResourceManager::donutBot = new Texture("../assets/donutBot.png", 1024, 1024, true, false);
+Texture * PD_ResourceManager::startSplash = new Texture("../assets/startSplash.png", 1024, 1024, true, false);
+Texture * PD_ResourceManager::endSplash = new Texture("../assets/endSplash.png", 1024, 1024, true, false);
+Texture * PD_ResourceManager::endSplashBad = new Texture("../assets/endSplashBad.png", 1024, 1024, true, false);
+SoundManager * PD_ResourceManager::music = new SoundManager(-1);
+SoundManager * PD_ResourceManager::sfx = new SoundManager(-1);
+SoundManager * PD_ResourceManager::bumperSfx = new SoundManager(-1);
+SoundManager * PD_ResourceManager::enemySfx = new SoundManager(-1);
+SoundManager * PD_ResourceManager::miscSounds = new SoundManager(-1);
+Texture * PD_ResourceManager::donutTop = new Texture("../assets/donutTop.png", 1024, 1024, true, false);
+Texture * PD_ResourceManager::donutBot = new Texture("../assets/donutBot.png", 1024, 1024, true, false);
 
-void LD32_ResourceManager::init(){
+void PD_ResourceManager::init(){
 	resources.push_back(startSplash);
 	resources.push_back(endSplash);
 	resources.push_back(endSplashBad);

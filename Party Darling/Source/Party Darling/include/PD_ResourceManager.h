@@ -4,7 +4,7 @@
 #include <SoundManager.h>
 #include <Texture.h>
 
-class LD32_ResourceManager : public ResourceManager{
+class PD_ResourceManager : public ResourceManager{
 public:
 	static Texture * startSplash;
 	static Texture * endSplash;

@@ -11,29 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\LD32_ContactListener.cpp" />
-    <ClCompile Include="..\src\LD32_Donut.cpp" />
-    <ClCompile Include="..\src\LD32_EndScene.cpp" />
-    <ClCompile Include="..\src\LD32_Enemy.cpp" />
-    <ClCompile Include="..\src\LD32_Monster.cpp" />
-    <ClCompile Include="..\src\LD32_Player.cpp" />
-    <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
-    <ClCompile Include="..\src\LD32_StartupScene.cpp" />
+    <ClCompile Include="..\src\PD_ContactListener.cpp" />
+    <ClCompile Include="..\src\PD_Player.cpp" />
+    <ClCompile Include="..\src\PD_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\LD32_Game.cpp" />
-    <ClCompile Include="..\src\LD32_Scene.cpp" />
+    <ClCompile Include="..\src\PD_Game.cpp" />
+    <ClCompile Include="..\src\PD_TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\LD32_ContactListener.h" />
-    <ClInclude Include="..\include\LD32_Donut.h" />
-    <ClInclude Include="..\include\LD32_EndScene.h" />
-    <ClInclude Include="..\include\LD32_Enemy.h" />
-    <ClInclude Include="..\include\LD32_Monster.h" />
-    <ClInclude Include="..\include\LD32_Player.h" />
-    <ClInclude Include="..\include\LD32_ResourceManager.h" />
-    <ClInclude Include="..\include\LD32_Game.h" />
-    <ClInclude Include="..\include\LD32_Scene.h" />
-    <ClInclude Include="..\include\LD32_StartupScene.h" />
+    <ClInclude Include="..\include\PD_ContactListener.h" />
+    <ClInclude Include="..\include\PD_Player.h" />
+    <ClInclude Include="..\include\PD_ResourceManager.h" />
+    <ClInclude Include="..\include\PD_Game.h" />
+    <ClInclude Include="..\include\PD_TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\test.frag" />
