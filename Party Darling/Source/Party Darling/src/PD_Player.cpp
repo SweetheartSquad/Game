@@ -24,6 +24,7 @@ PD_Player::PD_Player(Box2DWorld * _world) :
 	b2Fixture * f = createFixture(true);
 	f->SetFilterData(sf);
 	f->SetUserData(this);
+	f->SetRestitution(0.0f);
 	body->SetUserData(this);
 }
 

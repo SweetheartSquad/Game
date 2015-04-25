@@ -1,5 +1,9 @@
 #pragma once
 
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <Scene.h>
 #include <SoundManager.h>
 
@@ -28,6 +32,8 @@ public:
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
 
+	MeshEntity * ground;
+
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	PD_Player * player;
@@ -37,6 +43,8 @@ public:
 	StandardFrameBuffer * screenFBO;
 	Material * phongMat;
 
+	FT_Library ft_lib;
+
 	float sceneHeight;
 	float sceneWidth;
 
@@ -45,6 +53,8 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
+	void render_text(const std::string &str, FT_Face face, float x, float y, float sx, float sy);
+
 	virtual void load() override;
 	virtual void unload() override;
 
