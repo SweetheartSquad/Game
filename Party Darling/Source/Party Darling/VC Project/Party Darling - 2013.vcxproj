@@ -11,23 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\LD32_Donut.cpp" />
-    <ClCompile Include="..\src\LD32_Player.cpp" />
-    <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\LD32_Game.cpp" />
-    <ClCompile Include="..\src\LD32_Scene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\LD32_Donut.h" />
-    <ClInclude Include="..\include\LD32_Player.h" />
-    <ClInclude Include="..\include\LD32_ResourceManager.h" />
-    <ClInclude Include="..\include\LD32_Game.h" />
-    <ClInclude Include="..\include\LD32_Scene.h" />
+    <ClCompile Include="..\src\PD_ContactListener.cpp" />
+    <ClCompile Include="..\src\PD_Game.cpp" />
+    <ClCompile Include="..\src\PD_Player.cpp" />
+    <ClCompile Include="..\src\PD_ResourceManager.cpp" />
+    <ClCompile Include="..\src\PD_TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\test.frag" />
     <None Include="..\assets\test.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\PD_ContactListener.h" />
+    <ClInclude Include="..\include\PD_Game.h" />
+    <ClInclude Include="..\include\PD_Player.h" />
+    <ClInclude Include="..\include\PD_ResourceManager.h" />
+    <ClInclude Include="..\include\PD_TestScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
@@ -63,7 +63,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ENGINE_DIR)\Source\vox\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -73,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ENGINE_DIR)\Source\vox\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -94,11 +94,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;vox - 2013d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;S-Tengine2 - 2013d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>true</PerUserRedirection>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;$(ENGINE_DIR)\Output\vox - 2013-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;$(ENGINE_DIR)\Output\S-Tengine2 - 2013-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
     </Link>
     <Bscmake>
@@ -130,8 +130,8 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;vox - 2012.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\vox - 2012-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;S-Tengine2 - 2012.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
