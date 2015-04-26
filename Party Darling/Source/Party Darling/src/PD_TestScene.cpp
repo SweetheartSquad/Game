@@ -165,7 +165,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	world->b2world->SetContactListener(cl);
 
-	addChild(player);
 }
 
 PD_TestScene::~PD_TestScene(){
