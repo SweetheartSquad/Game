@@ -5,6 +5,7 @@
 Texture * PD_ResourceManager::startSplash = new Texture("../assets/startSplash.png", 1024, 1024, true, false);
 Texture * PD_ResourceManager::endSplash = new Texture("../assets/endSplash.png", 1024, 1024, true, false);
 Texture * PD_ResourceManager::endSplashBad = new Texture("../assets/endSplashBad.png", 1024, 1024, true, false);
+Texture * PD_ResourceManager::crosshair = new Texture("../assets/crosshair.png", 16, 16, true, false);
 SoundManager * PD_ResourceManager::music = new SoundManager(-1);
 SoundManager * PD_ResourceManager::sfx = new SoundManager(-1);
 SoundManager * PD_ResourceManager::bumperSfx = new SoundManager(-1);
@@ -17,6 +18,7 @@ void PD_ResourceManager::init(){
 	resources.push_back(startSplash);
 	resources.push_back(endSplash);
 	resources.push_back(endSplashBad);
+	resources.push_back(crosshair);
 
 	music->addNewSound("bgm", "../assets/Birdy-baseloop.ogg");
 	music->addNewSound("bgm2", "../assets/Birdy-birds.ogg");

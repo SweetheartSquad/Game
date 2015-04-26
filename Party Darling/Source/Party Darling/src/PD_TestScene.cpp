@@ -165,6 +165,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	world->b2world->SetContactListener(cl);
 
+	Sprite * s = new Sprite();
+	s->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	s->setShader(shader, true);
+	s->transform->scale(16,16,1);
+	s->transform->translate(1920/2, 1080/2, 0);
+	uiLayer.addChild(s);
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -269,6 +275,7 @@ void PD_TestScene::update(Step * _step){
 	
 	Scene::update(_step);
 	world->update(_step);
+	uiLayer.update(_step);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -277,7 +284,7 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-
+	uiLayer.render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 }

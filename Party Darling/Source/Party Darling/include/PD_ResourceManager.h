@@ -9,6 +9,7 @@ public:
 	static Texture * startSplash;
 	static Texture * endSplash;
 	static Texture * endSplashBad;
+	static Texture * crosshair;
 	static SoundManager * music;
 	static SoundManager * sfx;
 	static SoundManager * miscSounds;

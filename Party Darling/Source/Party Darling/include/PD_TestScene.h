@@ -2,6 +2,7 @@
 
 #include <Scene.h>
 #include <SoundManager.h>
+#include <UILayer.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -49,6 +50,8 @@ public:
 	virtual void unload() override;
 
 	std::vector<MeshEntity *> audioVisualizer;
+
+	UILayer uiLayer;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
