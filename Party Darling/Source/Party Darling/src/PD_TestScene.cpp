@@ -167,7 +167,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	Sprite * s = new Sprite();
 	s->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	s->setShader(shader, true);
 	s->transform->scale(16,16,1);
 	s->transform->translate(1920/2, 1080/2, 0);
 	uiLayer.addChild(s);
