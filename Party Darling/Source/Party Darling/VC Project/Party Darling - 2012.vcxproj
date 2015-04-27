@@ -25,10 +25,6 @@
     <ClInclude Include="..\include\PD_Game.h" />
     <ClInclude Include="..\include\PD_TestScene.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\assets\test.frag" />
-    <None Include="..\assets\test.vert" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
