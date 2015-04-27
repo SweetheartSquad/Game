@@ -182,9 +182,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.addChild(playerIndicator);
 
 	mouseIndicator = new Sprite();
-	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	mouseIndicator->transform->scale(8,8,1);
+	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
+	mouseIndicator->transform->scale(128,128,1);
 	uiLayer.addChild(mouseIndicator);
+
+	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
+		mouseIndicator->mesh->vertices[i].x -= 1;
+		mouseIndicator->mesh->vertices[i].y -= 1;
+	}
+	mouseIndicator->mesh->dirty = true;
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -260,7 +266,7 @@ void PD_TestScene::update(Step * _step){
 		
 		// correct joystick controls for first-person
 		Joystick * one = joy->joysticks[0];
-			if(one != nullptr){
+		if(one != nullptr){
 			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
 				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
 			float y = playerSpeed * mass * sin(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
@@ -268,6 +274,11 @@ void PD_TestScene::update(Step * _step){
 
 			player->applyLinearImpulseUp(y);
 			player->applyLinearImpulseRight(x);
+
+			
+			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
+			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
+			mouse->translate(glm::vec2(x2, y2));
 		}
 	}
 
@@ -307,17 +318,8 @@ void PD_TestScene::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
-	glm::vec3 pos = player->getPos(false);
-	std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
-
-	glm::vec2 newPos = activeCamera->worldToScreen(pos, sd);
-
-	std::cout << newPos.x << " " << newPos.y << std::endl;
-	std::cout << std::endl;
-	playerIndicator->transform->translate(newPos.x, newPos.y, 0, false);
-
+	playerIndicator->transform->translate(glm::vec3(activeCamera->worldToScreen(player->getPos(false), sd), 0), false);
 	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
-
 	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 }
 
@@ -337,6 +339,7 @@ void PD_TestScene::load(){
 
 	screenSurface->load();
 	screenFBO->load();
+	uiLayer.load();
 }
 
 void PD_TestScene::unload(){
@@ -344,4 +347,5 @@ void PD_TestScene::unload(){
 
 	screenSurface->unload();
 	screenFBO->unload();
+	uiLayer.unload();
 }
