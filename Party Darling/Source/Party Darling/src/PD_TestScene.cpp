@@ -55,7 +55,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenFBO(new StandardFrameBuffer(true)),
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
-	joy(new Joystick(GLFW_JOYSTICK_1))
+	joy(new JoystickManager())
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
@@ -188,6 +188,7 @@ PD_TestScene::~PD_TestScene(){
 	delete screenSurface;
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
+	delete joy;
 }
 
 void PD_TestScene::update(Step * _step){
@@ -246,13 +247,16 @@ void PD_TestScene::update(Step * _step){
 		}
 		
 		// correct joystick controls for first-person
-		float x = playerSpeed * mass * cos(angle) * -joy->getAxis(Joystick::xbox_axes::kLY) +
-			playerSpeed * mass * sin(angle) * joy->getAxis(Joystick::xbox_axes::kLX);
-		float y = playerSpeed * mass * sin(angle) * -joy->getAxis(Joystick::xbox_axes::kLY) +
-			playerSpeed * mass * cos(angle) * -joy->getAxis(Joystick::xbox_axes::kLX);
+		Joystick * one = joy->joysticks[0];
+			if(one != nullptr){
+			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
+				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
+			float y = playerSpeed * mass * sin(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
+				playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLX);
 
-		player->applyLinearImpulseUp(y);
-		player->applyLinearImpulseRight(x);
+			player->applyLinearImpulseUp(y);
+			player->applyLinearImpulseRight(x);
+		}
 	}
 
 	// debug controls
