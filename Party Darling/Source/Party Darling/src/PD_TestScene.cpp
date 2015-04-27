@@ -54,7 +54,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1))
+	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
+	joy(new Joystick(GLFW_JOYSTICK_1))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
@@ -149,7 +150,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	gameCam->addTarget(player, 1);
 	addChild(player);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
-	
+	player->body->SetLinearDamping(2.5f);
+	player->body->SetAngularDamping(2.5f);
+
 	//intialize key light
 	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, 0.01f, -10.f);
 	//Set it as the key light so it casts shadows
@@ -188,7 +191,8 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-	
+	joy->update(_step);
+
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
@@ -240,7 +244,15 @@ void PD_TestScene::update(Step * _step){
 			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 		}
+		
+		// correct joystick controls for first-person
+		float x = playerSpeed * mass * cos(angle) * -joy->getAxis(Joystick::xbox_axes::kLY) +
+			playerSpeed * mass * sin(angle) * joy->getAxis(Joystick::xbox_axes::kLX);
+		float y = playerSpeed * mass * sin(angle) * -joy->getAxis(Joystick::xbox_axes::kLY) +
+			playerSpeed * mass * cos(angle) * -joy->getAxis(Joystick::xbox_axes::kLX);
 
+		player->applyLinearImpulseUp(y);
+		player->applyLinearImpulseRight(x);
 	}
 
 	// debug controls

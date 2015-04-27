@@ -3,6 +3,7 @@
 #include <Scene.h>
 #include <SoundManager.h>
 #include <UILayer.h>
+#include <Joystick.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -42,6 +43,7 @@ public:
 	float sceneWidth;
 
 	bool firstPerson;
+	Joystick * joy;
 
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
