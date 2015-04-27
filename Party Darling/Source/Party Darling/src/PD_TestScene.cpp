@@ -33,6 +33,8 @@
 #include <Sound.h>
 #include <libzplay.h>
 
+#include <System.h>
+#include <Mouse.h>
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
 #include <MatrixStack.h>
@@ -55,7 +57,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenFBO(new StandardFrameBuffer(true)),
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
-	joy(new JoystickManager())
+	joy(new JoystickManager()),
+	uiLayer(0,0,0,0)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
@@ -132,7 +135,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
 	ground->transform->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
-	ground->transform->scale(sceneWidth, sceneHeight, 1);
+	ground->transform->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
 	ground->setShader(shader, true);
 	addChild(ground);
 
@@ -167,12 +170,21 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	world->b2world->SetContactListener(cl);
+	
+	crosshair = new Sprite();
+	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	crosshair->transform->scale(8,8,1);
+	uiLayer.addChild(crosshair);
 
-	Sprite * s = new Sprite();
-	s->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	s->transform->scale(16,16,1);
-	s->transform->translate(1920/2, 1080/2, 0);
-	uiLayer.addChild(s);
+	playerIndicator = new Sprite();
+	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	playerIndicator->transform->scale(8,8,1);
+	uiLayer.addChild(playerIndicator);
+
+	mouseIndicator = new Sprite();
+	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	mouseIndicator->transform->scale(8,8,1);
+	uiLayer.addChild(mouseIndicator);
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -290,7 +302,23 @@ void PD_TestScene::update(Step * _step){
 	
 	Scene::update(_step);
 	world->update(_step);
+
+	glm::uvec2 sd = vox::getScreenDimensions();
+	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
+
+	glm::vec3 pos = player->getPos(false);
+	std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
+
+	glm::vec2 newPos = activeCamera->worldToScreen(pos, sd);
+
+	std::cout << newPos.x << " " << newPos.y << std::endl;
+	std::cout << std::endl;
+	playerIndicator->transform->translate(newPos.x, newPos.y, 0, false);
+
+	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
+
+	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

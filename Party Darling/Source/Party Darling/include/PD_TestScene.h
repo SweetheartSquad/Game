@@ -20,6 +20,7 @@ class Shader;
 class RenderSurface;
 class StandardFrameBuffer;
 class Material;
+class Sprite;
 
 class PD_Player;
 
@@ -55,6 +56,9 @@ public:
 	std::vector<MeshEntity *> audioVisualizer;
 
 	UILayer uiLayer;
+	Sprite * crosshair;
+	Sprite * playerIndicator;
+	Sprite * mouseIndicator;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
