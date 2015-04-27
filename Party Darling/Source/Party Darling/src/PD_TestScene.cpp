@@ -136,11 +136,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ground->setShader(shader, true);
 	addChild(ground);
 
-	MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
+	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
 	ceiling->transform->translate(sceneWidth/2.f, sceneHeight/2.f, _size * 4.f);
 	ceiling->transform->scale(sceneWidth, sceneHeight, 1);
 	ceiling->setShader(shader, true);
-	addChild(ceiling);
+	addChild(ceiling);*/
 
 
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
