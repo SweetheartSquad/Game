@@ -8,6 +8,8 @@ class PD_ResourceManager : public ResourceManager{
 public:
 	static Texture * crosshair;
 	static Texture * cursor;
+	static Texture * cheryl;
+	static Texture * uvs;
 
 	static void init();
 };

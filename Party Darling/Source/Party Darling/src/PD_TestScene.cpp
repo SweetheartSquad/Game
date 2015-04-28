@@ -157,7 +157,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	player->body->SetAngularDamping(2.5f);
 
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, 0.01f, -10.f);
+	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -318,7 +318,11 @@ void PD_TestScene::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
-	playerIndicator->transform->translate(glm::vec3(activeCamera->worldToScreen(player->getPos(false), sd), 0), false);
+	glm::vec3 sp = activeCamera->worldToScreen(player->getPos(false), sd);
+	if(sp.z < 0){
+		sp.z = activeCamera->farClip * 2;
+	}
+	playerIndicator->transform->translate(sp, false);
 	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
 	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 }
