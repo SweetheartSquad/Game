@@ -183,7 +183,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	mouseIndicator = new Sprite();
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
-	mouseIndicator->transform->scale(128,128,1);
+	mouseIndicator->transform->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
 	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 	uiLayer.addChild(mouseIndicator);
@@ -193,6 +193,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		mouseIndicator->mesh->vertices[i].y -= 1;
 	}
 	mouseIndicator->mesh->dirty = true;
+
+	screenSurface->scaleModeMag = GL_NEAREST;
+	screenSurface->scaleModeMin = GL_NEAREST;
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -205,7 +208,7 @@ PD_TestScene::~PD_TestScene(){
 	//delete phongMat;
 	delete world;
 
-	delete screenSurface;
+	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 	delete joy;
@@ -330,14 +333,23 @@ void PD_TestScene::update(Step * _step){
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	float scale = 10;
+	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
+
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+
+	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
+
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_TestScene::load(){
