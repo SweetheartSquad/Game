@@ -19,10 +19,6 @@
     <ClCompile Include="..\src\PD_TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\test.frag" />
-    <None Include="..\assets\test.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\include\PD_ContactListener.h" />
     <ClInclude Include="..\include\PD_Game.h" />
     <ClInclude Include="..\include\PD_Player.h" />
