@@ -4,11 +4,8 @@
 #include <PD_TestScene.h>
 
 PD_Game::PD_Game() :
-	Game(true)
+	Game(true, std::pair<std::string, Scene *>("test", new PD_TestScene(this)), true)
 {
-	currentSceneKey = "1";
-	currentScene = new PD_TestScene(this);
-	scenes.insert(std::pair<std::string, Scene * >(currentSceneKey, currentScene));
 }
 
 PD_Game::~PD_Game(){

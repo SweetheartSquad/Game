@@ -184,6 +184,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseIndicator = new Sprite();
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
 	mouseIndicator->transform->scale(128,128,1);
+	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
+	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 	uiLayer.addChild(mouseIndicator);
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
