@@ -7,6 +7,9 @@
 #include <Scene.h>
 #include <SoundManager.h>
 
+#include <Text.h>
+#include <OrthographicCamera.h>
+
 class MousePerspectiveCamera;
 class FollowCamera;
 
@@ -30,7 +33,7 @@ public:
 	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
-	FollowCamera * gameCam;
+	PerspectiveCamera * gameCam;
 
 	MeshEntity * ground;
 
@@ -45,6 +48,8 @@ public:
 
 	FT_Library ft_lib;
 
+	Text * text;
+	
 	float sceneHeight;
 	float sceneWidth;
 

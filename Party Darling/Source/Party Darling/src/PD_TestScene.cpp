@@ -42,6 +42,7 @@
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
+#include <OrthographicCamera.h>
 
 FT_Face face;
 
@@ -69,8 +70,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	shader->compileShader();
 
 	clearColor[0] = 1.f;
-	clearColor[1] = 1.f;
-	clearColor[2] = 1.f;
+	clearColor[1] = 0;
+	clearColor[2] = 0;
 	clearColor[3] = 1.f;
 
 	//Set up cameras
@@ -93,14 +94,21 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	debugCam->pitch = -10.0f;
 	debugCam->speed = 1;
 
-	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
+	/*gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
 	cameras.push_back(gameCam);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
 	gameCam->minimumZoom = 22.5f;
 	gameCam->yaw = 90.0f;
-	gameCam->pitch = -10.0f;
+	gameCam->pitch = -10.0f;*/
+
+	gameCam = new PerspectiveCamera();
+	gameCam->farClip = 1000.f;
+	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
+	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
+	gameCam->yaw = 90.0f;
+	gameCam->pitch = 10.0f;
 
 	activeCamera = mouseCam;
 	
@@ -126,7 +134,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//sf.categoryBits = PuppetGame::kBOUNDARY;
 	//sf.maskBits = -1;
 	for(auto b : boundaries){
-		addChild(b);
+		//addChild(b);
 		b->setShader(shader, true);
 		world->addToWorld(b);
 		b->body->GetFixtureList()->SetFilterData(sf);
@@ -155,7 +163,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	player = new PD_Player(world);
 	player->setShader(shader, true);
-	gameCam->addTarget(player, 1);
+//	gameCam->addTarget(player, 1);
 	addChild(player);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	
@@ -177,7 +185,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	addChild(player);
 
 	
-	ft_lib = nullptr;
+	/*ft_lib = nullptr;
 	if(FT_Init_FreeType(&ft_lib) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
 	}
@@ -185,12 +193,21 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	face = nullptr;
 	if(FT_New_Face(ft_lib, "../assets/arial.ttf", 0, &face) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
-	}
+	}*/
+	
+	text = new Text("SDS");
+	text->setText("SDS");
+
+	FT_Set_Pixel_Sizes(face, 0, 50);
+ //  render_text("Hello World!", face, -0.5, 0, 2.f/640.f, 2.f/480.f);
+
+	addChild(text->m);
+	text->m->transform->scale(200,200,1,true);
 }
 
 void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, float y, float sx, float sy) {
 
-	 FT_Set_Pixel_Sizes(face, 0, 200);
+	 //FT_Set_Pixel_Sizes(face, 0, 200);
 	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     //static FT_GlyphSlot glyph = face->glyph;
 
@@ -198,15 +215,15 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
 
 	//FT_Glyph glyph;
 
-	const FT_GlyphSlot glyph = face->glyph;
+	//const FT_GlyphSlot glyph = face->glyph;
 
-	FT_Load_Char(face, 'p', FT_LOAD_RENDER);
+	//FT_Load_Char(face, 'p', FT_LOAD_RENDER);
 	//if(FT_Get_Glyph(face->glyph, &glyph ))
 		//throw std::runtime_error("FT_Get_Glyph failed");
 
 //int ii = FT_Load_Char(face, 'R', FT_LOAD_RENDER);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	//FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1 );
 	//FT_BitmapGlyph bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
@@ -214,22 +231,21 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
 	//FT_Bitmap& bitmap=bitmap_glyph->bitmap;
 
 	//if(ii != 0){
-		Texture * tex = new Texture(glyph->bitmap, true, false);
-		tex->load();
-		while(ground->mesh->textureCount() > 0){
-			ground->mesh->popTexture2D();
-		}
-		ground->mesh->pushTexture2D(tex);
+		//Texture * tex = new Texture(glyph->bitmap, true, false);
+		//tex->load();
+	//	while(ground->mesh->textureCount() > 0){
+	//		ground->mesh->popTexture2D();
+	//	}
+	//	ground->mesh->pushTexture2D(tex);
 	//}
 
-	float xr=(float)glyph->bitmap.width;
-    float yr=(float)glyph->bitmap.rows;
+	//float xr=(float)glyph->bitmap.width;
+  //  float yr=(float)glyph->bitmap.rows;
 		
-	float vx = x + glyph->bitmap_left * sx;
-	float vy = y + glyph->bitmap_top * sy;
-    float w = glyph->bitmap.width * sx;
-    float h = glyph->bitmap.rows * sy;
-	
+	float vx = x + text->face->glyph->bitmap_left * sx;
+	float vy = y + text->face->glyph->bitmap_top * sy;
+    float w = text->face->glyph->bitmap.width * sx;
+    float h = text->face->glyph->bitmap.rows * sy;
 	
 	//ground->mesh->polygonalDrawMode = GL_TRIANGLES;
 
@@ -237,12 +253,15 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
 	ground->mesh->indices.clear();
 
 	ground->mesh->pushVert(Vertex(glm::vec3(vx, vy, -2.f), glm::vec2(0.f, 0.f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy, -2.f), glm::vec2(0.5f, 0.f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, -2.f), glm::vec2(0.5f, 0.5f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx, vy-h, -2.f), glm::vec2(0.f, 0.5f)));
+	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy, -2.f), glm::vec2(1.f, 0.f)));
+	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, -2.f), glm::vec2(1.f, 1.f)));
+	ground->mesh->pushVert(Vertex(glm::vec3(vx, vy-h, -2.f), glm::vec2(0.f, 1.f)));
 
+	ground->mesh->textures.clear();
+	ground->mesh->pushTexture2D(text->texture);
 
 	ground->mesh->dirty = true;
+
 
     /*for(auto c : str) {
         if(FT_Load_Char(face, c, FT_LOAD_RENDER) != 0)
@@ -276,16 +295,16 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
         y += (glyph->advance.y >> 6) * sy;
     }*/
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    //glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	
 }
 
 
 PD_TestScene::~PD_TestScene(){
-	while(children.size() > 0){
+	//while(children.size() > 0){
 		//NodeHierarchical::deleteRecursively(children.back());
 		//children.pop_back();
-	}
+	//}
 	
 	shader->safeDelete();
 	//delete phongMat;
@@ -297,12 +316,15 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-
-	FT_Set_Pixel_Sizes(face, 0, 50);
-    render_text("Hello World!", face, -0.5, 0, 2.f/640.f, 2.f/480.f);
 	
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_D)){
+		text->setText("?");
+		//FT_Set_Pixel_Sizes(face, 0, 50);
+		render_text("Hello World!", face, -0.5, 0, 2.f/640.f, 2.f/480.f);
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
@@ -383,20 +405,47 @@ void PD_TestScene::update(Step * _step){
 			addChild(drawer);
 		}
 	}
+
+	//text->cam.yaw += 2.f;
+	text->cam.update(_step);
+
+	gameCam->yaw += 2.0f;
 	
 	Scene::update(_step);
 	world->update(_step);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+#if 1
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	text->frameBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
-	screenFBO->bindFrameBuffer();
-	//render the scene to the buffer
-	Scene::render(_matrixStack, _renderOptions);
+	//render the scene to the buffer	
+	
+	//if(text->textDirty){
+		screenFBO->bindFrameBuffer();
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		text->render(_matrixStack, _renderOptions);
+	
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	//}
 
+	text->frameBuffer->bindFrameBuffer();
+	Scene::render(_matrixStack, _renderOptions);
+	//text->frameBuffer->bindFrameBuffer();
+
+	
 	//Render the buffer to the render surface
+	screenSurface->render(text->frameBuffer->getTextureId());
 	screenSurface->render(screenFBO->getTextureId());
+	//glBindBuffer(GL_FRAMEBUFFER, 0);
+
+	//text->setText("r");
+#else	
+	Scene::render(_matrixStack, _renderOptions);
+	screenSurface->render(text->frameBuffer2.getTextureId());
+#endif
 }
 
 void PD_TestScene::load(){
@@ -404,6 +453,7 @@ void PD_TestScene::load(){
 
 	screenSurface->load();
 	screenFBO->load();
+	text->load();
 }
 
 void PD_TestScene::unload(){
@@ -411,4 +461,5 @@ void PD_TestScene::unload(){
 
 	screenSurface->unload();
 	screenFBO->unload();
+	text->unload();
 }
