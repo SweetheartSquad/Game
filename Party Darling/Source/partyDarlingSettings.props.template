@@ -8,7 +8,7 @@
     <SOIL_DIR>C:\Users\seanleblanc\Desktop\dev\Simple OpenGL Image Library</SOIL_DIR>
     <ZPLAY_DIR>C:\Users\seanleblanc\Desktop\dev\libzplay-2.02-sdk\C++</ZPLAY_DIR>
     <BOX2D_DIR>C:\Users\seanleblanc\Desktop\dev\box2d\v2.3.1\Box2D</BOX2D_DIR>
-    <ENGINE_DIR>C:\Projects\STengine2\S-Tengine2\vox</ENGINE_DIR>
+    <ENGINE_DIR>C:\Users\seanleblanc\Desktop\S-Tengine2\S-Tengine2</ENGINE_DIR>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

@@ -1,10 +1,13 @@
 #version 150
-#extension GL_ARB_explicit_attrib_location : enable
 
-layout(location = 1) in vec2 aVertexPosition;
-layout(location = 2) in vec2 aVertexUVs;
+in vec3 aVertexPosition;
+in vec4 aVertexColor;
+in vec3 aVertexNormals;
+in vec2 aVertexUVs;
+
 out vec2 Texcoord;
+
 void main() {
     Texcoord = aVertexUVs;
-    gl_Position = vec4(aVertexPosition, 0.0, 1.0);
+    gl_Position = vec4(aVertexPosition, 1.0);
 }

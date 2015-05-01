@@ -6,6 +6,9 @@
 
 #include <Scene.h>
 #include <SoundManager.h>
+#include <UILayer.h>
+#include <Joystick.h>
+#include <JoystickManager.h>
 
 #include <Text.h>
 #include <OrthographicCamera.h>
@@ -24,6 +27,7 @@ class Shader;
 class RenderSurface;
 class StandardFrameBuffer;
 class Material;
+class Sprite;
 
 class PD_Player;
 
@@ -54,6 +58,7 @@ public:
 	float sceneWidth;
 
 	bool firstPerson;
+	JoystickManager * joy;
 
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
@@ -64,6 +69,11 @@ public:
 	virtual void unload() override;
 
 	std::vector<MeshEntity *> audioVisualizer;
+
+	UILayer uiLayer;
+	Sprite * crosshair;
+	Sprite * playerIndicator;
+	Sprite * mouseIndicator;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();

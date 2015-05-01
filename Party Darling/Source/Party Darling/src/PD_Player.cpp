@@ -2,13 +2,16 @@
 
 #include <PD_Player.h>
 #include <PD_Game.h>
+#include <PD_ResourceManager.h>
+
 #include <Resource.h>
 #include <MeshInterface.h>
 #include <Box2DWorld.h>
 #include <Material.h>
 #include <MeshFactory.h>
+
 PD_Player::PD_Player(Box2DWorld * _world) :
-	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/player.vox"), b2_dynamicBody, false),
+	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/bunny.vox").at(0), b2_dynamicBody, false),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	playerMat(new Material(15, glm::vec3(1,1,1), true))
@@ -17,8 +20,9 @@ PD_Player::PD_Player(Box2DWorld * _world) :
 	sf.groupIndex = -1;
 	sf.categoryBits = PD_Game::kPLAYER;
 
-	transform->scale(1.f, 1.f, 1.f);
+	//transform->scale(10.f, 10.f, 10.f);
 	mesh->pushMaterial(playerMat);
+	mesh->pushTexture2D(PD_ResourceManager::uvs);
 	mesh->dirty = true;
 	world->addToWorld(this);
 	b2Fixture * f = createFixture(true);

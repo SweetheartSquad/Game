@@ -35,6 +35,8 @@
 #include <Sound.h>
 #include <libzplay.h>
 
+#include <System.h>
+#include <Mouse.h>
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
 #include <MatrixStack.h>
@@ -59,7 +61,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1))
+	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
+	joy(new JoystickManager()),
+	uiLayer(0,0,0,0)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
@@ -111,7 +115,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	gameCam->pitch = 10.0f;
 
 	activeCamera = mouseCam;
-	
+
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
 	MeshInterface * boundaryMesh = MeshFactory::getPlaneMesh();
@@ -129,7 +133,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 0);
 	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 0);
 	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 0);
-	
+
 	b2Filter sf;
 	//sf.categoryBits = PuppetGame::kBOUNDARY;
 	//sf.maskBits = -1;
@@ -148,33 +152,39 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	ground = new MeshEntity(MeshFactory::getPlaneMesh());
 	ground->transform->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
+
+
 	ground->transform->scale(sceneWidth, sceneWidth, 1);
+	//Uncomment Later
+	//ground->transform->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
+
 	ground->setShader(shader, true);
 	addChild(ground);
 
-	MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
+	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
 	ceiling->transform->translate(sceneWidth/2.f, sceneHeight/2.f, _size * 4.f);
 	ceiling->transform->scale(sceneWidth, sceneHeight, 1);
 	ceiling->setShader(shader, true);
-	//addChild(ceiling);
-
+	addChild(ceiling);*/
 
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
-	
+
 	player = new PD_Player(world);
 	player->setShader(shader, true);
 //	gameCam->addTarget(player, 1);
 	addChild(player);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
-	
+	player->body->SetLinearDamping(2.5f);
+	player->body->SetAngularDamping(2.5f);
+
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, 0.01f, -10.f);
+	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
 	player->addChild(keyLight);
-	
+
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
@@ -182,9 +192,32 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	world->b2world->SetContactListener(cl);
 
+	crosshair = new Sprite();
+	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	crosshair->transform->scale(8,8,1);
+	uiLayer.addChild(crosshair);
+
+	playerIndicator = new Sprite();
+	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	playerIndicator->transform->scale(8,8,1);
+	uiLayer.addChild(playerIndicator);
+
+	mouseIndicator = new Sprite();
+	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
+	mouseIndicator->transform->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
+	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
+	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
+	uiLayer.addChild(mouseIndicator);
+
+	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
+		mouseIndicator->mesh->vertices[i].x -= 1;
+		mouseIndicator->mesh->vertices[i].y -= 1;
+	}
+	mouseIndicator->mesh->dirty = true;
+
 	addChild(player);
 
-	
+
 	/*ft_lib = nullptr;
 	if(FT_Init_FreeType(&ft_lib) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
@@ -194,7 +227,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	if(FT_New_Face(ft_lib, "../assets/arial.ttf", 0, &face) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
 	}*/
-	
+
 	text = new Text("SDS");
 	text->setText("SDS");
 
@@ -203,6 +236,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	addChild(text->m);
 	text->m->transform->scale(200,200,1,true);
+
+	screenSurface->scaleModeMag = GL_NEAREST;
+	screenSurface->scaleModeMin = GL_NEAREST;
+
 }
 
 void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, float y, float sx, float sy) {
@@ -227,7 +264,7 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
 
 	//FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1 );
 	//FT_BitmapGlyph bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
-	
+
 	//FT_Bitmap& bitmap=bitmap_glyph->bitmap;
 
 	//if(ii != 0){
@@ -241,12 +278,12 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
 
 	//float xr=(float)glyph->bitmap.width;
   //  float yr=(float)glyph->bitmap.rows;
-		
+
 	float vx = x + text->face->glyph->bitmap_left * sx;
 	float vy = y + text->face->glyph->bitmap_top * sy;
     float w = text->face->glyph->bitmap.width * sx;
     float h = text->face->glyph->bitmap.rows * sy;
-	
+
 	//ground->mesh->polygonalDrawMode = GL_TRIANGLES;
 
 	ground->mesh->vertices.clear();
@@ -296,7 +333,7 @@ void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, fl
     }*/
 
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	
+
 }
 
 
@@ -305,18 +342,20 @@ PD_TestScene::~PD_TestScene(){
 		//NodeHierarchical::deleteRecursively(children.back());
 		//children.pop_back();
 	//}
-	
+
 	shader->safeDelete();
 	//delete phongMat;
 	delete world;
 
-	delete screenSurface;
+	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
+	delete joy;
 }
 
 void PD_TestScene::update(Step * _step){
-	
+	joy->update(_step);
+
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
@@ -356,8 +395,8 @@ void PD_TestScene::update(Step * _step){
 
 		mouseCam->transform->translate(player->getPos(false) + glm::vec3(0, 0, player->transform->getScaleVector().z*1.25f), false);
 		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->transform->getScaleVector().z*0.25f);
-		
-		
+
+
 		if (keyboard->keyDown(GLFW_KEY_W)){
 			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
@@ -375,6 +414,22 @@ void PD_TestScene::update(Step * _step){
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 		}
 
+		// correct joystick controls for first-person
+		Joystick * one = joy->joysticks[0];
+		if(one != nullptr){
+			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
+				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
+			float y = playerSpeed * mass * sin(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
+				playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLX);
+
+			player->applyLinearImpulseUp(y);
+			player->applyLinearImpulseRight(x);
+
+
+			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
+			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
+			mouse->translate(glm::vec2(x2, y2));
+		}
 	}
 
 	// debug controls
@@ -410,24 +465,43 @@ void PD_TestScene::update(Step * _step){
 	text->cam.update(_step);
 
 	gameCam->yaw += 2.0f;
-	
+
 	Scene::update(_step);
 	world->update(_step);
+
+	glm::uvec2 sd = vox::getScreenDimensions();
+	uiLayer.resize(0, sd.x, 0, sd.y);
+	uiLayer.update(_step);
+
+	glm::vec3 sp = activeCamera->worldToScreen(player->getPos(false), sd);
+	if(sp.z < 0){
+		sp.z = activeCamera->farClip * 2;
+	}
+	playerIndicator->transform->translate(sp, false);
+	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
+	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+
 #if 1
+
+	float scale = 10;
+	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	text->frameBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+
 	//Bind frameBuffer
-	//render the scene to the buffer	
-	
+	//render the scene to the buffer
+
 	//if(text->textDirty){
 		screenFBO->bindFrameBuffer();
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		text->render(_matrixStack, _renderOptions);
-	
+
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	//}
 
@@ -435,31 +509,37 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	Scene::render(_matrixStack, _renderOptions);
 	//text->frameBuffer->bindFrameBuffer();
 
-	
+	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
+
 	//Render the buffer to the render surface
 	screenSurface->render(text->frameBuffer->getTextureId());
 	screenSurface->render(screenFBO->getTextureId());
 	//glBindBuffer(GL_FRAMEBUFFER, 0);
 
 	//text->setText("r");
-#else	
+#else
 	Scene::render(_matrixStack, _renderOptions);
 	screenSurface->render(text->frameBuffer2.getTextureId());
 #endif
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_TestScene::load(){
-	Scene::load();	
+	Scene::load();
 
 	screenSurface->load();
 	screenFBO->load();
 	text->load();
+	uiLayer.load();
 }
 
 void PD_TestScene::unload(){
-	Scene::unload();	
+	Scene::unload();
 
 	screenSurface->unload();
 	screenFBO->unload();
 	text->unload();
+	uiLayer.unload();
 }
