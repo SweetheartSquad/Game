@@ -1,17 +1,13 @@
 #pragma once
 
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include <Scene.h>
 #include <SoundManager.h>
 #include <UILayer.h>
 #include <Joystick.h>
 #include <JoystickManager.h>
 
-#include <Text.h>
-#include <OrthographicCamera.h>
+#include <btBulletDynamicsCommon.h>
+#include <BulletDebugDrawer.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -37,9 +33,7 @@ public:
 	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
-	PerspectiveCamera * gameCam;
-
-	MeshEntity * ground;
+	FollowCamera * gameCam;
 
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
@@ -50,10 +44,6 @@ public:
 	StandardFrameBuffer * screenFBO;
 	Material * phongMat;
 
-	FT_Library ft_lib;
-
-	Text * text;
-	
 	float sceneHeight;
 	float sceneWidth;
 
@@ -63,8 +53,6 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
-	void render_text(const std::string &str, FT_Face face, float x, float y, float sx, float sy);
-
 	virtual void load() override;
 	virtual void unload() override;
 
@@ -77,4 +65,18 @@ public:
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
+
+
+	// bullet test
+	btCollisionConfiguration * collisionConfig;
+	btDispatcher * dispatcher;
+	btBroadphaseInterface * broadphase;
+	btConstraintSolver * solver;
+	btDynamicsWorld * bulletWorld;
+	BulletDebugDrawer * debugDrawer;
+	
+	std::vector<btRigidBody *> bodies;
+	std::vector<MeshEntity *> bodies2;
+
+	void addThing();
 };

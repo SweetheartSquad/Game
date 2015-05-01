@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ftglyph.h>
-
 #include <PD_TestScene.h>
 #include <PD_Game.h>
 #include <PD_ResourceManager.h>
@@ -44,9 +42,8 @@
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
-#include <OrthographicCamera.h>
+#include <RenderOptions.h>
 
-FT_Face face;
 
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
@@ -73,11 +70,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
-	clearColor[0] = 1.f;
-	clearColor[1] = 0;
-	clearColor[2] = 0;
-	clearColor[3] = 1.f;
-
 	//Set up cameras
 	mouseCam = new MousePerspectiveCamera();
 	cameras.push_back(mouseCam);
@@ -98,31 +90,24 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	debugCam->pitch = -10.0f;
 	debugCam->speed = 1;
 
-	/*gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
+	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
 	cameras.push_back(gameCam);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
 	gameCam->minimumZoom = 22.5f;
 	gameCam->yaw = 90.0f;
-	gameCam->pitch = -10.0f;*/
-
-	gameCam = new PerspectiveCamera();
-	gameCam->farClip = 1000.f;
-	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
-	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
-	gameCam->yaw = 90.0f;
-	gameCam->pitch = 10.0f;
+	gameCam->pitch = -10.0f;
 
 	activeCamera = mouseCam;
-
+	
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
-	MeshInterface * boundaryMesh = MeshFactory::getPlaneMesh();
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	MeshInterface * boundaryMesh = MeshFactory::getCubeMesh();
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
 
 	boundaries.at(0)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
 	boundaries.at(1)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
@@ -133,12 +118,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 0);
 	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 0);
 	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 0);
-
+	
 	b2Filter sf;
 	//sf.categoryBits = PuppetGame::kBOUNDARY;
 	//sf.maskBits = -1;
 	for(auto b : boundaries){
-		//addChild(b);
+		addChild(b);
 		b->setShader(shader, true);
 		world->addToWorld(b);
 		b->body->GetFixtureList()->SetFilterData(sf);
@@ -150,14 +135,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
 
-	ground = new MeshEntity(MeshFactory::getPlaneMesh());
+	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
 	ground->transform->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
-
-
-	ground->transform->scale(sceneWidth, sceneWidth, 1);
-	//Uncomment Later
-	//ground->transform->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
-
+	ground->transform->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
 	ground->setShader(shader, true);
 	addChild(ground);
 
@@ -167,11 +147,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ceiling->setShader(shader, true);
 	addChild(ceiling);*/
 
-	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
 
+	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
+	
 	player = new PD_Player(world);
 	player->setShader(shader, true);
-//	gameCam->addTarget(player, 1);
+	gameCam->addTarget(player, 1);
 	addChild(player);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	player->body->SetLinearDamping(2.5f);
@@ -184,14 +165,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//Add it to the scene
 	lights.push_back(keyLight);
 	player->addChild(keyLight);
-
+	
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
 
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	world->b2world->SetContactListener(cl);
-
+	
 	crosshair = new Sprite();
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	crosshair->transform->scale(8,8,1);
@@ -215,134 +196,75 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 
-	addChild(player);
-
-
-	/*ft_lib = nullptr;
-	if(FT_Init_FreeType(&ft_lib) != 0) {
-		std::cerr << "Couldn't initialize FreeType library\n";
-	}
-
-	face = nullptr;
-	if(FT_New_Face(ft_lib, "../assets/arial.ttf", 0, &face) != 0) {
-		std::cerr << "Couldn't initialize FreeType library\n";
-	}*/
-
-	text = new Text("SDS");
-	text->setText("SDS");
-
-	FT_Set_Pixel_Sizes(face, 0, 50);
- //  render_text("Hello World!", face, -0.5, 0, 2.f/640.f, 2.f/480.f);
-
-	addChild(text->m);
-	text->m->transform->scale(200,200,1,true);
-
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
 
+	collisionConfig = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfig);
+	broadphase = new btDbvtBroadphase(); // how the world loops through the possible collisions?
+	solver = new btSequentialImpulseConstraintSolver();
+	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
+	bulletWorld->setGravity(btVector3(0, -20, 0));
+
+	debugDrawer = new BulletDebugDrawer(bulletWorld);
+	debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	bulletWorld->setDebugDrawer(debugDrawer);
+
+	addChild(debugDrawer);
+
+	btTransform t;
+	t.setIdentity();
+	t.setOrigin(btVector3(0,0,0));
+	btStaticPlaneShape * plane = new btStaticPlaneShape(btVector3(0,1,0), 0);
+	btMotionState * motion = new btDefaultMotionState(t);
+	btRigidBody::btRigidBodyConstructionInfo info(0, motion, plane);
+	btRigidBody * body = new btRigidBody(info);
+	bulletWorld->addRigidBody(body);
+	bodies.push_back(body);
+	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
+	bodies2.back()->setShader(shader, true);
+	bodies2.back()->transform->scale(50, 50, 50);
+	bodies2.back()->transform->rotate(90, 1, 0, 0, kOBJECT);
+	bodies2.back()->freezeTransformation();
+	addChild(bodies2.back());
 }
 
-void PD_TestScene::render_text(const std::string &str, FT_Face face, float x, float y, float sx, float sy) {
+void PD_TestScene::addThing(){
+	MeshInterface * me;
+	if(bodies.size() == 1){
+		me = MeshFactory::getCubeMesh();
+		bodies2.push_back(new MeshEntity(me));
+		bodies2.back()->transform->scale(3,3,3);
+		bodies2.back()->freezeTransformation();
+	}else{
+		me = bodies2.back()->mesh;
+		bodies2.push_back(new MeshEntity(me));
+	}
+	bodies2.back()->setShader(shader, true);
+	addChild(bodies2.back());
 
-	 //FT_Set_Pixel_Sizes(face, 0, 200);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    //static FT_GlyphSlot glyph = face->glyph;
-
-	//FT_Load_Glyph(face, 'R', FT_LOAD_DEFAULT);
-
-	//FT_Glyph glyph;
-
-	//const FT_GlyphSlot glyph = face->glyph;
-
-	//FT_Load_Char(face, 'p', FT_LOAD_RENDER);
-	//if(FT_Get_Glyph(face->glyph, &glyph ))
-		//throw std::runtime_error("FT_Get_Glyph failed");
-
-//int ii = FT_Load_Char(face, 'R', FT_LOAD_RENDER);
-
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	//FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1 );
-	//FT_BitmapGlyph bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
-
-	//FT_Bitmap& bitmap=bitmap_glyph->bitmap;
-
-	//if(ii != 0){
-		//Texture * tex = new Texture(glyph->bitmap, true, false);
-		//tex->load();
-	//	while(ground->mesh->textureCount() > 0){
-	//		ground->mesh->popTexture2D();
-	//	}
-	//	ground->mesh->pushTexture2D(tex);
-	//}
-
-	//float xr=(float)glyph->bitmap.width;
-  //  float yr=(float)glyph->bitmap.rows;
-
-	float vx = x + text->face->glyph->bitmap_left * sx;
-	float vy = y + text->face->glyph->bitmap_top * sy;
-    float w = text->face->glyph->bitmap.width * sx;
-    float h = text->face->glyph->bitmap.rows * sy;
-
-	//ground->mesh->polygonalDrawMode = GL_TRIANGLES;
-
-	ground->mesh->vertices.clear();
-	ground->mesh->indices.clear();
-
-	ground->mesh->pushVert(Vertex(glm::vec3(vx, vy, -2.f), glm::vec2(0.f, 0.f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy, -2.f), glm::vec2(1.f, 0.f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, -2.f), glm::vec2(1.f, 1.f)));
-	ground->mesh->pushVert(Vertex(glm::vec3(vx, vy-h, -2.f), glm::vec2(0.f, 1.f)));
-
-	ground->mesh->textures.clear();
-	ground->mesh->pushTexture2D(text->texture);
-
-	ground->mesh->dirty = true;
-
-
-    /*for(auto c : str) {
-        if(FT_Load_Char(face, c, FT_LOAD_RENDER) != 0)
-            continue;
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_R8,
-                     glyph->bitmap.width, glyph->bitmap.rows,
-                     0, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
-
-        const float vx = x + glyph->bitmap_left * sx;
-        const float vy = y + glyph->bitmap_top * sy;
-        const float w = glyph->bitmap.width * sx;
-        const float h = glyph->bitmap.rows * sy;
-
-        struct {
-            float x, y, s, t;
-        } data[6] = {
-            {vx    , vy    , 0, 0},
-            {vx    , vy - h, 0, 1},
-            {vx + w, vy    , 1, 0},
-            {vx + w, vy    , 1, 0},
-            {vx    , vy - h, 0, 1},
-            {vx + w, vy - h, 1, 1}
-        };
-
-        //glBufferData(GL_ARRAY_BUFFER, 24*sizeof(float), data, GL_DYNAMIC_DRAW);
-        //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        x += (glyph->advance.x >> 6) * sx;
-        y += (glyph->advance.y >> 6) * sy;
-    }*/
-
-    //glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
+	btTransform t;
+	t.setIdentity();
+	t.setOrigin(btVector3(std::rand() % 30, 100, std::rand() % 30));
+	btBoxShape * shape = new btBoxShape(btVector3(3,3,3));
+	btMotionState * motion = new btDefaultMotionState(t);
+	btVector3 inertia(0,0,0);
+	float mass = 1;
+	if(mass != 0){
+		shape->calculateLocalInertia(mass, inertia);
+	}
+	btRigidBody::btRigidBodyConstructionInfo info(mass, motion, shape, inertia);
+	btRigidBody * body = new btRigidBody(info);
+	bulletWorld->addRigidBody(body);
+	bodies.push_back(body);
 }
-
 
 PD_TestScene::~PD_TestScene(){
-	//while(children.size() > 0){
-		//NodeHierarchical::deleteRecursively(children.back());
-		//children.pop_back();
-	//}
-
+	while(children.size() > 0){
+		NodeHierarchical::deleteRecursively(children.back());
+		children.pop_back();
+	}
+	
 	shader->safeDelete();
 	//delete phongMat;
 	delete world;
@@ -351,23 +273,37 @@ PD_TestScene::~PD_TestScene(){
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 	delete joy;
+
+
+	delete bulletWorld;
+	delete solver;
+	delete broadphase;
+	delete dispatcher;
+	delete collisionConfig;
 }
 
 void PD_TestScene::update(Step * _step){
+	for(unsigned long int i = 0; i < bodies.size(); ++i){
+		btTransform t = bodies.at(i)->getWorldTransform();
+		btVector3 v = t.getOrigin();
+		btQuaternion q = t.getRotation();
+		bodies2.at(i)->transform->translate(v.x(), v.y(), v.z(), false);
+		bodies2.at(i)->transform->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
+	}
+
+
 	joy->update(_step);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
-
-	if(keyboard->keyJustUp(GLFW_KEY_D)){
-		text->setText("?");
-		//FT_Set_Pixel_Sizes(face, 0, 50);
-		render_text("Hello World!", face, -0.5, 0, 2.f/640.f, 2.f/480.f);
-	}
-
+	
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
 		firstPerson = !firstPerson;
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_G)){
+		addThing();
 	}
 
 	// camera controls
@@ -395,8 +331,8 @@ void PD_TestScene::update(Step * _step){
 
 		mouseCam->transform->translate(player->getPos(false) + glm::vec3(0, 0, player->transform->getScaleVector().z*1.25f), false);
 		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->transform->getScaleVector().z*0.25f);
-
-
+		
+		
 		if (keyboard->keyDown(GLFW_KEY_W)){
 			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
@@ -413,7 +349,7 @@ void PD_TestScene::update(Step * _step){
 			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 		}
-
+		
 		// correct joystick controls for first-person
 		Joystick * one = joy->joysticks[0];
 		if(one != nullptr){
@@ -425,7 +361,7 @@ void PD_TestScene::update(Step * _step){
 			player->applyLinearImpulseUp(y);
 			player->applyLinearImpulseRight(x);
 
-
+			
 			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
 			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
 			mouse->translate(glm::vec2(x2, y2));
@@ -460,12 +396,7 @@ void PD_TestScene::update(Step * _step){
 			addChild(drawer);
 		}
 	}
-
-	//text->cam.yaw += 2.f;
-	text->cam.update(_step);
-
-	gameCam->yaw += 2.0f;
-
+	
 	Scene::update(_step);
 	world->update(_step);
 
@@ -480,66 +411,42 @@ void PD_TestScene::update(Step * _step){
 	playerIndicator->transform->translate(sp, false);
 	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
 	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
+
+
+	bulletWorld->stepSimulation(_step->deltaTime);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-
-#if 1
-
-	float scale = 10;
+	float scale = 1;
 	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	text->frameBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 
 	//Bind frameBuffer
+	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
-
-	//if(text->textDirty){
-		screenFBO->bindFrameBuffer();
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		text->render(_matrixStack, _renderOptions);
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	//}
-
-	text->frameBuffer->bindFrameBuffer();
 	Scene::render(_matrixStack, _renderOptions);
-	//text->frameBuffer->bindFrameBuffer();
-
 	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
 
 	//Render the buffer to the render surface
-	screenSurface->render(text->frameBuffer->getTextureId());
 	screenSurface->render(screenFBO->getTextureId());
-	//glBindBuffer(GL_FRAMEBUFFER, 0);
-
-	//text->setText("r");
-#else
-	Scene::render(_matrixStack, _renderOptions);
-	screenSurface->render(text->frameBuffer2.getTextureId());
-#endif
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_TestScene::load(){
-	Scene::load();
+	Scene::load();	
 
 	screenSurface->load();
 	screenFBO->load();
-	text->load();
 	uiLayer.load();
 }
 
 void PD_TestScene::unload(){
-	Scene::unload();
+	Scene::unload();	
 
 	screenSurface->unload();
 	screenFBO->unload();
-	text->unload();
 	uiLayer.unload();
 }
