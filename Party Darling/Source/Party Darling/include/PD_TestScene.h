@@ -6,6 +6,8 @@
 #include <Joystick.h>
 #include <JoystickManager.h>
 
+#include <btBulletDynamicsCommon.h>
+
 class MousePerspectiveCamera;
 class FollowCamera;
 
@@ -62,4 +64,17 @@ public:
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
+
+
+	// bullet test
+	btCollisionConfiguration * collisionConfig;
+	btDispatcher * dispatcher;
+	btBroadphaseInterface * broadphase;
+	btConstraintSolver * solver;
+	btDynamicsWorld * bulletWorld;
+	
+	std::vector<btRigidBody *> bodies;
+	std::vector<MeshEntity *> bodies2;
+
+	void addThing();
 };

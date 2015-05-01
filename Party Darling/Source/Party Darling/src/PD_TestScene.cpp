@@ -43,6 +43,7 @@
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
 
+
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
@@ -196,6 +197,48 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
+
+	collisionConfig = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfig);
+	broadphase = new btDbvtBroadphase(); // how the world loops through the possible collisions?
+	solver = new btSequentialImpulseConstraintSolver();
+	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
+	bulletWorld->setGravity(btVector3(0, -10, 0));
+
+	btTransform t;
+	t.setIdentity();
+	t.setOrigin(btVector3(0,0,0));
+	btStaticPlaneShape * plane = new btStaticPlaneShape(btVector3(0,1,0), 0);
+	btMotionState * motion = new btDefaultMotionState(t);
+	btRigidBody::btRigidBodyConstructionInfo info(0, motion, plane);
+	btRigidBody * body = new btRigidBody(info);
+	bulletWorld->addRigidBody(body);
+	bodies.push_back(body);
+	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
+	bodies2.back()->setShader(shader, true);
+	addChild(bodies2.back());
+}
+
+void PD_TestScene::addThing(){
+	
+	btTransform t;
+	t.setIdentity();
+	t.setOrigin(btVector3(std::rand() % 10,std::rand() % 10,std::rand() % 10));
+	btBoxShape * shape = new btBoxShape(btVector3(3,3,3));
+	btMotionState * motion = new btDefaultMotionState(t);
+	btVector3 inertia(0,0,0);
+	float mass = 1;
+	if(mass != 0){
+		shape->calculateLocalInertia(mass, inertia);
+	}
+	btRigidBody::btRigidBodyConstructionInfo info(mass, motion, shape, inertia);
+	btRigidBody * body = new btRigidBody(info);
+	bulletWorld->addRigidBody(body);
+	bodies.push_back(body);
+	bodies2.push_back(new MeshEntity(MeshFactory::getCubeMesh()));
+	bodies2.back()->setShader(shader, true);
+	bodies2.back()->transform->scale(3,3,3);
+	addChild(bodies2.back());
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -212,17 +255,37 @@ PD_TestScene::~PD_TestScene(){
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 	delete joy;
+
+
+	delete bulletWorld;
+	delete solver;
+	delete broadphase;
+	delete dispatcher;
+	delete collisionConfig;
 }
 
 void PD_TestScene::update(Step * _step){
+	for(unsigned long int i = 0; i < bodies.size(); ++i){
+		btTransform t = bodies.at(i)->getWorldTransform();
+		btVector3 v = t.getOrigin();
+		btQuaternion q = t.getRotation();
+		bodies2.at(i)->transform->translate(v.x(), v.y(), v.z(), false);
+		bodies2.at(i)->transform->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
+	}
+
+
 	joy->update(_step);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
-
+	
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
 		firstPerson = !firstPerson;
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_G)){
+		addThing();
 	}
 
 	// camera controls
@@ -330,10 +393,13 @@ void PD_TestScene::update(Step * _step){
 	playerIndicator->transform->translate(sp, false);
 	crosshair->transform->translate(sd.x/2.f, sd.y/2.f, 0, false);
 	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
+
+
+	bulletWorld->stepSimulation(_step->deltaTime);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	float scale = 10;
+	float scale = 3;
 	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
 
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
