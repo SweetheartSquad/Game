@@ -203,7 +203,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	broadphase = new btDbvtBroadphase(); // how the world loops through the possible collisions?
 	solver = new btSequentialImpulseConstraintSolver();
 	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-	bulletWorld->setGravity(btVector3(0, -10, 0));
+	bulletWorld->setGravity(btVector3(0, -20, 0));
 
 	btTransform t;
 	t.setIdentity();
@@ -216,14 +216,29 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bodies.push_back(body);
 	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
 	bodies2.back()->setShader(shader, true);
+	bodies2.back()->transform->scale(50, 50, 50);
+	bodies2.back()->transform->rotate(90, 1, 0, 0, kOBJECT);
+	bodies2.back()->freezeTransformation();
 	addChild(bodies2.back());
 }
 
 void PD_TestScene::addThing(){
-	
+	MeshInterface * me;
+	if(bodies.size() == 1){
+		me = MeshFactory::getCubeMesh();
+		bodies2.push_back(new MeshEntity(me));
+		bodies2.back()->transform->scale(3,3,3);
+		bodies2.back()->freezeTransformation();
+	}else{
+		me = bodies2.back()->mesh;
+		bodies2.push_back(new MeshEntity(me));
+	}
+	bodies2.back()->setShader(shader, true);
+	addChild(bodies2.back());
+
 	btTransform t;
 	t.setIdentity();
-	t.setOrigin(btVector3(std::rand() % 10,std::rand() % 10,std::rand() % 10));
+	t.setOrigin(btVector3(std::rand() % 30, 100, std::rand() % 30));
 	btBoxShape * shape = new btBoxShape(btVector3(3,3,3));
 	btMotionState * motion = new btDefaultMotionState(t);
 	btVector3 inertia(0,0,0);
@@ -235,10 +250,6 @@ void PD_TestScene::addThing(){
 	btRigidBody * body = new btRigidBody(info);
 	bulletWorld->addRigidBody(body);
 	bodies.push_back(body);
-	bodies2.push_back(new MeshEntity(MeshFactory::getCubeMesh()));
-	bodies2.back()->setShader(shader, true);
-	bodies2.back()->transform->scale(3,3,3);
-	addChild(bodies2.back());
 }
 
 PD_TestScene::~PD_TestScene(){
