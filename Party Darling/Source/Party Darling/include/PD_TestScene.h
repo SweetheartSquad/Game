@@ -6,6 +6,9 @@
 #include <Joystick.h>
 #include <JoystickManager.h>
 
+#include <Font.h>
+#include <Label.h>
+
 #include <btBulletDynamicsCommon.h>
 #include <BulletDebugDrawer.h>
 
@@ -27,6 +30,8 @@ class Sprite;
 
 class PD_Player;
 
+
+
 class PD_TestScene : public Scene{
 public:
 	BaseComponentShader * shader;
@@ -38,6 +43,9 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	PD_Player * player;
+
+	Font  * font;
+	Label * label;
 
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
