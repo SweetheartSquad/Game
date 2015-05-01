@@ -42,6 +42,7 @@
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
+#include <RenderOptions.h>
 
 
 PD_TestScene::PD_TestScene(Game * _game) :
@@ -204,6 +205,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	solver = new btSequentialImpulseConstraintSolver();
 	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
 	bulletWorld->setGravity(btVector3(0, -20, 0));
+
+	debugDrawer = new BulletDebugDrawer(bulletWorld);
+	debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	bulletWorld->setDebugDrawer(debugDrawer);
+
+	addChild(debugDrawer);
 
 	btTransform t;
 	t.setIdentity();
@@ -410,7 +417,7 @@ void PD_TestScene::update(Step * _step){
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	float scale = 3;
+	float scale = 1;
 	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
 
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
@@ -419,7 +426,6 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-
 	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
 
 	//Render the buffer to the render surface

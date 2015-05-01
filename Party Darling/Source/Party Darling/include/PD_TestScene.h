@@ -7,6 +7,7 @@
 #include <JoystickManager.h>
 
 #include <btBulletDynamicsCommon.h>
+#include <BulletDebugDrawer.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -72,6 +73,7 @@ public:
 	btBroadphaseInterface * broadphase;
 	btConstraintSolver * solver;
 	btDynamicsWorld * bulletWorld;
+	BulletDebugDrawer * debugDrawer;
 	
 	std::vector<btRigidBody *> bodies;
 	std::vector<MeshEntity *> bodies2;
