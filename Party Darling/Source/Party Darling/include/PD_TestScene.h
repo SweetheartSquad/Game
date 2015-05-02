@@ -35,6 +35,7 @@ class PD_Player;
 class PD_TestScene : public Scene{
 public:
 	BaseComponentShader * shader;
+	BaseComponentShader * textShader;
 	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;

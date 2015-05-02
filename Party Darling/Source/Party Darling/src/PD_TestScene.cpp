@@ -43,11 +43,13 @@
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
 #include <RenderOptions.h>
+#include <shader\ShaderComponentText.h>
 
 
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
+	textShader(new BaseComponentShader(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
 	world(new Box2DWorld(b2Vec2(0, 0))),
 	drawer(nullptr),
@@ -63,13 +65,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer(0,0,0,0)
 {
 
-	clearColor[0] = 1;
-	clearColor[1] = 0;
-	clearColor[2] = 0;
-
-	font = new Font("../assets/arial.ttf", 200);
-	label = new Label(font, shader);
-
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
 	shader->components.push_back(hsvComponent);
@@ -77,6 +72,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//shader->components.push_back(new ShaderComponentBlinn(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
+
+	textShader->components.push_back(new ShaderComponentText(textShader));
+	textShader->compileShader();
+
+	font = new Font("../assets/arial.ttf", 200);
+	label = new Label(font, textShader);
+
 
 	//Set up cameras
 	mouseCam = new MousePerspectiveCamera();
@@ -131,7 +133,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//sf.categoryBits = PuppetGame::kBOUNDARY;
 	//sf.maskBits = -1;
 	for(auto b : boundaries){
-		//addChild(b);
+		addChild(b);
 		b->setShader(shader, true);
 		world->addToWorld(b);
 		b->body->GetFixtureList()->SetFilterData(sf);
@@ -147,8 +149,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ground->transform->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
 	ground->transform->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
 	ground->setShader(shader, true);
-	ground->mesh->pushTexture2D(font->getTextureForChar('R'));
-	//addChild(ground);
+	addChild(ground);
 
 	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
 	ceiling->transform->translate(sceneWidth/2.f, sceneHeight/2.f, _size * 4.f);
@@ -237,10 +238,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bodies2.back()->freezeTransformation();
 	addChild(bodies2.back());
 
-	//label->transform->scale(200, 200, 200);
-	label->setText("Sean");
-	
-	uiLayer.addChild(label);
+	label->setText("Lorem ipsum");	
+	addChild(label);
 }
 
 void PD_TestScene::addThing(){
@@ -318,6 +317,7 @@ void PD_TestScene::update(Step * _step){
 
 	if(keyboard->keyJustUp(GLFW_KEY_G)){
 		addThing();
+		static_cast<ShaderComponentText *>(textShader->components.at(0))->setColor(glm::vec3(1, 0.1, 0.2));
 	}
 
 	// camera controls
