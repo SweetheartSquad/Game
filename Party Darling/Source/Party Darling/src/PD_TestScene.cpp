@@ -62,12 +62,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	joy(new JoystickManager()),
 	uiLayer(0,0,0,0)
 {
-	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentDiffuse(shader));
-	shader->components.push_back(hsvComponent);
-	//shader->components.push_back(new ShaderComponentPhong(shader));
-	//shader->components.push_back(new ShaderComponentBlinn(shader));
-	//shader->components.push_back(new ShaderComponentShadow(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(hsvComponent);
+	//shader->addComponent(new ShaderComponentPhong(shader));
+	//shader->addComponent(new ShaderComponentBlinn(shader));
+	//shader->addComponent(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
 	//Set up cameras
