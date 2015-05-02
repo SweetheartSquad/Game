@@ -332,7 +332,7 @@ void PD_TestScene::update(Step * _step){
 
 	if(keyboard->keyJustUp(GLFW_KEY_G)){
 		addThing();
-		static_cast<ShaderComponentText *>(textShader->components.at(0))->setColor(glm::vec3(1, 0.1, 0.2));
+		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
 	}
 
 	// camera controls
