@@ -444,9 +444,9 @@ void PD_TestScene::load(){
 }
 
 void PD_TestScene::unload(){
-	Scene::unload();	
-
-	screenSurface->unload();
-	screenFBO->unload();
 	uiLayer.unload();
+	screenFBO->unload();
+	screenSurface->unload();
+
+	Scene::unload();	
 }
