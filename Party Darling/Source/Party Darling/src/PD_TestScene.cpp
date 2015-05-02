@@ -238,9 +238,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
+	children.clear();
+
 	font = new Font("../assets/arial.ttf", 100);
 	label = new Label(font, textShader);
-	label->setText("Thequickbrownfoxjumpsoverthelazydog");	
+	label->setText("The");	
 	addChild(label);
 }
 
