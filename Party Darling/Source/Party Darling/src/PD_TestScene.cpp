@@ -67,15 +67,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer(0,0,0,0)
 {
 
-	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentDiffuse(shader));
-	shader->components.push_back(hsvComponent);
-	//shader->components.push_back(new ShaderComponentPhong(shader));
-	//shader->components.push_back(new ShaderComponentBlinn(shader));
-	//shader->components.push_back(new ShaderComponentShadow(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(hsvComponent);
+	//shader->addComponent(new ShaderComponentPhong(shader));
+	//shader->addComponent(new ShaderComponentBlinn(shader));
+	//shader->addComponent(new ShaderComponentShadow(shader));
+
 	shader->compileShader();
 
-	textShader->components.push_back(new ShaderComponentText(textShader));
+	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
 	font = new Font("../assets/arial.ttf", 100);
@@ -472,9 +473,9 @@ void PD_TestScene::load(){
 }
 
 void PD_TestScene::unload(){
-	Scene::unload();	
-
-	screenSurface->unload();
-	screenFBO->unload();
 	uiLayer.unload();
+	screenFBO->unload();
+	screenSurface->unload();
+
+	Scene::unload();	
 }
