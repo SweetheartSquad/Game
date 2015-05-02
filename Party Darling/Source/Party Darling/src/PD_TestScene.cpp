@@ -76,11 +76,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	shader->compileShader();
 
-	textShader->addComponent(new ShaderComponentText(textShader));
-	textShader->compileShader();
-
-	font = new Font("../assets/arial.ttf", 100);
-	label = new Label(font, textShader);
 
 	//Set up cameras
 	mouseCam = new MousePerspectiveCamera();
@@ -239,8 +234,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bodies2.back()->transform->rotate(90, 1, 0, 0, kOBJECT);
 	bodies2.back()->freezeTransformation();
 	addChild(bodies2.back());
+	
+	textShader->addComponent(new ShaderComponentText(textShader));
+	textShader->compileShader();
 
-	label->setText("Loreeempsum");	
+	font = new Font("../assets/arial.ttf", 100);
+	label = new Label(font, textShader);
+	label->setText("Thequickbrownfoxjumpsoverthelazydog");	
 	addChild(label);
 }
 
@@ -306,8 +306,10 @@ void PD_TestScene::update(Step * _step){
 		bodies2.at(i)->transform->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_BACKSPACE)){
-		label->setText(label->getText().substr(label->getText().size() - 2));
+	if(keyboard->keyJustDown(GLFW_KEY_BACKSPACE)){
+		if(label->getText().size() > 0){
+			label->setText(label->getText().substr(0, label->getText().size() - 1));
+		}
 	}
 
 	if(keyboard->justReleasedKeys.size() > 0){
@@ -316,8 +318,10 @@ void PD_TestScene::update(Step * _step){
 			if(CharacterUtils::isSymbolLetteDigit(k.second)){
 				acc += k.second;
 			}
-		}	
-		label->appendText(acc);
+		}
+		if(acc != ""){
+			label->appendText(acc);
+		}
 	}
 
 	joy->update(_step);
