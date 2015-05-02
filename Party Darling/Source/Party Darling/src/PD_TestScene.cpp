@@ -44,6 +44,8 @@
 #include <NumberUtils.h>
 #include <RenderOptions.h>
 #include <shader\ShaderComponentText.h>
+#include <StringUtils.h>
+#include <CharacterUtils.h>
 
 
 PD_TestScene::PD_TestScene(Game * _game) :
@@ -76,9 +78,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textShader->components.push_back(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	font = new Font("../assets/arial.ttf", 200);
+	font = new Font("../assets/arial.ttf", 100);
 	label = new Label(font, textShader);
-
 
 	//Set up cameras
 	mouseCam = new MousePerspectiveCamera();
@@ -238,7 +239,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bodies2.back()->freezeTransformation();
 	addChild(bodies2.back());
 
-	label->setText("Lorem ipsum");	
+	label->setText("Loreeempsum");	
 	addChild(label);
 }
 
@@ -304,6 +305,19 @@ void PD_TestScene::update(Step * _step){
 		bodies2.at(i)->transform->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
 	}
 
+	if(keyboard->keyDown(GLFW_KEY_BACKSPACE)){
+		label->setText(label->getText().substr(label->getText().size() - 2));
+	}
+
+	if(keyboard->justReleasedKeys.size() > 0){
+		std::string acc = "";
+		for(auto k : keyboard->justReleasedKeys){
+			if(CharacterUtils::isSymbolLetteDigit(k.second)){
+				acc += k.second;
+			}
+		}	
+		label->appendText(acc);
+	}
 
 	joy->update(_step);
 
