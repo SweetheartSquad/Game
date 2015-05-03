@@ -314,11 +314,10 @@ void PD_TestScene::update(Step * _step){
 			label->setText(label->getText().substr(0, label->getText().size() - 1));
 		}
 	}
-
 	if(keyboard->justReleasedKeys.size() > 0){
 		std::string acc = "";
 		for(auto k : keyboard->justReleasedKeys){
-			if(CharacterUtils::isSymbolLetteDigit(k.second)){
+			if(CharacterUtils::isSymbolLetterDigit(k.second)){
 				acc += k.second;
 			}
 		}
