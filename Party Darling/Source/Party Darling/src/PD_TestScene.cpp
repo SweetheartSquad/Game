@@ -238,9 +238,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	children.clear();
+	//children.clear();
 
-	font = new Font("../assets/arial.ttf", 100);
+	font = new Font("../assets/arial.ttf", 100, false);
 	label = new Label(font, textShader);
 	label->setText("The");	
 	addChild(label);
@@ -291,12 +291,13 @@ PD_TestScene::~PD_TestScene(){
 	screenFBO->safeDelete();
 	delete joy;
 
-
 	delete bulletWorld;
 	delete solver;
 	delete broadphase;
 	delete dispatcher;
 	delete collisionConfig;
+
+	delete font;
 }
 
 void PD_TestScene::update(Step * _step){

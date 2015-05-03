@@ -9,8 +9,16 @@
 
 #include <PD_Game.h>
 
+// memory leak debugging
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 int main(void){
-	vox::initialize("Vox");
+	_CrtMemState s1;
+	_CrtMemCheckpoint( &s1 );
+
+	vox::initialize("Party, Darling? -super test build EX edition");
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();
@@ -34,4 +42,6 @@ int main(void){
 #endif
 
 	vox::destruct();
+	
+	_CrtMemDumpAllObjectsSince(&s1);
 }

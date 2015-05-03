@@ -12,7 +12,6 @@
 
 PD_Player::PD_Player(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/bunny.vox").at(0), b2_dynamicBody, false),
-	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	playerMat(new Material(15, glm::vec3(1,1,1), true))
 {
