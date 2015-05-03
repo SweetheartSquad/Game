@@ -452,6 +452,8 @@ void PD_TestScene::update(Step * _step){
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	clear();
+	
 	float scale = 1;
 	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
 
