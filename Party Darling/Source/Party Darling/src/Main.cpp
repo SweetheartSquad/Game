@@ -23,9 +23,6 @@ int main(void){
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();
 
-	//Hide the mouse cursor
-	glfwSetInputMode(vox::currentContext, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 	while (game->isRunning){
 		game->performGameLoop();
 	}

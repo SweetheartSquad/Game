@@ -25,7 +25,7 @@
 
 #include <Box2DWorld.h>
 #include <Box2DMeshEntity.h>
-#include <Box2DDebugDraw.h>
+#include <Box2DDebugDrawer.h>
 
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
@@ -53,8 +53,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	shader(new BaseComponentShader(true)),
 	textShader(new BaseComponentShader(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
-	world(new Box2DWorld(b2Vec2(0, 0))),
-	drawer(nullptr),
+	box2dWorld(new Box2DWorld(b2Vec2(0, 0))),
+	box2dDebugDrawer(nullptr),
 	player(nullptr),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
@@ -117,24 +117,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
 	MeshInterface * boundaryMesh = MeshFactory::getCubeMesh();
-	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
 	
-	b2Filter sf;
-	//sf.categoryBits = PuppetGame::kBOUNDARY;
-	//sf.maskBits = -1;
-	//sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
 	for(auto b : boundaries){
 		t = new Transform();
 		t->addChild(b);
 		childButNotReally->addChild(t);
 		b->setShader(shader, true);
-		world->addToWorld(b);
-		b->body->GetFixtureList()->SetFilterData(sf);
 		b->mesh->pushMaterial(phongMat);
-		//b->mesh->pushTexture2D(PuppetResourceManager::stageFront);
 	}
 
 	boundaries.at(0)->parent->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
@@ -147,6 +140,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 0);
 	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 0);
 	
+	// important that this is done after scaling
+	b2Filter sf;
+	for(auto b : boundaries){
+		box2dWorld->addToWorld(b);
+		b->body->GetFixtureList()->SetFilterData(sf);
+	}
 	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
@@ -168,7 +167,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
 	
-	player = new PD_Player(world);
+	player = new PD_Player(box2dWorld);
 	t = new Transform();
 	t->addChild(player);
 	childButNotReally->addChild(t);
@@ -194,7 +193,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
 
 	PD_ContactListener * cl = new PD_ContactListener(this);
-	world->b2world->SetContactListener(cl);
+	box2dWorld->b2world->SetContactListener(cl);
 	
 	crosshair = new Sprite();
 	t = new Transform();
@@ -202,6 +201,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.childButNotReally->addChild(t);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	crosshair->parent->scale(8,8,1);
+	crosshair->setShader(uiLayer.shader, true);
 
 	playerIndicator = new Sprite();
 	t = new Transform();
@@ -209,6 +209,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.childButNotReally->addChild(t);
 	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	playerIndicator->parent->scale(8,8,1);
+	playerIndicator->setShader(uiLayer.shader, true);
 
 	mouseIndicator = new Sprite();
 	t = new Transform();
@@ -224,6 +225,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		mouseIndicator->mesh->vertices[i].y -= 1;
 	}
 	mouseIndicator->mesh->dirty = true;
+	mouseIndicator->setShader(uiLayer.shader, true);
 
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
@@ -271,11 +273,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	label->setText("The");	
 	childButNotReally->addChild(label);
 
-	for(unsigned long int i = 0; i < 1000; ++i){
+	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
 		me->setShader(shader, true);
 		childButNotReally->addChild(me);
-	}
+	}*/
 }
 
 void PD_TestScene::addThing(){
@@ -317,7 +319,7 @@ void PD_TestScene::addThing(){
 PD_TestScene::~PD_TestScene(){
 	shader->safeDelete();
 	//delete phongMat;
-	delete world;
+	delete box2dWorld;
 
 	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
@@ -334,13 +336,9 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-	for(unsigned long int i = 0; i < bodies.size(); ++i){
-		btTransform t = bodies.at(i)->getWorldTransform();
-		btVector3 v = t.getOrigin();
-		btQuaternion q = t.getRotation();
-		bodies2.at(i)->parent->translate(v.x(), v.y(), v.z(), false);
-		bodies2.at(i)->parent->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
-	}
+	// handle inputs
+
+	joy->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_BACKSPACE)){
 		if(label->getText().size() > 0){
@@ -359,8 +357,6 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 
-	joy->update(_step);
-
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
@@ -368,10 +364,15 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
 		firstPerson = !firstPerson;
 	}
-
+	
 	if(keyboard->keyJustUp(GLFW_KEY_G)){
 		addThing();
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_R)){
 		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_B)){
+		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.2, 0.1, 1));
 	}
 
 	// camera controls
@@ -447,27 +448,41 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
-		if(drawer != nullptr){
-			world->b2world->SetDebugDraw(nullptr);
-			childButNotReally->removeChild(drawer);
-			delete drawer;
-			drawer = nullptr;
+		if(box2dDebugDrawer != nullptr){
+			box2dWorld->b2world->SetDebugDraw(nullptr);
+			childButNotReally->removeChild(box2dDebugDrawer->parent);
+			delete box2dDebugDrawer->parent;
+			box2dDebugDrawer = nullptr;
 		}else{
-			drawer = new Box2DDebugDraw(world);
-			world->b2world->SetDebugDraw(drawer);
-			drawer->drawing = true;
+			box2dDebugDrawer = new Box2DDebugDrawer(box2dWorld);
+			box2dWorld->b2world->SetDebugDraw(box2dDebugDrawer);
+			box2dDebugDrawer->drawing = true;
 			//drawer->AppendFlags(b2Draw::e_aabbBit);
-			drawer->AppendFlags(b2Draw::e_shapeBit);
-			drawer->AppendFlags(b2Draw::e_centerOfMassBit);
-			drawer->AppendFlags(b2Draw::e_jointBit);
+			box2dDebugDrawer->AppendFlags(b2Draw::e_shapeBit);
+			box2dDebugDrawer->AppendFlags(b2Draw::e_centerOfMassBit);
+			box2dDebugDrawer->AppendFlags(b2Draw::e_jointBit);
 			//drawer->AppendFlags(b2Draw::e_pairBit);
-			childButNotReally->addChild(drawer);
+			Transform * t = new Transform();
+			t->addChild(box2dDebugDrawer);
+			childButNotReally->addChild(t);
 		}
 	}
 	
+	// update scene and physics
+	box2dWorld->update(_step);
+	bulletWorld->stepSimulation(_step->deltaTime);
 	Scene::update(_step);
-	world->update(_step);
 
+	// manually snap the cubes to the bullet boxes (won't be needed when we have a proper class for bullet physics objects)
+	for(unsigned long int i = 0; i < bodies.size(); ++i){
+		btTransform t = bodies.at(i)->getWorldTransform();
+		btVector3 v = t.getOrigin();
+		btQuaternion q = t.getRotation();
+		bodies2.at(i)->parent->translate(v.x(), v.y(), v.z(), false);
+		bodies2.at(i)->parent->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
+	}
+
+	// update ui stuff
 	glm::uvec2 sd = vox::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
@@ -479,9 +494,6 @@ void PD_TestScene::update(Step * _step){
 	playerIndicator->parent->translate(sp, false);
 	crosshair->parent->translate(sd.x/2.f, sd.y/2.f, 0, false);
 	mouseIndicator->parent->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
-
-
-	bulletWorld->stepSimulation(_step->deltaTime);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -502,7 +514,7 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	screenSurface->render(screenFBO->getTextureId());
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_TestScene::load(){

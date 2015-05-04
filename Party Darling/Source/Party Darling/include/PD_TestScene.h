@@ -16,7 +16,7 @@ class MousePerspectiveCamera;
 class FollowCamera;
 
 class Box2DWorld;
-class Box2DDebugDraw;
+class Box2DDebugDrawer;
 class Box2DMeshEntity;
 class MeshEntity;
 
@@ -41,8 +41,8 @@ public:
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
 
-	Box2DWorld * world;
-	Box2DDebugDraw * drawer;
+	Box2DWorld * box2dWorld;
+	Box2DDebugDrawer * box2dDebugDrawer;
 	PD_Player * player;
 
 	Font  * font;
