@@ -55,6 +55,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
 	box2dWorld(new Box2DWorld(b2Vec2(0, 0))),
 	box2dDebugDrawer(nullptr),
+	debugDrawer(nullptr),
 	player(nullptr),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
@@ -172,7 +173,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t->addChild(player);
 	childButNotReally->addChild(t);
 	player->setShader(shader, true);
-	gameCam->addTarget(player->childButNotReally, 1);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	player->body->SetLinearDamping(2.5f);
 	player->body->SetAngularDamping(2.5f);
@@ -236,13 +236,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	solver = new btSequentialImpulseConstraintSolver();
 	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
 	bulletWorld->setGravity(btVector3(0, -20, 0));
-
-	debugDrawer = new BulletDebugDrawer(bulletWorld);
-	t = new Transform();
-	t->addChild(debugDrawer);
-	childButNotReally->addChild(t);
-	debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	bulletWorld->setDebugDrawer(debugDrawer);
 
 
 	btTransform bt;
@@ -465,6 +458,20 @@ void PD_TestScene::update(Step * _step){
 			Transform * t = new Transform();
 			t->addChild(box2dDebugDrawer);
 			childButNotReally->addChild(t);
+		}
+
+		if(debugDrawer != nullptr){
+			bulletWorld->setDebugDrawer(nullptr);
+			childButNotReally->removeChild(debugDrawer->parent);
+			delete debugDrawer->parent;
+			debugDrawer = nullptr;
+		}else{
+			debugDrawer = new BulletDebugDrawer(bulletWorld);
+			Transform * t = new Transform();
+			t->addChild(debugDrawer);
+			childButNotReally->addChild(t);
+			debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+			bulletWorld->setDebugDrawer(debugDrawer);
 		}
 	}
 	
