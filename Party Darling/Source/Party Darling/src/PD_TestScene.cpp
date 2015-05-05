@@ -240,8 +240,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	//children.clear();
 
-	font = new Font("../assets/arial.ttf", 100, false);
-	label = new Label(font, textShader);
+	font = new Font("../assets/arial.ttf", 30, false);
+	label = new Label(font, textShader, 200);
 	label->setText("The");	
 	addChild(label);
 }
@@ -318,7 +318,11 @@ void PD_TestScene::update(Step * _step){
 		std::string acc = "";
 		for(auto k : keyboard->justReleasedKeys){
 			if(CharacterUtils::isSymbolLetterDigit(k.second)){
-				acc += k.second;
+				if(!keyboard->shift){
+					acc += tolower(k.second);
+				}else {
+					acc += k.second;
+				}
 			}
 		}
 		if(acc != ""){
