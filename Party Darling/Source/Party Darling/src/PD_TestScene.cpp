@@ -241,7 +241,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//children.clear();
 
 	font = new Font("../assets/arial.ttf", 30, false);
-	label = new Label(font, textShader, 200);
+	label = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
 	label->setText("The fgfd");	
 	addChild(label);
 }
