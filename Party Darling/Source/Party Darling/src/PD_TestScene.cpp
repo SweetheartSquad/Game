@@ -173,6 +173,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t->addChild(player);
 	childButNotReally->addChild(t);
 	player->setShader(shader, true);
+	gameCam->addTarget(player, 1);
+
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	player->body->SetLinearDamping(2.5f);
 	player->body->SetAngularDamping(2.5f);
