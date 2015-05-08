@@ -99,9 +99,7 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"</Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -130,9 +128,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
