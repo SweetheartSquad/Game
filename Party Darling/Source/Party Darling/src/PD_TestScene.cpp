@@ -124,9 +124,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
 	
 	for(auto b : boundaries){
-		t = new Transform();
-		t->addChild(b);
-		childButNotReally->addChild(t);
+		childTransform->addChild(b);
 		b->setShader(shader, true);
 		b->mesh->pushMaterial(phongMat);
 	}
@@ -152,9 +150,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
 
 	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
-	t = new Transform();
-	t->addChild(ground);
-	childButNotReally->addChild(t);
+	childTransform->addChild(ground);
 	ground->parent->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
 	ground->parent->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
 	ground->setShader(shader, true);
@@ -169,9 +165,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
 	
 	player = new PD_Player(box2dWorld);
-	t = new Transform();
-	t->addChild(player);
-	childButNotReally->addChild(t);
+	childTransform->addChild(player);
 	player->setShader(shader, true);
 	gameCam->addTarget(player, 1);
 
@@ -185,10 +179,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
-	t = new Transform();
-	t->addChild(keyLight);
-	t->translate(0,0,0.2f);
-	player->childButNotReally->addChild(t);
+	player->childTransform->addChild(keyLight);
+	keyLight->parent->translate(0,0,0.2f);
 	
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
@@ -198,25 +190,19 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	box2dWorld->b2world->SetContactListener(cl);
 	
 	crosshair = new Sprite();
-	t = new Transform();
-	t->addChild(crosshair);
-	uiLayer.childButNotReally->addChild(t);
+	uiLayer.childTransform->addChild(crosshair);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	crosshair->parent->scale(8,8,1);
 	crosshair->setShader(uiLayer.shader, true);
 
 	playerIndicator = new Sprite();
-	t = new Transform();
-	t->addChild(playerIndicator);
-	uiLayer.childButNotReally->addChild(t);
+	uiLayer.childTransform->addChild(playerIndicator);
 	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	playerIndicator->parent->scale(8,8,1);
 	playerIndicator->setShader(uiLayer.shader, true);
 
 	mouseIndicator = new Sprite();
-	t = new Transform();
-	t->addChild(mouseIndicator);
-	uiLayer.childButNotReally->addChild(t);
+	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
 	mouseIndicator->parent->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
@@ -250,9 +236,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletWorld->addRigidBody(body);
 	bodies.push_back(body);
 	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
-	t = new Transform();
-	t->addChild(bodies2.back());
-	childButNotReally->addChild(t);
+	childTransform->addChild(bodies2.back());
 	bodies2.back()->setShader(shader, true);
 	bodies2.back()->parent->scale(50, 50, 50);
 	bodies2.back()->parent->rotate(90, 1, 0, 0, kOBJECT);
@@ -266,12 +250,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	font = new Font("../assets/arial.ttf", 100, false);
 	label = new Label(font, textShader);
 	label->setText("The");	
-	childButNotReally->addChild(label);
+	childTransform->addChild(label);
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
 		me->setShader(shader, true);
-		childButNotReally->addChild(me);
+		childTransform->addChild(me);
 	}*/
 }
 
@@ -280,18 +264,14 @@ void PD_TestScene::addThing(){
 	if(bodies.size() == 1){
 		me = MeshFactory::getCubeMesh();
 		bodies2.push_back(new MeshEntity(me));
-		Transform * t = new Transform();
-		t->addChild(bodies2.back());
-		childButNotReally->addChild(t);
+		childTransform->addChild(bodies2.back());
 
 		bodies2.back()->parent->scale(3,3,3);
 		bodies2.back()->freezeTransformation();
 	}else{
 		me = bodies2.back()->mesh;
 		bodies2.push_back(new MeshEntity(me));
-		Transform * t = new Transform();
-		t->addChild(bodies2.back());
-		childButNotReally->addChild(t);
+		childTransform->addChild(bodies2.back());
 	}
 	bodies2.back()->setShader(shader, true);
 
@@ -445,7 +425,7 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		if(box2dDebugDrawer != nullptr){
 			box2dWorld->b2world->SetDebugDraw(nullptr);
-			childButNotReally->removeChild(box2dDebugDrawer->parent);
+			childTransform->removeChild(box2dDebugDrawer->parent);
 			delete box2dDebugDrawer->parent;
 			box2dDebugDrawer = nullptr;
 		}else{
@@ -457,21 +437,17 @@ void PD_TestScene::update(Step * _step){
 			box2dDebugDrawer->AppendFlags(b2Draw::e_centerOfMassBit);
 			box2dDebugDrawer->AppendFlags(b2Draw::e_jointBit);
 			//drawer->AppendFlags(b2Draw::e_pairBit);
-			Transform * t = new Transform();
-			t->addChild(box2dDebugDrawer);
-			childButNotReally->addChild(t);
+			childTransform->addChild(box2dDebugDrawer);
 		}
 
 		if(debugDrawer != nullptr){
 			bulletWorld->setDebugDrawer(nullptr);
-			childButNotReally->removeChild(debugDrawer->parent);
+			childTransform->removeChild(debugDrawer->parent);
 			delete debugDrawer->parent;
 			debugDrawer = nullptr;
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld);
-			Transform * t = new Transform();
-			t->addChild(debugDrawer);
-			childButNotReally->addChild(t);
+			childTransform->addChild(debugDrawer);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 			bulletWorld->setDebugDrawer(debugDrawer);
 		}
