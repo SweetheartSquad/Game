@@ -99,13 +99,13 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(CPPREST_DIR)\Binaries\Win32\Debug\cpprest110d_2_5.dll" "$(TargetDir)\cpprest110d_2_5.dll"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(CPPREST_DIR)\Binaries\Win32\Debug\cpprest110d_2_5.dll" "$(TargetDir)\cpprest110d_2_5.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,12 +129,12 @@ copy /Y "$(CPPREST_DIR)\Binaries\Win32\Debug\cpprest110d_2_5.dll" "$(TargetDir)\
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(CPPREST_DIR)\Binaries\Win32\Release\cpprest110_2_5.dll" "$(TargetDir)\cpprest110_2_5.dll"</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
       <Command>
       </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(CPPREST_DIR)\Binaries\Win32\Release\cpprest110_2_5.dll" "$(TargetDir)\cpprest110_2_5.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

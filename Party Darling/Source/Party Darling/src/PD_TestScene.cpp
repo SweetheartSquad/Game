@@ -57,6 +57,43 @@ using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams*/
 
 
+
+
+// Retrieves a JSON value from an HTTP request.
+pplx::task<void> RequestJSONValueAsync(){
+	// TODO: To successfully use this example, you must perform the request  
+	// against a server that provides JSON data.  
+	// This example fails because the returned Content-Type is text/html and not application/json.
+	web::http::client::http_client client(L"https://api.twitter.com/1.1/statuses/show.json");
+	return client.request(web::http::methods::GET).then([](web::http::http_response response) -> pplx::task<web::json::value>
+	{
+		if(response.status_code() == web::http::status_codes::OK){
+			std::wcout << response.extract_string(true).get() << std::endl;
+			return response.extract_json();
+		}
+
+		// Handle error cases, for now return empty json value... 
+		return pplx::task_from_result(web::json::value());
+	})
+		.then([](pplx::task<web::json::value> previousTask){
+		try{
+			const web::json::value& v = previousTask.get();
+			// Perform actions here to process the JSON value...
+		}catch (const web::http::http_exception& e){
+			// Print error.
+			std::wostringstream ss;
+			ss << e.what() << std::endl;
+			std::wcout << ss.str();
+		}
+	});
+
+	/* Output:
+	Content-Type must be application/json to extract (is: text/html)
+	*/
+}
+
+
+
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
@@ -266,42 +303,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
-
-	auto fileStream = std::make_shared<concurrency::streams::ostream>();
-
-    // Open stream to output file.
-	pplx::task<void> requestTask = concurrency::streams::fstream::open_ostream(U("results.html")).then([=](concurrency::streams::ostream outFile){
-        *fileStream = outFile;
-
-        // Create http_client to send the request.
-		web::http::client::http_client client(U("http://www.bing.com/"));
-
-        // Build request URI and start the request.
-        web::uri_builder builder(U("/search"));
-        builder.append_query(U("q"), U("Casablanca CodePlex"));
-		utility::string_t test = builder.to_string();
-        return client.request(web::http::methods::GET, test);
-    })
-    // Handle response headers arriving.
-    .then([=](web::http::http_response response){
-        printf("Received response status code:%u\n", response.status_code());
-
-        // Write response body into the file.
-        return response.body().read_to_end(fileStream->streambuf());
-    })
-    // Close the file stream.
-    .then([=](size_t){
-        return fileStream->close();
-    });
-
-	
-    // Wait for all the outstanding I/O to complete and handle any exceptions
-    try{
-        requestTask.wait();
-    }catch (const std::exception &e){
-        printf("Error exception:%s\n", e.what());
-    }
+	RequestJSONValueAsync();
 }
+
+
+
+
 
 void PD_TestScene::addThing(){
 	MeshInterface * me;
