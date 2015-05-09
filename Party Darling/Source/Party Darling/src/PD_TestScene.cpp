@@ -50,26 +50,24 @@
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
 
-/*using namespace utility;                    // Common utilities like string conversions
-using namespace web;                        // Common features like URIs.
-using namespace web::http;                  // Common HTTP functionality
-using namespace web::http::client;          // HTTP client features
-using namespace concurrency::streams;       // Asynchronous streams*/
-
-
-
-
 // Retrieves a JSON value from an HTTP request.
-pplx::task<void> RequestJSONValueAsync(){
+pplx::task<void> RequestJSONValueAsync(Label * _label){
 	// TODO: To successfully use this example, you must perform the request  
 	// against a server that provides JSON data.  
 	// This example fails because the returned Content-Type is text/html and not application/json.
-	web::http::client::http_client client(L"https://api.twitter.com/1.1/statuses/show.json");
-	return client.request(web::http::methods::GET).then([](web::http::http_response response) -> pplx::task<web::json::value>
+	web::http::client::http_client client(L"http://jsonplaceholder.typicode.com/posts/1");
+	return client.request(web::http::methods::GET).then([_label](web::http::http_response response) -> pplx::task<web::json::value>
 	{
+		std::wcout << L"Response recieved" << std::endl << L"Status: " << response.status_code() << std::endl;
 		if(response.status_code() == web::http::status_codes::OK){
-			std::wcout << response.extract_string(true).get() << std::endl;
-			return response.extract_json();
+			auto body = response.extract_string().get();    
+			std::wcout << L"Response: " << body << std::endl;
+			std::wcout << body.substr(5, 6) << std::endl;
+
+			_label->setText(body);
+            return response.extract_json();
+		}else{
+			std::wcout << L"No response because the code wasn't ok." << std::endl;
 		}
 
 		// Handle error cases, for now return empty json value... 
@@ -295,7 +293,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	font = new Font("../assets/arial.ttf", 100, false);
 	label = new Label(font, textShader);
-	label->setText("The");	
+	label->setText(L"userId");	
 	childTransform->addChild(label);
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
@@ -303,7 +301,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
-	RequestJSONValueAsync();
 }
 
 
@@ -372,13 +369,13 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	if(keyboard->justReleasedKeys.size() > 0){
-		std::string acc = "";
+		std::wstring acc = L"";
 		for(auto k : keyboard->justReleasedKeys){
 			if(CharacterUtils::isSymbolLetterDigit(k.second)){
 				acc += k.second;
 			}
 		}
-		if(acc != ""){
+		if(acc != L""){
 			label->appendText(acc);
 		}
 	}
@@ -387,6 +384,11 @@ void PD_TestScene::update(Step * _step){
 		game->toggleFullScreen();
 	}
 	
+	if(keyboard->keyJustUp(GLFW_KEY_E)){	
+		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
+		RequestJSONValueAsync(label);
+	}
+
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
 		firstPerson = !firstPerson;
 	}
