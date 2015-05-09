@@ -60,12 +60,14 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 	{
 		std::wcout << L"Response recieved" << std::endl << L"Status: " << response.status_code() << std::endl;
 		if(response.status_code() == web::http::status_codes::OK){
-			auto body = response.extract_string().get();    
+			/*auto body = response.extract_string().get();    
 			std::wcout << L"Response: " << body << std::endl;
 			std::wcout << body.substr(5, 6) << std::endl;
+			*/
+			auto json = response.extract_json();
 
-			_label->setText(body);
-            return response.extract_json();
+			_label->setText(json.get()[0].at(L"user").at(L"email").as_string());
+            return json;
 		}else{
 			std::wcout << L"No response because the code wasn't ok." << std::endl;
 		}
@@ -294,7 +296,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	font = new Font("../assets/arial.ttf", 100, false);
 	label = new Label(font, textShader);
 	label->setText(L"userId");	
-	childTransform->addChild(label);
+	player->childTransform->addChild(label);
+	label->parent->scale(0.01,0.01,0.01);
+	label->parent->rotate(90, 1, 0, 0, kOBJECT);
+	label->parent->translate(0,5,0);
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
@@ -369,14 +374,18 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	if(keyboard->justReleasedKeys.size() > 0){
-		std::wstring acc = L"";
+		std::wstringstream acc;
 		for(auto k : keyboard->justReleasedKeys){
 			if(CharacterUtils::isSymbolLetterDigit(k.second)){
-				acc += k.second;
+				if(keyboard->shift){
+					acc << (wchar_t)k.second;
+				}else{
+					acc << (wchar_t)tolower(k.second);
+				}
 			}
 		}
-		if(acc != L""){
-			label->appendText(acc);
+		if(acc.tellp() > 0){
+			label->appendText(acc.str());
 		}
 	}
 
