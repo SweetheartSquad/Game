@@ -55,7 +55,7 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 	// TODO: To successfully use this example, you must perform the request  
 	// against a server that provides JSON data.  
 	// This example fails because the returned Content-Type is text/html and not application/json.
-	web::http::client::http_client client(L"http://jsonplaceholder.typicode.com/posts/1");
+	web::http::client::http_client client(L"https://seniorproject-ryanbluth.c9.io/api/users");
 	return client.request(web::http::methods::GET).then([_label](web::http::http_response response) -> pplx::task<web::json::value>
 	{
 		std::wcout << L"Response recieved" << std::endl << L"Status: " << response.status_code() << std::endl;
