@@ -18,13 +18,10 @@ int main(void){
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
 
-	vox::initialize("Party, Darling? -super test build EX edition");
+	vox::initialize("Party, Darling? -super test build EX edition MAX transform: 3.0++");
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();
-
-	//Hide the mouse cursor
-	glfwSetInputMode(vox::currentContext, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	while (game->isRunning){
 		game->performGameLoop();

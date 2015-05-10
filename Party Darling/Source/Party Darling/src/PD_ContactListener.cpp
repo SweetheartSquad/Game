@@ -17,7 +17,7 @@ PD_ContactListener::PD_ContactListener(PD_TestScene * _scene) :
 scene(_scene),
 damageScoreMult(0.f)
 {
-	_scene->world->b2world->SetContactListener(this);
+	_scene->box2dWorld->b2world->SetContactListener(this);
 }
 
 void PD_ContactListener::BeginContact(b2Contact * _contact){
