@@ -53,17 +53,11 @@
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
 	// TODO: To successfully use this example, you must perform the request  
-	// against a server that provides JSON data.  
-	// This example fails because the returned Content-Type is text/html and not application/json.
+	// against a server that provides JSON data.
 	web::http::client::http_client client(L"https://seniorproject-ryanbluth.c9.io/api/users");
-	return client.request(web::http::methods::GET).then([_label](web::http::http_response response) -> pplx::task<web::json::value>
-	{
+	return client.request(web::http::methods::GET).then([_label](web::http::http_response response) -> pplx::task<web::json::value>{
 		std::wcout << L"Response recieved" << std::endl << L"Status: " << response.status_code() << std::endl;
 		if(response.status_code() == web::http::status_codes::OK){
-			/*auto body = response.extract_string().get();    
-			std::wcout << L"Response: " << body << std::endl;
-			std::wcout << body.substr(5, 6) << std::endl;
-			*/
 			auto json = response.extract_json();
 
 			_label->setText(json.get()[0].at(L"user").at(L"email").as_string());
@@ -74,8 +68,7 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 
 		// Handle error cases, for now return empty json value... 
 		return pplx::task_from_result(web::json::value());
-	})
-		.then([](pplx::task<web::json::value> previousTask){
+	}).then([](pplx::task<web::json::value> previousTask){
 		try{
 			const web::json::value& v = previousTask.get();
 			// Perform actions here to process the JSON value...
@@ -86,10 +79,6 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 			std::wcout << ss.str();
 		}
 	});
-
-	/* Output:
-	Content-Type must be application/json to extract (is: text/html)
-	*/
 }
 
 
@@ -131,8 +120,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	cameras.push_back(mouseCam);
 	mouseCam->farClip = 1000.f;
 	mouseCam->nearClip = 0.001f;
-	mouseCam->parent->rotate(90, 0, 1, 0, kWORLD);
-	mouseCam->parent->translate(5.0f, 1.5f, 22.5f);
+	mouseCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	mouseCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	mouseCam->yaw = 90.0f;
 	mouseCam->pitch = -10.0f;
 	mouseCam->speed = 1;
@@ -142,8 +131,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t = new Transform();
 	t->addChild(debugCam);
 	debugCam->farClip = 1000.f;
-	debugCam->parent->rotate(90, 0, 1, 0, kWORLD);
-	debugCam->parent->translate(5.0f, 1.5f, 22.5f);
+	debugCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	debugCam->yaw = 90.0f;
 	debugCam->pitch = -10.0f;
 	debugCam->speed = 1;
@@ -153,8 +142,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t = new Transform();
 	t->addChild(gameCam);
 	gameCam->farClip = 1000.f;
-	gameCam->parent->rotate(90, 0, 1, 0, kWORLD);
-	gameCam->parent->translate(5.0f, 1.5f, 22.5f);
+	gameCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	gameCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	gameCam->minimumZoom = 22.5f;
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
@@ -175,10 +164,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		b->mesh->pushMaterial(phongMat);
 	}
 
-	boundaries.at(0)->parent->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
-	boundaries.at(1)->parent->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
-	boundaries.at(2)->parent->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
-	boundaries.at(3)->parent->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
+	boundaries.at(0)->parents.at(0)->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
+	boundaries.at(1)->parents.at(0)->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
+	boundaries.at(2)->parents.at(0)->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
+	boundaries.at(3)->parents.at(0)->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
 
 	boundaries.at(0)->setTranslationPhysical(sceneWidth+_size, sceneHeight*0.5f, 0);
 	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 0);
@@ -197,8 +186,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
 	childTransform->addChild(ground);
-	ground->parent->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
-	ground->parent->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
+	ground->parents.at(0)->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
+	ground->parents.at(0)->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
 	ground->setShader(shader, true);
 
 	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
@@ -220,13 +209,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	player->body->SetAngularDamping(2.5f);
 
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
+	keyLight = new PointLight(glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
 	player->childTransform->addChild(keyLight);
-	keyLight->parent->translate(0,0,0.2f);
+	//childTransform->addChild(keyLight);
+	keyLight->parents.at(0)->translate(0,0,0.2f);
+
+	player->printHierarchy();
 	
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
@@ -238,19 +230,19 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	crosshair = new Sprite();
 	uiLayer.childTransform->addChild(crosshair);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	crosshair->parent->scale(8,8,1);
+	crosshair->parents.at(0)->scale(8,8,1);
 	crosshair->setShader(uiLayer.shader, true);
 
 	playerIndicator = new Sprite();
 	uiLayer.childTransform->addChild(playerIndicator);
 	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	playerIndicator->parent->scale(8,8,1);
+	playerIndicator->parents.at(0)->scale(8,8,1);
 	playerIndicator->setShader(uiLayer.shader, true);
 
 	mouseIndicator = new Sprite();
 	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
-	mouseIndicator->parent->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
+	mouseIndicator->parents.at(0)->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
 	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
@@ -284,9 +276,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
 	childTransform->addChild(bodies2.back());
 	bodies2.back()->setShader(shader, true);
-	bodies2.back()->parent->scale(50, 50, 50);
-	bodies2.back()->parent->rotate(90, 1, 0, 0, kOBJECT);
-	bodies2.back()->freezeTransformation();
+	bodies2.back()->parents.at(0)->scale(50, 50, 50);
+	bodies2.back()->parents.at(0)->rotate(90, 0, 0, 1, kOBJECT);
+	//bodies2.back()->freezeTransformation();
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -297,9 +289,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	label = new Label(font, textShader);
 	label->setText(L"userId");	
 	player->childTransform->addChild(label);
-	label->parent->scale(0.01,0.01,0.01);
-	label->parent->rotate(90, 1, 0, 0, kOBJECT);
-	label->parent->translate(0,5,0);
+	label->parents.at(0)->scale(0.01,0.01,0.01);
+	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	label->parents.at(0)->translate(0,5,0);
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
@@ -316,16 +308,11 @@ void PD_TestScene::addThing(){
 	MeshInterface * me;
 	if(bodies.size() == 1){
 		me = MeshFactory::getCubeMesh();
-		bodies2.push_back(new MeshEntity(me));
-		childTransform->addChild(bodies2.back());
-
-		bodies2.back()->parent->scale(3,3,3);
-		bodies2.back()->freezeTransformation();
 	}else{
-		me = bodies2.back()->mesh;
-		bodies2.push_back(new MeshEntity(me));
-		childTransform->addChild(bodies2.back());
+		me = bodies2.back()->mesh;;
 	}
+	bodies2.push_back(new MeshEntity(me));
+	childTransform->addChild(bodies2.back())->scale(3,3,3);
 	bodies2.back()->setShader(shader, true);
 
 	btTransform t;
@@ -368,7 +355,7 @@ void PD_TestScene::update(Step * _step){
 
 	joy->update(_step);
 
-	if(keyboard->keyJustDown(GLFW_KEY_BACKSPACE)){
+	/*if(keyboard->keyJustDown(GLFW_KEY_BACKSPACE)){
 		if(label->getText().size() > 0){
 			label->setText(label->getText().substr(0, label->getText().size() - 1));
 		}
@@ -387,8 +374,8 @@ void PD_TestScene::update(Step * _step){
 		if(acc.tellp() > 0){
 			label->appendText(acc.str());
 		}
-	}
-
+	}*/
+	
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
@@ -414,16 +401,16 @@ void PD_TestScene::update(Step * _step){
 
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parent->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parent->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parent->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parent->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 
 	if(firstPerson){
@@ -435,8 +422,8 @@ void PD_TestScene::update(Step * _step){
 			angle = glm::radians(90.f);
 		}
 
-		mouseCam->parent->translate(player->getWorldPos() + glm::vec3(0, 0, player->parent->getScaleVector().z*1.25f), false);
-		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parent->getScaleVector().z*0.25f);
+		mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
+		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
 		
 		
 		if (keyboard->keyDown(GLFW_KEY_W)){
@@ -487,8 +474,8 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		if(box2dDebugDrawer != nullptr){
 			box2dWorld->b2world->SetDebugDraw(nullptr);
-			childTransform->removeChild(box2dDebugDrawer->parent);
-			delete box2dDebugDrawer->parent;
+			childTransform->removeChild(box2dDebugDrawer->parents.at(0));
+			delete box2dDebugDrawer->parents.at(0);
 			box2dDebugDrawer = nullptr;
 		}else{
 			box2dDebugDrawer = new Box2DDebugDrawer(box2dWorld);
@@ -504,8 +491,8 @@ void PD_TestScene::update(Step * _step){
 
 		if(debugDrawer != nullptr){
 			bulletWorld->setDebugDrawer(nullptr);
-			childTransform->removeChild(debugDrawer->parent);
-			delete debugDrawer->parent;
+			childTransform->removeChild(debugDrawer->parents.at(0));
+			delete debugDrawer->parents.at(0);
 			debugDrawer = nullptr;
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld);
@@ -525,8 +512,8 @@ void PD_TestScene::update(Step * _step){
 		btTransform t = bodies.at(i)->getWorldTransform();
 		btVector3 v = t.getOrigin();
 		btQuaternion q = t.getRotation();
-		bodies2.at(i)->parent->translate(v.x(), v.y(), v.z(), false);
-		bodies2.at(i)->parent->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
+		bodies2.at(i)->parents.at(0)->translate(v.x(), v.y(), v.z(), false);
+		bodies2.at(i)->parents.at(0)->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
 	}
 
 	// update ui stuff
@@ -538,9 +525,9 @@ void PD_TestScene::update(Step * _step){
 	if(sp.z < 0){
 		sp.z = activeCamera->farClip * 2;
 	}
-	playerIndicator->parent->translate(sp, false);
-	crosshair->parent->translate(sd.x/2.f, sd.y/2.f, 0, false);
-	mouseIndicator->parent->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
+	playerIndicator->parents.at(0)->translate(sp, false);
+	crosshair->parents.at(0)->translate(sd.x/2.f, sd.y/2.f, 0, false);
+	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
