@@ -79,9 +79,6 @@ public:
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
-	
-	std::vector<btRigidBody *> bodies;
-	std::vector<MeshEntity *> bodies2;
 
 	void addThing();
 };

@@ -49,6 +49,8 @@
 
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
+#include <NodeBulletBody.h>
+#include <BulletMeshEntity.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -152,7 +154,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
-	MeshInterface * boundaryMesh = MeshFactory::getCubeMesh();
+	MeshInterface * boundaryMesh = MeshFactory::getCubeMesh(1.f);
 	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
@@ -186,8 +188,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
 	childTransform->addChild(ground);
-	ground->parents.at(0)->translate(sceneWidth/2.f, sceneHeight/2.f, -2.f);
-	ground->parents.at(0)->scale(sceneWidth/2.f, sceneHeight/2.f, 1);
+	ground->parents.at(0)->translate(sceneWidth*0.5f, sceneHeight*0.5f, -2.f);
+	ground->parents.at(0)->scale(sceneWidth, sceneHeight, 1);
 	ground->setShader(shader, true);
 
 	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
@@ -195,9 +197,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ceiling->transform->scale(sceneWidth, sceneHeight, 1);
 	ceiling->setShader(shader, true);
 	addChild(ceiling);*/
-
-
-	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 0));
 	
 	player = new PD_Player(box2dWorld);
 	childTransform->addChild(player);
@@ -212,10 +211,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	keyLight = new PointLight(glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
-	//Add it to the scene
 	lights.push_back(keyLight);
 	player->childTransform->addChild(keyLight);
-	//childTransform->addChild(keyLight);
 	keyLight->parents.at(0)->translate(0,0,0.2f);
 
 	player->printHierarchy();
@@ -262,23 +259,19 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	btTransform bt;
 	bt.setIdentity();
 	bt.setOrigin(btVector3(0,0,0));
-	btStaticPlaneShape * plane = new btStaticPlaneShape(btVector3(0,1,0), 0);
+	btStaticPlaneShape * planeShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
 	btMotionState * motion = new btDefaultMotionState(bt);
-	btRigidBody::btRigidBodyConstructionInfo info(0, motion, plane);
+	btRigidBody::btRigidBodyConstructionInfo info(0, motion, planeShape);
 	btRigidBody * body = new btRigidBody(info);
 	bulletWorld->world->addRigidBody(body);
-	bodies.push_back(body);
-	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
-	childTransform->addChild(bodies2.back());
-	bodies2.back()->setShader(shader, true);
-	bodies2.back()->parents.at(0)->scale(50, 50, 50);
-	bodies2.back()->parents.at(0)->rotate(90, 0, 0, 1, kOBJECT);
-	//bodies2.back()->freezeTransformation();
+	MeshEntity * plane = new MeshEntity(MeshFactory::getPlaneMesh());
+	childTransform->addChild(plane);
+	plane->setShader(shader, true);
+	plane->parents.at(0)->scale(50, 50, 50);
+	plane->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
-
-	//children.clear();
 
 	font = new Font("../assets/arial.ttf", 100, false);
 	label = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
@@ -300,30 +293,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 void PD_TestScene::addThing(){
-	MeshInterface * me;
-	if(bodies.size() == 1){
-		me = MeshFactory::getCubeMesh();
-	}else{
-		me = bodies2.back()->mesh;;
-	}
-	bodies2.push_back(new MeshEntity(me));
-	childTransform->addChild(bodies2.back())->scale(3,3,3);
-	bodies2.back()->setShader(shader, true);
-
-	btTransform t;
-	t.setIdentity();
-	t.setOrigin(btVector3(std::rand() % 30, 100, std::rand() % 30));
-	btBoxShape * shape = new btBoxShape(btVector3(3,3,3));
-	btMotionState * motion = new btDefaultMotionState(t);
-	btVector3 inertia(0,0,0);
-	float mass = 1;
-	if(mass != 0){
-		shape->calculateLocalInertia(mass, inertia);
-	}
-	btRigidBody::btRigidBodyConstructionInfo info(mass, motion, shape, inertia);
-	btRigidBody * body = new btRigidBody(info);
-	bulletWorld->world->addRigidBody(body);
-	bodies.push_back(body);
+	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh());
+	childTransform->addChild(thing);
+	thing->setShader(shader, true);
+	thing->body->translate(btVector3(std::rand() % 10, 50, std::rand() % 10));
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -464,6 +437,7 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
 		if(box2dDebugDrawer != nullptr){
 			box2dWorld->b2world->SetDebugDraw(nullptr);
 			childTransform->removeChild(box2dDebugDrawer->parents.at(0));
@@ -498,15 +472,6 @@ void PD_TestScene::update(Step * _step){
 	box2dWorld->update(_step);
 	bulletWorld->update(_step);
 	Scene::update(_step);
-
-	// manually snap the cubes to the bullet boxes (won't be needed when we have a proper class for bullet physics objects)
-	for(unsigned long int i = 0; i < bodies.size(); ++i){
-		btTransform t = bodies.at(i)->getWorldTransform();
-		btVector3 v = t.getOrigin();
-		btQuaternion q = t.getRotation();
-		bodies2.at(i)->parents.at(0)->translate(v.x(), v.y(), v.z(), false);
-		bodies2.at(i)->parents.at(0)->setOrientation(glm::quat(q.w(), q.x(), q.y(), q.z()));
-	}
 
 	// update ui stuff
 	glm::uvec2 sd = vox::getScreenDimensions();
