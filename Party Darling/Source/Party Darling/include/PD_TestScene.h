@@ -9,8 +9,8 @@
 #include <Font.h>
 #include <Label.h>
 
-#include <btBulletDynamicsCommon.h>
 #include <BulletDebugDrawer.h>
+#include <BulletWorld.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -77,13 +77,7 @@ public:
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
 
-
-	// bullet test
-	btCollisionConfiguration * collisionConfig;
-	btDispatcher * dispatcher;
-	btBroadphaseInterface * broadphase;
-	btConstraintSolver * solver;
-	btDynamicsWorld * bulletWorld;
+	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
 	
 	std::vector<btRigidBody *> bodies;

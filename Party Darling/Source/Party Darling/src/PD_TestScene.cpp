@@ -256,12 +256,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
 
-	collisionConfig = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collisionConfig);
-	broadphase = new btDbvtBroadphase(); // how the world loops through the possible collisions?
-	solver = new btSequentialImpulseConstraintSolver();
-	bulletWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-	bulletWorld->setGravity(btVector3(0, -20, 0));
+	bulletWorld = new BulletWorld();
 
 
 	btTransform bt;
@@ -271,7 +266,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	btMotionState * motion = new btDefaultMotionState(bt);
 	btRigidBody::btRigidBodyConstructionInfo info(0, motion, plane);
 	btRigidBody * body = new btRigidBody(info);
-	bulletWorld->addRigidBody(body);
+	bulletWorld->world->addRigidBody(body);
 	bodies.push_back(body);
 	bodies2.push_back(new MeshEntity(MeshFactory::getPlaneMesh()));
 	childTransform->addChild(bodies2.back());
@@ -327,11 +322,12 @@ void PD_TestScene::addThing(){
 	}
 	btRigidBody::btRigidBodyConstructionInfo info(mass, motion, shape, inertia);
 	btRigidBody * body = new btRigidBody(info);
-	bulletWorld->addRigidBody(body);
+	bulletWorld->world->addRigidBody(body);
 	bodies.push_back(body);
 }
 
 PD_TestScene::~PD_TestScene(){
+	deleteChildTransform();
 	shader->safeDelete();
 	//delete phongMat;
 	delete box2dWorld;
@@ -342,10 +338,6 @@ PD_TestScene::~PD_TestScene(){
 	delete joy;
 
 	delete bulletWorld;
-	delete solver;
-	delete broadphase;
-	delete dispatcher;
-	delete collisionConfig;
 
 	delete font;
 }
@@ -490,21 +482,21 @@ void PD_TestScene::update(Step * _step){
 		}
 
 		if(debugDrawer != nullptr){
-			bulletWorld->setDebugDrawer(nullptr);
+			bulletWorld->world->setDebugDrawer(nullptr);
 			childTransform->removeChild(debugDrawer->parents.at(0));
 			delete debugDrawer->parents.at(0);
 			debugDrawer = nullptr;
 		}else{
-			debugDrawer = new BulletDebugDrawer(bulletWorld);
+			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
 			childTransform->addChild(debugDrawer);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-			bulletWorld->setDebugDrawer(debugDrawer);
+			bulletWorld->world->setDebugDrawer(debugDrawer);
 		}
 	}
 	
 	// update scene and physics
 	box2dWorld->update(_step);
-	bulletWorld->stepSimulation(_step->deltaTime);
+	bulletWorld->update(_step);
 	Scene::update(_step);
 
 	// manually snap the cubes to the bullet boxes (won't be needed when we have a proper class for bullet physics objects)
