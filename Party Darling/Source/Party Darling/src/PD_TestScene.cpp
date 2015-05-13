@@ -261,20 +261,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	bulletWorld = new BulletWorld();
 
-
-	btTransform bt;
-	bt.setIdentity();
-	bt.setOrigin(btVector3(0,0,0));
-	btStaticPlaneShape * planeShape = new btStaticPlaneShape(btVector3(0,1,0), 0);
-	btMotionState * motion = new btDefaultMotionState(bt);
-	btRigidBody::btRigidBodyConstructionInfo info(0, motion, planeShape);
-	btRigidBody * body = new btRigidBody(info);
-	bulletWorld->world->addRigidBody(body);
-	MeshEntity * plane = new MeshEntity(MeshFactory::getPlaneMesh());
-	childTransform->addChild(plane);
-	plane->setShader(shader, true);
-	plane->parents.at(0)->scale(50, 50, 50);
-	plane->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh());
+	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
+	bulletGround->createRigidBody(0);
+	childTransform->addChild(bulletGround);
+	bulletGround->setShader(shader, true);
+	bulletGround->mesh->parents.at(0)->scale(25,25,25);
+	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	bulletGround->body->translate(btVector3(0, 10, 0));
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -299,12 +293,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 void PD_TestScene::addThing(){
-	static TriMesh * mesh = Resource::loadMeshFromObj("../assets/pyramid.obj").at(0);
+	static TriMesh * mesh = Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0);
 	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, mesh);
 	
-	thing->setAsMesh(mesh, true);
-	//thing->setAsSphere(3);
-	thing->createRigidBody();
+	thing->setColliderAsMesh(mesh, true);
+	//thing->setColliderAsSphere(3);
+	thing->createRigidBody(1);
 	childTransform->addChild(thing);
 	thing->setShader(shader, true);
 	thing->body->translate(btVector3(std::rand() % 10, 50, std::rand() % 10));
