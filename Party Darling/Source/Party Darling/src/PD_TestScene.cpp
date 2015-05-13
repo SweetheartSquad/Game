@@ -51,6 +51,7 @@
 #include <cpprest/filestream.h>
 #include <NodeBulletBody.h>
 #include <BulletMeshEntity.h>
+#include <Billboard.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -215,8 +216,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	player->childTransform->addChild(keyLight);
 	keyLight->parents.at(0)->translate(0,0,0.2f);
 
-	player->printHierarchy();
-	
+	Billboard * billboard = new Billboard();
+	billboard->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	billboard->setShader(shader, true);
+	player->childTransform->addChild(billboard);
+	billboard->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	billboard->parents.at(0)->translate(0, 0, 2);
+
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
@@ -293,7 +299,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 void PD_TestScene::addThing(){
-	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh());
+	static TriMesh * mesh = Resource::loadMeshFromObj("../assets/pyramid.obj").at(0);
+	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, mesh);
+	
+	thing->setAsMesh(mesh, true);
+	//thing->setAsSphere(3);
+	thing->createRigidBody();
 	childTransform->addChild(thing);
 	thing->setShader(shader, true);
 	thing->body->translate(btVector3(std::rand() % 10, 50, std::rand() % 10));
