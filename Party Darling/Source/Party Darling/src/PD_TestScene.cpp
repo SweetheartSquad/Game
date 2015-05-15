@@ -216,12 +216,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	player->childTransform->addChild(keyLight);
 	keyLight->parents.at(0)->translate(0,0,0.2f);
 
-	Billboard * billboard = new Billboard();
+	/*Billboard * billboard = new Billboard();
 	billboard->mesh->pushTexture2D(PD_ResourceManager::crosshair);
 	billboard->setShader(shader, true);
 	player->childTransform->addChild(billboard);
 	billboard->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	billboard->parents.at(0)->translate(0, 0, 2);
+	billboard->parents.at(0)->translate(0, 0, 2);*/
 
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
@@ -286,22 +286,30 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
+	
+	BulletMeshEntity * thing1 = addThing();
+	BulletMeshEntity * thing2 = addThing();
+	//btPoint2PointConstraint * test = new btPoint2PointConstraint(*thing1->body, *thing2->body, btVector3(0,1,0), btVector3(0,-1,0));
+	//bulletWorld->world->addConstraint(test, false);
 }
 
 
 
 
 
-void PD_TestScene::addThing(){
-	static TriMesh * mesh = Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0);
+BulletMeshEntity * PD_TestScene::addThing(){
+	//static MeshInterface * mesh = MeshFactory::getCubeMesh(3);//Resource::loadMeshFromObj("../assets/pipe.obj").at(0);
+	static MeshInterface * mesh = MeshFactory::getCubeMesh(3);
 	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, mesh);
 	
-	thing->setColliderAsMesh(mesh, true);
+	//thing->setColliderAsMesh(mesh, true);
+	thing->setColliderAsBoundingBox();
 	//thing->setColliderAsSphere(3);
 	thing->createRigidBody(1);
 	childTransform->addChild(thing);
 	thing->setShader(shader, true);
 	thing->body->translate(btVector3(std::rand() % 10, 50, std::rand() % 10));
+	return thing;
 }
 
 PD_TestScene::~PD_TestScene(){

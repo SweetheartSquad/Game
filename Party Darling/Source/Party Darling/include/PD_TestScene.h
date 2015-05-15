@@ -31,6 +31,8 @@ class Sprite;
 class PD_Player;
 class PointLight;
 
+class BulletMeshEntity;
+
 
 
 class PD_TestScene : public Scene{
@@ -80,5 +82,5 @@ public:
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
 
-	void addThing();
+	BulletMeshEntity * addThing();
 };
