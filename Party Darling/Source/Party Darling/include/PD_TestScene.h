@@ -32,6 +32,7 @@ class PD_Player;
 class PointLight;
 
 class BulletMeshEntity;
+class BulletRagdoll;
 
 
 
@@ -83,4 +84,6 @@ public:
 	BulletDebugDrawer * debugDrawer;
 
 	BulletMeshEntity * addThing();
+
+	BulletRagdoll * ragdoll;
 };

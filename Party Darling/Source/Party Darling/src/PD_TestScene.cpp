@@ -53,6 +53,8 @@
 #include <BulletMeshEntity.h>
 #include <Billboard.h>
 
+#include <BulletRagdoll.h>
+
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
 	// TODO: To successfully use this example, you must perform the request  
@@ -286,11 +288,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
-	
-	BulletMeshEntity * thing1 = addThing();
-	BulletMeshEntity * thing2 = addThing();
-	//btPoint2PointConstraint * test = new btPoint2PointConstraint(*thing1->body, *thing2->body, btVector3(0,1,0), btVector3(0,-1,0));
-	//bulletWorld->world->addConstraint(test, false);
+
+	ragdoll = new BulletRagdoll(bulletWorld);
+	childTransform->addChild(ragdoll);
+	ragdoll->setShader(shader, true);
+
+	ragdoll->body->body->setAngularFactor(btVector3(0,0,0));
+	//ragdoll->body->body->
 }
 
 
@@ -298,8 +302,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 BulletMeshEntity * PD_TestScene::addThing(){
-	//static MeshInterface * mesh = MeshFactory::getCubeMesh(3);//Resource::loadMeshFromObj("../assets/pipe.obj").at(0);
-	static MeshInterface * mesh = MeshFactory::getCubeMesh(3);
+	//static MeshInterface * mesh = Resource::loadMeshFromObj("../assets/pipe.obj").at(0);
+	static MeshInterface * mesh = MeshFactory::getCubeMesh(1);
 	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, mesh);
 	
 	//thing->setColliderAsMesh(mesh, true);
@@ -329,6 +333,28 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
+	
+	if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
+		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
+	}
+
+	if(mouse->leftDown()){
+		float range = 1000;
+		glm::vec3 pos = activeCamera->getWorldPos();
+		btVector3 start(pos.x, pos.y, pos.z);
+		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
+		btVector3 end = start + dir*range;
+		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
+		bulletWorld->world->rayTest(start, end, RayCallback);
+		if(RayCallback.hasHit()){
+			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
+			if(me != nullptr){
+				me->body->applyImpulse(dir*-10, me->body->getWorldTransform().getOrigin());
+			}
+			//std::cout << RayCallback.m_collisionObject->getWorldTransform().getOrigin().x() << std::endl;
+		}
+	}
+
 	// handle inputs
 
 	joy->update(_step);
@@ -476,7 +502,7 @@ void PD_TestScene::update(Step * _step){
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
 			childTransform->addChild(debugDrawer);
-			debugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 		}
 	}
