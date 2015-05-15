@@ -294,6 +294,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll->setShader(shader, true);
 
 	ragdoll->body->body->setAngularFactor(btVector3(0,0,0));
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.005f, -1);
+	lights.push_back(light2);
+	ragdoll->body->childTransform->addChild(light2);
 	//ragdoll->body->body->
 }
 
@@ -334,9 +337,9 @@ PD_TestScene::~PD_TestScene(){
 
 void PD_TestScene::update(Step * _step){
 	
-	if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
+	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
-	}
+	}*/
 
 	if(mouse->leftDown()){
 		float range = 1000;
