@@ -123,7 +123,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//Set up cameras
 	Transform * t = new Transform();
 	mouseCam = new MousePerspectiveCamera();
-	t->addChild(mouseCam);
+	t->addChild(mouseCam, false);
 	cameras.push_back(mouseCam);
 	mouseCam->farClip = 1000.f;
 	mouseCam->nearClip = 0.001f;
@@ -136,7 +136,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	debugCam = new MousePerspectiveCamera();
 	cameras.push_back(debugCam);
 	t = new Transform();
-	t->addChild(debugCam);
+	t->addChild(debugCam, false);
 	debugCam->farClip = 1000.f;
 	debugCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
 	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
@@ -147,7 +147,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
 	cameras.push_back(gameCam);
 	t = new Transform();
-	t->addChild(gameCam);
+	t->addChild(gameCam, false);
 	gameCam->farClip = 1000.f;
 	gameCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);

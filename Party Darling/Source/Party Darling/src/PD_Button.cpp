@@ -28,10 +28,10 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel)->scale(size);
 
-	setColliderAsBox(3,0.5,0.5);
+	setColliderAsBox(3,0.5,0.1);
 	createRigidBody(0);
-	childTransform->translate(-1.5, -0.25, -0.25);
-	body->translate(btVector3(1.5, 0.25, 0.25));
+	childTransform->translate(-1.5, -0.25, 0);
+	body->translate(btVector3(1.5, 0.25, 0));
 }
 
 void PD_Button::update(Step * _step){
