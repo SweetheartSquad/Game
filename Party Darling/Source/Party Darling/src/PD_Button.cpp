@@ -13,31 +13,43 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	Font * font = new Font("../assets/arial.ttf", 100, false);
+	float size = 300.f;
+	Font * font = new Font("../assets/arial.ttf", size, false);
+	size = 1.f/size;
 	normalLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
 	normalLabel->setText(L"normal");
-	childTransform->addChild(normalLabel)->scale(0.01, 0.01, 0.01);
+	childTransform->addChild(normalLabel)->scale(size);
 	
 	downLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
 	downLabel->setText(L"down");
-	childTransform->addChild(downLabel)->scale(0.01, 0.01, 0.01);
+	childTransform->addChild(downLabel)->scale(size);
 	
 	overLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
 	overLabel->setText(L"over");
-	childTransform->addChild(overLabel)->scale(0.01, 0.01, 0.01);
+	childTransform->addChild(overLabel)->scale(size);
 
-	setColliderAsBox(10,10,10);
+	setColliderAsBox(3,0.5,0.5);
 	createRigidBody(0);
+	childTransform->translate(-1.5, -0.25, -0.25);
+	body->translate(btVector3(1.5, 0.25, 0.25));
 }
 
-void PD_Button::renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	normalLabel->render(_matrixStack, _renderOptions);
-}
+void PD_Button::update(Step * _step){
+	NodeUI::update(_step);
 
-void PD_Button::renderDown(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	downLabel->render(_matrixStack, _renderOptions);
-}
-
-void PD_Button::renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	overLabel->render(_matrixStack, _renderOptions);
+	if(isHovered){
+		if(isDown){
+			normalLabel->setVisible(false);
+			overLabel->setVisible(false);
+			downLabel->setVisible(true);
+		}else{
+			normalLabel->setVisible(false);
+			overLabel->setVisible(true);
+			downLabel->setVisible(false);
+		}
+	}else{
+		normalLabel->setVisible(true);
+		overLabel->setVisible(false);
+		downLabel->setVisible(false);
+	}
 }

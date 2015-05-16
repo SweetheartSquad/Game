@@ -12,7 +12,5 @@ public:
 
 	PD_Button(BulletWorld * _world, Scene * _scene);
 	
-	void renderDown(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	void renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	void renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	void update(Step * _step) override;
 };
