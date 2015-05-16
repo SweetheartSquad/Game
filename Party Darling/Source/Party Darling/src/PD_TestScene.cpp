@@ -396,9 +396,6 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		game->toggleFullScreen();
-	}
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
