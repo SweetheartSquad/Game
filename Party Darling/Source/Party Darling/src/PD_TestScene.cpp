@@ -55,6 +55,7 @@
 
 #include <BulletRagdoll.h>
 #include <NodeUI.h>
+#include <PD_Button.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -300,13 +301,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll->body->childTransform->addChild(light2);
 	//ragdoll->body->body->
 
-	NodeUI * uiThing = new NodeUI(bulletWorld, this);
+	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
 	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
 	uiThing->childTransform->addChild(uiThingMesh);
 	uiThing->setColliderAsBox();
 	uiThing->createRigidBody(0);
 	uiThingMesh->setShader(shader, true);
-	childTransform->addChild(uiThing);
+	childTransform->addChild(uiThing);*/
+
+	PD_Button * button = new PD_Button(bulletWorld, this);
+	childTransform->addChild(button);
 }
 
 

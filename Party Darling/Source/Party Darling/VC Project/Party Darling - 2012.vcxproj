@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\PD_Button.cpp" />
     <ClCompile Include="..\src\PD_ContactListener.cpp" />
     <ClCompile Include="..\src\PD_Player.cpp" />
     <ClCompile Include="..\src\PD_ResourceManager.cpp" />
@@ -19,6 +20,7 @@
     <ClCompile Include="..\src\PD_TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\PD_Button.h" />
     <ClInclude Include="..\include\PD_ContactListener.h" />
     <ClInclude Include="..\include\PD_Player.h" />
     <ClInclude Include="..\include\PD_ResourceManager.h" />
