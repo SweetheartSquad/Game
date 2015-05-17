@@ -311,6 +311,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	PD_Button * button = new PD_Button(bulletWorld, this);
 	childTransform->addChild(button);
+	button->onDownFunction = [](NodeUI * _this) {
+		std::cout << "test " << std::endl;
+		std::cout << _this << std::endl;
+	};
 }
 
 
@@ -415,19 +419,24 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
 		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.2, 0.1, 1));
 	}
-
+	
+	float speed = 1;
+	MousePerspectiveCamera * cam = dynamic_cast<MousePerspectiveCamera *>(activeCamera);
+	if(cam != nullptr){
+		speed = cam->speed;
+	}
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
 	}
 
 	if(firstPerson){
