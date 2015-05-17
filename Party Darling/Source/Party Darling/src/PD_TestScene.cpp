@@ -311,6 +311,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	PD_Button * button = new PD_Button(bulletWorld, this);
 	childTransform->addChild(button);
+	button->onDownFunction = [](NodeUI * _this) {
+		std::cout << "test " << std::endl;
+		std::cout << _this << std::endl;
+	};
 }
 
 
