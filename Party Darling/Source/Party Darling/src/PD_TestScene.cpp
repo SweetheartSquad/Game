@@ -56,6 +56,11 @@
 #include <BulletRagdoll.h>
 #include <NodeUI.h>
 #include <PD_Button.h>
+#include <PD_Story.h>
+
+#include <OpenALTest.h>
+#include <AL\alure.h>
+
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -109,6 +114,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	joy(new JoystickManager()),
 	uiLayer(0,0,0,0)
 {
+
+	OpenALTest_StreamPlayer * stream = new OpenALTest_StreamPlayer("../assets/HighCountdown_Zero.ogg");
+	childTransform->addChild(stream, false);
 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentDiffuse(shader));
@@ -315,6 +323,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << "test " << std::endl;
 		std::cout << _this << std::endl;
 	};
+
+
+	//PD_Story("../assets/the legend of the figure skater's book.json");
 }
 
 
@@ -353,7 +364,6 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-	
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
