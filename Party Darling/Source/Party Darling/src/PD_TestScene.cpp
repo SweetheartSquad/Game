@@ -115,9 +115,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer(0,0,0,0)
 {
 
-	OpenALTest_StreamPlayer * stream = new OpenALTest_StreamPlayer("../assets/HighCountdown_Zero.ogg");
-	childTransform->addChild(stream, false);
-
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->addComponent(hsvComponent);
@@ -410,7 +407,10 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	
+	if(keyboard->keyJustUp(GLFW_KEY_P)){
+		OpenALTest_StreamPlayer * stream = new OpenALTest_StreamPlayer("../assets/HighCountdown_Zero.ogg");
+		childTransform->addChild(stream, false);
+	}
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);

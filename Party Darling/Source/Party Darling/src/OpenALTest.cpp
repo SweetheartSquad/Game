@@ -39,28 +39,30 @@ OpenALTest_StreamPlayer::OpenALTest_StreamPlayer(const char * _filename) :
 	loop(false)
 {
 	initOpenAL();
+	ALenum error;
+	ALuint bufferID;
+
+	alGenBuffers(1, &bufferID);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	std::cout << "alGenBuffers : " << error << std::endl;
+	ALboolean alureStat = alureBufferDataFromFile(_filename, bufferID);
+	if(alureStat == AL_FALSE){
+		std::cout << "alureBufferDataFromFile: " << alureGetErrorString() << std::endl;
+	}
+
 	
 	alGenSources(1, &src);
-	stream = alureCreateStreamFromFile(_filename, 19200, NUM_BUFS, buf);
-	if(stream == nullptr){
-		std::cout << "Could not load file.ogg: " << alureGetErrorString() << std::endl;
-		alDeleteSources(1, &src);
-		throw;
-	}
-	ALboolean stat;
-	stat = alurePlaySourceStream(src,stream,19200,0/*# of loops*/,nullptr,nullptr); // add eos_callback tie-in here
-	if(stat == AL_FALSE){
-		std::cout << "alure error: " << alureGetErrorString() << std::endl;
-		throw;
-	}
-   
+	if ((error = alGetError()) != AL_NO_ERROR)
+	std::cout << "alGenSources : " << error << std::endl;
+	// attach the buffer to the source
+	alSourcei(src, AL_BUFFER, bufferID); 
 
-	// then queue up and start streaming..
-	//alSourceQueueBuffers(src, NUM_BUFS, buf);
-	//alSourcePlay(src);
-	//int loopcount = -1;
-	//ALboolean stat = alurePlaySource(src, nullptr, nullptr);
-	/**/
+	// turn off looping
+	alSourcei(src, AL_LOOPING, AL_FALSE);
+	// Start playing source
+	alSourcePlay(src);
+	if ((error = alGetError()) != AL_NO_ERROR)
+	std::cout << "alSourcePlay source 0 : " << error << std::endl;
 }
 
 OpenALTest_StreamPlayer::~OpenALTest_StreamPlayer(){
@@ -68,48 +70,48 @@ OpenALTest_StreamPlayer::~OpenALTest_StreamPlayer(){
 }
 
 void OpenALTest_StreamPlayer::update(Step * _step){
-	alureUpdate();
-
-	ALint state = AL_PLAYING;
-	ALint processed = 0;    
-	/*alureSleep(threadDelay);
-	if ( !src || src.state!=playing ){
-		return;
-	}*/
-	alGetError();
-	alGetSourcei(src, AL_SOURCE_STATE, &state);
-	alGetSourcei(src, AL_BUFFERS_PROCESSED, &processed);
-	//    printf( "Processed: %d\n", processed );
-	//    printf( "I: %s", alureGetErrorString());
-	if(processed > 0){
-		ALuint * bufs = new ALuint[NUM_BUFS];
-		ALsizei filled;
-		alSourceUnqueueBuffers(src, processed, bufs);
-		filled = alureBufferDataFromStream(stream, processed, bufs);
-		if(filled <= 0) {
-			if(loop) {
-				alureRewindStream(stream);
-				filled = alureBufferDataFromStream(stream, processed, bufs);
-				if(filled <= 0) { 
-					printf( "ALUREStream:DelayExpiredinThread:Bad error when attempting to loop.\n" );
-					throw;
-					/*badError=true;
-					((GuiApplication)__thisModule).Lock(); OnError(); ((GuiApplication)__thisModule).Unlock();
-					delete bufs;
-					return false;*/
-				}
-			} else if(state != AL_PLAYING) {
-				//((GuiApplication)__thisModule).Lock(); OnComplete(); ((GuiApplication)__thisModule).Unlock();
-				delete bufs;
-				return;
-			}
-		}
-		alSourceQueueBuffers(src, filled, bufs);
-		delete bufs;
-	}
-	if(state != AL_PLAYING) {
-		alSourcePlay(src);
-	}
+	//alureUpdate();
+	//
+	//ALint state = AL_PLAYING;
+	//ALint processed = 0;    
+	///*alureSleep(threadDelay);
+	//if ( !src || src.state!=playing ){
+	//	return;
+	//}*/
+	//alGetError();
+	//alGetSourcei(src, AL_SOURCE_STATE, &state);
+	//alGetSourcei(src, AL_BUFFERS_PROCESSED, &processed);
+	////    printf( "Processed: %d\n", processed );
+	////    printf( "I: %s", alureGetErrorString());
+	//if(processed > 0){
+	//	ALuint * bufs = new ALuint[NUM_BUFS];
+	//	ALsizei filled;
+	//	alSourceUnqueueBuffers(src, processed, bufs);
+	//	filled = alureBufferDataFromStream(stream, processed, bufs);
+	//	if(filled <= 0) {
+	//		if(loop) {
+	//			alureRewindStream(stream);
+	//			filled = alureBufferDataFromStream(stream, processed, bufs);
+	//			if(filled <= 0) { 
+	//				printf( "ALUREStream:DelayExpiredinThread:Bad error when attempting to loop.\n" );
+	//				throw;
+	//				/*badError=true;
+	//				((GuiApplication)__thisModule).Lock(); OnError(); ((GuiApplication)__thisModule).Unlock();
+	//				delete bufs;
+	//				return false;*/
+	//			}
+	//		} else if(state != AL_PLAYING) {
+	//			//((GuiApplication)__thisModule).Lock(); OnComplete(); ((GuiApplication)__thisModule).Unlock();
+	//			delete bufs;
+	//			return;
+	//		}
+	//	}
+	//	alSourceQueueBuffers(src, filled, bufs);
+	//	delete bufs;
+	//}
+	//if(state != AL_PLAYING) {
+	//	alSourcePlay(src);
+	//}
 	//((GuiApplication)__thisModule).Lock(); BetweenFrames(); ((GuiApplication)__thisModule).Unlock();
 
 
