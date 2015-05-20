@@ -5,7 +5,7 @@
 #include <AL\alure.h>
 #include <iostream>
 
-#define NUM_BUFS 32
+//#define NUM_BUFS 32
 
 class OpenALTest_StreamPlayer : public virtual NodeUpdatable, public virtual NodeChild{
 private:
@@ -17,7 +17,8 @@ public:
     /*static ALCcontext * context;
     static ALCdevice * device;*/
 
-	ALuint src, buf[NUM_BUFS];
+	ALuint sourceId;
+	ALuint bufferId;
 	alureStream * stream;
 	bool loop;
 

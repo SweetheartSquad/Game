@@ -56,7 +56,6 @@
 #include <BulletRagdoll.h>
 #include <NodeUI.h>
 #include <PD_Button.h>
-#include <PD_Story.h>
 
 #include <OpenALTest.h>
 #include <AL\alure.h>
