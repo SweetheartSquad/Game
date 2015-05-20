@@ -1,0 +1,287 @@
+{
+	"items":[
+		{
+			"id": "book",
+			"name": "book_owner's book"
+		}
+	],
+
+	"characters": [
+		{
+			"id": "book_owner",
+			"name": "Basil",
+			"states": [
+				{
+					"id": "not_talked_book_borrower",
+					"action": "idle",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_owner",
+							"portrait": "DEFAULT",
+							"text": ["Oh hey dude, what's up?",
+								"This house is so weird, I love it.",
+								"Wish I knew who this Omar Clean dude was, I'd come over here all the time."]
+						},
+						{
+							"type": "ask",
+							"speaker": "book_owner",
+							"portrait": "DEFAULT",
+							"text": "What's up?",
+							"options": [
+								{
+									"text": "Not much, you?",
+									"triggers": []
+								}
+							]
+						},
+						{
+							"type": "say",
+							"speaker": "book_owner",
+							"portrait": "DEFAULT",
+							"text": "Same."
+						}
+					],
+					"repetition": [
+						{
+							"dialog": [
+								{
+									"type": "say",
+									"text": "Oh hey, still here?"
+								}
+							]
+						},
+						{
+							"dialog": [
+								{
+									"type": "say",
+									"text": "We already talked dude."
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": "accepted_from_book_borrower",
+					"action": "idle",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "PLAYER",
+							"portrait": "DEFAULT",
+							"text": "Is this book yours?"
+						},
+						{
+							"type": "say",
+							"speaker": "book_owner",
+							"portrait": "DEFAULT",
+							"text": ["Oh.",
+								"book_borrower sent you, I guess.",
+								"Well, tell book_borrower I'm not taking this.",
+								"He can come talk to me himself.",
+								"Bye."],
+							"triggers": [
+								{
+									"type": "stateChange",
+									"target": "book_borrower",
+									"newState": "tried"
+								}
+							]
+						}
+					]
+
+				},
+				{
+					"id": "with_book_borrower",
+					"action": "idle",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "PLAYER",
+							"portrait": "DEFAULT",
+							"text": "Oh great we're done the quest now.",
+							"triggers": [
+								{
+									"type": "stateChange",
+									"target": "book_borrower",
+									"newState": "complete"
+								},
+								{
+									"type": "stateChange",
+									"target": "book_owner",
+									"newState": "complete"
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": "complete",
+					"action": "idle",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": "Yeah I thought it was neat how she set up her questionnaire."
+						}
+					]
+				}
+			]
+		},
+
+		{
+			"id": "book_borrower",
+			"name": "Stenton",
+			"states": [
+				{
+					"id": "not_talked_to",
+					"action": "wander",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": ["Hey man, long time no see!",
+								"This is a crazy party, right? Just like back in high school...",
+								"Anyway, uh..."]
+						},
+						{
+							"type": "ask",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": "Can I ask you a favour?",
+							"options": [
+								{
+									"text": "Yes",
+									"triggers": [
+										{
+											"type": "stateChange",
+											"target": "book_owner",
+											"newState": "talked_book_borrower"
+										},
+										{
+											"type": "stateChange",
+											"target": "book_borrower",
+											"newState": "accepted"
+										}
+									]
+								},
+								{
+									"text": "No",
+									"triggers": []
+								}
+							]
+						}
+					],
+					"repetition": []
+				},
+				{
+					"id": "accepted",
+					"action": "wander",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": ["Thanks man, I owe you one.",
+								"I heard Basil was gonna be here, so I brought this book I borrowed from her.",
+								"When I talked to her, she got mad and said we're not \"talking\" anymore.",
+								"I don't know why she's mad at me...",
+								"Maybe she'll talk to you.",
+								"Here's the book.",
+								"Thanks again for this."],
+							"triggers": [
+								{
+									"type": "itemChange",
+									"target": "book",
+									"newOwner": "PLAYER"
+								}
+							]
+						}
+					]
+				},
+				{
+					"id": "tried",
+					"action": "wander",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": ["Hey, did you find book_owner?",
+								"Oh, cool, did she take the book?",
+								"Oh, uh, she said she wants me to go talk to her myself?",
+								"But she told me we weren't speaking!",
+								"Well, I guess I'll go see her, then..",
+								"Uh, can you maybe... come with me?",
+								"I think I need backup..."]
+
+						},
+						{
+							"type": "ask",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": "",
+							"options": {
+								"text": "Sure",
+								"triggers": [
+									{
+										"type": "stateChange",
+										"target": "book_owner",
+										"newState": "with_book_borrower"
+									},
+									{
+										"type": "stateChange",
+										"target": "book_borrower",
+										"newState": "with_book_borrower"
+									}
+								]
+							}
+						},
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": ["Thanks, man. Sorry to drag you into this mess.",
+								"Alright, let's go."]
+						}
+					]
+				},
+				{
+					"id": "with_book_borrower",
+					"action": "followPlayer",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": "C'mon, we better find book_owner."
+						}
+					]
+				},
+				{
+					"id": "complete",
+					"action": "idle",
+					"dialog": [
+						{
+							"type": "say",
+							"speaker": "book_borrower",
+							"portrait": "DEFAULT",
+							"text": "Yeah I thought it was neat how she set up her questionnaire."
+						}
+					]
+				}
+			]
+		}
+	],
+
+	"rooms": [
+		{
+			"characters": ["book_owner"]
+		},
+		{
+			"characters": ["book_borrower"]
+		}
+	]
+}
