@@ -4,6 +4,7 @@
 #include <Font.h>
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentText.h>
+#include <shader/ShaderComponentTexture.h>
 
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	NodeUI(_world, _scene),
@@ -13,18 +14,22 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
+	BaseComponentShader * shader = new BaseComponentShader(true);
+	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->compileShader();
+
 	float size = 300.f;
 	Font * font = new Font("../assets/arial.ttf", size, false);
 	size = 1.f/size;
-	normalLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
+	normalLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	normalLabel->setText(L"normal");
 	childTransform->addChild(normalLabel)->scale(size);
 	
-	downLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
+	downLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	downLabel->setText(L"down");
 	childTransform->addChild(downLabel)->scale(size);
 	
-	overLabel = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
+	overLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel)->scale(size);
 

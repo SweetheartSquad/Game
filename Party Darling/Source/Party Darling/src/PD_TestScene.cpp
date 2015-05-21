@@ -277,8 +277,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
+	BaseComponentShader * backgroundShader = new BaseComponentShader(true);
+	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
+	backgroundShader->compileShader();
+
 	font = new Font("../assets/arial.ttf", 100, false);
-	label = new Label(font, textShader, WrapMode::WORD_WRAP, 200);
+	label = new Label(font, textShader, backgroundShader, WrapMode::WORD_WRAP, 200);
 	label->setText(L"userId");	
 	player->childTransform->addChild(label);
 	label->parents.at(0)->scale(0.01,0.01,0.01);
@@ -353,6 +357,8 @@ void PD_TestScene::update(Step * _step){
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
+
+
 
 	if(mouse->leftDown()){
 		float range = 1000;
