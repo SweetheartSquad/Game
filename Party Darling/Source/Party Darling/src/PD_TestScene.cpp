@@ -411,11 +411,12 @@ void PD_TestScene::update(Step * _step){
 		childTransform->addChild(stream, false);
 	}*/
 	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		OpenAL_Sound * stream = new OpenAL_Sound("../assets/footsteps2.raw", false);
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero.ogg", false);
 		childTransform->addChild(stream, false);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_O)){
-		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
+		//OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
+		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.ogg");
 		ragdoll->head->childTransform->addChild(stream, false);
 		//stream->setPosition(ragdoll->body->getWorldPos());
 	}

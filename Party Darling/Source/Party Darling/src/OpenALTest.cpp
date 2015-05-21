@@ -94,22 +94,22 @@ OpenAL_Sound::OpenAL_Sound(const char * _filename, bool _loop) :
 	std::cout << "alGenBuffers : " << error << std::endl;
 
 	
-   {
+   /*{
       long dataSize;
 	  const ALvoid* data = load(_filename, &dataSize );
       // for simplicity, assume raw file is signed-16b at 44.1kHz 
-	  alBufferData( bufferId, AL_FORMAT_MONO16, data, dataSize, 44100 );
+	  //alBufferData( bufferId, AL_FORMAT_MONO16, data, dataSize, 44100 );
 	  //alureBufferDataFromMemory((const ALubyte *)data, dataSize, bufferId);
       free( (void*)data );
-   }
-	// attach the buffer to the source
-	alSourcei(sourceId, AL_BUFFER, bufferId); 
+   }*/
 
-	/*ALboolean alureStat = alureBufferDataFromFile(_filename, bufferId);
+	ALboolean alureStat = alureBufferDataFromFile(_filename, bufferId);
 	if(alureStat == AL_FALSE){
 		std::cout << "alureBufferDataFromFile: " << alureGetErrorString() << std::endl;
-	}*/
-
+	}
+   
+	// attach the buffer to the source
+	alSourcei(sourceId, AL_BUFFER, bufferId); 
 	
 
 	// Start playing source
