@@ -7,7 +7,7 @@
 
 //#define NUM_BUFS 32
 
-class OpenALTest_StreamPlayer : public virtual NodeUpdatable, public virtual NodeChild{
+class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeChild{
 private:
 	static bool inited;
 
@@ -22,8 +22,20 @@ public:
 	alureStream * stream;
 	bool loop;
 
-	OpenALTest_StreamPlayer(const char * _filename);
-	~OpenALTest_StreamPlayer();
+	OpenAL_Sound(const char * _filename, bool _loop);
+	~OpenAL_Sound();
 
+	virtual void update(Step * _step) override;
+	
+	void setPosition(glm::vec3 _pos);
+	void setDirection(glm::vec3 _forward, glm::vec3 _up);
+
+	static void setListenerPos(glm::vec3 _pos);
+	static void setListenerOrientation(glm::vec3 _forward, glm::vec3 _up);
+};
+class OpenAL_Stream : public OpenAL_Sound{
+public:
+	OpenAL_Stream(const char * _filename);
+	~OpenAL_Stream();
 	void update(Step * _step) override;
 };

@@ -276,7 +276,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->setShader(shader, true);
 	bulletGround->mesh->parents.at(0)->scale(25,25,25);
 	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	bulletGround->body->translate(btVector3(0, 10, 0));
+	bulletGround->body->translate(btVector3(0, -1, 0));
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -406,10 +406,23 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	if(keyboard->keyJustUp(GLFW_KEY_P)){
-		OpenALTest_StreamPlayer * stream = new OpenALTest_StreamPlayer("../assets/HighCountdown_Zero.ogg");
+	/*if(keyboard->keyJustUp(GLFW_KEY_P)){
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg", false);
+		childTransform->addChild(stream, false);
+	}*/
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/footsteps2.raw", false);
 		childTransform->addChild(stream, false);
 	}
+	if(keyboard->keyJustUp(GLFW_KEY_O)){
+		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
+		ragdoll->head->childTransform->addChild(stream, false);
+		//stream->setPosition(ragdoll->body->getWorldPos());
+	}
+	OpenAL_Sound::setListenerPos(activeCamera->getWorldPos());
+	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
+
+
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);
