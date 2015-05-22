@@ -30,9 +30,6 @@
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
-#include <Sound.h>
-#include <libzplay.h>
-
 #include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
@@ -56,6 +53,8 @@
 #include <BulletRagdoll.h>
 #include <NodeUI.h>
 #include <PD_Button.h>
+
+#include <OpenALSound.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -272,7 +271,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->setShader(shader, true);
 	bulletGround->mesh->parents.at(0)->scale(25,25,25);
 	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	bulletGround->body->translate(btVector3(0, 10, 0));
+	bulletGround->body->translate(btVector3(0, -1, 0));
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -315,6 +314,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << "test " << std::endl;
 		std::cout << _this << std::endl;
 	};
+
+
+	//PD_Story("../assets/the legend of the figure skater's book.json");
 }
 
 
@@ -353,7 +355,6 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-	
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
@@ -400,7 +401,24 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	
+	/*if(keyboard->keyJustUp(GLFW_KEY_P)){
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg", false);
+		childTransform->addChild(stream, false);
+	}*/
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero.ogg", false);
+		childTransform->addChild(stream, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_O)){
+		//OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
+		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.ogg");
+		ragdoll->head->childTransform->addChild(stream, false);
+		//stream->setPosition(ragdoll->body->getWorldPos());
+	}
+	OpenAL_Sound::setListenerPosition(activeCamera->getWorldPos());
+	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
+
+
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);
