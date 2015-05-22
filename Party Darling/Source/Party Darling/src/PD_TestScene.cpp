@@ -30,9 +30,6 @@
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
-#include <Sound.h>
-#include <libzplay.h>
-
 #include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
@@ -57,9 +54,7 @@
 #include <NodeUI.h>
 #include <PD_Button.h>
 
-#include <OpenALTest.h>
-#include <AL\alure.h>
-
+#include <OpenALSound.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -420,7 +415,7 @@ void PD_TestScene::update(Step * _step){
 		ragdoll->head->childTransform->addChild(stream, false);
 		//stream->setPosition(ragdoll->body->getWorldPos());
 	}
-	OpenAL_Sound::setListenerPos(activeCamera->getWorldPos());
+	OpenAL_Sound::setListenerPosition(activeCamera->getWorldPos());
 	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
 
