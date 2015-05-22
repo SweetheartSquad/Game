@@ -1,5 +1,0 @@
-download
-run build/vs2010.bat
-open 0_Bullet3Solution and update to new vs versions
-change project configurations->c++->code generation->Runtime Library to Multi-Threaded DLL
-build
