@@ -3,6 +3,7 @@
 #include <ResourceManager.h>
 #include <SoundManager.h>
 #include <Texture.h>
+#include <OpenALSound.h>
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -10,6 +11,7 @@ public:
 	static Texture * cursor;
 	static Texture * cheryl;
 	static Texture * uvs;
+	static OpenAL_Sound * scene;
 
 	static void init();
 };

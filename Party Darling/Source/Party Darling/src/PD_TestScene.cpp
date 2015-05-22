@@ -414,16 +414,29 @@ void PD_TestScene::update(Step * _step){
 	}
 	
 	/*if(keyboard->keyJustUp(GLFW_KEY_P)){
-		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg", false);
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg");
 		childTransform->addChild(stream, false);
 	}*/
 	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero.ogg", false);
-		childTransform->addChild(stream, false);
+		PD_ResourceManager::scene->play(true);
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_O)){
 		//OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
 		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.ogg");
+		stream->play(true);
 		ragdoll->head->childTransform->addChild(stream, false);
 		//stream->setPosition(ragdoll->body->getWorldPos());
 	}
@@ -576,16 +589,15 @@ void PD_TestScene::update(Step * _step){
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
 	
-	float scale = 1;
-	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
-
+	//float scale = 1;
+	//game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
+	//game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
 
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
