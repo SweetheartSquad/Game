@@ -125,7 +125,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t->addChild(mouseCam, false);
 	cameras.push_back(mouseCam);
 	mouseCam->farClip = 1000.f;
-	mouseCam->nearClip = 0.001f;
+	mouseCam->nearClip = 0.1f;
 	mouseCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
 	mouseCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	mouseCam->yaw = 90.0f;
@@ -226,9 +226,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	billboard->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	billboard->parents.at(0)->translate(0, 0, 2);*/
 
-	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
+	/*mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
-	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
+	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);*/
 
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	box2dWorld->b2world->SetContactListener(cl);
@@ -269,9 +269,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->createRigidBody(0);
 	childTransform->addChild(bulletGround);
 	bulletGround->setShader(shader, true);
-	bulletGround->mesh->parents.at(0)->scale(25,25,25);
+	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
 	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
+	bulletGround->body->setFriction(10);
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -289,16 +290,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
-
+	
 	ragdoll = new BulletRagdoll(bulletWorld);
 	childTransform->addChild(ragdoll);
 	ragdoll->setShader(shader, true);
 
-	ragdoll->body->body->setAngularFactor(btVector3(0,0,0));
-	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.005f, -1);
+	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.0005f, -1);
 	lights.push_back(light2);
-	ragdoll->body->childTransform->addChild(light2);
-	//ragdoll->body->body->
+	ragdoll->upperbody->childTransform->addChild(light2);
 
 	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
 	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
@@ -359,6 +359,17 @@ void PD_TestScene::update(Step * _step){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
 
+	glm::vec3 pos(0);
+	pos += ragdoll->head->getWorldPos();
+	pos += ragdoll->upperbody->getWorldPos();
+	pos += ragdoll->lowerbody->getWorldPos();
+	pos += ragdoll->lowerarmLeft->getWorldPos();
+	pos += ragdoll->lowerarmRight->getWorldPos();
+	pos += ragdoll->lowerlegLeft->getWorldPos();
+	pos += ragdoll->lowerlegRight->getWorldPos();
+	pos /= 7;
+
+	mouseCam->parents.at(0)->translate(pos - mouseCam->forwardVectorRotated * 25.f, false);
 	if(mouse->leftDown()){
 		float range = 1000;
 		glm::vec3 pos = activeCamera->getWorldPos();
@@ -370,6 +381,7 @@ void PD_TestScene::update(Step * _step){
 		if(RayCallback.hasHit()){
 			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			if(me != nullptr){
+				me->body->activate(true);
 				me->body->applyImpulse(dir*-10, me->body->getWorldTransform().getOrigin());
 			}
 			//std::cout << RayCallback.m_collisionObject->getWorldTransform().getOrigin().x() << std::endl;
@@ -458,37 +470,31 @@ void PD_TestScene::update(Step * _step){
 	}
 
 	if(firstPerson){
-		float playerSpeed = 2.5f;
-		float mass = player->body->GetMass();
-		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
+		float playerSpeed = 10.f;
+		float mass = ragdoll->upperbody->body->getInvMass();
 
-		if(activeCamera != mouseCam){
-			angle = glm::radians(90.f);
-		}
-
-		mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
-		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
+		//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
+		//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
 		
-		
+		glm::vec3 movement(0);
 		if (keyboard->keyDown(GLFW_KEY_W)){
-			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
-			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
+			movement += playerSpeed * mass * mouseCam->forwardVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_S)){
-			player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
+			movement -= playerSpeed * mass * mouseCam->forwardVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_A)){
-			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+			movement -= playerSpeed * mass * mouseCam->rightVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			movement += playerSpeed * mass * mouseCam->rightVectorRotated;
 		}
-		
+		if(movement.x != 0 || movement.y != 0 || movement.z != 0){
+			ragdoll->upperbody->body->activate(true);
+			ragdoll->upperbody->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
+		}
 		// correct joystick controls for first-person
-		Joystick * one = joy->joysticks[0];
+		/*Joystick * one = joy->joysticks[0];
 		if(one != nullptr){
 			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
 				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
@@ -502,8 +508,9 @@ void PD_TestScene::update(Step * _step){
 			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
 			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
 			mouse->translate(glm::vec2(x2, y2));
-		}
+		}*/
 	}
+	
 
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
