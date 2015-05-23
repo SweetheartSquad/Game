@@ -15,8 +15,10 @@
 #include <crtdbg.h>
 
 int main(void){
+#ifdef _DEBUG
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
+#endif
 
 	vox::initialize("Party, Darling? -super test build EX edition MAX transform: 3.0++");
 	PD_ResourceManager::init();
@@ -40,5 +42,7 @@ int main(void){
 
 	vox::destruct();
 	
+#ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);
+#endif
 }
