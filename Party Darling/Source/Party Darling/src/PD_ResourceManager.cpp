@@ -6,7 +6,8 @@ Texture * PD_ResourceManager::crosshair = new Texture("../assets/crosshair.png",
 Texture * PD_ResourceManager::cursor = new Texture("../assets/cursor.png", 32, 32, true, false);
 Texture * PD_ResourceManager::cheryl = new Texture("../assets/img_cheryl.jpg", 256, 256, true, false);
 Texture * PD_ResourceManager::uvs = new Texture("../assets/uvs.png", 2048, 2048, true, false);
-OpenAL_Sound * PD_ResourceManager::scene = new OpenAL_Sound("../assets/HighCountdown_Zero.ogg");
+OpenAL_Sound * PD_ResourceManager::scene = new OpenAL_Sound("../assets/HighCountdown_Zero.ogg", true);
+OpenAL_Sound * PD_ResourceManager::stream = new OpenAL_Sound("../assets/Nu-.ogg", false);
 
 void PD_ResourceManager::init(){
 	resources.push_back(crosshair);
@@ -14,4 +15,5 @@ void PD_ResourceManager::init(){
 	resources.push_back(cheryl);
 	resources.push_back(uvs);
 	resources.push_back(scene);
+	resources.push_back(stream);
 }

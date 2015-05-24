@@ -299,6 +299,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll = new BulletRagdoll(bulletWorld);
 	childTransform->addChild(ragdoll);
 	ragdoll->setShader(shader, true);
+	ragdoll->head->childTransform->addChild(PD_ResourceManager::stream, false);
 
 	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
 	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.0005f, -1);
@@ -374,7 +375,11 @@ void PD_TestScene::update(Step * _step){
 	pos += ragdoll->lowerlegRight->getWorldPos();
 	pos /= 7;
 
-	mouseCam->parents.at(0)->translate(pos - mouseCam->forwardVectorRotated * 25.f, false);
+	pos -= mouseCam->forwardVectorRotated * 25.f;
+	pos = (pos - mouseCam->parents.at(0)->getTranslationVector()) * 0.5f;
+	mouseCam->parents.at(0)->translate(pos);
+
+
 	if(mouse->leftDown()){
 		float range = 1000;
 		glm::vec3 pos = activeCamera->getWorldPos();
@@ -427,31 +432,23 @@ void PD_TestScene::update(Step * _step){
 		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg");
 		childTransform->addChild(stream, false);
 	}*/
-	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		PD_ResourceManager::scene->play(true);
-		//childTransform->addChild(sound, false);
+	if(keyboard->keyJustUp(GLFW_KEY_V)){
+		PD_ResourceManager::scene->source->play(true);
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		PD_ResourceManager::scene->play();
-		//childTransform->addChild(sound, false);
+	if(keyboard->keyJustUp(GLFW_KEY_B)){
+		PD_ResourceManager::scene->source->pause();
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		PD_ResourceManager::scene->play();
-		//childTransform->addChild(sound, false);
+	if(keyboard->keyJustUp(GLFW_KEY_N)){
+		PD_ResourceManager::scene->source->stop();
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		PD_ResourceManager::scene->play();
-		//childTransform->addChild(sound, false);
+	if(keyboard->keyJustUp(GLFW_KEY_M)){
+		PD_ResourceManager::scene->source->play();
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_O)){
-		//OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
-		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.ogg");
-		stream->play(true);
-		ragdoll->head->childTransform->addChild(stream, false);
-		//stream->setPosition(ragdoll->body->getWorldPos());
+	if(keyboard->keyJustUp(GLFW_KEY_P)){
+		PD_ResourceManager::stream->source->play(true);
 	}
-	OpenAL_Sound::setListenerPosition(activeCamera->getWorldPos());
-	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
+	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
+	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
 
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
@@ -512,26 +509,22 @@ void PD_TestScene::update(Step * _step){
 		if (keyboard->keyDown(GLFW_KEY_D)){
 			movement += playerSpeed * mass * mouseCam->rightVectorRotated;
 		}
+
+		Joystick * one = joy->joysticks[0];
+		if(one != nullptr){
+			movement += playerSpeed * mass * mouseCam->forwardVectorRotated * -one->getAxis(Joystick::xbox_axes::kLY);
+			movement += playerSpeed * mass * mouseCam->rightVectorRotated * one->getAxis(Joystick::xbox_axes::kLX);
+			
+			// move camera by directly moving mouse
+			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
+			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
+			mouse->translate(glm::vec2(x2, y2));
+		}
+
 		if(movement.x != 0 || movement.y != 0 || movement.z != 0){
 			ragdoll->upperbody->body->activate(true);
 			ragdoll->upperbody->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
 		}
-		// correct joystick controls for first-person
-		/*Joystick * one = joy->joysticks[0];
-		if(one != nullptr){
-			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
-				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
-			float y = playerSpeed * mass * sin(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
-				playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLX);
-
-			player->applyLinearImpulseUp(y);
-			player->applyLinearImpulseRight(x);
-
-			
-			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
-			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
-			mouse->translate(glm::vec2(x2, y2));
-		}*/
 	}
 	
 

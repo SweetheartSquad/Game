@@ -12,6 +12,7 @@ public:
 	static Texture * cheryl;
 	static Texture * uvs;
 	static OpenAL_Sound * scene;
+	static OpenAL_Sound * stream;
 
 	static void init();
 };
