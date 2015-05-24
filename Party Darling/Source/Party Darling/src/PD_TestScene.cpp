@@ -281,13 +281,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
 
-	font = new Font("../assets/arial.ttf", 100, false);
+	font = new Font("../assets/arial.ttf", 30, false);
 	label = new Label(font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
 	label->setText(L"userId");	
 	player->childTransform->addChild(label);
 	label->parents.at(0)->scale(0.01,0.01,0.01);
 	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	label->parents.at(0)->translate(0,5,0);
+	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
