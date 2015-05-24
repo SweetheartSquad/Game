@@ -30,9 +30,6 @@
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
-#include <Sound.h>
-#include <libzplay.h>
-
 #include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
@@ -56,6 +53,8 @@
 #include <BulletRagdoll.h>
 #include <NodeUI.h>
 #include <PD_Button.h>
+
+#include <OpenALSound.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -126,7 +125,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	t->addChild(mouseCam, false);
 	cameras.push_back(mouseCam);
 	mouseCam->farClip = 1000.f;
-	mouseCam->nearClip = 0.001f;
+	mouseCam->nearClip = 0.1f;
 	mouseCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
 	mouseCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	mouseCam->yaw = 90.0f;
@@ -227,9 +226,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	billboard->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	billboard->parents.at(0)->translate(0, 0, 2);*/
 
-	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
+	/*mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
-	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
+	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);*/
 
 	PD_ContactListener * cl = new PD_ContactListener(this);
 	box2dWorld->b2world->SetContactListener(cl);
@@ -270,9 +269,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->createRigidBody(0);
 	childTransform->addChild(bulletGround);
 	bulletGround->setShader(shader, true);
-	bulletGround->mesh->parents.at(0)->scale(25,25,25);
+	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
 	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	bulletGround->body->translate(btVector3(0, 10, 0));
+	bulletGround->body->translate(btVector3(0, -1, 0));
+	bulletGround->body->setFriction(10);
 	
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
@@ -282,7 +282,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	backgroundShader->compileShader();
 
 	font = new Font("../assets/arial.ttf", 100, false);
-	label = new Label(font, textShader, backgroundShader, WrapMode::WORD_WRAP, 200);
+	label = new Label(font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
 	label->setText(L"userId");	
 	player->childTransform->addChild(label);
 	label->parents.at(0)->scale(0.01,0.01,0.01);
@@ -294,16 +294,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		me->setShader(shader, true);
 		childTransform->addChild(me);
 	}*/
-
+	
 	ragdoll = new BulletRagdoll(bulletWorld);
 	childTransform->addChild(ragdoll);
 	ragdoll->setShader(shader, true);
 
-	ragdoll->body->body->setAngularFactor(btVector3(0,0,0));
-	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.005f, -1);
+	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.0005f, -1);
 	lights.push_back(light2);
-	ragdoll->body->childTransform->addChild(light2);
-	//ragdoll->body->body->
+	ragdoll->upperbody->childTransform->addChild(light2);
 
 	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
 	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
@@ -315,6 +314,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	PD_Button * button = new PD_Button(bulletWorld, this);
 	childTransform->addChild(button);
+	button->onDownFunction = [](NodeUI * _this) {
+		std::cout << "test " << std::endl;
+		std::cout << _this << std::endl;
+	};
+
+
+	//PD_Story("../assets/the legend of the figure skater's book.json");
 }
 
 
@@ -353,13 +359,21 @@ PD_TestScene::~PD_TestScene(){
 }
 
 void PD_TestScene::update(Step * _step){
-	
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
 
+	glm::vec3 pos(0);
+	pos += ragdoll->head->getWorldPos();
+	pos += ragdoll->upperbody->getWorldPos();
+	pos += ragdoll->lowerbody->getWorldPos();
+	pos += ragdoll->lowerarmLeft->getWorldPos();
+	pos += ragdoll->lowerarmRight->getWorldPos();
+	pos += ragdoll->lowerlegLeft->getWorldPos();
+	pos += ragdoll->lowerlegRight->getWorldPos();
+	pos /= 7;
 
-
+	mouseCam->parents.at(0)->translate(pos - mouseCam->forwardVectorRotated * 25.f, false);
 	if(mouse->leftDown()){
 		float range = 1000;
 		glm::vec3 pos = activeCamera->getWorldPos();
@@ -371,6 +385,7 @@ void PD_TestScene::update(Step * _step){
 		if(RayCallback.hasHit()){
 			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			if(me != nullptr){
+				me->body->activate(true);
 				me->body->applyImpulse(dir*-10, me->body->getWorldTransform().getOrigin());
 			}
 			//std::cout << RayCallback.m_collisionObject->getWorldTransform().getOrigin().x() << std::endl;
@@ -385,6 +400,11 @@ void PD_TestScene::update(Step * _step){
 		if(label->getText().size() > 0){
 			label->setText(label->getText().substr(0, label->getText().size() - 1));
 		}
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_ENTER)) {
+		std::wstring s;
+		s += '\n';
+		label->appendText(s);
 	}
 	if(keyboard->justReleasedKeys.size() > 0){
 		std::wstringstream acc;
@@ -402,7 +422,37 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	
+	/*if(keyboard->keyJustUp(GLFW_KEY_P)){
+		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg");
+		childTransform->addChild(stream, false);
+	}*/
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play(true);
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::scene->play();
+		//childTransform->addChild(sound, false);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_O)){
+		//OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.raw");
+		OpenAL_Sound * stream = new OpenAL_Stream("../assets/Nu-.ogg");
+		stream->play(true);
+		ragdoll->head->childTransform->addChild(stream, false);
+		//stream->setPosition(ragdoll->body->getWorldPos());
+	}
+	OpenAL_Sound::setListenerPosition(activeCamera->getWorldPos());
+	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
+
+
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);
@@ -421,53 +471,52 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
 		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.2, 0.1, 1));
 	}
-
+	
+	float speed = 1;
+	MousePerspectiveCamera * cam = dynamic_cast<MousePerspectiveCamera *>(activeCamera);
+	if(cam != nullptr){
+		speed = cam->speed;
+	}
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
 	}
 
 	if(firstPerson){
-		float playerSpeed = 2.5f;
-		float mass = player->body->GetMass();
-		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
+		float playerSpeed = 10.f;
+		float mass = ragdoll->upperbody->body->getInvMass();
 
-		if(activeCamera != mouseCam){
-			angle = glm::radians(90.f);
-		}
-
-		mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
-		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
+		//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
+		//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
 		
-		
+		glm::vec3 movement(0);
 		if (keyboard->keyDown(GLFW_KEY_W)){
-			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
-			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
+			movement += playerSpeed * mass * mouseCam->forwardVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_S)){
-			player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
+			movement -= playerSpeed * mass * mouseCam->forwardVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_A)){
-			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+			movement -= playerSpeed * mass * mouseCam->rightVectorRotated;
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			movement += playerSpeed * mass * mouseCam->rightVectorRotated;
 		}
-		
+		if(movement.x != 0 || movement.y != 0 || movement.z != 0){
+			ragdoll->upperbody->body->activate(true);
+			ragdoll->upperbody->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
+		}
 		// correct joystick controls for first-person
-		Joystick * one = joy->joysticks[0];
+		/*Joystick * one = joy->joysticks[0];
 		if(one != nullptr){
 			float x = playerSpeed * mass * cos(angle) * -one->getAxis(Joystick::xbox_axes::kLY) +
 				playerSpeed * mass * sin(angle) * one->getAxis(Joystick::xbox_axes::kLX);
@@ -481,8 +530,9 @@ void PD_TestScene::update(Step * _step){
 			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
 			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
 			mouse->translate(glm::vec2(x2, y2));
-		}
+		}*/
 	}
+	
 
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
@@ -548,16 +598,15 @@ void PD_TestScene::update(Step * _step){
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
 	
-	float scale = 1;
-	game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
-
+	//float scale = 1;
+	//game->setViewport(0, 0, game->viewPortWidth * 1 / scale, game->viewPortHeight * 1 / scale);
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
+	//game->setViewport(0, 0, game->viewPortWidth*scale, game->viewPortHeight*scale);
 
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
