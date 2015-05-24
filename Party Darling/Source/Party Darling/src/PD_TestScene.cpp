@@ -423,22 +423,22 @@ void PD_TestScene::update(Step * _step){
 		childTransform->addChild(stream, false);
 	}*/
 	if(keyboard->keyJustUp(GLFW_KEY_V)){
-		PD_ResourceManager::scene->play(true);
+		PD_ResourceManager::scene->source->play(true);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
-		PD_ResourceManager::scene->pause();
+		PD_ResourceManager::scene->source->pause();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_N)){
-		PD_ResourceManager::scene->stop();
+		PD_ResourceManager::scene->source->stop();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_M)){
-		PD_ResourceManager::scene->play();
+		PD_ResourceManager::scene->source->play();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_P)){
-		PD_ResourceManager::stream->play(true);
+		PD_ResourceManager::stream->source->play(true);
 	}
-	OpenAL_Sound::setListenerPosition(activeCamera->getWorldPos());
-	OpenAL_Sound::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
+	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
+	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
 
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
