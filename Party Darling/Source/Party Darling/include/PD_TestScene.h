@@ -44,6 +44,7 @@ public:
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
+	glm::vec3 lastPos;
 
 	Box2DWorld * box2dWorld;
 	Box2DDebugDrawer * box2dDebugDrawer;

@@ -447,6 +447,11 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_P)){
 		PD_ResourceManager::stream->source->play(true);
 	}
+	
+	glm::vec3 curpos = activeCamera->getWorldPos();
+	NodeOpenAL::setListenerVelocity((curpos - lastPos));
+	lastPos = curpos;
+
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
