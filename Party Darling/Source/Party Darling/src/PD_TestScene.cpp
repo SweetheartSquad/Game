@@ -434,8 +434,17 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_M)){
 		PD_ResourceManager::scene->source->play();
 	}
+	if(keyboard->keyJustUp(GLFW_KEY_U)){
+		PD_ResourceManager::stream->play(true);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_I)){
+		PD_ResourceManager::stream->pause();
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_O)){
+		PD_ResourceManager::stream->stop();
+	}
 	if(keyboard->keyJustUp(GLFW_KEY_P)){
-		PD_ResourceManager::stream->source->play(true);
+		PD_ResourceManager::stream->play();
 	}
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
