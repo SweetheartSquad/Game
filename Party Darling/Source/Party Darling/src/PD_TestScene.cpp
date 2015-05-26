@@ -55,6 +55,7 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
+#include <sqlite\sqlite3.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -86,6 +87,44 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 		}
 	});
 }
+
+
+
+
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+	int i;
+	for(i=0; i<argc; i++){
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+	}
+	printf("\n");
+	return 0;
+}
+
+bool testSql(const char * _filename, const char * _sql){
+	sqlite3 *db;
+	char *zErrMsg = 0;
+	int rc;
+	
+	/*if( argc!=3 ){
+		fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", _sql);
+		return(1);
+	}*/
+	rc = sqlite3_open(_filename, &db);
+	if(rc){
+		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+		sqlite3_close(db);
+		return true;
+	}
+	rc = sqlite3_exec(db, _sql, callback, 0, &zErrMsg);
+	if(rc != SQLITE_OK){
+		fprintf(stderr, "SQL error: %s\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+	}
+	sqlite3_close(db);
+	return false;
+}
+
 
 
 
@@ -465,10 +504,20 @@ void PD_TestScene::update(Step * _step){
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
-
+	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_R)){	
+		std::stringstream sql;
+		sql << "DROP TABLE TestTable;";
+		sql << "CREATE TABLE TestTable(id INTEGER PRIMARY KEY, TestColumn1, TestColumn2);";
+		for(unsigned long int i = 0; i < std::rand()%100; ++i){
+			sql << "INSERT INTO TestTable VALUES(" << i << ", 'test1', 'test2');";
+		}
+		sql << "SELECT * FROM TestTable;";
+		testSql("../assets/test.db", sql.str().c_str());
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
