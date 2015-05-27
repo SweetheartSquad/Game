@@ -56,6 +56,7 @@
 
 #include <OpenALSound.h>
 #include <sqlite\sqlite3.h>
+#include <DatabaseConnection.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -90,7 +91,7 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 
 
 
-
+#include <thread>
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName){
 	int i;
@@ -101,28 +102,13 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-bool testSql(const char * _filename, const char * _sql){
-	sqlite3 *db;
-	char *zErrMsg = 0;
-	int rc;
-	
-	/*if( argc!=3 ){
-		fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", _sql);
-		return(1);
-	}*/
-	rc = sqlite3_open(_filename, &db);
-	if(rc){
-		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-		sqlite3_close(db);
-		return true;
+DatabaseConnection db("../assets/test.db");
+void testSql(std::string _sql, bool _async){
+	if(_async){
+		db.queryDbAsync(_sql, callback);
+	}else{
+		db.queryDb(_sql, callback);
 	}
-	rc = sqlite3_exec(db, _sql, callback, 0, &zErrMsg);
-	if(rc != SQLITE_OK){
-		fprintf(stderr, "SQL error: %s\n", zErrMsg);
-		sqlite3_free(zErrMsg);
-	}
-	sqlite3_close(db);
-	return false;
 }
 
 
@@ -513,11 +499,11 @@ void PD_TestScene::update(Step * _step){
 		std::stringstream sql;
 		sql << "DROP TABLE TestTable;";
 		sql << "CREATE TABLE TestTable(id INTEGER PRIMARY KEY, TestColumn1, TestColumn2);";
-		for(unsigned long int i = 0; i < std::rand()%100; ++i){
+		for(unsigned long int i = 0; i < 1000; ++i){
 			sql << "INSERT INTO TestTable VALUES(" << i << ", 'test1', 'test2');";
 		}
 		sql << "SELECT * FROM TestTable;";
-		testSql("../assets/test.db", sql.str().c_str());
+		testSql(sql.str(), true);
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
