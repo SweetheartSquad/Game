@@ -12,8 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\PD_Button.cpp" />
-    <ClCompile Include="..\src\PD_ContactListener.cpp" />
-    <ClCompile Include="..\src\PD_Player.cpp" />
     <ClCompile Include="..\src\PD_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\PD_Game.cpp" />
@@ -21,8 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\PD_Button.h" />
-    <ClInclude Include="..\include\PD_ContactListener.h" />
-    <ClInclude Include="..\include\PD_Player.h" />
     <ClInclude Include="..\include\PD_ResourceManager.h" />
     <ClInclude Include="..\include\PD_Game.h" />
     <ClInclude Include="..\include\PD_TestScene.h" />
@@ -91,7 +87,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;OpenAL32.lib;libALURE32.dll.a;freetype255MTd.lib;cpprest110d_2_5.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2012d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;libALURE32.dll.a;freetype255MTd.lib;cpprest110d_2_5.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2012d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>true</PerUserRedirection>
       <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>

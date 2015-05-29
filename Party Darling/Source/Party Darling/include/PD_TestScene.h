@@ -28,7 +28,6 @@ class StandardFrameBuffer;
 class Material;
 class Sprite;
 
-class PD_Player;
 class PointLight;
 
 class BulletMeshEntity;
@@ -45,11 +44,6 @@ public:
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
 	glm::vec3 lastPos;
-
-	Box2DWorld * box2dWorld;
-	Box2DDebugDrawer * box2dDebugDrawer;
-	PD_Player * player;
-	PointLight * keyLight;
 
 	Font  * font;
 	Label * label;
