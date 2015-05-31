@@ -13,4 +13,7 @@ public:
 	PD_Button(BulletWorld * _world, Scene * _scene);
 	
 	void update(Step * _step) override;
+
+	float getMeasuredWidth() override;
+	float getMeasuredHeight() override;
 };
