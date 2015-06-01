@@ -7,7 +7,7 @@ Texture * PD_ResourceManager::cursor = new Texture("../assets/cursor.png", 32, 3
 Texture * PD_ResourceManager::cheryl = new Texture("../assets/img_cheryl.jpg", 256, 256, true, false);
 Texture * PD_ResourceManager::uvs = new Texture("../assets/uvs.png", 2048, 2048, true, false);
 OpenAL_Sound * PD_ResourceManager::scene = new OpenAL_Sound("../assets/audio/tone3.ogg", true);
-OpenAL_Stream * PD_ResourceManager::stream = new OpenAL_Stream("../assets/audio/tone2.ogg", false);
+OpenAL_Stream * PD_ResourceManager::stream = new OpenAL_Stream("../assets/audio/tone3.ogg", false);
 
 void PD_ResourceManager::init(){
 	resources.push_back(crosshair);

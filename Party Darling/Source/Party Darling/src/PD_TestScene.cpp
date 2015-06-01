@@ -599,9 +599,14 @@ void PD_TestScene::update(Step * _step){
 	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
 	
-	float volume = std::abs(PD_ResourceManager::scene->getAmplitude());
+	float volume = std::max(
+		std::abs(PD_ResourceManager::scene->getAmplitude()),
+		std::abs(PD_ResourceManager::stream->getAmplitude())
+	);
 	volumeIndicator->parents.at(0)->translate(sd.x, sd.y, 0, false);
 	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);
+	//lights.at(0)->data.ambientCoefficient = volume*0.9f + 0.1f;
+	//std::cout << PD_ResourceManager::stream->currentSample << std::endl;
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
