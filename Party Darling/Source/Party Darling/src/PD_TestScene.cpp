@@ -220,6 +220,18 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseIndicator->mesh->dirty = true;
 	mouseIndicator->setShader(uiLayer.shader, true);
 
+	volumeIndicator = new Sprite();
+	uiLayer.childTransform->addChild(volumeIndicator);
+	volumeIndicator->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	volumeIndicator->parents.at(0)->scale(50, 50, 1);
+
+	for(unsigned long int i = 0; i < volumeIndicator->mesh->vertices.size(); ++i){
+		volumeIndicator->mesh->vertices[i].x -= 1;
+		volumeIndicator->mesh->vertices[i].y -= 1;
+	}
+	volumeIndicator->mesh->dirty = true;
+	volumeIndicator->setShader(uiLayer.shader, true);
+
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
 
@@ -352,7 +364,7 @@ PD_TestScene::~PD_TestScene(){
 
 
 void PD_TestScene::update(Step * _step){
-
+	PD_ResourceManager::scene->update(_step);
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
@@ -584,8 +596,12 @@ void PD_TestScene::update(Step * _step){
 		sp.z = activeCamera->farClip * 2;
 	}
 	playerIndicator->parents.at(0)->translate(sp, false);
-	crosshair->parents.at(0)->translate(sd.x/2.f, sd.y/2.f, 0, false);
+	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
+	
+	float volume = std::abs(PD_ResourceManager::scene->getAmplitude());
+	volumeIndicator->parents.at(0)->translate(sd.x, sd.y, 0, false);
+	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

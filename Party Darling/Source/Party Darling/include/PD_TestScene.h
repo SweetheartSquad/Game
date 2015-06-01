@@ -71,6 +71,7 @@ public:
 	Sprite * crosshair;
 	Sprite * playerIndicator;
 	Sprite * mouseIndicator;
+	Sprite * volumeIndicator;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
