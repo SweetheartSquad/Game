@@ -437,16 +437,16 @@ void PD_TestScene::update(Step * _step){
 		childTransform->addChild(stream, false);
 	}*/
 	if(keyboard->keyJustUp(GLFW_KEY_V)){
-		PD_ResourceManager::scene->source->play(true);
+		PD_ResourceManager::scene->play(true);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
-		PD_ResourceManager::scene->source->pause();
+		PD_ResourceManager::scene->pause();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_N)){
-		PD_ResourceManager::scene->source->stop();
+		PD_ResourceManager::scene->stop();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_M)){
-		PD_ResourceManager::scene->source->play();
+		PD_ResourceManager::scene->play();
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_U)){
