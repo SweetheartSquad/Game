@@ -243,7 +243,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(bulletGround);
 	bulletGround->setShader(shader, true);
 	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
-	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(10);
 	
@@ -267,7 +267,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll->head->childTransform->addChild(PD_ResourceManager::stream, false);
 
 	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
-	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.1f, 0.0005f, -1);
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
 	lights.push_back(light2);
 	ragdoll->upperbody->childTransform->addChild(light2);
 
@@ -304,7 +304,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
-		obj->createRigidBody(1);
+		obj->createRigidBody(25);
 		obj->setShader(shader, true);
 		childTransform->addChild(obj);
 	}
@@ -605,8 +605,6 @@ void PD_TestScene::update(Step * _step){
 	);
 	volumeIndicator->parents.at(0)->translate(sd.x, sd.y, 0, false);
 	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);
-	//lights.at(0)->data.ambientCoefficient = volume*0.9f + 0.1f;
-	//std::cout << PD_ResourceManager::stream->currentSample << std::endl;
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
