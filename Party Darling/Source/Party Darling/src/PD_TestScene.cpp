@@ -55,6 +55,7 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
+#include <LinearLayout.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -284,10 +285,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	font = new Font("../assets/arial.ttf", 30, false);
 	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 300);
 	//label->setText(L"userId");	
-	player->childTransform->addChild(label);
-	label->parents.at(0)->scale(0.01,0.01,0.01);
-	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	label->parents.at(0)->translate(0,5,0);
+	//player->childTransform->addChild(label);
+	//label->parents.at(0)->scale(0.01,0.01,0.01);
+	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	//label->parents.at(0)->translate(0,5,0);
 	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
@@ -323,10 +324,21 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	//PD_Story("../assets/the legend of the figure skater's book.json");
+
+	Label * label2 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 300);
+	//label->setText(L"userId");	
+	//player->childTransform->addChild(label);
+	//label2->parents.at(0)->scale(0.01,0.01,0.01);
+	//label2->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	//label2->parents.at(0)->translate(0,5,0);
+
+	LinearLayout * l = new LinearLayout(VERTICAL);
+	l->addChild(label);
+	l->addChild(label2);
+	childTransform->addChild(l);
+
+	label2->setText(L"dsfdfd");
 }
-
-
-
 
 
 BulletMeshEntity * PD_TestScene::addThing(){
