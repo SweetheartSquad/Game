@@ -332,11 +332,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label2->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	//label2->parents.at(0)->translate(0,5,0);
 
-	LinearLayout * l = new LinearLayout(VERTICAL);
+	label2->setMarginTop(2.0f);
+	label2->setMarginLeft(5.0f);
+
+	LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
 	l->addChild(label);
 	l->addChild(label2);
+	
 	childTransform->addChild(l);
-
 	label2->setText(L"dsfdfd");
 }
 
