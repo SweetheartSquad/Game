@@ -56,6 +56,8 @@
 #include <sqlite\sqlite3.h>
 #include <DatabaseConnection.h>
 
+#include "RoomLayout.h"
+
 #include <thread>
 
 // Retrieves a JSON value from an HTTP request.
@@ -288,7 +290,20 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThing->createRigidBody(0);
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
+	
+	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::L, glm::vec2(3.f, 3.f)));
+	childTransform->addChild(room);
+	room->setShader(shader, true);
+	//room->mesh->pushMaterial(phongMat);
+	room->mesh->pushTexture2D(PD_ResourceManager::uvs);
 
+	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.3), 0);
+	/*
+	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
+	childTransform->addChild(blah);
+	blah->setShader(shader, true);
+	blah->mesh->pushMaterial(phongMat);
+	*/
 	std::vector<std::string> objs;
 	objs.push_back("../assets/LOD_1/coffeeTable_LOD_1.obj");
 	objs.push_back("../assets/LOD_1/couch_LOD_1.obj");
