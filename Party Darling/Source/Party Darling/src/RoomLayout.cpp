@@ -194,10 +194,10 @@ QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool fro
 		indices[2] = ++idx;
 		indices[3] = ++idx;
 		
-		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ));
-		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ));
-		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ));
-		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ));
+		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ)); // top right - top left
+		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ)); // bottom right - bottom left
+		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ)); // bottom left - bottom right
+		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ)); // top left - top right
 		m->setNormal(indices[0], 0.0, 0.0, -1.0);
 		m->setNormal(indices[1], 0.0, 0.0, -1.0);
 		m->setNormal(indices[2], 0.0, 0.0, -1.0);
@@ -215,10 +215,10 @@ QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool fro
 		indices[2] = ++idx;
 		indices[3] = ++idx;
 
-		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
+		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ));
 		m->setNormal(indices[0], 0.0, 0.0, 1.0);
 		m->setNormal(indices[1], 0.0, 0.0, 1.0);
 		m->setNormal(indices[2], 0.0, 0.0, 1.0);
@@ -236,10 +236,10 @@ QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool fro
 		indices[2] = ++idx;
 		indices[3] = ++idx;
 
-		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
+		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ));
 		m->setNormal(indices[0], 1.0, 0.0, 0.0);
 		m->setNormal(indices[1], 1.0, 0.0, 0.0);
 		m->setNormal(indices[2], 1.0, 0.0, 0.0);
@@ -257,10 +257,10 @@ QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool fro
 		indices[2] = ++idx;
 		indices[3] = ++idx;
 
-		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ));
+		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ));
 		m->setNormal(indices[0], -1.0, 0.0, 0.0);
 		m->setNormal(indices[1], -1.0, 0.0, 0.0);
 		m->setNormal(indices[2], -1.0, 0.0, 0.0);

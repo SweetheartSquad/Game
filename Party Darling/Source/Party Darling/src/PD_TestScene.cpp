@@ -291,13 +291,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(1.f, 1.f)));
+	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
 	room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
 
-	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.3), 0);
+	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
 	/*
 	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
 	childTransform->addChild(blah);
