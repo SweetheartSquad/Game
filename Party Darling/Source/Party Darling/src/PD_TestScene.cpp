@@ -291,7 +291,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::L, glm::vec2(3.f, 3.f)));
+	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(1.f, 1.f)));
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
