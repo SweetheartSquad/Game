@@ -7,14 +7,13 @@
 #define ROOM_UNIT 20
 
 enum RoomLayout_t{
-	SQUARE,
 	RECT,
 	T,
 	L
 };
 
 class RoomLayout{
-
+public: 
 	unsigned int id; // reference for layout specifications?
 
 	std::vector<MeshInterface *> walls;
