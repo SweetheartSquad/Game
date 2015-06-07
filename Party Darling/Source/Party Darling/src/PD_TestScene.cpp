@@ -295,7 +295,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
-	room->mesh->pushTexture2D(PD_ResourceManager::uvs);
+	room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
 
 	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.3), 0);
 	/*
