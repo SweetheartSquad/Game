@@ -59,6 +59,7 @@
 #include "RoomLayout.h"
 
 #include <thread>
+#include <Character.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -305,17 +306,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	blah->mesh->pushMaterial(phongMat);
 	*/
 	std::vector<std::string> objs;
-	objs.push_back("../assets/LOD_1/coffeeTable_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/couch_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/dish_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/dresser_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/lamp_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/shelf_LOD_1.obj");
-	objs.push_back("../assets/LOD_1/vase_LOD_1.obj");
+	objs.push_back("../assets/LOD_2/coffeeTable_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/couch_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/dish_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/dresser_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/lamp_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/shelf_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/vase_LOD_2.obj");
 	std::vector<std::string> staticobjs;
-	staticobjs.push_back("../assets/LOD_1/door_LOD_1.obj");
+	staticobjs.push_back("../assets/LOD_2/door_LOD_2.obj");
 	//staticobjs.push_back("../assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
-	staticobjs.push_back("../assets/LOD_1/windowFrame_LOD_1.obj");
+	staticobjs.push_back("../assets/LOD_2/windowFrame_LOD_2.obj");
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
@@ -339,7 +340,18 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << "test " << std::endl;
 		std::cout << _this << std::endl;
 	};
+	
+	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("../assets/S-Tengine2_logo.obj").at(0));
+	obj->setColliderAsCapsule();
+	obj->createRigidBody(4);
+	obj->setShader(shader, true);
+	childTransform->addChild(obj);
 
+	Character * c = new Character(bulletWorld);
+	c->setShader(shader, true);
+	childTransform->addChild(c);
+	c->attachJoints();
+	c->body->setAngularFactor(btVector3(0,1,0));
 	//PD_Story("../assets/the legend of the figure skater's book.json");
 }
 
