@@ -264,7 +264,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		childTransform->addChild(me);
 	}*/
 	
-	ragdoll = new BulletRagdoll(bulletWorld, 0.05f);
+	ragdoll = new BulletRagdoll(bulletWorld, 1.0f);
 	childTransform->addChild(ragdoll);
 	ragdoll->setShader(shader, true);
 	ragdoll->head->childTransform->addChild(PD_ResourceManager::stream, false);
