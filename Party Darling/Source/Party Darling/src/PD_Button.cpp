@@ -5,10 +5,12 @@
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentText.h>
 #include <shader/ShaderComponentTexture.h>
+#include <MeshFactory.h>
 
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	NodeUI(_world, _scene),
-	NodeBulletBody(_world)
+	NodeBulletBody(_world),
+	MeshEntity(MeshFactory::getPlaneMesh())
 {
 	BaseComponentShader * textShader = new BaseComponentShader(true);
 	textShader->addComponent(new ShaderComponentText(textShader));
