@@ -53,7 +53,6 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
-<<<<<<< HEAD
 #include <sqlite\sqlite3.h>
 #include <DatabaseConnection.h>
 
@@ -61,9 +60,7 @@
 
 #include <thread>
 #include <Character.h>
-=======
 #include <LinearLayout.h>
->>>>>>> text-v2
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
