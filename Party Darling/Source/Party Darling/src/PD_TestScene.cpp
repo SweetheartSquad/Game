@@ -53,6 +53,7 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
+<<<<<<< HEAD
 #include <sqlite\sqlite3.h>
 #include <DatabaseConnection.h>
 
@@ -60,6 +61,9 @@
 
 #include <thread>
 #include <Character.h>
+=======
+#include <LinearLayout.h>
+>>>>>>> text-v2
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -257,7 +261,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
 
+	font = new Font("../assets/arial.ttf", 30, false);
 	
+	//label->setText(L"userId");	
+	//player->childTransform->addChild(label);
+	//label->parents.at(0)->scale(0.01,0.01,0.01);
+	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	//label->parents.at(0)->translate(0,5,0);
+	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
 		me->setShader(shader, true);
@@ -275,7 +287,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll->upperbody->childTransform->addChild(light2);
 
 	font = new Font("../assets/arial.ttf", 30, false);
-	label = new Label(font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
+	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
 	label->setText(L"userId");	
 	ragdoll->head->childTransform->addChild(label);
 	label->parents.at(0)->scale(0.01,0.01,0.01);
@@ -353,10 +365,56 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	c->attachJoints();
 	c->body->setAngularFactor(btVector3(0,1,0));
 	//PD_Story("../assets/the legend of the figure skater's book.json");
+
+	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	label->setMarginTop(2.0f);
+	label->setMarginLeft(5.0f);
+
+	Label * label2 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	label2->setMarginTop(2.0f);
+	label2->setMarginLeft(5.0f);
+
+	Label * label3 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	label3->setMarginTop(2.0f);
+	label3->setMarginLeft(5.0f);
+
+	Label * label4 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
+	label4->setMarginTop(2.0f);
+	label4->setMarginLeft(5.0f);
+
+	Label * label5 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	label5->setMarginTop(2.0f);
+	label5->setMarginLeft(0.0f);
+
+	Label * label6 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
+	label6->setMarginTop(2.0f);
+	label6->setMarginLeft(5.0f);
+
+	LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
+	l->addChild(label2);
+	// Label causes a problem for some reason
+	//l->addChild(label);
+
+	LinearLayout * l2 = new LinearLayout(VERTICAL, bulletWorld, this);
+	l2->addChild(label3);
+	l2->addChild(label4);
+
+	LinearLayout * l3 = new LinearLayout(HORIZONTAL, bulletWorld, this);
+	l3->addChild(label5);
+	l3->addChild(l);
+	l3->addChild(label6);
+	l3->addChild(l2);
+
+	childTransform->addChild(l3);
+
+	l3->setMarginRight(0.f);
+	
+	label2->setText(L"label 2");
+	label3->setText(L"label 3");
+	label4->setText(L"label 4");
+	label5->setText(L"label 5");
+	label6->setText(L"label 6");
 }
-
-
-
 
 
 BulletMeshEntity * PD_TestScene::addThing(){
@@ -366,7 +424,7 @@ BulletMeshEntity * PD_TestScene::addThing(){
 	
 	//thing->setColliderAsMesh(mesh, true);
 	thing->setColliderAsBoundingBox();
-	//thing->setColliderAsSphere(3);
+	//thing->setColliderAsSphere(3);sou
 	thing->createRigidBody(1);
 	childTransform->addChild(thing);
 	thing->setShader(shader, true);

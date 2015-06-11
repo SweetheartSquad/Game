@@ -5,10 +5,12 @@
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentText.h>
 #include <shader/ShaderComponentTexture.h>
+#include <MeshFactory.h>
 
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	NodeUI(_world, _scene),
-	NodeBulletBody(_world)
+	NodeBulletBody(_world),
+	MeshEntity(MeshFactory::getPlaneMesh())
 {
 	BaseComponentShader * textShader = new BaseComponentShader(true);
 	textShader->addComponent(new ShaderComponentText(textShader));
@@ -21,15 +23,15 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	float size = 300.f;
 	Font * font = new Font("../assets/arial.ttf", size, false);
 	size = 1.f/size;
-	normalLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
+	normalLabel = new Label(_world, _scene, font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	normalLabel->setText(L"normal");
 	childTransform->addChild(normalLabel)->scale(size);
 	
-	downLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
+	downLabel = new Label(_world, _scene, font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	downLabel->setText(L"down");
 	childTransform->addChild(downLabel)->scale(size);
 	
-	overLabel = new Label(font, textShader, shader, WrapMode::WORD_WRAP, 200);
+	overLabel = new Label(_world, _scene, font, textShader, shader, WrapMode::WORD_WRAP, 200);
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel)->scale(size);
 
@@ -37,6 +39,14 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	createRigidBody(0);
 	childTransform->translate(-1.5, -0.25, 0);
 	body->translate(btVector3(1.5, 0.25, 0));
+}
+
+float PD_Button::getMeasuredWidth(){
+	return 0.f;
+}
+
+float PD_Button::getMeasuredHeight(){
+	return 0.f;
 }
 
 void PD_Button::update(Step * _step){
