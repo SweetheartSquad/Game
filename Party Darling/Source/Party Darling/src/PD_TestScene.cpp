@@ -13,7 +13,7 @@
 #include <PointLight.h>
 #include <Material.h>
 
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentPhong.h>
@@ -61,6 +61,7 @@
 #include <thread>
 #include <Character.h>
 #include <LinearLayout.h>
+#include <shader\ComponentShaderText.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -119,8 +120,8 @@ void testSql(std::string _sql, bool _async){
 
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
-	shader(new BaseComponentShader(true)),
-	textShader(new BaseComponentShader(true)),
+	shader(new ComponentShaderBase(true)),
+	textShader(new ComponentShaderText(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
 	debugDrawer(nullptr),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
@@ -250,11 +251,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(10);
-	
-	textShader->addComponent(new ShaderComponentText(textShader));
-	textShader->compileShader();
 
-	BaseComponentShader * backgroundShader = new BaseComponentShader(true);
+	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
 
@@ -265,7 +263,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label->parents.at(0)->scale(0.01,0.01,0.01);
 	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	//label->parents.at(0)->translate(0,5,0);
-	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
@@ -290,7 +288,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	label->parents.at(0)->scale(0.01,0.01,0.01);
 	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	label->parents.at(0)->translate(0,5,0);
-	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 
 	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);

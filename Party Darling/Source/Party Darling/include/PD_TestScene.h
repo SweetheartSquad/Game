@@ -32,13 +32,13 @@ class PointLight;
 
 class BulletMeshEntity;
 class BulletRagdoll;
-
+class ComponentShaderText;
 
 
 class PD_TestScene : public Scene{
 public:
-	BaseComponentShader * shader;
-	BaseComponentShader * textShader;
+	ComponentShaderBase * shader;
+	ComponentShaderText * textShader;
 	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
