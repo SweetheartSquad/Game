@@ -419,15 +419,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label5->setText(L"label 5");
 	//label6->setText(L"label 6");
 
-	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 500.f);
+	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 250.f);
 	lv2->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
-	
 	l3->addChild(lv2);
 
 	//l3->addChild(lv2);
 
 	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
-
 }
 
 
