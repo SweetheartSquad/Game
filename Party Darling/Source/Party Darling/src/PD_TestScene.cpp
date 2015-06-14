@@ -73,6 +73,7 @@
 #include <LabelV2.h>
 #include <shader\ComponentShaderText.h>
 #include <DialogueDisplay.h>
+#include <HorizontalLinearLayout.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -399,16 +400,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label6->setMarginTop(2.0f);
 	//label6->setMarginLeft(5.0f);
 
-	LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
+	//LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
 	//l->addChild(label2);
 	// Label causes a problem for some reason
 	//l->addChild(label);
 
-	LinearLayout * l2 = new LinearLayout(VERTICAL, bulletWorld, this);
+	//LinearLayout * l2 = new LinearLayout(VERTICAL, bulletWorld, this);
 	//l2->addChild(label3);
 	//l2->addChild(label4);
 
-	LinearLayout * l3 = new LinearLayout(HORIZONTAL, bulletWorld, this);
+	HorizontalLinearLayout * l3 = new HorizontalLinearLayout(bulletWorld, this);
 	//l3->addChild(label5);
 	//l3->addChild(l);
 	//l3->addChild(label6);
@@ -436,7 +437,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	dd->stuffToSay.push_back(new DialogueSay(test2));
 	dd->stuffToSay.push_back(new DialogueSay(test3));
 	dd->sayNext();
-	dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	//dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
 	uiLayer.childTransform->addChild(dd);
 	dd->parents.at(0)->translate(0, 150, 0);
 }

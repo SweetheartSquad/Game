@@ -6,14 +6,16 @@
 #include <MeshInterface.h>
 #include <Font.h>
 #include <PD_ResourceManager.h>
+#include <VerticalLinearLayout.h>
+#include <HorizontalLinearLayout.h>
 
 DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, float _width, float _height) :
 	currentDialogue(0),
 	waitingForInput(false)
 {
-	hlayout = new LinearLayout(Orientation::HORIZONTAL, _world, _scene);
-	vlayout = new LinearLayout(Orientation::VERTICAL, _world, _scene);
-	optionslayout = new LinearLayout(Orientation::VERTICAL, _world, _scene);
+	hlayout = new HorizontalLinearLayout(_world, _scene);
+	vlayout = new VerticalLinearLayout(_world, _scene);
+	optionslayout = new VerticalLinearLayout(_world, _scene);
 
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
@@ -21,8 +23,8 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	ComponentShaderText * textShader = new ComponentShaderText(true);
 	textShader->textComponent->setColor(glm::vec3(1, 0, 0));
 	
-	portraitPanel = new UIPanel(_height*0.5f, _height*0.5f, _world, _scene);
-	portraitPanel->setShader(backgroundShader, true);
+	//portraitPanel = new UIPanel(_height*0.5f, _height*0.5f, _world, _scene);
+	//portraitPanel->setShader(backgroundShader, true);
 	
 	dialogue = new Label(_world, _scene, _font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, _width-_height);
 	speaker = new Label(_world, _scene, _font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, _width-_height);
@@ -60,9 +62,9 @@ bool DialogueDisplay::sayNext(){
 	// set the speaker and portrait
 	std::string sp = stuffToSay.at(currentDialogue)->speaker;
 	speaker->setText(std::wstring(sp.begin(), sp.end()));
-	portraitPanel->mesh->textures.clear();
+	//portraitPanel->mesh->textures.clear();
 	if(stuffToSay.at(currentDialogue)->portrait == "cheryl"){
-		portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+		//portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
 	}else{
 
 	}
