@@ -380,43 +380,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	label->setMarginTop(2.0f);
 	label->setMarginLeft(5.0f);
 
-	//Label * label2 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	//label2->setMarginTop(2.0f);
-	//label2->setMarginLeft(5.0f);
-
-	//Label * label3 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	//label3->setMarginTop(2.0f);
-	//label3->setMarginLeft(5.0f);
-
-	//Label * label4 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
-	//label4->setMarginTop(2.0f);
-	//label4->setMarginLeft(5.0f);
-
-	//Label * label5 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	//label5->setMarginTop(2.0f);
-	//label5->setMarginLeft(0.0f);
-
-	//Label * label6 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
-	//label6->setMarginTop(2.0f);
-	//label6->setMarginLeft(5.0f);
-
-	//LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
-	//l->addChild(label2);
-	// Label causes a problem for some reason
-	//l->addChild(label);
-
-	//LinearLayout * l2 = new LinearLayout(VERTICAL, bulletWorld, this);
-	//l2->addChild(label3);
-	//l2->addChild(label4);
-
 	HorizontalLinearLayout * l3 = new HorizontalLinearLayout(bulletWorld, this);
-	//l3->addChild(label5);
-	//l3->addChild(l);
-	//l3->addChild(label6);
-	//l3->addChild(l2);
-
 	childTransform->addChild(l3);
-
 	l3->setMarginRight(0.f);
 	
 	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 250.f);

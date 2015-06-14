@@ -3,7 +3,6 @@
 #include <Entity.h>
 #include <LinearLayout.h>
 #include <LabelV2.h>
-#include <UIPanel.h>
 #include <Timeout.h>
 #include <DialogueSay.h>
 #include <PD_Button.h>
@@ -19,7 +18,7 @@ public:
 	LinearLayout * hlayout;
 	LinearLayout * vlayout;
 	LinearLayout * optionslayout;
-	UIPanel * portraitPanel;
+	NodeUI * portraitPanel;
 	LabelV2 * speaker;
 	LabelV2 * dialogue;
 	Timeout * timeout;

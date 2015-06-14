@@ -34,19 +34,11 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	overLabel = new LabelV2(_world, _scene, font, textShader, shader, 200);
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel);//->scale(size/64.f);
-
-	setColliderAsBox(200, size, 0.1);
-	createRigidBody(0);
+	
+	setWidth(200.f);
+	updateCollider();
 	childTransform->translate(-1.5, -0.25, 0);
 	body->translate(btVector3(1.5, 0.25, 0));
-}
-
-float PD_Button::getMeasuredWidth(){
-	return 200.f;
-}
-
-float PD_Button::getMeasuredHeight(){
-	return 30.f;
 }
 
 void PD_Button::update(Step * _step){
