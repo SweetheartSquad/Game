@@ -20,7 +20,7 @@ int main(void){
 	_CrtMemCheckpoint( &s1 );
 #endif
 
-	vox::initialize("Party, Darling? -super test build EX edition MAX transform: 3.0++");
+	vox::initialize("Party, Darling? -super test build EX edition MAX transform: 3.0++ now with audible sound");
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();

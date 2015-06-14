@@ -3,8 +3,6 @@
 #include <PD_TestScene.h>
 #include <PD_Game.h>
 #include <PD_ResourceManager.h>
-#include <PD_Player.h>
-#include <PD_ContactListener.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -15,7 +13,7 @@
 #include <PointLight.h>
 #include <Material.h>
 
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentPhong.h>
@@ -55,6 +53,13 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
+#include <sqlite\sqlite3.h>
+#include <DatabaseConnection.h>
+
+#include "RoomLayout.h"
+
+#include <thread>
+#include <Character.h>
 #include <LinearLayout.h>
 #include <sqlite\sqlite3.h>
 #include <DatabaseConnection.h>
@@ -65,6 +70,7 @@
 #include <Character.h>
 #include <LinearLayout.h>
 #include <LabelV2.h>
+#include <shader\ComponentShaderText.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -99,15 +105,34 @@ pplx::task<void> RequestJSONValueAsync(Label * _label){
 
 
 
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+	int i;
+	for(i=0; i<argc; i++){
+		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+	}
+	printf("\n");
+	return 0;
+}
+
+DatabaseConnection db("../assets/test.db");
+void testSql(std::string _sql, bool _async){
+	if(_async){
+		db.queryDbAsync(_sql, callback);
+	}else{
+		db.queryDb(_sql, callback);
+	}
+}
+
+
+
+
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
-	shader(new BaseComponentShader(true)),
-	textShader(new BaseComponentShader(true)),
+	shader(new ComponentShaderBase(true)),
+	textShader(new ComponentShaderText(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
-	box2dWorld(new Box2DWorld(b2Vec2(0, 0))),
-	box2dDebugDrawer(nullptr),
 	debugDrawer(nullptr),
-	player(nullptr),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
@@ -165,69 +190,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	gameCam->pitch = -10.0f;
 
 	activeCamera = mouseCam;
-	
-	float _size = 3;
-	std::vector<Box2DMeshEntity *> boundaries;
-	MeshInterface * boundaryMesh = MeshFactory::getCubeMesh(1.f);
-	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(box2dWorld, boundaryMesh, b2_staticBody));
-	
-	for(auto b : boundaries){
-		childTransform->addChild(b);
-		b->setShader(shader, true);
-		b->mesh->pushMaterial(phongMat);
-	}
-
-	boundaries.at(0)->parents.at(0)->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
-	boundaries.at(1)->parents.at(0)->scale(_size, sceneHeight*0.5f + _size*2.f, _size * 4.f);
-	boundaries.at(2)->parents.at(0)->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
-	boundaries.at(3)->parents.at(0)->scale(sceneWidth*0.5f + _size*2.f, _size, _size * 4.f);
-
-	boundaries.at(0)->setTranslationPhysical(sceneWidth+_size, sceneHeight*0.5f, 0);
-	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 0);
-	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 0);
-	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 0);
-	
-	// important that this is done after scaling
-	b2Filter sf;
-	for(auto b : boundaries){
-		box2dWorld->addToWorld(b);
-		b->body->GetFixtureList()->SetFilterData(sf);
-	}
-	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
-	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
-	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
-
-	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
-	childTransform->addChild(ground);
-	ground->parents.at(0)->translate(sceneWidth*0.5f, sceneHeight*0.5f, -2.f);
-	ground->parents.at(0)->scale(sceneWidth, sceneHeight, 1);
-	ground->setShader(shader, true);
 
 	/*MeshEntity * ceiling = new MeshEntity(MeshFactory::getPlaneMesh());
 	ceiling->transform->translate(sceneWidth/2.f, sceneHeight/2.f, _size * 4.f);
 	ceiling->transform->scale(sceneWidth, sceneHeight, 1);
 	ceiling->setShader(shader, true);
 	addChild(ceiling);*/
-	
-	player = new PD_Player(box2dWorld);
-	childTransform->addChild(player);
-	player->setShader(shader, true);
-	gameCam->addTarget(player, 1);
-
-	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
-	player->body->SetLinearDamping(2.5f);
-	player->body->SetAngularDamping(2.5f);
-
-	//intialize key light
-	keyLight = new PointLight(glm::vec3(1.f, 1.f, 1.f), 0.01f, 0.01f, -10.f);
-	//Set it as the key light so it casts shadows
-	//keyLight->isKeyLight = true;
-	lights.push_back(keyLight);
-	player->childTransform->addChild(keyLight);
-	keyLight->parents.at(0)->translate(0,0,0.2f);
 
 	/*Billboard * billboard = new Billboard();
 	billboard->mesh->pushTexture2D(PD_ResourceManager::crosshair);
@@ -240,9 +208,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);*/
 
-	PD_ContactListener * cl = new PD_ContactListener(this);
-	box2dWorld->b2world->SetContactListener(cl);
-	
 	crosshair = new Sprite();
 	uiLayer.childTransform->addChild(crosshair);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
@@ -269,6 +234,18 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseIndicator->mesh->dirty = true;
 	mouseIndicator->setShader(uiLayer.shader, true);
 
+	volumeIndicator = new Sprite();
+	uiLayer.childTransform->addChild(volumeIndicator);
+	volumeIndicator->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	volumeIndicator->parents.at(0)->scale(50, 50, 1);
+
+	for(unsigned long int i = 0; i < volumeIndicator->mesh->vertices.size(); ++i){
+		volumeIndicator->mesh->vertices[i].x -= 1;
+		volumeIndicator->mesh->vertices[i].y -= 1;
+	}
+	volumeIndicator->mesh->dirty = true;
+	volumeIndicator->setShader(uiLayer.shader, true);
+
 	screenSurface->scaleModeMag = GL_NEAREST;
 	screenSurface->scaleModeMin = GL_NEAREST;
 
@@ -280,14 +257,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(bulletGround);
 	bulletGround->setShader(shader, true);
 	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
-	bulletGround->mesh->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(10);
-	
-	textShader->addComponent(new ShaderComponentText(textShader));
-	textShader->compileShader();
 
-	BaseComponentShader * backgroundShader = new BaseComponentShader(true);
+	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
 
@@ -298,7 +272,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label->parents.at(0)->scale(0.01,0.01,0.01);
 	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
 	//label->parents.at(0)->translate(0,5,0);
-	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	/*for(unsigned long int i = 0; i < 1000; ++i){
 		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
@@ -306,15 +280,25 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		childTransform->addChild(me);
 	}*/
 	
-	ragdoll = new BulletRagdoll(bulletWorld);
+	ragdoll = new BulletRagdoll(bulletWorld, 1.0f);
 	childTransform->addChild(ragdoll);
 	ragdoll->setShader(shader, true);
 	ragdoll->head->childTransform->addChild(PD_ResourceManager::stream, false);
 
 	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
-	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0, 0.0005f, -1);
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
 	lights.push_back(light2);
 	ragdoll->upperbody->childTransform->addChild(light2);
+
+	font = new Font("../assets/arial.ttf", 30, false);
+	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
+	label->setText(L"userId");	
+	ragdoll->head->childTransform->addChild(label);
+	label->parents.at(0)->scale(0.01,0.01,0.01);
+	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	label->parents.at(0)->translate(0,5,0);
+	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+
 
 	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
 	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
@@ -324,7 +308,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
+<<<<<<< HEAD
 	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::T, glm::vec2(3.f, 3.f)));
+=======
+	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
+>>>>>>> a46d8205d89169998fe22981aa025a815e3962f8
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
@@ -372,8 +360,18 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << "test " << std::endl;
 		std::cout << _this << std::endl;
 	};
+	
+	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("../assets/S-Tengine2_logo.obj").at(0));
+	obj->setColliderAsCapsule();
+	obj->createRigidBody(4);
+	obj->setShader(shader, true);
+	childTransform->addChild(obj);
 
-
+	Character * c = new Character(bulletWorld);
+	c->setShader(shader, true);
+	childTransform->addChild(c);
+	c->attachJoints();
+	c->body->setAngularFactor(btVector3(0,1,0));
 	//PD_Story("../assets/the legend of the figure skater's book.json");
 
 	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
@@ -453,7 +451,6 @@ PD_TestScene::~PD_TestScene(){
 	deleteChildTransform();
 	shader->safeDelete();
 	//delete phongMat;
-	delete box2dWorld;
 
 	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
@@ -465,7 +462,9 @@ PD_TestScene::~PD_TestScene(){
 	delete font;
 }
 
+
 void PD_TestScene::update(Step * _step){
+	PD_ResourceManager::scene->update(_step);
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
 	}*/
@@ -480,7 +479,7 @@ void PD_TestScene::update(Step * _step){
 	pos += ragdoll->lowerlegRight->getWorldPos();
 	pos /= 7;
 
-	pos -= mouseCam->forwardVectorRotated * 25.f;
+	pos -= mouseCam->forwardVectorRotated * 2.f;
 	pos = (pos - mouseCam->parents.at(0)->getTranslationVector()) * 0.5f;
 	mouseCam->parents.at(0)->translate(pos);
 
@@ -538,16 +537,16 @@ void PD_TestScene::update(Step * _step){
 		childTransform->addChild(stream, false);
 	}*/
 	if(keyboard->keyJustUp(GLFW_KEY_V)){
-		PD_ResourceManager::scene->source->play(true);
+		PD_ResourceManager::scene->play(true);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
-		PD_ResourceManager::scene->source->pause();
+		PD_ResourceManager::scene->pause();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_N)){
-		PD_ResourceManager::scene->source->stop();
+		PD_ResourceManager::scene->stop();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_M)){
-		PD_ResourceManager::scene->source->play();
+		PD_ResourceManager::scene->play();
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_U)){
@@ -570,10 +569,20 @@ void PD_TestScene::update(Step * _step){
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 
-
+	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
 		RequestJSONValueAsync(label);
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_R)){	
+		std::stringstream sql;
+		sql << "DROP TABLE TestTable;";
+		sql << "CREATE TABLE TestTable(id INTEGER PRIMARY KEY, TestColumn1, TestColumn2);";
+		for(unsigned long int i = 0; i < 1000; ++i){
+			sql << "INSERT INTO TestTable VALUES(" << i << ", 'test1', 'test2');";
+		}
+		sql << "SELECT * FROM TestTable;";
+		testSql(sql.str(), true);
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
@@ -664,23 +673,6 @@ void PD_TestScene::update(Step * _step){
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		Transform::drawTransforms = !Transform::drawTransforms;
-		if(box2dDebugDrawer != nullptr){
-			box2dWorld->b2world->SetDebugDraw(nullptr);
-			childTransform->removeChild(box2dDebugDrawer->parents.at(0));
-			delete box2dDebugDrawer->parents.at(0);
-			box2dDebugDrawer = nullptr;
-		}else{
-			box2dDebugDrawer = new Box2DDebugDrawer(box2dWorld);
-			box2dWorld->b2world->SetDebugDraw(box2dDebugDrawer);
-			box2dDebugDrawer->drawing = true;
-			//drawer->AppendFlags(b2Draw::e_aabbBit);
-			box2dDebugDrawer->AppendFlags(b2Draw::e_shapeBit);
-			box2dDebugDrawer->AppendFlags(b2Draw::e_centerOfMassBit);
-			box2dDebugDrawer->AppendFlags(b2Draw::e_jointBit);
-			//drawer->AppendFlags(b2Draw::e_pairBit);
-			childTransform->addChild(box2dDebugDrawer);
-		}
-
 		if(debugDrawer != nullptr){
 			bulletWorld->world->setDebugDrawer(nullptr);
 			childTransform->removeChild(debugDrawer->parents.at(0));
@@ -695,7 +687,6 @@ void PD_TestScene::update(Step * _step){
 	}
 	
 	// update scene and physics
-	box2dWorld->update(_step);
 	bulletWorld->update(_step);
 	Scene::update(_step);
 
@@ -704,13 +695,20 @@ void PD_TestScene::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
-	glm::vec3 sp = activeCamera->worldToScreen(player->getWorldPos(), sd);
+	glm::vec3 sp = activeCamera->worldToScreen(ragdoll->head->getWorldPos(), sd);
 	if(sp.z < 0){
 		sp.z = activeCamera->farClip * 2;
 	}
 	playerIndicator->parents.at(0)->translate(sp, false);
-	crosshair->parents.at(0)->translate(sd.x/2.f, sd.y/2.f, 0, false);
+	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
+	
+	float volume = std::max(
+		std::abs(PD_ResourceManager::scene->getAmplitude()),
+		std::abs(PD_ResourceManager::stream->getAmplitude())
+	);
+	volumeIndicator->parents.at(0)->translate(sd.x, sd.y, 0, false);
+	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

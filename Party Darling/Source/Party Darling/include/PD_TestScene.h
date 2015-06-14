@@ -29,28 +29,22 @@ class StandardFrameBuffer;
 class Material;
 class Sprite;
 
-class PD_Player;
 class PointLight;
 
 class BulletMeshEntity;
 class BulletRagdoll;
-
+class ComponentShaderText;
 
 
 class PD_TestScene : public Scene{
 public:
-	BaseComponentShader * shader;
-	BaseComponentShader * textShader;
+	ComponentShaderBase * shader;
+	ComponentShaderText * textShader;
 	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
 	glm::vec3 lastPos;
-
-	Box2DWorld * box2dWorld;
-	Box2DDebugDrawer * box2dDebugDrawer;
-	PD_Player * player;
-	PointLight * keyLight;
 
 	Font  * font;
 	Label * label;
@@ -78,6 +72,7 @@ public:
 	Sprite * crosshair;
 	Sprite * playerIndicator;
 	Sprite * mouseIndicator;
+	Sprite * volumeIndicator;
 
 	LabelV2 * lv2;
 
