@@ -21,4 +21,8 @@ public:
 
 	Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture);
 	~Room(void);
+
+	void setShader(Shader * _shader, bool _default);
+
+	void translatePhysical(glm::vec3 _v);
 };

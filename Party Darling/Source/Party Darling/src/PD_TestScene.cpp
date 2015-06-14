@@ -307,8 +307,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
 	//room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
-
-	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
+	room->setShader(shader, true);
+	//room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
+	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	/*
 	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
 	childTransform->addChild(blah);
