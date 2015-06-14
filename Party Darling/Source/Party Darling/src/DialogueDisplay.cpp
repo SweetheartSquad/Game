@@ -29,7 +29,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	dialogue = new LabelV2(_world, _scene, _font, textShader, backgroundShader, _width-_height);
 	speaker = new LabelV2(_world, _scene, _font, textShader, backgroundShader, _width-_height);
 
-	hlayout->addChild(portraitPanel);
+	//hlayout->addChild(portraitPanel);
 	vlayout->addChild(speaker);
 	vlayout->addChild(dialogue);
 	hlayout->addChild(vlayout);

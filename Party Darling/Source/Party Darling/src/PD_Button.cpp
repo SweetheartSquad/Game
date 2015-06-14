@@ -10,7 +10,7 @@
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world),
-	MeshEntity(MeshFactory::getPlaneMesh())
+	Entity()
 {
 	ComponentShaderBase * textShader = new ComponentShaderBase(true);
 	textShader->addComponent(new ShaderComponentText(textShader));
