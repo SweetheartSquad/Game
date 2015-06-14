@@ -2,8 +2,8 @@
 #include <math.h>
 #include <shader/ComponentShaderBase.h>
 
-Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture)
-{
+Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture){
+
 	// Create room boundaries (walls, floor, ceiling)
 	std::vector<MeshInterface *> m = RoomLayout::getWalls(_type, _size);
 
@@ -12,7 +12,6 @@ Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _ty
 		childTransform->addChild(boundaries.at(i));
 		boundaries.at(i)->setColliderAsBoundingBox();
 		boundaries.at(i)->createRigidBody(0);
-		//boundaries.at(i)->setShader(_shader, true);
 		boundaries.at(i)->mesh->pushTexture2D(_wallTexture);
 	}
 

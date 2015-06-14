@@ -6,14 +6,20 @@
 #include <RoomLayout.h>
 #include <vector>
 
+enum Room_t{
+	BEDROOM,
+	LIVINGROOM,
+	KITCHEN,
+	BATHROOM,
+	OFFICE,
+	OTHER
+};
+
 class ComponentShaderBase;
 
 class Room: public Entity {
 public:
 
-	RoomLayout * roomLayout;
-
-	//std::vector<MeshEntity *> mesh;
 	std::vector<BulletMeshEntity *> boundaries;
 
 	std::vector<int> furnitureSlots;
