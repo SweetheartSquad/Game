@@ -24,8 +24,8 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	portraitPanel = new UIPanel(_height*0.5f, _height*0.5f, _world, _scene);
 	portraitPanel->setShader(backgroundShader, true);
 	
-	dialogue = new Label(_world, _scene, _font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, _width-_height);
-	speaker = new Label(_world, _scene, _font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, _width-_height);
+	dialogue = new LabelV2(_world, _scene, _font, textShader, backgroundShader, _width-_height);
+	speaker = new LabelV2(_world, _scene, _font, textShader, backgroundShader, _width-_height);
 
 	hlayout->addChild(portraitPanel);
 	vlayout->addChild(speaker);
