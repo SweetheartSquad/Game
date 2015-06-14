@@ -419,8 +419,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label5->setText(L"label 5");
 	//label6->setText(L"label 6");
 
-	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 100.f);
-	lv2->setText(L"NNNormal");
+	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 500.f);
+	lv2->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
 	
 	l3->addChild(lv2);
 
