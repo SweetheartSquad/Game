@@ -56,7 +56,8 @@
 #include <sqlite\sqlite3.h>
 #include <DatabaseConnection.h>
 
-#include "RoomLayout.h"
+#include <Room.h>
+#include <RoomLayout.h>
 
 #include <thread>
 #include <Character.h>
@@ -299,11 +300,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
+	Room * room = new Room(bulletWorld, shader, RoomLayout_t::RECT, glm::vec2(3.f, 3.f), PD_ResourceManager::uvs_alt);
+
+	//MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
 	childTransform->addChild(room);
-	room->setShader(shader, true);
+	//room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
-	room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
+	//room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
 
 	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
 	/*

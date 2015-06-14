@@ -1,12 +1,11 @@
 #include <RoomLayout.h>
-#include <MeshFactory.h>
+#include <MeshEntity.h>
 #include <math.h>
 
-RoomLayout::RoomLayout(void)
-{
+RoomLayout::~RoomLayout(void){
 }
 
-MeshInterface * RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
+std::vector<MeshInterface *> RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
 	// split up later into walls, floor, and cieling?
 	switch(type){
 		case T:
@@ -21,15 +20,12 @@ MeshInterface * RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
 	}
 }
 
-MeshInterface * RoomLayout::getRectRoom(glm::vec2 size){
+std::vector<MeshInterface *> RoomLayout::getRectRoom(glm::vec2 size){
 
-	QuadMesh * m = new QuadMesh();
-	m = box(m, size, glm::vec2(), true, true, true, true);
-
-	return m;
+	return box(size, glm::vec2(), true, true, true, true);
 }
 
-MeshInterface * RoomLayout::getTRoom(glm::vec2 size){
+std::vector<MeshInterface *> RoomLayout::getTRoom(glm::vec2 size){
 	
 	// size.x = # units right from intersection of T (reflected)
 	// size.y = # units down from intersection of T
@@ -38,7 +34,7 @@ MeshInterface * RoomLayout::getTRoom(glm::vec2 size){
 	size.x = size.x * 2 + 1;
 	size.y = size.y + 1;
 
-	QuadMesh * m = new QuadMesh();
+	std::vector<MeshInterface *> boundaries;
 
 	// horizontal block index
 	int middle = floor(size.x / 2);
@@ -49,20 +45,21 @@ MeshInterface * RoomLayout::getTRoom(glm::vec2 size){
 	
 	// across (min 3, odd number only)
 	for(unsigned int i = 0; i < size.x; ++i){
+		std::vector<MeshInterface *> b;
 		if(i == 0){
 			// left top of T
-			m = box(m, s, pos, true, true, true, false);
+			b = box(s, pos, true, true, true, false);
 		}else if(i == size.x - 1){
 			// right top of T
-			m = box(m, s, pos, true, true, false, true);
+			b = box(s, pos, true, true, false, true);
 		}else if(i == middle){
 			// top intersect with vertical part of T
-			m = box(m, s, pos, false, true, false, false);
+			b = box(s, pos, false, true, false, false);
 		}else{
 			// top of T
-			m = box(m, s, pos, true, true, false, false);
+			b = box(s, pos, true, true, false, false);
 		}
-
+		boundaries.insert(boundaries.end(), b.begin(), b.end());
 		pos.x += 1;
 	}
 
@@ -70,21 +67,23 @@ MeshInterface * RoomLayout::getTRoom(glm::vec2 size){
 
 	// down (min 2, including top part)
 	for(unsigned int i = 0; i < size.y - 1; ++i){
+		std::vector<MeshInterface *> b;
 		pos.y += 1;
 		
 		if(i == size.y - 2){
 			// bottom of T
-			m = box(m, s, pos, true, false, true, true);
+			b = box(s, pos, true, false, true, true);
 		}else{
 			// vertical part of T
-			m = box(m, s, pos, false, false, true, true);
+			b = box(s, pos, false, false, true, true);
 		}
+		boundaries.insert(boundaries.end(), b.begin(), b.end());
 	}
 
-	return m;
+	return boundaries;
 }
 
-MeshInterface * RoomLayout::getLRoom(glm::vec2 size){
+std::vector<MeshInterface *> RoomLayout::getLRoom(glm::vec2 size){
 
 	// size.x = # units up from intersection of L
 	// size/y = # units right from intersection of L
@@ -92,25 +91,25 @@ MeshInterface * RoomLayout::getLRoom(glm::vec2 size){
 	size.x = size.x + 1;
 	size.y = size.y + 1;
 
-	QuadMesh * m = new QuadMesh();
+	std::vector<MeshInterface *> boundaries;
 
 	glm::vec2 s = glm::vec2(1, 1);
 	glm::vec2 pos = glm::vec2();
 
 	// down (min 2, including bottom part)
 	for(unsigned int i = 0; i < size.y; ++i){
-		
+		std::vector<MeshInterface *> b;
 		if(i == 0){
 			// top of L
-			m = box(m, s, pos, false, true, true, true);
+			b = box(s, pos, false, true, true, true);
 		}else if(i == size.y - 1){
 			// bottom left corner of L
-			m = box(m, s, pos, true, false, true, false);
+			b = box(s, pos, true, false, true, false);
 		}else{
 			// vertical part of L
-			m = box(m, s, pos, false, false, true, true);
+			b = box(s, pos, false, false, true, true);
 		}
-
+		boundaries.insert(boundaries.end(), b.begin(), b.end());
 		pos.y += 1;
 	}
 
@@ -118,22 +117,26 @@ MeshInterface * RoomLayout::getLRoom(glm::vec2 size){
 
 	// across (min 2, including vertical part)
 	for(unsigned int i = 0; i < size.x - 1; ++i){
+		std::vector<MeshInterface *> b;
 		pos.x += 1;
 
 		if(i == size.x - 2){
 			// bottom right end of L
-			m = box(m, s, pos, true, true, false, true);
+			b = box(s, pos, true, true, false, true);
 		}else{
 			// horizontal part of L
-			m = box(m, s, pos, true, true, false, false);
+			b = box(s, pos, true, true, false, false);
 		}
+
+		boundaries.insert(boundaries.end(), b.begin(), b.end());
 	}
 
-	return m;
+	return boundaries;
 }
 
-QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top, bool bottom){
-	
+std::vector<MeshInterface *> RoomLayout::box(glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top, bool bottom){
+	std::vector<MeshInterface *> boundaries;
+
 	float posX = pos.x * ROOM_UNIT;
 	float posZ = pos.y * ROOM_UNIT;
 
@@ -141,138 +144,114 @@ QuadMesh * RoomLayout::box(QuadMesh * m, glm::vec2 size, glm::vec2 pos, bool fro
 	float halfY = ROOM_HEIGHT / 2.f;
 	float halfZ = size.y / 2.f * ROOM_UNIT;
 
-	int idx = m->vertices.size() - 1;
-
-	int indices[4];
 	if(top){
 		// Top
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-		
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ)); // top left
 		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ)); // bottom left
 		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ)); // bottom right
 		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ)); // top right
-		m->setNormal(indices[0], 0.0, -1.0, 0.0);
-		m->setNormal(indices[1], 0.0, -1.0, 0.0);
-		m->setNormal(indices[2], 0.0, -1.0, 0.0);
-		m->setNormal(indices[3], 0.0, -1.0, 0.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, size.y);
-		m->setUV(indices[2], size.x, size.y);
-		m->setUV(indices[3], size.x, 0.0);
+		m->setNormal(0, 0.0, -1.0, 0.0);
+		m->setNormal(1, 0.0, -1.0, 0.0);
+		m->setNormal(2, 0.0, -1.0, 0.0);
+		m->setNormal(3, 0.0, -1.0, 0.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, size.y);
+		m->setUV(2, size.x, size.y);
+		m->setUV(3, size.x, 0.0);
+		boundaries.push_back(m);
 	}
 
 
 	if(bottom){
 		// Bottom
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
-		m->setNormal(indices[0], 0.0, 1.0, 0.0);
-		m->setNormal(indices[1], 0.0, 1.0, 0.0);
-		m->setNormal(indices[2], 0.0, 1.0, 0.0);
-		m->setNormal(indices[3], 0.0, 1.0, 0.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, size.y);
-		m->setUV(indices[2], size.x, size.y);
-		m->setUV(indices[3], size.x, 0.0);
+		m->setNormal(0, 0.0, 1.0, 0.0);
+		m->setNormal(1, 0.0, 1.0, 0.0);
+		m->setNormal(2, 0.0, 1.0, 0.0);
+		m->setNormal(3, 0.0, 1.0, 0.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, size.y);
+		m->setUV(2, size.x, size.y);
+		m->setUV(3, size.x, 0.0);
+		boundaries.push_back(m);
 	}
 
 	if(front){
 		//Front
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-		
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ)); // top right - top left
 		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ)); // bottom right - bottom left
 		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ)); // bottom left - bottom right
 		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ)); // top left - top right
-		m->setNormal(indices[0], 0.0, 0.0, -1.0);
-		m->setNormal(indices[1], 0.0, 0.0, -1.0);
-		m->setNormal(indices[2], 0.0, 0.0, -1.0);
-		m->setNormal(indices[3], 0.0, 0.0, -1.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, 1.0);
-		m->setUV(indices[2], size.x, 1.0);
-		m->setUV(indices[3], size.x, 0.0);
+		m->setNormal(0, 0.0, 0.0, -1.0);
+		m->setNormal(1, 0.0, 0.0, -1.0);
+		m->setNormal(2, 0.0, 0.0, -1.0);
+		m->setNormal(3, 0.0, 0.0, -1.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, 1.0);
+		m->setUV(2, size.x, 1.0);
+		m->setUV(3, size.x, 0.0);
+		boundaries.push_back(m);
 	}
 
 	if(back){
 		//Back
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ));
-		m->setNormal(indices[0], 0.0, 0.0, 1.0);
-		m->setNormal(indices[1], 0.0, 0.0, 1.0);
-		m->setNormal(indices[2], 0.0, 0.0, 1.0);
-		m->setNormal(indices[3], 0.0, 0.0, 1.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, 1.0);
-		m->setUV(indices[2], size.x, 1.0);
-		m->setUV(indices[3], size.x, 0.0);
+		m->setNormal(0, 0.0, 0.0, 1.0);
+		m->setNormal(1, 0.0, 0.0, 1.0);
+		m->setNormal(2, 0.0, 0.0, 1.0);
+		m->setNormal(3, 0.0, 0.0, 1.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, 1.0);
+		m->setUV(2, size.x, 1.0);
+		m->setUV(3, size.x, 0.0);
+		boundaries.push_back(m);
 	}
 
 	if(left){
 		//Left
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ));
-		m->setNormal(indices[0], 1.0, 0.0, 0.0);
-		m->setNormal(indices[1], 1.0, 0.0, 0.0);
-		m->setNormal(indices[2], 1.0, 0.0, 0.0);
-		m->setNormal(indices[3], 1.0, 0.0, 0.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, 1.0);
-		m->setUV(indices[2], size.y, 1.0);
-		m->setUV(indices[3], size.y, 0.0);
+		m->setNormal(0, 1.0, 0.0, 0.0);
+		m->setNormal(1, 1.0, 0.0, 0.0);
+		m->setNormal(2, 1.0, 0.0, 0.0);
+		m->setNormal(3, 1.0, 0.0, 0.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, 1.0);
+		m->setUV(2, size.y, 1.0);
+		m->setUV(3, size.y, 0.0);
+		boundaries.push_back(m);
 	}
 
 	if(right){
 		//Right
-		indices[0] = ++idx;
-		indices[1] = ++idx;
-		indices[2] = ++idx;
-		indices[3] = ++idx;
-
+		QuadMesh * m = new QuadMesh();
 		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ));
 		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ));
-		m->setNormal(indices[0], -1.0, 0.0, 0.0);
-		m->setNormal(indices[1], -1.0, 0.0, 0.0);
-		m->setNormal(indices[2], -1.0, 0.0, 0.0);
-		m->setNormal(indices[3], -1.0, 0.0, 0.0);
-		m->setUV(indices[0], 0.0, 0.0);
-		m->setUV(indices[1], 0.0, 1.0);
-		m->setUV(indices[2], size.y, 1.0);
-		m->setUV(indices[3], size.y, 0.0);
+		m->setNormal(0, -1.0, 0.0, 0.0);
+		m->setNormal(1, -1.0, 0.0, 0.0);
+		m->setNormal(2, -1.0, 0.0, 0.0);
+		m->setNormal(3, -1.0, 0.0, 0.0);
+		m->setUV(0, 0.0, 0.0);
+		m->setUV(1, 0.0, 1.0);
+		m->setUV(2, size.y, 1.0);
+		m->setUV(3, size.y, 0.0);
+		boundaries.push_back(m);
 	}
 
-	return m;
-}
-
-RoomLayout::~RoomLayout(void){
+	return boundaries;
 }
