@@ -2,7 +2,7 @@
 
 #include <Entity.h>
 #include <LinearLayout.h>
-#include <Label.h>
+#include <LabelV2.h>
 #include <UIPanel.h>
 #include <Timeout.h>
 #include <DialogueSay.h>
@@ -20,8 +20,8 @@ public:
 	LinearLayout * vlayout;
 	LinearLayout * optionslayout;
 	UIPanel * portraitPanel;
-	Label * speaker;
-	Label * dialogue;
+	LabelV2 * speaker;
+	LabelV2 * dialogue;
 	Timeout * timeout;
 	
 	bool waitingForInput;
