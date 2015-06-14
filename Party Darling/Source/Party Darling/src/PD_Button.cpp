@@ -16,22 +16,18 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	ComponentShaderBase * shader = new ComponentShaderBase(true);
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->compileShader();
-
 	float size = 30.f;
 	Font * font = new Font("../assets/arial.ttf", size, false);
 	//size = 1.f/size;
-	normalLabel = new LabelV2(_world, _scene, font, textShader, shader, 200);
+	normalLabel = new LabelV2(_world, _scene, font, textShader, 200);
 	normalLabel->setText(L"normal");
 	childTransform->addChild(normalLabel);//->scale(size/64.f);
 	
-	downLabel = new LabelV2(_world, _scene, font, textShader, shader, 200);
+	downLabel = new LabelV2(_world, _scene, font, textShader, 200);
 	downLabel->setText(L"down");
 	childTransform->addChild(downLabel);//->scale(size/64.f);
 	
-	overLabel = new LabelV2(_world, _scene, font, textShader, shader, 200);
+	overLabel = new LabelV2(_world, _scene, font, textShader, 200);
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel);//->scale(size/64.f);
 	

@@ -374,17 +374,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(c);
 	c->attachJoints();
 	c->body->setAngularFactor(btVector3(0,1,0));
-	//PD_Story("../assets/the legend of the figure skater's book.json");
-
-	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	label->setMarginTop(2.0f);
-	label->setMarginLeft(5.0f);
 
 	HorizontalLinearLayout * l3 = new HorizontalLinearLayout(bulletWorld, this);
 	childTransform->addChild(l3);
 	l3->setMarginRight(0.f);
 	
-	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 250.f);
+	lv2 = new LabelV2(bulletWorld, this, font, textShader, 250.f);
 	lv2->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
 	l3->addChild(lv2);
 
