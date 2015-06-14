@@ -153,7 +153,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	shader->compileShader();
 
-
 	//Set up cameras
 	Transform * t = new Transform();
 	mouseCam = new MousePerspectiveCamera();
@@ -291,12 +290,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ragdoll->upperbody->childTransform->addChild(light2);
 
 	font = new Font("../assets/arial.ttf", 30, false);
-	label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
-	label->setText(L"userId");	
-	ragdoll->head->childTransform->addChild(label);
-	label->parents.at(0)->scale(0.01,0.01,0.01);
-	label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	label->parents.at(0)->translate(0,5,0);
+	
+	//label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
+	//label->setText(L"userId");	
+	//ragdoll->head->childTransform->addChild(label);
+	//label->parents.at(0)->scale(0.01,0.01,0.01);
+	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
+	//label->parents.at(0)->translate(0,5,0);
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 
@@ -308,11 +308,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-<<<<<<< HEAD
-	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::T, glm::vec2(3.f, 3.f)));
-=======
 	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
->>>>>>> a46d8205d89169998fe22981aa025a815e3962f8
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	//room->mesh->pushMaterial(phongMat);
@@ -378,28 +374,28 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	label->setMarginTop(2.0f);
 	label->setMarginLeft(5.0f);
 
-	Label * label2 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	label2->setMarginTop(2.0f);
-	label2->setMarginLeft(5.0f);
+	//Label * label2 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	//label2->setMarginTop(2.0f);
+	//label2->setMarginLeft(5.0f);
 
-	Label * label3 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	label3->setMarginTop(2.0f);
-	label3->setMarginLeft(5.0f);
+	//Label * label3 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	//label3->setMarginTop(2.0f);
+	//label3->setMarginLeft(5.0f);
 
-	Label * label4 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
-	label4->setMarginTop(2.0f);
-	label4->setMarginLeft(5.0f);
+	//Label * label4 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
+	//label4->setMarginTop(2.0f);
+	//label4->setMarginLeft(5.0f);
 
-	Label * label5 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
-	label5->setMarginTop(2.0f);
-	label5->setMarginLeft(0.0f);
+	//Label * label5 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 100);
+	//label5->setMarginTop(2.0f);
+	//label5->setMarginLeft(0.0f);
 
-	Label * label6 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
-	label6->setMarginTop(2.0f);
-	label6->setMarginLeft(5.0f);
+	//Label * label6 = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::CHARACTER_WRAP, 150);
+	//label6->setMarginTop(2.0f);
+	//label6->setMarginLeft(5.0f);
 
 	LinearLayout * l = new LinearLayout(VERTICAL, bulletWorld, this);
-	l->addChild(label2);
+	//l->addChild(label2);
 	// Label causes a problem for some reason
 	//l->addChild(label);
 
@@ -424,8 +420,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//label6->setText(L"label 6");
 
 	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 100.f);
-	lv2->setText(L"label 12345");
+	lv2->setText(L"NNNormal");
+	
 	l3->addChild(lv2);
+
+	//l3->addChild(lv2);
 
 	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
 
@@ -507,14 +506,14 @@ void PD_TestScene::update(Step * _step){
 	joy->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_BACKSPACE)){
-		if(label->getText().size() > 0){
-			label->setText(label->getText().substr(0, label->getText().size() - 1));
-		}
+		//if(label->getText().size() > 0){
+		//	label->setText(label->getText().substr(0, label->getText().size() - 1));
+		//}
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_ENTER)) {
 		std::wstring s;
 		s += '\n';
-		label->appendText(s);
+		//label->appendText(s);
 	}
 	if(keyboard->justReleasedKeys.size() > 0){
 		std::wstringstream acc;
@@ -528,7 +527,7 @@ void PD_TestScene::update(Step * _step){
 			}
 		}
 		if(acc.tellp() > 0){
-			label->appendText(acc.str());
+			//label->appendText(acc.str());
 		}
 	}
 	
@@ -572,7 +571,7 @@ void PD_TestScene::update(Step * _step){
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
-		RequestJSONValueAsync(label);
+		//RequestJSONValueAsync(label);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_R)){	
 		std::stringstream sql;
@@ -600,7 +599,7 @@ void PD_TestScene::update(Step * _step){
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_Z)){
-		lv2->setText(L"abcdefg");
+		lv2->setText(L"NNNormalabcdefg");
 	}
 	
 	float speed = 1;
