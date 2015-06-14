@@ -11,6 +11,7 @@
 
 #include <BulletDebugDrawer.h>
 #include <BulletWorld.h>
+#include <LabelV2.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -77,6 +78,8 @@ public:
 	Sprite * crosshair;
 	Sprite * playerIndicator;
 	Sprite * mouseIndicator;
+
+	LabelV2 * lv2;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();

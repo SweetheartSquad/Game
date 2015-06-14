@@ -56,6 +56,15 @@
 
 #include <OpenALSound.h>
 #include <LinearLayout.h>
+#include <sqlite\sqlite3.h>
+#include <DatabaseConnection.h>
+
+#include "RoomLayout.h"
+
+#include <thread>
+#include <Character.h>
+#include <LinearLayout.h>
+#include <LabelV2.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -314,6 +323,48 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThing->createRigidBody(0);
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
+	
+	MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::T, glm::vec2(3.f, 3.f)));
+	childTransform->addChild(room);
+	room->setShader(shader, true);
+	//room->mesh->pushMaterial(phongMat);
+	room->mesh->pushTexture2D(PD_ResourceManager::uvs_alt);
+
+	room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
+	/*
+	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
+	childTransform->addChild(blah);
+	blah->setShader(shader, true);
+	blah->mesh->pushMaterial(phongMat);
+	*/
+	std::vector<std::string> objs;
+	objs.push_back("../assets/LOD_2/coffeeTable_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/couch_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/dish_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/dresser_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/lamp_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/shelf_LOD_2.obj");
+	objs.push_back("../assets/LOD_2/vase_LOD_2.obj");
+	std::vector<std::string> staticobjs;
+	staticobjs.push_back("../assets/LOD_2/door_LOD_2.obj");
+	//staticobjs.push_back("../assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
+	staticobjs.push_back("../assets/LOD_2/windowFrame_LOD_2.obj");
+	for(std::string s : objs){
+		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
+		obj->setColliderAsBoundingBox();
+		obj->createRigidBody(25);
+		obj->setShader(shader, true);
+		childTransform->addChild(obj);
+	}
+	for(std::string s : staticobjs){
+		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
+		obj->setColliderAsMesh(Resource::loadMeshFromObj(s).at(0), false);
+		obj->createRigidBody(0);
+		obj->setShader(shader, true);
+		childTransform->addChild(obj);
+	}
+	
+	ragdoll->translatePhysical(glm::vec3(0, 0.5,0));
 
 	PD_Button * button = new PD_Button(bulletWorld, this);
 	childTransform->addChild(button);
@@ -355,24 +406,31 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//l->addChild(label);
 
 	LinearLayout * l2 = new LinearLayout(VERTICAL, bulletWorld, this);
-	l2->addChild(label3);
-	l2->addChild(label4);
+	//l2->addChild(label3);
+	//l2->addChild(label4);
 
 	LinearLayout * l3 = new LinearLayout(HORIZONTAL, bulletWorld, this);
-	l3->addChild(label5);
-	l3->addChild(l);
-	l3->addChild(label6);
-	l3->addChild(l2);
+	//l3->addChild(label5);
+	//l3->addChild(l);
+	//l3->addChild(label6);
+	//l3->addChild(l2);
 
 	childTransform->addChild(l3);
 
 	l3->setMarginRight(0.f);
 	
-	label2->setText(L"label 2");
-	label3->setText(L"label 3");
-	label4->setText(L"label 4");
-	label5->setText(L"label 5");
-	label6->setText(L"label 6");
+	//label2->setText(L"label 2");
+	//label3->setText(L"label 3");
+	//label4->setText(L"label 4");
+	//label5->setText(L"label 5");
+	//label6->setText(L"label 6");
+
+	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 100.f);
+	lv2->setText(L"label 12345");
+	l3->addChild(lv2);
+
+	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
+
 }
 
 
@@ -530,6 +588,10 @@ void PD_TestScene::update(Step * _step){
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_B)){
 		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(0.2, 0.1, 1));
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_Z)){
+		lv2->setText(L"abcdefg");
 	}
 	
 	float speed = 1;
