@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\DialogueDisplay.cpp" />
+    <ClCompile Include="..\src\DialogueSay.cpp" />
     <ClCompile Include="..\src\PD_Button.cpp" />
     <ClCompile Include="..\src\PD_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
@@ -22,6 +24,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Character.h" />
+    <ClInclude Include="..\include\DialogueDisplay.h" />
+    <ClInclude Include="..\include\DialogueSay.h" />
     <ClInclude Include="..\include\PD_Button.h" />
     <ClInclude Include="..\include\PD_ResourceManager.h" />
     <ClInclude Include="..\include\PD_Game.h" />

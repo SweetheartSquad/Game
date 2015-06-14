@@ -72,6 +72,7 @@
 #include <LinearLayout.h>
 #include <LabelV2.h>
 #include <shader\ComponentShaderText.h>
+#include <DialogueDisplay.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -211,25 +212,25 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	crosshair = new Sprite();
 	uiLayer.childTransform->addChild(crosshair);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	crosshair->parents.at(0)->scale(8,8,1);
+	crosshair->parents.at(0)->scale(16, 16, 1);
 	crosshair->setShader(uiLayer.shader, true);
 
 	playerIndicator = new Sprite();
 	uiLayer.childTransform->addChild(playerIndicator);
 	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
-	playerIndicator->parents.at(0)->scale(8,8,1);
+	playerIndicator->parents.at(0)->scale(16, 16, 1);
 	playerIndicator->setShader(uiLayer.shader, true);
 
 	mouseIndicator = new Sprite();
 	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
-	mouseIndicator->parents.at(0)->scale(32 * 10 * 0.5, 32 * 10 * 0.5, 1);
+	mouseIndicator->parents.at(0)->scale(32 * 10, 32 * 10, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
 	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
-		mouseIndicator->mesh->vertices[i].x -= 1;
-		mouseIndicator->mesh->vertices[i].y -= 1;
+		mouseIndicator->mesh->vertices[i].x += 0.5f;
+		mouseIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	mouseIndicator->mesh->dirty = true;
 	mouseIndicator->setShader(uiLayer.shader, true);
@@ -240,8 +241,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	volumeIndicator->parents.at(0)->scale(50, 50, 1);
 
 	for(unsigned long int i = 0; i < volumeIndicator->mesh->vertices.size(); ++i){
-		volumeIndicator->mesh->vertices[i].x -= 1;
-		volumeIndicator->mesh->vertices[i].y -= 1;
+		volumeIndicator->mesh->vertices[i].x -= 0.5f;
+		volumeIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	volumeIndicator->mesh->dirty = true;
 	volumeIndicator->setShader(uiLayer.shader, true);
@@ -417,19 +418,27 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	l3->setMarginRight(0.f);
 	
-	//label2->setText(L"label 2");
-	//label3->setText(L"label 3");
-	//label4->setText(L"label 4");
-	//label5->setText(L"label 5");
-	//label6->setText(L"label 6");
-
 	lv2 = new LabelV2(bulletWorld, this, font, textShader, backgroundShader, 250.f);
 	lv2->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
 	l3->addChild(lv2);
 
-	//l3->addChild(lv2);
+	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, 900, 150);
+	//childTransform->addChild(dd);
+	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
+	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
+	std::string test3 = "{ \"speaker\":\"sean\", \"portrait\":\"not implemented\", \"text\": [\"ryan this isn't working :\/\"] }";
+	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
+		"{\"text\": \"option 1\", \"triggers\": \"\"},"
+		"{\"text\": \"option 2\", \"triggers\": \"\"} ] }";
 
-	static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
+	dd->stuffToSay.push_back(new DialogueSay(test));
+	dd->stuffToSay.push_back(new DialogueAsk(test4));
+	dd->stuffToSay.push_back(new DialogueSay(test2));
+	dd->stuffToSay.push_back(new DialogueSay(test3));
+	dd->sayNext();
+	dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	uiLayer.childTransform->addChild(dd);
+	dd->parents.at(0)->translate(0, 150, 0);
 }
 
 
@@ -702,8 +711,8 @@ void PD_TestScene::update(Step * _step){
 	}
 	playerIndicator->parents.at(0)->translate(sp, false);
 	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
-	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0, false);
-	
+	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
+
 	float volume = std::max(
 		std::abs(PD_ResourceManager::scene->getAmplitude()),
 		std::abs(PD_ResourceManager::stream->getAmplitude())
