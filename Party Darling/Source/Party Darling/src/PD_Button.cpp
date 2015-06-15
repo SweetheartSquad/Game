@@ -21,7 +21,7 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader 
 void PD_Button::update(Step * _step){
 	TextArea::update(_step);
 
-	if(isHovered){
+	/*if(isHovered){
 		if(isDown){
 			setText(downLabel);
 		}else{
@@ -29,5 +29,5 @@ void PD_Button::update(Step * _step){
 		}
 	}else{
 		setText(normalLabel);
-	}
+	}*/
 }
