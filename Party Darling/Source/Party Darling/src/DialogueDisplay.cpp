@@ -90,8 +90,10 @@ bool DialogueDisplay::sayNext(){
 				//o->parents.at(0)->scale(50,50,1);
 				o->onDownFunction = [this](NodeUI * _this) {
 					this->waitingForInput = false;
-					optionslayout->childTransform->children.clear();
-					sayNext();
+					for(unsigned long int i = 0; i < this->options.size(); ++i){
+						this->optionslayout->removeChild(this->options.at(i));
+					}
+					this->sayNext();
 				};
 			}
 		}
