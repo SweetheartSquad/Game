@@ -2,7 +2,7 @@
 
 #include <Entity.h>
 #include <LinearLayout.h>
-#include <LabelV2.h>
+#include <TextArea.h>
 #include <Timeout.h>
 #include <DialogueSay.h>
 #include <PD_Button.h>
@@ -19,8 +19,8 @@ public:
 	LinearLayout * vlayout;
 	LinearLayout * optionslayout;
 	NodeUI * portraitPanel;
-	LabelV2 * speaker;
-	LabelV2 * dialogue;
+	TextArea * speaker;
+	TextArea * dialogue;
 	Timeout * timeout;
 	
 	bool waitingForInput;

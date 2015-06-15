@@ -70,7 +70,7 @@
 #include <thread>
 #include <Character.h>
 #include <LinearLayout.h>
-#include <LabelV2.h>
+#include <TextArea.h>
 #include <shader\ComponentShaderText.h>
 #include <DialogueDisplay.h>
 #include <HorizontalLinearLayout.h>
@@ -379,27 +379,29 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(l3);
 	l3->setMarginRight(0.f);
 	
-	lv2 = new LabelV2(bulletWorld, this, font, textShader, 250.f);
-	lv2->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
-	l3->addChild(lv2);
+	textArea = new TextArea(bulletWorld, this, font, textShader, 250.f);
+	textArea->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
+	l3->addChild(textArea);
 
+	srand(time(NULL));
 	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, 900, 150);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
-	std::string test3 = "{ \"speaker\":\"sean\", \"portrait\":\"not implemented\", \"text\": [\"ryan this isn't working :\/\"] }";
+	std::string test3 = "{ \"speaker\":\"sean\", \"portrait\":\"not implemented\", \"text\": [\"ryan this isn't working :/\"] }";
 	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
 		"{\"text\": \"option 1\", \"triggers\": \"\"},"
 		"{\"text\": \"option 2\", \"triggers\": \"\"} ] }";
 
 	dd->stuffToSay.push_back(new DialogueSay(test));
-	dd->stuffToSay.push_back(new DialogueAsk(test4));
 	dd->stuffToSay.push_back(new DialogueSay(test2));
+	dd->stuffToSay.push_back(new DialogueAsk(test4));
 	dd->stuffToSay.push_back(new DialogueSay(test3));
 	dd->sayNext();
 	//dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	//childTransform->addChild(dd);
 	uiLayer.childTransform->addChild(dd);
-	dd->parents.at(0)->translate(0, 150, 0);
+	//dd->parents.at(0)->translate(300, 300, 0);
 }
 
 
@@ -571,7 +573,7 @@ void PD_TestScene::update(Step * _step){
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_Z)){
-		lv2->setText(L"NNNormalabcdefg");
+		textArea->setText(L"NNNormalabcdefg");
 	}
 	
 	float speed = 1;

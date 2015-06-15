@@ -19,22 +19,20 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
 	float size = 30.f;
 	Font * font = new Font("../assets/arial.ttf", size, false);
 	//size = 1.f/size;
-	normalLabel = new LabelV2(_world, _scene, font, textShader, 200);
+	normalLabel = new TextLabel(_world, _scene, font, textShader, 200);
 	normalLabel->setText(L"normal");
 	childTransform->addChild(normalLabel);//->scale(size/64.f);
 	
-	downLabel = new LabelV2(_world, _scene, font, textShader, 200);
+	downLabel = new TextLabel(_world, _scene, font, textShader, 200);
 	downLabel->setText(L"down");
 	childTransform->addChild(downLabel);//->scale(size/64.f);
 	
-	overLabel = new LabelV2(_world, _scene, font, textShader, 200);
+	overLabel = new TextLabel(_world, _scene, font, textShader, 200);
 	overLabel->setText(L"over");
 	childTransform->addChild(overLabel);//->scale(size/64.f);
 	
 	setWidth(200.f);
 	updateCollider();
-	childTransform->translate(-1.5, -0.25, 0);
-	body->translate(btVector3(1.5, 0.25, 0));
 }
 
 void PD_Button::update(Step * _step){

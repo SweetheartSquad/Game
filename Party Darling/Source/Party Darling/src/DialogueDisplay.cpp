@@ -24,8 +24,8 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	portraitPanel->setWidth(_height);
 	portraitPanel->setHeight(_height);
 	
-	dialogue = new LabelV2(_world, _scene, _font, textShader, _width-_height);
-	speaker = new LabelV2(_world, _scene, _font, textShader, _width-_height);
+	dialogue = new TextArea(_world, _scene, _font, textShader, _width-_height);
+	speaker = new TextArea(_world, _scene, _font, textShader, _width-_height);
 
 	hlayout->addChild(portraitPanel);
 	vlayout->addChild(speaker);
@@ -60,7 +60,9 @@ bool DialogueDisplay::sayNext(){
 	// set the speaker and portrait
 	std::string sp = stuffToSay.at(currentDialogue)->speaker;
 	speaker->setText(std::wstring(sp.begin(), sp.end()));
-	portraitPanel->background->mesh->textures.clear();
+	while(portraitPanel->background->mesh->textures.size() > 0){
+		portraitPanel->background->mesh->popTexture2D();
+	}
 	if(stuffToSay.at(currentDialogue)->portrait == "cheryl"){
 		portraitPanel->background->mesh->pushTexture2D(PD_ResourceManager::cheryl);
 	}else{

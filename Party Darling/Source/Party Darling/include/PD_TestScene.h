@@ -11,7 +11,7 @@
 
 #include <BulletDebugDrawer.h>
 #include <BulletWorld.h>
-#include <LabelV2.h>
+#include <TextLabel.h>
 
 class MousePerspectiveCamera;
 class FollowCamera;
@@ -47,7 +47,6 @@ public:
 	glm::vec3 lastPos;
 
 	Font  * font;
-	Label * label;
 
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
@@ -74,7 +73,7 @@ public:
 	Sprite * mouseIndicator;
 	Sprite * volumeIndicator;
 
-	LabelV2 * lv2;
+	TextArea * textArea;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();

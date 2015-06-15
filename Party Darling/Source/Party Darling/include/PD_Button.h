@@ -1,14 +1,14 @@
 #pragma once
 
 #include <NodeUI.h>
-#include <LabelV2.h>
+#include <TextLabel.h>
 
 class PD_Button : public NodeUI{
 public:
 
-	LabelV2 * normalLabel;
-	LabelV2 * downLabel;
-	LabelV2 * overLabel;
+	TextLabel * normalLabel;
+	TextLabel * downLabel;
+	TextLabel * overLabel;
 
 	PD_Button(BulletWorld * _world, Scene * _scene);
 	
