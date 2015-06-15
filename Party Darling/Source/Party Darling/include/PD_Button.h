@@ -1,16 +1,18 @@
 #pragma once
 
 #include <NodeUI.h>
-#include <TextLabel.h>
+#include <TextArea.h>
 
-class PD_Button : public NodeUI{
+
+#define BUTTON_SIZE 30
+class PD_Button : public TextArea{
 public:
 
-	TextLabel * normalLabel;
-	TextLabel * downLabel;
-	TextLabel * overLabel;
+	std::wstring normalLabel;
+	std::wstring downLabel;
+	std::wstring overLabel;
 
-	PD_Button(BulletWorld * _world, Scene * _scene);
+	PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width);
 	
 	void update(Step * _step) override;
 };

@@ -12,7 +12,7 @@ public:
 	std::vector<DialogueSay *> stuffToSay;
 	unsigned long int currentDialogue;
 
-	DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, float _width, float _height);
+	DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height);
 	~DialogueDisplay();
 	
 	LinearLayout * hlayout;
@@ -25,6 +25,10 @@ public:
 	
 	bool waitingForInput;
 	std::vector<PD_Button *> options;
+	float width;
+	float height;
+	Font * font;
+	Shader * textShader;
 
 
 	void update(Step * _step) override;

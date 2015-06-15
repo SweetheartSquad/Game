@@ -222,20 +222,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerIndicator->parents.at(0)->scale(16, 16, 1);
 	playerIndicator->setShader(uiLayer.shader, true);
 
-	mouseIndicator = new Sprite();
-	uiLayer.childTransform->addChild(mouseIndicator);
-	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
-	mouseIndicator->parents.at(0)->scale(32 * 10, 32 * 10, 1);
-	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
-	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
-
-	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
-		mouseIndicator->mesh->vertices[i].x += 0.5f;
-		mouseIndicator->mesh->vertices[i].y -= 0.5f;
-	}
-	mouseIndicator->mesh->dirty = true;
-	mouseIndicator->setShader(uiLayer.shader, true);
-
 	volumeIndicator = new Sprite();
 	uiLayer.childTransform->addChild(volumeIndicator);
 	volumeIndicator->mesh->pushTexture2D(PD_ResourceManager::cheryl);
@@ -356,7 +342,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	ragdoll->translatePhysical(glm::vec3(0, 0.5,0));
 
-	PD_Button * button = new PD_Button(bulletWorld, this);
+	PD_Button * button = new PD_Button(bulletWorld, this, font, textShader, 200.f);
 	childTransform->addChild(button);
 	button->onDownFunction = [](NodeUI * _this) {
 		std::cout << "test " << std::endl;
@@ -379,12 +365,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(l3);
 	l3->setMarginRight(0.f);
 	
-	textArea = new TextArea(bulletWorld, this, font, textShader, 250.f);
-	textArea->setText(L"NNNormaffgfgffgfgfgffgfgfgfgfgfgegegererretertretrtretretretertertl");
+	textArea = new TextArea(bulletWorld, this, font, textShader, 50.f);
+	textArea->setText(L"NN\nNorm\naffgfgffgfgfgffgfgfgfgfgfg\negegererretertretrtretretretertertl");
 	l3->addChild(textArea);
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, 900, 150);
+	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, textShader, 900, 150);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
@@ -402,6 +388,20 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	//childTransform->addChild(dd);
 	uiLayer.childTransform->addChild(dd);
 	//dd->parents.at(0)->translate(300, 300, 0);
+
+	mouseIndicator = new Sprite();
+	uiLayer.childTransform->addChild(mouseIndicator);
+	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
+	mouseIndicator->parents.at(0)->scale(32 * 10, 32 * 10, 1);
+	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
+	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
+
+	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
+		mouseIndicator->mesh->vertices[i].x += 0.5f;
+		mouseIndicator->mesh->vertices[i].y -= 0.5f;
+	}
+	mouseIndicator->mesh->dirty = true;
+	mouseIndicator->setShader(uiLayer.shader, true);
 }
 
 

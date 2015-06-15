@@ -7,50 +7,27 @@
 #include <shader/ShaderComponentTexture.h>
 #include <MeshFactory.h>
 
-PD_Button::PD_Button(BulletWorld * _world, Scene * _scene) :
-	NodeUI(_world, _scene),
+PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width) :
+	TextArea(_world, _scene, _font, _textShader, _width, BUTTON_SIZE),
 	NodeBulletBody(_world),
-	Entity()
+	Entity(),
+	normalLabel(L"normal"),
+	downLabel(L"down"),
+	overLabel(L"over")
 {
-	ComponentShaderBase * textShader = new ComponentShaderBase(true);
-	textShader->addComponent(new ShaderComponentText(textShader));
-	textShader->compileShader();
-
-	float size = 30.f;
-	Font * font = new Font("../assets/arial.ttf", size, false);
-	//size = 1.f/size;
-	normalLabel = new TextLabel(_world, _scene, font, textShader, 200);
-	normalLabel->setText(L"normal");
-	childTransform->addChild(normalLabel);//->scale(size/64.f);
-	
-	downLabel = new TextLabel(_world, _scene, font, textShader, 200);
-	downLabel->setText(L"down");
-	childTransform->addChild(downLabel);//->scale(size/64.f);
-	
-	overLabel = new TextLabel(_world, _scene, font, textShader, 200);
-	overLabel->setText(L"over");
-	childTransform->addChild(overLabel);//->scale(size/64.f);
-	
-	setWidth(200.f);
-	updateCollider();
+	setText(normalLabel);
 }
 
 void PD_Button::update(Step * _step){
-	NodeUI::update(_step);
+	TextArea::update(_step);
 
 	if(isHovered){
 		if(isDown){
-			normalLabel->setVisible(false);
-			overLabel->setVisible(false);
-			downLabel->setVisible(true);
+			setText(downLabel);
 		}else{
-			normalLabel->setVisible(false);
-			overLabel->setVisible(true);
-			downLabel->setVisible(false);
+			setText(overLabel);
 		}
 	}else{
-		normalLabel->setVisible(true);
-		overLabel->setVisible(false);
-		downLabel->setVisible(false);
+		setText(normalLabel);
 	}
 }

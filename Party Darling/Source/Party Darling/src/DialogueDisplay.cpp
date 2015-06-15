@@ -9,23 +9,24 @@
 #include <VerticalLinearLayout.h>
 #include <HorizontalLinearLayout.h>
 
-DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, float _width, float _height) :
+DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
 	currentDialogue(0),
-	waitingForInput(false)
+	waitingForInput(false),
+	width(_width),
+	height(_height),
+	font(_font),
+	textShader(_textShader)
 {
 	hlayout = new HorizontalLinearLayout(_world, _scene);
 	vlayout = new VerticalLinearLayout(_world, _scene);
 	optionslayout = new VerticalLinearLayout(_world, _scene);
-
-	ComponentShaderText * textShader = new ComponentShaderText(true);
-	textShader->textComponent->setColor(glm::vec3(1, 0, 0));
 	
 	portraitPanel = new NodeUI(_world, _scene);
 	portraitPanel->setWidth(_height);
 	portraitPanel->setHeight(_height);
 	
-	dialogue = new TextArea(_world, _scene, _font, textShader, _width-_height);
-	speaker = new TextArea(_world, _scene, _font, textShader, _width-_height);
+	dialogue = new TextArea(_world, _scene, _font, _textShader, _width-_height);
+	speaker = new TextArea(_world, _scene, _font, _textShader, _width-_height);
 
 	hlayout->addChild(portraitPanel);
 	vlayout->addChild(speaker);
@@ -82,8 +83,8 @@ bool DialogueDisplay::sayNext(){
 			waitingForInput = true;
 			for(std::string s : ask->options){
 				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene);
-				o->normalLabel->setText(std::wstring(s.begin(), s.end()));
+				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, width-height);
+				o->normalLabel = std::wstring(s.begin(), s.end());
 				options.push_back(o);
 				optionslayout->addChild(o);
 				//o->parents.at(0)->scale(50,50,1);
