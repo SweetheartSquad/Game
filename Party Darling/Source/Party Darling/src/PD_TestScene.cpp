@@ -360,7 +360,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(c);
 	c->attachJoints();
 	c->body->setAngularFactor(btVector3(0,1,0));
-
+	
+	/*
 	HorizontalLinearLayout * l3 = new HorizontalLinearLayout(bulletWorld, this);
 	childTransform->addChild(l3);
 	l3->setMarginRight(0.f);
@@ -368,6 +369,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textArea = new TextArea(bulletWorld, this, font, textShader, 50.f);
 	textArea->setText(L"NN\nNorm\naffgfgffgfgfgffgfgfgfgfgfg\negegererretertretrtretretretertertl");
 	l3->addChild(textArea);
+	*/
 
 	srand(time(NULL));
 	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, textShader, 900, 150);

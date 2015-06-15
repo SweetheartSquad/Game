@@ -8,7 +8,7 @@
 #include <MeshFactory.h>
 
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width) :
-	TextArea(_world, _scene, _font, _textShader, _width, BUTTON_SIZE),
+	TextArea(_world, _scene, _font, _textShader, _width),
 	NodeBulletBody(_world),
 	Entity(),
 	normalLabel(L"normal"),
@@ -21,13 +21,16 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader 
 void PD_Button::update(Step * _step){
 	TextArea::update(_step);
 
-	/*if(isHovered){
+	if(isHovered){
 		if(isDown){
-			setText(downLabel);
+			setBackgroundColour(1, 0, 0);
+			//setText(downLabel);
 		}else{
-			setText(overLabel);
+			setBackgroundColour(0, 1, 0);
+			//setText(overLabel);
 		}
 	}else{
-		setText(normalLabel);
-	}*/
+		setBackgroundColour(0, 0, 1);
+		//setText(normalLabel);
+	}
 }

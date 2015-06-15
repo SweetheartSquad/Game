@@ -4,7 +4,6 @@
 #include <TextArea.h>
 
 
-#define BUTTON_SIZE 30
 class PD_Button : public TextArea{
 public:
 
