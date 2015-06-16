@@ -372,7 +372,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(bulletWorld, this, font, textShader, 500, 100);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.bulletWorld, this, font, textShader, 500, 100);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
@@ -653,11 +653,13 @@ void PD_TestScene::update(Step * _step){
 			childTransform->removeChild(debugDrawer->parents.at(0));
 			delete debugDrawer->parents.at(0);
 			debugDrawer = nullptr;
+			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
 			childTransform->addChild(debugDrawer);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			bulletWorld->world->setDebugDrawer(debugDrawer);
+			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
 	}
 	
