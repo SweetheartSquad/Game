@@ -23,14 +23,14 @@ void PD_Button::update(Step * _step){
 
 	if(isHovered){
 		if(isDown){
-			setBackgroundColour(1, 0, 0);
+			setBackgroundColour(0, -1, -1);
 			//setText(downLabel);
 		}else{
-			setBackgroundColour(0, 1, 0);
+			setBackgroundColour(-1, 0, -1);
 			//setText(overLabel);
 		}
 	}else{
-		setBackgroundColour(0, 0, 1);
+		setBackgroundColour(-1, -1, 0);
 		//setText(normalLabel);
 	}
 }
