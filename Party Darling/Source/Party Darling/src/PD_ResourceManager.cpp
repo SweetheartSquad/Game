@@ -3,7 +3,7 @@
 #include <PD_ResourceManager.h>
 
 Texture * PD_ResourceManager::crosshair = new Texture("../assets/crosshair.png", 16, 16, true, false);
-Texture * PD_ResourceManager::cursor = new Texture("../assets/cursor.png", 32, 32, true, false);
+Texture * PD_ResourceManager::cursor = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
 Texture * PD_ResourceManager::cheryl = new Texture("../assets/img_cheryl.jpg", 256, 256, true, false);
 Texture * PD_ResourceManager::uvs = new Texture("../assets/uvs.png", 2048, 2048, true, false);
 Texture * PD_ResourceManager::uvs_alt = new Texture("../assets/uvs_alt.png", 2048, 2048, true, false);

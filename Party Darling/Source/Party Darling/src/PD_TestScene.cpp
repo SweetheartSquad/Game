@@ -349,7 +349,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << _this << std::endl;
 	};
 	
-	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("../assets/S-Tengine2_logo.obj").at(0));
+	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("../assets/engine basics/S-Tengine2_logo.obj").at(0));
 	obj->setColliderAsCapsule();
 	obj->createRigidBody(4);
 	obj->setShader(shader, true);
@@ -439,6 +439,7 @@ PD_TestScene::~PD_TestScene(){
 
 
 void PD_TestScene::update(Step * _step){
+
 	PD_ResourceManager::scene->update(_step);
 	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
 		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
