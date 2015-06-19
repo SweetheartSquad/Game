@@ -12,34 +12,53 @@
 DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
 	currentDialogue(0),
 	waitingForInput(false),
-	width(_width),
-	height(_height),
 	font(_font),
-	textShader(_textShader)
+	textShader(_textShader),
+	NodeUI(_world, _scene),
+	NodeBulletBody(_world)
 {
+	useRationalWidth = true;
+	rationalWidth = 1.f;
+	
+	setWidth(_width);
+	setHeight(_height);
+
+
 	hlayout = new HorizontalLinearLayout(_world, _scene);
 	vlayout = new VerticalLinearLayout(_world, _scene);
 	optionslayout = new VerticalLinearLayout(_world, _scene);
 	
 	portraitPanel = new NodeUI(_world, _scene);
-	portraitPanel->setWidth(_height);
-	portraitPanel->setHeight(_height);
+	portraitPanel->useRationalWidth = true;
+	portraitPanel->rationalWidth = 0.25f;
 	
-	dialogue = new TextArea(_world, _scene, _font, _textShader, _width-_height);
-	speaker = new TextArea(_world, _scene, _font, _textShader, _width-_height);
+	dialogue = new TextArea(_world, _scene, _font, _textShader, -1);
+	speaker = new TextArea(_world, _scene, _font, _textShader, -1);
+	dialogue->useRationalWidth = true;
+	dialogue->rationalWidth = 1.0f;
+	speaker->useRationalWidth = true;
+	speaker->rationalWidth = 1.0f;
 
+	
+	hlayout->autoResizingWidth = false;
+	vlayout->autoResizingWidth = false;
+	hlayout->useRationalWidth = true;
+	hlayout->rationalWidth = 1.0f;
+	vlayout->useRationalWidth = true;
+	vlayout->rationalWidth = 0.75f;
+	
+	addChild(hlayout);
 	hlayout->addChild(portraitPanel);
+	hlayout->addChild(vlayout);
 	vlayout->addChild(speaker);
 	vlayout->addChild(dialogue);
-	hlayout->addChild(vlayout);
 	vlayout->addChild(optionslayout);
-	
-	childTransform->addChild(hlayout, false);
 
 	timeout = new Timeout(2.f);
 	timeout->onCompleteFunction = [this](Timeout * _this) {
 		this->sayNext();
 	};
+
 }
 
 DialogueDisplay::~DialogueDisplay(){
@@ -83,7 +102,7 @@ bool DialogueDisplay::sayNext(){
 			waitingForInput = true;
 			for(std::string s : ask->options){
 				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, width-height);
+				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, getWidth()-getHeight());
 				o->normalLabel = std::wstring(s.begin(), s.end());
 				options.push_back(o);
 				optionslayout->addChild(o);
@@ -113,4 +132,5 @@ bool DialogueDisplay::sayNext(){
 void DialogueDisplay::update(Step * _step){
 	Entity::update(_step);
 	timeout->update(_step);
+	portraitPanel->setHeight(portraitPanel->getWidth());
 }

@@ -144,7 +144,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	sceneWidth(50),
 	firstPerson(true),
 	joy(new JoystickManager()),
-	uiLayer(0,0,0,0)
+	uiLayer(this, 0,0,0,0)
 {
 
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -372,7 +372,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.bulletWorld, this, font, textShader, 500, 100);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 500, 100);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
