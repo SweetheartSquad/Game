@@ -17,8 +17,10 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world)
 {
-	setWidth(_width);
+	setWidth(0.6f);
 	setHeight(_height);
+	setPadding(0.1f, 5);
+	setMargin(0.1f, 5);
 
 
 	hlayout = new HorizontalLinearLayout(_world, _scene);
@@ -120,7 +122,7 @@ bool DialogueDisplay::sayNext(){
 }
 
 void DialogueDisplay::update(Step * _step){
-	Entity::update(_step);
+	NodeUI::update(_step);
 	timeout->update(_step);
 	portraitPanel->setHeight(portraitPanel->getWidth());
 }
