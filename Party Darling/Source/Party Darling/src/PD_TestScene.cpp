@@ -372,7 +372,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.5f, 100.f);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 1.0f, -1);
 	uiLayer.addChild(dd);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";

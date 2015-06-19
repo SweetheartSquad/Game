@@ -17,10 +17,10 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world)
 {
-	setWidth(0.6f);
+	setWidth(_width);
 	setHeight(_height);
-	setPadding(0.1f, 5);
-	setMargin(0.1f, 5);
+	setPadding(0.1f, 0);
+	setMargin(0.1f, 0);
 
 
 	hlayout = new HorizontalLinearLayout(_world, _scene);
