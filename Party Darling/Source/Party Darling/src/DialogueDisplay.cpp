@@ -29,8 +29,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	optionslayout->setRationalWidth(1.f);
 	
 	portraitPanel = new NodeUI(_world, _scene);
-	//portraitPanel->setRationalWidth(0.25f);
-	portraitPanel->setWidth(100.f);
+	portraitPanel->setRationalWidth(0.25f);
 	
 	dialogue = new TextArea(_world, _scene, _font, _textShader, -1);
 	dialogue->setRationalWidth(1.f);
@@ -98,7 +97,7 @@ bool DialogueDisplay::sayNext(){
 				options.push_back(o);
 				optionslayout->addChild(o);
 				//o->parents.at(0)->scale(50,50,1);
-				o->onDownFunction = [this](NodeUI * _this) {
+				o->onClickFunction = [this](NodeUI * _this) {
 					this->waitingForInput = false;
 					for(unsigned long int i = 0; i < this->options.size(); ++i){
 						this->optionslayout->removeChild(this->options.at(i));

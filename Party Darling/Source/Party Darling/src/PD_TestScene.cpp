@@ -344,7 +344,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	PD_Button * button = new PD_Button(bulletWorld, this, font, textShader, 200.f);
 	childTransform->addChild(button);
-	button->onDownFunction = [](NodeUI * _this) {
+	button->onClickFunction = [](NodeUI * _this) {
 		std::cout << "test " << std::endl;
 		std::cout << _this << std::endl;
 	};
@@ -372,7 +372,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 1.f, 100.f);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.5f, 100.f);
 	uiLayer.addChild(dd);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
