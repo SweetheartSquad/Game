@@ -372,7 +372,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 500, 100);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 1.f, 100.f);
+	uiLayer.addChild(dd);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
@@ -388,7 +389,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	dd->sayNext();
 	//dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
 	//childTransform->addChild(dd);
-	uiLayer.childTransform->addChild(dd);
 	//dd->parents.at(0)->translate(300, 300, 0);
 
 	mouseIndicator = new Sprite();

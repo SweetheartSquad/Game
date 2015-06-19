@@ -20,7 +20,6 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader 
 
 void PD_Button::update(Step * _step){
 	TextArea::update(_step);
-
 	if(isHovered){
 		if(isDown){
 			setBackgroundColour(0, -1, -1);

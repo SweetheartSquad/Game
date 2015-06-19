@@ -17,35 +17,26 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world)
 {
-	useRationalWidth = true;
-	rationalWidth = 1.f;
-	
 	setWidth(_width);
 	setHeight(_height);
 
 
 	hlayout = new HorizontalLinearLayout(_world, _scene);
+	hlayout->setRationalWidth(1.f);
 	vlayout = new VerticalLinearLayout(_world, _scene);
+	vlayout->setRationalWidth(0.75f);
 	optionslayout = new VerticalLinearLayout(_world, _scene);
+	optionslayout->setRationalWidth(1.f);
 	
 	portraitPanel = new NodeUI(_world, _scene);
-	portraitPanel->useRationalWidth = true;
-	portraitPanel->rationalWidth = 0.25f;
+	//portraitPanel->setRationalWidth(0.25f);
+	portraitPanel->setWidth(100.f);
 	
 	dialogue = new TextArea(_world, _scene, _font, _textShader, -1);
+	dialogue->setRationalWidth(1.f);
 	speaker = new TextArea(_world, _scene, _font, _textShader, -1);
-	dialogue->useRationalWidth = true;
-	dialogue->rationalWidth = 1.0f;
-	speaker->useRationalWidth = true;
-	speaker->rationalWidth = 1.0f;
+	speaker->setRationalWidth(1.f);
 
-	
-	hlayout->autoResizingWidth = false;
-	vlayout->autoResizingWidth = false;
-	hlayout->useRationalWidth = true;
-	hlayout->rationalWidth = 1.0f;
-	vlayout->useRationalWidth = true;
-	vlayout->rationalWidth = 0.75f;
 	
 	addChild(hlayout);
 	hlayout->addChild(portraitPanel);
@@ -102,7 +93,7 @@ bool DialogueDisplay::sayNext(){
 			waitingForInput = true;
 			for(std::string s : ask->options){
 				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, getWidth()-getHeight());
+				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, 1.f);
 				o->normalLabel = std::wstring(s.begin(), s.end());
 				options.push_back(o);
 				optionslayout->addChild(o);
