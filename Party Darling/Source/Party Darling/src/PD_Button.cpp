@@ -16,6 +16,7 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader 
 	overLabel(L"over")
 {
 	setText(normalLabel);
+	mouseEnabled = true;
 }
 
 void PD_Button::update(Step * _step){
