@@ -75,6 +75,7 @@
 #include <DialogueDisplay.h>
 #include <HorizontalLinearLayout.h>
 #include <shader/DepthMapShader.h>
+#include <shader/NormalsShader.h>
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(Label * _label){
@@ -706,8 +707,8 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 
-	renderDepth(_matrixStack, _renderOptions);
-	renderDepthBufferToSurface(screenSurface);
+	renderNormals(_matrixStack, _renderOptions);
+	renderNormalBufferToSurface(screenSurface);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
