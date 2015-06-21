@@ -19,29 +19,36 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 {
 	setWidth(_width);
 	setHeight(_height);
-	setPadding(0.1f, 0);
-	setMargin(0.1f, 0);
+	//setPadding(0.1f, 0);
+	//setMargin(0.1f, 0);
 
 
-	hlayout = new HorizontalLinearLayout(_world, _scene);
+	/*hlayout = new HorizontalLinearLayout(_world, _scene);
 	hlayout->setRationalWidth(1.f);
+	hlayout->setRationalHeight(1.f);*/
 	vlayout = new VerticalLinearLayout(_world, _scene);
-	vlayout->setRationalWidth(0.75f);
+	vlayout->setRationalWidth(1.f, this);
+	vlayout->setHeight(getHeight());
+	vlayout->setMarginLeft(getHeight());
+	vlayout->verticalAlignment = kTOP;
 	optionslayout = new VerticalLinearLayout(_world, _scene);
 	optionslayout->setRationalWidth(1.f);
 	
 	portraitPanel = new NodeUI(_world, _scene);
-	portraitPanel->setRationalWidth(0.25f);
+	portraitPanel->setHeight(getHeight());
+	portraitPanel->setWidth(getHeight());
 	
 	dialogue = new TextArea(_world, _scene, _font, _textShader, -1);
-	dialogue->setRationalWidth(1.f);
+	dialogue->setRationalWidth(1.f, vlayout);
 	speaker = new TextArea(_world, _scene, _font, _textShader, -1);
-	speaker->setRationalWidth(1.f);
+	speaker->setRationalWidth(1.f, vlayout);
 
 	
-	addChild(hlayout);
-	hlayout->addChild(portraitPanel);
-	hlayout->addChild(vlayout);
+	//addChild(hlayout);
+	//hlayout->addChild(portraitPanel);
+	//hlayout->addChild(vlayout);
+	addChild(portraitPanel);
+	addChild(vlayout);
 	vlayout->addChild(speaker);
 	vlayout->addChild(dialogue);
 	vlayout->addChild(optionslayout);
@@ -92,10 +99,12 @@ bool DialogueDisplay::sayNext(){
 		DialogueAsk * ask = dynamic_cast<DialogueAsk *>(stuffToSay.at(currentDialogue));
 		if(ask != nullptr){
 			waitingForInput = true;
-			for(std::string s : ask->options){
+			for(unsigned long int i = 0; i < ask->options.size(); ++i){
 				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				PD_Button * o = new PD_Button(hlayout->world, hlayout->scene, font, textShader, 1.f);
-				o->normalLabel = std::wstring(s.begin(), s.end());
+				PD_Button * o = new PD_Button(world, scene, font, textShader, 1.f);
+				std::wstringstream ss;
+				ss << (i+1) << L". " << std::wstring(ask->options.at(i).begin(), ask->options.at(i).end());
+				o->setText(ss.str());
 				options.push_back(o);
 				optionslayout->addChild(o);
 				//o->parents.at(0)->scale(50,50,1);
@@ -124,5 +133,4 @@ bool DialogueDisplay::sayNext(){
 void DialogueDisplay::update(Step * _step){
 	NodeUI::update(_step);
 	timeout->update(_step);
-	portraitPanel->setHeight(portraitPanel->getWidth());
 }
