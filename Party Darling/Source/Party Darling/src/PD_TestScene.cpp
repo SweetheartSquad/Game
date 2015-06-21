@@ -278,7 +278,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	lights.push_back(light2);
 	ragdoll->upperbody->childTransform->addChild(light2);
 
-	font = new Font("../assets/arial.ttf", 30, false);
+	font = new Font("../assets/arial.ttf", 24, false);
 	
 	//label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
 	//label->setText(L"userId");	
@@ -370,14 +370,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textArea->setText(L"NN\nNorm\naffgfgffgfgfgffgfgfgfgfgfg\negegererretertretrtretretretertertl");
 	l3->addChild(textArea);
 	
+	
+	glm::uvec2 sd = vox::getScreenDimensions();
+	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 1.0f, -1);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.75f, 500);
 	uiLayer.addChild(dd);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
-	std::string test3 = "{ \"speaker\":\"sean\", \"portrait\":\"not implemented\", \"text\": [\"ryan this isn't working :/\"] }";
+	std::string test3 = "{ \"speaker\":\"this is an extra long name too see if it wraps or not\", \"portrait\":\"not implemented\", \"text\": [\"this text is also pretty long so that we can test out the text-wrapping stuff.\"] }";
 	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
 		"{\"text\": \"option 1\", \"triggers\": \"\"},"
 		"{\"text\": \"option 2\", \"triggers\": \"\"} ] }";
@@ -386,7 +389,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	dd->stuffToSay.push_back(new DialogueSay(test2));
 	dd->stuffToSay.push_back(new DialogueAsk(test4));
 	dd->stuffToSay.push_back(new DialogueSay(test3));
-	dd->sayNext();
+	Step step;
+	dd->update(&step);
+	//dd->sayNext();
 	//dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
 	//childTransform->addChild(dd);
 	//dd->parents.at(0)->translate(300, 300, 0);
