@@ -29,7 +29,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	vlayout = new VerticalLinearLayout(_world, _scene);
 	vlayout->setRationalWidth(1.f, this);
 	vlayout->setHeight(getHeight());
-	vlayout->setMarginLeft(getHeight());
+	vlayout->setMarginLeft(getHeight()+vlayout->getMarginLeft());
 	vlayout->verticalAlignment = kTOP;
 	optionslayout = new VerticalLinearLayout(_world, _scene);
 	optionslayout->setRationalWidth(1.f);

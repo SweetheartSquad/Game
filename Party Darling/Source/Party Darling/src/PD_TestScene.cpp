@@ -375,12 +375,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.75f, 500);
+	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.75f, 200);
 	uiLayer.addChild(dd);
 	//childTransform->addChild(dd);
 	std::string test = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
-	std::string test3 = "{ \"speaker\":\"this is an extra long name too see if it wraps or not\", \"portrait\":\"not implemented\", \"text\": [\"this text is also pretty long so that we can test out the text-wrapping stuff.\"] }";
+	std::string test3 = "{ \"speaker\":\"this is an extra long name to see if it wraps or not\", \"portrait\":\"not implemented\", \"text\": [\"this text is also pretty long so that we can test out the text-wrapping stuff.\"] }";
 	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
 		"{\"text\": \"option 1\", \"triggers\": \"\"},"
 		"{\"text\": \"option 2\", \"triggers\": \"\"} ] }";
