@@ -108,10 +108,15 @@ bool DialogueDisplay::sayNext(){
 				options.push_back(o);
 				optionslayout->addChild(o);
 				//o->parents.at(0)->scale(50,50,1);
-				o->onClickFunction = [this](NodeUI * _this) {
+				
+				std::vector<Trigger *> optionResult = ask->optionsResults.at(i);
+				o->onClickFunction = [this, optionResult](NodeUI * _this) {
+					for(auto t : optionResult){
+						t->trigger();
+					}
 					this->waitingForInput = false;
-					for(unsigned long int i = 0; i < this->options.size(); ++i){
-						this->optionslayout->removeChild(this->options.at(i));
+					for(unsigned long int j = 0; j < this->options.size(); ++j){
+						this->optionslayout->removeChild(this->options.at(j));
 					}
 					this->sayNext();
 				};

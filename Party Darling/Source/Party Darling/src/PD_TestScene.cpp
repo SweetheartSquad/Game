@@ -382,8 +382,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
 	std::string test3 = "{ \"speaker\":\"this is an extra long name to see if it wraps or not\", \"portrait\":\"not implemented\", \"text\": [\"this text is also pretty long so that we can test out the text-wrapping stuff.\"] }";
 	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
-		"{\"text\": \"option 1\", \"triggers\": \"\"},"
-		"{\"text\": \"option 2\", \"triggers\": \"\"} ] }";
+		"{\"text\": \"option 1\", \"triggers\": [ {\"type\":\"stateChange\", \"target\":\"CHOICE\", \"newState\":\"you chose one\" } ] },"
+		"{\"text\": \"option 2\", \"triggers\": [ {\"type\":\"stateChange\", \"target\":\"CHOICE\", \"newState\":\"you chose two\" } ] } ] }";
 
 	dd->stuffToSay.push_back(new DialogueSay(test));
 	dd->stuffToSay.push_back(new DialogueSay(test2));
