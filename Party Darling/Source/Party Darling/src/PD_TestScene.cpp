@@ -76,7 +76,7 @@
 #include <HorizontalLinearLayout.h>
 
 // Retrieves a JSON value from an HTTP request.
-pplx::task<void> RequestJSONValueAsync(Label * _label){
+pplx::task<void> RequestJSONValueAsync(TextLabel * _label){
 	// TODO: To successfully use this example, you must perform the request  
 	// against a server that provides JSON data.
 	web::http::client::http_client client(L"https://seniorproject-ryanbluth.c9.io/api/users");

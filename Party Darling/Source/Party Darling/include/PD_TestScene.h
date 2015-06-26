@@ -7,7 +7,6 @@
 #include <JoystickManager.h>
 
 #include <Font.h>
-#include <Label.h>
 
 #include <BulletDebugDrawer.h>
 #include <BulletWorld.h>
