@@ -14,7 +14,6 @@ Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _ty
 		boundaries.at(i)->createRigidBody(0);
 		boundaries.at(i)->mesh->pushTexture2D(_wallTexture);
 	}
-
 }
 
 void Room::setShader(Shader * _shader, bool _default){

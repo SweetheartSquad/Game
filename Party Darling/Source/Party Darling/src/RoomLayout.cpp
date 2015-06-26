@@ -1,4 +1,5 @@
 #include <RoomLayout.h>
+#include <Room.h>
 #include <MeshEntity.h>
 #include <math.h>
 
@@ -254,4 +255,13 @@ std::vector<MeshInterface *> RoomLayout::box(glm::vec2 size, glm::vec2 pos, bool
 	}
 
 	return boundaries;
+}
+
+std::vector<RoomObject *> RoomLayout::getRoomObjects(std::vector<Character *> _characters, std::vector<Furniture *> _furniture, std::vector<Item *> _items){
+	// calculate size of room, get random # of furniture/items?
+	// dining table set 1, tv couch set, bathroom set, ...
+
+	// if type == OTHER, random
+
+	///
 }
