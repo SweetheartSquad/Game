@@ -11,8 +11,8 @@ Texture * PD_ResourceManager::cheryl = new Texture("../assets/img_cheryl.jpg", 2
 Texture * PD_ResourceManager::uvs = new Texture("../assets/uvs.png", 2048, 2048, true, false);
 Texture * PD_ResourceManager::uvs_alt = new Texture("../assets/uvs_alt.png", 2048, 2048, true, false);
 OpenAL_Sound * PD_ResourceManager::scene = new OpenAL_SoundSimple("../assets/audio/tone3.ogg", false, false);
-//OpenAL_Sound * PD_ResourceManager::stream = new OpenAL_SoundStream("../assets/audio/Nu-.ogg", false, false);
-OpenAL_Sound * PD_ResourceManager::stream = new OpenAL_SoundStreamGenerative(false, false);
+OpenAL_Sound * PD_ResourceManager::stream = new OpenAL_SoundStream("../assets/audio/Nu-.ogg", false, false);
+//OpenAL_Sound * PD_ResourceManager::stream = new OpenAL_SoundStreamGenerative(false, false);
 
 void PD_ResourceManager::init(){
 	resources.push_back(crosshair);
@@ -23,7 +23,7 @@ void PD_ResourceManager::init(){
 	resources.push_back(scene);
 	resources.push_back(stream);
 	
-	stream->source->buffer->sampleRate = 8000;
+	/*stream->source->buffer->sampleRate = 8000;
 	stream->source->buffer->format = AL_FORMAT_STEREO8;
 	dynamic_cast<OpenAL_SoundStreamGenerative *>(stream)->generativeFunction = [](unsigned long int t){
 		// a oneliner from http://countercomplex.blogspot.ca/2011/10/algorithmic-symphonies-from-one-line-of.html
@@ -44,5 +44,5 @@ void PD_ResourceManager::init(){
 
 		// give it a couple seconds to warm up
 		return (t|t*t>>8)*sqrt(t>>10);
-	};
+	};*/
 }

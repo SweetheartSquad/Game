@@ -626,12 +626,12 @@ void PD_TestScene::update(Step * _step){
 
 		Joystick * one = joy->joysticks[0];
 		if(one != nullptr){
-			movement += playerSpeed * mass * mouseCam->forwardVectorRotated * -one->getAxis(Joystick::xbox_axes::kLY);
-			movement += playerSpeed * mass * mouseCam->rightVectorRotated * one->getAxis(Joystick::xbox_axes::kLX);
+			movement += playerSpeed * mass * mouseCam->forwardVectorRotated * -one->getAxis(one->axisLeftY);
+			movement += playerSpeed * mass * mouseCam->rightVectorRotated * one->getAxis(one->axisLeftX);
 			
 			// move camera by directly moving mouse
-			float x2 = one->getAxis(Joystick::xbox_axes::kRX)*100;
-			float y2 = one->getAxis(Joystick::xbox_axes::kRY)*100;
+			float x2 = one->getAxis(one->axisRightX)*100;
+			float y2 = -one->getAxis(one->axisRightY)*100;
 			mouse->translate(glm::vec2(x2, y2));
 		}
 
