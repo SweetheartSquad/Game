@@ -66,7 +66,6 @@
 #include <LinearLayout.h>
 #include <TextArea.h>
 #include <shader\ComponentShaderText.h>
-#include <DialogueDisplay.h>
 #include <HorizontalLinearLayout.h>
 
 // Retrieves a JSON value from an HTTP request.
@@ -114,7 +113,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	textShader(new ComponentShaderText(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
 	debugDrawer(nullptr),
-	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
@@ -190,19 +189,19 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	crosshair = new Sprite();
 	uiLayer.childTransform->addChild(crosshair);
-	crosshair->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	crosshair->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	crosshair->parents.at(0)->scale(16, 16, 1);
 	crosshair->setShader(uiLayer.shader, true);
 
 	playerIndicator = new Sprite();
 	uiLayer.childTransform->addChild(playerIndicator);
-	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::crosshair);
+	playerIndicator->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	playerIndicator->parents.at(0)->scale(16, 16, 1);
 	playerIndicator->setShader(uiLayer.shader, true);
 
 	volumeIndicator = new Sprite();
 	uiLayer.childTransform->addChild(volumeIndicator);
-	volumeIndicator->mesh->pushTexture2D(PD_ResourceManager::cheryl);
+	volumeIndicator->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
 	volumeIndicator->parents.at(0)->scale(50, 50, 1);
 
 	for(unsigned long int i = 0; i < volumeIndicator->mesh->vertices.size(); ++i){
@@ -231,51 +230,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
 
-	font = new Font("../assets/arial.ttf", 30, false);
+	font = new Font("assets/engine basics/OpenSans-Regular.ttf", 24, false);
 	
-	//label->setText(L"userId");	
-	//player->childTransform->addChild(label);
-	//label->parents.at(0)->scale(0.01,0.01,0.01);
-	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	//label->parents.at(0)->translate(0,5,0);
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	/*for(unsigned long int i = 0; i < 1000; ++i){
-		MeshEntity * me = new MeshEntity(MeshFactory::getCubeMesh());
-		me->setShader(shader, true);
-		childTransform->addChild(me);
-	}*/
-	
-	ragdoll = new BulletRagdoll(bulletWorld, 1.0f);
-	childTransform->addChild(ragdoll);
-	ragdoll->setShader(shader, true);
-	ragdoll->head->childTransform->addChild(PD_ResourceManager::stream, false);
-
-	//ragdoll->body->body->setAngularFactor(btVector3(0,0,0)); // keeps body upright
 	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
 	lights.push_back(light2);
-	ragdoll->upperbody->childTransform->addChild(light2);
-
-	font = new Font("../assets/arial.ttf", 24, false);
+	childTransform->addChild(light2);
 	
-	//label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
-	//label->setText(L"userId");	
-	//ragdoll->head->childTransform->addChild(label);
-	//label->parents.at(0)->scale(0.01,0.01,0.01);
-	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	//label->parents.at(0)->translate(0,5,0);
-	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
-
-
-	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
-	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
-	uiThing->childTransform->addChild(uiThingMesh);
-	uiThing->setColliderAsBox();
-	uiThing->createRigidBody(0);
-	uiThingMesh->setShader(shader, true);
-	childTransform->addChild(uiThing);*/
-	
-	Room * room = new Room(bulletWorld, shader, RoomLayout_t::RECT, glm::vec2(3.f, 3.f), PD_ResourceManager::uvs_alt);
+	Room * room = new Room(bulletWorld, shader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
 
 	//MeshEntity * room = new MeshEntity(RoomLayout::getWalls(RoomLayout_t::RECT, glm::vec2(3.f, 3.f)));
 	childTransform->addChild(room);
@@ -287,17 +250,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	
 	std::vector<std::string> objs;
-	objs.push_back("../assets/LOD_2/coffeeTable_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/couch_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/dish_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/dresser_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/lamp_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/shelf_LOD_2.obj");
-	objs.push_back("../assets/LOD_2/vase_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/couch_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/dish_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/dresser_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/lamp_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/shelf_LOD_2.obj");
+	objs.push_back("assets/meshes/LOD_2/vase_LOD_2.obj");
 	std::vector<std::string> staticobjs;
-	staticobjs.push_back("../assets/LOD_2/door_LOD_2.obj");
-	//staticobjs.push_back("../assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
-	staticobjs.push_back("../assets/LOD_2/windowFrame_LOD_2.obj");
+	staticobjs.push_back("assets/meshes/LOD_2/door_LOD_2.obj");
+	//staticobjs.push_back("assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
+	staticobjs.push_back("assets/meshes/LOD_2/windowFrame_LOD_2.obj");
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
@@ -312,8 +275,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		obj->setShader(shader, true);
 		childTransform->addChild(obj);
 	}
-	
-	ragdoll->translatePhysical(glm::vec3(0, 0.5,0));
 
 	PD_Button * button = new PD_Button(bulletWorld, this, font, textShader, 200.f);
 	childTransform->addChild(button);
@@ -322,13 +283,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		std::cout << _this << std::endl;
 	};
 	
-	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("../assets/engine basics/S-Tengine2_logo.obj").at(0));
+	BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj("assets/engine basics/S-Tengine2_logo.obj").at(0));
 	obj->setColliderAsCapsule();
 	obj->createRigidBody(4);
 	obj->setShader(shader, true);
 	childTransform->addChild(obj);
 
-	Character * c = new Character(bulletWorld);
+	TestCharacter * c = new TestCharacter(bulletWorld);
 	c->setShader(shader, true);
 	childTransform->addChild(c);
 	c->attachJoints();
@@ -348,30 +309,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	srand(time(NULL));
-	DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.75f, 200);
+	/*DialogueDisplay * dd = new DialogueDisplay(uiLayer.world, this, font, textShader, 0.75f, 200);
 	uiLayer.addChild(dd);
-	//childTransform->addChild(dd);
-	std::string test  = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"This is a dialogue thing\", \"beep\", \"boop\", \"i am a robot\"] }";
-	std::string test2 = "{ \"speaker\":\"not cheryl\", \"portrait\":\"not implemented\", \"text\": [\"thanks cheryl\"] }";
-	std::string test3 = "{ \"speaker\":\"this is an extra long name to see if it wraps or not\", \"portrait\":\"not implemented\", \"text\": [\"this text is also pretty long so that we can test out the text-wrapping stuff.\"] }";
-	std::string test4 = "{ \"speaker\":\"cheryl\", \"portrait\":\"cheryl\", \"text\": [\"question???\"], \"options\": ["
-		"{\"text\": \"option 1\", \"triggers\": [ {\"type\":\"stateChange\", \"target\":\"CHOICE\", \"newState\":\"you chose one\" } ] },"
-		"{\"text\": \"option 2\", \"triggers\": [ {\"type\":\"stateChange\", \"target\":\"CHOICE\", \"newState\":\"you chose two\" } ] } ] }";
 
-	dd->stuffToSay.push_back(new DialogueSay(test));
-	dd->stuffToSay.push_back(new DialogueSay(test2));
-	dd->stuffToSay.push_back(new DialogueAsk(test4));
-	dd->stuffToSay.push_back(new DialogueSay(test3));
 	Step step;
-	dd->update(&step);
-	//dd->sayNext();
-	//dd->portraitPanel->mesh->pushTexture2D(PD_ResourceManager::cheryl);
-	//childTransform->addChild(dd);
-	//dd->parents.at(0)->translate(300, 300, 0);
+	dd->update(&step);*/
 
 	mouseIndicator = new Sprite();
 	uiLayer.childTransform->addChild(mouseIndicator);
-	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::cursor);
+	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CURSOR")->texture);
 	mouseIndicator->parents.at(0)->scale(32 * 10, 32 * 10, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
 	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
@@ -382,22 +328,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	mouseIndicator->setShader(uiLayer.shader, true);
-}
-
-
-BulletMeshEntity * PD_TestScene::addThing(){
-	//static MeshInterface * mesh = Resource::loadMeshFromObj("../assets/pipe.obj").at(0);
-	static MeshInterface * mesh = MeshFactory::getCubeMesh(1);
-	BulletMeshEntity * thing = new BulletMeshEntity(bulletWorld, mesh);
-	
-	//thing->setColliderAsMesh(mesh, true);
-	thing->setColliderAsBoundingBox();
-	//thing->setColliderAsSphere(3);sou
-	thing->createRigidBody(1);
-	childTransform->addChild(thing);
-	thing->setShader(shader, true);
-	thing->body->translate(btVector3(std::rand() % 10, 50, std::rand() % 10));
-	return thing;
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -417,27 +347,6 @@ PD_TestScene::~PD_TestScene(){
 
 
 void PD_TestScene::update(Step * _step){
-
-	PD_ResourceManager::scene->update(_step);
-	/*if(ragdoll->body->body->getWorldTransform().getOrigin().y() < 25){
-		ragdoll->body->body->applyImpulse(btVector3(0,5,0), ragdoll->body->body->getWorldTransform().getOrigin());
-	}*/
-
-	glm::vec3 pos(0);
-	pos += ragdoll->head->getWorldPos();
-	pos += ragdoll->upperbody->getWorldPos();
-	pos += ragdoll->lowerbody->getWorldPos();
-	pos += ragdoll->lowerarmLeft->getWorldPos();
-	pos += ragdoll->lowerarmRight->getWorldPos();
-	pos += ragdoll->lowerlegLeft->getWorldPos();
-	pos += ragdoll->lowerlegRight->getWorldPos();
-	pos /= 7;
-
-	pos -= mouseCam->forwardVectorRotated * 2.f;
-	pos = (pos - mouseCam->parents.at(0)->getTranslationVector()) * 0.5f;
-	mouseCam->parents.at(0)->translate(pos);
-
-
 	if(mouse->leftDown()){
 		float range = 1000;
 		glm::vec3 pos = activeCamera->getWorldPos();
@@ -486,36 +395,6 @@ void PD_TestScene::update(Step * _step){
 		}
 	}
 	
-	/*if(keyboard->keyJustUp(GLFW_KEY_P)){
-		OpenAL_Sound * stream = new OpenAL_Sound("../assets/HighCountdown_Zero2.ogg");
-		childTransform->addChild(stream, false);
-	}*/
-	if(keyboard->keyJustUp(GLFW_KEY_V)){
-		PD_ResourceManager::scene->play(true);
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_B)){
-		PD_ResourceManager::scene->pause();
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_N)){
-		PD_ResourceManager::scene->stop();
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_M)){
-		PD_ResourceManager::scene->play();
-	}
-
-	if(keyboard->keyJustUp(GLFW_KEY_U)){
-		PD_ResourceManager::stream->play(true);
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_I)){
-		PD_ResourceManager::stream->pause();
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_O)){
-		PD_ResourceManager::stream->stop();
-	}
-	if(keyboard->keyJustUp(GLFW_KEY_P)){
-		PD_ResourceManager::stream->play();
-	}
-	
 	glm::vec3 curpos = activeCamera->getWorldPos();
 	NodeOpenAL::setListenerVelocity((curpos - lastPos));
 	lastPos = curpos;
@@ -543,9 +422,6 @@ void PD_TestScene::update(Step * _step){
 		firstPerson = !firstPerson;
 	}
 	
-	if(keyboard->keyJustUp(GLFW_KEY_G)){
-		addThing();
-	}
 	if(keyboard->keyJustUp(GLFW_KEY_R)){
 		static_cast<ShaderComponentText *>(textShader->getComponentAt(0))->setColor(glm::vec3(1, 0.1, 0.2));
 	}
@@ -578,7 +454,7 @@ void PD_TestScene::update(Step * _step){
 
 	if(firstPerson){
 		float playerSpeed = 10.f;
-		float mass = ragdoll->upperbody->body->getInvMass();
+		float mass = 0;//ragdoll->upperbody->body->getInvMass();
 
 		//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 		//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
@@ -609,8 +485,8 @@ void PD_TestScene::update(Step * _step){
 		}
 
 		if(movement.x != 0 || movement.y != 0 || movement.z != 0){
-			ragdoll->upperbody->body->activate(true);
-			ragdoll->upperbody->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
+			//ragdoll->upperbody->body->activate(true);
+			//ragdoll->upperbody->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
 		}
 	}
 	
@@ -641,6 +517,9 @@ void PD_TestScene::update(Step * _step){
 			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
 	}
+	if(keyboard->keyJustUp(GLFW_KEY_F12)){
+		game->takeScreenshot();
+	}
 	
 	// update scene and physics
 	bulletWorld->update(_step);
@@ -651,7 +530,7 @@ void PD_TestScene::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
-	glm::vec3 sp = activeCamera->worldToScreen(ragdoll->head->getWorldPos(), sd);
+	glm::vec3 sp = activeCamera->worldToScreen(glm::vec3(0,0,0), sd);
 	if(sp.z < 0){
 		sp.z = activeCamera->farClip * 2;
 	}
@@ -659,12 +538,12 @@ void PD_TestScene::update(Step * _step){
 	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
 
-	float volume = std::max(
+	/*float volume = std::max(
 		std::abs(PD_ResourceManager::scene->getAmplitude()),
 		std::abs(PD_ResourceManager::stream->getAmplitude())
 	);
 	volumeIndicator->parents.at(0)->translate(sd.x, sd.y, 0, false);
-	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);
+	volumeIndicator->parents.at(0)->scale(50, volume*sd.y*0.5f, 1, false);*/
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

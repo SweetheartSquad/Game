@@ -11,41 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Character.cpp" />
-    <ClCompile Include="..\src\DialogueDisplay.cpp" />
-    <ClCompile Include="..\src\DialogueSay.cpp" />
-    <ClCompile Include="..\src\PD_Button.cpp" />
-    <ClCompile Include="..\src\PD_JsonObject.cpp" />
-    <ClCompile Include="..\src\PD_ResourceManager.cpp" />
-    <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\PD_Game.cpp" />
-    <ClCompile Include="..\src\PD_TestScene.cpp" />
-    <ClCompile Include="..\src\Room.cpp" />
-    <ClCompile Include="..\src\RoomLayout.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\PD_ContactListener.cpp" />
+    <ClCompile Include="src\PD_Game.cpp" />
+    <ClCompile Include="src\PD_Player.cpp" />
+    <ClCompile Include="src\PD_ResourceManager.cpp" />
+    <ClCompile Include="src\PD_TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Character.h" />
-    <ClInclude Include="..\include\DialogueDisplay.h" />
-    <ClInclude Include="..\include\DialogueSay.h" />
-    <ClInclude Include="..\include\PD_Button.h" />
-    <ClInclude Include="..\include\PD_JsonObject.h" />
-    <ClInclude Include="..\include\PD_ResourceManager.h" />
-    <ClInclude Include="..\include\PD_Game.h" />
-    <ClInclude Include="..\include\PD_TestScene.h" />
-    <ClInclude Include="..\include\Room.h" />
-    <ClInclude Include="..\include\RoomLayout.h" />
+    <ClInclude Include="include\PD_ContactListener.h" />
+    <ClInclude Include="include\PD_Game.h" />
+    <ClInclude Include="include\PD_Player.h" />
+    <ClInclude Include="include\PD_ResourceManager.h" />
+    <ClInclude Include="include\PD_TestScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
+    <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PartyDarling</RootNamespace>
-    <ProjectName>Party Darling - 2012</ProjectName>
+    <ProjectName>Party Darling - 2013</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -60,33 +50,35 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\partyDarlingSettings.props" />
+    <Import Project="../partyDarlingSettings.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\partyDarlingSettings.props" />
+    <Import Project="../partyDarlingSettings.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
-    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
-    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Debug;$(SOIL_DIR)\projects\VC9\Debug;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Debug;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <SourcePath>src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Debug;$(OPENAL_DIR)\libs\Win32;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(FREETYPE_DIR)\include;$(CPPREST_DIR)\Release\include;$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
-    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
-    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Release;$(SOIL_DIR)\projects\VC9\Release;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Release;$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <SourcePath>src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Release;$(OPENAL_DIR)\libs\Win32;$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -99,11 +91,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;freetype255MTd.lib;cpprest110d_2_5.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2012d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;freetype255MTd.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2013d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>true</PerUserRedirection>
-      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;$(ENGINE_DIR)\Output\S-Tengine2 - 2013-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib;</IgnoreSpecificDefaultLibraries>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -137,10 +130,8 @@ copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;Box2D.lib;freetype255MT.lib;cpprest110_2_5.lib;BulletSoftBody_vs2010.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;S-Tengine2 - 2012.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;freetype255MT.lib;Box2D.lib;BulletSoftBody_vs2010.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;S-Tengine2 - 2012.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib;</IgnoreSpecificDefaultLibraries>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreBuildEvent>
       <Command>

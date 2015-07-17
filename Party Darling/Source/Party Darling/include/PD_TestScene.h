@@ -79,8 +79,4 @@ public:
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
-
-	BulletMeshEntity * addThing();
-
-	BulletRagdoll * ragdoll;
 };

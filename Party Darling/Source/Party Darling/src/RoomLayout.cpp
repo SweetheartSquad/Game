@@ -8,10 +8,10 @@ RoomLayout::~RoomLayout(void){
 std::vector<MeshInterface *> RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
 	// split up later into walls, floor, and cieling?
 	switch(type){
-		case T:
+		case kT:
 			return getTRoom(size);
 			break;
-		case L:
+		case kL:
 			return getLRoom(size);
 			break;
 		default:

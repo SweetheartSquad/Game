@@ -7,9 +7,9 @@
 #define ROOM_UNIT 20
 
 enum RoomLayout_t{
-	RECT,
-	T,
-	L
+	kRECT,
+	kT,
+	kL
 };
 
 class Room;
