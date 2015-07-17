@@ -7,7 +7,7 @@ class Keyboard;
 class Mouse;
 class Joystick;
 class NodeBulletBody;
-class PerspectiveCamera;
+class MousePerspectiveCamera ;
 
 class PD_FirstPersonController : public virtual NodeChild, public virtual NodeUpdatable{
 private:
@@ -16,10 +16,10 @@ private:
 	Joystick * joystick;
 	
 	NodeBulletBody * targetEntity;
-	PerspectiveCamera * targetCamera;
+	MousePerspectiveCamera * targetCamera;
 	
 public:
-	PD_FirstPersonController(NodeBulletBody * _targetEntity, PerspectiveCamera * _targetCamera);
+	PD_FirstPersonController(NodeBulletBody * _targetEntity, MousePerspectiveCamera  * _targetCamera);
 
 	virtual void update(Step * _step) override;
 };

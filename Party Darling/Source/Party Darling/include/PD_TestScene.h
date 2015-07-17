@@ -45,11 +45,12 @@ public:
 	
 	
 	PD_FirstPersonController * playerController;
-	PerspectiveCamera * playerCam;
+	MousePerspectiveCamera * playerCam;
 	BulletMeshEntity * playerEntity;
 	glm::vec3 lastPos;
-
+	
 	Sprite * mouseIndicator;
+	Sprite * crosshair;
 	MousePerspectiveCamera * debugCam;
 
 	virtual void update(Step * _step) override;

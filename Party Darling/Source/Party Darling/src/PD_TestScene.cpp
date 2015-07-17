@@ -3,6 +3,7 @@
 #include <PD_TestScene.h>
 #include <PD_Game.h>
 #include <PD_ResourceManager.h>
+#include <PD_Button.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -13,6 +14,8 @@
 #include <PointLight.h>
 
 #include <shader\ComponentShaderBase.h>
+#include <shader\ComponentShaderText.h>
+#include <shader\ShaderComponentText.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
@@ -84,6 +87,7 @@ pplx::task<void> RequestJSONValueAsync(){
 
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
+	textShader(new ComponentShaderText(true)),
 	shader(new ComponentShaderBase(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
 	debugDrawer(nullptr),
@@ -122,7 +126,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
 	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
-	bulletGround->body->setFriction(10);
+	bulletGround->body->setFriction(1);
 
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
@@ -174,10 +178,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	glm::uvec2 sd = vox::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
+	// mouse cursor
 	mouseIndicator = new Sprite();
 	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CURSOR")->texture);
-	mouseIndicator->parents.at(0)->scale(32 * 10, 32 * 10, 1);
+	mouseIndicator->parents.at(0)->scale(32, 32, 1);
 	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
 	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
@@ -189,40 +194,57 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	mouseIndicator->setShader(uiLayer.shader, true);
 
 
-
-
+	// crosshair
+	crosshair = new Sprite();
+	uiLayer.childTransform->addChild(crosshair);
+	crosshair->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+	crosshair->parents.at(0)->scale(16, 16, 1);
+	crosshair->setShader(uiLayer.shader, true);
+	crosshair->mesh->scaleModeMag = GL_NEAREST;
+	crosshair->mesh->scaleModeMin = GL_NEAREST;
 
 
 
 
 	// player set-up
 	playerEntity = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh());
-	playerEntity->setColliderAsBoundingBox();
+	childTransform->addChild(playerEntity, true);
+	playerEntity->parents.at(0)->scale(1, 1.5f, 1);
+	playerEntity->parents.at(0)->scale(2);
+	playerEntity->setColliderAsCapsule(1, 1.5f);
 	playerEntity->createRigidBody(1);
 	playerEntity->setShader(shader, true);
-	childTransform->addChild(playerEntity, true);
+	playerEntity->body->setDamping(0.1, 0.1);
+	playerEntity->body->setAngularFactor(btVector3(0,1,0));
 
-	playerCam = new PerspectiveCamera();
-	t = new Transform();
-	t->addChild(playerCam, false);
+	playerCam = new MousePerspectiveCamera();
+	playerEntity->childTransform->addChild(playerCam)->translate(0, 1, 0);
 	cameras.push_back(playerCam);
 	playerCam->farClip = 1000.f;
 	playerCam->nearClip = 0.1f;
 	playerCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	playerCam->yaw = 90.0f;
 	playerCam->pitch = -10.0f;
-	//playerCam->speed = 1;
+	playerCam->speed = 1;
 	activeCamera = playerCam;
 
 	playerController = new PD_FirstPersonController(playerEntity, playerCam);
 	childTransform->addChild(playerController, false);
+
+
+	
+	PD_Button * butt = new PD_Button(bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 50.f);
+	childTransform->addChild(butt);
+
+	
+	PD_Button * butt2 = new PD_Button(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 50.f);
+	uiLayer.addChild(butt2);
 }
 
 PD_TestScene::~PD_TestScene(){
 	deleteChildTransform();
 	shader->safeDelete();
-	//delete phongMat;
+	textShader->safeDelete();
 
 	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
@@ -232,24 +254,6 @@ PD_TestScene::~PD_TestScene(){
 
 
 void PD_TestScene::update(Step * _step){
-	if(mouse->leftDown()){
-		float range = 1000;
-		glm::vec3 pos = activeCamera->getWorldPos();
-		btVector3 start(pos.x, pos.y, pos.z);
-		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
-		btVector3 end = start + dir*range;
-		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
-		bulletWorld->world->rayTest(start, end, RayCallback);
-		if(RayCallback.hasHit()){
-			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
-			if(me != nullptr){
-				me->body->activate(true);
-				me->body->applyImpulse(dir*-10, me->body->getWorldTransform().getOrigin());
-			}
-			//std::cout << RayCallback.m_collisionObject->getWorldTransform().getOrigin().x() << std::endl;
-		}
-	}
-	
 	glm::vec3 curpos = activeCamera->getWorldPos();
 	NodeOpenAL::setListenerVelocity((curpos - lastPos));
 	lastPos = curpos;
@@ -327,6 +331,7 @@ void PD_TestScene::update(Step * _step){
 		sp.z = activeCamera->farClip * 2;
 	}
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
+	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
