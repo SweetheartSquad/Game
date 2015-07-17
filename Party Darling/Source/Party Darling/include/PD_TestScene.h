@@ -1,19 +1,13 @@
 #pragma once
 
 #include <Scene.h>
-#include <SoundManager.h>
 #include <UILayer.h>
-#include <Joystick.h>
-#include <JoystickManager.h>
-
-#include <Font.h>
-
 #include <BulletDebugDrawer.h>
 #include <BulletWorld.h>
-#include <TextLabel.h>
+#include <PD_FirstPersonController.h>
 
+class PerspectiveCamera;
 class MousePerspectiveCamera;
-class FollowCamera;
 
 class Box2DWorld;
 class Box2DDebugDrawer;
@@ -37,24 +31,26 @@ class ComponentShaderText;
 
 class PD_TestScene : public Scene{
 public:
-	ComponentShaderBase * shader;
-	ComponentShaderText * textShader;
-	ShaderComponentHsv * hsvComponent;
-	MousePerspectiveCamera * mouseCam;
-	MousePerspectiveCamera * debugCam;
-	FollowCamera * gameCam;
-	glm::vec3 lastPos;
-
+	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
-	Material * phongMat;
 
-	float sceneHeight;
-	float sceneWidth;
+	ComponentShaderBase * shader;
+	ComponentShaderText * textShader;
+	ShaderComponentHsv * hsvComponent;
 
-	bool firstPerson;
-	JoystickManager * joy;
+	BulletWorld * bulletWorld;
+	BulletDebugDrawer * debugDrawer;
+	
+	
+	PD_FirstPersonController * playerController;
+	PerspectiveCamera * playerCam;
+	BulletMeshEntity * playerEntity;
+	glm::vec3 lastPos;
+
+	Sprite * mouseIndicator;
+	MousePerspectiveCamera * debugCam;
 
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
@@ -62,19 +58,8 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	std::vector<MeshEntity *> audioVisualizer;
-
 	UILayer uiLayer;
-	Sprite * crosshair;
-	Sprite * playerIndicator;
-	Sprite * mouseIndicator;
-	Sprite * volumeIndicator;
-
-	TextArea * textArea;
 
 	PD_TestScene(Game * _game);
 	~PD_TestScene();
-
-	BulletWorld * bulletWorld;
-	BulletDebugDrawer * debugDrawer;
 };

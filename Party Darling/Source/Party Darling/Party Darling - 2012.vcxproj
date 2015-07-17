@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
+    <ClCompile Include="src\PD_FirstPersonController.cpp" />
     <ClCompile Include="src\PD_JsonObject.cpp" />
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -24,6 +25,7 @@
   <ItemGroup>
     <ClInclude Include="include\Character.h" />
     <ClInclude Include="include\PD_Button.h" />
+    <ClInclude Include="include\PD_FirstPersonController.h" />
     <ClInclude Include="include\PD_JsonObject.h" />
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Game.h" />
