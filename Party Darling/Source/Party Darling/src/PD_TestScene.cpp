@@ -517,9 +517,6 @@ void PD_TestScene::update(Step * _step){
 			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_F12)){
-		game->takeScreenshot();
-	}
 	
 	// update scene and physics
 	bulletWorld->update(_step);
