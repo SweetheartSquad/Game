@@ -53,8 +53,6 @@
 #include <PD_Button.h>
 
 #include <OpenALSound.h>
-#include <sqlite\sqlite3.h>
-#include <DatabaseConnection.h>
 
 #include <Room.h>
 #include <RoomLayout.h>
@@ -62,10 +60,6 @@
 #include <thread>
 #include <Character.h>
 #include <LinearLayout.h>
-#include <sqlite\sqlite3.h>
-#include <DatabaseConnection.h>
-
-#include "RoomLayout.h"
 
 #include <thread>
 #include <Character.h>
@@ -109,23 +103,7 @@ pplx::task<void> RequestJSONValueAsync(TextLabel * _label){
 
 
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-	int i;
-	for(i=0; i<argc; i++){
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-	}
-	printf("\n");
-	return 0;
-}
 
-DatabaseConnection db("../assets/test.db");
-void testSql(std::string _sql, bool _async){
-	if(_async){
-		db.queryDbAsync(_sql, callback);
-	}else{
-		db.queryDb(_sql, callback);
-	}
-}
 
 
 
@@ -307,12 +285,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	room->setShader(shader, true);
 	//room->parents.at(0)->translate(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0);
 	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
-	/*
-	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
-	childTransform->addChild(blah);
-	blah->setShader(shader, true);
-	blah->mesh->pushMaterial(phongMat);
-	*/
+	
 	std::vector<std::string> objs;
 	objs.push_back("../assets/LOD_2/coffeeTable_LOD_2.obj");
 	objs.push_back("../assets/LOD_2/couch_LOD_2.obj");
@@ -563,7 +536,7 @@ void PD_TestScene::update(Step * _step){
 			sql << "INSERT INTO TestTable VALUES(" << i << ", 'test1', 'test2');";
 		}
 		sql << "SELECT * FROM TestTable;";
-		testSql(sql.str(), true);
+		PD_ResourceManager::testSql(sql.str(), true);
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)){
