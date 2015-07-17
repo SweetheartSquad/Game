@@ -530,7 +530,7 @@ void PD_TestScene::update(Step * _step){
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_R)){	
 		std::stringstream sql;
-		sql << "DROP TABLE TestTable;";
+		sql << "DROP TABLE IF EXISTS TestTable;";
 		sql << "CREATE TABLE TestTable(id INTEGER PRIMARY KEY, TestColumn1, TestColumn2);";
 		for(unsigned long int i = 0; i < 1000; ++i){
 			sql << "INSERT INTO TestTable VALUES(" << i << ", 'test1', 'test2');";
