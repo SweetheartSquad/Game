@@ -229,8 +229,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
 	backgroundShader->compileShader();
-
-	font = new Font("assets/engine basics/OpenSans-Regular.ttf", 24, false);
 	
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -276,7 +274,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		childTransform->addChild(obj);
 	}
 
-	PD_Button * button = new PD_Button(bulletWorld, this, font, textShader, 200.f);
+	PD_Button * button = new PD_Button(bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 200.f);
 	childTransform->addChild(button);
 	button->onClickFunction = [](NodeUI * _this) {
 		std::cout << "test " << std::endl;
@@ -300,7 +298,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(l3);
 	l3->setMarginRight(0.f);
 	
-	textArea = new TextArea(bulletWorld, this, font, textShader, 50.f);
+	textArea = new TextArea(bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 50.f);
 	textArea->setText(L"NN\nNorm\naffgfgffgfgfgffgfgfgfgfgfg\negegererretertretrtretretretertertl");
 	l3->addChild(textArea);
 	
@@ -341,8 +339,6 @@ PD_TestScene::~PD_TestScene(){
 	delete joy;
 
 	delete bulletWorld;
-
-	delete font;
 }
 
 

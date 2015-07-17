@@ -45,8 +45,6 @@ public:
 	FollowCamera * gameCam;
 	glm::vec3 lastPos;
 
-	Font  * font;
-
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
