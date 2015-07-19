@@ -74,7 +74,7 @@ void PD_FirstPersonController::update(Step * _step){
 	// mouse interaction with world objects
 	
 	float range = 1000;
-	glm::vec3 pos = targetCamera->getWorldPos();
+	glm::vec3 pos = targetCamera->childTransform->getWorldPos();
 	btVector3 start(pos.x, pos.y, pos.z);
 	btVector3 dir(targetCamera->forwardVectorRotated.x, targetCamera->forwardVectorRotated.y, targetCamera->forwardVectorRotated.z);
 	btVector3 end = start + dir*range;
