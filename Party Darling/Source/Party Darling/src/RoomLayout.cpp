@@ -1,8 +1,52 @@
+#pragma once
+
 #include <RoomLayout.h>
+#include <Room.h>
 #include <MeshEntity.h>
 #include <math.h>
+#include <string.h>
+
+#include <Resource.h>
+
+#include <Character.h>
+#include <Furniture.h>
+#include <Item.h>
+#include <PD_ResourceManager.h>
 
 RoomLayout::~RoomLayout(void){
+}
+
+Room * RoomLayout::getRoom(std::string _json, BulletWorld * _world, ComponentShaderBase * _shader){
+	
+	Json::Value json;
+	Json::Reader reader;
+
+	if(!reader.parse(_json, json, false))
+	{
+		// throw exception
+	}
+	
+	std::vector<RoomObject *> objects = getRoomObjects(json, _world); // This
+
+	// Square room
+	int l = json["size"].get("l", sqrt(objects.size()) + std::rand() % (objects.size() > 0 ? objects.size() : 1)).asInt();
+	int w = json["size"].get("w", sqrt(objects.size()) + std::rand() % (objects.size() > 0 ? objects.size() : 1)).asInt();
+	
+	
+	// 
+
+	Room * room = new Room(_world, _shader, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), glm::vec2(l, w), PD_ResourceManager::uvs_alt);
+	
+	room->objects = objects;
+	for(int i = 0; i < room->objects.size(); ++i){
+		room->childTransform->addChild(room->objects.at(i));
+		vox::Box box = room->objects.at(i)->mesh->calcBoundingBox();
+		room->objects.at(i)->setTranslationPhysical(rand() % l * ROOM_UNIT, 0, rand() % w * ROOM_UNIT);
+		// position object
+
+	}
+
+	return room;
 }
 
 std::vector<MeshInterface *> RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
@@ -254,4 +298,96 @@ std::vector<MeshInterface *> RoomLayout::box(glm::vec2 size, glm::vec2 pos, bool
 	}
 
 	return boundaries;
+}
+
+std::vector<RoomObject *> RoomLayout::getRoomObjects(Json::Value json, BulletWorld * _world){
+
+	std::vector<Character *> characters = getCharacters(json["characters"], _world);
+	std::vector<Furniture *> furniture = getFurniture(json["furniture"], _world);
+	std::vector<Item *> items = getItems(json["items"], _world);
+
+	std::vector<RoomObject *> objects;
+	// calculate size of room, get random # of furniture/items?
+	// dining table set 1, tv couch set, bathroom set, ...
+
+	for(int i = 0; i < characters.size(); ++i){
+		objects.push_back(characters.at(i));
+	}
+
+	for(int i = 0; i < furniture.size(); ++i){
+		objects.push_back(furniture.at(i));
+	}
+
+	for(int i = 0; i < items.size(); ++i){
+		objects.push_back(items.at(i));
+	}
+
+	return objects;
+}
+
+std::vector<Character *> RoomLayout::getCharacters(Json::Value json, BulletWorld * _world){
+	std::vector<Character *> characters;
+	/*
+	for(Json::ArrayIndex i = 0; i < characters.size(); ++i){
+		characters.push_back(readCharacter(json[i], _world));
+	}
+
+	// Random
+	int n = rand() % 10;
+	for(unsigned int i = 0; i < n; ++i){
+		characters.push_back(new Character(_world));
+	}
+	*/
+
+	return characters;
+}
+
+std::vector<Furniture *> RoomLayout::getFurniture(Json::Value json, BulletWorld * _world){
+	std::vector<Furniture *> furniture;
+	for(Json::ArrayIndex i = 0; i < furniture.size(); ++i){
+		furniture.push_back(readFurniture(json[i], _world));
+	}
+
+	// Random
+	int n = rand() % 10;
+	for(unsigned int i = 0; i < n; ++i){
+		TriMesh * mesh = Resource::loadMeshFromObj("../assets/LOD_2/couch_LOD_2.obj").at(0);
+		Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
+
+		furniture.push_back(new Furniture(_world, mesh, nullptr, anchor));
+	}
+
+	return furniture;
+}
+
+std::vector<Item *> RoomLayout::getItems(Json::Value json, BulletWorld * _world){
+	std::vector<Item *> items;
+	for(Json::ArrayIndex i = 0; i < items.size(); ++i){
+		items.push_back(readItem(json[i], _world));
+	}
+
+	int n = rand() % 10;
+	for(unsigned int i = 0; i < n; ++i){
+		TriMesh * mesh = Resource::loadMeshFromObj("../assets/LOD_2/dish_LOD_2.obj").at(0);
+
+		items.push_back(new Item(_world, mesh, nullptr));
+	}
+
+	return items;
+}
+
+Character * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world){
+	return new Character(_world);
+}
+
+Furniture * RoomLayout::readFurniture(Json::Value _json, BulletWorld * _world){
+	TriMesh * mesh = Resource::loadMeshFromObj(_json.get("resource", "../assets/LOD_2/couch_LOD_2.obj").asString()).at(0);
+	Anchor_t anchor = static_cast<Anchor_t>(_json.get("anchor", 0).asInt());
+	
+	return new Furniture(_world, mesh, nullptr, anchor);
+}
+
+Item * RoomLayout::readItem(Json::Value _json, BulletWorld * _world){
+	TriMesh * mesh = Resource::loadMeshFromObj(_json.get("resource", "../assets/LOD_2/dish_LOD_2.obj").asString()).at(0);
+	return new Item(_world, mesh, nullptr);
 }

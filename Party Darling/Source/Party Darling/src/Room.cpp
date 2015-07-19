@@ -12,14 +12,19 @@ Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _ty
 		childTransform->addChild(boundaries.at(i));
 		boundaries.at(i)->setColliderAsBoundingBox();
 		boundaries.at(i)->createRigidBody(0);
-		boundaries.at(i)->mesh->pushTexture2D(_wallTexture);
+		if(_wallTexture != nullptr){
+			boundaries.at(i)->mesh->pushTexture2D(_wallTexture);
+		}
 	}
-
 }
 
 void Room::setShader(Shader * _shader, bool _default){
 	for(unsigned int i = 0; i < boundaries.size(); ++i){
 		boundaries.at(i)->setShader(_shader, _default);
+	}
+
+	for(unsigned int i = 0; i < objects.size(); ++i){
+		objects.at(i)->setShader(_shader, _default);
 	}
 }
 

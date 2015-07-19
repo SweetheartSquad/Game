@@ -24,8 +24,9 @@ public:
 
 	std::vector<int> furnitureSlots;
 	std::vector<int> characterSlots;
+	std::vector<RoomObject *> objects;
 
-	Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture);
+	Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture = nullptr);
 	~Room(void);
 
 	void setShader(Shader * _shader, bool _default);
