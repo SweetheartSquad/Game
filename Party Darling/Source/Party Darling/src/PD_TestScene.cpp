@@ -245,6 +245,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	PD_Button * butt3 = new PD_Button(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
 	uiLayer.addChild(butt3);
 	butt3->setText(L"exit");
+	butt3->onClickFunction = [this](NodeUI * _this){
+		game->exit();
+	};
+	butt3->setTranslationPhysical(200, 0, 0, true);
 }
 
 PD_TestScene::~PD_TestScene(){
