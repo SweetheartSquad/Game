@@ -30,5 +30,30 @@
     }
   ],
   "characters": [],
-  "conversations": []
+  "conversations": [
+    {
+      "id": "test1",
+      "dialog": [
+        {
+          "speaker": "None",
+          "portrait": "None",
+          "text": [
+              "This is a test."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "test2",
+      "dialog": [
+        {
+          "speaker": "None",
+          "portrait": "None",
+          "text": [
+              "This is a test."
+          ]
+        }
+      ]
+    }
+  ]
 }

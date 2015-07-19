@@ -8,6 +8,8 @@ DatabaseConnection * PD_ResourceManager::db = nullptr;
 void PD_ResourceManager::init(){
 	scenario = new Scenario("assets/scenario.json");
 	db = new DatabaseConnection("data/test.db");
+
+	resources.push_back(scenario);
 }
 
 int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){

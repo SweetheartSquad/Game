@@ -17,6 +17,8 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, Font * _font, Shader 
 {
 	setText(normalLabel);
 	mouseEnabled = true;
+	autoResize();
+	updateCollider();
 }
 
 void PD_Button::update(Step * _step){

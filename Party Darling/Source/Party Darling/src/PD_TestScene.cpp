@@ -4,6 +4,7 @@
 #include <PD_Game.h>
 #include <PD_ResourceManager.h>
 #include <PD_Button.h>
+#include <PD_TalkToButton.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -232,12 +233,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	
-	PD_Button * butt = new PD_Button(bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 50.f);
-	childTransform->addChild(butt);
+	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	childTransform->addChild(butt1);
+
+	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	childTransform->addChild(butt2);
+	butt2->setTranslationPhysical(200, 0, 0, true);
 
 	
-	PD_Button * butt2 = new PD_Button(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 50.f);
-	uiLayer.addChild(butt2);
+	PD_Button * butt3 = new PD_Button(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	uiLayer.addChild(butt3);
+	butt3->setText(L"exit");
 }
 
 PD_TestScene::~PD_TestScene(){
