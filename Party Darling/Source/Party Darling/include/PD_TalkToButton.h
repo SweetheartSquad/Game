@@ -10,5 +10,5 @@ public:
 
 	PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width);
 
-	void up() override;
+	void click() override;
 };

@@ -9,10 +9,8 @@ PD_TalkToButton::PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Sc
 {
 }
 
-void PD_TalkToButton::up(){
-	PD_Button::up();
-	if(isHovered){
-		// start conversation
-		Log::info("Should start conversation: " + conversation->id);
-	}
+void PD_TalkToButton::click(){
+	PD_Button::click();
+	// start conversation
+	Log::info("Should start conversation: " + conversation->id);
 }
