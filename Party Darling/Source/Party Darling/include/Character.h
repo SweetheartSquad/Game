@@ -1,6 +1,6 @@
 #pragma once
 
-#include <BulletMeshEntity.h>
+#include <RoomObject.h>
 #include <Box2D/Box2D.h>
 
 class BitmapFont;
@@ -20,7 +20,7 @@ public:
 	ComponentTexture(Texture * _texture, float _width, float _height);
 };
 
-class Character : public BulletMeshEntity{
+class Character : public RoomObject{
 public:
 	float ratioX_neck_to_torso;
 	float ratioY_neck_to_torso;

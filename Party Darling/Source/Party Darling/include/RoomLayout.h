@@ -7,6 +7,7 @@
 
 #define ROOM_HEIGHT 20
 #define ROOM_UNIT 20
+#define ROOM_TILE 4
 
 class Room;
 class Furniture;
@@ -19,15 +20,20 @@ enum RoomLayout_t{
 	L
 };
 
+enum RoomObject_t{
+	CHARACTER,
+	FURNITURE,
+	ITEM
+};
+
 class Room;
-class String;
 
 // Use builder pattern (parsing flat data)
 class RoomLayout{
 public: 
 
-	RoomLayout(String json);
-	//~RoomLayout(void);
+	static Room * getRoom(std::string json, BulletWorld * _world, ComponentShaderBase * _shader);
+
 	Json::Value json;
 
 	RoomLayout(RoomLayout_t type, glm::vec2 size);
@@ -40,6 +46,13 @@ public:
 	static std::vector<MeshInterface *> box(glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top = true, bool bottom = true);
 
 	// Create random room objects, including specified objects
-	static std::vector<RoomObject *> getRoomObjects(std::vector<Character *> _characters, std::vector<Furniture *> _furniture, std::vector<Item *> _items);
+	static std::vector<RoomObject *> getRoomObjects(Json::Value json, BulletWorld * _world);
+	static std::vector<Character *> getCharacters(Json::Value json, BulletWorld * _world);
+	static std::vector<Furniture *> getFurniture(Json::Value json, BulletWorld * _world);
+	static std::vector<Item *> getItems(Json::Value json, BulletWorld * _world);
 	
+	static Character * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world);
+	static Furniture * RoomLayout::readFurniture(Json::Value _json, BulletWorld * _world);
+	static Item * RoomLayout::readItem(Json::Value _json, BulletWorld * _world);
+	static RoomObject * readRoomObject(Json::Value _roomObject, RoomObject_t _type, BulletWorld * _world);
 };

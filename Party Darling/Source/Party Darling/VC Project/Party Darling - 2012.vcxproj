@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Furniture.cpp" />
+    <ClCompile Include="..\src\Item.cpp" />
     <ClCompile Include="..\src\PD_Button.cpp" />
     <ClCompile Include="..\src\PD_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
@@ -25,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\Character.h" />
     <ClInclude Include="..\include\Furniture.h" />
+    <ClInclude Include="..\include\Item.h" />
     <ClInclude Include="..\include\PD_Button.h" />
     <ClInclude Include="..\include\PD_ResourceManager.h" />
     <ClInclude Include="..\include\PD_Game.h" />

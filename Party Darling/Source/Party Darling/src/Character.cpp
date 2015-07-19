@@ -19,7 +19,7 @@ ComponentTexture::ComponentTexture(Texture * _texture, float _width, float _heig
 }
 
 Character::Character(BulletWorld * _world) :
-	BulletMeshEntity(_world, MeshFactory::getCubeMesh()),
+	RoomObject(_world, MeshFactory::getCubeMesh()),
 	head(nullptr),
 	leftUpperArm(nullptr),
 	leftLowerArm(nullptr),
