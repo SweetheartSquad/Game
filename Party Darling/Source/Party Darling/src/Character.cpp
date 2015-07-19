@@ -18,7 +18,7 @@ ComponentTexture::ComponentTexture(Texture * _texture, float _width, float _heig
 {
 }
 
-Character::Character(BulletWorld * _world) :
+TestCharacter::TestCharacter(BulletWorld * _world) :
 	RoomObject(_world, MeshFactory::getCubeMesh()),
 	head(nullptr),
 	leftUpperArm(nullptr),
@@ -33,18 +33,18 @@ Character::Character(BulletWorld * _world) :
 	rightLowerLeg(nullptr)
 {
 	box2dWorld = new Box2DWorld();
-	torso = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelTorso.png", 512, 512, true, true), 150, 360));
-	head = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true), 160, 270));
-	leftUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
-	rightUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
-	leftLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
-	rightLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
-	leftHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
-	rightHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
-	leftUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
-	rightUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
-	leftLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
-	rightLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
+	torso = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelTorso.png", 512, 512, true, true), 150, 360));
+	head = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHead.png", 512, 512, true, true), 160, 270));
+	leftUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
+	rightUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
+	leftLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
+	rightLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
+	leftHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
+	rightHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
+	leftUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
+	rightUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
+	leftLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
+	rightLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
 	
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
@@ -93,14 +93,14 @@ Character::Character(BulletWorld * _world) :
 	createRigidBody(1);
 }
 
-Character::~Character(){
+TestCharacter::~TestCharacter(){
 }
 
-void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void TestCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	MeshEntity::render(_matrixStack, _renderStack);
 }
 
-void Character::update(Step * _step){
+void TestCharacter::update(Step * _step){
 	box2dWorld->update(_step);
 	BulletMeshEntity::update(_step);
 	//if(reactiveBody){
@@ -152,7 +152,7 @@ void Character::update(Step * _step){
 	//}
 }
 
-void Character::attachJoints(){
+void TestCharacter::attachJoints(){
 
 	/*for(NodeChild * s : children){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
@@ -339,7 +339,7 @@ void Character::attachJoints(){
 }
 
 
-void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
+void TestCharacter::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
 	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
@@ -348,7 +348,7 @@ void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttribut
 	}
 }
 
-void Character::translateComponents(glm::vec3 _translateVector){
+void TestCharacter::translateComponents(glm::vec3 _translateVector){
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
 			(*c)->setTranslationPhysical(_translateVector, true);

@@ -20,7 +20,7 @@ public:
 	ComponentTexture(Texture * _texture, float _width, float _height);
 };
 
-class Character : public RoomObject{
+class TestCharacter : public RoomObject{
 public:
 	float ratioX_neck_to_torso;
 	float ratioY_neck_to_torso;
@@ -71,9 +71,9 @@ public:
 
 	std::vector<Box2DSprite **> components;
 
-	explicit Character(BulletWorld * _world);
+	explicit TestCharacter(BulletWorld * _world);
 	
-	~Character();
+	~TestCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	void update(Step* _step) override;

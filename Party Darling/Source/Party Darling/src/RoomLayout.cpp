@@ -35,7 +35,7 @@ Room * RoomLayout::getRoom(std::string _json, BulletWorld * _world, ComponentSha
 	
 	// 
 
-	Room * room = new Room(_world, _shader, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), glm::vec2(l, w), PD_ResourceManager::uvs_alt);
+	Room * room = new Room(_world, _shader, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), glm::vec2(l, w));
 	
 	room->objects = objects;
 	for(int i = 0; i < room->objects.size(); ++i){
@@ -52,10 +52,10 @@ Room * RoomLayout::getRoom(std::string _json, BulletWorld * _world, ComponentSha
 std::vector<MeshInterface *> RoomLayout::getWalls(RoomLayout_t type, glm::vec2 size){
 	// split up later into walls, floor, and cieling?
 	switch(type){
-		case T:
+		case kT:
 			return getTRoom(size);
 			break;
-		case L:
+		case kL:
 			return getLRoom(size);
 			break;
 		default:
@@ -302,7 +302,7 @@ std::vector<MeshInterface *> RoomLayout::box(glm::vec2 size, glm::vec2 pos, bool
 
 std::vector<RoomObject *> RoomLayout::getRoomObjects(Json::Value json, BulletWorld * _world){
 
-	std::vector<Character *> characters = getCharacters(json["characters"], _world);
+	std::vector<TestCharacter *> characters = getCharacters(json["characters"], _world);
 	std::vector<Furniture *> furniture = getFurniture(json["furniture"], _world);
 	std::vector<Item *> items = getItems(json["items"], _world);
 
@@ -325,8 +325,8 @@ std::vector<RoomObject *> RoomLayout::getRoomObjects(Json::Value json, BulletWor
 	return objects;
 }
 
-std::vector<Character *> RoomLayout::getCharacters(Json::Value json, BulletWorld * _world){
-	std::vector<Character *> characters;
+std::vector<TestCharacter *> RoomLayout::getCharacters(Json::Value json, BulletWorld * _world){
+	std::vector<TestCharacter *> characters;
 	/*
 	for(Json::ArrayIndex i = 0; i < characters.size(); ++i){
 		characters.push_back(readCharacter(json[i], _world));
@@ -335,7 +335,7 @@ std::vector<Character *> RoomLayout::getCharacters(Json::Value json, BulletWorld
 	// Random
 	int n = rand() % 10;
 	for(unsigned int i = 0; i < n; ++i){
-		characters.push_back(new Character(_world));
+		characters.push_back(new TestCharacter(_world));
 	}
 	*/
 
@@ -376,8 +376,8 @@ std::vector<Item *> RoomLayout::getItems(Json::Value json, BulletWorld * _world)
 	return items;
 }
 
-Character * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world){
-	return new Character(_world);
+TestCharacter * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world){
+	return new TestCharacter(_world);
 }
 
 Furniture * RoomLayout::readFurniture(Json::Value _json, BulletWorld * _world){

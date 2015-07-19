@@ -11,13 +11,13 @@
 
 class Room;
 class Furniture;
-class Character;
+class TestCharacter;
 class Item;
 
 enum RoomLayout_t{
-	RECT,
-	T,
-	L
+	kRECT,
+	kT,
+	kL
 };
 
 enum RoomObject_t{
@@ -47,11 +47,11 @@ public:
 
 	// Create random room objects, including specified objects
 	static std::vector<RoomObject *> getRoomObjects(Json::Value json, BulletWorld * _world);
-	static std::vector<Character *> getCharacters(Json::Value json, BulletWorld * _world);
+	static std::vector<TestCharacter *> getCharacters(Json::Value json, BulletWorld * _world);
 	static std::vector<Furniture *> getFurniture(Json::Value json, BulletWorld * _world);
 	static std::vector<Item *> getItems(Json::Value json, BulletWorld * _world);
 	
-	static Character * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world);
+	static TestCharacter * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world);
 	static Furniture * RoomLayout::readFurniture(Json::Value _json, BulletWorld * _world);
 	static Item * RoomLayout::readItem(Json::Value _json, BulletWorld * _world);
 	static RoomObject * readRoomObject(Json::Value _roomObject, RoomObject_t _type, BulletWorld * _world);

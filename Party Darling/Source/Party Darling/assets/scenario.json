@@ -1,0 +1,59 @@
+{
+  "assets": [
+    {
+      "id": "UV-TEST",
+      "type": "texture",
+      "src": "uvs.png",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "id": "UV-TEST-ALT",
+      "type": "texture",
+      "src": "uvs_alt.png",
+      "width": 2048,
+      "height": 2048
+    },
+    {
+      "id": "CROSSHAIR",
+      "type": "texture",
+      "src": "crosshair.png",
+      "width": 16,
+      "height": 16
+    },
+    {
+      "id": "CURSOR",
+      "type": "texture",
+      "src": "../engine basics/cursor.png",
+      "width": 32,
+      "height": 32
+    }
+  ],
+  "characters": [],
+  "conversations": [
+    {
+      "id": "test1",
+      "dialog": [
+        {
+          "speaker": "None",
+          "portrait": "None",
+          "text": [
+              "This is a test."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "test2",
+      "dialog": [
+        {
+          "speaker": "None",
+          "portrait": "None",
+          "text": [
+              "This is a test."
+          ]
+        }
+      ]
+    }
+  ]
+}
