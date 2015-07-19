@@ -110,7 +110,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(debugCam, false);
 	debugCam->farClip = 1000.f;
 	debugCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	debugCam->childTransform->translate(5.0f, 1.5f, 22.5f);
+	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	debugCam->yaw = 90.0f;
 	debugCam->pitch = -10.0f;
 	debugCam->speed = 1;
@@ -218,11 +218,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerEntity->body->setAngularFactor(btVector3(0,1,0));
 
 	playerCam = new MousePerspectiveCamera();
-	playerEntity->childTransform->addChild(playerCam)->translate(0, 1, 0);
+	playerEntity->childTransform->addChild(playerCam);
 	cameras.push_back(playerCam);
 	playerCam->farClip = 1000.f;
 	playerCam->nearClip = 0.1f;
-	playerCam->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
+	playerCam->parents.at(0)->translate(0, 1, 0);
 	playerCam->yaw = 90.0f;
 	playerCam->pitch = -10.0f;
 	playerCam->speed = 1;
@@ -289,16 +290,16 @@ void PD_TestScene::update(Step * _step){
 	}
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->childTransform->translate((activeCamera->forwardVectorRotated) * speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->childTransform->translate((activeCamera->forwardVectorRotated) * -speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->childTransform->translate((activeCamera->rightVectorRotated) * -speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->childTransform->translate((activeCamera->rightVectorRotated) * speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
 	}
 
 	// debug controls
