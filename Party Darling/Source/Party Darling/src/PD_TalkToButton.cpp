@@ -2,8 +2,8 @@
 
 #include <PD_TalkToButton.h>
 
-PD_TalkToButton::PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width) :
-	PD_Button(_world, _scene, _font, _textShader, _width),
+PD_TalkToButton::PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene) :
+	PD_Button(_world, _scene, 5, 5),
 	conversation(_convo),
 	NodeBulletBody(_world)
 {

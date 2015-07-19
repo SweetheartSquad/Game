@@ -8,7 +8,7 @@ class PD_TalkToButton : public PD_Button{
 public:
 	Conversation * conversation;
 
-	PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width);
+	PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene);
 
 	void click() override;
 };

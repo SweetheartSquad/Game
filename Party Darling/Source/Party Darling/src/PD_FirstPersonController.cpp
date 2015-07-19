@@ -8,6 +8,7 @@
 #include <NodeBulletBody.h>
 #include <NodeUI.h>
 #include <MousePerspectiveCamera.h>
+#include <Log.h>
 
 PD_FirstPersonController::PD_FirstPersonController(NodeBulletBody * _targetEntity, MousePerspectiveCamera  * _targetCamera) :
 	targetEntity(_targetEntity),
@@ -80,6 +81,7 @@ void PD_FirstPersonController::update(Step * _step){
 	btVector3 end = start + dir*range;
 	btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
 	targetEntity->world->world->rayTest(start, end, RayCallback);
+	Log::info(std::to_string(RayCallback.hasHit()));
 	if(RayCallback.hasHit()){
 		NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			

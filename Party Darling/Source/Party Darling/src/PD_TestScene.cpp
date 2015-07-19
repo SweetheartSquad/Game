@@ -39,6 +39,7 @@
 
 #include <NodeBulletBody.h>
 #include <BulletMeshEntity.h>
+#include <TextArea.h>
 
 #include <Room.h>
 #include <RoomLayout.h>
@@ -234,21 +235,23 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	
-	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt1);
 
-	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
 	childTransform->addChild(butt2);
-	butt2->setTranslationPhysical(200, 0, 0, true);
+	butt2->setTranslationPhysical(20, 20, 0, true);
 
 	
-	PD_Button * butt3 = new PD_Button(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	TextArea * butt3 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	butt3->setMouseEnabled(true);
 	uiLayer.addChild(butt3);
 	butt3->setText(L"exit");
 	butt3->onClickFunction = [this](NodeUI * _this){
 		game->exit();
 	};
-	butt3->setTranslationPhysical(200, 0, 0, true);
+	butt3->setTranslationPhysical(100, 0, 0, true);
+	butt3->setBackgroundColour(1,1,1,1);
 }
 
 PD_TestScene::~PD_TestScene(){
