@@ -102,7 +102,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 {
 
 	shader->addComponent(new ShaderComponentIndexedTexture(shader));
-	//shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->addComponent(hsvComponent);
 
 	shader->compileShader();
@@ -132,7 +132,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->setFriction(1);
 
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
-	backgroundShader->addComponent(new ShaderComponentTexture(backgroundShader));
+	backgroundShader->addComponent(new ShaderComponentIndexedTexture(backgroundShader));
 	backgroundShader->compileShader();
 	
 	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);

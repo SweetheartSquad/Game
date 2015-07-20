@@ -27,6 +27,7 @@ class PointLight;
 class BulletMeshEntity;
 class BulletRagdoll;
 class ComponentShaderText;
+class TextureColourTable;
 
 
 class PD_TestScene : public Scene{
