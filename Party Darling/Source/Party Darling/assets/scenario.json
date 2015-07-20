@@ -27,6 +27,15 @@
       "src": "../engine basics/cursor.png",
       "width": 32,
       "height": 32
+    },
+
+
+    {
+      "id": "INDEXED-TEST",
+      "type": "texture",
+      "src": "indexedColourTest.png",
+      "width": 512,
+      "height": 512
     }
   ],
   "characters": [],

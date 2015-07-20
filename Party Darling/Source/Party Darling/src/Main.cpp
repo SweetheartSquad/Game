@@ -6,6 +6,7 @@
 #include <Texture.h>
 #include <Game.h>
 #include <PD_ResourceManager.h>
+#include <Log.h>
 
 #include <PD_Game.h>
 
@@ -19,6 +20,8 @@ int main(void){
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
 #endif
+
+	Log::THROW_ON_ERROR = true;
 
 	vox::initialize("Party, Darling? -test prepping");
 	PD_ResourceManager::init();

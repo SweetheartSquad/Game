@@ -48,6 +48,7 @@ public:
 	MousePerspectiveCamera * playerCam;
 	BulletMeshEntity * playerEntity;
 	glm::vec3 lastPos;
+	TextureColourTable * playerPalette;
 	
 	Sprite * mouseIndicator;
 	Sprite * crosshair;

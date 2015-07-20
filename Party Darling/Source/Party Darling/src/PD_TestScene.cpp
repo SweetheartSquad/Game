@@ -17,9 +17,11 @@
 #include <shader\ComponentShaderBase.h>
 #include <shader\ComponentShaderText.h>
 #include <shader\ShaderComponentText.h>
-#include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
+
+#include <shader\ShaderComponentIndexedTexture.h>
+#include <TextureColourTable.h>
 
 #include <Box2DWorld.h>
 #include <Box2DMeshEntity.h>
@@ -99,8 +101,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer(this, 0,0,0,0)
 {
 
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(new ShaderComponentIndexedTexture(shader));
+	//shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->addComponent(hsvComponent);
 
 	shader->compileShader();
@@ -269,6 +271,22 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	};
 	butt3->setTranslationPhysical(100, 0, 0, true);
 	butt3->setBackgroundColour(1,1,1,1);
+
+
+	playerPalette = new TextureColourTable(false);
+	playerPalette->load();
+	PD_ResourceManager::resources.push_back(playerPalette);
+
+	Sprite * testSprite = new Sprite();
+	testSprite->setShader(shader, true);
+	childTransform->addChild(testSprite);
+	testSprite->parents.at(0)->scale(10);
+	testSprite->parents.at(0)->translate(3, 3, 3);
+	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
+	testSprite->mesh->pushTexture2D(playerPalette);
+	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture);
+	testSprite->mesh->scaleModeMag = GL_NEAREST;
+	testSprite->mesh->scaleModeMin = GL_NEAREST;
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -290,7 +308,17 @@ void PD_TestScene::update(Step * _step){
 
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
-
+	
+	if(keyboard->keyDown(GLFW_KEY_P)){
+		//playerPalette->unload();
+		playerPalette->generateRandomTable();
+		playerPalette->bufferData();
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_O)){
+		//playerPalette->unload();
+		playerPalette->generateRandomTable();
+		playerPalette->bufferData();
+	}
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
@@ -334,13 +362,13 @@ void PD_TestScene::update(Step * _step){
 		Transform::drawTransforms = !Transform::drawTransforms;
 		if(debugDrawer != nullptr){
 			bulletWorld->world->setDebugDrawer(nullptr);
-			childTransform->removeChild(debugDrawer->parents.at(0));
-			delete debugDrawer->parents.at(0);
+			childTransform->removeChild(debugDrawer);
+			delete debugDrawer;
 			debugDrawer = nullptr;
 			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
-			childTransform->addChild(debugDrawer);
+			childTransform->addChild(debugDrawer, false);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);

@@ -79,9 +79,14 @@ void PD_FirstPersonController::update(Step * _step){
 	btVector3 start(pos.x, pos.y, pos.z);
 	btVector3 dir(targetCamera->forwardVectorRotated.x, targetCamera->forwardVectorRotated.y, targetCamera->forwardVectorRotated.z);
 	btVector3 end = start + dir*range;
+
+	
+	//std::cout << dir.x() << "\t" << dir.y() << "\t" << dir.z() << std::endl;
+	//std::cout << start.x() << "\t" << start.y() << "\t" << start.z() << std::endl;
+
 	btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
 	targetEntity->world->world->rayTest(start, end, RayCallback);
-	Log::info(std::to_string(RayCallback.hasHit()));
+	//Log::info(std::to_string(RayCallback.hasHit()));
 	if(RayCallback.hasHit()){
 		NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			
