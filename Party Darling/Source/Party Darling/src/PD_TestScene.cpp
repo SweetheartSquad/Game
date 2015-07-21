@@ -278,17 +278,31 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerPalette = new TextureColourTable(false);
 	playerPalette->load();
 	PD_ResourceManager::resources.push_back(playerPalette);
-
+	
+	{
 	Sprite * testSprite = new Sprite();
 	testSprite->setShader(characterShader, true);
 	childTransform->addChild(testSprite);
 	testSprite->parents.at(0)->scale(10);
-	testSprite->parents.at(0)->translate(3, 3, -3);
+	testSprite->parents.at(0)->translate(6, 4, -6);
+	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
+	testSprite->mesh->pushTexture2D(playerPalette);
+	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture);
+	testSprite->mesh->scaleModeMag = GL_NEAREST;
+	testSprite->mesh->scaleModeMin = GL_NEAREST;
+	}
+	{
+	Sprite * testSprite = new Sprite();
+	testSprite->setShader(characterShader, true);
+	childTransform->addChild(testSprite);
+	testSprite->parents.at(0)->scale(10);
+	testSprite->parents.at(0)->translate(-3, 3, -3);
 	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
 	testSprite->mesh->pushTexture2D(playerPalette);
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture);
 	testSprite->mesh->scaleModeMag = GL_NEAREST;
 	testSprite->mesh->scaleModeMin = GL_NEAREST;
+	}
 }
 
 PD_TestScene::~PD_TestScene(){

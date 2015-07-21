@@ -36,6 +36,13 @@
       "src": "indexedColourTest.png",
       "width": 512,
       "height": 512
+    },
+    {
+      "id": "INDEXED-TEST2",
+      "type": "texture",
+      "src": "indexedColourTest2.png",
+      "width": 2152,
+      "height": 2152
     }
   ],
   "characters": [],
