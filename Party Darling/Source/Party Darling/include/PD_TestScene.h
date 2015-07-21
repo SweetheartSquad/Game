@@ -36,10 +36,10 @@ public:
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
-
-	ComponentShaderBase * shader;
+	
+	ComponentShaderBase * diffuseShader;
+	ComponentShaderBase * characterShader;
 	ComponentShaderText * textShader;
-	ShaderComponentHsv * hsvComponent;
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;

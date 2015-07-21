@@ -17,6 +17,7 @@
 #include <shader\ComponentShaderBase.h>
 #include <shader\ComponentShaderText.h>
 #include <shader\ShaderComponentText.h>
+#include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
 
@@ -92,20 +93,20 @@ pplx::task<void> RequestJSONValueAsync(){
 PD_TestScene::PD_TestScene(Game * _game) :
 	Scene(_game),
 	textShader(new ComponentShaderText(true)),
-	shader(new ComponentShaderBase(true)),
-	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
+	characterShader(new ComponentShaderBase(true)),
+	diffuseShader(new ComponentShaderBase(true)),
 	debugDrawer(nullptr),
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(this, 0,0,0,0)
 {
+	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
+	characterShader->compileShader();
 
-	shader->addComponent(new ShaderComponentIndexedTexture(shader));
-	shader->addComponent(new ShaderComponentDiffuse(shader));
-	shader->addComponent(hsvComponent);
-
-	shader->compileShader();
+	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
+	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
+	diffuseShader->compileShader();
 
 	//Set up debug camera
 	debugCam = new MousePerspectiveCamera();
@@ -125,7 +126,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
 	bulletGround->createRigidBody(0);
 	childTransform->addChild(bulletGround);
-	bulletGround->setShader(shader, true);
+	bulletGround->setShader(diffuseShader, true);
 	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
 	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
@@ -134,10 +135,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
 	backgroundShader->addComponent(new ShaderComponentIndexedTexture(backgroundShader));
 	backgroundShader->compileShader();
-	
-	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
-	lights.push_back(light2);
-	childTransform->addChild(light2);
 	
 	//label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
 	//label->setText(L"userId");	
@@ -156,9 +153,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-	Room * room = new Room(bulletWorld, shader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
+	Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
 	childTransform->addChild(room);
-	room->setShader(shader, true);
+	room->setShader(diffuseShader, true);
 	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	
 	/*
@@ -183,14 +180,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
 		obj->createRigidBody(25);
-		obj->setShader(shader, true);
+		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
 	}
 	for(std::string s : staticobjs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsMesh(Resource::loadMeshFromObj(s).at(0), false);
 		obj->createRigidBody(0);
-		obj->setShader(shader, true);
+		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
 	}
 	
@@ -233,7 +230,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerEntity->parents.at(0)->scale(2);
 	playerEntity->setColliderAsCapsule(1, 1.5f);
 	playerEntity->createRigidBody(1);
-	playerEntity->setShader(shader, true);
+	playerEntity->setShader(diffuseShader, true);
 	playerEntity->body->setDamping(0.1, 0.1);
 	playerEntity->body->setAngularFactor(btVector3(0,1,0));
 
@@ -248,6 +245,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerCam->pitch = -10.0f;
 	playerCam->speed = 1;
 	activeCamera = playerCam;
+	
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
+	lights.push_back(light2);
+	playerCam->childTransform->addChild(light2);
 
 	playerController = new PD_FirstPersonController(playerEntity, playerCam);
 	childTransform->addChild(playerController, false);
@@ -256,10 +257,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt1);
+	butt1->setTranslationPhysical(20, 20, -30, true);
 
 	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
 	childTransform->addChild(butt2);
-	butt2->setTranslationPhysical(20, 20, 0, true);
+	butt2->setTranslationPhysical(20, 20, -30, true);
 
 	
 	TextArea * butt3 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
@@ -278,10 +280,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	PD_ResourceManager::resources.push_back(playerPalette);
 
 	Sprite * testSprite = new Sprite();
-	testSprite->setShader(shader, true);
+	testSprite->setShader(characterShader, true);
 	childTransform->addChild(testSprite);
 	testSprite->parents.at(0)->scale(10);
-	testSprite->parents.at(0)->translate(3, 3, 3);
+	testSprite->parents.at(0)->translate(3, 3, -3);
 	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
 	testSprite->mesh->pushTexture2D(playerPalette);
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture);
@@ -291,7 +293,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 PD_TestScene::~PD_TestScene(){
 	deleteChildTransform();
-	shader->safeDelete();
+	diffuseShader->safeDelete();
+	characterShader->safeDelete();
 	textShader->safeDelete();
 
 	screenSurface->safeDelete();
