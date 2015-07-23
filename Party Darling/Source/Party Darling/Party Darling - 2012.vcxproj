@@ -14,6 +14,8 @@
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\RoomLayout.cpp" />
+    <ClCompile Include="src\TestCharacter.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
     <ClCompile Include="src\PD_JsonObject.cpp" />
@@ -23,11 +25,11 @@
     <ClCompile Include="src\PD_TalkToButton.cpp" />
     <ClCompile Include="src\PD_TestScene.cpp" />
     <ClCompile Include="src\Room.cpp" />
-    <ClCompile Include="src\RoomLayout.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Character.h" />
+    <ClInclude Include="include\TestCharacter.h" />
     <ClCompile Include="include\Furniture.h" />
     <ClCompile Include="include\Item.h" />
     <ClInclude Include="include\PD_Button.h" />

@@ -1,18 +1,12 @@
 #pragma once
 
-#include <MeshInterface.h>
-#include <RoomObject.h>
+#include <glm\glm.hpp>
 #include <vector>
 #include <json\json.h>
 
-#define ROOM_HEIGHT 20
-#define ROOM_UNIT 20
+#define ROOM_HEIGHT 5
+#define DEFAULT_ROOM_LENGTH 15
 #define ROOM_TILE 4
-
-class Room;
-class Furniture;
-class TestCharacter;
-class Item;
 
 enum RoomLayout_t{
 	kRECT,
@@ -25,6 +19,16 @@ enum RoomObject_t{
 	FURNITURE,
 	ITEM
 };
+
+class BulletWorld;
+class MeshInterface;
+class ComponentShaderBase;
+
+class Room;
+class RoomObject;
+class Furniture;
+class Person;
+class Item;
 
 class Room;
 
@@ -46,12 +50,12 @@ public:
 	static std::vector<MeshInterface *> box(glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top = true, bool bottom = true);
 
 	// Create random room objects, including specified objects
-	static std::vector<RoomObject *> getRoomObjects(Json::Value json, BulletWorld * _world);
-	static std::vector<TestCharacter *> getCharacters(Json::Value json, BulletWorld * _world);
-	static std::vector<Furniture *> getFurniture(Json::Value json, BulletWorld * _world);
-	static std::vector<Item *> getItems(Json::Value json, BulletWorld * _world);
+	static std::vector<RoomObject *> getRoomObjects(Json::Value _json, BulletWorld * _world);
+	static std::vector<Person *> getCharacters(Json::Value _json, BulletWorld * _world);
+	static std::vector<Furniture *> getFurniture(Json::Value _json, BulletWorld * _world);
+	static std::vector<Item *> getItems(Json::Value _json, BulletWorld * _world);
 	
-	static TestCharacter * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world);
+	static Person * RoomLayout::readCharacter(Json::Value _json, BulletWorld * _world);
 	static Furniture * RoomLayout::readFurniture(Json::Value _json, BulletWorld * _world);
 	static Item * RoomLayout::readItem(Json::Value _json, BulletWorld * _world);
 	static RoomObject * readRoomObject(Json::Value _roomObject, RoomObject_t _type, BulletWorld * _world);

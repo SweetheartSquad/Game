@@ -1,8 +1,7 @@
 #pragma once
 
-#include <MeshEntity.h>
 #include <Entity.h>
-#include <BulletMeshEntity.h>
+#include <BulletWorld.h>
 #include <RoomLayout.h>
 #include <vector>
 
@@ -15,7 +14,12 @@ enum Room_t{
 	OTHER
 };
 
+class BulletMeshEntity;
 class ComponentShaderBase;
+class Shader;
+class Texture;
+
+class RoomObject;
 
 class Room: public Entity {
 public:

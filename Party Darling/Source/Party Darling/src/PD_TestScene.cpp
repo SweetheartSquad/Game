@@ -153,7 +153,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiThingMesh->setShader(shader, true);
 	childTransform->addChild(uiThing);*/
 	
-	Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
+	//Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
+	Room * room = RoomLayout::getRoom("{}",bulletWorld, diffuseShader);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
@@ -176,6 +177,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	staticobjs.push_back("assets/meshes/LOD_2/door_LOD_2.obj");
 	//staticobjs.push_back("assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
 	staticobjs.push_back("assets/meshes/LOD_2/windowFrame_LOD_2.obj");
+	/*
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
@@ -183,6 +185,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
 	}
+	*/
 	for(std::string s : staticobjs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsMesh(Resource::loadMeshFromObj(s).at(0), false);

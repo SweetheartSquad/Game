@@ -1,6 +1,13 @@
+#pragma once
+
 #include <Room.h>
 #include <math.h>
+
+#include <MeshInterface.h>
+#include <BulletMeshEntity.h>
 #include <shader/ComponentShaderBase.h>
+
+#include <RoomObject.h>
 
 Room::Room(BulletWorld * _world, ComponentShaderBase * _shader, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture){
 
