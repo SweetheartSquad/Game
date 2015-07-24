@@ -20,6 +20,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
+#include <shader\ShaderComponentMVP.h>
 
 #include <shader\ShaderComponentIndexedTexture.h>
 #include <TextureColourTable.h>
@@ -101,9 +102,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(this, 0,0,0,0)
 {
+	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->compileShader();
-
+	
+	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->compileShader();
@@ -133,6 +136,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->setFriction(1);
 
 	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
+	backgroundShader->addComponent(new ShaderComponentMVP(backgroundShader));
 	backgroundShader->addComponent(new ShaderComponentIndexedTexture(backgroundShader));
 	backgroundShader->compileShader();
 	

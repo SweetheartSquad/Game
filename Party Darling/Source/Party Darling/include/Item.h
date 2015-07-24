@@ -13,5 +13,5 @@ class Item: public RoomObject {
 public:
 
 	Item(BulletWorld * _world, TriMesh * _mesh, ComponentShaderBase * _shader = nullptr);
-	~Item(void);
+	~Item();
 };
