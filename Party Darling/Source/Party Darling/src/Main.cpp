@@ -10,10 +10,12 @@
 
 #include <PD_Game.h>
 
-// memory leak debugging
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+#ifdef _DEBUG
+	// memory leak debugging
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
+#endif
 
 int main(void){
 #ifdef _DEBUG
