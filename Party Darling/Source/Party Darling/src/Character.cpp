@@ -33,18 +33,18 @@ TestCharacter::TestCharacter(BulletWorld * _world) :
 	rightLowerLeg(nullptr)
 {
 	box2dWorld = new Box2DWorld();
-	torso = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelTorso.png", 512, 512, true, true), 150, 360));
-	head = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHead.png", 512, 512, true, true), 160, 270));
-	leftUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
-	rightUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", 512, 512, true, true), 55, 205));
-	leftLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
-	rightLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", 512, 512, true, true), 40, 145));
-	leftHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
-	rightHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", 512, 512, true, true), 50, 82));
-	leftUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
-	rightUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", 512, 512, true, true), 70, 215));
-	leftLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
-	rightLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", 512, 512, true, true), 135, 285));
+	torso = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelTorso.png", true, true), 150, 360));
+	head = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHead.png", true, true), 160, 270));
+	leftUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", true, true), 55, 205));
+	rightUpperArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperArm.png", true, true), 55, 205));
+	leftLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", true, true), 40, 145));
+	rightLowerArm = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerArm.png", true, true), 40, 145));
+	leftHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", true, true), 50, 82));
+	rightHand = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelHand.png", true, true), 50, 82));
+	leftUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", true, true), 70, 215));
+	rightUpperLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelUpperLeg.png", true, true), 70, 215));
+	leftLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", true, true), 135, 285));
+	rightLowerLeg = new Box2DSprite(box2dWorld, new TextureSampler(new Texture("assets/textures/character components/MichaelLowerLeg.png", true, true), 135, 285));
 	
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
