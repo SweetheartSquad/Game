@@ -1,15 +1,23 @@
 #pragma once
 
-#include <Character.h>
+#include "Character.h"
+#include "Box2DSprite.h"
+#include "Box2DWorld.h"
+#include "shader/Shader.h"
+#include "Scene.h"
+#include "BitmapFont.h"
 
-Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
-	RoomObject(_world, _mesh, _anchor)
+#include <MeshFactory.h>
+#include "Texture.h"
+#include <TextureSampler.h>
+
+ComponentTexture::ComponentTexture(Texture * _texture, float _width, float _height) :
+	texture(_texture),
+	width(_width),
+	height(_height)
 {
-	setColliderAsBoundingBox();
-	createRigidBody(25);
 }
 
-<<<<<<< HEAD
 TestCharacter::TestCharacter(BulletWorld * _world) :
 	RoomObject(_world, MeshFactory::getCubeMesh()),
 	head(nullptr),
@@ -346,7 +354,4 @@ void TestCharacter::translateComponents(glm::vec3 _translateVector){
 			(*c)->setTranslationPhysical(_translateVector, true);
 		}
 	}
-=======
-Person::~Person(void){
->>>>>>> origin/E1-FurniturePlacement
 }
