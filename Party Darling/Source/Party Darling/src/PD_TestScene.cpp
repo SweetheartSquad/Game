@@ -141,7 +141,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 	
-	std::vector<std::string> objs;
+	/*std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
 	objs.push_back("assets/meshes/LOD_2/couch_LOD_2.obj");
 	objs.push_back("assets/meshes/LOD_2/dish_LOD_2.obj");
@@ -153,7 +153,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	staticobjs.push_back("assets/meshes/LOD_2/door_LOD_2.obj");
 	//staticobjs.push_back("assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
 	staticobjs.push_back("assets/meshes/LOD_2/windowFrame_LOD_2.obj");
-	/*
+	
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
@@ -161,14 +161,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
 	}
-	*/
+	
 	for(std::string s : staticobjs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsMesh(Resource::loadMeshFromObj(s).at(0), false);
 		obj->createRigidBody(0);
 		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
-	}
+	}*/
 	
 
 	glm::uvec2 sd = vox::getScreenDimensions();
@@ -236,7 +236,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	// 3D ui testing stuff
-	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
+	/*PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt1);
 	butt1->setTranslationPhysical(20, 20, 0, true);
 	
@@ -263,14 +263,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	};
 	butt3->setTranslationPhysical(100, 0, 0, true);
 	butt3->setBackgroundColour(1,1,1,1);
-
+	*/
 
 
 
 
 
 	// palette testing stuff
-	playerPalette = new TextureColourTable(false);
+	/*playerPalette = new TextureColourTable(false);
 	playerPalette->load();
 	PD_ResourceManager::resources.push_back(playerPalette);
 	
@@ -295,7 +295,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture);
 	testSprite->mesh->scaleModeMag = GL_NEAREST;
 	testSprite->mesh->scaleModeMin = GL_NEAREST;
-	}
+	}*/
 }
 
 PD_TestScene::~PD_TestScene(){
