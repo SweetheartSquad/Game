@@ -46,7 +46,7 @@
 #include <TextArea.h>
 
 #include <Room.h>
-#include <RoomLayout.h>
+#include <RoomBuilder.h>
 
 
 #include <cpprest/http_client.h>
@@ -137,10 +137,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 
-	Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
+	Room * room = RoomBuilder::getRoom("{}",bulletWorld);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
-	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	
 	std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
@@ -154,6 +153,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	staticobjs.push_back("assets/meshes/LOD_2/door_LOD_2.obj");
 	//staticobjs.push_back("assets/LOD_1/roomBox_LOD_1.obj"); // we need to make separate pieces for the walls/ground otherwise it wont collide properly
 	staticobjs.push_back("assets/meshes/LOD_2/windowFrame_LOD_2.obj");
+	/*
 	for(std::string s : objs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsBoundingBox();
@@ -161,6 +161,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 		obj->setShader(diffuseShader, true);
 		childTransform->addChild(obj);
 	}
+	*/
 	for(std::string s : staticobjs){
 		BulletMeshEntity * obj = new BulletMeshEntity(bulletWorld, Resource::loadMeshFromObj(s).at(0));
 		obj->setColliderAsMesh(Resource::loadMeshFromObj(s).at(0), false);
