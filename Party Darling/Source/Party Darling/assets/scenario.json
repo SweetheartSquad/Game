@@ -3,46 +3,34 @@
     {
       "id": "UV-TEST",
       "type": "texture",
-      "src": "uvs.png",
-      "width": 2048,
-      "height": 2048
+      "src": "uvs.png"
     },
     {
       "id": "UV-TEST-ALT",
       "type": "texture",
-      "src": "uvs_alt.png",
-      "width": 2048,
-      "height": 2048
+      "src": "uvs_alt.png"
     },
     {
       "id": "CROSSHAIR",
       "type": "texture",
-      "src": "crosshair.png",
-      "width": 16,
-      "height": 16
+      "src": "crosshair.png"
     },
     {
       "id": "CURSOR",
       "type": "texture",
-      "src": "../engine basics/cursor.png",
-      "width": 32,
-      "height": 32
+      "src": "../engine basics/cursor.png"
     },
 
 
     {
       "id": "INDEXED-TEST",
       "type": "texture",
-      "src": "indexedColourTest.png",
-      "width": 512,
-      "height": 512
+      "src": "indexedColourTest.png"
     },
     {
       "id": "INDEXED-TEST2",
       "type": "texture",
-      "src": "indexedColourTest2.png",
-      "width": 2152,
-      "height": 2152
+      "src": "indexedColourTest2.png"
     }
   ],
   "characters": [],

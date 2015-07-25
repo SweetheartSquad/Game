@@ -20,6 +20,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
+#include <shader\ShaderComponentMVP.h>
 
 #include <shader\ShaderComponentIndexedTexture.h>
 #include <TextureColourTable.h>
@@ -101,12 +102,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(this, 0,0,0,0)
 {
+	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->compileShader();
-
+	
+	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->compileShader();
+
+	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	//Set up debug camera
 	debugCam = new MousePerspectiveCamera();
@@ -132,38 +137,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 
-	ComponentShaderBase * backgroundShader = new ComponentShaderBase(true);
-	backgroundShader->addComponent(new ShaderComponentIndexedTexture(backgroundShader));
-	backgroundShader->compileShader();
-	
-	//label = new Label(bulletWorld, this, font, textShader, backgroundShader, WrapMode::WORD_WRAP, 300);
-	//label->setText(L"userId");	
-	//ragdoll->head->childTransform->addChild(label);
-	//label->parents.at(0)->scale(0.01,0.01,0.01);
-	//label->parents.at(0)->rotate(90, 1, 0, 0, kOBJECT);
-	//label->parents.at(0)->translate(0,5,0);
-	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
-
-
-	/*NodeUI * uiThing = new NodeUI(bulletWorld, this);
-	MeshEntity * uiThingMesh = new MeshEntity(MeshFactory::getCubeMesh());
-	uiThing->childTransform->addChild(uiThingMesh);
-	uiThing->setColliderAsBox();
-	uiThing->createRigidBody(0);
-	uiThingMesh->setShader(shader, true);
-	childTransform->addChild(uiThing);*/
-	
 	Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	
-	/*
-	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);
-	childTransform->addChild(blah);
-	blah->setShader(shader, true);
-	blah->mesh->pushMaterial(phongMat);
-	*/
 	std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
 	objs.push_back("assets/meshes/LOD_2/couch_LOD_2.obj");
@@ -255,13 +233,24 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	
+
+	// 3D ui testing stuff
 	PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt1);
-	butt1->setTranslationPhysical(20, 20, -30, true);
+	butt1->setTranslationPhysical(20, 20, 0, true);
+	
+	butt1->body->getWorldTransform().getOrigin().rotate(btVector3(0,1,0), 45);
+	//butt1->body->setWorldTransform();45, 0, 1, 0, kOBJECT);
 
 	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
 	childTransform->addChild(butt2);
-	butt2->setTranslationPhysical(20, 20, -30, true);
+	butt2->setTranslationPhysical(20, 30, -23, true);
+	butt2->childTransform->rotate(45, 1, 1, 0, kOBJECT);
+
+	PD_TalkToButton * butt4 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
+	childTransform->addChild(butt4);
+	butt4->setTranslationPhysical(20, 40, -23, true);
+	butt4->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
 
 	
 	TextArea * butt3 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
@@ -275,6 +264,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt3->setBackgroundColour(1,1,1,1);
 
 
+
+
+
+
+	// palette testing stuff
 	playerPalette = new TextureColourTable(false);
 	playerPalette->load();
 	PD_ResourceManager::resources.push_back(playerPalette);
@@ -285,7 +279,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(testSprite);
 	testSprite->parents.at(0)->scale(10);
 	testSprite->parents.at(0)->translate(6, 4, -6);
-	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
 	testSprite->mesh->pushTexture2D(playerPalette);
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture);
 	testSprite->mesh->scaleModeMag = GL_NEAREST;
@@ -297,7 +290,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(testSprite);
 	testSprite->parents.at(0)->scale(10);
 	testSprite->parents.at(0)->translate(-3, 3, -3);
-	//testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("PALETTE-TEST")->texture);
 	testSprite->mesh->pushTexture2D(playerPalette);
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture);
 	testSprite->mesh->scaleModeMag = GL_NEAREST;
@@ -326,15 +318,14 @@ void PD_TestScene::update(Step * _step){
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 	
-	if(keyboard->keyDown(GLFW_KEY_P)){
-		//playerPalette->unload();
+	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
 	}
-	if(keyboard->keyJustDown(GLFW_KEY_O)){
-		//playerPalette->unload();
-		playerPalette->generateRandomTable();
-		playerPalette->bufferData();
+	if(keyboard->keyJustDown(GLFW_KEY_I)){
+		playerPalette->saveImageData("palette.tga");
+		PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture->saveImageData("INDEXED-TEST.tga");
+		PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture->saveImageData("INDEXED-TEST2.tga");
 	}
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
@@ -369,6 +360,9 @@ void PD_TestScene::update(Step * _step){
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
 		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_F11)){
+		screenFBO->saveToFile("fboTest.tga", 0);
 	}
 
 	// debug controls
