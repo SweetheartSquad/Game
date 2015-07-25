@@ -22,8 +22,14 @@ public:
 	
 	Anchor_t anchor;
 
-	std::map<Side_t, RoomObject *> childSlots;
+	// map of vectors of available slots per side of an object
+	std::map<Side_t, std::vector<RoomObject *>> childSlots;
+	std::vector<RoomObject *> components;
 
 	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 	~RoomObject(void);
+
+	void addComponent(RoomObject *);
+	void setShader(Shader * _shader, bool _default) override;
+	void translatePhysical(glm::vec3 _v);
 };

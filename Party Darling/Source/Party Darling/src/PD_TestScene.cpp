@@ -45,7 +45,7 @@
 #include <TextArea.h>
 
 #include <Room.h>
-#include <RoomLayout.h>
+#include <RoomBuilder.h>
 
 
 #include <cpprest/http_client.h>
@@ -154,10 +154,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(uiThing);*/
 	
 	//Room * room = new Room(bulletWorld, diffuseShader, RoomLayout_t::kRECT, glm::vec2(3.f, 3.f), PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
-	Room * room = RoomLayout::getRoom("{}",bulletWorld, diffuseShader);
+	Room * room = RoomBuilder::getRoom("{}",bulletWorld);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
-	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT / 2.f - (1 - 0.05), 0));
 	
 	/*
 	MeshEntity * blah = new MeshEntity(MeshFactory::getCubeMesh(), shader);

@@ -14,7 +14,7 @@
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
-    <ClCompile Include="src\RoomLayout.cpp" />
+    <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\TestCharacter.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
@@ -40,7 +40,7 @@
     <ClInclude Include="include\PD_TalkToButton.h" />
     <ClInclude Include="include\PD_TestScene.h" />
     <ClInclude Include="include\Room.h" />
-    <ClInclude Include="include\RoomLayout.h" />
+    <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
