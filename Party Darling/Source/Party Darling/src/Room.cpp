@@ -31,31 +31,12 @@ void Room::setShader(Shader * _shader, bool _default){
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->setShader(_shader, _default);
 	}
-		/*
-	for(unsigned int i = 0; i < boundaries.size(); ++i){
-		boundaries.at(i)->setShader(_shader, _default);
-	}
-
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		objects.at(i)->setShader(_shader, _default);
-	}*/
 }
 
 void Room::translatePhysical(glm::vec3 _v){
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->translatePhysical(_v);
 	}
-	
-	/*
-	btVector3 v(_v.x, _v.y, _v.z);
-
-	for(unsigned int i = 0; i < boundaries.size(); ++i){
-		boundaries.at(i)->body->translate(v);
-	}
-
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		objects.at(i)->body->translate(v);
-	}*/
 }
 
 Room::~Room(void){

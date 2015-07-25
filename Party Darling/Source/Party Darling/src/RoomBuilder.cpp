@@ -57,7 +57,7 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	std::vector<RoomObject *> availableParents;
 	for(unsigned int i = 0; i < room->boundaries.size(); ++i){
 		// only walls in boundaries should have child slots (not floor, cieling)
-		if(room->boundaries.at(i)->childSlots.size() > 0){
+		if(room->boundaries.at(i)->emptySlots.size() > 0){
 			availableParents.insert(availableParents.begin(), room->boundaries.at(i));
 		}
 	}
@@ -80,42 +80,76 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 
 bool RoomBuilder::findPotentialParent(RoomObject * child, std::vector<RoomObject *> objects){
 	for(unsigned int i = 0; i < objects.size(); ++i){
-		typedef std::map<Side_t, std::vector<RoomObject *>>::iterator it_type;
-		for(it_type iterator = objects.at(i)->childSlots.begin(); iterator != objects.at(i)->childSlots.end(); iterator++) {
-			// go through childSlots until one is free
+		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
+		for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
+			// go through available slots of side
 			for(unsigned int j = 0; j < iterator->second.size(); ++j){
-				if(iterator->second.at(j) == nullptr){
-					// check space around
-
-						// if ok, return
-						iterator->second.at(j) = child;
-						objects.at(i)->addComponent(child);
-						// position
-						//glm::vec3 pos = objects.at(i)->childTransform->getTranslationVector();
-						glm::vec3 pos = objects.at(i)->getWorldPos();
-						
-						vox::Box parentBox = objects.at(i)->mesh->calcBoundingBox();
-						vox::Box childBox = child->mesh->calcBoundingBox();
-						switch(iterator->first){
-							case FRONT:
-								pos.z += parentBox.depth / 2.f + childBox.depth / 2.f;
-								break;
-							case BACK:
-								pos.z += -parentBox.depth / 2.f - childBox.depth / 2.f;
-								break;
-							case LEFT:
-								pos.x += parentBox.width / 2.f + childBox.width / 2.f;
-								break;
-							case RIGHT:
-								pos.x += -parentBox.width / 2.f - childBox.width / 2.f;
-								break;
-								
-						}
-						child->translatePhysical(pos);
-						return true;
+				Side_t side = iterator->first;
+				Slot * slot = iterator->second.at(j);
+				vox::Box childBox = child->mesh->calcBoundingBox();
+					
+				// check length of slot
+				if(childBox.width > slot->length){
+					continue;
 				}
+				
+				// check space around
+				if(positionObject(child, objects.at(i), slot, iterator->first)){
+
+				}
+					objects.at(i)->addComponent(child);
+					// position
+					//glm::vec3 pos = objects.at(i)->childTransform->getTranslationVector();
+					glm::vec3 pos = objects.at(i)->getWorldPos();
+						
+					vox::Box parentBox = objects.at(i)->mesh->calcBoundingBox();
+						
+					switch(iterator->first){
+						case FRONT:
+							pos.z += parentBox.depth / 2.f + childBox.depth / 2.f;
+							break;
+						case BACK:
+							pos.z += -parentBox.depth / 2.f - childBox.depth / 2.f;
+							break;
+						case LEFT:
+							pos.x += parentBox.width / 2.f + childBox.width / 2.f;
+							break;
+						case RIGHT:
+							pos.x += -parentBox.width / 2.f - childBox.width / 2.f;
+							break;
+								
+					}
+					child->translatePhysical(pos);
+
+					if(childBox.width < slot->length){
+						// adjust remaining slot space
+						slot->loc += slot->loc + childBox.width;
+						slot->length = slot->length - childBox.width;
+					}else{
+						// remove slot
+						iterator->second.erase(iterator->second.begin() + j);
+					}
+					return true;
 			}
 		}
+	}
+	return false;
+}
+
+bool RoomBuilder::positionObject(RoomObject * child, RoomObject * parent, Slot * slot, Side_t side){
+	glm::vec2 startPos;
+	glm::vec2 endPos;
+
+	switch(side){
+		case FRONT:
+			//startPos = 
+			break;
+		case BACK:
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			break;
 	}
 	return false;
 }
@@ -331,10 +365,10 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 	if(front){
 		//Front
 		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(halfX + posX, halfY, 0)); // top right - top left
-		m->pushVert(Vertex(halfX + posX, -halfY, 0)); // bottom right - bottom left
-		m->pushVert(Vertex(-halfX + posX, -halfY, 0)); // bottom left - bottom right
-		m->pushVert(Vertex(-halfX + posX, halfY, 0)); // top left - top right
+		m->pushVert(Vertex(halfX + posX, halfY, 0)); // top right
+		m->pushVert(Vertex(halfX + posX, -halfY, 0)); // bottom right
+		m->pushVert(Vertex(-halfX + posX, -halfY, 0)); // bottom left
+		m->pushVert(Vertex(-halfX + posX, halfY, 0)); // top left
 		m->setNormal(0, 0.0, 0.0, -1.0);
 		m->setNormal(1, 0.0, 0.0, -1.0);
 		m->setNormal(2, 0.0, 0.0, -1.0);
@@ -348,8 +382,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(0, 0, halfZ + posZ));
 		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
-		int n = left ? size.x - 1 : size.x;
-		boundaries.back()->childSlots[BACK] = std::vector<RoomObject *>(n, nullptr);
+		boundaries.back()->emptySlots[BACK] = std::vector<Slot *>(1, new Slot(0.f, size.x));
 	}
 
 	if(back){
@@ -372,8 +405,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(0, 0, -halfZ + posZ));
 		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
-		int n = right ? size.x - 1 : size.x;
-		boundaries.back()->childSlots[FRONT] = std::vector<RoomObject *>(n, nullptr);
+		boundaries.back()->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, size.x));
 	}
 
 	if(left){
@@ -397,7 +429,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->translatePhysical(glm::vec3(-halfX + posX, 0, 0));
 		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
 		int n = back ? size.y - 1 : size.y;
-		boundaries.back()->childSlots[RIGHT] = std::vector<RoomObject *>(n, nullptr);
+		boundaries.back()->emptySlots[RIGHT] = std::vector<Slot *>(1, new Slot(0.f, size.y));
 	}
 
 	if(right){
@@ -422,7 +454,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		//boundaries.back()->childTransform->translate(halfX + posX, 0, 0);
 		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
 		int n = front ? size.y - 1 : size.y;
-		boundaries.back()->childSlots[LEFT] = std::vector<RoomObject *>(n, nullptr);
+		boundaries.back()->emptySlots[LEFT] = std::vector<Slot *>(1, new Slot(0.f, size.y));
 	}
 
 	return boundaries;

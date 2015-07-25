@@ -1,5 +1,11 @@
 #include <RoomObject.h>
 
+Slot::Slot(float _loc, float _length) :
+	loc(_loc),
+	length(_length)
+{
+}
+
 RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	BulletMeshEntity(_world, _mesh),
 	anchor(_anchor)
