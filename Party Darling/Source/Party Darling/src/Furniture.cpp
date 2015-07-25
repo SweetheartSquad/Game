@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Furniture.h>
-#include <math.h>
 
 Furniture::Furniture(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor)

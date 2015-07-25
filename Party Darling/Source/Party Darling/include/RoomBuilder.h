@@ -26,6 +26,8 @@ enum Tile_t{
 	kCORNER
 };
 
+enum Side_t;
+
 class BulletWorld;
 class MeshInterface;
 
@@ -46,6 +48,8 @@ public:
 	Tile(glm::vec2 _pos, Tile_t _type);
 };
 
+class Slot;
+
 // Use builder pattern (parsing flat data)
 class RoomBuilder{
 public: 
@@ -53,6 +57,7 @@ public:
 	static Room * getRoom(std::string json, BulletWorld * _world);
 
 	static bool findPotentialParent(RoomObject * child, std::vector<RoomObject *> objects);
+	static bool positionObject(RoomObject * child, RoomObject * parent, Slot * slot, Side_t side);
 
 	// Room boundaries builder functions
 	static std::vector<RoomObject *> getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size);
