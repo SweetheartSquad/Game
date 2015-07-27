@@ -4,8 +4,7 @@
 
 PD_TalkToButton::PD_TalkToButton(Conversation * _convo, BulletWorld * _world, Scene * _scene) :
 	PD_Button(_world, _scene, 5, 5),
-	conversation(_convo),
-	NodeBulletBody(_world)
+	conversation(_convo)
 {
 }
 

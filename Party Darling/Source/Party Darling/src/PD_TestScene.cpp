@@ -132,8 +132,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->createRigidBody(0);
 	childTransform->addChild(bulletGround);
 	bulletGround->setShader(diffuseShader, true);
-	bulletGround->mesh->parents.at(0)->scale(1000,1000,1000);
-	bulletGround->mesh->parents.at(0)->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletGround->meshTransform->scale(1000,1000,1000);
+	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 
@@ -205,8 +205,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	// player set-up
 	playerEntity = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh());
 	childTransform->addChild(playerEntity, true);
-	playerEntity->parents.at(0)->scale(1, 1.5f, 1);
-	playerEntity->parents.at(0)->scale(2);
+	playerEntity->meshTransform->scale(1, 1.5f, 1);
+	playerEntity->meshTransform->scale(2);
 	playerEntity->setColliderAsCapsule(1, 1.5f);
 	playerEntity->createRigidBody(1);
 	playerEntity->setShader(diffuseShader, true);
@@ -214,12 +214,12 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerEntity->body->setAngularFactor(btVector3(0,1,0));
 
 	playerCam = new MousePerspectiveCamera();
-	playerEntity->childTransform->addChild(playerCam);
+	playerEntity->meshTransform->addChild(playerCam);
 	cameras.push_back(playerCam);
 	playerCam->farClip = 1000.f;
 	playerCam->nearClip = 0.1f;
 	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->parents.at(0)->translate(0, 1, 0);
+	playerCam->parents.at(0)->translate(0, 2.5, 0);
 	playerCam->yaw = 90.0f;
 	playerCam->pitch = -10.0f;
 	playerCam->speed = 1;
@@ -236,34 +236,42 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	// 3D ui testing stuff
-	/*PD_TalkToButton * butt1 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
-	childTransform->addChild(butt1);
-	butt1->setTranslationPhysical(20, 20, 0, true);
-	
-	butt1->body->getWorldTransform().getOrigin().rotate(btVector3(0,1,0), 45);
-	//butt1->body->setWorldTransform();45, 0, 1, 0, kOBJECT);
+	{
+	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
+	childTransform->addChild(butt);
+	butt->setTranslationPhysical(-2, 3, 1, true);
+	}
+	{
+	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
+	childTransform->addChild(butt);
+	butt->setTranslationPhysical(2, 4, -2, true);
+	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
+	}
 
-	PD_TalkToButton * butt2 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
-	childTransform->addChild(butt2);
-	butt2->setTranslationPhysical(20, 30, -23, true);
-	butt2->childTransform->rotate(45, 1, 1, 0, kOBJECT);
 
-	PD_TalkToButton * butt4 = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
-	childTransform->addChild(butt4);
-	butt4->setTranslationPhysical(20, 40, -23, true);
-	butt4->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
-
-	
-	TextArea * butt3 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
-	butt3->setMouseEnabled(true);
-	uiLayer.addChild(butt3);
-	butt3->setText(L"exit");
-	butt3->onClickFunction = [this](NodeUI * _this){
+	{
+	TextArea * butt = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	butt->setMouseEnabled(true);
+	uiLayer.addChild(butt);
+	butt->setText(L"exit1");
+	butt->onClickFunction = [this](NodeUI * _this){
 		game->exit();
 	};
-	butt3->setTranslationPhysical(100, 0, 0, true);
-	butt3->setBackgroundColour(1,1,1,1);
-	*/
+	butt->setTranslationPhysical(50, 50, 0, true);
+	butt->setBackgroundColour(1,1,1,1);
+	}
+	{
+	TextArea * butt = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	butt->setMouseEnabled(true);
+	uiLayer.addChild(butt);
+	butt->setText(L"exit2");
+	butt->onClickFunction = [this](NodeUI * _this){
+		game->exit();
+	};
+	butt->setMargin(100, 0, 100, 0);
+	butt->setBackgroundColour(1,1,1,1);
+	}
+	
 
 
 
