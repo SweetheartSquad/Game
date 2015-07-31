@@ -113,10 +113,15 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
 
+	// remove initial camera
+	childTransform->removeChild(cameras.at(0)->parents.at(0));
+	delete cameras.at(0)->parents.at(0);
+	cameras.pop_back();
+
 	//Set up debug camera
 	debugCam = new MousePerspectiveCamera();
 	cameras.push_back(debugCam);
-	childTransform->addChild(debugCam, false);
+	childTransform->addChild(debugCam);
 	debugCam->farClip = 1000.f;
 	debugCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
 	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
