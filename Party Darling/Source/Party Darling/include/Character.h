@@ -2,9 +2,6 @@
 
 #include <RoomObject.h>
 
-class MeshInterface;
-class BulletWorld;
-
 class Person: public RoomObject {
 public:
 

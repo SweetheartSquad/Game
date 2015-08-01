@@ -29,9 +29,12 @@ class BulletRagdoll;
 class ComponentShaderText;
 class TextureColourTable;
 
+class Room;
 
 class PD_TestScene : public Scene{
 public:
+
+	Room * room;
 	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

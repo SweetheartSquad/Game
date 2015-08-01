@@ -42,7 +42,6 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	glm::vec2 size = glm::vec2(l, w);
 
 	Room * room = new Room(_world, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size, PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
-	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE / 2.f - (1 - 0.05), 0));
 
 	// get all available tile positions
 	std::vector<Tile *> tiles = getTiles(static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size);
@@ -67,7 +66,7 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 		if(tiles.size() == 0){
 			break;
 		}
-		if(findPotentialParent(objects.at(i), availableParents)){
+		if(search(objects.at(i), availableParents)){
 
 		}else{
 			room->addComponent(objects.at(i));
@@ -78,6 +77,70 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	return room;
 }
 
+bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
+	for(unsigned int i = 0; i < objects.size(); ++i){
+		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
+		for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
+			// go through available slots of side
+			for(unsigned int j = 0; j < iterator->second.size(); ++j){
+				Side_t side = iterator->first;
+				Slot * slot = iterator->second.at(j);
+				vox::Box childBox = child->mesh->calcBoundingBox();
+					
+				// check length of slot
+				if(childBox.width > slot->length){
+					continue;
+				}
+				
+				if(arrange(child, objects.at(i), side, slot)){
+
+					if(childBox.width < slot->length){
+						// adjust remaining slot space
+						slot->loc += slot->loc + childBox.width;
+						slot->length = slot->length - childBox.width;
+					}else{
+						// remove slot
+						iterator->second.erase(iterator->second.begin() + j);
+					}
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
+	// check space around
+
+	parent->addComponent(child);
+	// position
+	glm::vec3 posi = parent->childTransform->getTranslationVector();
+	glm::vec3 pos = parent->getWorldPos();
+	
+	vox::Box childBox = child->mesh->calcBoundingBox();
+	vox::Box parentBox = parent->mesh->calcBoundingBox();
+						
+	switch(side){
+		case FRONT:
+			pos.z += parentBox.depth / 2.f + childBox.depth / 2.f;
+			break;
+		case BACK:
+			pos.z += -parentBox.depth / 2.f - childBox.depth / 2.f;
+			break;
+		case LEFT:
+			pos.x += parentBox.width / 2.f + childBox.width / 2.f;
+			break;
+		case RIGHT:
+			pos.x += -parentBox.width / 2.f - childBox.width / 2.f;
+			break;
+								
+	}
+	child->translatePhysical(pos);
+
+	return true;
+}
+/*
 bool RoomBuilder::findPotentialParent(RoomObject * child, std::vector<RoomObject *> objects){
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
@@ -153,7 +216,7 @@ bool RoomBuilder::positionObject(RoomObject * child, RoomObject * parent, Slot *
 	}
 	return false;
 }
-
+*/
 std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
 	std::vector<Tile *> tiles;
 	switch(_type){

@@ -47,6 +47,7 @@
 
 #include <Room.h>
 #include <RoomBuilder.h>
+#include <RoomObject.h>
 
 
 #include <cpprest/http_client.h>
@@ -142,7 +143,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 
-	Room * room = RoomBuilder::getRoom("{}",bulletWorld);
+	//Room * room = RoomBuilder::getRoom("{}",bulletWorld);
+	room = RoomBuilder::getRoom("{}",bulletWorld);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 	
@@ -344,6 +346,7 @@ void PD_TestScene::update(Step * _step){
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
+		room->boundaries.at(2)->translatePhysical(glm::vec3(0, 0, 10.f));
 		//RequestJSONValueAsync(label);
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_R)){	

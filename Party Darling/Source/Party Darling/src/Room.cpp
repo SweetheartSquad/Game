@@ -20,6 +20,9 @@ Room::Room(BulletWorld * _world, RoomLayout_t _type, glm::vec2 _size, Texture * 
 			boundaries.at(i)->mesh->pushTexture2D(_wallTexture);
 		}
 	}
+
+	// Level with ground plane
+	translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE / 2.f - (1 - 0.05), 0));
 }
 
 void Room::addComponent(RoomObject * obj){
@@ -33,9 +36,10 @@ void Room::setShader(Shader * _shader, bool _default){
 	}
 }
 
-void Room::translatePhysical(glm::vec3 _v){
+void Room::translatePhysical(glm::vec3 _v, bool _relative){
+	//TODO: move room to an absolute position while moving components relatively? (maintain component spacing)
 	for(unsigned int i = 0; i < components.size(); ++i){
-		components.at(i)->translatePhysical(_v);
+		components.at(i)->translatePhysical(_v, true);
 	}
 }
 

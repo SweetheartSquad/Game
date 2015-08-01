@@ -15,6 +15,7 @@
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
+    <ClCompile Include="src\RoomObject.cpp" />
     <ClCompile Include="src\TestCharacter.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
@@ -25,13 +26,14 @@
     <ClCompile Include="src\PD_TalkToButton.cpp" />
     <ClCompile Include="src\PD_TestScene.cpp" />
     <ClCompile Include="src\Room.cpp" />
-    <ClCompile Include="src\RoomObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Character.h" />
+    <ClInclude Include="include\Furniture.h" />
+    <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\RoomBuilder.h" />
+    <ClInclude Include="include\RoomObject.h" />
     <ClInclude Include="include\TestCharacter.h" />
-    <ClCompile Include="include\Furniture.h" />
-    <ClCompile Include="include\Item.h" />
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_FirstPersonController.h" />
     <ClInclude Include="include\PD_JsonObject.h" />
@@ -40,8 +42,6 @@
     <ClInclude Include="include\PD_TalkToButton.h" />
     <ClInclude Include="include\PD_TestScene.h" />
     <ClInclude Include="include\Room.h" />
-    <ClInclude Include="include\RoomBuilder.h" />
-    <ClInclude Include="include\RoomObject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
