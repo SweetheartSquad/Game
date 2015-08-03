@@ -87,6 +87,20 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 					
 					jaw = new PersonComponent(components[0], _paletteTex);
 					head = new PersonComponent(components[1], _paletteTex);
+				}else if(asset["category"].asString() == "arms"){
+					Json::Value components = asset["components"][0]["components"];
+					
+					armL = new PersonComponent(components[0], _paletteTex);
+					forearmL = new PersonComponent(components[1], _paletteTex);
+					handL = new PersonComponent(components[2], _paletteTex);
+
+					//components = asset["components"][1]["components"];
+					
+					armR = new PersonComponent(components[0], _paletteTex);
+					forearmR = new PersonComponent(components[1], _paletteTex);
+					handR = new PersonComponent(components[2], _paletteTex);
+
+					armR->childTransform->scale(-1,1,1);
 				}
 			}
 		}
@@ -95,6 +109,14 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	childTransform->addChild(torso)->translate(0,1,0);
 	connect(torso, jaw);
 	connect(jaw, head);
+	
+	connect(torso, armL, true);
+	connect(armL, forearmL);
+	connect(forearmL, handL);
+	
+	connect(torso, armR, true);
+	connect(armR, forearmR);
+	connect(forearmR, handR);
 
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
@@ -104,11 +126,11 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	talk->hasStart = true;
 }
 
-void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to){
+void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
 	_from->childTransform->addChild(_to)->translate(
 		_from->out.at(_from->connections.size()).x - _from->in.x,
 		_from->out.at(_from->connections.size()).y - _from->in.y,
-		0);
+		_behind ? 0.1 : -0.1); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
 	_from->connections.push_back(_to);
 }
 
@@ -116,6 +138,14 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);
 	head->setShader(_shader, _default);
+
+	armL->setShader(_shader, _default);
+	forearmL->setShader(_shader, _default);
+	handL->setShader(_shader, _default);
+
+	armR->setShader(_shader, _default);
+	forearmR->setShader(_shader, _default);
+	handR->setShader(_shader, _default);
 }
 
 void PersonRenderer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

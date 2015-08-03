@@ -36,15 +36,23 @@ public:
 	PersonComponent
 		* torso,
 		* jaw,
-		* head;
+		* head,
+		* armL,
+		* armR,
+		* forearmL,
+		* forearmR,
+		* handL,
+		* handR;
 
 	PersonRenderer(Texture * _paletteTex);
 
 	void setShader(Shader * _shader, bool _default);
 
 
-	
-	void connect(PersonComponent * _from, PersonComponent * _to);
+	// creates a parent-child relationship between two components
+	// uses one of the connection slots on _from
+	// if behind, _to moves backward; otherwise, _to moves forward
+	void connect(PersonComponent * _from, PersonComponent * _to, bool _behind = false);
 
 	
 	virtual void update(Step * _step) override;
