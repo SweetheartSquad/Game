@@ -30,8 +30,8 @@
   <ItemGroup>
     <ClInclude Include="include\Character.h" />
     <ClInclude Include="include\TestCharacter.h" />
-    <ClCompile Include="include\Furniture.h" />
-    <ClCompile Include="include\Item.h" />
+    <ClInclude Include="include\Furniture.h" />
+    <ClInclude Include="include\Item.h" />
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_FirstPersonController.h" />
     <ClInclude Include="include\PD_JsonObject.h" />
