@@ -6,6 +6,8 @@
 #include <PD_Button.h>
 #include <PD_TalkToButton.h>
 
+#include <Character.h>
+
 #include <MeshEntity.h>
 #include <MeshInterface.h>
 #include <MeshFactory.h>
@@ -47,7 +49,6 @@
 
 #include <Room.h>
 #include <RoomBuilder.h>
-
 
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
@@ -241,16 +242,17 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	// 3D ui testing stuff
-	{
+	/*{
 	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt);
-	butt->setTranslationPhysical(-2, 3, 1, true);
+	butt->setTranslationPhysical(-2, 1, 1, true);
 	}
 	{
 	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
 	childTransform->addChild(butt);
 	butt->setTranslationPhysical(2, 4, -2, true);
 	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
+	butt->parents.at(0)->scale(0.1);
 	}
 
 
@@ -275,7 +277,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	};
 	butt->setMargin(100, 0, 100, 0);
 	butt->setBackgroundColour(1,1,1,1);
-	}
+	}*/
 	
 
 
@@ -283,11 +285,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	// palette testing stuff
-	/*playerPalette = new TextureColourTable(false);
+	playerPalette = new TextureColourTable(false);
 	playerPalette->load();
 	PD_ResourceManager::resources.push_back(playerPalette);
 	
-	{
+	/*{
 	Sprite * testSprite = new Sprite();
 	testSprite->setShader(characterShader, true);
 	childTransform->addChild(testSprite);
@@ -309,6 +311,39 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	testSprite->mesh->scaleModeMag = GL_NEAREST;
 	testSprite->mesh->scaleModeMin = GL_NEAREST;
 	}*/
+
+
+	PersonRenderer * test = new PersonRenderer(playerPalette);
+	childTransform->addChild(test);
+	test->setShader(characterShader, true);
+	test->unload();
+	test->load();
+	test->parents.at(0)->translate(0, 5, -3);
+	test->parents.at(0)->scale(0.01);
+
+
+
+	/*Sprite * torso = new Sprite();
+	Sprite * headLower = new Sprite();
+	Sprite * headUpper = new Sprite();
+	
+	torso->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
+	headLower->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
+	headUpper->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
+
+	
+	childTransform->addChild(torso);
+	//childTransform->addChild(headLower);
+	torso->meshTransform->addChild(headLower);
+	headLower->meshTransform->addChild(headUpper);
+
+	torso->meshTransform->scale(1,2,1);
+	torso->parents.at(0)->translate(2,3,0);
+	headUpper->parents.at(0)->translate(0,2,0);
+	headLower->parents.at(0)->translate(0,1,0);
+	torso->setShader(diffuseShader, true);
+	headUpper->setShader(diffuseShader, true);
+	headLower->setShader(diffuseShader, true);*/
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -332,6 +367,11 @@ void PD_TestScene::update(Step * _step){
 	NodeOpenAL::setListenerPosition(activeCamera->getWorldPos());
 	NodeOpenAL::setListenerOrientation(activeCamera->forwardVectorRotated, activeCamera->upVectorRotated);
 	
+	
+	if(keyboard->keyJustDown(GLFW_KEY_F12)){
+		game->toggleFullScreen();
+	}
+
 	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();

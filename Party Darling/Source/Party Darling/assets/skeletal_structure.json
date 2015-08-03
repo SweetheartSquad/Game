@@ -1,0 +1,173 @@
+{
+    "characters": [
+        {
+            "id": "Olivia",
+            "gender": "female",
+            "age": "adult",
+            "assets": [
+                {
+                    "category": "head",
+                    "components": [
+                        {
+                            "id": "jaw",
+                            "src": "jaw.png",
+                            "gender": "male",
+                            "neckSize": "thick",
+                            "inX": 140,
+                            "inY": 20,
+                            "out": [ {"x": 154, "y": 150} ]
+                        },
+                        {
+                            "id": "upperface",
+                            "src": "head.png",
+                            "gender": "male",
+                            "size": "large",
+                            "hair": "green",
+                            "inX": 290,
+                            "inY": 0,
+                            "upperFaceComponents": [
+                                {
+                                    "id": "eyes",
+                                    "src": "eyes.png",
+                                    "size": "large",
+                                    "posX": 50,
+                                    "posY": 20
+                                },
+                                {
+                                    "id": "nose",
+                                    "src": "nose.png",
+                                    "size": "large",
+                                    "posX": 50,
+                                    "posY": 30
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "category": "torso",
+                    "id": "torso",
+                    "src": "torso.png",
+                    "gender": "male",
+                    "size": "large",
+                    "neckJointSize": "large",
+                    "armJointSize": "large",
+                    "legJointSize": "small",
+                    "inX": 277,
+                    "inY": 50,
+					"out":[
+						{ "x": 295, "y": 590 }, //neck
+						{ "x": 0, "y": 590 }, //l-shoulder
+						{ "x": 554, "y": 590 }, //r-shoulder
+						{ "x": 295, "y": 0 } //pelvis
+
+					]
+                },
+
+
+				// haven't done below this
+
+
+                {
+                    "category": "arms",
+                    "armJointSize": "large",
+                    "components": [
+                        {
+                            "category": "leftArm",
+                            "components": [
+                                {
+                                    "id": "topLeftArm",
+                                    "src": "left_arm_top.png",
+                                    "type": "thick",
+                                    "inX": 200,
+                                    "inY": 200,
+                                    "outX": 200,
+                                    "outY": 200
+                                },
+                                {
+                                    "id": "bottomLeftArm",
+                                    "src": "left_arm_bottom.png",
+                                    "size": "large",
+                                    "inX": 200,
+                                    "inY": 200
+                                }
+                            ]
+                        },
+                        {
+                            "category": "rightArm",
+                            "components": [
+                                {
+                                    "id": "topRightArm",
+                                    "src": "right_arm_top.png",
+                                    "size": "large",
+                                    "inX": 200,
+                                    "inY": 200,
+                                    "outX": 200,
+                                    "outY": 200
+                                },
+                                {
+                                    "id": "bottomRightArm",
+                                    "src": "right_arm_bottom.png",
+                                    "size": "large",
+                                    "inX": 200,
+                                    "inY": 200
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "category": "legs",
+                    "legJointSize": "large",
+                    "components": [
+                        {
+                            "category": "leftLeg",
+                            "components": [
+                                {
+                                    "id": "topLeftLeg",
+                                    "src": "left_leg_top.png",
+                                    "size": "small",
+                                    "inX": 200,
+                                    "inY": 200,
+                                    "outX": 200,
+                                    "outY": 200
+                                },
+                                {
+                                    "id": "bottomLeftLeg",
+                                    "src": "left_leg_bottom.png",
+                                    "size": "small",
+                                    "inX": 200,
+                                    "inY": 200
+                                }
+                            ]
+                        },
+                        {
+                            "category": "rightLeg",
+                            "components": [
+                                {
+                                    "id": "topRightLeg",
+                                    "src": "right_leg_top.png",
+                                    "size": "small",
+                                    "inX": 200,
+                                    "inY": 200,
+                                    "outX": 200,
+                                    "outY": 200
+                                },
+                                {
+                                    "id": "bottomRightLeg",
+                                    "src": "right_leg_bottom.png",
+                                    "size": "small",
+                                    "inX": 200,
+                                    "inY": 200
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "Bridget"
+        }
+    ]
+}
