@@ -34,6 +34,7 @@ public:
 	float talkHeight;
 	Animation<float> * talk;
 	PersonComponent
+		* pelvis,
 		* torso,
 		* jaw,
 		* head,
@@ -42,7 +43,14 @@ public:
 		* forearmL,
 		* forearmR,
 		* handL,
-		* handR;
+		* handR,
+		
+		* legL,
+		* legR,
+		* forelegL,
+		* forelegR,
+		* footL,
+		* footR;
 
 	PersonRenderer(Texture * _paletteTex);
 

@@ -79,7 +79,9 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 			for(auto j = 0; j < assets.size(); ++j) {
 				Json::Value asset = assets[j];
 
-				if(asset["category"].asString() == "torso"){
+				if(asset["category"].asString() == "pelvis"){
+					pelvis = new PersonComponent(asset, _paletteTex);
+				}else if(asset["category"].asString() == "torso"){
 					torso = new PersonComponent(asset, _paletteTex);
 					
 				}else if(asset["category"].asString() == "head"){
@@ -101,12 +103,28 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 					handR = new PersonComponent(components[2], _paletteTex);
 
 					armR->childTransform->scale(-1,1,1);
+				}else if(asset["category"] == "legs"){
+					Json::Value components = asset["components"][0]["components"];
+					
+					legL = new PersonComponent(components[0], _paletteTex);
+					forelegL = new PersonComponent(components[1], _paletteTex);
+					footL = new PersonComponent(components[2], _paletteTex);
+
+					//components = asset["components"][1]["components"];
+					
+					legR = new PersonComponent(components[0], _paletteTex);
+					forelegR = new PersonComponent(components[1], _paletteTex);
+					footR = new PersonComponent(components[2], _paletteTex);
+
+					legR->childTransform->scale(-1,1,1);
 				}
 			}
 		}
 	}
 	
-	childTransform->addChild(torso)->translate(0,1,0);
+	childTransform->addChild(pelvis)->translate(0,1,0);
+
+	connect(pelvis, torso);
 	connect(torso, jaw);
 	connect(jaw, head);
 	
@@ -117,6 +135,14 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	connect(torso, armR, true);
 	connect(armR, forearmR);
 	connect(forearmR, handR);
+	
+	connect(pelvis, legL, true);
+	connect(legL, forelegL);
+	connect(forelegL, footL);
+	
+	connect(pelvis, legR, true);
+	connect(legR, forelegR);
+	connect(forelegR, footR);
 
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
@@ -135,6 +161,7 @@ void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, boo
 }
 
 void PersonRenderer::setShader(Shader * _shader, bool _default){
+	pelvis->setShader(_shader, _default);
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);
 	head->setShader(_shader, _default);
@@ -146,6 +173,14 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 	armR->setShader(_shader, _default);
 	forearmR->setShader(_shader, _default);
 	handR->setShader(_shader, _default);
+
+	legL->setShader(_shader, _default);
+	forelegL->setShader(_shader, _default);
+	footL->setShader(_shader, _default);
+
+	legR->setShader(_shader, _default);
+	forelegR->setShader(_shader, _default);
+	footR->setShader(_shader, _default);
 }
 
 void PersonRenderer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

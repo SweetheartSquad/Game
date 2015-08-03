@@ -319,7 +319,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	test->unload();
 	test->load();
 	test->parents.at(0)->translate(0, 5, -3);
-	test->parents.at(0)->scale(0.01);
+	test->parents.at(0)->scale(0.001);
 
 
 

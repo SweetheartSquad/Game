@@ -45,6 +45,23 @@
                     ]
                 },
                 {
+                    "category": "pelvis",
+                    "id": "pelvis",
+                    "src": "pelvis.png",
+                    "gender": "male",
+                    "size": "large",
+                    "neckJointSize": "large",
+                    "armJointSize": "large",
+                    "legJointSize": "small",
+                    "inX": 277,
+                    "inY": 200,
+					"out":[
+						{ "x": 295, "y": 400 }, //chest
+						{ "x": 100, "y": 100 }, //l-hip
+						{ "x": 450, "y": 100 } //r-hip
+					]
+                },
+                {
                     "category": "torso",
                     "id": "torso",
                     "src": "torso.png",
@@ -58,9 +75,7 @@
 					"out":[
 						{ "x": 295, "y": 590 }, //neck
 						{ "x": 100, "y": 550 }, //l-shoulder
-						{ "x": 450, "y": 500 }, //r-shoulder
-						{ "x": 295, "y": 0 } //pelvis
-
+						{ "x": 450, "y": 500 } //r-shoulder
 					]
                 },
                 {
@@ -96,7 +111,7 @@
                             ]
                         },
 
-				// haven't done below this
+				// haven't done right arm
                         {
                             "category": "rightArm",
                             "components": [
@@ -130,22 +145,30 @@
                             "components": [
                                 {
                                     "id": "topLeftLeg",
-                                    "src": "left_leg_top.png",
+                                    "src": "leg.png",
                                     "size": "small",
-                                    "inX": 200,
-                                    "inY": 200,
-                                    "outX": 200,
-                                    "outY": 200
+                                    "inX": 120,
+                                    "inY": 400,
+									"out": [ { "x": 120, "y": 25 } ]
                                 },
                                 {
                                     "id": "bottomLeftLeg",
-                                    "src": "left_leg_bottom.png",
+                                    "src": "foreleg.png",
                                     "size": "small",
-                                    "inX": 200,
-                                    "inY": 200
+                                    "inX": 75,
+                                    "inY": 450,
+									"out": [ { "x": 175, "y": 50 } ]
+                                },
+                                {
+                                    "id": "foot",
+                                    "src": "foot.png",
+                                    "size": "small",
+                                    "inX": 180,
+                                    "inY": 100
                                 }
                             ]
                         },
+				// haven't done right leg
                         {
                             "category": "rightLeg",
                             "components": [
