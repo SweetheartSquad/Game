@@ -110,26 +110,31 @@
                                 }
                             ]
                         },
-
-				// haven't done right arm
                         {
                             "category": "rightArm",
                             "components": [
                                 {
                                     "id": "topRightArm",
-                                    "src": "right_arm_top.png",
-                                    "size": "large",
-                                    "inX": 200,
-                                    "inY": 200,
-                                    "outX": 200,
-                                    "outY": 200
+                                    "src": "arm.png",
+                                    "type": "thick",
+                                    "inX": 122,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
                                 },
                                 {
                                     "id": "bottomRightArm",
-                                    "src": "right_arm_bottom.png",
+                                    "src": "forearm.png",
                                     "size": "large",
-                                    "inX": 200,
-                                    "inY": 200
+                                    "inX": 100,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
+                                },
+                                {
+                                    "id": "rightHand",
+                                    "src": "hand.png",
+                                    "size": "large",
+                                    "inX": 30,
+                                    "inY": 250
                                 }
                             ]
                         }
@@ -160,7 +165,7 @@
 									"out": [ { "x": 175, "y": 50 } ]
                                 },
                                 {
-                                    "id": "foot",
+                                    "id": "leftFoot",
                                     "src": "foot.png",
                                     "size": "small",
                                     "inX": 180,
@@ -168,34 +173,37 @@
                                 }
                             ]
                         },
-				// haven't done right leg
                         {
                             "category": "rightLeg",
                             "components": [
                                 {
                                     "id": "topRightLeg",
-                                    "src": "right_leg_top.png",
+                                    "src": "leg.png",
                                     "size": "small",
-                                    "inX": 200,
-                                    "inY": 200,
-                                    "outX": 200,
-                                    "outY": 200
+                                    "inX": 120,
+                                    "inY": 400,
+									"out": [ { "x": 120, "y": 25 } ]
                                 },
                                 {
                                     "id": "bottomRightLeg",
-                                    "src": "right_leg_bottom.png",
+                                    "src": "foreleg.png",
                                     "size": "small",
-                                    "inX": 200,
-                                    "inY": 200
+                                    "inX": 75,
+                                    "inY": 450,
+									"out": [ { "x": 175, "y": 50 } ]
+                                },
+                                {
+                                    "id": "rightFoot",
+                                    "src": "foot.png",
+                                    "size": "small",
+                                    "inX": 180,
+                                    "inY": 100
                                 }
                             ]
                         }
                     ]
                 }
             ]
-        },
-        {
-            "id": "Bridget"
         }
     ]
 }

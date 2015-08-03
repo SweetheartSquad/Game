@@ -1,0 +1,11 @@
+{
+    "category": "head",
+    "components": [
+        {
+            "$ref": "file:jaw.json"
+        },
+        {
+            "$ref": "file:face.json"
+        }
+    ]
+}

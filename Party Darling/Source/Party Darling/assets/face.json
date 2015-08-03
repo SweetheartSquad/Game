@@ -1,0 +1,18 @@
+{
+    "id": "upperface",
+    "src": "head.png",
+    "gender": "male",
+    "size": "large",
+    "hair": "green",
+    "inX": 290,
+    "inY": 0,
+    "upperFaceComponents": [
+        {
+            "$ref": "file:e.jsoyesn"
+        },
+        {
+            "$ref": "file:nose.json"
+        }
+    ]
+}
+                    
