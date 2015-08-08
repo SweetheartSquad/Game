@@ -1,4 +1,6 @@
 #include <RoomObject.h>
+#include <MeshInterface.h>
+#include <Box.h>
 
 Slot::Slot(float _loc, float _length) :
 	loc(_loc),
@@ -8,8 +10,10 @@ Slot::Slot(float _loc, float _length) :
 
 RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	BulletMeshEntity(_world, _mesh),
-	anchor(_anchor)
+	anchor(_anchor),
+	boundingBox(mesh->calcBoundingBox())
 {
+	 
 }
 
 RoomObject::~RoomObject(void){
