@@ -1,0 +1,17 @@
+{
+    "category": "torso",
+    "id": "torso",
+    "src": "torso.png",
+    "gender": "male",
+    "size": "large",
+    "neckJointSize": "large",
+    "armJointSize": "large",
+    "legJointSize": "small",
+    "inX": 277,
+    "inY": 50,
+	"out":[
+		{ "x": 295, "y": 590 }, //neck
+		{ "x": 100, "y": 550 }, //l-shoulder
+		{ "x": 450, "y": 500 } //r-shoulder
+	]
+}

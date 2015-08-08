@@ -1,0 +1,35 @@
+{
+    "category": "legs",
+    "legJointSize": "large",
+    "components": [
+        {
+            "category": "leftLeg",
+            "components": [
+                {
+					"$ref": "file:topLeftLeg.json"
+                },
+                {
+					"$ref": "file:bottomLeftLeg.json"
+                },
+                {
+                    "$ref": "file:leftFoot.json"
+                }
+            ]
+        },
+        {
+            "category": "rightLeg",
+            "components": [
+                {
+					"$ref": "file:topRightLeg.json"
+                },
+                {
+					"$ref": "file:bottomRightLeg.json"
+                },
+                {
+                    "$ref": "file:rightFoot.json"
+                }
+            ]
+        }
+    ]
+}
+            

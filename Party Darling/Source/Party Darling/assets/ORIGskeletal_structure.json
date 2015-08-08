@@ -1,0 +1,209 @@
+{
+    "characters": [
+        {
+            "id": "Olivia",
+            "gender": "female",
+            "age": "adult",
+            "assets": [
+                {
+                    "category": "head",
+                    "components": [
+                        {
+                            "id": "jaw",
+                            "src": "jaw.png",
+                            "gender": "male",
+                            "neckSize": "thick",
+                            "inX": 140,
+                            "inY": 20,
+                            "out": [ {"x": 154, "y": 150} ]
+                        },
+                        {
+                            "id": "upperface",
+                            "src": "head.png",
+                            "gender": "male",
+                            "size": "large",
+                            "hair": "green",
+                            "inX": 290,
+                            "inY": 0,
+                            "upperFaceComponents": [
+                                {
+                                    "id": "eyes",
+                                    "src": "eyes.png",
+                                    "size": "large",
+                                    "posX": 50,
+                                    "posY": 20
+                                },
+                                {
+                                    "id": "nose",
+                                    "src": "nose.png",
+                                    "size": "large",
+                                    "posX": 50,
+                                    "posY": 30
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "category": "pelvis",
+                    "id": "pelvis",
+                    "src": "pelvis.png",
+                    "gender": "male",
+                    "size": "large",
+                    "neckJointSize": "large",
+                    "armJointSize": "large",
+                    "legJointSize": "small",
+                    "inX": 277,
+                    "inY": 200,
+					"out":[
+						{ "x": 295, "y": 400 }, //chest
+						{ "x": 100, "y": 100 }, //l-hip
+						{ "x": 450, "y": 100 } //r-hip
+					]
+                },
+                {
+                    "category": "torso",
+                    "id": "torso",
+                    "src": "torso.png",
+                    "gender": "male",
+                    "size": "large",
+                    "neckJointSize": "large",
+                    "armJointSize": "large",
+                    "legJointSize": "small",
+                    "inX": 277,
+                    "inY": 50,
+					"out":[
+						{ "x": 295, "y": 590 }, //neck
+						{ "x": 100, "y": 550 }, //l-shoulder
+						{ "x": 450, "y": 500 } //r-shoulder
+					]
+                },
+                {
+                    "category": "arms",
+                    "armJointSize": "large",
+                    "components": [
+                        {
+                            "category": "leftArm",
+                            "components": [
+                                {
+                                    "id": "topLeftArm",
+                                    "src": "arm.png",
+                                    "type": "thick",
+                                    "inX": 122,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
+                                },
+                                {
+                                    "id": "bottomLeftArm",
+                                    "src": "forearm.png",
+                                    "size": "large",
+                                    "inX": 100,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
+                                },
+                                {
+                                    "id": "leftHand",
+                                    "src": "hand.png",
+                                    "size": "large",
+                                    "inX": 30,
+                                    "inY": 250
+                                }
+                            ]
+                        },
+                        {
+                            "category": "rightArm",
+                            "components": [
+                                {
+                                    "id": "topRightArm",
+                                    "src": "arm.png",
+                                    "type": "thick",
+                                    "inX": 122,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
+                                },
+                                {
+                                    "id": "bottomRightArm",
+                                    "src": "forearm.png",
+                                    "size": "large",
+                                    "inX": 100,
+                                    "inY": 400,
+									"out": [ { "x": 100, "y": 50 } ]
+                                },
+                                {
+                                    "id": "rightHand",
+                                    "src": "hand.png",
+                                    "size": "large",
+                                    "inX": 30,
+                                    "inY": 250
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "category": "legs",
+                    "legJointSize": "large",
+                    "components": [
+                        {
+                            "category": "leftLeg",
+                            "components": [
+                                {
+                                    "id": "topLeftLeg",
+                                    "src": "leg.png",
+                                    "size": "small",
+                                    "inX": 120,
+                                    "inY": 400,
+									"out": [ { "x": 120, "y": 25 } ]
+                                },
+                                {
+                                    "id": "bottomLeftLeg",
+                                    "src": "foreleg.png",
+                                    "size": "small",
+                                    "inX": 75,
+                                    "inY": 450,
+									"out": [ { "x": 175, "y": 50 } ]
+                                },
+                                {
+                                    "id": "leftFoot",
+                                    "src": "foot.png",
+                                    "size": "small",
+                                    "inX": 180,
+                                    "inY": 100
+                                }
+                            ]
+                        },
+                        {
+                            "category": "rightLeg",
+                            "components": [
+                                {
+                                    "id": "topRightLeg",
+                                    "src": "leg.png",
+                                    "size": "small",
+                                    "inX": 120,
+                                    "inY": 400,
+									"out": [ { "x": 120, "y": 25 } ]
+                                },
+                                {
+                                    "id": "bottomRightLeg",
+                                    "src": "foreleg.png",
+                                    "size": "small",
+                                    "inX": 75,
+                                    "inY": 450,
+									"out": [ { "x": 175, "y": 50 } ]
+                                },
+                                {
+                                    "id": "rightFoot",
+                                    "src": "foot.png",
+                                    "size": "small",
+                                    "inX": 180,
+                                    "inY": 100
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

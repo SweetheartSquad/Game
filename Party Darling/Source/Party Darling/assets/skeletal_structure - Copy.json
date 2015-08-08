@@ -1,0 +1,26 @@
+{
+    "characters": [
+        {
+            "id": "Olivia",
+            "gender": "female",
+            "age": "adult",
+            "assets": [
+                {
+                    "$ref": "file:head.json"
+                },
+                {
+                    "$ref": "file:pelvis.json"
+                },
+                {
+                    "$ref": "file:torso.json"
+                },
+                {
+                    "$ref": "file:arms.json"
+                },
+                {
+                    "$ref": "file:legs.json"                             
+                }
+            ]
+        }
+    ]
+}

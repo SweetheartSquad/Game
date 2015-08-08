@@ -1,0 +1,17 @@
+{
+    "category": "pelvis",
+    "id": "pelvis",
+    "src": "pelvis.png",
+    "gender": "male",
+    "size": "large",
+    "neckJointSize": "large",
+    "armJointSize": "large",
+    "legJointSize": "small",
+    "inX": 277,
+    "inY": 200,
+	"out":[
+		{ "x": 295, "y": 400 }, //chest
+		{ "x": 100, "y": 100 }, //l-hip
+		{ "x": 450, "y": 100 } //r-hip
+	]
+}

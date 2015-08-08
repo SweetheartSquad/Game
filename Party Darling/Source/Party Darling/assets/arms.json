@@ -1,0 +1,34 @@
+{
+    "category": "arms",
+    "armJointSize": "large",
+    "components": [
+        {
+            "category": "leftArm",
+            "components": [
+                {
+                    "$ref": "file:topLeftArm.json"
+                },
+                {
+                    "$ref": "file:bottomLeftArm.json"
+                },
+                {
+                    "$ref": "file:leftHand.json"
+                }
+            ]
+        },
+        {
+            "category": "rightArm",
+            "components": [
+                {
+                    "$ref": "file:topRightArm.json"
+                },
+                {
+                    "$ref": "file:bottomRightArm.json"
+                },
+                {
+                    "$ref": "file:rightHand.json"
+                }
+            ]
+        }
+    ]
+}
