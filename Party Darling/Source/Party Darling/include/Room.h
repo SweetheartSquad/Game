@@ -34,5 +34,5 @@ public:
 	void addComponent(RoomObject *);
 	void setShader(Shader * _shader, bool _default);
 
-	void translatePhysical(glm::vec3 _v);
+	void translatePhysical(glm::vec3 _v, bool _relative = false);
 };

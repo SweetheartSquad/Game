@@ -16,6 +16,9 @@
 #include <Item.h>
 #include <PD_ResourceManager.h>
 
+#include <stb/stb_herringbone_wang_tile.h>
+#include <stb/stb_image.h>
+
 Tile::Tile(glm::vec2 _pos, Tile_t _type) :
 	pos(_pos),
 	type(_type),
@@ -25,6 +28,7 @@ Tile::Tile(glm::vec2 _pos, Tile_t _type) :
 
 Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	
+
 	Json::Value json;
 	Json::Reader reader;
 
@@ -42,7 +46,6 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	glm::vec2 size = glm::vec2(l, w);
 
 	Room * room = new Room(_world, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size, PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
-	room->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE / 2.f - (1 - 0.05), 0));
 
 	// get all available tile positions
 	std::vector<Tile *> tiles = getTiles(static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size);
@@ -67,8 +70,8 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 		if(tiles.size() == 0){
 			break;
 		}
-		if(findPotentialParent(objects.at(i), availableParents)){
-
+		if(search(objects.at(i), availableParents)){
+			room->addComponent(objects.at(i));
 		}else{
 			room->addComponent(objects.at(i));
 			availableParents.push_back(objects.at(i));
@@ -78,7 +81,7 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	return room;
 }
 
-bool RoomBuilder::findPotentialParent(RoomObject * child, std::vector<RoomObject *> objects){
+bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
 		for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
@@ -93,65 +96,53 @@ bool RoomBuilder::findPotentialParent(RoomObject * child, std::vector<RoomObject
 					continue;
 				}
 				
-				// check space around
-				if(positionObject(child, objects.at(i), slot, iterator->first)){
-
-				}
-					objects.at(i)->addComponent(child);
-					// position
-					//glm::vec3 pos = objects.at(i)->childTransform->getTranslationVector();
-					glm::vec3 pos = objects.at(i)->getWorldPos();
-						
-					vox::Box parentBox = objects.at(i)->mesh->calcBoundingBox();
-						
-					switch(iterator->first){
-						case FRONT:
-							pos.z += parentBox.depth / 2.f + childBox.depth / 2.f;
-							break;
-						case BACK:
-							pos.z += -parentBox.depth / 2.f - childBox.depth / 2.f;
-							break;
-						case LEFT:
-							pos.x += parentBox.width / 2.f + childBox.width / 2.f;
-							break;
-						case RIGHT:
-							pos.x += -parentBox.width / 2.f - childBox.width / 2.f;
-							break;
-								
-					}
-					child->translatePhysical(pos);
+				if(arrange(child, objects.at(i), side, slot)){
 
 					if(childBox.width < slot->length){
 						// adjust remaining slot space
-						slot->loc += slot->loc + childBox.width;
+						slot->loc += childBox.width;
 						slot->length = slot->length - childBox.width;
 					}else{
 						// remove slot
 						iterator->second.erase(iterator->second.begin() + j);
 					}
 					return true;
+				}
 			}
 		}
 	}
 	return false;
 }
 
-bool RoomBuilder::positionObject(RoomObject * child, RoomObject * parent, Slot * slot, Side_t side){
-	glm::vec2 startPos;
-	glm::vec2 endPos;
+bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
+	// check space around
 
+	// position
+	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	vox::Box p = parent->boundingBox;
+	vox::Box c = child->boundingBox;
 	switch(side){
 		case FRONT:
-			//startPos = 
+			pos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
+			pos.x += -parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f + slot->loc;
 			break;
 		case BACK:
+			pos.z += -parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f;
+			pos.x += parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f - slot->loc;
 			break;
 		case LEFT:
+			pos.x += -parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f;
+			pos.z += -parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f + slot->loc;
 			break;
 		case RIGHT:
+			pos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
+			pos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
 			break;
+								
 	}
-	return false;
+	child->translatePhysical(pos);
+
+	return true;
 }
 
 std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
@@ -183,6 +174,181 @@ std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
 }
 
 std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size){
+	int w, h;
+	int n = 3;
+	unsigned char * pixels = stbi_load("assets/map.png", &w, &h, &n, 0);
+
+	assert(pixels);
+	if(pixels){
+		
+		int blah = 0;
+	}
+	
+	// vector conaining: vec2 pos1, vec2 pos2, vec2 N (normal)
+	std::vector<glm::vec2> backE;
+	std::vector<glm::vec2> frontE;
+	// keep track of vertical edges in order along y
+	std::map<unsigned int, std::vector<glm::vec2>> leftE;
+	std::map<unsigned int, std::vector<glm::vec2>> rightE;
+
+	for(unsigned int y = 0; y < h; ++y){
+		for(unsigned int x = 0; x < w; ++x){
+			int r = pixels[(y*w+x)*n];
+			// int g
+			// int b
+
+			if(r == 255){
+				continue;
+			}
+
+			/**
+			*	--- B ---
+			*	|		 |
+			*	L		 R
+			*	|		 |
+			*	--- F ---
+			*/
+
+			// Back Edge
+			if(y == 0 || pixels[((y-1)*w+x)*n] == 255){
+				backE.push_back(glm::vec2(x,y));
+			}
+			// Front Edge
+			if(y == h-1 || (y < h-1 && pixels[((y+1)*w+x)*n] == 255)){
+				frontE.push_back(glm::vec2(x,y));
+			}
+
+			int l, rt;
+
+			// Left Edge
+			if (x > 0){
+				l = pixels[(y*w+(x-1))*n];
+			}
+			if(x < w){
+				rt = pixels[(y*w+(x+1))*n];
+			}
+			
+			if(x == 0 || pixels[(y*w+(x-1))*n] == 255){
+				if(leftE.find(x) == leftE.end()){
+					leftE[x] = std::vector<glm::vec2>();
+				}
+				leftE[x].push_back(glm::vec2(x, y));
+			}
+			// Right Edge
+			if(x == w-1 || pixels[(y*w+(x+1))*n] == 255){
+				if(rightE.find(x) == rightE.end()){
+					rightE[x] = std::vector<glm::vec2>();
+				}
+				rightE[x].push_back(glm::vec2(x, y));
+			}
+		}
+	}
+	
+	std::vector<RoomObject *> walls;
+
+	glm::vec2 * startPos = nullptr;
+	glm::vec2 * endPos = nullptr;
+	// Back walls
+	for(unsigned int i = 0; i < backE.size(); ++i){
+		glm::vec2 * edge = &backE.at(i);
+
+		// Start wall if: startPos is nullptr
+		if(startPos == nullptr){
+			startPos = edge;
+		}
+
+		// End wall if: last item, last item of row, last adjacent item
+		if(i == backE.size() - 1 || backE.at(i+1).y != edge->y || (backE.at(i+1).x - edge->x > 1)){
+			endPos = edge;
+		}
+
+		if(startPos != nullptr && endPos != nullptr){
+			int width = endPos->x - startPos->x + 1;
+			walls.push_back(getWall(_world, width, glm::vec2(startPos->x + width / 2.f, startPos->y), BACK));
+			startPos = nullptr;
+			endPos = nullptr;
+		}
+	}
+
+	startPos = nullptr;
+	endPos = nullptr;
+	// Front walls
+	for(unsigned int i = 0; i < frontE.size(); ++i){
+		glm::vec2 * edge = &frontE.at(i);
+		// Start wall if: startPos is nullptr
+		if(startPos == nullptr){
+			startPos = edge;
+		}
+
+		// End wall if: last item, last item of row, last adjacent item
+		if(i == frontE.size() - 1 || frontE.at(i+1).y != edge->y || (frontE.at(i+1).x - edge->x > 1)){
+			endPos = edge;
+		}
+
+		if(startPos != nullptr && endPos != nullptr){
+			int width = endPos->x - startPos->x + 1;
+			walls.push_back(getWall(_world, width, glm::vec2(startPos->x + width / 2.f, startPos->y + 1), FRONT));
+			startPos = nullptr;
+			endPos = nullptr;
+		}
+	}
+
+	typedef std::map<unsigned int, std::vector<glm::vec2>>::iterator it_type;
+
+	startPos = nullptr;
+	endPos = nullptr;
+	// Left walls
+	for(it_type iterator = leftE.begin(); iterator != leftE.end(); iterator++) {
+		// go through all columns (second is the value)
+		for(unsigned int i = 0; i < iterator->second.size(); ++i){
+			glm::vec2 * edge = &iterator->second.at(i);
+			// Start wall if: startPos is nullptr
+			if(startPos == nullptr){
+				startPos = edge;
+			}
+
+			// End wall if: last item of column, last adjacent item
+			if(i == iterator->second.size() - 1 || (iterator->second.at(i+1).y - edge->y > 1)){
+				endPos = edge;
+			}
+
+			if(startPos != nullptr && endPos != nullptr){
+				int width = endPos->y - startPos->y + 1;
+				walls.push_back(getWall(_world, width, glm::vec2(startPos->x, startPos->y + width / 2.f), LEFT));
+				startPos = nullptr;
+				endPos = nullptr;
+			}
+		}
+	}
+
+	startPos = nullptr;
+	endPos = nullptr;
+	// Right walls
+	for(it_type iterator = rightE.begin(); iterator != rightE.end(); iterator++) {
+		// go through all columns (second is the value)
+		for(unsigned int i = 0; i < iterator->second.size(); ++i){
+			glm::vec2 * edge = &iterator->second.at(i);
+			// Start wall if: startPos is nullptr
+			if(startPos == nullptr){
+				startPos = edge;
+			}
+
+			// End wall if: last item of column, last adjacent item
+			if(i == iterator->second.size() - 1 || (iterator->second.at(i+1).y - edge->y > 1)){
+				endPos = edge;
+			}
+
+			if(startPos != nullptr && endPos != nullptr){
+				int width = endPos->y - startPos->y + 1;
+				walls.push_back(getWall(_world, width, glm::vec2(startPos->x + 1, startPos->y + width / 2.f), RIGHT));
+				startPos = nullptr;
+				endPos = nullptr;
+			}
+		}
+	}
+
+	return walls;
+	/*
 	// split up later into walls, floor, and cieling?
 	switch(type){
 		case kT:
@@ -194,7 +360,63 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		default:
 			return getRectRoom(_world, size);
 			break;
+	}*/
+	
+}
+
+RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 pos, Side_t side){
+	RoomObject * wall;
+
+	float posX = pos.x * ROOM_TILE;
+	float posZ = pos.y * ROOM_TILE;
+
+	float halfW = width / 2.f * ROOM_TILE;
+	float halfH = (ROOM_HEIGHT * ROOM_TILE) / 2.f;
+
+	float angle = 0.f;
+	glm::vec3 axis = glm::vec3(0.f, 1.f, 0.f);
+
+	glm::vec3 n = glm::vec3(0.0, 0.0 , 0.0);
+	switch(side){
+		case BACK:
+			n.z = 1.f;
+			break;
+		case FRONT:
+			n.z = -1.f;
+			break;
+		case LEFT:
+			angle = 90.f;
+			n.x = 1.f;
+			break;
+		case RIGHT:
+			angle = 90.f;
+			n.x = -1.f;
+		default:
+			break;
 	}
+
+	
+	QuadMesh * m = new QuadMesh();
+	m->pushVert(Vertex(-halfW, halfH, 0));
+	m->pushVert(Vertex(-halfW, -halfH, 0));
+	m->pushVert(Vertex(halfW, -halfH, 0));
+	m->pushVert(Vertex(halfW, halfH, 0));
+	m->setNormal(0, n.x, n.y, n.z);
+	m->setNormal(1, n.x, n.y, n.z);
+	m->setNormal(2, n.x, n.y, n.z);
+	m->setNormal(3, n.x, n.y, n.z);
+	m->setUV(0, 0.0, 0.0);
+	m->setUV(1, 0.0, 1.0);
+	m->setUV(2, width, 1.0);
+	m->setUV(3, width, 0.0);
+	wall = new RoomObject(_world, m);
+	wall->meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
+	wall->setColliderAsBoundingBox();
+	wall->createRigidBody(0);
+	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
+	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width));
+
+	return wall;
 }
 
 std::vector<RoomObject *> RoomBuilder::getRectRoom(BulletWorld * _world, glm::vec2 size){
@@ -381,8 +603,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->setColliderAsBoundingBox();
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(0, 0, halfZ + posZ));
-		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
-		boundaries.back()->emptySlots[BACK] = std::vector<Slot *>(1, new Slot(0.f, size.x));
+		boundaries.back()->emptySlots[BACK] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfX));
 	}
 
 	if(back){
@@ -404,8 +625,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->setColliderAsBoundingBox();
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(0, 0, -halfZ + posZ));
-		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
-		boundaries.back()->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, size.x));
+		boundaries.back()->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfX));
 	}
 
 	if(left){
@@ -427,9 +647,8 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->setColliderAsBoundingBox();
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(-halfX + posX, 0, 0));
-		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
 		int n = back ? size.y - 1 : size.y;
-		boundaries.back()->emptySlots[RIGHT] = std::vector<Slot *>(1, new Slot(0.f, size.y));
+		boundaries.back()->emptySlots[RIGHT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfZ));
 	}
 
 	if(right){
@@ -451,10 +670,8 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 		boundaries.back()->setColliderAsBoundingBox();
 		boundaries.back()->createRigidBody(0);
 		boundaries.back()->translatePhysical(glm::vec3(halfX + posX, 0, 0));
-		//boundaries.back()->childTransform->translate(halfX + posX, 0, 0);
-		// if creates a corner clockwise, don't make a slot for corner tile, will be included in adjoining side
 		int n = front ? size.y - 1 : size.y;
-		boundaries.back()->emptySlots[LEFT] = std::vector<Slot *>(1, new Slot(0.f, size.y));
+		boundaries.back()->emptySlots[LEFT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfZ));
 	}
 
 	return boundaries;
@@ -462,7 +679,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWorld * _world){
 
-	std::vector<Person *> characters = getCharacters(json["characters"], _world);
+	std::vector<Person *> characters;// = getCharacters(json["characters"], _world);
 	std::vector<Furniture *> furniture = getFurniture(json["furniture"], _world);
 	std::vector<Item *> items = getItems(json["items"], _world);
 
@@ -518,7 +735,7 @@ std::vector<Furniture *> RoomBuilder::getFurniture(Json::Value json, BulletWorld
 
 	// Random
 	int n = rand() % 10;
-	for(unsigned int i = 0; i < n; ++i){
+	for(unsigned int i = 0; i < 6; ++i){
 		MeshInterface * mesh = Resource::loadMeshFromObj("assets/meshes/RoomTest/couch.obj").at(0);
 		Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 

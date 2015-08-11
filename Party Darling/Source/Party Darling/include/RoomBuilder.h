@@ -56,11 +56,13 @@ public:
 
 	static Room * getRoom(std::string json, BulletWorld * _world);
 
-	static bool findPotentialParent(RoomObject * child, std::vector<RoomObject *> objects);
-	static bool positionObject(RoomObject * child, RoomObject * parent, Slot * slot, Side_t side);
+	// Furniture placement
+	static bool search(RoomObject * child, std::vector<RoomObject *> objects);
+	static bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
 
 	// Room boundaries builder functions
 	static std::vector<RoomObject *> getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size);
+	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, Side_t side);
 	static std::vector<RoomObject *> getRectRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getTRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getLRoom(BulletWorld * _world, glm::vec2 size);
