@@ -1,9 +1,0 @@
-{
-    "id": "jaw",
-    "src": "jaw.png",
-    "gender": "male",
-    "neckSize": "thick",
-    "inX": 140,
-    "inY": 20,
-    "out": [ {"x": 154, "y": 150} ]
-}

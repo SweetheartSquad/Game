@@ -1,8 +1,0 @@
-{
-    "id": "bottomLeftArm",
-    "src": "forearm.png",
-    "size": "large",
-    "inX": 100,
-    "inY": 400,
-	"out": [ { "x": 100, "y": 50 } ]
-}

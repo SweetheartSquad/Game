@@ -52,6 +52,7 @@
 
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
+
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(){
 	// TODO: To successfully use this example, you must perform the request  
@@ -320,30 +321,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	test->load();
 	test->parents.at(0)->translate(0, 5, -3);
 	test->parents.at(0)->scale(0.001);
-
-
-
-	/*Sprite * torso = new Sprite();
-	Sprite * headLower = new Sprite();
-	Sprite * headUpper = new Sprite();
-	
-	torso->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
-	headLower->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
-	headUpper->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
-
-	
-	childTransform->addChild(torso);
-	//childTransform->addChild(headLower);
-	torso->meshTransform->addChild(headLower);
-	headLower->meshTransform->addChild(headUpper);
-
-	torso->meshTransform->scale(1,2,1);
-	torso->parents.at(0)->translate(2,3,0);
-	headUpper->parents.at(0)->translate(0,2,0);
-	headLower->parents.at(0)->translate(0,1,0);
-	torso->setShader(diffuseShader, true);
-	headUpper->setShader(diffuseShader, true);
-	headLower->setShader(diffuseShader, true);*/
 }
 
 PD_TestScene::~PD_TestScene(){

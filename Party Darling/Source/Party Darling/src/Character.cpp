@@ -5,6 +5,8 @@
 #include <MeshInterface.h>
 #include <MeshFactory.h>
 #include <PD_ResourceManager.h>
+#include <NumberUtils.h>
+#include <Keyboard.h>
 
 Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor)
@@ -13,46 +15,67 @@ Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	createRigidBody(25);
 }
 
-/*void Person::update(Step * _step){
-	RoomObject::update(_step);
+std::vector<PersonComponent *> PersonComponent::getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped){
+	Json::Value root;
+	Json::Reader reader;
+	std::string jsonLoaded = FileUtils::voxReadFile("assets/"+_json["id"].asString());
+	bool parsingSuccessful = reader.parse( jsonLoaded, root );
+	if(!parsingSuccessful){
+		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+	}
 
-	//headLower->parents.at(0)->translate(0,0.01,0);
-}*/
+	std::vector<PersonComponent *> res;
 
+	if(root.isMember("components")){
+		Json::Value componentsJson = root["components"];
+		for(auto i = 0; i < componentsJson.size(); ++i) {
+			res.push_back(new PersonComponent(componentsJson[i], _paletteTex, _flipped));
+		}
+	}else{
+		res.push_back(new PersonComponent(root, _paletteTex, _flipped));
+	}
 
-PersonComponent::PersonComponent(Texture * _tex, Texture * _paletteTex) :
-	Sprite()
-{
-	mesh->pushTexture2D(_paletteTex);
-	mesh->pushTexture2D(_tex);
-
-	meshTransform->scale(_tex->width, _tex->height, 1);
-	mesh->scaleModeMag = GL_NEAREST;
-	mesh->scaleModeMin = GL_NEAREST;
-
-	meshTransform->translate(_tex->width*0.5f, _tex->height*0.5f, 0);
+	return res;
 }
-PersonComponent::PersonComponent(Json::Value _json, Texture * _paletteTex) :
-	Sprite()
+
+PersonComponent::PersonComponent(Json::Value _json, Texture * _paletteTex, bool _flipped) :
+	Sprite(),
+	flipped(_flipped)
 {
+	// get texture
 	Texture * tex = new Texture("assets/textures/character components/" + _json["src"].asString(), true, true);
 	tex->load();
 
-
+	// apply palette + texture
 	mesh->pushTexture2D(_paletteTex);
 	mesh->pushTexture2D(tex);
-
-					
-					
-	in = glm::vec2(_json["inX"].asFloat(), _json["inY"].asFloat());
 	
+	// parse coordinates
+	in = glm::vec2(_json["in"][0].asFloat(), _json["in"][1].asFloat());
 	Json::Value outJson = _json["out"];
 	for(auto i = 0; i < outJson.size(); ++i){
-		out.push_back(glm::vec2(outJson[i]["x"].asFloat(), outJson[i]["y"].asFloat()));
+		out.push_back(glm::vec2(outJson[i][0].asFloat(), outJson[i][1].asFloat()));
 	}
 
+	// handle flipping
+	if(flipped){
+		meshTransform->scale(-1, 1, 1);
+		in.x = 1 - in.x;
+		for(glm::vec2 & o : out){
+			o.x = 1 - o.x;
+		}
+	}
+	
+	// multiply percentage coordinates by width/height to corresponding to specific texture
+	in.x *= tex->width;
+	in.y *= tex->height;
+	for(glm::vec2 & o : out){
+		o.x *= tex->width;
+		o.y *= tex->height;
+	}
+	
+	// scale and translate the mesh into position
 	meshTransform->scale(tex->width, tex->height, 1);
-
 	meshTransform->translate(tex->width*0.5f, tex->height*0.5f, 0);
 	meshTransform->translate(-in.x, -in.y, 0);
 
@@ -60,10 +83,21 @@ PersonComponent::PersonComponent(Json::Value _json, Texture * _paletteTex) :
 	mesh->scaleModeMin = GL_NEAREST;
 }
 
-void PersonComponent::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	Sprite::render(_matrixStack, _renderOptions);
+glm::vec2 PersonComponent::getOut(unsigned long int _index){
+	return (out.size() > 0 ? out.at(_index) : glm::vec2(0,0)) - in;
 }
 
+PersonLimbSolver::PersonLimbSolver(glm::vec2 _pos) :
+	IkChain_CCD(_pos)
+{
+}
+
+void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight){
+	AnimationJoint * j = new AnimationJoint(_component->getOut(0));
+	jointsLocal.back()->childTransform->addChild(_component);
+	addJointToChain(j);
+	components.push_back(_component);
+}
 
 PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	Json::Value root;
@@ -80,70 +114,94 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 				Json::Value asset = assets[j];
 
 				if(asset["category"].asString() == "pelvis"){
-					pelvis = new PersonComponent(asset, _paletteTex);
+					pelvis = PersonComponent::getComponentsFromJson(asset, _paletteTex).at(0);
 				}else if(asset["category"].asString() == "torso"){
-					torso = new PersonComponent(asset, _paletteTex);
-					
+					torso = PersonComponent::getComponentsFromJson(asset, _paletteTex).at(0);
 				}else if(asset["category"].asString() == "head"){
-					Json::Value components = asset["components"];
-					
-					jaw = new PersonComponent(components[0], _paletteTex);
-					head = new PersonComponent(components[1], _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					jaw = components.at(0);
+					head = components.at(1);
+					nose = components.at(2);
+					eyes = components.at(3);
 				}else if(asset["category"].asString() == "arms"){
-					Json::Value components = asset["components"][0]["components"];
-					
-					armL = new PersonComponent(components[0], _paletteTex);
-					forearmL = new PersonComponent(components[1], _paletteTex);
-					handL = new PersonComponent(components[2], _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					armR = components.at(0);
+					forearmR = components.at(1);
+					handR = components.at(2);
 
-					//components = asset["components"][1]["components"];
-					
-					armR = new PersonComponent(components[0], _paletteTex);
-					forearmR = new PersonComponent(components[1], _paletteTex);
-					handR = new PersonComponent(components[2], _paletteTex);
-
-					armR->childTransform->scale(-1,1,1);
+					components = PersonComponent::getComponentsFromJson(asset, _paletteTex, true);
+					armL = components.at(0);
+					forearmL = components.at(1);
+					handL = components.at(2);
 				}else if(asset["category"] == "legs"){
-					Json::Value components = asset["components"][0]["components"];
-					
-					legL = new PersonComponent(components[0], _paletteTex);
-					forelegL = new PersonComponent(components[1], _paletteTex);
-					footL = new PersonComponent(components[2], _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					legR = components.at(0);
+					forelegR = components.at(1);
+					footR = components.at(2);
 
-					//components = asset["components"][1]["components"];
-					
-					legR = new PersonComponent(components[0], _paletteTex);
-					forelegR = new PersonComponent(components[1], _paletteTex);
-					footR = new PersonComponent(components[2], _paletteTex);
-
-					legR->childTransform->scale(-1,1,1);
+					components = PersonComponent::getComponentsFromJson(asset, _paletteTex, true);
+					legL = components.at(0);
+					forelegL = components.at(1);
+					footL = components.at(2);
 				}
 			}
 		}
 	}
-	
-	childTransform->addChild(pelvis)->translate(0,1,0);
+	solverArmR = new PersonLimbSolver(torso->getOut(1));
+	solverArmL = new PersonLimbSolver(torso->getOut(2));
+	solverLegR = new PersonLimbSolver(pelvis->getOut(1));
+	solverLegL = new PersonLimbSolver(pelvis->getOut(2));
+	solverBod = new PersonLimbSolver(glm::vec2(0));
 
-	connect(pelvis, torso);
-	connect(torso, jaw);
-	connect(jaw, head);
+	// implicitly create skeletal structure by adding components in the correct order
+	solverArmR->addComponent(armR);
+	solverArmR->addComponent(forearmR);
+	solverArmR->addComponent(handR);
 	
-	connect(torso, armL, true);
-	connect(armL, forearmL);
-	connect(forearmL, handL);
+	solverArmL->addComponent(armL);
+	solverArmL->addComponent(forearmL);
+	solverArmL->addComponent(handL);
 	
-	connect(torso, armR, true);
-	connect(armR, forearmR);
-	connect(forearmR, handR);
+	solverLegR->addComponent(legR);
+	solverLegR->addComponent(forelegR);
+	solverLegR->addComponent(footR);
 	
-	connect(pelvis, legL, true);
-	connect(legL, forelegL);
-	connect(forelegL, footL);
+	solverLegL->addComponent(legL);
+	solverLegL->addComponent(forelegL);
+	solverLegL->addComponent(footL);
 	
-	connect(pelvis, legR, true);
-	connect(legR, forelegR);
-	connect(forelegR, footR);
+	solverBod->addComponent(pelvis);
+	solverBod->addComponent(torso);
+	solverBod->addComponent(jaw);
+	solverBod->addComponent(head);
+	
+	// attach the arms/legs to the spine
+	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
+	solverBod->jointsLocal.at(1)->addJoint(solverArmL);
+	solverBod->jointsLocal.at(0)->addJoint(solverLegR);
+	solverBod->jointsLocal.at(0)->addJoint(solverLegL);
+	childTransform->addChild(solverBod);
 
+	// no point in putting the nose/eyes into the skeletal structure
+	connect(head, nose);
+	connect(head, eyes);
+	
+	solvers.push_back(solverBod);
+	solvers.push_back(solverArmR);
+	solvers.push_back(solverArmL);
+	solvers.push_back(solverLegR);
+	solvers.push_back(solverLegL);
+	currentSolver = solvers.front();
+	
+	// pre-initialize the effectors to a T-pose type thing
+	solverArmR->target = glm::vec2(-solverArmR->getChainLength(), 0);
+	solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
+	solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
+	solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
+	solverBod->target = glm::vec2(0, solverBod->getChainLength());
+	
+	
+	// talking thing
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
 	talk->tweens.push_back(new Tween<float>(0.1, head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
@@ -153,10 +211,11 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
-	_from->childTransform->addChild(_to)->translate(
+	joints.push_back(_from->childTransform->addChild(_to));
+	joints.back()->translate(
 		_from->out.at(_from->connections.size()).x - _from->in.x,
 		_from->out.at(_from->connections.size()).y - _from->in.y,
-		_behind ? 0.1 : -0.1); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
+		_behind ? -0.1 : 0.1); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
 	_from->connections.push_back(_to);
 }
 
@@ -165,6 +224,9 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);
 	head->setShader(_shader, _default);
+	
+	nose->setShader(_shader, _default);
+	eyes->setShader(_shader, _default);
 
 	armL->setShader(_shader, _default);
 	forearmL->setShader(_shader, _default);
@@ -183,15 +245,39 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 	footR->setShader(_shader, _default);
 }
 
-void PersonRenderer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	Entity::render(_matrixStack, _renderOptions);
-}
 void PersonRenderer::update(Step * _step){
+	Keyboard & k = Keyboard::getInstance();
+
+	glm::vec2 test(0);
+	if(k.keyDown(GLFW_KEY_I)){
+		test.y += 50;
+	}if(k.keyDown(GLFW_KEY_J)){
+		test.x -= 50;
+	}if(k.keyDown(GLFW_KEY_K)){
+		test.y -= 50;
+	}if(k.keyDown(GLFW_KEY_L)){
+		test.x += 50;
+	}
+
+	currentSolver->target += test;
+	
+	if(k.keyJustDown(GLFW_KEY_U)){
+		if(currentSolver == solvers.back()){
+			currentSolver = solvers.at(0);
+		}else{
+			for(unsigned long int i = 0; i < solvers.size()-1; ++i){
+				if(currentSolver == solvers.at(i)){
+					currentSolver = solvers.at(i+1);
+					break;
+				}
+			}
+		}
+	}
+	
 	// talking
 	talk->update(_step);
 	glm::vec3 v = head->parents.at(0)->getTranslationVector();
 	head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
-
 
 	Entity::update(_step);
 }

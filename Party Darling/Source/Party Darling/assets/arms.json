@@ -1,34 +1,26 @@
 {
-    "category": "arms",
-    "armJointSize": "large",
-    "components": [
-        {
-            "category": "leftArm",
-            "components": [
-                {
-                    "$ref": "file:topLeftArm.json"
-                },
-                {
-                    "$ref": "file:bottomLeftArm.json"
-                },
-                {
-                    "$ref": "file:leftHand.json"
-                }
-            ]
-        },
-        {
-            "category": "rightArm",
-            "components": [
-                {
-                    "$ref": "file:topRightArm.json"
-                },
-                {
-                    "$ref": "file:bottomRightArm.json"
-                },
-                {
-                    "$ref": "file:rightHand.json"
-                }
-            ]
-        }
-    ]
+	"category": "arms",
+	"components": [
+		{
+			"id": "topLeftArm",
+			"src": "arm.png",
+			"size": "large",
+			"in": [0.5,0.9,"size"],
+			"out": [ [0.4,0.1,"size"] ]
+		},
+		{
+			"id": "bottomLeftArm",
+			"src": "forearm.png",
+			"size": "large",
+			"in": [0.5,0.9,"size"],
+			"out": [ [0.8,0.1,"size"] ]
+		},
+		{
+			"id": "leftHand",
+			"src": "hand.png",
+			"size": "large",
+			"in": [0.1,0.9,"size"],
+			"out": [ [0.5,0.5,"size"] ]
+		}
+	]
 }

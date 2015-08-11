@@ -1,8 +1,0 @@
-{
-    "id": "topRightLeg",
-    "src": "leg.png",
-    "size": "small",
-    "inX": 120,
-    "inY": 400,
-	"out": [ { "x": 120, "y": 25 } ]
-}

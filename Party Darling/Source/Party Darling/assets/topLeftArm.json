@@ -1,8 +1,0 @@
-{
-    "id": "topLeftArm",
-    "src": "arm.png",
-    "type": "thick",
-    "inX": 122,
-    "inY": 400,
-	"out": [ { "x": 100, "y": 50 } ]
-}

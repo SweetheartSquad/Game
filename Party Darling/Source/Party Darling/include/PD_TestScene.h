@@ -32,7 +32,7 @@ class TextureColourTable;
 
 class PD_TestScene : public Scene{
 public:
-	
+
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;

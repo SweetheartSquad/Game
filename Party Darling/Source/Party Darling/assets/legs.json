@@ -1,35 +1,26 @@
 {
-    "category": "legs",
-    "legJointSize": "large",
-    "components": [
-        {
-            "category": "leftLeg",
-            "components": [
-                {
-					"$ref": "file:topLeftLeg.json"
-                },
-                {
-					"$ref": "file:bottomLeftLeg.json"
-                },
-                {
-                    "$ref": "file:leftFoot.json"
-                }
-            ]
-        },
-        {
-            "category": "rightLeg",
-            "components": [
-                {
-					"$ref": "file:topRightLeg.json"
-                },
-                {
-					"$ref": "file:bottomRightLeg.json"
-                },
-                {
-                    "$ref": "file:rightFoot.json"
-                }
-            ]
-        }
-    ]
+	"category": "legs",
+	"components": [
+		{
+			"id": "topLeftLeg",
+			"src": "leg.png",
+			"size": "small",
+			"in": [0.5,0.9,"size"],
+			"out": [ [0.5,0.1,"size"] ]
+		},
+		{
+			"id": "bottomLeftLeg",
+			"src": "foreleg.png",
+			"size": "small",
+			"in": [0.4,0.9,"size"],
+			"out": [ [0.9,0.05,"size"] ]
+		},
+		{
+			"id": "leftFoot",
+			"src": "foot.png",
+			"size": "small",
+			"in": [0.9,0.7,"size"],
+			"out": [ [0.5,0.5,"size"] ]
+		}
+	]
 }
-            

@@ -1,8 +1,0 @@
-{
-    "id": "bottomLeftLeg",
-    "src": "foreleg.png",
-    "size": "small",
-    "inX": 75,
-    "inY": 450,
-	"out": [ { "x": 175, "y": 50 } ]
-}
