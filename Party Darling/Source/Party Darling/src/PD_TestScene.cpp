@@ -353,11 +353,11 @@ void PD_TestScene::update(Step * _step){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
 	}
-	if(keyboard->keyJustDown(GLFW_KEY_I)){
+	/*if(keyboard->keyJustDown(GLFW_KEY_I)){
 		playerPalette->saveImageData("palette.tga");
 		PD_ResourceManager::scenario->getTexture("INDEXED-TEST")->texture->saveImageData("INDEXED-TEST.tga");
 		PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture->saveImageData("INDEXED-TEST2.tga");
-	}
+	}*/
 	
 	if(keyboard->keyJustUp(GLFW_KEY_E)){	
 		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
