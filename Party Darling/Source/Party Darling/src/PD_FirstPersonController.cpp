@@ -62,10 +62,10 @@ void PD_FirstPersonController::update(Step * _step){
 		float y2 = -joystick->getAxis(joystick->axisRightY)*100;
 		mouse->translate(glm::vec2(x2, y2));
 	}
-
-	movement *= playerSpeed * mass;
-
-	if(movement.x != 0 || movement.y != 0 || movement.z != 0){
+	
+	float movementMag = glm::length(movement);
+	if(movementMag > 0){
+		movement = movement/movementMag * playerSpeed * mass;
 		targetEntity->body->activate(true);
 		targetEntity->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
 	}
