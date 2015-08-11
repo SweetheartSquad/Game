@@ -218,7 +218,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	playerEntity->setColliderAsCapsule(1, 1.5f);
 	playerEntity->createRigidBody(1);
 	playerEntity->setShader(diffuseShader, true);
-	playerEntity->body->setDamping(0.1, 0.1);
+	playerEntity->body->setDamping(0.9, 0.8);
+	playerEntity->body->setFriction(1);
 	playerEntity->body->setAngularFactor(btVector3(0,1,0));
 
 	playerCam = new MousePerspectiveCamera();

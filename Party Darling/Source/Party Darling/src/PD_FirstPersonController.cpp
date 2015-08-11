@@ -21,8 +21,8 @@ PD_FirstPersonController::PD_FirstPersonController(NodeBulletBody * _targetEntit
 }
 
 void PD_FirstPersonController::update(Step * _step){
-	float playerSpeed = 1.f;
-	float mass = 1;//target->body->get();
+	float playerSpeed = 3.f;
+	float mass = 1;
 
 	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
@@ -42,14 +42,11 @@ void PD_FirstPersonController::update(Step * _step){
 	glm::vec3 movement(0);
 	if (keyboard->keyDown(GLFW_KEY_W)){
 		movement += forward;
-	}
-	if (keyboard->keyDown(GLFW_KEY_S)){
+	}if (keyboard->keyDown(GLFW_KEY_S)){
 		movement -= forward;
-	}
-	if (keyboard->keyDown(GLFW_KEY_A)){
+	}if (keyboard->keyDown(GLFW_KEY_A)){
 		movement -= right;
-	}
-	if (keyboard->keyDown(GLFW_KEY_D)){
+	}if (keyboard->keyDown(GLFW_KEY_D)){
 		movement += right;
 	}
 
