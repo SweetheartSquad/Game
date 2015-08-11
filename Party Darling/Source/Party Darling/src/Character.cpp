@@ -99,7 +99,9 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 	components.push_back(_component);
 }
 
-PersonRenderer::PersonRenderer(Texture * _paletteTex){
+PersonRenderer::PersonRenderer(Texture * _paletteTex) :
+	paletteTex(_paletteTex),
+{
 	Json::Value root;
 	Json::Reader reader;
 	std::string jsonLoaded = FileUtils::voxReadFile("assets/skeletal_structure.json");
@@ -156,24 +158,33 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	// implicitly create skeletal structure by adding components in the correct order
 	solverArmR->addComponent(armR);
 	solverArmR->addComponent(forearmR);
-	solverArmR->addComponent(handR);
+	connect(forearmR, handR);
+	//solverArmR->addComponent(handR);
 	
 	solverArmL->addComponent(armL);
 	solverArmL->addComponent(forearmL);
-	solverArmL->addComponent(handL);
+	connect(forearmL, handL);
+	//solverArmL->addComponent(handL);
 	
 	solverLegR->addComponent(legR);
 	solverLegR->addComponent(forelegR);
-	solverLegR->addComponent(footR);
+	connect(forelegR, footR);
+	//solverLegR->addComponent(footR);
 	
 	solverLegL->addComponent(legL);
 	solverLegL->addComponent(forelegL);
-	solverLegL->addComponent(footL);
+	connect(forelegL, footL);
+	//solverLegL->addComponent(footL);
 	
 	solverBod->addComponent(pelvis);
 	solverBod->addComponent(torso);
-	solverBod->addComponent(jaw);
-	solverBod->addComponent(head);
+	connect(torso, jaw);
+	connect(jaw, head);
+	//solverBod->addComponent(jaw);
+	//solverBod->addComponent(head);
+	// no point in putting the nose/eyes into the skeletal structure
+	connect(head, nose);
+	connect(head, eyes);
 	
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
@@ -182,9 +193,6 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex){
 	solverBod->jointsLocal.at(0)->addJoint(solverLegL);
 	childTransform->addChild(solverBod);
 
-	// no point in putting the nose/eyes into the skeletal structure
-	connect(head, nose);
-	connect(head, eyes);
 	
 	solvers.push_back(solverBod);
 	solvers.push_back(solverArmR);
