@@ -5,6 +5,7 @@
 #include <BulletDebugDrawer.h>
 #include <BulletWorld.h>
 #include <PD_FirstPersonController.h>
+#include <PD_TilemapGenerator.h>
 
 class PerspectiveCamera;
 class MousePerspectiveCamera;
@@ -52,6 +53,9 @@ public:
 	BulletMeshEntity * playerEntity;
 	glm::vec3 lastPos;
 	TextureColourTable * playerPalette;
+
+	PD_TilemapGenerator * tilemap;
+	MeshEntity * tilemapContour;
 	
 	Sprite * mouseIndicator;
 	Sprite * crosshair;

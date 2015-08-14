@@ -14,6 +14,7 @@
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\PD_TilemapGenerator.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
     <ClCompile Include="src\TestCharacter.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="include\Character.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\PD_TilemapGenerator.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
     <ClInclude Include="include\TestCharacter.h" />

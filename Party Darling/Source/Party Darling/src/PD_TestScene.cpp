@@ -323,6 +323,35 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	test->load();
 	test->parents.at(0)->translate(0, 5, -3);
 	test->parents.at(0)->scale(0.001);
+
+
+
+
+
+
+
+
+	tilemap = new PD_TilemapGenerator(12,12,true);
+	tilemap->load();
+	tilemap->saveImageData("tilemap.tga");
+	
+	tilemapContour = new MeshEntity(tilemap->march(128, true));
+	playerEntity->childTransform->addChild(tilemapContour);
+	tilemapContour->setShader(characterShader, true);
+	tilemapContour->mesh->pushTexture2D(playerPalette);
+	tilemapContour->mesh->pushTexture2D(playerPalette);
+	
+	Sprite * tilemapSprite = new Sprite();
+	tilemapSprite->mesh->pushTexture2D(tilemap);
+	tilemapSprite->childTransform->scale(tilemap->width, tilemap->height, 1);
+	tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
+	tilemapSprite->mesh->scaleModeMag = GL_NEAREST;
+	tilemapSprite->mesh->scaleModeMin = GL_NEAREST;
+	tilemapSprite->setShader(diffuseShader, true);
+	playerEntity->childTransform->addChild(tilemapSprite);
+	
+	
+	glLineWidth(15);
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -354,6 +383,19 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
+		
+		tilemap->unload();
+		tilemap->unloadImageData();
+		tilemap->load();
+
+		playerEntity->childTransform->removeChild(tilemapContour->parents.at(0));
+		delete tilemapContour->parents.at(0);
+		
+		tilemapContour = new MeshEntity(tilemap->march(128, true));
+		playerEntity->childTransform->addChild(tilemapContour);
+		tilemapContour->setShader(characterShader, true);
+		tilemapContour->mesh->pushTexture2D(playerPalette);
+		tilemapContour->mesh->pushTexture2D(playerPalette);
 	}
 	/*if(keyboard->keyJustDown(GLFW_KEY_I)){
 		playerPalette->saveImageData("palette.tga");
