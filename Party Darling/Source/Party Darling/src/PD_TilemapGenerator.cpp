@@ -15,10 +15,15 @@ PD_TilemapGenerator::PD_TilemapGenerator(unsigned long int _width, unsigned long
 
 	numPixels = width * height;
 	numBytes = numPixels * channels;
+
+	configure();
 }
 
 
-
+void PD_TilemapGenerator::configure(unsigned long int _max, unsigned long int _pixelIncrement){
+	max = _max;
+	pixelIncrement = _pixelIncrement;
+}
 void PD_TilemapGenerator::loadImageData(){
 	// allocate and initialize texture data
 	data = (unsigned char *)calloc(numBytes, sizeof(unsigned char));
@@ -30,17 +35,20 @@ void PD_TilemapGenerator::loadImageData(){
 	}
 	}
 	
+	// center is always fully on
 	std::vector<glm::ivec2> points;
 	points.push_back(glm::ivec2(width/2, height/2));
-	vox::TextureUtils::getPixel(this, width/2, height/2) = 255;
-	vox::TextureUtils::getPixel(this, width/2, height/2, 1) = 0;
-	vox::TextureUtils::getPixel(this, width/2, height/2, 2) = 0;
+	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 0) = 255;
+	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 1) = 0;
+	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 2) = 0;
 	
 	bool done = false;
 	float prob = 1;
-	while(!done){
-		
+	unsigned long int maxAttempts = numPixels;
 
+	
+	float probDecrement = (float)pixelIncrement/(numPixels * max);
+	while(!done){
 		bool valid = true;
 		glm::ivec2 newPos;
 		unsigned long int attempts = 0;
@@ -52,7 +60,7 @@ void PD_TilemapGenerator::loadImageData(){
 			
 			newPos = pos+dir;
 
-			// make sure the new point is within the image (an additional 1-pixel border is also ignored to account let marching squares work properly)
+			// make sure the new point is within the image (an additional 1-pixel border is also ignored to let marching squares work properly)
 			if(newPos.x <= 0){
 				valid = false; continue;
 			}if(newPos.x >= width-1){
@@ -68,25 +76,28 @@ void PD_TilemapGenerator::loadImageData(){
 					valid = false; break;
 				}
 			}*/
-			if(vox::TextureUtils::getPixel(this, newPos.x, newPos.y) == 255){
+			if(vox::TextureUtils::getPixel(this, newPos.x, newPos.y) >= max){
 				valid = false;
 			}
 
-		}while(!valid && ++attempts < 64);
+		}while(!valid && ++attempts < maxAttempts);
 		
 		if(!valid){
 			break;
 		}
+		
+		if(vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) < pixelIncrement){
+			points.push_back(newPos);
+		}
+		
+		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) += pixelIncrement;
+		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) -= pixelIncrement;
+		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) -= pixelIncrement;
 
-		points.push_back(newPos);
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y) += 15;
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) = 0;
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) = 0;
-
-		if(/*vox::NumberUtils::randomFloat(0, 1) > */prob <= 0){
+		if(prob < 0){
 			done = true;
 		}else{
-			prob -= 0.001f;
+			prob -= probDecrement;
 		}
 	}
 	

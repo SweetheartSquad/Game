@@ -3,14 +3,12 @@
 #include <Texture.h>
 #include <MeshInterface.h>
 
-
-class MarchingSquare{
-public:
-	unsigned long int x, y, size, p0, p1, p2, p3, code;
-};
-
 class PD_TilemapGenerator : public Texture{
 public:
+
+	unsigned long int max, pixelIncrement;
+	void configure(unsigned long int _max = 255, unsigned long int _pixelIncrement = 255);
+
 
 	PD_TilemapGenerator(unsigned long int _width, unsigned long int _height, bool _autorelease);
 

@@ -331,11 +331,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 
-	tilemap = new PD_TilemapGenerator(12,12,true);
+	tilemap = new PD_TilemapGenerator(9,9,true);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 	
-	tilemapContour = new MeshEntity(tilemap->march(128, true));
+	tilemapContour = new MeshEntity(tilemap->march(128, false));
 	playerEntity->childTransform->addChild(tilemapContour);
 	tilemapContour->setShader(characterShader, true);
 	tilemapContour->mesh->pushTexture2D(playerPalette);
@@ -383,7 +383,8 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
-		
+		unsigned long int pixelIncrement = vox::NumberUtils::randomInt(1, 255);
+		tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 		tilemap->unload();
 		tilemap->unloadImageData();
 		tilemap->load();
@@ -391,7 +392,7 @@ void PD_TestScene::update(Step * _step){
 		playerEntity->childTransform->removeChild(tilemapContour->parents.at(0));
 		delete tilemapContour->parents.at(0);
 		
-		tilemapContour = new MeshEntity(tilemap->march(128, true));
+		tilemapContour = new MeshEntity(tilemap->march(128, false));
 		playerEntity->childTransform->addChild(tilemapContour);
 		tilemapContour->setShader(characterShader, true);
 		tilemapContour->mesh->pushTexture2D(playerPalette);
