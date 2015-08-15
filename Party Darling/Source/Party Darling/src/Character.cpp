@@ -100,7 +100,7 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 }
 
 PersonRenderer::PersonRenderer(Texture * _paletteTex) :
-	paletteTex(_paletteTex),
+	paletteTex(_paletteTex)
 {
 	Json::Value root;
 	Json::Reader reader;

@@ -19,11 +19,23 @@
 #include <stb/stb_herringbone_wang_tile.h>
 #include <stb/stb_image.h>
 
+#include <NumberUtils.h>
+#include <PD_TilemapGenerator.h>
+#include <TextureUtils.h>
+#include <glm/gtx/vector_angle.hpp>
+
 Tile::Tile(glm::vec2 _pos, Tile_t _type) :
 	pos(_pos),
 	type(_type),
 	free(false)
 {
+}
+
+Edge::Edge(glm::vec2 _p1, glm::vec2 _p2):
+	p1(_p1),
+	p2(_p2),
+	angle(0.f)
+{		
 }
 
 Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
@@ -174,197 +186,78 @@ std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
 }
 
 std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size){
-	int w, h;
-	int n = 3;
-	unsigned char * pixels = stbi_load("assets/map.png", &w, &h, &n, 0);
-
-	assert(pixels);
-	if(pixels){
-		
-		int blah = 0;
-	}
-	
-	// vector conaining: vec2 pos1, vec2 pos2, vec2 N (normal)
-	std::vector<glm::vec2> backE;
-	std::vector<glm::vec2> frontE;
-	// keep track of vertical edges in order along y
-	std::map<unsigned int, std::vector<glm::vec2>> leftE;
-	std::map<unsigned int, std::vector<glm::vec2>> rightE;
-
-	for(unsigned int y = 0; y < h; ++y){
-		for(unsigned int x = 0; x < w; ++x){
-			int r = pixels[(y*w+x)*n];
-			// int g
-			// int b
-
-			if(r == 255){
-				continue;
-			}
-
-			/**
-			*	--- B ---
-			*	|		 |
-			*	L		 R
-			*	|		 |
-			*	--- F ---
-			*/
-
-			// Back Edge
-			if(y == 0 || pixels[((y-1)*w+x)*n] == 255){
-				backE.push_back(glm::vec2(x,y));
-			}
-			// Front Edge
-			if(y == h-1 || (y < h-1 && pixels[((y+1)*w+x)*n] == 255)){
-				frontE.push_back(glm::vec2(x,y));
-			}
-
-			int l, rt;
-
-			// Left Edge
-			if (x > 0){
-				l = pixels[(y*w+(x-1))*n];
-			}
-			if(x < w){
-				rt = pixels[(y*w+(x+1))*n];
-			}
-			
-			if(x == 0 || pixels[(y*w+(x-1))*n] == 255){
-				if(leftE.find(x) == leftE.end()){
-					leftE[x] = std::vector<glm::vec2>();
-				}
-				leftE[x].push_back(glm::vec2(x, y));
-			}
-			// Right Edge
-			if(x == w-1 || pixels[(y*w+(x+1))*n] == 255){
-				if(rightE.find(x) == rightE.end()){
-					rightE[x] = std::vector<glm::vec2>();
-				}
-				rightE[x].push_back(glm::vec2(x, y));
-			}
-		}
-	}
-	
 	std::vector<RoomObject *> walls;
 
-	glm::vec2 * startPos = nullptr;
-	glm::vec2 * endPos = nullptr;
-	// Back walls
-	for(unsigned int i = 0; i < backE.size(); ++i){
-		glm::vec2 * edge = &backE.at(i);
+	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(4,4,true);
+	tilemap->load();
+	tilemap->saveImageData("tilemap.tga");
+	
+	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 0, 0);
 
-		// Start wall if: startPos is nullptr
-		if(startPos == nullptr){
-			startPos = edge;
-		}
+	std::vector<Edge *> edges;
 
-		// End wall if: last item, last item of row, last adjacent item
-		if(i == backE.size() - 1 || backE.at(i+1).y != edge->y || (backE.at(i+1).x - edge->x > 1)){
-			endPos = edge;
+	// Pair vertices to create edges
+	for(unsigned int i = 0; i < verts.size(); i+=2){
+		// Error check to make sure there is a following vert
+		if(i+1 >= verts.size()){
+			break;
 		}
-
-		if(startPos != nullptr && endPos != nullptr){
-			int width = endPos->x - startPos->x + 1;
-			walls.push_back(getWall(_world, width, glm::vec2(startPos->x + width / 2.f, startPos->y), BACK));
-			startPos = nullptr;
-			endPos = nullptr;
-		}
+		Edge * e = new Edge(verts.at(i), verts.at(i+1));
+		edges.push_back(e);
 	}
 
-	startPos = nullptr;
-	endPos = nullptr;
-	// Front walls
-	for(unsigned int i = 0; i < frontE.size(); ++i){
-		glm::vec2 * edge = &frontE.at(i);
-		// Start wall if: startPos is nullptr
-		if(startPos == nullptr){
-			startPos = edge;
+	// Reduce vertices
+	for (std::vector<Edge *>::iterator it = edges.begin(); it != edges.end();){
+		int idx = it - edges.begin();
+		int N = edges.size();
+		if(N < 2){
+			// exit if has less than 2 edges
+			break;
 		}
 
-		// End wall if: last item, last item of row, last adjacent item
-		if(i == frontE.size() - 1 || frontE.at(i+1).y != edge->y || (frontE.at(i+1).x - edge->x > 1)){
-			endPos = edge;
-		}
+		Edge * e1 = *it;
+		
+		++it;
 
-		if(startPos != nullptr && endPos != nullptr){
-			int width = endPos->x - startPos->x + 1;
-			walls.push_back(getWall(_world, width, glm::vec2(startPos->x + width / 2.f, startPos->y + 1), FRONT));
-			startPos = nullptr;
-			endPos = nullptr;
-		}
-	}
+		for(std::vector<Edge *>::iterator jt = edges.begin(); jt != edges.end(); ++jt){
+			Edge * e2 = edges.at((idx+1) % N);
 
-	typedef std::map<unsigned int, std::vector<glm::vec2>>::iterator it_type;
-
-	startPos = nullptr;
-	endPos = nullptr;
-	// Left walls
-	for(it_type iterator = leftE.begin(); iterator != leftE.end(); iterator++) {
-		// go through all columns (second is the value)
-		for(unsigned int i = 0; i < iterator->second.size(); ++i){
-			glm::vec2 * edge = &iterator->second.at(i);
-			// Start wall if: startPos is nullptr
-			if(startPos == nullptr){
-				startPos = edge;
+			if(e1 == e2){
+				continue;
 			}
-
-			// End wall if: last item of column, last adjacent item
-			if(i == iterator->second.size() - 1 || (iterator->second.at(i+1).y - edge->y > 1)){
-				endPos = edge;
-			}
-
-			if(startPos != nullptr && endPos != nullptr){
-				int width = endPos->y - startPos->y + 1;
-				walls.push_back(getWall(_world, width, glm::vec2(startPos->x, startPos->y + width / 2.f), LEFT));
-				startPos = nullptr;
-				endPos = nullptr;
+			// If e1's end point is the same as e2's start point (should only happen once)
+			if(e1->p2.x == e2->p1.x && e1->p2.y == e2->p1.y){
+				// Horizontal, Vertical, TODO: Diagonals
+				if( e1->p1.x == e1->p2.x && e1->p1.x == e2->p2.x ||
+					e1->p1.y == e1->p2.y && e1->p1.y == e2->p2.y){
+						// Combine first edge into second edge
+						e2->p1.x = e1->p1.x;
+						e2->p1.y = e1->p1.y;
+						// Delete first edge from edges and overwrite it
+						it = edges.erase(it);
+						break;
+				}
 			}
 		}
 	}
 
-	startPos = nullptr;
-	endPos = nullptr;
-	// Right walls
-	for(it_type iterator = rightE.begin(); iterator != rightE.end(); iterator++) {
-		// go through all columns (second is the value)
-		for(unsigned int i = 0; i < iterator->second.size(); ++i){
-			glm::vec2 * edge = &iterator->second.at(i);
-			// Start wall if: startPos is nullptr
-			if(startPos == nullptr){
-				startPos = edge;
-			}
-
-			// End wall if: last item of column, last adjacent item
-			if(i == iterator->second.size() - 1 || (iterator->second.at(i+1).y - edge->y > 1)){
-				endPos = edge;
-			}
-
-			if(startPos != nullptr && endPos != nullptr){
-				int width = endPos->y - startPos->y + 1;
-				walls.push_back(getWall(_world, width, glm::vec2(startPos->x + 1, startPos->y + width / 2.f), RIGHT));
-				startPos = nullptr;
-				endPos = nullptr;
-			}
-		}
+	// Calc orientation
+	for(unsigned int i = 0; i < edges.size(); ++i){
+		Edge * e = edges.at(i);
+		glm::vec2 v = glm::vec2(e->p2.x - e->p1.x, e->p2.y - e->p1.y);
+		edges.at(i)->angle = glm::angle(glm::normalize(v), glm::vec2(1, 0));
+	}
+	
+	// Create walls from edges
+	for(unsigned int i = 0; i < edges.size(); ++i){
+		Edge * e = edges.at(i);
+		walls.push_back(getWall(_world, glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle, FRONT));
 	}
 
 	return walls;
-	/*
-	// split up later into walls, floor, and cieling?
-	switch(type){
-		case kT:
-			return getTRoom(_world, size);
-			break;
-		case kL:
-			return getLRoom(_world, size);
-			break;
-		default:
-			return getRectRoom(_world, size);
-			break;
-	}*/
-	
 }
 
-RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 pos, Side_t side){
+RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle, Side_t side){
 	RoomObject * wall;
 
 	float posX = pos.x * ROOM_TILE;
@@ -373,28 +266,9 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 	float halfW = width / 2.f * ROOM_TILE;
 	float halfH = (ROOM_HEIGHT * ROOM_TILE) / 2.f;
 
-	float angle = 0.f;
 	glm::vec3 axis = glm::vec3(0.f, 1.f, 0.f);
 
-	glm::vec3 n = glm::vec3(0.0, 0.0 , 0.0);
-	switch(side){
-		case BACK:
-			n.z = 1.f;
-			break;
-		case FRONT:
-			n.z = -1.f;
-			break;
-		case LEFT:
-			angle = 90.f;
-			n.x = 1.f;
-			break;
-		case RIGHT:
-			angle = 90.f;
-			n.x = -1.f;
-		default:
-			break;
-	}
-
+	glm::vec3 n = glm::vec3(0.0, 0.0 , 1.f);
 	
 	QuadMesh * m = new QuadMesh();
 	m->pushVert(Vertex(-halfW, halfH, 0));

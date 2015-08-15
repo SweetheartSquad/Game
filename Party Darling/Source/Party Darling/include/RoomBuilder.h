@@ -48,6 +48,15 @@ public:
 	Tile(glm::vec2 _pos, Tile_t _type);
 };
 
+class Edge{
+public:
+	glm::vec2 p1;
+	glm::vec2 p2;
+	float angle;
+
+	Edge(glm::vec2 _p1, glm::vec2 _p2);
+};
+
 class Slot;
 
 // Use builder pattern (parsing flat data)
@@ -62,7 +71,7 @@ public:
 
 	// Room boundaries builder functions
 	static std::vector<RoomObject *> getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size);
-	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, Side_t side);
+	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle, Side_t side);
 	static std::vector<RoomObject *> getRectRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getTRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getLRoom(BulletWorld * _world, glm::vec2 size);
