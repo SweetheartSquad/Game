@@ -30,10 +30,10 @@ Tile::Tile(glm::vec2 _pos, Tile_t _type) :
 {
 }
 
-Edge::Edge(glm::vec2 _p1, glm::vec2 _p2):
+Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
 	p2(_p2),
-	angle(0.f)
+	angle(glm::degrees(glm::atan(_normal.y, _normal.x)))
 {		
 }
 
@@ -189,21 +189,24 @@ std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
 std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size){
 	std::vector<RoomObject *> walls;
 
-	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(9,9,true);
+	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(16,16,true);
+	unsigned long int pixelIncrement = vox::NumberUtils::randomInt(1, 255);
+	tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 	
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 0, 0);
+	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 128, true, true);
 
 	std::vector<Edge *> edges;
 
+	// error check to make sure size makes sense
+	if(verts.size() % 3 != 0){
+		throw;
+	}
+
 	// Pair vertices to create edges
-	for(unsigned int i = 0; i < verts.size(); i+=2){
-		// Error check to make sure there is a following vert
-		if(i+1 >= verts.size()){
-			break;
-		}
-		Edge * e = new Edge(verts.at(i), verts.at(i+1));
+	for(unsigned int i = 0; i < verts.size(); i += 3){
+		Edge * e = new Edge(verts.at(i), verts.at(i+1), verts.at(i+2));
 		edges.push_back(e);
 	}
 
@@ -219,12 +222,6 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		Edge * e1 = *it;
 		
 		++it;
-		std::wcout << L"\nEdges" << std::endl;
-		std::wcout << L"------" << std::endl;
-		for(int blah = 0; blah < edges.size(); ++blah){
-
-			std::wcout << L"edge " << blah << ": (" << edges.at(blah)->p1.x << ", " << edges.at(blah)->p1.y << "), (" << edges.at(blah)->p2.x << ", " << edges.at(blah)->p2.y << ")" << std::endl;
-		}
 
 		int wow = 1;
 		for(std::vector<Edge *>::iterator jt = edges.begin(); jt != edges.end(); ++jt){
@@ -256,13 +253,6 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		}
 	}
 
-	// Calc orientation
-	for(unsigned int i = 0; i < edges.size(); ++i){
-		Edge * e = edges.at(i);
-		glm::vec2 v = glm::vec2(e->p2.x - e->p1.x, e->p2.y - e->p1.y);
-		edges.at(i)->angle = glm::angle(glm::normalize(v), glm::vec2(1, 0));
-	}
-	
 	// Create walls from edges
 	for(unsigned int i = 0; i < edges.size(); ++i){
 		Edge * e = edges.at(i);

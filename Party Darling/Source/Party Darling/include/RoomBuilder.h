@@ -54,7 +54,7 @@ public:
 	glm::vec2 p2;
 	float angle;
 
-	Edge(glm::vec2 _p1, glm::vec2 _p2);
+	Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal = glm::vec2(0));
 };
 
 class Slot;

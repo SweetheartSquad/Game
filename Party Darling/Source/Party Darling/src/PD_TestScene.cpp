@@ -394,9 +394,7 @@ void PD_TestScene::update(Step * _step){
 		
 		tilemapContour = new MeshEntity(tilemap->march(128, false));
 		playerEntity->childTransform->addChild(tilemapContour);
-		tilemapContour->setShader(characterShader, true);
-		tilemapContour->mesh->pushTexture2D(playerPalette);
-		tilemapContour->mesh->pushTexture2D(playerPalette);
+		tilemapContour->setShader(diffuseShader, true);
 	}
 	/*if(keyboard->keyJustDown(GLFW_KEY_I)){
 		playerPalette->saveImageData("palette.tga");

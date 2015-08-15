@@ -105,11 +105,14 @@ void PD_TilemapGenerator::loadImageData(){
 }
 
 MeshInterface * PD_TilemapGenerator::march(unsigned long int _thresh, bool _smooth){
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(this, _thresh, _smooth);
+	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(this, _thresh, _smooth, true);
 	MeshInterface * res = new MeshInterface(GL_LINES, GL_STATIC_DRAW);
 	
-	for(auto v : verts){
-		res->pushVert(Vertex(v.x, v.y, 0));
+	assert(verts.size() % 3 == 0);
+
+	for(unsigned long int i = 0; i < verts.size(); i += 3){
+		res->pushVert(Vertex(verts.at(i).x, verts.at(i).y, 0.f, verts.at(i+2).x, verts.at(i+2).y, 0.f, 1.f));
+		res->pushVert(Vertex(verts.at(i+1).x, verts.at(i+1).y, 0));
 	}
 	return res;
 }
