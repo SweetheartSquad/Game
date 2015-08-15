@@ -23,6 +23,9 @@
 #include <NumberUtils.h>
 #include <glm/gtx/vector_angle.hpp>
 
+#include <Sprite.h>
+#include <Texture.h>
+
 Tile::Tile(glm::vec2 _pos, Tile_t _type) :
 	pos(_pos),
 	type(_type),
@@ -190,12 +193,12 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 	std::vector<RoomObject *> walls;
 
 	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(16,16,true);
-	unsigned long int pixelIncrement = vox::NumberUtils::randomInt(1, 255);
+	unsigned long int pixelIncrement = 158;
 	tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 	
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 128, true, true);
+	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 128, false, true);
 
 	std::vector<Edge *> edges;
 

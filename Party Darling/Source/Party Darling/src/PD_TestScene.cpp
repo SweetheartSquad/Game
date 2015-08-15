@@ -145,9 +145,24 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 
+
 	room = RoomBuilder::getRoom("{}",bulletWorld);
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
+
+	Sprite * tSprite = new Sprite();
+	Texture * tex = new Texture("data/images/tilemap.tga", true, true);
+	tex->load();
+	tSprite->mesh->pushTexture2D(tex);
+	//tSprite->meshTransform->translate(0.5, 0, 0.5);
+	tSprite->childTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	tSprite->childTransform->scale(tex->width * ROOM_TILE, -tex->height * ROOM_TILE, 1);
+	tSprite->mesh->scaleModeMag = GL_NEAREST;
+	tSprite->mesh->scaleModeMin = GL_NEAREST;
+	tSprite->setShader(diffuseShader, true);
+	childTransform->addChild(tSprite);
+
+	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
 	
 	/*std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
@@ -484,8 +499,12 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
+	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	Scene::render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
+	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	screenSurface->render(screenFBO->getTextureId());
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);

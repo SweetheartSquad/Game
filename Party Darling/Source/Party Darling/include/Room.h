@@ -18,14 +18,17 @@ enum RoomLayout_t;
 class BulletMeshEntity;
 class Shader;
 class Texture;
+class Sprite;
 
 class RoomObject;
 
 class Room: public Entity {
 public:
 	std::vector<RoomObject *> components;
+	Sprite * tilemapSprite;
 
 	std::vector<RoomObject *> boundaries;
+	
 	std::vector<RoomObject *> objects;
 
 	Room(BulletWorld * _world, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture = nullptr);
