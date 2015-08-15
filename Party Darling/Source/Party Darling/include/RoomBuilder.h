@@ -71,7 +71,7 @@ public:
 
 	// Room boundaries builder functions
 	static std::vector<RoomObject *> getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size);
-	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle, Side_t side);
+	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
 	static std::vector<RoomObject *> getRectRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getTRoom(BulletWorld * _world, glm::vec2 size);
 	static std::vector<RoomObject *> getLRoom(BulletWorld * _world, glm::vec2 size);
