@@ -188,7 +188,7 @@ std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
 std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size){
 	std::vector<RoomObject *> walls;
 
-	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(4,4,true);
+	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(9,9,true);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 	
@@ -220,21 +220,28 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		++it;
 
 		for(std::vector<Edge *>::iterator jt = edges.begin(); jt != edges.end(); ++jt){
-			Edge * e2 = edges.at((idx+1) % N);
+			int jdx = jt - edges.begin();
+			Edge * e2 = *jt;
 
 			if(e1 == e2){
 				continue;
 			}
 			// If e1's end point is the same as e2's start point (should only happen once)
-			if(e1->p2.x == e2->p1.x && e1->p2.y == e2->p1.y){
+			glm::vec2 eI;
+			if( (eI = e1->p2) == e2->p1 || (eI = e1->p1) == e2->p2){
+	
+				Edge eDiff = (e1->p2 == e2->p1 ? Edge(e1->p1, e2->p2) : Edge(e1->p2, e2->p1));
+
 				// Horizontal, Vertical, TODO: Diagonals
-				if( e1->p1.x == e1->p2.x && e1->p1.x == e2->p2.x ||
-					e1->p1.y == e1->p2.y && e1->p1.y == e2->p2.y){
+				if( eDiff.p1.x == eDiff.p2.x && eDiff.p1.x == eI.x || // Horizontal
+					eDiff.p1.y == eDiff.p2.y && eDiff.p1.y == eI.y ){ // Vertical
 						// Combine first edge into second edge
-						e2->p1.x = e1->p1.x;
-						e2->p1.y = e1->p1.y;
+						e2->p1.x = eDiff.p1.x;
+						e2->p1.y = eDiff.p1.y;
+						e2->p2.x = eDiff.p2.x;
+						e2->p2.y = eDiff.p2.y;
 						// Delete first edge from edges and overwrite it
-						it = edges.erase(it);
+						it = edges.erase(--it);
 						break;
 				}
 			}
@@ -284,9 +291,9 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 	m->setUV(2, width, 1.0);
 	m->setUV(3, width, 0.0);
 	wall = new RoomObject(_world, m);
-	wall->meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
+	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width));
 
