@@ -37,24 +37,37 @@
   "conversations": [
     {
       "id": "test1",
-      "dialog": [
+      "dialogue": [
         {
-          "speaker": "None",
-          "portrait": "None",
+          "speaker": "Speaker 1",
           "text": [
-              "This is a test."
+              "test dialogue 1.1",
+              "test dialogue 1.2",
+              "test dialogue 1.3",
+              "test dialogue 1.4"
+          ]
+        },
+        {
+          "speaker": "Speaker 2",
+          "text": [
+              "test dialogue 2.1",
+              "test dialogue 2.2",
+              "test dialogue 2.3",
+              "test dialogue 2.4"
           ]
         }
       ]
     },
     {
       "id": "test2",
-      "dialog": [
+      "dialogue": [
         {
-          "speaker": "None",
-          "portrait": "None",
+          "speaker": "Speaker 1",
           "text": [
-              "This is a test."
+              "test dialogue (conversation 2) 1.1",
+              "test dialogue (conversation 2) 1.2",
+              "test dialogue (conversation 2) 1.3",
+              "test dialogue (conversation 2) 1.4"
           ]
         }
       ]
