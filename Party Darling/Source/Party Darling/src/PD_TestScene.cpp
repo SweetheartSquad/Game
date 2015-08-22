@@ -146,7 +146,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->setFriction(1);
 
 
-	room = RoomBuilder::getRoom("{}",bulletWorld);
+	room = RoomBuilder("{}",bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
@@ -161,8 +161,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	tSprite->mesh->scaleModeMin = GL_NEAREST;
 	tSprite->setShader(diffuseShader, true);
 	childTransform->addChild(tSprite);
-
-	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
 	
 	/*std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");

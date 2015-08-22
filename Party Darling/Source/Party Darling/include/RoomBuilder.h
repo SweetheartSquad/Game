@@ -30,6 +30,7 @@ enum Side_t;
 
 class BulletWorld;
 class MeshInterface;
+class PD_TilemapGenerator;
 
 class Room;
 class RoomObject;
@@ -37,15 +38,12 @@ class Furniture;
 class Person;
 class Item;
 
-class Room;
-
 class Tile{
 public:
 	glm::vec2 pos;
-	Tile_t type;
 	bool free;
 
-	Tile(glm::vec2 _pos, Tile_t _type);
+	Tile(glm::vec2 _pos);
 };
 
 class Edge{
@@ -62,22 +60,30 @@ class Slot;
 // Use builder pattern (parsing flat data)
 class RoomBuilder{
 public: 
+	PD_TilemapGenerator * tilemap;
+	unsigned int thresh;
 
-	static Room * getRoom(std::string json, BulletWorld * _world);
+	Json::Value json;
+	BulletWorld * world;
+
+	std::vector<Tile *> tiles;
+	std::map<int, std::map<int, bool>> map;
+
+	Room * room;
+
+	RoomBuilder(std::string _json, BulletWorld * _world);
+	~RoomBuilder();
+
+	Room * getRoom();
 
 	// Furniture placement
-	static bool search(RoomObject * child, std::vector<RoomObject *> objects);
-	static bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
+	bool search(RoomObject * child, std::vector<RoomObject *> objects);
+	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
 
 	// Room boundaries builder functions
-	static std::vector<RoomObject *> getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size);
-	static RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
-	static std::vector<RoomObject *> getRectRoom(BulletWorld * _world, glm::vec2 size);
-	static std::vector<RoomObject *> getTRoom(BulletWorld * _world, glm::vec2 size);
-	static std::vector<RoomObject *> getLRoom(BulletWorld * _world, glm::vec2 size);
-	static std::vector<RoomObject *> box(BulletWorld * _world, glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top = true, bool bottom = true);
-
-	static std::vector<Tile *> getTiles(RoomLayout_t _type, glm::vec2 _size);
+	void createWalls(unsigned long int _thresh);
+	RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
+	std::vector<Tile *> getTiles(unsigned long int _thresh);
 
 	// Create random room objects, including specified objects
 	static std::vector<RoomObject *> getRoomObjects(Json::Value _json, BulletWorld * _world);
