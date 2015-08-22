@@ -214,6 +214,7 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 	}
 
 	// Reduce vertices
+
 	for (std::vector<Edge *>::iterator it = edges.begin(); it != edges.end();){
 		int idx = it - edges.begin();
 		int N = edges.size();
@@ -225,8 +226,14 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		Edge * e1 = *it;
 		
 		++it;
+		/*
+		std::wcout << L"\nEdges" << std::endl;
+		std::wcout << L"------" << std::endl;
+		for(int blah = 0; blah < edges.size(); ++blah){
 
-		int wow = 1;
+			std::wcout << L"edge " << blah << ": (" << edges.at(blah)->p1.x << ", " << edges.at(blah)->p1.y << "), (" << edges.at(blah)->p2.x << ", " << edges.at(blah)->p2.y << ")" << std::endl;
+		}*/
+
 		for(std::vector<Edge *>::iterator jt = edges.begin(); jt != edges.end(); ++jt){
 			int jdx = jt - edges.begin();
 			Edge * e2 = *jt;
@@ -235,22 +242,23 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 				continue;
 			}
 			// If e1's end point is the same as e2's start point (should only happen once)
-			glm::vec2 eI;
-			if( (eI = e1->p2) == e2->p1 || (eI = e1->p1) == e2->p2){
+			glm::vec2 C;
+			if( (C = e1->p2) == e2->p1 || (C = e1->p1) == e2->p2 || (C = e1->p1) == e2->p1 || (C = e1->p2) == e2->p2){
 	
-				Edge eDiff = (e1->p2 == e2->p1 ? Edge(e1->p1, e2->p2) : Edge(e1->p2, e2->p1));
+				Edge AB = (e1->p2 == e2->p1 ? Edge(e1->p1, e2->p2) : e1->p1 == e2->p2 ? Edge(e1->p2, e2->p1) : e1->p1 == e2->p1 ? Edge(e1->p2, e2->p2) : Edge(e1->p1, e2->p1));
 
-				// Horizontal, Vertical, TODO: Diagonals
-				if( eDiff.p1.x == eDiff.p2.x && eDiff.p1.x == eI.x || // Horizontal
-					eDiff.p1.y == eDiff.p2.y && eDiff.p1.y == eI.y ){ // Vertical
-						// Combine first edge into second edge
-						e2->p1.x = eDiff.p1.x;
-						e2->p1.y = eDiff.p1.y;
-						e2->p2.x = eDiff.p2.x;
-						e2->p2.y = eDiff.p2.y;
-						// Delete first edge from edges and overwrite it
-						it = edges.erase(--it);
-						break;
+				float d1 = glm::distance(AB.p1, C);
+				float d2 = glm::distance(AB.p2, C);
+				float d = glm::distance(AB.p1, AB.p2);
+				if((glm::distance(AB.p1, C) + glm::distance(AB.p2, C) - glm::distance(AB.p1, AB.p2)) < 0.00000001){
+					// Combine first edge into second edge
+					e2->p1.x = AB.p1.x;
+					e2->p1.y = AB.p1.y;
+					e2->p2.x = AB.p2.x;
+					e2->p2.y = AB.p2.y;
+					// Delete first edge from edges and overwrite it
+					it = edges.erase(--it);
+					break;
 				}
 			}
 		}
