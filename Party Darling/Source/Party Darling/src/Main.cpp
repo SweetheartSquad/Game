@@ -41,7 +41,7 @@ int main(void){
 	std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 
 	for(auto n : Node::nodes){
-		std::cout << typeid(*n).name() << " " << n << std::endl;
+		///std::cout << typeid(*n).name() << " " << n << std::endl;
 	}
 #endif
 

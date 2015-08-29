@@ -54,6 +54,19 @@
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
 
+#include <MatrixStack.h>
+#include <RenderOptions.h>
+#include <UIUnit.h>
+
+#include <vector>
+	
+MeshEntity * plane;
+VerticalLinearLayout * vertLinLayout;
+bool done = false;
+
+float x = 0;
+float y = 0;
+
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(){
 	// TODO: To successfully use this example, you must perform the request  
@@ -138,7 +151,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh());
 	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
 	bulletGround->createRigidBody(0);
-	childTransform->addChild(bulletGround);
+	
+	//childTransform->addChild(bulletGround);
 	bulletGround->setShader(diffuseShader, true);
 	bulletGround->meshTransform->scale(1000,1000,1000);
 	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
@@ -147,7 +161,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 
 	room = RoomBuilder::getRoom("{}",bulletWorld);
-	childTransform->addChild(room);
+	//childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
 	Sprite * tSprite = new Sprite();
@@ -160,7 +174,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	tSprite->mesh->scaleModeMag = GL_NEAREST;
 	tSprite->mesh->scaleModeMin = GL_NEAREST;
 	tSprite->setShader(diffuseShader, true);
-	childTransform->addChild(tSprite);
+	//childTransform->addChild(tSprite);
 
 	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
 	
@@ -296,16 +310,45 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt->setMargin(100, 0, 100, 0);
 	butt->setBackgroundColour(1,1,1,1);
 	}*/
-	
 
+	clearColor[0] = 1;
 
+	vertLinLayout = new VerticalLinearLayout(bulletWorld, this);
+	vertLinLayout->setPadding(20.0f);
+	vertLinLayout->setBackgroundColour(0, 1, 0, 1);
 
+	TextArea * text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	text1->setMouseEnabled(true);
+	vertLinLayout->addChild(text1);
+	text1->setText(L"Tejjajdsajhdsakjhdkjsahdkjsahkjashdsjksahdkjsadkjhasdjkhaskjhsadxt");
+	text1->setBackgroundColour(0, 1, 0, 1);
 
+	TextArea * text2 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
+	text2->setMouseEnabled(true);
+	vertLinLayout->addChild(text2);
+	text2->setText(L"Text 2");
+
+	text2->setBackgroundColour(0, 1, 0, 1);
+
+	vertLinLayout->invalidateLayout();
+
+	vertLinLayout->update(&vox::step);
+
+//	childTransform->addChild(vertLinLayout);
+
+	//vertLinLayout->firstParent()->translate(100, 100, 0);
+
+	plane = new MeshEntity(MeshFactory::getPlaneMesh(5), diffuseShader);
+	plane->mesh->vertices.at(0).blue = 0;
+	plane->mesh->vertices.at(0).green = 0;
+	childTransform->addChild(plane);
 
 	// palette testing stuff
 	playerPalette = new TextureColourTable(false);
 	playerPalette->load();
 	PD_ResourceManager::resources.push_back(playerPalette);
+
+
 	
 	/*{
 	Sprite * testSprite = new Sprite();
@@ -455,6 +498,19 @@ void PD_TestScene::update(Step * _step){
 		screenFBO->saveToFile("fboTest.tga", 0);
 	}
 
+	if (keyboard->keyDown(GLFW_KEY_W)){
+		y+=0.5f;
+	}
+	if (keyboard->keyDown(GLFW_KEY_A)){
+		x-=0.5f;
+	}
+	if (keyboard->keyDown(GLFW_KEY_S)){
+		y-=0.5f;
+	}
+	if (keyboard->keyDown(GLFW_KEY_D)){
+	x=0.5f;
+	}
+
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
 		cycleCamera();
@@ -495,6 +551,7 @@ void PD_TestScene::update(Step * _step){
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
+	
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
@@ -502,12 +559,37 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	Scene::render(_matrixStack, _renderOptions);
+
 	//Render the buffer to the render surface
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	screenSurface->render(screenFBO->getTextureId());
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
+	
+	//done = true;
+	//plane->mesh->textures.clear();
+	if(!done){
+
+		//plane->mesh->vertices.at(1).u = 10;
+		//plane->mesh->vertices.at(2).u = 10;
+		//plane->mesh->vertices.at(2).v = 10;
+		//plane->mesh->vertices.at(3).v = 10;
+
+		//plane->mesh->dirty = true;
+
+		Texture * texy = vertLinLayout->renderToTexture(_renderOptions, x, y);
+		texy->load();
+
+		plane->mesh->pushTexture2D(texy);
+		done = true;
+
+		Texture * tex = new Texture("data/images/tilemap.tga", true, true);
+		tex->load();
+		//plane->mesh->pushTexture2D(tex);
+
+		plane->firstParent()->scale(vertLinLayout->getWidth() * 0.01, vertLinLayout->getHeight() * 0.01, 1, false);
+	}
 }
 
 void PD_TestScene::load(){
