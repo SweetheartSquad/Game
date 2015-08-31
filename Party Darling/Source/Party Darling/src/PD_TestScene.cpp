@@ -63,6 +63,7 @@
 MeshEntity * plane;
 VerticalLinearLayout * vertLinLayout;
 bool done = false;
+TextArea * text1;
 
 float x = 0;
 float y = 0;
@@ -124,7 +125,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
-	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
+	//diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->compileShader();
 
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -317,8 +318,8 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	vertLinLayout->setPadding(20.0f);
 	vertLinLayout->setBackgroundColour(0, 1, 0, 1);
 
-	TextArea * text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
-	text1->setMouseEnabled(true);
+	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 300.f);
+	text1->setMouseEnabled(true);	
 	vertLinLayout->addChild(text1);
 	text1->setText(L"Tejjajdsajhdsakjhdkjsahdkjsahkjashdsjksahdkjsadkjhasdjkhaskjhsadxt");
 	text1->setBackgroundColour(0, 1, 0, 1);
@@ -327,6 +328,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	text2->setMouseEnabled(true);
 	vertLinLayout->addChild(text2);
 	text2->setText(L"Text 2");
+
+	//uiLayer.addChild(vertLinLayout);
+
+	//uiLayer.addChild(vertLinLayout);
 
 	text2->setBackgroundColour(0, 1, 0, 1);
 
@@ -508,7 +513,10 @@ void PD_TestScene::update(Step * _step){
 		y-=0.5f;
 	}
 	if (keyboard->keyDown(GLFW_KEY_D)){
-	x=0.5f;
+		x=0.5f;
+
+		text1->setText(L"ABCDEFG");
+		vertLinLayout->renderToTexture();
 	}
 
 	// debug controls
@@ -569,7 +577,8 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	
 	//done = true;
 	//plane->mesh->textures.clear();
-	if(!done){
+	if(!done){ 
+
 
 		//plane->mesh->vertices.at(1).u = 10;
 		//plane->mesh->vertices.at(2).u = 10;
@@ -578,17 +587,22 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 		//plane->mesh->dirty = true;
 
-		Texture * texy = vertLinLayout->renderToTexture(_renderOptions, x, y);
+		Texture * texy = vertLinLayout->renderToTexture();
 		texy->load();
-
+		 
 		plane->mesh->pushTexture2D(texy);
 		done = true;
 
 		Texture * tex = new Texture("data/images/tilemap.tga", true, true);
 		tex->load();
-		//plane->mesh->pushTexture2D(tex);
+		plane->mesh->pushTexture2D(tex);
 
-		plane->firstParent()->scale(vertLinLayout->getWidth() * 0.01, vertLinLayout->getHeight() * 0.01, 1, false);
+		float a = vertLinLayout->getWidth(true, true) * 0.01;
+		float b = vertLinLayout->getHeight(true, true) * 0.01;
+
+		plane->firstParent()->scale(vertLinLayout->getWidth(true, true) * 0.01, vertLinLayout->getHeight(true, true) * 0.01, 1, false);
+
+		plane->mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
 	}
 }
 
