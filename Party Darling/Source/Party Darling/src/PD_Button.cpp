@@ -8,7 +8,7 @@
 #include <MeshFactory.h>
 
 PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _height) :
-	NodeUI(_world, _scene, true)
+	NodeUI(_world, _scene, kENTITIES, true)
 {
 	setWidth(_width);
 	setHeight(_height);

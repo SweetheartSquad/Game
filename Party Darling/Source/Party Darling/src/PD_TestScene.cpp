@@ -59,14 +59,10 @@
 #include <UIUnit.h>
 
 #include <vector>
-	
-MeshEntity * plane;
-VerticalLinearLayout * vertLinLayout;
-bool done = false;
-TextArea * text1;
+#include <NodeUI.h>
 
-float x = 0;
-float y = 0;
+VerticalLinearLayout * vertLinLayout;
+TextArea * text1;
 
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(){
@@ -315,10 +311,11 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	clearColor[0] = 1;
 
 	vertLinLayout = new VerticalLinearLayout(bulletWorld, this);
+	vertLinLayout->renderMode = kTEXTURE;
 	vertLinLayout->setPadding(20.0f);
 	vertLinLayout->setBackgroundColour(0, 1, 0, 1);
 
-	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 300.f);
+	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, sd.x);
 	text1->setMouseEnabled(true);	
 	vertLinLayout->addChild(text1);
 	text1->setText(L"Tejjajdsajhdsakjhdkjsahdkjsahkjashdsjksahdkjsadkjhasdjkhaskjhsadxt");
@@ -326,7 +323,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	TextArea * text2 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
 	text2->setMouseEnabled(true);
-	vertLinLayout->addChild(text2);
+	//vertLinLayout->addChild(text2);
 	text2->setText(L"Text 2");
 
 	//uiLayer.addChild(vertLinLayout);
@@ -337,16 +334,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	vertLinLayout->invalidateLayout();
 
-	vertLinLayout->update(&vox::step);
+	vertLinLayout->getAsTexturedPlane();
+	// This causes a problem where the mesh and bullet body get out of sync
+	uiLayer.addChild(vertLinLayout);
+	//vertLinLayout->texturedPlane->firstParent()->translate(sd.x/2, 300, 0);
 
-//	childTransform->addChild(vertLinLayout);
-
-	//vertLinLayout->firstParent()->translate(100, 100, 0);
-
-	plane = new MeshEntity(MeshFactory::getPlaneMesh(5), diffuseShader);
-	plane->mesh->vertices.at(0).blue = 0;
-	plane->mesh->vertices.at(0).green = 0;
-	childTransform->addChild(plane);
+	//	childTransform->addChild(vertLinLayout);
+	//	vertLinLayout->firstParent()->translate(100, 100, 0);
 
 	// palette testing stuff
 	playerPalette = new TextureColourTable(false);
@@ -359,7 +353,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	Sprite * testSprite = new Sprite();
 	testSprite->setShader(characterShader, true);
 	childTransform->addChild(testSprite);
-	testSprite->parents.at(0)->scale(10);
+	testSprite->parents.(0)->scale(10);
 	testSprite->parents.at(0)->translate(6, 4, -6);
 	testSprite->mesh->pushTexture2D(playerPalette);
 	testSprite->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture);
@@ -431,6 +425,7 @@ PD_TestScene::~PD_TestScene(){
 
 
 void PD_TestScene::update(Step * _step){
+
 	glm::vec3 curpos = activeCamera->getWorldPos();
 	NodeOpenAL::setListenerVelocity((curpos - lastPos));
 	lastPos = curpos;
@@ -502,21 +497,8 @@ void PD_TestScene::update(Step * _step){
 	if (keyboard->keyDown(GLFW_KEY_F11)){
 		screenFBO->saveToFile("fboTest.tga", 0);
 	}
-
-	if (keyboard->keyDown(GLFW_KEY_W)){
-		y+=0.5f;
-	}
-	if (keyboard->keyDown(GLFW_KEY_A)){
-		x-=0.5f;
-	}
-	if (keyboard->keyDown(GLFW_KEY_S)){
-		y-=0.5f;
-	}
 	if (keyboard->keyDown(GLFW_KEY_D)){
-		x=0.5f;
-
 		text1->setText(L"ABCDEFG");
-		vertLinLayout->renderToTexture();
 	}
 
 	// debug controls
@@ -577,7 +559,7 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	
 	//done = true;
 	//plane->mesh->textures.clear();
-	if(!done){ 
+	/*if(!done){ 
 
 
 		//plane->mesh->vertices.at(1).u = 10;
@@ -595,15 +577,15 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 		Texture * tex = new Texture("data/images/tilemap.tga", true, true);
 		tex->load();
-		plane->mesh->pushTexture2D(tex);
+		//plane->mesh->pushTexture2D(tex);
 
 		float a = vertLinLayout->getWidth(true, true) * 0.01;
 		float b = vertLinLayout->getHeight(true, true) * 0.01;
 
 		plane->firstParent()->scale(vertLinLayout->getWidth(true, true) * 0.01, vertLinLayout->getHeight(true, true) * 0.01, 1, false);
-
-		plane->mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
-	}
+		plane->mesh->scaleModeMag = GL_NEAREST;
+		plane->mesh->scaleModeMin = GL_NEAREST;
+	}*/
 }
 
 void PD_TestScene::load(){
