@@ -308,18 +308,19 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt->setBackgroundColour(1,1,1,1);
 	}*/
 
-	clearColor[0] = 1;
+	clearColor[1] = 1;
 
 	vertLinLayout = new VerticalLinearLayout(bulletWorld, this);
-	vertLinLayout->renderMode = kTEXTURE;
+	//vertLinLayout->renderMode = kTEXTURE;
 	vertLinLayout->setPadding(20.0f);
 	vertLinLayout->setBackgroundColour(0, 1, 0, 1);
 
 	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, sd.x);
 	text1->setMouseEnabled(true);	
-	vertLinLayout->addChild(text1);
+	//vertLinLayout->addChild(text1);
 	text1->setText(L"Tejjajdsajhdsakjhdkjsahdkjsahkjashdsjksahdkjsadkjhasdjkhaskjhsadxt");
-	text1->setBackgroundColour(0, 1, 0, 1);
+	//text1->setBackgroundColour(0, 1, 0, 1);
+	//text1->background->setVisible(true);
 
 	TextArea * text2 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
 	text2->setMouseEnabled(true);
@@ -336,7 +337,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	vertLinLayout->getAsTexturedPlane();
 	// This causes a problem where the mesh and bullet body get out of sync
-	uiLayer.addChild(vertLinLayout);
+	//uiLayer.addChild(vertLinLayout);
 	//vertLinLayout->texturedPlane->firstParent()->translate(sd.x/2, 300, 0);
 
 	//	childTransform->addChild(vertLinLayout);
@@ -382,12 +383,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	test->parents.at(0)->scale(0.001);
 
 
-
-
-
-
-
-
 	tilemap = new PD_TilemapGenerator(9,9,true);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
@@ -409,6 +404,25 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	
 	glLineWidth(15);
+
+	MeshEntity * me = vertLinLayout->getAsTexturedPlane();
+	
+	childTransform->addChild(text1);
+	//me->firstParent()->scale(vertLinLayout->getWidth() * 0.001, vertLinLayout->getHeight() * 0.001, 1.0f, false);
+
+	//text1->setBackgroundColour(0, 1, 1, 1);
+	
+	//Texture * texy = new Texture("data/images/tilemap.tga", true, true);
+	//texy->load();
+	//me->mesh->pushTexture2D(texy);
+
+	text1->background->setVisible(true);
+	text1->setBackgroundColour(1, 0, 0, 1);
+
+	/*text1->doRecursivleyOnUIChildren([](NodeUI * ui){
+		ui->setBackgroundColour(1, 0, 0, 1);	
+		ui->background->setVisible(true);
+	}, true);*/
 }
 
 PD_TestScene::~PD_TestScene(){
@@ -498,7 +512,7 @@ void PD_TestScene::update(Step * _step){
 		screenFBO->saveToFile("fboTest.tga", 0);
 	}
 	if (keyboard->keyDown(GLFW_KEY_D)){
-		text1->setText(L"ABCDEFG");
+	//	text1->setText(L"ABCDEFG");
 	}
 
 	// debug controls
@@ -537,11 +551,17 @@ void PD_TestScene::update(Step * _step){
 	}
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
 	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
+	
+
+	
 }
 
 void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	
 	clear();
 	
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
@@ -553,7 +573,9 @@ void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	//Render the buffer to the render surface
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	
 	screenSurface->render(screenFBO->getTextureId());
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 	
