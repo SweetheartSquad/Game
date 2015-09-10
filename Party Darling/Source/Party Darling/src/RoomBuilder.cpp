@@ -87,7 +87,7 @@ Room * RoomBuilder::getRoom(){
 	for(unsigned int i = 0; i < room->boundaries.size(); ++i){
 		// only walls in boundaries should have child slots (not floor, cieling)
 		if(room->boundaries.at(i)->emptySlots.size() > 0){
-			availableParents.insert(availableParents.begin(), room->boundaries.at(i));
+			availableParents.push_back(room->boundaries.at(i));
 		}
 	}
 	
@@ -126,7 +126,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 				}
 				
 				if(arrange(child, objects.at(i), side, slot)){
-
+					
 					if(childBox.width < slot->length){
 						// adjust remaining slot space
 						slot->loc += childBox.width;
@@ -169,9 +169,8 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 			break;
 								
 	}
-	child->translatePhysical(pos);
 
-	//rA = vox::NumberUtils::randomFloat();
+	child->translatePhysical(pos);
 
 	return true;
 }
@@ -185,6 +184,12 @@ std::vector<Tile *> RoomBuilder::getTiles(unsigned long int _thresh){
 
 			if(p > _thresh){ 
 				tiles.push_back(new Tile(glm::vec2(x - (tilemap->width/2.f) * ROOM_TILE, y - (tilemap->height/2.f) * ROOM_TILE)));
+				/*
+				Sprite * blah;
+				AssetTexture * blahTex = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "UV-TEST").asString());
+				blah->mesh->pushTexture2D(blahTex->texture);
+				room->addComponent(blah);
+				*/
 			}
 		}
 	}
@@ -194,12 +199,6 @@ std::vector<Tile *> RoomBuilder::getTiles(unsigned long int _thresh){
 void RoomBuilder::createWalls(unsigned long int _thresh){
 	std::vector<RoomObject *> walls;
 
-	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(16,16,true);
-	unsigned long int pixelIncrement = 158;
-	tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
-	tilemap->load();
-	tilemap->saveImageData("tilemap.tga");
-	
 	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, _thresh, false, true);
 
 	std::vector<Edge *> edges;
