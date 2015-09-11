@@ -103,7 +103,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 			for(unsigned int j = 0; j < iterator->second.size(); ++j){
 				Side_t side = iterator->first;
 				Slot * slot = iterator->second.at(j);
-				vox::Box childBox = child->mesh->calcBoundingBox();
+				sweet::Box childBox = child->mesh->calcBoundingBox();
 					
 				// check length of slot
 				if(childBox.width > slot->length){
@@ -133,8 +133,8 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	// position
 	glm::vec3 pos = parent->childTransform->getTranslationVector();
-	vox::Box p = parent->boundingBox;
-	vox::Box c = child->boundingBox;
+	sweet::Box p = parent->boundingBox;
+	sweet::Box c = child->boundingBox;
 	switch(side){
 		case FRONT:
 			pos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
@@ -156,7 +156,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	}
 	child->translatePhysical(pos);
 
-	//rA = vox::NumberUtils::randomFloat();
+	//rA = sweet::NumberUtils::randomFloat();
 
 	return true;
 }
@@ -194,11 +194,11 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 
 	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(16,16,true);
 	unsigned long int pixelIncrement = 158;
-	tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+	tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 	
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 128, false, true);
+	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(tilemap, 128, false, true);
 
 	std::vector<Edge *> edges;
 

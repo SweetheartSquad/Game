@@ -18,7 +18,7 @@ Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 std::vector<PersonComponent *> PersonComponent::getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped){
 	Json::Value root;
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::voxReadFile("assets/"+_json["id"].asString());
+	std::string jsonLoaded = FileUtils::readFile("assets/"+_json["id"].asString());
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
@@ -104,7 +104,7 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex) :
 {
 	Json::Value root;
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::voxReadFile("assets/skeletal_structure.json");
+	std::string jsonLoaded = FileUtils::readFile("assets/skeletal_structure.json");
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);

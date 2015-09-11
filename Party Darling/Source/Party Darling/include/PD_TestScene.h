@@ -62,7 +62,7 @@ public:
 	MousePerspectiveCamera * debugCam;
 
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
 	virtual void load() override;
 	virtual void unload() override;

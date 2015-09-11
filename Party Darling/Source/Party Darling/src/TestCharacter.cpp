@@ -96,7 +96,7 @@ TestCharacter::TestCharacter(BulletWorld * _world) :
 TestCharacter::~TestCharacter(){
 }
 
-void TestCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void TestCharacter::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	MeshEntity::render(_matrixStack, _renderStack);
 }
 

@@ -75,7 +75,7 @@ public:
 	
 	~TestCharacter();
 
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	void update(Step* _step) override;
 	void attachJoints();
 

@@ -205,7 +205,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 	
 
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	// mouse cursor
@@ -455,8 +455,8 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
-		unsigned long int pixelIncrement = vox::NumberUtils::randomInt(1, 255);
-		tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+		unsigned long int pixelIncrement = sweet::NumberUtils::randomInt(1, 255);
+		tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 		tilemap->unload();
 		tilemap->unloadImageData();
 		tilemap->load();
@@ -541,7 +541,7 @@ void PD_TestScene::update(Step * _step){
 	Scene::update(_step);
 
 	// update ui stuff
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
@@ -556,7 +556,7 @@ void PD_TestScene::update(Step * _step){
 	
 }
 
-void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void PD_TestScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	
 	clear();
 	
