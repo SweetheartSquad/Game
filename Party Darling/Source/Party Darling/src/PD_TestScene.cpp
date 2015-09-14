@@ -64,6 +64,8 @@
 VerticalLinearLayout * vertLinLayout;
 TextArea * text1;
 
+bool once = false;
+
 // Retrieves a JSON value from an HTTP request.
 pplx::task<void> RequestJSONValueAsync(){
 	// TODO: To successfully use this example, you must perform the request  
@@ -268,8 +270,6 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	childTransform->addChild(playerController, false);
 
 
-	
-
 	// 3D ui testing stuff
 	/*{
 	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
@@ -315,12 +315,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	vertLinLayout->setPadding(20.0f);
 	vertLinLayout->setBackgroundColour(0, 1, 0, 1);
 
-	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, sd.x);
+	text1 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100);
 	text1->setMouseEnabled(true);	
+	text1->renderMode = kTEXTURE;
 	//vertLinLayout->addChild(text1);
-	text1->setText(L"Tejjajdsajhdsakjhdkjsahdkjsahkjashdsjksahdkjsadkjhasdjkhaskjhsadxt");
-	//text1->setBackgroundColour(0, 1, 0, 1);
+	text1->setText(L"22222222221111111111111dasdpasidjosiadjsaiodjsaiodoisahdoisadoiashdoshdfoshfiuasdfiuhsdaiufhsadiufhiuasdhfiuasdhfiusadfiuhdasiufhasdiufhisadufhiusdafhiusadfhuisadhfisadhfiusdahfiusdahfiusdahuif11");
 	//text1->background->setVisible(true);
+
+	//text1->getAsTexturedPlane();
 
 	TextArea * text2 = new TextArea(uiLayer.world, this, PD_ResourceManager::scenario->getFont("DEFAULT")->font, textShader, 100.f);
 	text2->setMouseEnabled(true);
@@ -608,6 +610,11 @@ void PD_TestScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 		plane->mesh->scaleModeMag = GL_NEAREST;
 		plane->mesh->scaleModeMin = GL_NEAREST;
 	}*/
+
+	if(!once) {
+		//text1->renderFrame = true;
+		once = true;
+	}
 }
 
 void PD_TestScene::load(){
