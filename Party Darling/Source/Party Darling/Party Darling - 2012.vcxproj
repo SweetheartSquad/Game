@@ -119,8 +119,7 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>..\..\..\VCProjer\dist\VCProjer.exe "Party Darling - 2012.vcxproj" "Party Darling - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
