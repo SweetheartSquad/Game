@@ -33,7 +33,17 @@
       "src": "indexedColourTest2.png"
     }
   ],
-  "characters": [],
+  "characters": [
+    {
+
+    },
+    {
+      
+    },
+    {
+      
+    }
+  ],
   "conversations": [
     {
       "id": "test1",

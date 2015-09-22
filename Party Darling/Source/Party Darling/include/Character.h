@@ -7,14 +7,7 @@
 #include <Animation.h>
 #include <json/json.h>
 
-class Person: public RoomObject {
-public:
-	Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 
-	//virtual void update(Step * _step) override;
-
-	//virtual void setShader(Shader * _shader, bool _default) override;
-};
 
 
 #include <IkChain.h>
@@ -45,6 +38,8 @@ public:
 
 class PersonRenderer : public Entity{
 public:
+	float timer;
+
 	PersonLimbSolver * solverArmR;
 	PersonLimbSolver * solverArmL;
 	PersonLimbSolver * solverLegR;
@@ -78,7 +73,8 @@ public:
 		* footR;
 
 	Texture * paletteTex;
-	PersonRenderer(Texture * _paletteTex);
+	PersonRenderer();
+	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default);
 
@@ -89,4 +85,15 @@ public:
 	void connect(PersonComponent * _from, PersonComponent * _to, bool _behind = false);
 
 	virtual void update(Step * _step) override;
+};
+
+class Person: public RoomObject {
+public:
+	Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
+
+	//virtual void update(Step * _step) override;
+
+	//virtual void setShader(Shader * _shader, bool _default) override;
+	
+	PersonRenderer * pr;
 };

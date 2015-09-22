@@ -160,7 +160,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	tSprite->mesh->scaleModeMag = GL_NEAREST;
 	tSprite->mesh->scaleModeMin = GL_NEAREST;
 	tSprite->setShader(diffuseShader, true);
-	childTransform->addChild(tSprite);
+	childTransform->addChild(tSprite)->translate(0, -1, 0);
 
 	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
 	
@@ -260,11 +260,18 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 
 	// 3D ui testing stuff
-	/*{
+
+	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
+	dialogueDisplay = new DialogueDisplay(uiLayer.world, this, f, textShader, 0.5, 0.5);
+
+	uiLayer.addChild(dialogueDisplay);
+
+	{
 	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
 	childTransform->addChild(butt);
 	butt->setTranslationPhysical(-2, 1, 1, true);
 	}
+
 	{
 	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
 	childTransform->addChild(butt);
@@ -272,6 +279,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
 	butt->parents.at(0)->scale(0.1);
 	}
+	/*
 
 
 	{
@@ -331,7 +339,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 
 
-	PersonRenderer * test = new PersonRenderer(playerPalette);
+	PersonRenderer * test = new PersonRenderer();
 	childTransform->addChild(test);
 	test->setShader(characterShader, true);
 	test->unload();
@@ -340,7 +348,14 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	test->parents.at(0)->scale(0.001);
 
 
+	
 
+	for(auto o : room->components){
+		Person * c = dynamic_cast<Person *>(o);
+		if(c != nullptr){
+			c->pr->setShader(characterShader, true);
+		}
+	}
 
 
 

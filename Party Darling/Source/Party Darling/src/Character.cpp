@@ -7,12 +7,17 @@
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
 #include <Keyboard.h>
+#include <TextureColourTable.h>
 
 Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
-	RoomObject(_world, _mesh, _anchor)
+	RoomObject(_world, _mesh, _anchor),
+	pr(new PersonRenderer())
 {
-	setColliderAsBoundingBox();
+	setColliderAsCapsule(0.5f,1.f);
 	createRigidBody(25);
+	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
+
+	childTransform->addChild(pr)->scale(0.001);
 }
 
 std::vector<PersonComponent *> PersonComponent::getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped){
@@ -99,9 +104,12 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 	components.push_back(_component);
 }
 
-PersonRenderer::PersonRenderer(Texture * _paletteTex) :
-	paletteTex(_paletteTex)
+PersonRenderer::PersonRenderer() :
+	paletteTex(new TextureColourTable(false)),
+	timer(0)
 {
+	paletteTex->load();
+
 	Json::Value root;
 	Json::Reader reader;
 	std::string jsonLoaded = FileUtils::voxReadFile("assets/skeletal_structure.json");
@@ -116,32 +124,32 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex) :
 				Json::Value asset = assets[j];
 
 				if(asset["category"].asString() == "pelvis"){
-					pelvis = PersonComponent::getComponentsFromJson(asset, _paletteTex).at(0);
+					pelvis = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
 				}else if(asset["category"].asString() == "torso"){
-					torso = PersonComponent::getComponentsFromJson(asset, _paletteTex).at(0);
+					torso = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
 				}else if(asset["category"].asString() == "head"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
 					jaw = components.at(0);
 					head = components.at(1);
 					nose = components.at(2);
 					eyes = components.at(3);
 				}else if(asset["category"].asString() == "arms"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
 					armR = components.at(0);
 					forearmR = components.at(1);
 					handR = components.at(2);
 
-					components = PersonComponent::getComponentsFromJson(asset, _paletteTex, true);
+					components = PersonComponent::getComponentsFromJson(asset, paletteTex, true);
 					armL = components.at(0);
 					forearmL = components.at(1);
 					handL = components.at(2);
 				}else if(asset["category"] == "legs"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, _paletteTex);
+					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
 					legR = components.at(0);
 					forelegR = components.at(1);
 					footR = components.at(2);
 
-					components = PersonComponent::getComponentsFromJson(asset, _paletteTex, true);
+					components = PersonComponent::getComponentsFromJson(asset, paletteTex, true);
 					legL = components.at(0);
 					forelegL = components.at(1);
 					footL = components.at(2);
@@ -218,6 +226,10 @@ PersonRenderer::PersonRenderer(Texture * _paletteTex) :
 	talk->hasStart = true;
 }
 
+PersonRenderer::~PersonRenderer(){
+	delete paletteTex;
+}
+
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
 	joints.push_back(_from->childTransform->addChild(_to));
 	joints.back()->translate(
@@ -254,6 +266,47 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 }
 
 void PersonRenderer::update(Step * _step){
+	
+
+	timer += _step->deltaTime;
+
+	if(timer > 1){
+		timer = 0;
+		float l;
+
+		l = solverArmR->getChainLength();
+		solverArmR->target.x = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), 0);
+		solverArmR->target.y = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmR->getChainLength());
+		
+		l = solverArmL->getChainLength();
+		solverArmL->target.x = vox::NumberUtils::randomFloat(solverArmL->getChainLength(), 0);
+		solverArmL->target.y = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmL->getChainLength());
+		
+		l = solverLegR->getChainLength();
+		solverLegR->target.x = vox::NumberUtils::randomFloat(-solverLegL->getChainLength()*0.5, 0);
+		solverLegR->target.y = vox::NumberUtils::randomFloat(-solverLegR->getChainLength(), -solverLegL->getChainLength()*0.8);
+		
+		l = solverLegL->getChainLength();
+		solverLegL->target.x = vox::NumberUtils::randomFloat(0, solverLegR->getChainLength()*0.5);
+		solverLegL->target.y = vox::NumberUtils::randomFloat(-solverLegL->getChainLength(), -solverLegL->getChainLength()*0.8);
+		
+		l = solverBod->getChainLength();
+		solverBod->target.x = vox::NumberUtils::randomFloat(-solverBod->getChainLength()*0.5, solverBod->getChainLength()*0.5);
+		solverBod->target.y = vox::NumberUtils::randomFloat(solverBod->getChainLength()*0.95, solverBod->getChainLength());
+
+		/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
+		solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
+		solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
+		solverBod->target = glm::vec2(0, solverBod->getChainLength());
+		
+		for(unsigned long int s = 1; s < solvers.size(); ++s){
+			float l = solvers.at(s)->getChainLength();
+			solvers.at(s)->target.x = vox::NumberUtils::randomFloat(-l, l);
+			solvers.at(s)->target.y = vox::NumberUtils::randomFloat(-l, l);
+		}*/
+	}
+
+
 	Keyboard & k = Keyboard::getInstance();
 
 	glm::vec2 test(0);

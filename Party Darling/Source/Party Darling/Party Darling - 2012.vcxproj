@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\DialogueDisplay.cpp" />
+    <ClCompile Include="src\DialogueText.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
@@ -30,6 +32,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Character.h" />
+    <ClInclude Include="include\DialogueDisplay.h" />
+    <ClInclude Include="include\DialogueText.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />

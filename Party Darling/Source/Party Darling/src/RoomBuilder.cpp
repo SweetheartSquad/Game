@@ -561,7 +561,7 @@ std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size,
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWorld * _world){
 
-	std::vector<Person *> characters;// = getCharacters(json["characters"], _world);
+	std::vector<Person *> characters = getCharacters(json["characters"], _world);
 	std::vector<Furniture *> furniture = getFurniture(json["furniture"], _world);
 	std::vector<Item *> items = getItems(json["items"], _world);
 
@@ -587,7 +587,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWo
 std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld * _world){
 	std::vector<Person*> characters;
 	
-	for(Json::ArrayIndex i = 0; i < characters.size(); ++i){
+	for(Json::ArrayIndex i = 0; i < json.size(); ++i){
 		characters.push_back(readCharacter(json[i], _world));
 	}
 

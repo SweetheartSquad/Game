@@ -7,6 +7,8 @@
 #include <PD_FirstPersonController.h>
 #include <PD_TilemapGenerator.h>
 
+#include <DialogueDisplay.h>
+
 class PerspectiveCamera;
 class MousePerspectiveCamera;
 
@@ -34,6 +36,7 @@ class Room;
 
 class PD_TestScene : public Scene{
 public:
+	DialogueDisplay * dialogueDisplay;
 	Room * room;
 	
 	Shader * screenSurfaceShader;
