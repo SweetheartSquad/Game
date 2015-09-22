@@ -31,7 +31,7 @@ public:
 	
 	std::vector<RoomObject *> objects;
 
-	Room(BulletWorld * _world, RoomLayout_t _type, glm::vec2 _size, Texture * _wallTexture = nullptr);
+	Room(BulletWorld * _world);
 	~Room(void);
 
 	void addComponent(RoomObject *);

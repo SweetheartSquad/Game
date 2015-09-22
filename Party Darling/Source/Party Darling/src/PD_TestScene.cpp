@@ -146,7 +146,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->body->setFriction(1);
 
 
-	room = RoomBuilder::getRoom("{}",bulletWorld);
+	room = RoomBuilder("{}",bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
@@ -160,10 +160,9 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	tSprite->mesh->scaleModeMag = GL_NEAREST;
 	tSprite->mesh->scaleModeMin = GL_NEAREST;
 	tSprite->setShader(diffuseShader, true);
-	childTransform->addChild(tSprite)->translate(0, -1, 0);
-
 	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
-	
+	childTransform->addChild(tSprite);
+
 	/*std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");
 	objs.push_back("assets/meshes/LOD_2/couch_LOD_2.obj");
@@ -194,7 +193,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 	
 
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	// mouse cursor
@@ -413,8 +412,8 @@ void PD_TestScene::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_P) || keyboard->keyJustDown(GLFW_KEY_O)){
 		playerPalette->generateRandomTable();
 		playerPalette->bufferData();
-		unsigned long int pixelIncrement = vox::NumberUtils::randomInt(1, 255);
-		tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+		unsigned long int pixelIncrement = sweet::NumberUtils::randomInt(1, 255);
+		tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 		tilemap->unload();
 		tilemap->unloadImageData();
 		tilemap->load();
@@ -496,7 +495,7 @@ void PD_TestScene::update(Step * _step){
 	Scene::update(_step);
 
 	// update ui stuff
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
@@ -508,7 +507,7 @@ void PD_TestScene::update(Step * _step){
 	crosshair->parents.at(0)->translate(sd.x*0.5f, sd.y*0.5f, 0, false);
 }
 
-void PD_TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void PD_TestScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer

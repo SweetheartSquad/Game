@@ -29,7 +29,7 @@ class RoomObject: public BulletMeshEntity {
 public:
 	
 	Anchor_t anchor;
-	vox::Box boundingBox;
+	sweet::Box boundingBox;
 	// map of vectors of available slots per side of an object
 	std::map<Side_t, std::vector<Slot *>> emptySlots;
 	std::vector<RoomObject *> components;

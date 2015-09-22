@@ -23,7 +23,7 @@ Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 std::vector<PersonComponent *> PersonComponent::getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped){
 	Json::Value root;
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::voxReadFile("assets/"+_json["id"].asString());
+	std::string jsonLoaded = FileUtils::readFile("assets/"+_json["id"].asString());
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
@@ -112,7 +112,7 @@ PersonRenderer::PersonRenderer() :
 
 	Json::Value root;
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::voxReadFile("assets/skeletal_structure.json");
+	std::string jsonLoaded = FileUtils::readFile("assets/skeletal_structure.json");
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
@@ -275,24 +275,24 @@ void PersonRenderer::update(Step * _step){
 		float l;
 
 		l = solverArmR->getChainLength();
-		solverArmR->target.x = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), 0);
-		solverArmR->target.y = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmR->getChainLength());
+		solverArmR->target.x = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), 0);
+		solverArmR->target.y = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmR->getChainLength());
 		
 		l = solverArmL->getChainLength();
-		solverArmL->target.x = vox::NumberUtils::randomFloat(solverArmL->getChainLength(), 0);
-		solverArmL->target.y = vox::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmL->getChainLength());
+		solverArmL->target.x = sweet::NumberUtils::randomFloat(solverArmL->getChainLength(), 0);
+		solverArmL->target.y = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmL->getChainLength());
 		
 		l = solverLegR->getChainLength();
-		solverLegR->target.x = vox::NumberUtils::randomFloat(-solverLegL->getChainLength()*0.5, 0);
-		solverLegR->target.y = vox::NumberUtils::randomFloat(-solverLegR->getChainLength(), -solverLegL->getChainLength()*0.8);
+		solverLegR->target.x = sweet::NumberUtils::randomFloat(-solverLegL->getChainLength()*0.5, 0);
+		solverLegR->target.y = sweet::NumberUtils::randomFloat(-solverLegR->getChainLength(), -solverLegL->getChainLength()*0.8);
 		
 		l = solverLegL->getChainLength();
-		solverLegL->target.x = vox::NumberUtils::randomFloat(0, solverLegR->getChainLength()*0.5);
-		solverLegL->target.y = vox::NumberUtils::randomFloat(-solverLegL->getChainLength(), -solverLegL->getChainLength()*0.8);
+		solverLegL->target.x = sweet::NumberUtils::randomFloat(0, solverLegR->getChainLength()*0.5);
+		solverLegL->target.y = sweet::NumberUtils::randomFloat(-solverLegL->getChainLength(), -solverLegL->getChainLength()*0.8);
 		
 		l = solverBod->getChainLength();
-		solverBod->target.x = vox::NumberUtils::randomFloat(-solverBod->getChainLength()*0.5, solverBod->getChainLength()*0.5);
-		solverBod->target.y = vox::NumberUtils::randomFloat(solverBod->getChainLength()*0.95, solverBod->getChainLength());
+		solverBod->target.x = sweet::NumberUtils::randomFloat(-solverBod->getChainLength()*0.5, solverBod->getChainLength()*0.5);
+		solverBod->target.y = sweet::NumberUtils::randomFloat(solverBod->getChainLength()*0.95, solverBod->getChainLength());
 
 		/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
 		solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
@@ -301,8 +301,8 @@ void PersonRenderer::update(Step * _step){
 		
 		for(unsigned long int s = 1; s < solvers.size(); ++s){
 			float l = solvers.at(s)->getChainLength();
-			solvers.at(s)->target.x = vox::NumberUtils::randomFloat(-l, l);
-			solvers.at(s)->target.y = vox::NumberUtils::randomFloat(-l, l);
+			solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
+			solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		}*/
 	}
 

@@ -38,7 +38,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	conversationId->setRationalWidth(1.f, vlayout);
 	conversationId->setMarginLeft(0.1f);
 
-	progressButton = new NodeUI(world, scene, 1.f);
+	progressButton = new NodeUI(world, scene, kENTITIES, 1.f);
 	//progressButton->setText(L"Next");
 	progressButton->setRationalWidth(1.f);
 	progressButton->setRationalHeight(1.f);

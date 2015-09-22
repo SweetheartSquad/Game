@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Vox.h>
+#include <Sweet.h>
 #include <node\Node.h>
 #include <typeinfo>
 #include <Texture.h>
@@ -25,7 +25,7 @@ int main(void){
 
 	Log::THROW_ON_ERROR = true;
 
-	vox::initialize("Party, Darling? -test prepping");
+	sweet::initialize("Party, Darling? -test prepping");
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();
@@ -45,7 +45,7 @@ int main(void){
 	}
 #endif
 
-	vox::destruct();
+	sweet::destruct();
 	
 #ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);

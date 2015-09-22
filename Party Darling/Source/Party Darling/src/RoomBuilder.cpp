@@ -26,9 +26,8 @@
 #include <Sprite.h>
 #include <Texture.h>
 
-Tile::Tile(glm::vec2 _pos, Tile_t _type) :
+Tile::Tile(glm::vec2 _pos) :
 	pos(_pos),
-	type(_type),
 	free(false)
 {
 }
@@ -40,34 +39,47 @@ Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 {		
 }
 
-Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
-	
-
-	Json::Value json;
+RoomBuilder::RoomBuilder(std::string _json, BulletWorld * _world):
+	world(_world)
+{
 	Json::Reader reader;
-
 	if(!reader.parse(_json, json, false))
 	{
 		// throw exception
 	}
-	
-	std::vector<RoomObject *> objects = getRoomObjects(json, _world); // This
+}
 
-	// Square room
-	int l = 15;//;json["size"].get("l", objects.size() > 0 ? std::rand() % (int)sqrt(objects.size()) + sqrt(objects.size()) : DEFAULT_ROOM_LENGTH).asInt();
-	int w = 15;//;json["size"].get("w", objects.size() > 0 ? std::rand() % (int)sqrt(objects.size()) + sqrt(objects.size()) : DEFAULT_ROOM_LENGTH).asInt();
+RoomBuilder::~RoomBuilder(){
+}
+
+Room * RoomBuilder::getRoom(){
+	
+	std::vector<RoomObject *> objects = getRoomObjects(json, world);
+
+	room = new Room(world);
+	
+	// Size
+	int l = json["size"].get("l", DEFAULT_ROOM_LENGTH).asInt();
+	int w = json["size"].get("w", DEFAULT_ROOM_LENGTH).asInt();
 
 	glm::vec2 size = glm::vec2(l, w);
 
-	Room * room = new Room(_world, static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size, PD_ResourceManager::scenario->getTexture("UV-TEST-ALT")->texture);
+	// Generate tilemap image
+	tilemap = new PD_TilemapGenerator(16,16,true);
+	unsigned long int pixelIncrement = 158;
+	tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+	tilemap->load();
+	tilemap->saveImageData("tilemap.tga");
 
-	// get all available tile positions
-	std::vector<Tile *> tiles = getTiles(static_cast<RoomLayout_t>(json.get("type", 0).asInt()), size);
+	unsigned long int thresh = 158;
+	// create room walls from tilemap
+	createWalls(thresh);
+	// get all available tile positions from tilemap
+	tiles = getTiles(thresh);
 	
 	// set map for coordinate access to tiles
-	std::map<int, std::map<int, Tile_t>> map;
 	for(unsigned int i = 0; i < tiles.size(); ++i){
-		map[tiles.at(i)->pos.x][tiles.at(i)->pos.y] = tiles.at(i)->type;
+		map[tiles.at(i)->pos.x][tiles.at(i)->pos.y] = tiles.at(i)->free;
 	}
 
 	// list of available placed parent objects
@@ -75,7 +87,7 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 	for(unsigned int i = 0; i < room->boundaries.size(); ++i){
 		// only walls in boundaries should have child slots (not floor, cieling)
 		if(room->boundaries.at(i)->emptySlots.size() > 0){
-			availableParents.insert(availableParents.begin(), room->boundaries.at(i));
+			availableParents.push_back(room->boundaries.at(i));
 		}
 	}
 	
@@ -92,6 +104,9 @@ Room * RoomBuilder::getRoom(std::string _json, BulletWorld * _world){
 		}
 	}
 
+	// Center room at origin
+	room->translatePhysical(glm::vec3(-size.x/2.f * ROOM_TILE, 0.f, -size.y/2.f * ROOM_TILE), true);
+	
 	return room;
 }
 
@@ -103,7 +118,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 			for(unsigned int j = 0; j < iterator->second.size(); ++j){
 				Side_t side = iterator->first;
 				Slot * slot = iterator->second.at(j);
-				vox::Box childBox = child->mesh->calcBoundingBox();
+				sweet::Box childBox = child->mesh->calcBoundingBox();
 					
 				// check length of slot
 				if(childBox.width > slot->length){
@@ -111,7 +126,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 				}
 				
 				if(arrange(child, objects.at(i), side, slot)){
-
+					
 					if(childBox.width < slot->length){
 						// adjust remaining slot space
 						slot->loc += childBox.width;
@@ -133,8 +148,8 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	// position
 	glm::vec3 pos = parent->childTransform->getTranslationVector();
-	vox::Box p = parent->boundingBox;
-	vox::Box c = child->boundingBox;
+	sweet::Box p = parent->boundingBox;
+	sweet::Box c = child->boundingBox;
 	switch(side){
 		case FRONT:
 			pos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
@@ -154,51 +169,37 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 			break;
 								
 	}
-	child->translatePhysical(pos);
 
-	//rA = vox::NumberUtils::randomFloat();
+	child->translatePhysical(pos);
 
 	return true;
 }
 
-std::vector<Tile *> RoomBuilder::getTiles(RoomLayout_t _type, glm::vec2 _size){
+std::vector<Tile *> RoomBuilder::getTiles(unsigned long int _thresh){
 	std::vector<Tile *> tiles;
-	switch(_type){
-		case RoomLayout_t::kRECT:
-			{
-				glm::vec2 pos = glm::vec2(-_size.x / 2.f + 0.5f, -_size.y / 2.f + 0.5f);
-				for(unsigned int x = 0; x < _size.x; ++x){
-					bool xBoundary = x == 0 || x == _size.x - 1;
-					for(unsigned int z = 0; z < _size.y; ++z){
-						bool zBoundary = z == 0 || z == _size.y - 1;
 
-						Tile_t tileType = xBoundary && zBoundary ? kCORNER : xBoundary || zBoundary ? kSIDE : kNONE; 
-						tiles.push_back(new Tile(glm::vec2(pos.x * ROOM_TILE, pos.y * ROOM_TILE), tileType));
-						++pos.y;
-					}
-					++pos.x;
-				}
+	for(unsigned long int y = 0; y < tilemap->height; ++y){
+		for(unsigned long int x = 0; x < tilemap->width; ++x){
+			unsigned long int p = sweet::TextureUtils::getPixel(tilemap, x, y);
+
+			if(p > _thresh){ 
+				tiles.push_back(new Tile(glm::vec2(x - (tilemap->width/2.f) * ROOM_TILE, y - (tilemap->height/2.f) * ROOM_TILE)));
+				/*
+				Sprite * blah;
+				AssetTexture * blahTex = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "UV-TEST").asString());
+				blah->mesh->pushTexture2D(blahTex->texture);
+				room->addComponent(blah);
+				*/
 			}
-			break;
-		case RoomLayout_t::kT:
-			break;
-		case RoomLayout_t::kL:
-			break;
+		}
 	}
-
 	return tiles;
 }
 
-std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomLayout_t type, glm::vec2 size){
+void RoomBuilder::createWalls(unsigned long int _thresh){
 	std::vector<RoomObject *> walls;
 
-	PD_TilemapGenerator * tilemap = new PD_TilemapGenerator(16,16,true);
-	unsigned long int pixelIncrement = 158;
-	tilemap->configure(vox::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
-	tilemap->load();
-	tilemap->saveImageData("tilemap.tga");
-	
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(tilemap, 128, false, true);
+	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(tilemap, _thresh, false, true);
 
 	std::vector<Edge *> edges;
 
@@ -214,6 +215,7 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 	}
 
 	// Reduce vertices
+
 	for (std::vector<Edge *>::iterator it = edges.begin(); it != edges.end();){
 		int idx = it - edges.begin();
 		int N = edges.size();
@@ -225,8 +227,14 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 		Edge * e1 = *it;
 		
 		++it;
+		/*
+		std::wcout << L"\nEdges" << std::endl;
+		std::wcout << L"------" << std::endl;
+		for(int blah = 0; blah < edges.size(); ++blah){
 
-		int wow = 1;
+			std::wcout << L"edge " << blah << ": (" << edges.at(blah)->p1.x << ", " << edges.at(blah)->p1.y << "), (" << edges.at(blah)->p2.x << ", " << edges.at(blah)->p2.y << ")" << std::endl;
+		}*/
+
 		for(std::vector<Edge *>::iterator jt = edges.begin(); jt != edges.end(); ++jt){
 			int jdx = jt - edges.begin();
 			Edge * e2 = *jt;
@@ -235,34 +243,41 @@ std::vector<RoomObject *> RoomBuilder::getBoundaries(BulletWorld * _world, RoomL
 				continue;
 			}
 			// If e1's end point is the same as e2's start point (should only happen once)
-			glm::vec2 eI;
-			if( (eI = e1->p2) == e2->p1 || (eI = e1->p1) == e2->p2){
+			glm::vec2 C;
+			if( (C = e1->p2) == e2->p1 || (C = e1->p1) == e2->p2 || (C = e1->p1) == e2->p1 || (C = e1->p2) == e2->p2){
 	
-				Edge eDiff = (e1->p2 == e2->p1 ? Edge(e1->p1, e2->p2) : Edge(e1->p2, e2->p1));
+				Edge AB = (e1->p2 == e2->p1 ? Edge(e1->p1, e2->p2) : e1->p1 == e2->p2 ? Edge(e1->p2, e2->p1) : e1->p1 == e2->p1 ? Edge(e1->p2, e2->p2) : Edge(e1->p1, e2->p1));
 
-				// Horizontal, Vertical, TODO: Diagonals
-				if( eDiff.p1.x == eDiff.p2.x && eDiff.p1.x == eI.x || // Horizontal
-					eDiff.p1.y == eDiff.p2.y && eDiff.p1.y == eI.y ){ // Vertical
-						// Combine first edge into second edge
-						e2->p1.x = eDiff.p1.x;
-						e2->p1.y = eDiff.p1.y;
-						e2->p2.x = eDiff.p2.x;
-						e2->p2.y = eDiff.p2.y;
-						// Delete first edge from edges and overwrite it
-						it = edges.erase(--it);
-						break;
+				float d1 = glm::distance(AB.p1, C);
+				float d2 = glm::distance(AB.p2, C);
+				float d = glm::distance(AB.p1, AB.p2);
+				if((glm::distance(AB.p1, C) + glm::distance(AB.p2, C) - glm::distance(AB.p1, AB.p2)) < 0.00000001){
+					// Combine first edge into second edge
+					e2->p1.x = AB.p1.x;
+					e2->p1.y = AB.p1.y;
+					e2->p2.x = AB.p2.x;
+					e2->p2.y = AB.p2.y;
+					// Delete first edge from edges and overwrite it
+					it = edges.erase(--it);
+					break;
 				}
 			}
 		}
 	}
 
+	// Get wall texture
+	AssetTexture * wallTexture = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "UV-TEST-ALT").asString());
+
 	// Create walls from edges
+	// TODO: make separate bullet colliders and a single mesh for walls
 	for(unsigned int i = 0; i < edges.size(); ++i){
 		Edge * e = edges.at(i);
-		walls.push_back(getWall(_world, glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle));
+		room->boundaries.push_back(getWall(world, glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle));
+		room->addComponent(room->boundaries.back());
+		if(wallTexture != nullptr){
+			room->boundaries.back()->mesh->pushTexture2D(wallTexture->texture);
+		}
 	}
-
-	return walls;
 }
 
 RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle){
@@ -272,17 +287,17 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 	float posZ = pos.y * ROOM_TILE;
 
 	float halfW = width / 2.f * ROOM_TILE;
-	float halfH = (ROOM_HEIGHT * ROOM_TILE) / 2.f;
+	float H = ROOM_HEIGHT * ROOM_TILE;
 
 	glm::vec3 axis = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::vec3 n = glm::vec3(0.0, 0.0 , 1.f);
 	
 	QuadMesh * m = new QuadMesh();
-	m->pushVert(Vertex(-halfW, halfH, 0));
-	m->pushVert(Vertex(-halfW, -halfH, 0));
-	m->pushVert(Vertex(halfW, -halfH, 0));
-	m->pushVert(Vertex(halfW, halfH, 0));
+	m->pushVert(Vertex(-halfW, H, 0));
+	m->pushVert(Vertex(-halfW, 0, 0));
+	m->pushVert(Vertex(halfW, 0, 0));
+	m->pushVert(Vertex(halfW, H, 0));
 	m->setNormal(0, n.x, n.y, n.z);
 	m->setNormal(1, n.x, n.y, n.z);
 	m->setNormal(2, n.x, n.y, n.z);
@@ -299,264 +314,6 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
 
 	return wall;
-}
-
-std::vector<RoomObject *> RoomBuilder::getRectRoom(BulletWorld * _world, glm::vec2 size){
-
-	return box(_world, size, glm::vec2(), true, true, true, true);
-}
-
-std::vector<RoomObject *> RoomBuilder::getTRoom(BulletWorld * _world, glm::vec2 size){
-	
-	// size.x = # units right from intersection of T (reflected)
-	// size.y = # units down from intersection of T
-
-	// actual dimensions
-	size.x = size.x * 2 + 1;
-	size.y = size.y + 1;
-
-	std::vector<RoomObject *> boundaries;
-
-	// horizontal block index
-	int middle = floor(size.x / 2);
-
-	glm::vec2 s = glm::vec2(1, 1);
-
-	glm::vec2 pos = glm::vec2(-floor(size.x / 2.f), 0);
-	
-	// across (min 3, odd number only)
-	for(unsigned int i = 0; i < size.x; ++i){
-		std::vector<RoomObject *> b;
-		if(i == 0){
-			// left top of T
-			b = box(_world, s, pos, true, true, true, false);
-		}else if(i == size.x - 1){
-			// right top of T
-			b = box(_world, s, pos, true, true, false, true);
-		}else if(i == middle){
-			// top intersect with vertical part of T
-			b = box(_world, s, pos, false, true, false, false);
-		}else{
-			// top of T
-			b = box(_world, s, pos, true, true, false, false);
-		}
-		boundaries.insert(boundaries.end(), b.begin(), b.end());
-		pos.x += 1;
-	}
-
-	pos.x = 0;
-
-	// down (min 2, including top part)
-	for(unsigned int i = 0; i < size.y - 1; ++i){
-		std::vector<RoomObject *> b;
-		pos.y += 1;
-		
-		if(i == size.y - 2){
-			// bottom of T
-			b = box(_world, s, pos, true, false, true, true);
-		}else{
-			// vertical part of T
-			b = box(_world, s, pos, false, false, true, true);
-		}
-		boundaries.insert(boundaries.end(), b.begin(), b.end());
-	}
-
-	return boundaries;
-}
-
-std::vector<RoomObject *> RoomBuilder::getLRoom(BulletWorld * _world, glm::vec2 size){
-
-	// size.x = # units up from intersection of L
-	// size/y = # units right from intersection of L
-
-	size.x = size.x + 1;
-	size.y = size.y + 1;
-
-	std::vector<RoomObject *> boundaries;
-
-	glm::vec2 s = glm::vec2(1, 1);
-	glm::vec2 pos = glm::vec2();
-
-	// down (min 2, including bottom part)
-	for(unsigned int i = 0; i < size.y; ++i){
-		std::vector<RoomObject *> b;
-		if(i == 0){
-			// top of L
-			b = box(_world, s, pos, false, true, true, true);
-		}else if(i == size.y - 1){
-			// bottom left corner of L
-			b = box(_world, s, pos, true, false, true, false);
-		}else{
-			// vertical part of L
-			b = box(_world, s, pos, false, false, true, true);
-		}
-		boundaries.insert(boundaries.end(), b.begin(), b.end());
-		pos.y += 1;
-	}
-
-	--pos.y;
-
-	// across (min 2, including vertical part)
-	for(unsigned int i = 0; i < size.x - 1; ++i){
-		std::vector<RoomObject *> b;
-		pos.x += 1;
-
-		if(i == size.x - 2){
-			// bottom right end of L
-			b = box(_world, s, pos, true, true, false, true);
-		}else{
-			// horizontal part of L
-			b = box(_world, s, pos, true, true, false, false);
-		}
-
-		boundaries.insert(boundaries.end(), b.begin(), b.end());
-	}
-
-	return boundaries;
-}
-
-std::vector<RoomObject *> RoomBuilder::box(BulletWorld * _world, glm::vec2 size, glm::vec2 pos, bool front, bool back, bool left, bool right, bool top, bool bottom){
-	std::vector<RoomObject *> boundaries;
-
-	float posX = pos.x * ROOM_TILE;
-	float posZ = pos.y * ROOM_TILE;
-
-	float halfX = size.x / 2.f * ROOM_TILE;
-	float halfY = (ROOM_HEIGHT * ROOM_TILE) / 2.f;
-	float halfZ = size.y / 2.f * ROOM_TILE;
-
-	if(top){
-		// Top
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(-halfX + posX, halfY, halfZ + posZ)); // top left
-		m->pushVert(Vertex(-halfX + posX, halfY, -halfZ + posZ)); // bottom left
-		m->pushVert(Vertex(halfX + posX, halfY, -halfZ + posZ)); // bottom right
-		m->pushVert(Vertex(halfX + posX, halfY, halfZ + posZ)); // top right
-		m->setNormal(0, 0.0, -1.0, 0.0);
-		m->setNormal(1, 0.0, -1.0, 0.0);
-		m->setNormal(2, 0.0, -1.0, 0.0);
-		m->setNormal(3, 0.0, -1.0, 0.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, size.y);
-		m->setUV(2, size.x, size.y);
-		m->setUV(3, size.x, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-	}
-
-
-	if(bottom){
-		// Bottom
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(-halfX + posX, -halfY, halfZ + posZ));
-		m->pushVert(Vertex(halfX + posX, -halfY, halfZ + posZ));
-		m->pushVert(Vertex(halfX + posX, -halfY, -halfZ + posZ));
-		m->pushVert(Vertex(-halfX + posX, -halfY, -halfZ + posZ));
-		m->setNormal(0, 0.0, 1.0, 0.0);
-		m->setNormal(1, 0.0, 1.0, 0.0);
-		m->setNormal(2, 0.0, 1.0, 0.0);
-		m->setNormal(3, 0.0, 1.0, 0.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, size.y);
-		m->setUV(2, size.x, size.y);
-		m->setUV(3, size.x, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-	}
-
-	if(front){
-		//Front
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(halfX + posX, halfY, 0)); // top right
-		m->pushVert(Vertex(halfX + posX, -halfY, 0)); // bottom right
-		m->pushVert(Vertex(-halfX + posX, -halfY, 0)); // bottom left
-		m->pushVert(Vertex(-halfX + posX, halfY, 0)); // top left
-		m->setNormal(0, 0.0, 0.0, -1.0);
-		m->setNormal(1, 0.0, 0.0, -1.0);
-		m->setNormal(2, 0.0, 0.0, -1.0);
-		m->setNormal(3, 0.0, 0.0, -1.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, 1.0);
-		m->setUV(2, size.x, 1.0);
-		m->setUV(3, size.x, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-		boundaries.back()->translatePhysical(glm::vec3(0, 0, halfZ + posZ));
-		boundaries.back()->emptySlots[BACK] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfX));
-	}
-
-	if(back){
-		//Back
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(-halfX + posX, halfY, 0));
-		m->pushVert(Vertex(-halfX + posX, -halfY, 0));
-		m->pushVert(Vertex(halfX + posX, -halfY, 0));
-		m->pushVert(Vertex(halfX + posX, halfY, 0));
-		m->setNormal(0, 0.0, 0.0, 1.0);
-		m->setNormal(1, 0.0, 0.0, 1.0);
-		m->setNormal(2, 0.0, 0.0, 1.0);
-		m->setNormal(3, 0.0, 0.0, 1.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, 1.0);
-		m->setUV(2, size.x, 1.0);
-		m->setUV(3, size.x, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-		boundaries.back()->translatePhysical(glm::vec3(0, 0, -halfZ + posZ));
-		boundaries.back()->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfX));
-	}
-
-	if(left){
-		//Left
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(0, halfY, halfZ + posZ));
-		m->pushVert(Vertex(0, -halfY, halfZ + posZ));
-		m->pushVert(Vertex(0, -halfY, -halfZ + posZ));
-		m->pushVert(Vertex(0, halfY, -halfZ + posZ));
-		m->setNormal(0, 1.0, 0.0, 0.0);
-		m->setNormal(1, 1.0, 0.0, 0.0);
-		m->setNormal(2, 1.0, 0.0, 0.0);
-		m->setNormal(3, 1.0, 0.0, 0.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, 1.0);
-		m->setUV(2, size.y, 1.0);
-		m->setUV(3, size.y, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-		boundaries.back()->translatePhysical(glm::vec3(-halfX + posX, 0, 0));
-		int n = back ? size.y - 1 : size.y;
-		boundaries.back()->emptySlots[RIGHT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfZ));
-	}
-
-	if(right){
-		//Right
-		QuadMesh * m = new QuadMesh();
-		m->pushVert(Vertex(0, halfY, -halfZ + posZ));
-		m->pushVert(Vertex(0, -halfY, -halfZ + posZ));
-		m->pushVert(Vertex(0, -halfY, halfZ + posZ));
-		m->pushVert(Vertex(0, halfY, halfZ + posZ));
-		m->setNormal(0, -1.0, 0.0, 0.0);
-		m->setNormal(1, -1.0, 0.0, 0.0);
-		m->setNormal(2, -1.0, 0.0, 0.0);
-		m->setNormal(3, -1.0, 0.0, 0.0);
-		m->setUV(0, 0.0, 0.0);
-		m->setUV(1, 0.0, 1.0);
-		m->setUV(2, size.y, 1.0);
-		m->setUV(3, size.y, 0.0);
-		boundaries.push_back(new RoomObject(_world, m));
-		boundaries.back()->setColliderAsBoundingBox();
-		boundaries.back()->createRigidBody(0);
-		boundaries.back()->translatePhysical(glm::vec3(halfX + posX, 0, 0));
-		int n = front ? size.y - 1 : size.y;
-		boundaries.back()->emptySlots[LEFT] = std::vector<Slot *>(1, new Slot(0.f, 2 * halfZ));
-	}
-
-	return boundaries;
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWorld * _world){

@@ -29,18 +29,18 @@ void PD_TilemapGenerator::loadImageData(){
 	data = (unsigned char *)calloc(numBytes, sizeof(unsigned char));
 	for(unsigned long int y = 0; y < height; ++y){
 	for(unsigned long int x = 0; x < width; ++x){
-		vox::TextureUtils::getPixel(this, x, y, 1) = 255;
-		vox::TextureUtils::getPixel(this, x, y, 2) = 255;
-		vox::TextureUtils::getPixel(this, x, y, 3) = 255;
+		sweet::TextureUtils::getPixel(this, x, y, 1) = 255;
+		sweet::TextureUtils::getPixel(this, x, y, 2) = 255;
+		sweet::TextureUtils::getPixel(this, x, y, 3) = 255;
 	}
 	}
 	
 	// center is always fully on
 	std::vector<glm::ivec2> points;
 	points.push_back(glm::ivec2(width/2, height/2));
-	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 0) = 255;
-	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 1) = 0;
-	vox::TextureUtils::getPixel(this, points.front().x, points.front().y, 2) = 0;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 0) = 255;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 1) = 0;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 2) = 0;
 	
 	bool done = false;
 	float prob = 1;
@@ -54,9 +54,9 @@ void PD_TilemapGenerator::loadImageData(){
 		unsigned long int attempts = 0;
 		do{
 			valid = true;
-			glm::ivec2 pos = points.at(vox::NumberUtils::randomInt(0, points.size()-1));
+			glm::ivec2 pos = points.at(sweet::NumberUtils::randomInt(0, points.size()-1));
 		
-			glm::ivec2 dir(vox::NumberUtils::randomInt(-1,1), vox::NumberUtils::randomInt(-1,1));
+			glm::ivec2 dir(sweet::NumberUtils::randomInt(-1,1), sweet::NumberUtils::randomInt(-1,1));
 			
 			newPos = pos+dir;
 
@@ -76,7 +76,7 @@ void PD_TilemapGenerator::loadImageData(){
 					valid = false; break;
 				}
 			}*/
-			if(vox::TextureUtils::getPixel(this, newPos.x, newPos.y) >= max){
+			if(sweet::TextureUtils::getPixel(this, newPos.x, newPos.y) >= max){
 				valid = false;
 			}
 
@@ -86,13 +86,13 @@ void PD_TilemapGenerator::loadImageData(){
 			break;
 		}
 		
-		if(vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) < pixelIncrement){
+		if(sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) < pixelIncrement){
 			points.push_back(newPos);
 		}
 		
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) += pixelIncrement;
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) -= pixelIncrement;
-		vox::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) -= pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) += pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) -= pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) -= pixelIncrement;
 
 		if(prob < 0){
 			done = true;
@@ -105,7 +105,7 @@ void PD_TilemapGenerator::loadImageData(){
 }
 
 MeshInterface * PD_TilemapGenerator::march(unsigned long int _thresh, bool _smooth){
-	std::vector<glm::vec2> verts = vox::TextureUtils::getMarchingSquaresContour(this, _thresh, _smooth, true);
+	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(this, _thresh, _smooth, true);
 	MeshInterface * res = new MeshInterface(GL_LINES, GL_STATIC_DRAW);
 	
 	assert(verts.size() % 3 == 0);
