@@ -65,7 +65,7 @@ Room * RoomBuilder::getRoom(){
 	glm::vec2 size = glm::vec2(l, w);
 
 	// Generate tilemap image
-	tilemap = new PD_TilemapGenerator(16,16,true);
+	tilemap = new PD_TilemapGenerator(10,10,true);
 	unsigned long int pixelIncrement = 158;
 	tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 	tilemap->load();
@@ -266,7 +266,7 @@ void RoomBuilder::createWalls(unsigned long int _thresh){
 	}
 
 	// Get wall texture
-	AssetTexture * wallTexture = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "UV-TEST-ALT").asString());
+	AssetTexture * wallTexture = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "WALLS").asString());
 
 	// Create walls from edges
 	// TODO: make separate bullet colliders and a single mesh for walls

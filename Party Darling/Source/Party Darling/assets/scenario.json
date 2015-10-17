@@ -11,6 +11,16 @@
       "src": "uvs_alt.png"
     },
     {
+      "id": "WALLS",
+      "type": "texture",
+      "src": "walls.png"
+    },
+    {
+      "id": "GREY",
+      "type": "texture",
+      "src": "grey.png"
+    },
+    {
       "id": "CROSSHAIR",
       "type": "texture",
       "src": "crosshair.png"

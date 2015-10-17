@@ -111,7 +111,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	
 	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
-	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
+	//diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->compileShader();
 
 	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -144,9 +144,10 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
+	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 
-	room = RoomBuilder("{}",bulletWorld).getRoom();
+	room = RoomBuilder("{size:{l:5, w:15}}",bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
@@ -260,7 +261,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	// 3D ui testing stuff
 
-	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
+	/*Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
 	dialogueDisplay = new DialogueDisplay(uiLayer.world, this, f, textShader, 0.5, 0.5);
 
 	uiLayer.addChild(dialogueDisplay);
@@ -277,7 +278,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt->setTranslationPhysical(2, 4, -2, true);
 	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
 	butt->parents.at(0)->scale(0.1);
-	}
+	}*/
 	/*
 
 
