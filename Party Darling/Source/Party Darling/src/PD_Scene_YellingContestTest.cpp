@@ -18,7 +18,7 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	// mouse cursor
-	mouseIndicator = new Sprite();
+	mouseIndicator = new Sprite(uiLayer.shader);
 	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CURSOR")->texture);
 	mouseIndicator->parents.at(0)->scale(32, 32, 1);
@@ -30,7 +30,6 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 		mouseIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	mouseIndicator->mesh->dirty = true;
-	mouseIndicator->setShader(uiLayer.shader, true);
 }
 
 PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
