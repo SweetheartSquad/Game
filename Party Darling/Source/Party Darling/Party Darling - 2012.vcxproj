@@ -16,7 +16,9 @@
     <ClCompile Include="src\DialogueText.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\PD_Scene_YellingContestTest.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
+    <ClCompile Include="src\PD_UI_YellingContest.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
     <ClCompile Include="src\TestCharacter.cpp" />
@@ -36,6 +38,7 @@
     <ClInclude Include="include\DialogueText.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\PD_Scene_YellingContestTest.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
@@ -64,6 +67,7 @@
     <ClCompile Include="src/PD_TalkToButton.cpp" />
     <ClCompile Include="src/PD_TestScene.cpp" />
     <ClCompile Include="src/Room.cpp" />
+    <ClInclude Include="include\PD_UI_YellingContest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Character.h" />
