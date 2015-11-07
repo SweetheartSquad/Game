@@ -261,7 +261,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	// 3D ui testing stuff
 
-	/*Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
+	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
 	dialogueDisplay = new DialogueDisplay(uiLayer.world, this, f, textShader, 0.5, 0.5);
 
 	uiLayer.addChild(dialogueDisplay);
@@ -278,7 +278,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	butt->setTranslationPhysical(2, 4, -2, true);
 	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
 	butt->parents.at(0)->scale(0.1);
-	}*/
+	}
 	/*
 
 

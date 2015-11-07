@@ -1,8 +1,7 @@
 #pragma once
 
 #include <PD_UI_YellingContest.h>
-#include <VerticalLinearLayout.h>
-#include <TextArea.h>
+#include <sweet/UI.h>
 
 class Shader;
 
