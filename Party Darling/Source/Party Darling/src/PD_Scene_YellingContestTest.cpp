@@ -6,6 +6,7 @@
 #include <PD_Game.h>
 #include <Keyboard.h>
 #include <Mouse.h>
+#include <RenderOptions.h>
 
 PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	Scene(_game),
@@ -64,7 +65,7 @@ void PD_Scene_YellingContestTest::update(Step * _step){
 }
 
 void PD_Scene_YellingContestTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	clear();
+	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
