@@ -44,7 +44,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	progressButton->setRationalHeight(1.f);
 	progressButton->setMarginTop(0.9f);
 	progressButton->setMarginRight(0.9f);
-	progressButton->onClickFunction = [this](NodeUI * _this) {
+	progressButton->onClickFunction = [this]() {
 		this->autoProgressTimer->trigger();
 	};
 	progressButton->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
@@ -112,10 +112,10 @@ bool DialogueDisplay::sayNext(){
 				//o->parents.at(0)->scale(50,50,1);
 				
 				std::vector<Trigger *> optionResult = ask->options.at(i)->triggers;
-				o->onClickFunction = [this, optionResult](NodeUI * _this) {
+				o->onClickFunction = [this, optionResult]() {
 					// remove the function pointers on all the other buttons to avoid multiple buttons getting triggered at the same time
 					for(auto o : options){
-						if(o != _this){
+						if(o != this){
 							o->onClickFunction = nullptr;
 						}
 					}

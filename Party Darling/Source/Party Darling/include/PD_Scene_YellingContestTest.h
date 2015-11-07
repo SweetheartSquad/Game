@@ -6,6 +6,8 @@
 #include <Sprite.h>
 #include <shader/ComponentShaderText.h>
 
+class PD_UI_YellingContest;
+
 class PD_Scene_YellingContestTest : public Scene{
 public:
 	Sprite * mouseIndicator;
@@ -18,6 +20,10 @@ public:
 	virtual void unload() override;
 
 	UILayer uiLayer;
+	
+	PD_UI_YellingContest * uiYellingContest;
+
+	BulletWorld * bulletWorld;
 
 	PD_Scene_YellingContestTest(Game * _game);
 	~PD_Scene_YellingContestTest();

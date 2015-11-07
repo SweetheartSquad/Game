@@ -6,13 +6,16 @@
 #include <PD_Game.h>
 #include <Keyboard.h>
 #include <Mouse.h>
+#include <PD_UI_YellingContest.h>
 
 PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	Scene(_game),
 	textShader(new ComponentShaderText(true)),
 	uiLayer(this, 0,0,0,0)
 {
-	textShader->textComponent->setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	bulletWorld = new BulletWorld();
+
+	textShader->textComponent->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
@@ -31,6 +34,11 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	mouseIndicator->setShader(uiLayer.shader, true);
+
+	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
+	uiYellingContest = new PD_UI_YellingContest(bulletWorld, this, f, textShader);
+	
+	uiLayer.addChild(uiYellingContest);
 }
 
 PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
@@ -49,6 +57,17 @@ void PD_Scene_YellingContestTest::update(Step * _step){
 		cycleCamera();
 	}
 	
+	if (keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
+		if (uiLayer.bulletDebugDrawer != nullptr){
+			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}else{
+			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+		}
+	}
+
+
+
 	Scene::update(_step);
 
 	// update ui stuff
