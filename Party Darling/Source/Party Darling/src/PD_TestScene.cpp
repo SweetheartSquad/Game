@@ -38,6 +38,7 @@
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
+#include <RenderOptions.h>
 
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
@@ -509,7 +510,7 @@ void PD_TestScene::update(Step * _step){
 }
 
 void PD_TestScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	clear();
+	_renderOptions->clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
