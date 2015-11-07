@@ -55,10 +55,6 @@ void PD_Scene_YellingContestTest::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 
-	glm::vec3 sp = activeCamera->worldToScreen(glm::vec3(0,0,0), sd);
-	if(sp.z < 0){
-		sp.z = activeCamera->farClip * 2;
-	}
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
 }
 
