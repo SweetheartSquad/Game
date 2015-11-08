@@ -510,13 +510,13 @@ void PD_TestScene::update(Step * _step){
 }
 
 void PD_TestScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	_renderOptions->clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
 	
