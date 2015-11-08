@@ -15,7 +15,10 @@ PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _
 	setWidth(_width);
 	setHeight(_height);
 
-	setText(_text);
+	text->setWidth(1.0);
+	text->setHeight(1.0);
+	text->horizontalAlignment = kCENTER;
+	text->verticalAlignment = kMIDDLE;
 	addChild(text);
 }
 
