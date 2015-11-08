@@ -16,6 +16,7 @@
     <ClCompile Include="src\DialogueText.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />
     <ClCompile Include="src\PD_Scene_YellingContestTest.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
     <ClCompile Include="src\PD_UI_YellingContest.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="include\DialogueText.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
     <ClInclude Include="include\PD_Scene_YellingContestTest.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
     <ClInclude Include="include\RoomBuilder.h" />
