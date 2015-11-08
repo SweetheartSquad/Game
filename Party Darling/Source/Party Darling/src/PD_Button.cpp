@@ -6,23 +6,34 @@
 #include <shader\ShaderComponentText.h>
 #include <shader/ShaderComponentTexture.h>
 #include <MeshFactory.h>
+#include <sweet/UI.h>
 
-PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _height) :
-	NodeUI(_world, _scene, kENTITIES, true)
+PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _height, Font * _font, Shader * _textShader, std::wstring _text) :
+	NodeUI(_world, _scene, kENTITIES, true),
+	text(new TextArea(_world, _scene, _font, _textShader, _width, _height))
 {
 	setWidth(_width);
 	setHeight(_height);
+
+	setText(_text);
+	addChild(text);
+}
+
+void PD_Button::setText(std::wstring _text){
+	if (text->font && text->textShader){
+		text->setText(_text);
+	}
 }
 
 void PD_Button::update(Step * _step){
 	NodeUI::update(_step);
 	if(isHovered){
 		if(isDown){
-			setBackgroundColour(0, -1, -1);
+			//setBackgroundColour(0.5, 0.5, 0.5);
 		}else{
-			setBackgroundColour(-1, 0, -1);
+			//setBackgroundColour(2, 2, 2);
 		}
 	}else{
-		setBackgroundColour(-1, -1, 0);
+		//setBackgroundColour(1, 1, 1);
 	}
 }

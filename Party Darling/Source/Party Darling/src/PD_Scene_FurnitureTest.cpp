@@ -110,7 +110,7 @@ void PD_Scene_FurnitureTest::update(Step * _step){
 }
 
 void PD_Scene_FurnitureTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	clear();
+	//clear();
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 }

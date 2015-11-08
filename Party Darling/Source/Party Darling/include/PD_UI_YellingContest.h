@@ -15,16 +15,16 @@ public:
 	HorizontalLinearLayout * playerBubble;
 	TextArea * playerBubbleText;
 	
-	PD_InsultButton * playerBubbleBtn1;
-	PD_InsultButton * playerBubbleBtn2;
+	PD_InsultButton * pBubbleBtn1;
+	PD_InsultButton * pBubbleBtn2;
 
 	Keyboard * keyboard;
 
 	bool modeOffensive;
 
 	PD_UI_YellingContest(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader);
-	void setEnemyText(std::string _text);
-	void setPlayerText(std::string _text);
+	void setEnemyText();
+	void setPlayerText();
 
 	virtual void update(Step * _step) override;
 

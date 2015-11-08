@@ -25,6 +25,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Scene* _sc
 	enemyBubble->setHeight(0.25);
 	enemyBubble->setBackgroundColour(0.682, 0.439, 0.670, 1);
 	enemyBubbleText = new TextArea(world, scene, _font, _textShader, 0.9);
+	enemyBubble->addChild(enemyBubbleText);
 
 	playerBubble = new HorizontalLinearLayout(_bulletWorld, _scene);
 	playerBubble->verticalAlignment = kMIDDLE;
@@ -33,15 +34,27 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Scene* _sc
 	playerBubble->setHeight(0.25);
 	playerBubble->setBackgroundColour(0.451, 0.439, 0.675, 1);
 	playerBubbleText = new TextArea(world, scene, _font, _textShader, 0.9);
+	playerBubble->addChild(playerBubbleText);
+
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld, _scene);
-	playerBubbleBtn1 = new PD_InsultButton(_bulletWorld, _scene);
-	playerBubbleBtn1->onClickFunction = [this](){insult(playerBubbleBtn1->isEffective); };
-	playerBubbleBtn2 = new PD_InsultButton(_bulletWorld, _scene);
-	playerBubbleBtn2->onClickFunction = [this](){insult(playerBubbleBtn1->isEffective); };
+	buttonLayout->setWidth(0.4);
+	buttonLayout->setHeight(1.0);
 
-	
+	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _scene, _font, _textShader);
+	pBubbleBtn1->setWidth(1.0);
+	pBubbleBtn1->setHeight(0.5);
+	pBubbleBtn1->setBackgroundColour(0.569, 0.569, 0.733, 1);
+	pBubbleBtn1->onClickFunction = [this](){insult(pBubbleBtn1->isEffective); };
 
-	
+	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _scene, _font, _textShader);
+	pBubbleBtn2->setWidth(1.0);
+	pBubbleBtn2->setHeight(0.5);
+	pBubbleBtn2->setBackgroundColour(0.569, 0.569, 0.733, 1);
+	pBubbleBtn2->onClickFunction = [this](){insult(pBubbleBtn2->isEffective); };
+	buttonLayout->addChild(pBubbleBtn1);
+	buttonLayout->addChild(pBubbleBtn2);
+
+	playerBubble->addChild(buttonLayout);
 	
 	addChild(enemyBubble);
 	addChild(playerBubble);
@@ -54,7 +67,7 @@ void PD_UI_YellingContest::update(Step * _step){
 		interject();
 		
 	}
-	std::cout << playerBubbleBtn2->isHovered << std::endl;
+	std::cout << pBubbleBtn1->bgShader << std::endl;
 	VerticalLinearLayout::update(_step);
 }
 
@@ -65,6 +78,32 @@ void PD_UI_YellingContest::interject(){
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyBubble->setVisible(!_isOffensive);
 	playerBubble->setVisible(_isOffensive);
+
+	if (_isOffensive){
+		setEnemyText();
+	}
+	else{
+		setPlayerText();
+	}
+}
+
+void PD_UI_YellingContest::setEnemyText(){
+	// Generate full insult
+	std::wstring insult = L"Well, you got a set of lizard legs!";
+
+	enemyBubbleText->setText(insult);
+}
+
+void PD_UI_YellingContest::setPlayerText(){
+	// Generate partial insult
+	std::wstring insult = L"Your face is";
+	// Generate insult word choices
+	std::wstring opt1 = L"flat";
+	std::wstring opt2 = L"lovely";
+
+	playerBubbleText->setText(insult);
+	pBubbleBtn1->setText(opt1);
+	pBubbleBtn2->setText(opt2);
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective){
