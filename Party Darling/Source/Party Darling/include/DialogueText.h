@@ -8,7 +8,7 @@ class DialogueTextLabel : public TextLabel{
 public:
 	bool ticking;
 
-	DialogueTextLabel(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader);
+	DialogueTextLabel(BulletWorld * _world, Font * _font, Shader * _textShader);
 	~DialogueTextLabel();
 
 	std::vector<Timeout *> timers;
@@ -28,6 +28,6 @@ public:
 	virtual TextLabel * getNewLine();
 	virtual void update(Step * _step) override;
 
-	DialogueTextArea(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader);
+	DialogueTextArea(BulletWorld * _world, Font * _font, Shader * _textShader);
 	~DialogueTextArea();
 };

@@ -8,9 +8,9 @@
 #include <MeshFactory.h>
 #include <sweet/UI.h>
 
-PD_Button::PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _height, Font * _font, Shader * _textShader, std::wstring _text) :
-	NodeUI(_world, _scene, kENTITIES, true),
-	text(new TextArea(_world, _scene, _font, _textShader, _width, _height))
+PD_Button::PD_Button(BulletWorld * _world, float _width, float _height, Font * _font, Shader * _textShader, std::wstring _text) :
+	NodeUI(_world, kENTITIES, true),
+	text(new TextArea(_world, _font, _textShader, _width, _height))
 {
 	setWidth(_width);
 	setHeight(_height);

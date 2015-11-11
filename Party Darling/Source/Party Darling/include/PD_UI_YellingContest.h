@@ -22,7 +22,7 @@ public:
 
 	bool modeOffensive;
 
-	PD_UI_YellingContest(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader);
+	PD_UI_YellingContest(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader);
 	void setEnemyText();
 	void setPlayerText();
 
@@ -31,5 +31,4 @@ public:
 	void setUIMode(bool _isOffensive);
 	void interject();
 	void insult(bool _isEffective);
-	
 };

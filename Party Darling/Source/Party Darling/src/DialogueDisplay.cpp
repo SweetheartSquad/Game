@@ -9,36 +9,36 @@
 #include <HorizontalLinearLayout.h>
 #include <PD_ResourceManager.h>
 
-DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
+DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _textShader, float _width, float _height) :
 	waitingForInput(false),
 	font(_font),
 	textShader(_textShader),
-	NodeUI(_world, _scene)
+	NodeUI(_world)
 {
 	setWidth(_width);
 	setHeight(_height);
 	setPadding(10);
 	setMargin(10);
 	
-	vlayout = new VerticalLinearLayout(_world, _scene);
+	vlayout = new VerticalLinearLayout(_world);
 	vlayout->setRationalWidth(1.f, this);
 	vlayout->setRationalHeight(1.f, this);
 	vlayout->verticalAlignment = kTOP;
 	vlayout->setPadding(10);
 	
-	dialogue = new TextArea(_world, _scene, _font, _textShader, -1);
+	dialogue = new TextArea(_world, _font, _textShader, -1);
 	dialogue->setRationalWidth(1.f, vlayout);
 	dialogue->setMarginLeft(0.1f);
 
-	speaker = new TextArea(_world, _scene, _font, _textShader, -1);
+	speaker = new TextArea(_world, _font, _textShader, -1);
 	speaker->setRationalWidth(1.f, vlayout);
 	speaker->setMarginLeft(0.1f);
 
-	conversationId = new TextArea(_world, _scene, _font, _textShader, -1);
+	conversationId = new TextArea(_world, _font, _textShader, -1);
 	conversationId->setRationalWidth(1.f, vlayout);
 	conversationId->setMarginLeft(0.1f);
 
-	progressButton = new NodeUI(world, scene, kENTITIES, 1.f);
+	progressButton = new NodeUI(world, kENTITIES, 1.f);
 	//progressButton->setText(L"Next");
 	progressButton->setRationalWidth(1.f);
 	progressButton->setRationalHeight(1.f);
@@ -50,7 +50,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _f
 	progressButton->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
 	//progressButton->setVisible(false);
 
-	optionslayout = new HorizontalLinearLayout(_world, _scene);
+	optionslayout = new HorizontalLinearLayout(_world);
 	optionslayout->setRationalWidth(1.f);
 	optionslayout->setRationalHeight(1.f);
 	optionslayout->verticalAlignment = kMIDDLE;
@@ -100,7 +100,7 @@ bool DialogueDisplay::sayNext(){
 			removeChild(progressButton);
 			for(unsigned long int i = 0; i < ask->options.size(); ++i){
 				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				TextArea * o = new TextArea(world, scene, font, textShader, 0.3f);
+				TextArea * o = new TextArea(world, font, textShader, 0.3f);
 				if(i != 0){
 					o->setMarginLeft(10);
 				}

@@ -10,8 +10,9 @@ class PD_Button : public NodeUI{
 private:
 	TextArea * text;
 public:
+	Scene * scene;
 
-	PD_Button(BulletWorld * _world, Scene * _scene, float _width, float _height, Font * _font = nullptr, Shader * _textShader = nullptr, std::wstring _text = L"");
+	PD_Button(BulletWorld * _world, float _width, float _height, Font * _font = nullptr, Shader * _textShader = nullptr, std::wstring _text = L"");
 	
 	void update(Step * _step) override;
 

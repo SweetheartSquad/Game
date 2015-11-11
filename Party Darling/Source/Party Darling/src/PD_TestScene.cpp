@@ -104,7 +104,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
-	uiLayer(this, 0,0,0,0)
+	uiLayer(0,0,0,0)
 {
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
@@ -263,7 +263,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	// 3D ui testing stuff
 
 	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
-	dialogueDisplay = new DialogueDisplay(uiLayer.world, this, f, textShader, 0.5, 0.5);
+	dialogueDisplay = new DialogueDisplay(uiLayer.world, f, textShader, 0.5, 0.5);
 
 	uiLayer.addChild(dialogueDisplay);
 

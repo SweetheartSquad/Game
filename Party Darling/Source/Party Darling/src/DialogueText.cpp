@@ -4,8 +4,8 @@
 #include <PD_ResourceManager.h>
 #include <CharacterUtils.h>
 
-DialogueTextLabel::DialogueTextLabel(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader) :
-	TextLabel(_world, _scene, _font, _textShader, 1.f)
+DialogueTextLabel::DialogueTextLabel(BulletWorld * _world, Font * _font, Shader * _textShader) :
+	TextLabel(_world, _font, _textShader, 1.f)
 {
 
 }
@@ -61,8 +61,8 @@ void DialogueTextLabel::update(Step * _step){
 	}
 }
 
-DialogueTextArea::DialogueTextArea(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader) :
-	TextArea(_world, _scene, _font, _textShader, 1.f),
+DialogueTextArea::DialogueTextArea(BulletWorld * _world, Font * _font, Shader * _textShader) :
+	TextArea(_world, _font, _textShader, 1.f),
 	ticking(false)
 {
 
@@ -121,7 +121,7 @@ TextLabel * DialogueTextArea::getNewLine(){
 		line = unusedLines.back();
 		unusedLines.pop_back();
 	}else{
-		line = new DialogueTextLabel(world, scene, font, textShader);
+		line = new DialogueTextLabel(world, font, textShader);
 		line->setRationalWidth(1.f, this);
 		line->horizontalAlignment = horizontalAlignment;
 	}

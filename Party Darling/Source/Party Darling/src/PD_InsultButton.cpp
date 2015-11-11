@@ -3,8 +3,8 @@
 #include <PD_InsultButton.h>
 #include <PD_Scene_YellingContestTest.h>
 
-PD_InsultButton::PD_InsultButton(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, std::wstring _text) :
-	PD_Button(_world, _scene, 5, 5, _font, _textShader, _text),
+PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _textShader, std::wstring _text) :
+	PD_Button(_world, 5, 5, _font, _textShader, _text),
 	isEffective(false)
 {
 }

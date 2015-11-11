@@ -11,7 +11,7 @@
 
 class DialogueDisplay : public ConversationIterator, public NodeUI{
 public:
-	DialogueDisplay(BulletWorld * _world, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height);
+	DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _textShader, float _width, float _height);
 	~DialogueDisplay();
 	
 	LinearLayout * vlayout;

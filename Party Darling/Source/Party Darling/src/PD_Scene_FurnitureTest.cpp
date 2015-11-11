@@ -12,9 +12,10 @@
 #include <MousePerspectiveCamera.h>
 #include <MeshFactory.h>
 
+#include <RenderOptions.h>
 PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	Scene(_game),
-	uiLayer(this, 0,0,0,0),
+	uiLayer(0,0,0,0),
 	shader(new ComponentShaderBase(false))
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
@@ -110,7 +111,7 @@ void PD_Scene_FurnitureTest::update(Step * _step){
 }
 
 void PD_Scene_FurnitureTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//clear();
+	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 }

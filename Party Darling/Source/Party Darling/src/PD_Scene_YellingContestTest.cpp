@@ -12,7 +12,7 @@
 PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	Scene(_game),
 	textShader(new ComponentShaderText(true)),
-	uiLayer(this, 0,0,0,0)
+	uiLayer(0,0,0,0)
 {
 	bulletWorld = new BulletWorld();
 
@@ -37,7 +37,7 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	mouseIndicator->setShader(uiLayer.shader, true);
 
 	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
-	uiYellingContest = new PD_UI_YellingContest(bulletWorld, this, f, textShader);
+	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader);
 	
 	uiLayer.addChild(uiYellingContest);
 }
