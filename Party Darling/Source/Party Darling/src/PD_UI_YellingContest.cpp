@@ -77,7 +77,6 @@ void PD_UI_YellingContest::update(Step * _step){
 		interject();
 		
 	}
-	std::cout << pBubbleBtn1->bgShader << std::endl;
 	VerticalLinearLayout::update(_step);
 }
 
@@ -89,12 +88,16 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyBubble->setVisible(!_isOffensive);
 	playerBubble->setVisible(_isOffensive);
 
+	enemyBubble->setMouseEnabled(!_isOffensive);
+	playerBubble->setMouseEnabled(_isOffensive);
+	
 	if (!_isOffensive){
 		setEnemyText();
 	}
 	else{
 		setPlayerText();
 	}
+	invalidateLayout();
 }
 
 void PD_UI_YellingContest::setEnemyText(){

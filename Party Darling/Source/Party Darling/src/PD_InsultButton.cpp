@@ -12,5 +12,5 @@ PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _t
 void PD_InsultButton::click(){
 	PD_Button::click();
 	// start conversation
-	Log::info("Click!!!");
+	std::cout << "Click!!! iseffective: " << isEffective << std::endl;;
 }
