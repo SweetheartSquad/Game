@@ -41,6 +41,11 @@
       "id": "INDEXED-TEST2",
       "type": "texture",
       "src": "indexedColourTest2.png"
+    },
+	{
+      "id": "RYAN",
+      "type": "texture",
+      "src": "ryan.png"
     }
   ],
   "characters": [

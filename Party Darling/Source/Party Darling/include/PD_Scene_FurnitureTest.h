@@ -14,6 +14,8 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
+	Transform * createChair();
+
 	UILayer uiLayer;
 
 	PD_Scene_FurnitureTest(Game * _game);

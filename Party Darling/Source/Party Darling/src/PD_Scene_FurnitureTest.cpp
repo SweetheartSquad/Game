@@ -9,6 +9,8 @@
 #include <shader/ShaderComponentTexture.h>
 #include <shader/ShaderComponentDiffuse.h>
 
+#include <NumberUtils.h>
+
 #include <MousePerspectiveCamera.h>
 #include <MeshFactory.h>
 
@@ -39,16 +41,23 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 		mouseIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	mouseIndicator->mesh->dirty = true;
+
 	MeshInterface * lamp = Resource::loadMeshFromObj("assets/meshes/LOD_2/lamp_LOD_2.obj").at(0);
 	lamp->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
 	MeshEntity * meshEntity = new MeshEntity(lamp, shader);
 
 	childTransform->addChild(meshEntity);
 
+	Transform * furniture1 = new Transform();
 
+	furniture1 = createChair();
 
+	Transform * furniture2 = new Transform();
 
-	
+	furniture2 = createChair();
+
+	childTransform->addChild(furniture1);
+	childTransform->addChild(furniture2);
 	// remove initial camera
 	childTransform->removeChild(cameras.at(0)->parents.at(0));
 	delete cameras.at(0)->parents.at(0);
@@ -108,6 +117,8 @@ void PD_Scene_FurnitureTest::update(Step * _step){
 
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
 
+	
+
 }
 
 void PD_Scene_FurnitureTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -124,4 +135,60 @@ void PD_Scene_FurnitureTest::load(){
 void PD_Scene_FurnitureTest::unload(){
 	uiLayer.unload();
 	Scene::unload();	
+}
+
+Transform * PD_Scene_FurnitureTest::createChair(){
+	int textureID = sweet::NumberUtils::randomInt(1,2);
+
+	std::string chairTexture = "DEFAULT";
+
+	if (textureID == 1){
+		//leave texture as default
+	}
+
+	if (textureID == 2){
+		chairTexture = "RYAN";
+	}
+	MeshInterface * chairBack = Resource::loadMeshFromObj("assets/TestChairComponents/Chair_Back_1.obj").at(0);
+	chairBack->pushTexture2D(PD_ResourceManager::scenario->getTexture(chairTexture)->texture);
+	MeshEntity * chairBack_Entity = new MeshEntity(chairBack, shader);
+
+	MeshInterface * chairBase = Resource::loadMeshFromObj("assets/TestChairComponents/Chair_Base_1.obj").at(0);
+	chairBase->pushTexture2D(PD_ResourceManager::scenario->getTexture(chairTexture)->texture);
+	MeshEntity * chairBase_Entity = new MeshEntity(chairBase, shader);
+
+	MeshInterface * chairLegs = Resource::loadMeshFromObj("assets/TestChairComponents/Chair_Legs_1.obj").at(0);
+	chairLegs->pushTexture2D(PD_ResourceManager::scenario->getTexture(chairTexture)->texture);
+	MeshEntity * chairLegs_Entity = new MeshEntity(chairLegs, shader);
+
+	Transform * chairTransform = new Transform();
+	chairTransform ->addChild(chairBack_Entity,false);
+	chairTransform ->addChild(chairBase_Entity,false);
+	chairTransform ->addChild(chairLegs_Entity,false);
+
+
+	Json::Value root;
+	int id;
+
+
+	std::string jsonLoaded = FileUtils::readFile("assets/furnitureMesh.json");
+	bool parsingSuccessful = reader.parse( jsonLoaded, root );
+	if(!parsingSuccessful){
+		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+	}else{
+		 Json::Value charactersJson = root["components"];
+
+		 for(Json::Value v : charactersJson){
+			 v
+		 }
+	}
+
+
+
+	int xValue = sweet::NumberUtils::randomInt(0,50);
+	int zValue = sweet::NumberUtils::randomInt(0,50);
+
+	chairTransform ->translate(xValue,0,zValue);
+	return chairTransform;
+
 }
