@@ -1,5 +1,5 @@
 {
-	furniture:
+	"furniture":
 	[
 		{
 			"type":"chair",
@@ -19,7 +19,7 @@
 									{
 									"childComponent":"arm",
 									"required":false,
-									"multiplier":2,
+									"multiplier":2
 									}
 								]
 							},
@@ -32,10 +32,10 @@
 									{
 									"childComponent":"legSupport",
 									"required":false,
-									"multiplier":2,
+									"multiplier":2
 									}
 								]
-							},
+							}
 						
 						]
 					}
@@ -44,12 +44,12 @@
 		}
 	
 	],
-	components
+	"components":
 	[
 		{
 			"id":"1",
-			"type:"seat",
-			"src":"chair_Seat_1.obj"
+			"type":"seat",
+			"src":"chair_Seat_1.obj",
 			"connectors":
 			[
 				{
@@ -86,9 +86,9 @@
 		},
 	
 		{
-			"id":"2",
-			"type:"back",
-			"src":"chair_Back_1.obj"
+			"id":2,
+			"type":"back",
+			"src":"chair_Back_1.obj",
 			"connectors":
 			[
 				{

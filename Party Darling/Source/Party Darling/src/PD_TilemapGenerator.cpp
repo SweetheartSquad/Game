@@ -6,7 +6,7 @@
 #include <TextureUtils.h>
 
 PD_TilemapGenerator::PD_TilemapGenerator(unsigned long int _width, unsigned long int _height, bool _autorelease) :
-	Texture(true, _autorelease),
+	Texture("", true, _autorelease),
 	NodeResource(_autorelease)
 {
 	channels = 4;

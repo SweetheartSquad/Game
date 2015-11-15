@@ -15,6 +15,8 @@
 #include <MeshFactory.h>
 
 #include <RenderOptions.h>
+#include <json\json.h>
+
 PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
@@ -170,16 +172,16 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 	Json::Value root;
 	int id;
 
-
-	std::string jsonLoaded = FileUtils::readFile("assets/furnitureMesh.json");
+	Json::Reader reader;
+	std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
 	}else{
-		 Json::Value charactersJson = root["components"];
+		 Json::Value furnitureJson = root["furniture"];
 
-		 for(Json::Value v : charactersJson){
-			 v
+		 for(Json::Value v : furnitureJson){
+			std::cout << v; 
 		 }
 	}
 
