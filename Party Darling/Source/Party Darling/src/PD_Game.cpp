@@ -6,7 +6,7 @@
 #include <PD_Scene_FurnitureTest.h>
 
 PD_Game::PD_Game() :
-	Game(true, std::pair<std::string, Scene *>("test", new PD_Scene_YellingContestTest(this)), false)
+	Game("test", new PD_Scene_YellingContestTest(this), true)
 {
 }
 

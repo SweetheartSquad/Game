@@ -2,7 +2,6 @@
 
 #include <PD_Scene_YellingContestTest.h>
 #include <PD_ResourceManager.h>
-#include <System.h>
 #include <PD_Game.h>
 #include <Keyboard.h>
 #include <Mouse.h>
@@ -18,7 +17,7 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 
 	textShader->textComponent->setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	// mouse cursor
@@ -72,7 +71,7 @@ void PD_Scene_YellingContestTest::update(Step * _step){
 	Scene::update(_step);
 
 	// update ui stuff
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 

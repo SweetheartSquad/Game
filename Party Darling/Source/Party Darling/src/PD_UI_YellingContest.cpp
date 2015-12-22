@@ -54,13 +54,13 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1->setRationalWidth(1.0f);
 	pBubbleBtn1->setRationalHeight(0.5f);
 	pBubbleBtn1->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
-	pBubbleBtn1->onClickFunction = [this](){insult(pBubbleBtn1->isEffective); };
+	pBubbleBtn1->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn1->isEffective); });
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	pBubbleBtn2->setRationalWidth(1.0f);
 	pBubbleBtn2->setRationalHeight(0.5f);
 	pBubbleBtn2->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
-	pBubbleBtn2->onClickFunction = [this](){insult(pBubbleBtn2->isEffective); };
+	pBubbleBtn2->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn2->isEffective); });
 	buttonLayout->addChild(pBubbleBtn1);
 	buttonLayout->addChild(pBubbleBtn2);
 

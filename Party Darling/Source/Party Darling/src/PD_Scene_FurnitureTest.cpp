@@ -1,7 +1,6 @@
 #include <PD_Scene_FurnitureTest.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
-#include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <Resource.h>
@@ -27,7 +26,7 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	//shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
 
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 
 	mouseIndicator = new Sprite(uiLayer.shader);
@@ -113,7 +112,7 @@ void PD_Scene_FurnitureTest::update(Step * _step){
 
 	Scene::update(_step);
 
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 	uiLayer.update(_step);
 

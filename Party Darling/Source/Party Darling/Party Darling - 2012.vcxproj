@@ -115,18 +115,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(ANT_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Debug;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Debug;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Debug;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Debug;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(ANT_DIR)\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(FREETYPE_DIR)\include;$(CPPREST_DIR)\Release\include;$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(FREETYPE_DIR)\include;$(CPPREST_DIR)\Release\include;$(BULLET_DIR)\src;$(ANT_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -156,7 +156,8 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>..\..\..\VCProjer\dist\VCProjer.exe "Party Darling - 2012.vcxproj" "Party Darling - 2013.vcxproj"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
@@ -164,7 +165,7 @@
 copy /Y "$(CPPREST_DIR)\Binaries\Win32\Debug\cpprest110d_2_5.dll" "$(TargetDir)\cpprest110d_2_5.dll"
 copy /Y "$(OPENAL_DIR)\bin\Win32\libsndfile-1.dll" "$(TargetDir)\libsndfile-1.dll"
 copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
-</Command>
+copy /Y "$(ANT_DIR)\lib\AntTweakBar.dll" "$(TargetDir)\AntTweakBar.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -175,7 +176,7 @@ copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

@@ -32,9 +32,7 @@
 #include <Box2DDebugDrawer.h>
 
 #include <MousePerspectiveCamera.h>
-#include <FollowCamera.h>
 
-#include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
@@ -195,7 +193,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 	
 
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 
 	// mouse cursor
@@ -497,7 +495,7 @@ void PD_TestScene::update(Step * _step){
 	Scene::update(_step);
 
 	// update ui stuff
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 

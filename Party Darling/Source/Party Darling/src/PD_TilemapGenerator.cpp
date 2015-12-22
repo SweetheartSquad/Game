@@ -28,11 +28,11 @@ void PD_TilemapGenerator::loadImageData(){
 	// allocate and initialize texture data
 	data = (unsigned char *)calloc(numBytes, sizeof(unsigned char));
 	for(unsigned long int y = 0; y < height; ++y){
-	for(unsigned long int x = 0; x < width; ++x){
-		sweet::TextureUtils::getPixel(this, x, y, 1) = 255;
-		sweet::TextureUtils::getPixel(this, x, y, 2) = 255;
-		sweet::TextureUtils::getPixel(this, x, y, 3) = 255;
-	}
+		for(unsigned long int x = 0; x < width; ++x){
+			sweet::TextureUtils::getPixel(this, x, y, 1) = 255;
+			sweet::TextureUtils::getPixel(this, x, y, 2) = 255;
+			sweet::TextureUtils::getPixel(this, x, y, 3) = 255;
+		}
 	}
 	
 	// center is always fully on

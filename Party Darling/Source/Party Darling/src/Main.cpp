@@ -29,7 +29,7 @@ int main(void){
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
 	PD_Game * game = new PD_Game();
-
+	game->init();
 	while (game->isRunning){
 		game->performGameLoop();
 	}

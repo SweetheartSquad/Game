@@ -44,9 +44,9 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _t
 	progressButton->setRationalHeight(1.f);
 	progressButton->setMarginTop(0.9f);
 	progressButton->setMarginRight(0.9f);
-	progressButton->onClickFunction = [this]() {
+	progressButton->eventManager.addEventListener("mousedown", [this](sweet::Event * _event) {
 		this->autoProgressTimer->trigger();
-	};
+	});
 	progressButton->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
 	//progressButton->setVisible(false);
 
@@ -63,14 +63,14 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _t
 	vlayout->addChild(dialogue);
 	vlayout->addChild(optionslayout);
 
-	autoProgressTimer->onCompleteFunction = [this](Timeout * _this) {
+	autoProgressTimer->eventManager->addEventListener("mousedown", [this](sweet::Event * _event) {
 		//if(dialogue->ticking){
 		//	dialogue->finishTicking();
 		//	autoProgressTimer->restart();
 		//}else{
 			this->shouldSayNext = true;
 		//}
-	};
+	});
 	autoProgressTimer->start();
 }
 
@@ -93,7 +93,7 @@ bool DialogueDisplay::sayNext(){
 	dialogue->setText(std::wstring(dialogueText.begin(), dialogueText.end()));
 
 	// check for dialogue options
-	DialogueAsk * ask = dynamic_cast<DialogueAsk *>(currentConversation->getCurrentDialogue());
+	/*DialogueAsk * ask = dynamic_cast<DialogueAsk *>(currentConversation->getCurrentDialogue());
 	if(ask != nullptr){
 		if(ask->currentText == ask->text.size()-1){
 			waitingForInput = true;
@@ -131,7 +131,7 @@ bool DialogueDisplay::sayNext(){
 
 			optionslayout->layoutChildren();
 		}
-	}
+	}*/
 
 	return true;
 }

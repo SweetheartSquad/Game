@@ -26,8 +26,7 @@ void DialogueTextLabel::tickerIn(float _delay){
 	for(unsigned long int i = 0; i < usedGlyphs.size(); ++i){
 		UIGlyph * g = usedGlyphs.at(i);
 		g->setVisible(false);
-		Timeout * t = new Timeout(_delay * i);
-		t->onCompleteFunction = [g, i](Timeout * _this){
+		Timeout * t = new Timeout(_delay * i, [g, i](sweet::Event * _event){
 			/*OpenAL_Sound * voice = PD_ResourceManager::scenario->getAudio(PD_ResourceManager::speaker)->sound;
 			g->setVisible(true);
 			//std::cout << g->character/128.f+0.5f << std::endl;
@@ -36,7 +35,7 @@ void DialogueTextLabel::tickerIn(float _delay){
 				voice->setGain(PD_ResourceManager::getSfxVolume());
 				voice->play();
 			}*/
-		};
+		});
 		t->start();
 		timers.push_back(t);
 	}
@@ -83,11 +82,10 @@ void DialogueTextArea::tickerIn(float _delay){
 		DialogueTextLabel * tl = dynamic_cast<DialogueTextLabel *>(usedLines.at(i));
 		tl->setVisible(false);
 		time += usedLines.at(i-1)->usedGlyphs.size() * _delay;
-		Timeout * t = new Timeout(time);
-		t->onCompleteFunction = [tl, _delay](Timeout * _this){
+		Timeout * t = new Timeout(time, [tl, _delay](sweet::Event * _event){
 			tl->setVisible(true);
 			tl->tickerIn(_delay);
-		};
+		});
 		t->start();
 		timers.push_back(t);
 	}
@@ -95,10 +93,9 @@ void DialogueTextArea::tickerIn(float _delay){
 		dynamic_cast<DialogueTextLabel *>(usedLines.at(i))->tickerIn(_delay);
 		time += usedLines.at(i)->usedGlyphs.size() * _delay;
 	}
-	Timeout * t = new Timeout(time);
-	t->onCompleteFunction = [this](Timeout * _this){
+	Timeout * t = new Timeout(time, [this](sweet::Event * _event){
 		this->ticking = false;
-	};
+	});
 	t->start();
 	timers.push_back(t);
 }

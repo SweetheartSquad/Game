@@ -30,7 +30,7 @@
     <ClInclude Include="include/PD_TalkToButton.h" />
     <ClInclude Include="include/PD_TestScene.h" />
     <ClInclude Include="include/Room.h" />
-	<ClInclude Include="include\PD_InsultButton.h" />
+    <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
   </ItemGroup>
   <ItemGroup>
@@ -90,7 +90,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(ANT_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -101,7 +101,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(FREETYPE_DIR)\include;$(CPPREST_DIR)\Release\include;$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(FREETYPE_DIR)\include;$(CPPREST_DIR)\Release\include;$(BULLET_DIR)\src;$(ANT_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -113,7 +113,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <EnablePREfast>false</EnablePREfast>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -152,7 +152,7 @@ copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
