@@ -4,6 +4,8 @@
 
 class PD_Game : public Game{
 public:
+	virtual void addSplashes() override;
+
 	PD_Game();
 	~PD_Game();
 
