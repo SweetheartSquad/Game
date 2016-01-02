@@ -36,14 +36,14 @@ bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
 	return sweet::TextureUtils::getPixel(mesh->textures.at(0), t.x, t.y, 3) == 255;
 }
 
-void PD_Item::interact(glm::vec3 _position){
+bool PD_Item::interact(glm::vec3 _position){
 	// if a pixel perfect interaction is expected and _position doesn't pass the check, return early without triggering an interaction
 	if(pixelPerfectInteraction){
 		if(!checkPixelPerfectCollision(_position)){
-			return;
+			return false;
 		}
 	}
 
 	// trigger an interaction event
-	std::cout << "hey gj you clicked a thing" << std::endl;
+	return true;
 }

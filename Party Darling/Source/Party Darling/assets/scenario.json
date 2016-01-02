@@ -42,10 +42,22 @@
       "type": "texture",
       "src": "indexedColourTest2.png"
     },
-	{
+    {
       "id": "RYAN",
       "type": "texture",
       "src": "ryan.png"
+    },
+
+
+    {
+      "id": "BACKPACK",
+      "type": "texture",
+      "src": "backpack.png"
+    },
+    {
+      "id": "GRID",
+      "type": "texture",
+      "src": "GRID.png"
     }
   ],
   "characters": [

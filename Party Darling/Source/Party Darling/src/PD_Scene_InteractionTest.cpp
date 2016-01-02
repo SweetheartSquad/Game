@@ -80,6 +80,9 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	
 	door->setTranslationPhysical(10,0,2);
 	door->rotatePhysical(45,0,1,0,false);
+
+	uiInventory = new PD_UI_Inventory(uiLayer.world);
+	uiLayer.addChild(uiInventory);
 }
 
 PD_Scene_InteractionTest::~PD_Scene_InteractionTest(){
@@ -109,7 +112,22 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			if(mouse->leftJustPressed()){
 				PD_Item * b = dynamic_cast<PD_Item *>(me);
 				if(b != nullptr){
-					b->interact(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()));
+					if(b->interact(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
+						if(b->collectable){
+							// remove the item from the scene
+							Transform * toDelete = b->firstParent();
+							toDelete->firstParent()->removeChild(toDelete);
+							toDelete->removeChild(b);
+							delete toDelete;
+							bulletWorld->world->removeRigidBody(b->body);
+
+							// pickup the item
+							uiInventory->pickupItem(b);
+						}else{
+							// interact with the item
+							std::cout << "hey gj you clicked a thing" << std::endl;
+						}
+					}
 				}
 			}
 
@@ -121,7 +139,9 @@ void PD_Scene_InteractionTest::update(Step * _step){
 	}
 
 
-
+	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
+		uiInventory->setVisible(!uiInventory->isVisible());
+	}
 
 
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){

@@ -9,6 +9,8 @@
 #include <BulletWorld.h>
 #include <BulletMeshEntity.h>
 
+#include <PD_UI_Inventory.h>
+
 class PD_Scene_InteractionTest : public Scene{
 public:
 	ComponentShaderBase * shader;
@@ -23,6 +25,8 @@ public:
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
+
+	PD_UI_Inventory * uiInventory;
 
 	PD_Scene_InteractionTest(Game * _game);
 	~PD_Scene_InteractionTest();

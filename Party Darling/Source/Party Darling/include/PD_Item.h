@@ -20,7 +20,7 @@ public:
 
 	// called when the player clicks on an item in the world
 	// _position, the world position of the intersection point, is used to potentially filter interactions
-	void interact(glm::vec3 _position);
+	bool interact(glm::vec3 _position);
 
 	// given a _position in world space, checks for pixel perfect collision
 	// process: world space -> object space -> UV coordinates -> 
