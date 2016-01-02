@@ -5,8 +5,6 @@
 #include <TextArea.h>
 #include <Timeout.h>
 #include <Easing.h>
-//#include <scenario/ConversationIterator.h>
-#include <DialogueText.h>
 #include <scenario/Conversation.h>
 
 class DialogueDisplay : public ConversationIterator, public NodeUI{
