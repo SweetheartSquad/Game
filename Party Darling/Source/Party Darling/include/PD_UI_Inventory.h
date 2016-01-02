@@ -6,7 +6,7 @@
 #define UI_INVENTORY_GRID_SIZE_X 5
 #define UI_INVENTORY_GRID_SIZE_Y 5
 
-class PD_UI_Inventory : public VerticalLinearLayout{
+class PD_UI_Inventory : public HorizontalLinearLayout{
 private:
 	bool gridDirty;
 public:
@@ -14,8 +14,14 @@ public:
 	std::vector<PD_Item *> items;
 
 	// the grid of UI elements used to display inventory items
-	// array access is [x][y]
-	NodeUI * grid[UI_INVENTORY_GRID_SIZE_X][UI_INVENTORY_GRID_SIZE_Y];
+	// array access is [y][x]
+	NodeUI * grid[UI_INVENTORY_GRID_SIZE_Y][UI_INVENTORY_GRID_SIZE_X];
+	
+	// scrollbar for grid
+	SliderController * slider;
+
+	// the number of rows that have been scrolled since the top of the grid
+	float gridOffset;
 
 	PD_UI_Inventory(BulletWorld * _world);
 
