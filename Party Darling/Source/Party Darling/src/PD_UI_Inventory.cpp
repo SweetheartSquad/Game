@@ -51,6 +51,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cell->setMargin(0.01f, 0);
 			cell->background->mesh->setScaleMode(GL_NEAREST);
 			cell->boxSizing = kBORDER_BOX;
+			cell->setMouseEnabled(true);
+			cell->setVisible(false);
 			hl->addChild(cell);
 			grid[y][x] = cell;
 		}
@@ -59,7 +61,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	// scrollbar
 	slider = new SliderController(world, &gridOffset, 0, 0, 0, false, true);
 	slider->setRationalHeight(0.75f);
-	slider->setWidth(50);
+	slider->setWidth(10);
 	slider->setStepped(1.f);
 	slider->eventManager.addEventListener("change", [this](sweet::Event * _event){
 		gridDirty = true;
@@ -105,7 +107,10 @@ void PD_UI_Inventory::refreshGrid(){
 				PD_Item * item = items.at(itemIdx);
 
 				cell->background->mesh->pushTexture2D(item->mesh->textures.at(0));
+				cell->setVisible(true);
 				++itemIdx;
+			}else{
+				cell->setVisible(false);
 			}
 		}
 	}
