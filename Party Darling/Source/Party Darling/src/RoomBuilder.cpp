@@ -354,7 +354,7 @@ std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld *
 		MeshInterface * mesh = MeshFactory::getPlaneMesh(3);
 		Json::Value j;
 		j["src"] = "indexedColourTest.png";
-		AssetTexture * tex = new AssetTexture(j);
+		AssetTexture * tex = AssetTexture::create(j);
 		mesh->pushTexture2D(tex->texture);
 		characters.push_back(new Person(_world, MeshFactory::getPlaneMesh(3.f)));
 		
@@ -395,7 +395,7 @@ std::vector<Item *> RoomBuilder::getItems(Json::Value _json, BulletWorld * _worl
 		MeshInterface * mesh = MeshFactory::getPlaneMesh(2.f);
 		Json::Value j;
 		j["src"] = "uvs.png";
-		AssetTexture * tex = new AssetTexture(j);
+		AssetTexture * tex = AssetTexture::create(j);
 		mesh->pushTexture2D(tex->texture);
 
 		items.push_back(new Item(_world, mesh));
@@ -406,7 +406,7 @@ std::vector<Item *> RoomBuilder::getItems(Json::Value _json, BulletWorld * _worl
 
 Person * RoomBuilder::readCharacter(Json::Value _json, BulletWorld * _world){
 	MeshInterface * mesh = MeshFactory::getPlaneMesh(3);
-	AssetTexture * tex = new AssetTexture(_json["texture"]);
+	AssetTexture * tex = AssetTexture::create(_json["texture"]);
 	mesh->pushTexture2D(tex->texture);
 	return new Person(_world, mesh);
 }
