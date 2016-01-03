@@ -54,6 +54,19 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cell->setMouseEnabled(true);
 			cell->setVisible(false);
 			hl->addChild(cell);
+
+			// event listeners
+			cell->eventManager.addEventListener("mousein", [cell](sweet::Event * _event){
+				cell->setBackgroundColour(1,1,1,0.5f);
+			});
+			cell->eventManager.addEventListener("mouseout", [cell](sweet::Event * _event){
+				cell->setBackgroundColour(1,1,1,1.f);
+			});
+			cell->eventManager.addEventListener("click", [this, y, x](sweet::Event * _event){
+				selectItem(getItem(x, y));
+			});
+
+			// save a reference to the cell in the grid
 			grid[y][x] = cell;
 		}
 	}
@@ -78,6 +91,18 @@ void PD_UI_Inventory::pickupItem(PD_Item * _item){
 
 	// set flag to let us know we need to refresh the grid
 	gridDirty = true;
+}
+
+PD_Item * PD_UI_Inventory::getItem(unsigned long int _x, unsigned long int _y){
+	// reverse-engineer the item index based on the cell coordinates and grid offset
+	unsigned long int itemIdx = _x + (_y+gridOffset) * UI_INVENTORY_GRID_SIZE_X;
+
+	// return the item at the calculated index, or nullptr if the cell is empty
+	return itemIdx < items.size() ? items.at(itemIdx) : nullptr;
+}
+
+void PD_UI_Inventory::selectItem(PD_Item * _item){
+	std::cout << "hey gj you clicked an inventory item: " << _item <<  std::endl;
 }
 
 

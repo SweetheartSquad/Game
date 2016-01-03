@@ -25,9 +25,15 @@ public:
 
 	PD_UI_Inventory(BulletWorld * _world);
 
-	// add an item to the inventory l
+	// add an item to the inventory
 	void pickupItem(PD_Item * _item);
 	
+	// return the inventory item stored in grid[_x][_y]
+	PD_Item * getItem(unsigned long int _x, unsigned long int _y);
+	
+	// put _item in the player's "hands"
+	void selectItem(PD_Item * _item);
+
 	// updates the grid of displayed inventory items based on the list
 	// of currently held items and the view offset
 	void refreshGrid();
