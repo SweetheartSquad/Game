@@ -6,8 +6,9 @@
 #include <MeshFactory.h>
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
-#include <Keyboard.h>
 #include <TextureColourTable.h>
+
+#include <sweet/Input.h>
 
 Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor),

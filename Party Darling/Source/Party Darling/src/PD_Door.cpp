@@ -9,7 +9,4 @@ PD_Door::PD_Door(BulletWorld * _world, Texture * _texture, Shader * _shader) :
 {
 	childTransform->scale(10);
 	freezeTransformation();
-	
-	setColliderAsBoundingBox();
-	createRigidBody(0);
 }

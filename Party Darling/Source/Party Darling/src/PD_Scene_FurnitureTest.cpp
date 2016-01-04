@@ -1,8 +1,6 @@
 #include <PD_Scene_FurnitureTest.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
-#include <Mouse.h>
-#include <Keyboard.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
@@ -15,6 +13,8 @@
 
 #include <RenderOptions.h>
 #include <json\json.h>
+
+#include <sweet/Input.h>
 
 PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	Scene(_game),

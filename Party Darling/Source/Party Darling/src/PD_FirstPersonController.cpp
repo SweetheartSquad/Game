@@ -2,13 +2,13 @@
 
 #include <PD_FirstPersonController.h>
 
-#include <Keyboard.h>
-#include <Mouse.h>
 #include <Joystick.h>
 #include <NodeBulletBody.h>
 #include <NodeUI.h>
 #include <MousePerspectiveCamera.h>
 #include <Log.h>
+
+#include <sweet/Input.h>
 
 PD_FirstPersonController::PD_FirstPersonController(NodeBulletBody * _targetEntity, MousePerspectiveCamera  * _targetCamera) :
 	targetEntity(_targetEntity),

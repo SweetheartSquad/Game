@@ -47,3 +47,9 @@ bool PD_Item::interact(glm::vec3 _position){
 	// trigger an interaction event
 	return true;
 }
+
+void PD_Item::addToWorld(){	
+	
+	setColliderAsBoundingBox();
+	createRigidBody(0);
+}

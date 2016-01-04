@@ -3,10 +3,10 @@
 #include <PD_Scene_YellingContestTest.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
-#include <Keyboard.h>
-#include <Mouse.h>
 #include <RenderOptions.h>
 #include <PD_UI_YellingContest.h>
+
+#include <sweet/Input.h>
 
 PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	Scene(_game),

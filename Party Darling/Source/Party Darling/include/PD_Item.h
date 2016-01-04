@@ -26,4 +26,8 @@ public:
 	// process: world space -> object space -> UV coordinates -> 
 	bool checkPixelPerfectCollision(glm::vec3 _position);
 
+
+	// sets the collider as the bounding box
+	// and creates a static rigid body
+	void addToWorld();
 };

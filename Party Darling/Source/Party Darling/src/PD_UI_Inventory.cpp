@@ -7,7 +7,8 @@
 PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	HorizontalLinearLayout(_world),
 	gridDirty(false),
-	gridOffset(0)
+	gridOffset(0),
+	selectedItem(nullptr)
 {
 	// this is the root element which has the backpack texture
 	setBackgroundColour(1,1,1,1);
@@ -57,10 +58,10 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 			// event listeners
 			cell->eventManager.addEventListener("mousein", [cell](sweet::Event * _event){
-				cell->setBackgroundColour(1,1,1,0.5f);
+				cell->setBackgroundColour(1,1,1, 0.5f);
 			});
 			cell->eventManager.addEventListener("mouseout", [cell](sweet::Event * _event){
-				cell->setBackgroundColour(1,1,1,1.f);
+				cell->setBackgroundColour(1,1,1, 1.f);
 			});
 			cell->eventManager.addEventListener("click", [this, y, x](sweet::Event * _event){
 				selectItem(getItem(x, y));
@@ -94,17 +95,52 @@ void PD_UI_Inventory::pickupItem(PD_Item * _item){
 }
 
 PD_Item * PD_UI_Inventory::getItem(unsigned long int _x, unsigned long int _y){
-	// reverse-engineer the item index based on the cell coordinates and grid offset
-	unsigned long int itemIdx = _x + (_y+gridOffset) * UI_INVENTORY_GRID_SIZE_X;
-
+	unsigned long int itemIdx = getItemIdx(_x, _y);
 	// return the item at the calculated index, or nullptr if the cell is empty
 	return itemIdx < items.size() ? items.at(itemIdx) : nullptr;
 }
-
-void PD_UI_Inventory::selectItem(PD_Item * _item){
-	std::cout << "hey gj you clicked an inventory item: " << _item <<  std::endl;
+unsigned long int PD_UI_Inventory::getItemIdx(unsigned long int _x, unsigned long int _y){
+	// reverse-engineer the item index based on the cell coordinates and grid offset
+	return _x + (_y+gridOffset) * UI_INVENTORY_GRID_SIZE_X;
 }
 
+void PD_UI_Inventory::selectItem(PD_Item * _item){
+	selectedItem = _item;
+}
+
+PD_Item * PD_UI_Inventory::getSelected(){
+	return selectedItem;
+}
+
+PD_Item * PD_UI_Inventory::removeSelected(){
+	PD_Item * res = selectedItem;
+	// if nothing is selected, log a warning and return early
+	if(res == nullptr){
+		Log::warn("Tried to remove the selected inventory item but nothing was selected.");
+		return nullptr;
+	}
+
+	// search the inventory for the selected item
+	// when found, remove it, flag the grid as dirty
+	// (assumes that there are no duplicated)
+	for(signed long int i = items.size()-1; i >= 0; --i){
+		if(items.at(i) == res){
+			items.erase(items.begin() + i);
+			gridDirty = true;
+			selectedItem = nullptr;
+			break;
+		}
+	}
+
+	// if we still have a selected item at this point, it means
+	// that it wasn't in the inventory in the first place
+	// this shouldn't happen, so log an error
+	if(selectedItem != nullptr){
+		Log::error("Tried to remove selected inventory item, but the item wasn't in the inventory?");
+	}
+
+	return res;
+}
 
 void PD_UI_Inventory::update(Step * _step){
 	// only refresh the grid when necessary, i.e. when it is both visible and out of date
