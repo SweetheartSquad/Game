@@ -3,8 +3,6 @@
 #include <PD_Scene_InteractionTest.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
-#include <Mouse.h>
-#include <Keyboard.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
@@ -22,6 +20,8 @@
 #include <json\json.h>
 
 #include <PD_Door.h>
+
+#include <sweet/Input.h>
 
 PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	Scene(_game),
@@ -76,6 +76,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	Texture * tex = new Texture("assets/textures/door.png", true, true, false);
 	tex->load();
 	PD_Door * door = new PD_Door(bulletWorld, tex, shader);
+	door->addToWorld();
 	childTransform->addChild(door);
 	
 	door->setTranslationPhysical(10,0,2);
@@ -119,7 +120,10 @@ void PD_Scene_InteractionTest::update(Step * _step){
 							toDelete->firstParent()->removeChild(toDelete);
 							toDelete->removeChild(b);
 							delete toDelete;
+							delete b->shape;
+							b->shape = nullptr;
 							bulletWorld->world->removeRigidBody(b->body);
+							b->body = nullptr;
 
 							// pickup the item
 							uiInventory->pickupItem(b);
@@ -137,7 +141,23 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			}
 		}
 	}
+	if(keyboard->keyJustDown(GLFW_KEY_D)){
 
+		// dropping an item
+
+		if(PD_Item * item = uiInventory->removeSelected()){
+			// put the item back into the scene
+			childTransform->addChild(item);
+			item->addToWorld();
+			
+			// figure out where to put the item
+			glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
+			targetPos.y = 0; // always put stuff on the ground
+			item->setTranslationPhysical(targetPos, false);
+			// rotate the item to face the camera
+			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+		}
+	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
 		uiInventory->setVisible(!uiInventory->isVisible());
