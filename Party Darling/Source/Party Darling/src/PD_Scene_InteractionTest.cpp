@@ -81,6 +81,14 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	
 	door->setTranslationPhysical(10,0,2);
 	door->rotatePhysical(45,0,1,0,false);
+	
+
+	uiBubble = new PD_UI_Bubble(uiLayer.world);
+	uiLayer.addChild(uiBubble);
+
+	uiBubble->addOption("test1");
+	uiBubble->addOption("test2");
+	uiBubble->addOption("test3");
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
@@ -158,9 +166,21 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
 		}
 	}
-
+	
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
 		uiInventory->setVisible(!uiInventory->isVisible());
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_V)){
+		++uiBubble->currentOption;
+		if(uiBubble->currentOption >= uiBubble->options.size()){
+			uiBubble->currentOption = 0;
+		}
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_B)){
+		--uiBubble->currentOption;
+		if(uiBubble->currentOption > uiBubble->options.size()){
+			uiBubble->currentOption = uiBubble->options.size()-1;
+		}
 	}
 
 
