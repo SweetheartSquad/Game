@@ -150,7 +150,8 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 	if (textureID == 2){
 		chairTexture = "RYAN";
 	}
-	MeshInterface * chairBack = Resource::loadMeshFromObj("assets/TestChairComponents/Chair_Back_1.obj").at(0);
+
+	/*MeshInterface * chairBack = Resource::loadMeshFromObj("assets/TestChairComponents/Chair_Back_1.obj").at(0);
 	chairBack->pushTexture2D(PD_ResourceManager::scenario->getTexture(chairTexture)->texture);
 	MeshEntity * chairBack_Entity = new MeshEntity(chairBack, shader);
 
@@ -162,11 +163,13 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 	chairLegs->pushTexture2D(PD_ResourceManager::scenario->getTexture(chairTexture)->texture);
 	MeshEntity * chairLegs_Entity = new MeshEntity(chairLegs, shader);
 
-	Transform * chairTransform = new Transform();
+	
 	chairTransform ->addChild(chairBack_Entity,false);
 	chairTransform ->addChild(chairBase_Entity,false);
-	chairTransform ->addChild(chairLegs_Entity,false);
+	chairTransform ->addChild(chairLegs_Entity,false);*/
 
+
+	Transform * chairTransform = new Transform();
 
 	Json::Value root;
 	int id;
@@ -177,12 +180,25 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
 	}else{
+
+		 Json::Value componentJson = root["components"];
+
 		 Json::Value furnitureJson = root["furniture"];
 
+
 		 for(Json::Value v : furnitureJson){
-			std::cout << v; 
+			 createFurniture(v);
 		 }
-	}
+			 
+			 
+			 /*for(auto val : t["outComponents"]){
+				 for(auto v2 : val){
+					ST_LOG_INFO(v2.get("childComponent", "NONE").asString());
+				 }
+			 }*/
+			
+		 }
+	
 
 
 
@@ -191,5 +207,40 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 
 	chairTransform ->translate(xValue,0,zValue);
 	return chairTransform;
+
+}
+
+void PD_Scene_FurnitureTest::createFurniture(Json::Value v){
+
+	Json::Value v = v;
+
+	auto t = v["type"];
+	if (t.asString()=="chair"){
+		//std::cout << "butts" << std::endl;
+		auto c = v["components"];
+		//std::cout << c;
+		for (auto i = 0; i < c.size(); i ++){
+			auto isRequired = c[i]["required"];
+			auto componentType = c[i]["componentType"].asString();
+
+				std::cout << c[i]["componentType"].asString() << "butts" << std::endl;
+				createComponent(c[i]["outComponents"]);
+				
+			}
+		}
+				
+	}
+
+void PD_Scene_FurnitureTest::createComponent(Json::Value c){
+
+	Json::Value component = c;
+
+	for(auto i = 0; i <component.size(); i++){
+		auto childComp = component[i]["childComponent"].asString();
+		auto isRequired = component[i]["required"].asBool();
+		auto multiplier = component[i]["multiplier"].asInt();
+
+		createComponent(component[i]["outComponent"]);
+	}
 
 }

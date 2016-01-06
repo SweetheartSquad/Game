@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Scene.h>
 #include <Sprite.h>
 #include <UILayer.h>
@@ -15,6 +17,9 @@ public:
 	virtual void unload() override;
 
 	Transform * createChair();
+
+	void createFurniture(Json::Value v);
+	void createComponent(Json::Value c);
 
 	UILayer uiLayer;
 
