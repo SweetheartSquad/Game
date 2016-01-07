@@ -210,9 +210,9 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 
 }
 
-void PD_Scene_FurnitureTest::createFurniture(Json::Value v){
+void PD_Scene_FurnitureTest::createFurniture(Json::Value _v){
 
-	Json::Value v = v;
+	Json::Value v = _v;
 
 	auto t = v["type"];
 	if (t.asString()=="chair"){
