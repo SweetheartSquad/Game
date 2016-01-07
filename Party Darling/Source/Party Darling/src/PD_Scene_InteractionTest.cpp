@@ -86,9 +86,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
 	uiLayer.addChild(uiBubble);
 
-	uiBubble->addOption("test1");
-	uiBubble->addOption("test2");
-	uiBubble->addOption("test3");
+	uiBubble->addOption("test");
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
@@ -167,20 +165,18 @@ void PD_Scene_InteractionTest::update(Step * _step){
 		}
 	}
 	
+	// inventory toggle
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
 		uiInventory->setVisible(!uiInventory->isVisible());
 	}
+
+	// bubble testing controls
 	if(keyboard->keyJustDown(GLFW_KEY_V)){
-		++uiBubble->currentOption;
-		if(uiBubble->currentOption >= uiBubble->options.size()){
-			uiBubble->currentOption = 0;
-		}
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_B)){
-		--uiBubble->currentOption;
-		if(uiBubble->currentOption > uiBubble->options.size()){
-			uiBubble->currentOption = uiBubble->options.size()-1;
-		}
+		uiBubble->next();
+	}if(keyboard->keyJustDown(GLFW_KEY_B)){
+		uiBubble->prev();
+	}if(keyboard->keyJustDown(GLFW_KEY_N)){
+		uiBubble->addOption("test");
 	}
 
 
