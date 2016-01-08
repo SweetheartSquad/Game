@@ -39,9 +39,17 @@ private:
 	glm::vec3 glyph1Pos;
 	glm::vec3 glyph2Pos;
 
+	float confidence;
+
 public:
 	Sprite * enemyCursor;
 	Camera * cam;
+
+	SliderControlled * confidenceSlider;
+
+	TextArea * selectedGlyphText;
+	
+	float damage;
 
 	HorizontalLinearLayout * enemyBubble;
 	//TextArea * enemyBubbleText;
@@ -66,4 +74,6 @@ public:
 	void setUIMode(bool _isOffensive);
 	void interject();
 	void insult(bool _isEffective);
+
+	void incrementConfidence(float _value);
 };

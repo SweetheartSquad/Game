@@ -54,12 +54,14 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	modeOffensive(true),
-	cursorDelayLength(0.25f),
+	cursorDelayLength(0.2f),
 	cursorDelayDuration(0.f),
 	moveCursor(false),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
-	cam(_cam)
+	cam(_cam),
+	confidence(50.f),
+	damage(20.f)
 {
 	enemyCursor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-CURSOR")->texture);
 	enemyCursor->childTransform->scale(20.f);
@@ -75,6 +77,17 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	verticalAlignment = kMIDDLE;
 	horizontalAlignment = kCENTER;
 	setBackgroundColour(0.5, 0.5, 0.5, 1);
+
+	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
+	confidenceSlider->setBackgroundColour(1.f, 0, 0);
+	confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
+	confidenceSlider->setRationalWidth(0.7f);
+	confidenceSlider->setRationalHeight(0.05f);
+
+	selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 2.f, 2.f);
+	selectedGlyphText->setBackgroundColour(0, 0, 1.f);
+	selectedGlyphText->setRationalWidth(0.5f);
+	selectedGlyphText->setRationalHeight(0.05f);
 
 	enemyBubble = new HorizontalLinearLayout(_bulletWorld);
 	enemyBubble->verticalAlignment = kMIDDLE;
@@ -124,6 +137,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	playerBubble->addChild(buttonLayout);
 	
+	addChild(confidenceSlider);
+	addChild(selectedGlyphText);
 	addChild(enemyBubble);
 	addChild(playerBubble);
 
@@ -135,6 +150,16 @@ void PD_UI_YellingContest::update(Step * _step){
 		interject();
 		
 	}
+	
+	if(modeOffensive){
+		if(keyboard->keyJustDown(GLFW_KEY_UP)){
+			insult(pBubbleBtn1->isEffective);
+		}
+		if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
+			insult(pBubbleBtn2->isEffective);
+		}
+	}
+
 	VerticalLinearLayout::update(_step);
 
 	if(moveCursor){
@@ -153,6 +178,8 @@ void PD_UI_YellingContest::update(Step * _step){
 				enemyCursor->childTransform->translate(tx, ty, 0, false);
 			}else{
 				++glyphIdx;
+				std::string s;
+				selectedGlyphText->setText(std::wstring(&glyphs.at(glyphIdx)->character));
 				cursorDelayDuration = 0;
 			}
 			
@@ -177,10 +204,14 @@ void PD_UI_YellingContest::interject(){
 	}else{
 		isPunctuation = true;
 	}
+
+	incrementConfidence(isPunctuation ? damage : -damage);
+
 	setUIMode(isPunctuation);
 }
 
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
+	modeOffensive = _isOffensive;
 	enemyBubble->setVisible(!_isOffensive);
 	enemyCursor->setVisible(!_isOffensive);
 
@@ -206,6 +237,7 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	glyphIdx = 0;
 	moveCursor = true;
+	cursorDelayDuration = 0;
 	glyphs.clear();
 	for (auto label : enemyBubbleText->usedLines) {
 		for (int i = 0; i < label->usedGlyphs.size(); ++i){
@@ -237,10 +269,16 @@ void PD_UI_YellingContest::setPlayerText(){
 void PD_UI_YellingContest::insult(bool _isEffective){
 	if (_isEffective){
 		// next insult
+		incrementConfidence(damage);
 		setPlayerText();
 	}
 	else{
 		//fail
+		incrementConfidence(-damage);
 		setUIMode(false);
 	}
+}
+
+void PD_UI_YellingContest::incrementConfidence(float _value){
+	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value; 
 }
