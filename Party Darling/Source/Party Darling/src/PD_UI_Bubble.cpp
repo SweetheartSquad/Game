@@ -99,10 +99,7 @@ void PD_UI_Bubble::update(Step * _step){
 		options.at(i)->setWidth(w);
 		//options.at(i)->setBorder(std::max(2.f,w/30.f));
 		options.at(i)->setBackgroundColour(1,1,1, i == currentOption ? 1.f : 0.5f);
-		//options.at(i)->invalidateLayout();
-		options.at(i)->doRecursivelyOnUIChildren([](NodeUI * _this){
-			_this->invalidateLayout();
-		}, true);
+		options.at(i)->invalidateLayout();
 	}
 
 
