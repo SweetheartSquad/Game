@@ -76,7 +76,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	setRationalHeight(1.0);
 	verticalAlignment = kMIDDLE;
 	horizontalAlignment = kCENTER;
-	setBackgroundColour(0.5, 0.5, 0.5, 1);
+	background->setVisible(false);
 
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	confidenceSlider->setBackgroundColour(1.f, 0, 0);
