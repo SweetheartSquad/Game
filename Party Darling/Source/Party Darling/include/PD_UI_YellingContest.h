@@ -7,10 +7,11 @@ class Shader;
 class PD_InsultButton;
 class Keyboard;
 class Sprite;
+class ComponentShaderText;
 
 class PD_UI_YellingContest_TextArea : public TextArea{
 private:
-	
+	ComponentShaderText * highlightTextShader;
 
 public:
 	
@@ -37,6 +38,7 @@ private:
 	unsigned int glyphIdx;
 	glm::vec3 glyph1Pos;
 	glm::vec3 glyph2Pos;
+
 public:
 	Sprite * enemyCursor;
 	Camera * cam;

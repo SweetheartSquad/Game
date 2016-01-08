@@ -10,16 +10,25 @@
 #include <Sprite.h>
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
+#include <shader/ComponentShaderText.h>
 
 PD_UI_YellingContest_TextArea::PD_UI_YellingContest_TextArea(BulletWorld * _world, Font * _font, Shader * _textShader, Shader * _shader) :
-	TextArea(_world, _font, _textShader, 0.9f)
+	TextArea(_world, _font, _textShader, 0.9f),
+	highlightTextShader(new ComponentShaderText(true))
 {
+	highlightTextShader->setColor(0, 1.f, 0);
 }
 PD_UI_YellingContest_TextArea::~PD_UI_YellingContest_TextArea(){
 }
 
 void PD_UI_YellingContest_TextArea::setText(std::wstring _text){
 	TextArea::setText(_text);
+
+	for (auto label : usedLines) {
+		for (int i = 0; i < label->usedGlyphs.size(); ++i){
+			highlightPunctuation(label->usedGlyphs.at(i));
+		}
+	}
 }
 void PD_UI_YellingContest_TextArea::highlightPunctuation(UIGlyph * _glyph){
 	switch (_glyph->character){
@@ -27,7 +36,12 @@ void PD_UI_YellingContest_TextArea::highlightPunctuation(UIGlyph * _glyph){
 		case L'?':
 		case L'!':
 		case L',':
-			_glyph->setBackgroundColour(0, 1.f, 0);
+			if(_glyph->shader != nullptr){
+				_glyph->shader->decrementAndDelete();
+			}
+			_glyph->shader = highlightTextShader;
+			++_glyph->shader->referenceCount;
+			_glyph->shader->load();
 	}
 }
 
