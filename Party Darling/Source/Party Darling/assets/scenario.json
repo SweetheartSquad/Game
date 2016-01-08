@@ -48,6 +48,11 @@
       "src": "ryan.png"
     },
 
+	{
+      "id": "YELLING-CONTEST-CURSOR",
+      "type": "texture",
+      "src": "yelling contest/cursor.png"
+    },
 
     {
       "id": "BACKPACK",
