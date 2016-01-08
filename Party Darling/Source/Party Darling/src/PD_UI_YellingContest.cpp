@@ -86,8 +86,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 2.f, 2.f);
 	selectedGlyphText->setBackgroundColour(0, 0, 1.f);
-	selectedGlyphText->setRationalWidth(0.5f);
+	selectedGlyphText->setWidth(50.f);
 	selectedGlyphText->setRationalHeight(0.05f);
+	selectedGlyphText->horizontalAlignment = kCENTER;
 
 	enemyBubble = new HorizontalLinearLayout(_bulletWorld);
 	enemyBubble->verticalAlignment = kMIDDLE;
@@ -146,10 +147,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 }
 
 void PD_UI_YellingContest::update(Step * _step){
-	if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-		interject();
-		
-	}
+	
 	
 	if(modeOffensive){
 		if(keyboard->keyJustDown(GLFW_KEY_UP)){
@@ -158,15 +156,24 @@ void PD_UI_YellingContest::update(Step * _step){
 		if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
 			insult(pBubbleBtn2->isEffective);
 		}
+	}else{
+		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+			interject();
+		}
 	}
 
 	VerticalLinearLayout::update(_step);
 
-	if(moveCursor){
+	if(!modeOffensive){
 		// At least two glyphs in stack
-		if(glyphIdx+1 < glyphs.size()){
-			glm::vec3 screenPos1 = glyphs.at(glyphIdx)->childTransform->getWorldPos();//cam->worldToScreen(glyphs.at(glyphIdx)->childTransform->getWorldPos(), sweet::getWindowDimensions());
-			glm::vec3 screenPos2 = glyphs.at(glyphIdx+1)->childTransform->getWorldPos();
+		if(glyphIdx < glyphs.size()){
+			glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
+			float w = glyphs.at(glyphIdx)->getWidth();
+
+			glm::vec3 screenPos1 = screenPos;
+			glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
+			//glm::vec3 screenPos1 = glyphs.at(glyphIdx)->childTransform->getWorldPos();//cam->worldToScreen(glyphs.at(glyphIdx)->childTransform->getWorldPos(), sweet::getWindowDimensions());
+			//glm::vec3 screenPos2 = glyphs.at(glyphIdx+1)->childTransform->getWorldPos();
 			
 			cursorDelayDuration += _step->getDeltaTime();
 
@@ -178,9 +185,13 @@ void PD_UI_YellingContest::update(Step * _step){
 				enemyCursor->childTransform->translate(tx, ty, 0, false);
 			}else{
 				++glyphIdx;
-				std::string s;
-				selectedGlyphText->setText(std::wstring(&glyphs.at(glyphIdx)->character));
 				cursorDelayDuration = 0;
+
+				if(glyphIdx < glyphs.size()){
+					std::wstringstream s;
+					s << glyphs.at(glyphIdx)->character;
+					selectedGlyphText->setText(s.str());
+				}
 			}
 			
 		}else{
