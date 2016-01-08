@@ -10,6 +10,7 @@
 #include <BulletMeshEntity.h>
 
 #include <PD_UI_Inventory.h>
+#include <PD_UI_Bubble.h>
 
 class PD_Scene_InteractionTest : public Scene{
 public:
@@ -27,6 +28,7 @@ public:
 	BulletDebugDrawer * debugDrawer;
 
 	PD_UI_Inventory * uiInventory;
+	PD_UI_Bubble * uiBubble;
 
 	PD_Scene_InteractionTest(Game * _game);
 	~PD_Scene_InteractionTest();

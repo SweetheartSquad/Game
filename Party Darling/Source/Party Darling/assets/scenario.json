@@ -63,6 +63,21 @@
       "id": "GRID",
       "type": "texture",
       "src": "GRID.png"
+    },
+
+
+    {
+      "id": "SLIDER-THUMB",
+      "type": "texture",
+      "src": "UI/thumb.png"
+    },{
+      "id": "SLIDER-FILL",
+      "type": "texture",
+      "src": "UI/fill.png"
+    },{
+      "id": "SLIDER-TRACK",
+      "type": "texture",
+      "src": "UI/track.png"
     }
   ],
   "characters": [
