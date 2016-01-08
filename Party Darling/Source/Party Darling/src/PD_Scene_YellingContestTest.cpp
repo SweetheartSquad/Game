@@ -36,9 +36,10 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	mouseIndicator->setShader(uiLayer.shader, true);
 
 	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 12, true);
-	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader);
+	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader, uiLayer.shader, activeCamera);
 	
 	uiLayer.addChild(uiYellingContest);
+	//uiLayer.addChild(uiYellingContest->enemyBubbleText->enemyCursor);
 }
 
 PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
