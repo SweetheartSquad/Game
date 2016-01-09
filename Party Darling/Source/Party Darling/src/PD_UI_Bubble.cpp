@@ -84,24 +84,27 @@ void PD_UI_Bubble::update(Step * _step){
 	float h = getHeight(true, true);
 	test->translate(w/2, h/2, 0, false);
 	}
-
-	displayOffset += (((float)currentOption / options.size() + 0.1f) - displayOffset) * 0.2f;
 	
-	float verticalSpacing = 50.f;
-	float bubbleWidth = 200;
-	for(unsigned long int i = 0; i < options.size(); ++i){
-		float offset = (float)i / options.size();
-		offset -= displayOffset;
-		offset *= glm::pi<float>()*2.f;
-		float w = ((glm::cos(offset) + 1)*0.5f + 1.f)*bubbleWidth;
+	float targetDispayOffset = ((float)currentOption / options.size() + 0.1f);
+	float delta = targetDispayOffset - displayOffset;
+	if(std::abs(delta) > FLT_EPSILON){
+		displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
+	
+		float verticalSpacing = 50.f;
+		float bubbleWidth = 200;
+		for(unsigned long int i = 0; i < options.size(); ++i){
+			float offset = (float)i / options.size();
+			offset -= displayOffset;
+			offset *= glm::pi<float>()*2.f;
+			float w = ((glm::cos(offset) + 1)*0.5f + 1.f)*bubbleWidth;
 
-		options.at(i)->firstParent()->translate(-w/2.f, glm::sin(offset)*verticalSpacing, 0, false);
-		options.at(i)->setWidth(w);
-		//options.at(i)->setBorder(std::max(2.f,w/30.f));
-		options.at(i)->setBackgroundColour(1,1,1, i == currentOption ? 1.f : 0.5f);
-		options.at(i)->invalidateLayout();
+			options.at(i)->firstParent()->translate(-w/2.f, glm::sin(offset)*verticalSpacing, 0, false);
+			options.at(i)->setWidth(w);
+			//options.at(i)->setBorder(std::max(2.f,w/30.f));
+			options.at(i)->setBackgroundColour(1,1,1, i == currentOption ? 1.f : 0.5f);
+			options.at(i)->invalidateLayout();
+		}
 	}
-
 
 	
 
