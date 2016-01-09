@@ -90,6 +90,11 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
+	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
+		uiInventory->close();
+
+		// TODO: update the UI to indicate the selected item to the player
+	});
 }
 
 PD_Scene_InteractionTest::~PD_Scene_InteractionTest(){
@@ -167,7 +172,11 @@ void PD_Scene_InteractionTest::update(Step * _step){
 	
 	// inventory toggle
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
-		uiInventory->setVisible(!uiInventory->isVisible());
+		if(uiInventory->isVisible()){
+			uiInventory->close();
+		}else{
+			uiInventory->open();
+		}
 	}
 
 	// bubble testing controls

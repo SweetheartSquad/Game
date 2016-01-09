@@ -13,6 +13,7 @@ private:
 	// the currenty selected item
 	// nullptr if nothing is selected
 	PD_Item * selectedItem;
+	bool itemHovered;
 public:
 	// all of the currently held inventory items
 	std::vector<PD_Item *> items;
@@ -23,6 +24,13 @@ public:
 	
 	// scrollbar for grid
 	SliderController * slider;
+
+
+	NodeUI * itemImage;
+	TextArea * itemDescription;
+	TextLabel * itemName;
+	VerticalLinearLayout * infoLayout;
+	VerticalLinearLayout * gridLayout;
 
 	// the number of rows that have been scrolled since the top of the grid
 	float gridOffset;
@@ -54,6 +62,11 @@ public:
 	// returns the currently selected item, or nullptr if nothing is selected
 	PD_Item * getSelected();
 
+
+	// hides the inventory and disables interaction
+	void close();
+	// opens the inventory and enabled interaction
+	void open();
 
 	virtual void update(Step * _step) override;
 };

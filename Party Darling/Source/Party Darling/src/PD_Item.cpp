@@ -5,10 +5,12 @@
 #include <MeshInterface.h>
 #include <TextureUtils.h>
 
-PD_Item::PD_Item(BulletWorld * _world, Texture * _texture, Shader * _shader, bool _collectable, bool _pixelPerfectInteraction) :
+PD_Item::PD_Item(std::string _name, std::string _description, BulletWorld * _world, Texture * _texture, Shader * _shader, bool _collectable, bool _pixelPerfectInteraction) :
 	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
 	collectable(_collectable),
-	pixelPerfectInteraction(_pixelPerfectInteraction)
+	pixelPerfectInteraction(_pixelPerfectInteraction),
+	name(_name),
+	description(_description)
 {
 	mesh->pushTexture2D(_texture);
 	mesh->setScaleMode(GL_NEAREST);
