@@ -54,6 +54,12 @@
       "src": "yelling contest/cursor.png"
     },
 
+	{
+      "id": "YELLING-CONTEST-HIGHLIGHT",
+      "type": "texture",
+      "src": "yelling contest/highlight.png"
+    },
+
     {
       "id": "BACKPACK",
       "type": "texture",
