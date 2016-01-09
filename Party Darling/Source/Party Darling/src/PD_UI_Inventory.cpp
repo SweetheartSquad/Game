@@ -66,8 +66,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 				}
 				PD_Item * item = getItem(x, y);
 				if(item != nullptr){
-					itemImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->defaultTexture->texture);
-					//itemImage->background->mesh->pushTexture2D(item->mesh->textures.at(0));
+					//itemImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->defaultTexture->texture);
+					itemImage->background->mesh->pushTexture2D(item->mesh->textures.at(0));
 					
 					itemName->setText(item->name);
 					itemDescription->setText(item->description);

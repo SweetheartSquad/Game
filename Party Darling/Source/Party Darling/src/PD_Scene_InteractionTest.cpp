@@ -73,9 +73,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiLayer.addChild(l);
 	l->addChild(c);
 
-	Texture * tex = new Texture("assets/textures/door.png", true, true, false);
-	tex->load();
-	PD_Door * door = new PD_Door(bulletWorld, tex, shader);
+	PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
 	door->addToWorld();
 	childTransform->addChild(door);
 	

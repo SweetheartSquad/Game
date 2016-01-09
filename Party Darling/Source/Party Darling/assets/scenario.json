@@ -65,6 +65,12 @@
       "src": "GRID.png"
     },
 
+    {
+      "id": "DOOR",
+      "type": "texture",
+      "src": "door.png"
+    },
+
 
     {
       "id": "SLIDER-THUMB",
