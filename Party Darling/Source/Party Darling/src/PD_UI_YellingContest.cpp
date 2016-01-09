@@ -66,7 +66,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	confidenceSlider->setRationalWidth(0.7f);
 	confidenceSlider->setRationalHeight(0.05f);
 
-	selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 2.f, 2.f);
+	selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 0.9);
 	selectedGlyphText->setBackgroundColour(0, 0, 1.f);
 	selectedGlyphText->setWidth(50.f);
 	selectedGlyphText->setRationalHeight(0.05f);
@@ -250,7 +250,7 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	typedef std::map<UIGlyph *, Sprite *>::iterator it_type;
 	for(it_type it = highlights.begin(); it != highlights.end(); it++) {
-		childTransform->removeChild(it->second);
+		enemyBubbleText->firstParent()->removeChild(it->second);
 	}
 	highlights.clear();
 
@@ -320,9 +320,12 @@ void PD_UI_YellingContest::highlightGlyph(UIGlyph * _glyph, bool _highlight){
 				highlights.at(_glyph)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
 				// move the cusrosr's mesh up so that the origin is aligned with the bottom
 				for (unsigned long int i = 0; i < highlights.at(_glyph)->mesh->vertices.size(); ++i){
+					highlights.at(_glyph)->mesh->vertices.at(i).x += 0.5f;
 					highlights.at(_glyph)->mesh->vertices.at(i).y += 0.5f;
 				}
-				highlights.at(_glyph)->childTransform->scale(40, 40, 1.f);
+				float w = _glyph->getWidth();
+				float h = enemyBubbleText->font->getLineHeight();
+				highlights.at(_glyph)->childTransform->scale(w, h, 1.f);
 
 				enemyBubbleText->firstParent()->addChildAtIndex(highlights.at(_glyph), 0);
 			}
