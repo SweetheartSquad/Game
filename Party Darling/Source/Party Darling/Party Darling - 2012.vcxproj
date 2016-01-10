@@ -21,6 +21,7 @@
     <ClInclude Include="include\PD_Game.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_Item.h" />
+    <ClInclude Include="include\PD_Nav.h" />
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
     <ClInclude Include="include\PD_Scene_InteractionTest.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="include\PD_UI_Inventory.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
+    <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
@@ -48,6 +50,7 @@
     <ClCompile Include="src\PD_Game.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
+    <ClCompile Include="src\PD_Nav.cpp" />
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />
     <ClCompile Include="src\PD_Scene_InteractionTest.cpp" />
@@ -59,6 +62,7 @@
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_YellingContest.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />

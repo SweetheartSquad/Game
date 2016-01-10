@@ -1,0 +1,58 @@
+#pragma once
+
+#include <node/NodeChild.h>
+#include <node/NodeUpdatable.h>
+
+#include <Scene.h>
+#include <BulletDebugDrawer.h>
+#include <BulletWorld.h>
+#include <NodeBulletBody.h>
+#include <MousePerspectiveCamera.h>
+
+class Keyboard;
+class Mouse;
+class Joystick;
+
+class PerspectiveCamera;
+class MousePerspectiveCamera;
+
+class ShaderComponentHsv;
+
+class Shader;
+class RenderSurface;
+class StandardFrameBuffer;
+class Material;
+class Sprite;
+
+class BulletMeshEntity;
+class NodeBulletBody;
+class BulletRagdoll;
+class ComponentShaderText;
+class TextureColourTable;
+
+class Room;
+
+class Player : public virtual NodeBulletBody{
+private:
+	Keyboard * keyboard;
+	Mouse * mouse;
+	Joystick * joystick;
+
+	MousePerspectiveCamera * playerCamera;
+
+	ComponentShaderBase * diffuseShader;
+
+	BulletWorld * bulletWorld;
+	BulletDebugDrawer * debugDrawer;
+	
+	glm::vec3 lastPos;
+
+	glm::vec3 startPos;
+
+	Sprite * crosshair;
+	
+public:
+	Player(glm::vec3 sPos, BulletWorld * bulletWorld, MousePerspectiveCamera * playerCamera);
+
+	virtual void update(Step * _step) override;
+};
