@@ -39,7 +39,8 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader, uiLayer.shader, activeCamera);
 	
 	uiLayer.addChild(uiYellingContest);
-	//uiLayer.addChild(uiYellingContest->enemyBubbleText->enemyCursor);
+	uiYellingContest->setRationalWidth(1.f, &uiLayer);
+	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 }
 
 PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){

@@ -12,25 +12,6 @@
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
-PD_UI_YellingContest_TextArea::PD_UI_YellingContest_TextArea(BulletWorld * _world, Font * _font, Shader * _textShader, Shader * _shader) :
-	TextArea(_world, _font, _textShader, 0.9f)
-{
-	//highlightTextShader->setColor(0, 1.f, 0);
-}
-PD_UI_YellingContest_TextArea::~PD_UI_YellingContest_TextArea(){
-}
-
-void PD_UI_YellingContest_TextArea::setText(std::wstring _text){
-	TextArea::setText(_text);
-	
-}
-
-
-void PD_UI_YellingContest_TextArea::update(Step * _step){
-
-	TextArea::update(_step);
-}
-
 PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader, Camera * _cam) :
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
@@ -43,8 +24,16 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	cam(_cam),
 	confidence(50.f),
 	damage(20.f),
-	highlightShader(_shader)
+	shader(_shader),
+	highlightedPunctuation(nullptr),
+	punctuationHighlight(new Sprite(_shader)),
+	wordHighlight(new Sprite(_shader))
 {
+	verticalAlignment = kMIDDLE;
+	horizontalAlignment = kCENTER;
+	background->setVisible(false);
+
+	// Enemy Cursor
 	enemyCursor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-CURSOR")->texture);
 	enemyCursor->childTransform->scale(20.f);
 	childTransform->addChild(enemyCursor);
@@ -54,11 +43,29 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 		enemyCursor->mesh->vertices.at(i).y -= 0.5f;
 	}
 
-	setRationalWidth(1.0);
-	setRationalHeight(1.0);
-	verticalAlignment = kMIDDLE;
-	horizontalAlignment = kCENTER;
-	background->setVisible(false);
+	// Punctuation Highlight
+	punctuationHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
+	// move the highlight's mesh up so that the origin is aligned with the bottom
+	for (unsigned long int i = 0; i < punctuationHighlight->mesh->vertices.size(); ++i){
+		punctuationHighlight->mesh->vertices.at(i).x += 0.5f;
+		punctuationHighlight->mesh->vertices.at(i).y += 0.5f;
+	}
+	punctuationHighlight->setVisible(false);
+
+	// Word Highlight
+	wordHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
+	// move the highlights's mesh up so that the origin is aligned with the bottom and set the colour
+	for (unsigned long int i = 0; i < wordHighlight->mesh->vertices.size(); ++i){
+		wordHighlight->mesh->vertices.at(i).x += 0.5f;
+		wordHighlight->mesh->vertices.at(i).y += 0.5f;
+
+		wordHighlight->mesh->vertices.at(i).red = 0.820;
+		wordHighlight->mesh->vertices.at(i).green = 0.722;
+		wordHighlight->mesh->vertices.at(i).blue = 0.851;
+
+	}
+	wordHighlight->setVisible(false);
+
 
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	confidenceSlider->setBackgroundColour(1.f, 0, 0);
@@ -73,21 +80,19 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	selectedGlyphText->horizontalAlignment = kCENTER;
 
 	enemyBubble = new NodeUI(_bulletWorld);
-	//enemyBubble->verticalAlignment = kMIDDLE;
-	//enemyBubble->horizontalAlignment = kCENTER;
-	enemyBubble->setRationalWidth(0.25f);
-	enemyBubble->setRationalHeight(0.25f);
+	enemyBubble->setRationalWidth(0.25f, this);
+	enemyBubble->setRationalHeight(0.25f, this);
 	enemyBubble->setBackgroundColour(0.682f, 0.439f, 0.670f, 1);
-	//enemyBubbleText = new PD_UI_YellingContest_TextArea(world, _font, _textShader, 0.9f);//
-	enemyBubbleText = new PD_UI_YellingContest_TextArea(world, _font, _textShader, _shader);
-	//enemyBubbleText->setWrapMode(kWORD);
-	enemyBubbleText->setRationalWidth(1.0f);
-	enemyBubbleText->setRationalHeight(1.0f);
+	enemyBubble->childTransform->addChild(punctuationHighlight);
+	enemyBubble->childTransform->addChild(wordHighlight);
+	enemyBubbleText = new TextArea(world, _font, _textShader, 0.9);
+	enemyBubbleText->setWrapMode(kWORD);
+	enemyBubbleText->setRationalWidth(1.0f, enemyBubble);
+	enemyBubbleText->setRationalHeight(1.0f, enemyBubble);
 	enemyBubbleText->horizontalAlignment = kCENTER;
 	enemyBubbleText->verticalAlignment = kMIDDLE;
 	enemyBubbleText->background->setVisible(false);
 	enemyBubble->addChild(enemyBubbleText);
-	
 
 	playerBubble = new HorizontalLinearLayout(_bulletWorld);
 	playerBubble->verticalAlignment = kMIDDLE;
@@ -132,7 +137,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 void PD_UI_YellingContest::update(Step * _step){
 	
-	
 	if(modeOffensive){
 		if(keyboard->keyJustDown(GLFW_KEY_UP)){
 			insult(pBubbleBtn1->isEffective);
@@ -166,6 +170,13 @@ void PD_UI_YellingContest::update(Step * _step){
 				float ty = Easing::linear(cursorDelayDuration, screenPos1.y, dy, cursorDelayLength);
 				enemyCursor->childTransform->translate(tx, ty, 0, false);
 			}else{
+				// Get next glyph
+
+				// Find next punctuation
+				if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+					highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
+				}
+
 				++glyphIdx;
 				cursorDelayDuration = 0;
 
@@ -181,18 +192,15 @@ void PD_UI_YellingContest::update(Step * _step){
 		}
 
 		//Position Highlights
-		typedef std::map<UIGlyph *, Sprite *>::iterator it_type;
-		for(it_type it = highlights.begin(); it != highlights.end(); it++) {
-			UIGlyph * g = it->first;
-			Sprite * s = it->second;
-			glm::vec3 pos = g->firstParent()->getTranslationVector();
+		// Punctuation Highlight
+		if(highlightedPunctuation != nullptr){
+			glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
 			// text label
-			glm::mat4 mm = g->firstParent()->firstParent()->firstParent()->firstParent()->firstParent()->firstParent()->getModelMatrix();
+			glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
 			pos = glm::vec3(mm* glm::vec4(pos, 1));
 			// text area
 			//pos = glm::vec3(firstParent()->getModelMatrix() * glm::vec4(pos, 1));
-			s->childTransform->translate(pos, false);
-			// 
+			punctuationHighlight->childTransform->translate(pos, false);
 		}
 	}
 }
@@ -257,9 +265,9 @@ void PD_UI_YellingContest::setEnemyText(){
 	for (auto label : enemyBubbleText->usedLines) {
 		for (int i = 0; i < label->usedGlyphs.size(); ++i){
 			glyphs.push_back(label->usedGlyphs.at(i));
-			highlightPunctuation(label->usedGlyphs.at(i));
 		}
 	}
+	highlightedPunctuation = findFirstPunctuation();
 }
 
 void PD_UI_YellingContest::setPlayerText(){
@@ -298,43 +306,30 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value; 
 }
 
-void PD_UI_YellingContest::highlightPunctuation(UIGlyph * _glyph){
+UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
+	for(int i = _startIdx; i < glyphs.size(); ++i){
+		if(isPunctuation(glyphs.at(i))){
+			float w = glyphs.at(i)->getWidth();
+			float h = enemyBubbleText->font->getLineHeight();
+			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
+			punctuationHighlight->setVisible(true);
+
+			return glyphs.at(i);
+		}
+	}
+	punctuationHighlight->setVisible(false);
+	return nullptr;
+}
+
+bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
 
 	switch (_glyph->character){
 		case L'.':
 		case L'?':
 		case L'!':
 		case L',':
-			highlightGlyph(_glyph, true);
+			return true;
 	}
-}
 
-void PD_UI_YellingContest::highlightGlyph(UIGlyph * _glyph, bool _highlight){
-	if(_glyph != nullptr){
-		std::map<UIGlyph *, Sprite *>::iterator it = highlights.find(_glyph);
-
-		if (it == highlights.end()) {
-			// doesn't exist
-			if(_highlight){
-				highlights.insert(std::map<UIGlyph *, Sprite *>::value_type(_glyph, new Sprite(highlightShader)));
-				highlights.at(_glyph)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
-				// move the cusrosr's mesh up so that the origin is aligned with the bottom
-				for (unsigned long int i = 0; i < highlights.at(_glyph)->mesh->vertices.size(); ++i){
-					highlights.at(_glyph)->mesh->vertices.at(i).x += 0.5f;
-					highlights.at(_glyph)->mesh->vertices.at(i).y += 0.5f;
-				}
-				float w = _glyph->getWidth();
-				float h = enemyBubbleText->font->getLineHeight();
-				highlights.at(_glyph)->childTransform->scale(w, h, 1.f);
-
-				enemyBubbleText->firstParent()->addChildAtIndex(highlights.at(_glyph), 0);
-			}
-		} else {
-			// exists
-			if(!_highlight){
-				enemyBubbleText->firstParent()->removeChild(it->second);
-				highlights.erase(it);
-			}
-		}
-	}
+	return false;
 }

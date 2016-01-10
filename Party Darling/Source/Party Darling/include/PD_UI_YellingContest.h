@@ -8,31 +8,6 @@ class PD_InsultButton;
 class Keyboard;
 class Sprite;
 class ComponentShaderText;
-/*
-class PD_UI_YellingContest_TextLabel : public TextLabel{
-	Sprite * highlight;
-	UIGlyph * highlightedGlyph;
-
-	void highlightGlyph(UIGlyph * _glyph);
-
-	PD_UI_YellingContest_TextLabel(BulletWorld* _world, Font * _font, Shader * _textShader, Shader * _shader, float _width = -1);
-
-	virtual void update(Step * _step) override;
-};
-*/
-class PD_UI_YellingContest_TextArea : public TextArea{
-private:
-	
-public:
-	
-	virtual void setText(std::wstring _text);
-	
-
-	PD_UI_YellingContest_TextArea(BulletWorld * _world, Font * _font, Shader * _textShader, Shader * _shader);
-	~PD_UI_YellingContest_TextArea();
-
-	virtual void update(Step * _step) override;
-};
 
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
@@ -40,8 +15,13 @@ private:
 	float playerTimer;
 
 	std::map<UIGlyph *, Sprite *> highlights;
-	UIGlyph * highlightedGlyph;
-	Shader * highlightShader;
+
+	UIGlyph * highlightedPunctuation;
+	Sprite * punctuationHighlight;
+	
+	Sprite * wordHighlight;
+	
+	Shader * shader;
 
 	float cursorDelayLength;
 	float cursorDelayDuration;
@@ -65,7 +45,7 @@ public:
 	float damage;
 
 	NodeUI * enemyBubble;
-	PD_UI_YellingContest_TextArea * enemyBubbleText;
+	TextArea * enemyBubbleText;
 
 	HorizontalLinearLayout * playerBubble;
 	TextArea * playerBubbleText;
@@ -89,6 +69,6 @@ public:
 
 	void incrementConfidence(float _value);
 
-	void highlightPunctuation(UIGlyph * _glyph);
-	void highlightGlyph(UIGlyph * _glyph, bool _highlight);
+	UIGlyph * findFirstPunctuation(int startIdx = 0);
+	bool isPunctuation(UIGlyph * _glyph);
 };
