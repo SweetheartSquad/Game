@@ -25,8 +25,10 @@ private:
 	
 	Shader * shader;
 
+	float baseCursorDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
+	float baseGlyphWidth;
 
 	std::vector<UIGlyph *> glyphs;
 	unsigned int glyphIdx;

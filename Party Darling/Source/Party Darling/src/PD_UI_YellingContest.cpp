@@ -16,8 +16,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	modeOffensive(true),
-	cursorDelayLength(0.2f),
+	baseCursorDelayLength(0.2f),
+	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
+	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	cam(_cam),
@@ -186,6 +188,7 @@ void PD_UI_YellingContest::update(Step * _step){
 				cursorDelayDuration = 0;
 
 				if(glyphIdx < glyphs.size()){
+					cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 					std::wstringstream s;
 					s << glyphs.at(glyphIdx)->character;
 					selectedGlyphText->setText(s.str());
@@ -278,6 +281,10 @@ void PD_UI_YellingContest::setEnemyText(){
 			glyphs.push_back(label->usedGlyphs.at(i));
 		}
 	}
+	if(glyphs.size() > 0){
+		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+	}
+
 	highlightedPunctuation = findFirstPunctuation();
 	highlightNextWord();
 }
