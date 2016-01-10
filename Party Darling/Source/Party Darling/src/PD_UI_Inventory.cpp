@@ -165,7 +165,9 @@ unsigned long int PD_UI_Inventory::getItemIdx(unsigned long int _x, unsigned lon
 
 void PD_UI_Inventory::selectItem(PD_Item * _item){
 	selectedItem = _item;
-	eventManager.triggerEvent("itemSelected");
+	if(selectedItem != nullptr){
+		eventManager.triggerEvent("itemSelected");
+	}
 }
 
 PD_Item * PD_UI_Inventory::getSelected(){
