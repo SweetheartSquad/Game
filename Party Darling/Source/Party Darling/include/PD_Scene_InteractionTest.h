@@ -30,6 +30,8 @@ public:
 	PD_UI_Inventory * uiInventory;
 	PD_UI_Bubble * uiBubble;
 
+	NodeUI * crosshairIndicator;
+
 	PD_Scene_InteractionTest(Game * _game);
 	~PD_Scene_InteractionTest();
 };

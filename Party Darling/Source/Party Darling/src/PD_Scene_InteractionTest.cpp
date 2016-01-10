@@ -65,13 +65,13 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
-	NodeUI * c = new NodeUI(uiLayer.world);
-	c->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	c->setWidth(16);
-	c->setHeight(16);
-	c->background->mesh->setScaleMode(GL_NEAREST);
+	crosshairIndicator = new NodeUI(uiLayer.world);
+	crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+	crosshairIndicator->setWidth(16);
+	crosshairIndicator->setHeight(16);
+	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
 	uiLayer.addChild(l);
-	l->addChild(c);
+	l->addChild(crosshairIndicator);
 
 	PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
 	door->addToWorld();
@@ -91,6 +91,11 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->close();
 
+		// replace the crosshair texture with the item texture
+		while(crosshairIndicator->background->mesh->textureCount() > 0){
+			crosshairIndicator->background->mesh->popTexture2D();
+		}
+		crosshairIndicator->background->mesh->pushTexture2D(uiInventory->getSelected()->mesh->textures.at(0));
 		// TODO: update the UI to indicate the selected item to the player
 	});
 }
@@ -166,6 +171,12 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			// rotate the item to face the camera
 			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
 		}
+
+		// replace the crosshair itme texture with the actual crosshair texture
+		while(crosshairIndicator->background->mesh->textureCount() > 0){
+			crosshairIndicator->background->mesh->popTexture2D();
+		}
+		crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	}
 	
 	// inventory toggle
