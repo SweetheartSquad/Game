@@ -19,6 +19,8 @@ private:
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
 	
+	UIGlyph * highlightedWordStart;
+	UIGlyph * highlightedWordEnd;
 	Sprite * wordHighlight;
 	
 	Shader * shader;
@@ -26,7 +28,6 @@ private:
 	float cursorDelayLength;
 	float cursorDelayDuration;
 
-	bool moveCursor;
 	std::vector<UIGlyph *> glyphs;
 	unsigned int glyphIdx;
 	glm::vec3 glyph1Pos;
@@ -70,5 +71,6 @@ public:
 	void incrementConfidence(float _value);
 
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
+	void highlightNextWord(int startIdx = 0);
 	bool isPunctuation(UIGlyph * _glyph);
 };

@@ -18,7 +18,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	modeOffensive(true),
 	cursorDelayLength(0.2f),
 	cursorDelayDuration(0.f),
-	moveCursor(false),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	cam(_cam),
@@ -27,6 +26,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	shader(_shader),
 	highlightedPunctuation(nullptr),
 	punctuationHighlight(new Sprite(_shader)),
+	highlightedWordStart(nullptr),
+	highlightedWordEnd(nullptr),
 	wordHighlight(new Sprite(_shader))
 {
 	verticalAlignment = kMIDDLE;
@@ -53,7 +54,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	punctuationHighlight->setVisible(false);
 
 	// Word Highlight
-	wordHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
 	// move the highlights's mesh up so that the origin is aligned with the bottom and set the colour
 	for (unsigned long int i = 0; i < wordHighlight->mesh->vertices.size(); ++i){
 		wordHighlight->mesh->vertices.at(i).x += 0.5f;
@@ -83,8 +83,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubble->setRationalWidth(0.25f, this);
 	enemyBubble->setRationalHeight(0.25f, this);
 	enemyBubble->setBackgroundColour(0.682f, 0.439f, 0.670f, 1);
-	enemyBubble->childTransform->addChild(punctuationHighlight);
-	enemyBubble->childTransform->addChild(wordHighlight);
 	enemyBubbleText = new TextArea(world, _font, _textShader, 0.9);
 	enemyBubbleText->setWrapMode(kWORD);
 	enemyBubbleText->setRationalWidth(1.0f, enemyBubble);
@@ -92,7 +90,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubbleText->horizontalAlignment = kCENTER;
 	enemyBubbleText->verticalAlignment = kMIDDLE;
 	enemyBubbleText->background->setVisible(false);
+	enemyBubble->uiElements->addChild(wordHighlight);
+	enemyBubble->uiElements->addChild(punctuationHighlight);
 	enemyBubble->addChild(enemyBubbleText);
+	
 
 	playerBubble = new HorizontalLinearLayout(_bulletWorld);
 	playerBubble->verticalAlignment = kMIDDLE;
@@ -177,6 +178,10 @@ void PD_UI_YellingContest::update(Step * _step){
 					highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
 				}
 
+				if(highlightedWordEnd != nullptr && glyphs.at(glyphIdx) == highlightedWordEnd){
+					highlightNextWord(glyphIdx+1);
+				}
+
 				++glyphIdx;
 				cursorDelayDuration = 0;
 
@@ -187,8 +192,6 @@ void PD_UI_YellingContest::update(Step * _step){
 				}
 			}
 			
-		}else{
-			moveCursor = false;
 		}
 
 		//Position Highlights
@@ -198,9 +201,18 @@ void PD_UI_YellingContest::update(Step * _step){
 			// text label
 			glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
 			pos = glm::vec3(mm* glm::vec4(pos, 1));
-			// text area
-			//pos = glm::vec3(firstParent()->getModelMatrix() * glm::vec4(pos, 1));
+			
 			punctuationHighlight->childTransform->translate(pos, false);
+		}
+
+		// Word Highlight
+		if(highlightedWordStart != nullptr){
+			glm::vec3 pos = highlightedWordStart->firstParent()->getTranslationVector();
+			// text label
+			glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
+			pos = glm::vec3(mm* glm::vec4(pos, 1));
+			
+			wordHighlight->childTransform->translate(pos, false);
 		}
 	}
 }
@@ -252,7 +264,6 @@ void PD_UI_YellingContest::setEnemyText(){
 	enemyBubbleText->setText(insult);
 
 	glyphIdx = 0;
-	moveCursor = true;
 	cursorDelayDuration = 0;
 	glyphs.clear();
 
@@ -268,6 +279,7 @@ void PD_UI_YellingContest::setEnemyText(){
 		}
 	}
 	highlightedPunctuation = findFirstPunctuation();
+	highlightNextWord();
 }
 
 void PD_UI_YellingContest::setPlayerText(){
@@ -319,6 +331,36 @@ UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
 	}
 	punctuationHighlight->setVisible(false);
 	return nullptr;
+}
+
+void PD_UI_YellingContest::highlightNextWord(int _startIdx){
+	float w = 0;
+	highlightedWordStart = nullptr;
+	highlightedWordEnd = nullptr;
+
+	for(int i = _startIdx; i < glyphs.size(); ++i){
+		// Search for start of next word
+		if(highlightedWordStart == nullptr){
+			if(i == 0 || glyphs.at(i-1)->character == ' '){
+				highlightedWordStart = glyphs.at(i);
+			}
+		}
+
+		// If start of word found, continue until end of word
+		if(highlightedWordStart != nullptr){
+			w += glyphs.at(i)->getWidth();
+			if(i == glyphs.size()-1 || glyphs.at(i+1)->character == ' '){
+				float h = enemyBubbleText->font->getLineHeight();
+				highlightedWordEnd = glyphs.at(i);
+				wordHighlight->childTransform->scale(w, h, 1.f, false);
+				wordHighlight->setVisible(true);
+
+				return;
+			}
+		}
+	}
+	wordHighlight->setVisible(false);
+	
 }
 
 bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
