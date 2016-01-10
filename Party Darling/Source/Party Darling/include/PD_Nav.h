@@ -6,8 +6,8 @@
 #include <BulletWorld.h>
 #include <PD_FirstPersonController.h>
 #include <PD_TilemapGenerator.h>
+#include <NodeBulletBody.h>
 
-#include <DialogueDisplay.h>
 
 class PerspectiveCamera;
 class MousePerspectiveCamera;
@@ -28,6 +28,7 @@ class Sprite;
 class PointLight;
 
 class BulletMeshEntity;
+class NodeBulletBody;
 class BulletRagdoll;
 class ComponentShaderText;
 class TextureColourTable;
@@ -43,7 +44,7 @@ public:
 	
 	PD_FirstPersonController * playerController;
 	MousePerspectiveCamera * playerCam;
-	BulletMeshEntity * playerEntity;
+	NodeBulletBody * playerEntity;
 	glm::vec3 lastPos;
 
 	Sprite * crosshair;

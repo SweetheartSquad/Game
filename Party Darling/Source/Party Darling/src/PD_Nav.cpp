@@ -25,6 +25,8 @@
 
 #include <sweet/Input.h>
 
+#include <Player.h>
+
 
 PD_Nav::PD_Nav(Game * _game) :
 	Scene(_game),
@@ -56,16 +58,25 @@ PD_Nav::PD_Nav(Game * _game) :
 
 	bulletWorld = new BulletWorld();
 
-	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh());
+	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh(), diffuseShader);
 	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
 	bulletGround->createRigidBody(0);
 	childTransform->addChild(bulletGround);
-	bulletGround->setShader(diffuseShader, true);
 	bulletGround->meshTransform->scale(1000,1000,1000);
 	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
+
+	BulletMeshEntity * bulletCube = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh(), diffuseShader);
+	childTransform->addChild(bulletCube);
+	bulletCube->meshTransform->scale(10,10,10);
+	bulletCube->freezeTransformation();
+	bulletCube->setColliderAsBoundingBox();
+	bulletCube->createRigidBody(0);
+	bulletCube->body->translate(btVector3(20, 5, 0));
+	bulletCube->body->setFriction(0);
+	bulletCube->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0, sd.x, 0, sd.y);
@@ -74,7 +85,7 @@ PD_Nav::PD_Nav(Game * _game) :
 	crosshair = new Sprite();
 	uiLayer.childTransform->addChild(crosshair);
 	crosshair->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	crosshair->parents.at(0)->scale(16, 16, 1);
+	crosshair->firstParent()->scale(16, 16, 1);
 	crosshair->setShader(uiLayer.shader, true);
 	crosshair->mesh->scaleModeMag = GL_NEAREST;
 	crosshair->mesh->scaleModeMin = GL_NEAREST;
@@ -82,25 +93,16 @@ PD_Nav::PD_Nav(Game * _game) :
 
 
 
-	// player set-up
-	playerEntity = new BulletMeshEntity(bulletWorld, MeshFactory::getCubeMesh());
-	childTransform->addChild(playerEntity, true);
-	playerEntity->meshTransform->scale(1, 1.5f, 1);
-	playerEntity->meshTransform->scale(2);
-	playerEntity->setColliderAsCapsule(1, 1.5f);
-	playerEntity->createRigidBody(1);
-	playerEntity->setShader(diffuseShader, true);
-	playerEntity->body->setDamping(0.9, 0.8);
-	playerEntity->body->setFriction(1);
-	playerEntity->body->setAngularFactor(btVector3(0,1,0));
-
+	
 	playerCam = new MousePerspectiveCamera();
-	playerEntity->meshTransform->addChild(playerCam);
+	//playerEntity->childTransform->addChild(playerCam);
+	childTransform->addChild(playerCam);
+
 	cameras.push_back(playerCam);
 	playerCam->farClip = 1000.f;
 	playerCam->nearClip = 0.1f;
 	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->parents.at(0)->translate(0, 2.5, 0);
+	playerCam->firstParent()->translate(0, 2.5, 0);
 	playerCam->yaw = 90.0f;
 	playerCam->pitch = -10.0f;
 	playerCam->speed = 1;
@@ -110,8 +112,8 @@ PD_Nav::PD_Nav(Game * _game) :
 	lights.push_back(light2);
 	playerCam->childTransform->addChild(light2);
 
-	playerController = new PD_FirstPersonController(playerEntity, playerCam);
-	childTransform->addChild(playerController, false);
+	playerEntity = new Player(glm::vec3(0,0,0), bulletWorld, playerCam);
+	childTransform->addChild(playerEntity);
 }
 
 PD_Nav::~PD_Nav(){
@@ -123,6 +125,8 @@ PD_Nav::~PD_Nav(){
 
 
 void PD_Nav::update(Step * _step){
+
+
 	glm::vec3 curpos = activeCamera->getWorldPos();
 	NodeOpenAL::setListenerVelocity((curpos - lastPos));
 	lastPos = curpos;
@@ -154,6 +158,11 @@ void PD_Nav::update(Step * _step){
 	
 	// update scene and physics
 	bulletWorld->update(_step);
+
+	
+	btVector3 b = playerEntity->body->getWorldTransform().getOrigin();
+	playerCam->firstParent()->translate(b.x(), b.y(), b.z(), false);
+
 	Scene::update(_step);
 
 	// update ui stuff
