@@ -60,6 +60,24 @@
       "src": "yelling contest/highlight.png"
     },
 
+	{
+      "id": "YELLING-CONTEST-FRIENDSHIP",
+      "type": "texture",
+      "src": "yelling contest/friendshipToken.png"
+    },
+
+	{
+      "id": "YELLING-CONTEST-WIN",
+      "type": "texture",
+      "src": "yelling contest/win.png"
+    },
+
+	{
+      "id": "YELLING-CONTEST-LOSE",
+      "type": "texture",
+      "src": "yelling contest/lose.png"
+    },
+
     {
       "id": "BACKPACK",
       "type": "texture",

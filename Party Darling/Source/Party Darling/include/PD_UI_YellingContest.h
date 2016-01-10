@@ -11,6 +11,9 @@ class ComponentShaderText;
 
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
+	HorizontalLinearLayout * livesContainer;
+	std::vector<NodeUI *> lives;
+
 	float playerDelay;
 	float playerTimer;
 
@@ -32,10 +35,15 @@ private:
 
 	std::vector<UIGlyph *> glyphs;
 	unsigned int glyphIdx;
-	glm::vec3 glyph1Pos;
-	glm::vec3 glyph2Pos;
 
 	float confidence;
+
+	bool isGameOver;
+	LinearLayout * gameOverContainer;
+	NodeUI * gameOverImage;
+
+	float gameOverLength;
+	float gameOverDuration;
 
 public:
 	Sprite * enemyCursor;
@@ -71,6 +79,9 @@ public:
 	void insult(bool _isEffective);
 
 	void incrementConfidence(float _value);
+
+	void gameOver(bool _win);
+	void complete();
 
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);
