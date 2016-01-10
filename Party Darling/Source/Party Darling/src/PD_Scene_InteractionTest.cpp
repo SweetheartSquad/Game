@@ -7,6 +7,8 @@
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
 #include <shader/ShaderComponentDiffuse.h>
+#include <shader/ShaderComponentIndexedTexture.h>
+#include <shader/ShaderComponentDepthOffset.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -27,13 +29,19 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
 	shader(new ComponentShaderBase(false)),
+	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
-	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTexture(shader, 0));
 	//shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
+
+	characterShader->addComponent(new ShaderComponentMVP(characterShader));
+	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
+	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
+	characterShader->compileShader();
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
@@ -98,6 +106,14 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 		crosshairIndicator->background->mesh->pushTexture2D(uiInventory->getSelected()->mesh->textures.at(0));
 		// TODO: update the UI to indicate the selected item to the player
 	});
+
+
+	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
+	childTransform->addChild(testCharacter);
+	testCharacter->setShader(characterShader, true);
+	testCharacter->unload();
+	testCharacter->load();
+	testCharacter->firstParent()->scale(0.005f);
 }
 
 PD_Scene_InteractionTest::~PD_Scene_InteractionTest(){
@@ -145,6 +161,11 @@ void PD_Scene_InteractionTest::update(Step * _step){
 							// interact with the item
 							std::cout << "hey gj you clicked a thing" << std::endl;
 						}
+					}
+				}else{
+					PersonButt * butt = dynamic_cast<PersonButt *>(me);
+					if(butt != nullptr){
+						std::cout << "hey gj you clicked a butt" << std::endl;
 					}
 				}
 			}

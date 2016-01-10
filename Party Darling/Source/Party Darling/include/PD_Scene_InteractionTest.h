@@ -12,6 +12,9 @@
 #include <PD_UI_Inventory.h>
 #include <PD_UI_Bubble.h>
 
+
+#include <Character.h>
+
 class PD_Scene_InteractionTest : public Scene{
 public:
 	ComponentShaderBase * shader;
@@ -29,6 +32,7 @@ public:
 
 	PD_UI_Inventory * uiInventory;
 	PD_UI_Bubble * uiBubble;
+	ComponentShaderBase * characterShader;
 
 	NodeUI * crosshairIndicator;
 

@@ -10,9 +10,15 @@
 
 #include <sweet/Input.h>
 
+PersonButt::PersonButt(BulletWorld * _world) :
+	NodeBulletBody(_world)
+{
+
+}
+
 Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor),
-	pr(new PersonRenderer())
+	pr(new PersonRenderer(_world))
 {
 	setColliderAsCapsule(0.5f,1.f);
 	createRigidBody(25);
@@ -105,7 +111,7 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 	components.push_back(_component);
 }
 
-PersonRenderer::PersonRenderer() :
+PersonRenderer::PersonRenderer(BulletWorld * _world) :
 	paletteTex(new TextureColourTable(false)),
 	timer(0)
 {
@@ -225,6 +231,12 @@ PersonRenderer::PersonRenderer() :
 	talk->tweens.push_back(new Tween<float>(0.1, -head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
 	talk->loopType = Animation<float>::LoopType::kLOOP;
 	talk->hasStart = true;
+
+
+	PersonButt * butt = new PersonButt(_world);
+	childTransform->addChild(butt);
+	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.005f, solverBod->getChainLength() * 0.005f, 0.005f);
+	butt->createRigidBody(0);
 }
 
 PersonRenderer::~PersonRenderer(){
@@ -236,7 +248,7 @@ void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, boo
 	joints.back()->translate(
 		_from->out.at(_from->connections.size()).x - _from->in.x,
 		_from->out.at(_from->connections.size()).y - _from->in.y,
-		_behind ? -0.1 : 0.1); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
+		0); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
 	_from->connections.push_back(_to);
 }
 

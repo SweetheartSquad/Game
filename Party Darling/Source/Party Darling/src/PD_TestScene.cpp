@@ -338,7 +338,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 
 
-	PersonRenderer * test = new PersonRenderer();
+	PersonRenderer * test = new PersonRenderer(bulletWorld);
 	childTransform->addChild(test);
 	test->setShader(characterShader, true);
 	test->unload();

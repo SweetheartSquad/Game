@@ -11,6 +11,15 @@
 
 
 #include <IkChain.h>
+#include <BulletWorld.h>
+#include <NodeBulletBody.h>
+
+class PersonButt : public NodeBulletBody{
+public:
+	PersonButt(BulletWorld * _world);
+};
+
+
 class PersonComponent : public Sprite{
 public:
 	glm::vec2 in;
@@ -73,7 +82,7 @@ public:
 		* footR;
 
 	Texture * paletteTex;
-	PersonRenderer();
+	PersonRenderer(BulletWorld * _world);
 	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default);
@@ -87,7 +96,7 @@ public:
 	virtual void update(Step * _step) override;
 };
 
-class Person: public RoomObject {
+class Person : public RoomObject {
 public:
 	Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 
