@@ -11,26 +11,26 @@
 						"outComponents":
 						[
 							{
-								"childComponent":"back",
+								"componentType":"back",
 								"required":true,
 								"multiplier":1,
 								"outComponents":
 								[
 									{
-									"childComponent":"arm",
+									"componentType":"arm",
 									"required":false,
 									"multiplier":2
 									}
 								]
 							},
 							{
-								"childComponent":"leg",
-								"required":"true",
+								"componentType":"leg",
+								"required":true,
 								"multiplier":4,
 								"outComponents":
 								[
 									{
-									"childComponent":"legSupport",
+									"componentType":"legSupport",
 									"required":false,
 									"multiplier":2
 									}
@@ -47,7 +47,7 @@
 	"components":
 	[
 		{
-			"id":"1",
+			"id":1,
 			"type":"seat",
 			"src":"chair_Seat_1.obj",
 			"connectors":
@@ -107,7 +107,7 @@
 		},
 		
 		{
-			"id":"3",
+			"id":3,
 			"type":"leg",
 			"src":"chair_Leg_1.obj",
 			"connectors":[
@@ -119,7 +119,7 @@
 		},
 		
 		{
-		  "id":"4",
+		  "id":4,
 		  "type":"legSupport",
 		  "src":"chair_legSupport_1.obj",
 			"connectors":[
@@ -131,7 +131,7 @@
 		},
 	 
 		{
-			"id":"5",
+			"id":5,
 			"type":"arm",
 			"src":"chair_Arm_1.obj",
 			"connectors":[
@@ -141,8 +141,5 @@
 				}
 			]
 		}
-	
 	]
-
-
 }

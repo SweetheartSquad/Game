@@ -18,6 +18,11 @@
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_Door.h" />
     <ClInclude Include="include\PD_FirstPersonController.h" />
+    <ClInclude Include="include\PD_Furniture.h" />
+    <ClInclude Include="include\PD_FurnitureComponent.h" />
+    <ClInclude Include="include\PD_FurnitureComponentDefinition.h" />
+    <ClInclude Include="include\PD_FurnitureDefinition.h" />
+    <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_Item.h" />
@@ -47,6 +52,11 @@
     <ClCompile Include="src\PD_Button.cpp" />
     <ClCompile Include="src\PD_Door.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
+    <ClCompile Include="src\PD_Furniture.cpp" />
+    <ClCompile Include="src\PD_FurnitureComponent.cpp" />
+    <ClCompile Include="src\PD_FurnitureComponentDefinition.cpp" />
+    <ClCompile Include="src\PD_FurnitureDefinition.cpp" />
+    <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />

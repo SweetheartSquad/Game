@@ -15,6 +15,7 @@
 #include <json\json.h>
 
 #include <sweet/Input.h>
+#include <PD_FurnitureParser.h>
 
 PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	Scene(_game),
@@ -118,7 +119,10 @@ void PD_Scene_FurnitureTest::update(Step * _step){
 
 	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
 
-	
+	auto a = PD_FurnitureParser::parseFurnitureDefinitions();
+	auto b = PD_FurnitureParser::parseFurnitureComponents();
+
+	auto i = 0;
 
 }
 
