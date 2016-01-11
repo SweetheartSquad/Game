@@ -30,6 +30,7 @@
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
     <ClInclude Include="include\PD_Scene_InteractionTest.h" />
+    <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_Scene_YellingContestTest.h" />
     <ClInclude Include="include\PD_TalkToButton.h" />
     <ClInclude Include="include\PD_TestScene.h" />
@@ -64,6 +65,7 @@
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />
     <ClCompile Include="src\PD_Scene_InteractionTest.cpp" />
+    <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_Scene_YellingContestTest.cpp" />
     <ClCompile Include="src\PD_TalkToButton.cpp" />
     <ClCompile Include="src\PD_TestScene.cpp" />
