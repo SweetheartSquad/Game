@@ -93,7 +93,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
 	uiLayer.addChild(uiBubble);
 
-	uiBubble->addOption("test");
+	uiBubble->addOption("test", nullptr);
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
@@ -144,36 +144,33 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			PD_Item * item = dynamic_cast<PD_Item *>(me);
 			if(item != nullptr){
 				if(item->actuallyHovered(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
-					if(mouse->leftJustPressed()){
-						// click on item
+					// hover over item
+					if(item != currentHoverTarget){
+						// if we aren't already looking at the item,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
 						if(item->collectable){
-							// remove the item from the scene
-							Transform * toDelete = item->firstParent();
-							toDelete->firstParent()->removeChild(toDelete);
-							toDelete->removeChild(item);
-							delete toDelete;
-							delete item->shape;
-							item->shape = nullptr;
-							bulletWorld->world->removeRigidBody(item->body);
-							item->body = nullptr;
+							uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
+								if(item->collectable){
+									// remove the item from the scene
+									Transform * toDelete = item->firstParent();
+									toDelete->firstParent()->removeChild(toDelete);
+									toDelete->removeChild(item);
+									delete toDelete;
+									delete item->shape;
+									item->shape = nullptr;
+									bulletWorld->world->removeRigidBody(item->body);
+									item->body = nullptr;
 
-							// pickup the item
-							uiInventory->pickupItem(item);
+									// pickup the item
+									uiInventory->pickupItem(item);
+								}else{
+									// interact with the item
+									std::cout << "hey gj you clicked a thing" << std::endl;
+								}
+							});
 						}else{
-							// interact with the item
-							std::cout << "hey gj you clicked a thing" << std::endl;
-						}
-					}else{
-						// hover over item
-						if(item != currentHoverTarget){
-							// if we aren't already looking at the item,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							if(item->collectable){
-								uiBubble->addOption("pickup");
-							}else{
-								uiBubble->addOption("interact");
-							}
+							uiBubble->addOption("interact", nullptr);
 						}
 					}
 				}else{
@@ -183,20 +180,19 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			}else{
 				PersonButt * butt = dynamic_cast<PersonButt *>(me);
 				if(butt != nullptr){
-					if(mouse->leftJustPressed()){
-						// click on person
-						std::cout << "hey gj you clicked a butt" << std::endl;
-					}else{
-						// hover over person
-						if(butt != currentHoverTarget){
-							// if we aren't already looking at the person,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							uiBubble->addOption("talk to ");
-							uiBubble->addOption("yell at ");
-							uiBubble->placeOptions();
-							uiBubble->reorderChildren();
-						}
+					// hover over person
+					if(butt != currentHoverTarget){
+						// if we aren't already looking at the person,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						uiBubble->addOption("talk to ", [](sweet::Event * _event){
+							std::cout << "hey gj you talked" << std::endl;
+						});
+						uiBubble->addOption("yell at ", [](sweet::Event * _event){
+							std::cout << "hey gj you yelled" << std::endl;
+						});
+						uiBubble->placeOptions();
+						uiBubble->reorderChildren();
 					}
 				}
 			}
@@ -255,7 +251,7 @@ void PD_Scene_InteractionTest::update(Step * _step){
 	}if(keyboard->keyJustDown(GLFW_KEY_B)){
 		uiBubble->prev();
 	}if(keyboard->keyJustDown(GLFW_KEY_N)){
-		uiBubble->addOption("test");
+		uiBubble->addOption("test", nullptr);
 	}
 
 
