@@ -12,7 +12,7 @@
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
-PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader, Camera * _cam) :
+PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	modeOffensive(true),
@@ -22,7 +22,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
-	cam(_cam),
 	confidence(50.f),
 	damage(20.f),
 	shader(_shader),
@@ -30,9 +29,15 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	punctuationHighlight(new Sprite(_shader)),
 	highlightedWordStart(nullptr),
 	highlightedWordEnd(nullptr),
-	wordHighlight(new Sprite(_shader))
+	wordHighlight(new Sprite(_shader)),
+	isGameOver(false),
+	gameOverLength(1.f),
+	gameOverDuration(0.f),
+	win(false),
+	isComplete(false),
+	isEnabled(true)
 {
-	verticalAlignment = kMIDDLE;
+	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
 	background->setVisible(false);
 
@@ -68,12 +73,32 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	}
 	wordHighlight->setVisible(false);
 
+	livesContainer = new HorizontalLinearLayout(_bulletWorld);
+	livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
+	livesContainer->setRationalWidth(0.5f);
+	livesContainer->setHeight(50.f);
+	livesContainer->setPadding(0.01f);
+	livesContainer->setMarginTop(20.f);
+	livesContainer->setMarginBottom(20.f);
+
+	// loop through friends and add tokens
+	for(unsigned int i = 0; i < 3; ++i){
+		NodeUI * l = new NodeUI(world);
+		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
+		l->background->mesh->pushTexture2D(tex);
+		l->setWidth(tex->width);
+		l->setHeight(tex->height);
+		lives.push_back(l);
+		livesContainer->addChild(l);
+	}
 
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
+	confidenceSlider->boxSizing = kCONTENT_BOX;
 	confidenceSlider->setBackgroundColour(1.f, 0, 0);
 	confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
 	confidenceSlider->setRationalWidth(0.7f);
 	confidenceSlider->setRationalHeight(0.05f);
+	confidenceSlider->setMarginBottom(0.2f);
 
 	selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 0.9);
 	selectedGlyphText->setBackgroundColour(0, 0, 1.f);
@@ -119,17 +144,33 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1->setRationalHeight(0.5f);
 	pBubbleBtn1->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
 	pBubbleBtn1->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn1->isEffective); });
+	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	pBubbleBtn2->setRationalWidth(1.0f);
 	pBubbleBtn2->setRationalHeight(0.5f);
 	pBubbleBtn2->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
 	pBubbleBtn2->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn2->isEffective); });
+	pBubbleBtn2->setMouseEnabled(false);
 	buttonLayout->addChild(pBubbleBtn1);
 	buttonLayout->addChild(pBubbleBtn2);
 
 	playerBubble->addChild(buttonLayout);
+
+	gameOverContainer = new VerticalLinearLayout(_bulletWorld);
+	gameOverContainer->horizontalAlignment = kCENTER;
+	gameOverContainer->verticalAlignment = kMIDDLE;
+	gameOverContainer->setRationalWidth(0.5f);
+	gameOverContainer->setHeight(0.4f);
+	gameOverContainer->setBackgroundColour(0.5, 0.5, 1.f);
+
+	gameOverImage = new NodeUI(_bulletWorld);
+	gameOverImage->setRationalWidth(0.5f);
+	gameOverImage->setRationalHeight(0.5f);
+	gameOverContainer->addChild(gameOverImage);
+	// don't add the container until yelling contest is over
 	
+	addChild(livesContainer);
 	addChild(confidenceSlider);
 	addChild(selectedGlyphText);
 	addChild(enemyBubble);
@@ -139,85 +180,120 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 }
 
 void PD_UI_YellingContest::update(Step * _step){
-	
-	if(modeOffensive){
-		if(keyboard->keyJustDown(GLFW_KEY_UP)){
-			insult(pBubbleBtn1->isEffective);
+	if(!isGameOver && isEnabled){
+		VerticalLinearLayout::update(_step);
+
+		if(modeOffensive){
+			if(keyboard->keyJustDown(GLFW_KEY_UP)){
+				insult(pBubbleBtn1->isEffective);
+			}
+			if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
+				insult(pBubbleBtn2->isEffective);
+			}
+		}else{
+			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+				interject();
+			}
 		}
-		if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
-			insult(pBubbleBtn2->isEffective);
+
+		if(!modeOffensive){
+			// Cursor
+			if(glyphIdx < glyphs.size()){
+				glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
+				float w = glyphs.at(glyphIdx)->getWidth();
+
+				glm::vec3 screenPos1 = screenPos;
+				glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
+			
+				cursorDelayDuration += _step->getDeltaTime();
+
+				if(cursorDelayDuration < cursorDelayLength){
+					float dx = screenPos2.x - screenPos1.x;
+					float dy = screenPos2.y - screenPos1.y;
+					float tx = Easing::linear(cursorDelayDuration, screenPos1.x, dx, cursorDelayLength);
+					float ty = Easing::linear(cursorDelayDuration, screenPos1.y, dy, cursorDelayLength);
+					enemyCursor->childTransform->translate(tx, ty, 0, false);
+				}else{
+					// Get next glyph
+
+					// Find next punctuation
+					if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+						highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
+					}
+
+					if(highlightedWordEnd != nullptr && glyphs.at(glyphIdx) == highlightedWordEnd){
+						highlightNextWord(glyphIdx+1);
+					}
+
+					++glyphIdx;
+					cursorDelayDuration = 0;
+
+					if(glyphIdx < glyphs.size()){
+						cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+						std::wstringstream s;
+						s << glyphs.at(glyphIdx)->character;
+						selectedGlyphText->setText(s.str());
+					}
+				}
+			
+			}
+
+			//Position Highlights
+			// Punctuation Highlight
+			if(highlightedPunctuation != nullptr){
+				glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
+				// text label
+				glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
+				pos = glm::vec3(mm* glm::vec4(pos, 1));
+			
+				punctuationHighlight->childTransform->translate(pos, false);
+			}
+
+			// Word Highlight
+			if(highlightedWordStart != nullptr){
+				glm::vec3 pos = highlightedWordStart->firstParent()->getTranslationVector();
+				// text label
+				glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
+				pos = glm::vec3(mm* glm::vec4(pos, 1));
+			
+				wordHighlight->childTransform->translate(pos, false);
+			}
 		}
 	}else{
-		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-			interject();
+		gameOverDuration += _step->getDeltaTime();
+		
+		if(gameOverDuration >= gameOverLength){
+			complete();
+		}else{
+			float size = 0.5f + (gameOverDuration / (2 * gameOverLength));
+			gameOverImage->setRationalWidth(size, gameOverContainer);
+			gameOverImage->setRationalHeight(size, gameOverContainer);
+			gameOverContainer->invalidateLayout();
 		}
+
+		VerticalLinearLayout::update(_step);
 	}
+}
 
-	VerticalLinearLayout::update(_step);
-
-	if(!modeOffensive){
-		// Cursor
-		if(glyphIdx < glyphs.size()){
-			glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
-			float w = glyphs.at(glyphIdx)->getWidth();
-
-			glm::vec3 screenPos1 = screenPos;
-			glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
-			
-			cursorDelayDuration += _step->getDeltaTime();
-
-			if(cursorDelayDuration < cursorDelayLength){
-				float dx = screenPos2.x - screenPos1.x;
-				float dy = screenPos2.y - screenPos1.y;
-				float tx = Easing::linear(cursorDelayDuration, screenPos1.x, dx, cursorDelayLength);
-				float ty = Easing::linear(cursorDelayDuration, screenPos1.y, dy, cursorDelayLength);
-				enemyCursor->childTransform->translate(tx, ty, 0, false);
-			}else{
-				// Get next glyph
-
-				// Find next punctuation
-				if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
-					highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
-				}
-
-				if(highlightedWordEnd != nullptr && glyphs.at(glyphIdx) == highlightedWordEnd){
-					highlightNextWord(glyphIdx+1);
-				}
-
-				++glyphIdx;
-				cursorDelayDuration = 0;
-
-				if(glyphIdx < glyphs.size()){
-					cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
-					std::wstringstream s;
-					s << glyphs.at(glyphIdx)->character;
-					selectedGlyphText->setText(s.str());
-				}
-			}
-			
-		}
-
-		//Position Highlights
-		// Punctuation Highlight
-		if(highlightedPunctuation != nullptr){
-			glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
-			// text label
-			glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
-			pos = glm::vec3(mm* glm::vec4(pos, 1));
-			
-			punctuationHighlight->childTransform->translate(pos, false);
-		}
-
-		// Word Highlight
-		if(highlightedWordStart != nullptr){
-			glm::vec3 pos = highlightedWordStart->firstParent()->getTranslationVector();
-			// text label
-			glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
-			pos = glm::vec3(mm* glm::vec4(pos, 1));
-			
-			wordHighlight->childTransform->translate(pos, false);
-		}
+void PD_UI_YellingContest::complete(){
+	if(!isComplete){
+		sweet::Event * e = new sweet::Event("yellingContestComplete");
+		e->setIntData("win", win);
+		eventManager.triggerEvent(e);
+		isComplete = true;
 	}
+}
+
+void PD_UI_YellingContest::disable(){
+	setVisible(false);
+	isEnabled = false;
+	invalidateLayout();
+}
+
+void PD_UI_YellingContest::enable(){
+	setVisible(true);
+	isEnabled = true;
+	invalidateLayout();
 }
 
 void PD_UI_YellingContest::interject(){
@@ -247,9 +323,6 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyCursor->setVisible(!_isOffensive);
 
 	playerBubble->setVisible(_isOffensive);
-
-	enemyBubble->setMouseEnabled(!_isOffensive);
-	playerBubble->setMouseEnabled(_isOffensive);
 	
 	if (!_isOffensive){
 		setEnemyText();
@@ -322,7 +395,39 @@ void PD_UI_YellingContest::insult(bool _isEffective){
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){
-	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value; 
+	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value;
+
+	if(confidence <= 0){
+		// Check if out of lives
+		if(lives.size() <= 0){
+			gameOver(false);
+		}else{
+			livesContainer->removeChild(lives.back());
+			lives.pop_back();
+			confidence = 50.f;
+		}
+		
+	}
+
+	if(confidence >= 100){
+		gameOver(true);
+	}
+}
+
+void PD_UI_YellingContest::gameOver(bool _win){
+	isGameOver = true;
+	win = _win;
+
+	removeChild(enemyBubble);
+	removeChild(playerBubble);
+
+	if(_win){
+		gameOverImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
+	}else{
+		gameOverImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
+	}
+
+	addChild(gameOverContainer);
 }
 
 UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){

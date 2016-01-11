@@ -49,9 +49,10 @@ Player::Player(glm::vec3  sPos, BulletWorld * _bulletWorld, MousePerspectiveCame
 	// player set-up
 	this->setColliderAsCapsule(1, 1.5f);
 	this->createRigidBody(1);
-	this->body->setDamping(0.9, 0.8);
+	//this->body->setDamping(0.9, 0.8);
 	this->body->setFriction(1);
 	this->body->setAngularFactor(btVector3(0,1,0));
+	this->body->setLinearFactor(btVector3(1,0.9,1));
 
 
 };
@@ -59,6 +60,10 @@ Player::Player(glm::vec3  sPos, BulletWorld * _bulletWorld, MousePerspectiveCame
 void Player::update(Step * _step){
 	float playerSpeed = 3.f;
 	float mass = 1;
+	float initSpeed = 2.0f;
+	btVector3 curVelocity = this->body->getLinearVelocity();
+	float xVelocity = curVelocity[0];
+	float zVelocity = curVelocity[2];
 
 	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
@@ -84,8 +89,8 @@ void Player::update(Step * _step){
 		movement -= right;
 	}if (keyboard->keyDown(GLFW_KEY_D)){
 		movement += right;
-	}if (keyboard->keyDown(GLFW_KEY_SPACE)){
-		movement += glm::vec3(0,10,0);
+	}if (keyboard->keyJustUp(GLFW_KEY_SPACE)){
+			movement += glm::vec3(0,10,0);
 	}
 
 
@@ -103,13 +108,37 @@ void Player::update(Step * _step){
 	if(movementMag > 0){
 		//movement = movement/movementMag * playerSpeed * mass;
 		movement = movement/movementMag * playerSpeed * mass;
+		float initXSpeed = (movement/movementMag)[0]*initSpeed;
+		float initZSpeed = (movement/movementMag)[2]*initSpeed;
+
 		this->body->activate(true);
-		this->body->applyCentralImpulse(btVector3(movement.x, movement.y, movement.z));
+		this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*5, initZSpeed+movement.z));
 		this->body->applyDamping(btScalar(0));
+		this -> maxVelocity = btVector3(-1,-1,-1);
 	}
+
+
 	else if(movementMag <= 0){
+		float slideVal = 10.0f;
 		this->body->activate(true);
-		this->body->applyDamping(btScalar(0.025 * playerSpeed * mass));
+		
+
+		this->body->applyCentralImpulse(btVector3(xVelocity*-0.2,0,zVelocity*-0.2));
+
+		/*float curVel = std::max(abs(xVelocity), abs(zVelocity));
+		if(curVel > slideVal){
+			if(xVelocity > zVelocity){
+				this -> maxVelocity.setX(slideVal/xVelocity*maxVelocity.x());
+				this -> maxVelocity.setZ(slideVal/xVelocity*maxVelocity.z());
+			}
+			else if(zVelocity > xVelocity){
+				this -> maxVelocity.setX(slideVal/zVelocity*maxVelocity.x());
+				this -> maxVelocity.setZ(slideVal/zVelocity*maxVelocity.z());
+			}
+			else{
+				this -> maxVelocity = btVector3(slideVal,-1,slideVal);
+			}
+		}*/
 	}
 
 
@@ -145,4 +174,6 @@ void Player::update(Step * _step){
 			}
 		}
 	}
+
+	NodeBulletBody::update(_step);
 }
