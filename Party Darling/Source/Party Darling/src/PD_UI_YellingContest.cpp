@@ -12,7 +12,7 @@
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
-PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader, Camera * _cam) :
+PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	modeOffensive(true),
@@ -22,7 +22,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
-	cam(_cam),
 	confidence(50.f),
 	damage(20.f),
 	shader(_shader),
@@ -33,7 +32,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	wordHighlight(new Sprite(_shader)),
 	isGameOver(false),
 	gameOverLength(1.f),
-	gameOverDuration(0.f)
+	gameOverDuration(0.f),
+	win(false),
+	isComplete(false),
+	isEnabled(true)
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -142,12 +144,14 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1->setRationalHeight(0.5f);
 	pBubbleBtn1->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
 	pBubbleBtn1->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn1->isEffective); });
+	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	pBubbleBtn2->setRationalWidth(1.0f);
 	pBubbleBtn2->setRationalHeight(0.5f);
 	pBubbleBtn2->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
 	pBubbleBtn2->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn2->isEffective); });
+	pBubbleBtn2->setMouseEnabled(false);
 	buttonLayout->addChild(pBubbleBtn1);
 	buttonLayout->addChild(pBubbleBtn2);
 
@@ -176,7 +180,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 }
 
 void PD_UI_YellingContest::update(Step * _step){
-	if(!isGameOver){
+	if(!isGameOver && isEnabled){
 		VerticalLinearLayout::update(_step);
 
 		if(modeOffensive){
@@ -272,7 +276,24 @@ void PD_UI_YellingContest::update(Step * _step){
 }
 
 void PD_UI_YellingContest::complete(){
-	// I don't know
+	if(!isComplete){
+		sweet::Event * e = new sweet::Event("yellingContestComplete");
+		e->setIntData("win", win);
+		eventManager.triggerEvent(e);
+		isComplete = true;
+	}
+}
+
+void PD_UI_YellingContest::disable(){
+	setVisible(false);
+	isEnabled = false;
+	invalidateLayout();
+}
+
+void PD_UI_YellingContest::enable(){
+	setVisible(true);
+	isEnabled = true;
+	invalidateLayout();
 }
 
 void PD_UI_YellingContest::interject(){
@@ -302,9 +323,6 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyCursor->setVisible(!_isOffensive);
 
 	playerBubble->setVisible(_isOffensive);
-
-	enemyBubble->setMouseEnabled(!_isOffensive);
-	playerBubble->setMouseEnabled(_isOffensive);
 	
 	if (!_isOffensive){
 		setEnemyText();
@@ -398,6 +416,7 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 
 void PD_UI_YellingContest::gameOver(bool _win){
 	isGameOver = true;
+	win = _win;
 
 	removeChild(enemyBubble);
 	removeChild(playerBubble);

@@ -36,11 +36,17 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	mouseIndicator->setShader(uiLayer.shader, true);
 
 	Font * f = new Font("assets/engine basics/OpenSans-Regular.ttf", 42, true);
-	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader, uiLayer.shader, activeCamera);
+	uiYellingContest = new PD_UI_YellingContest(bulletWorld, f, textShader, uiLayer.shader);
 	
 	uiLayer.addChild(uiYellingContest);
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
+
+	uiYellingContest->eventManager.addEventListener("yellingContestComplete", [this](sweet::Event * _event){
+		// Stuff!!!
+		int i = 0;
+	});
+
 }
 
 PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
@@ -50,6 +56,13 @@ PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
 
 
 void PD_Scene_YellingContestTest::update(Step * _step){
+	if(keyboard->keyJustDown(GLFW_KEY_E)){
+		uiYellingContest->disable();
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_R)){
+		uiYellingContest->enable();
+	}
+
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){
 		game->toggleFullScreen();
 	}

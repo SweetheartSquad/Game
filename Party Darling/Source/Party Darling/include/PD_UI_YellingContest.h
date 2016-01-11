@@ -11,6 +11,8 @@ class ComponentShaderText;
 
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
+	bool isEnabled;
+
 	HorizontalLinearLayout * livesContainer;
 	std::vector<NodeUI *> lives;
 
@@ -45,9 +47,12 @@ private:
 	float gameOverLength;
 	float gameOverDuration;
 
+	bool win;
+
+	bool isComplete;
+
 public:
 	Sprite * enemyCursor;
-	Camera * cam;
 
 	SliderControlled * confidenceSlider;
 
@@ -68,7 +73,7 @@ public:
 
 	bool modeOffensive;
 
-	PD_UI_YellingContest(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader, Camera * _cam);
+	PD_UI_YellingContest(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader);
 	void setEnemyText();
 	void setPlayerText();
 
@@ -82,6 +87,8 @@ public:
 
 	void gameOver(bool _win);
 	void complete();
+	void disable();
+	void enable();
 
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);
