@@ -2,6 +2,7 @@
 
 #include <PD_UI_Bubble.h>
 #include <PD_ResourceManager.h>
+#include <Mouse.h>
 
 Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textShader) :
 	NodeUI_NineSliced(_world, _tex)
@@ -79,11 +80,11 @@ void PD_UI_Bubble::addOption(std::string _text){
 }
 
 void PD_UI_Bubble::select(unsigned long int _option){
-
+	std::cout << "hey gj you clicked a bubble" << std::endl;
 }
 
 void PD_UI_Bubble::selectCurrent(){
-
+	select(currentOption);
 }
 
 void PD_UI_Bubble::placeOptions(){
@@ -104,17 +105,36 @@ void PD_UI_Bubble::placeOptions(){
 }
 
 void PD_UI_Bubble::update(Step * _step){
-	{
-	float w = getWidth(true, true);
-	float h = getHeight(true, true);
-	test->translate(w/2, h/2, 0, false);
-	}
-	
-	float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + 0.1f) : 0;
-	float delta = targetDispayOffset - displayOffset;
-	if(std::abs(delta) > FLT_EPSILON){
-		displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
-		placeOptions();
+	// don't bother with interaction and layout stuff if it's hidden or there aren't any options right now
+	if(isVisible() && options.size() > 0){
+		// use the mouse to determine interactions
+		// if we're scrolling, then we either call "next" or "prev" based on the direction of the scroll
+		// if we're not scrolling, we can click the current option
+		Mouse & mouse = Mouse::getInstance();
+		float d = mouse.getMouseWheelDelta();
+		// if there's only one option, override and say we aren't scrolling
+		if(options.size() < 2){
+			d = 0;
+		}
+		if(d > FLT_EPSILON){
+			next();
+		}else if(d < -FLT_EPSILON){
+			prev();
+		}else if(mouse.leftJustPressed()){
+			selectCurrent();
+		}
+
+		// re-center the transform containing the bubbles
+		// TODO: only do this when the size has actually changed
+		test->translate(getWidth(true, true)*0.5f, getHeight(true, true)*0.5f, 0, false);
+		
+		// interpolate the rotation of the options
+		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + 0.1f) : 0;
+		float delta = targetDispayOffset - displayOffset;
+		if(std::abs(delta) > FLT_EPSILON){
+			displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
+			placeOptions();
+		}
 	}
 
 	NodeUI::update(_step);
@@ -159,4 +179,5 @@ void PD_UI_Bubble::clear(){
 		unusedOptions.push(options.back());
 		options.pop_back();
 	}
+	currentOption = displayOffset = 0;
 }
