@@ -42,10 +42,12 @@ PD_Scene_YellingContestTest::PD_Scene_YellingContestTest(Game * _game) :
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 
-	uiYellingContest->eventManager.addEventListener("yellingContestComplete", [this](sweet::Event * _event){
+	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
 		// Stuff!!!
 		int i = 0;
 	});
+
+	uiYellingContest->disable();
 
 }
 
@@ -56,6 +58,10 @@ PD_Scene_YellingContestTest::~PD_Scene_YellingContestTest(){
 
 
 void PD_Scene_YellingContestTest::update(Step * _step){
+	if(keyboard->keyJustDown(GLFW_KEY_F)){
+		uiYellingContest->enable();
+		uiYellingContest->startNewFight();
+	}
 	if(keyboard->keyJustDown(GLFW_KEY_E)){
 		uiYellingContest->disable();
 	}

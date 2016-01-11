@@ -85,6 +85,7 @@ public:
 
 	void incrementConfidence(float _value);
 
+	void startNewFight();
 	void gameOver(bool _win);
 	void complete();
 	void disable();
