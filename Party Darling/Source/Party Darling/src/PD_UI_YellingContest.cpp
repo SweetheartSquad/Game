@@ -226,7 +226,6 @@ void PD_UI_YellingContest::update(Step * _step){
 			
 				}
 
-				//Position Highlights
 				// Punctuation Highlight
 				if(highlightedPunctuation != nullptr){
 					glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
@@ -269,7 +268,11 @@ void PD_UI_YellingContest::startNewFight(){
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));
 	}
+	for(unsigned int i = 0; i < lostLives.size(); ++i){
+		livesContainer->removeChild(lostLives.at(i));
+	}
 	lives.clear();
+	lostLives.clear();
 
 	// loop through friends and add tokens
 	for(unsigned int i = 0; i < 3; ++i){
@@ -414,7 +417,8 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 		if(lives.size() <= 0){
 			gameOver(false);
 		}else{
-			livesContainer->removeChild(lives.back());
+			lostLives.push_back(lives.back());
+			lives.back()->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSTFRIENDSHIP")->texture);
 			lives.pop_back();
 			confidence = 50.f;
 		}
