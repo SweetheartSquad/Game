@@ -5,6 +5,13 @@
 
 #include <NineSlicing.h>
 
+class Bubble : public NodeUI_NineSliced{
+public:
+	TextLabel * label;
+
+	Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textShader);
+};
+
 class PD_UI_Bubble : public NodeUI{
 private:
 	float displayOffset;
@@ -12,7 +19,8 @@ private:
 public:
 	ComponentShaderText * textShader;
 	// all of the currently available options
-	std::vector<NodeUI_NineSliced *> options;
+	std::vector<Bubble *> options;
+	std::stack<Bubble *> unusedOptions;
 	// the currently selected option
 	// currentOption == options.size() when nothing is selected
 	unsigned long int currentOption;
@@ -38,5 +46,11 @@ public:
 	// (this makes it so that it draws on top of the others when depth-testing is turned off)
 	void reorderChildren();
 
+	// updates the positions of the visible options
+	void placeOptions();
+
 	virtual void update(Step * _step) override;
+
+	// clear out all existing options
+	void clear();
 };
