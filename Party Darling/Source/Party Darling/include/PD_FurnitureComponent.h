@@ -3,6 +3,9 @@
 #include <string>
 #include <json/json.h>
 #include <vector>
+#include <MeshInterface.h>
+
+class PD_FurnitureComponentContainer;
 
 class PD_FurnitureConnector {
 public:	
@@ -21,6 +24,8 @@ public:
 	std::string src;
 
 	std::vector<PD_FurnitureConnector *> connectors; 
+
+	MeshInterface * mesh;
 
 	explicit PD_FurnitureComponent(Json::Value _jsonDef);
 };

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <PD_FurnitureComponentDefinition.h>
 #include <string>
 #include <json/json.h>
+
+class PD_FurnitureComponentDefinition;
 
 class PD_FurnitureDefinition {
 public:

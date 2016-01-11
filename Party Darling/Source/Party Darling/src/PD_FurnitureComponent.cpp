@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_FurnitureComponent.h>
+#include <Resource.h>
 
 PD_FurnitureConnector::PD_FurnitureConnector(Json::Value _jsonDef) {
 	description =_jsonDef.get("description", "UNDEFINED").asString();
@@ -12,7 +13,12 @@ PD_FurnitureConnector::PD_FurnitureConnector(Json::Value _jsonDef) {
 PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) {
 	id = _jsonDef.get("id", -1).asInt();
 	type = _jsonDef.get("type", -1).asString();
-	src = _jsonDef.get("src", -1).asString();
+	src = _jsonDef.get("src", "UNDEFINED").asString();
+
+	if(src != "UNDEFINED") {
+		mesh = Resource::loadMeshFromObj("assets/meshes/furniture/" + src).at(0);
+	}
+
 	for(auto jsonObj : _jsonDef["connectors"]) {
 		connectors.push_back(new PD_FurnitureConnector(jsonObj));
 	}

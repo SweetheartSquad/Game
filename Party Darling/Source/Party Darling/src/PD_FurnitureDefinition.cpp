@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_FurnitureDefinition.h>
+#include <PD_FurnitureComponentDefinition.h>
 
 PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) {
 	type = _jsonDef.get("type", "UNDEFINED").asString();
