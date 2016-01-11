@@ -62,7 +62,7 @@ PD_UI_Bubble::~PD_UI_Bubble(){
 	textShader->decrementAndDelete();
 }
 
-void PD_UI_Bubble::addOption(std::string _text){
+void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _listener){
 	Bubble * optionBubble;
 	if(unusedOptions.size() > 0){
 		optionBubble = unusedOptions.top();
@@ -76,11 +76,14 @@ void PD_UI_Bubble::addOption(std::string _text){
 	optionBubble->label->setText(_text);
 	options.push_back(optionBubble);
 	
+	optionBubble->eventManager.addEventListener("selected", _listener);
+
 	test->addChild(optionBubble->firstParent(), false);
 }
 
 void PD_UI_Bubble::select(unsigned long int _option){
 	std::cout << "hey gj you clicked a bubble" << std::endl;
+	options.at(_option)->eventManager.triggerEvent("selected");
 }
 
 void PD_UI_Bubble::selectCurrent(){
@@ -176,6 +179,7 @@ void PD_UI_Bubble::clear(){
 	while(options.size() > 0){
 		test->removeChild(options.back()->firstParent());
 		//delete options.back()->firstParent();
+		options.back()->eventManager.listeners["selected"].clear();
 		unusedOptions.push(options.back());
 		options.pop_back();
 	}

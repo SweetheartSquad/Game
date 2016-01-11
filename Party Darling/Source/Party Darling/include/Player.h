@@ -9,9 +9,13 @@
 #include <NodeBulletBody.h>
 #include <MousePerspectiveCamera.h>
 
+#include <Animation.h>
+#include <Tween.h>
+
 class Keyboard;
 class Mouse;
 class Joystick;
+
 
 class PerspectiveCamera;
 class MousePerspectiveCamera;
@@ -39,6 +43,21 @@ private:
 	Joystick * joystick;
 
 	MousePerspectiveCamera * playerCamera;
+	float camYpos;
+
+	Animation<float> * headBobble;
+	Tween<float> * headBobbleTween1;
+	Tween<float> * headBobbleTween2;
+	float bobbleVal;
+	float bobbleInterpolation;
+
+	/*Animation<float> * easeIntoBobble;
+	Tween<float> * easeIntoBobbleTween1;
+	float easeIntoBobbleVal;
+
+	Animation<float> * easeOutOfBobble;
+	Tween<float> * easeOutOfBobbleTween1;
+	float easeOutOfBobbleVal;*/
 
 	ComponentShaderBase * diffuseShader;
 

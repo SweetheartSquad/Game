@@ -32,7 +32,7 @@ public:
 	Transform * test;
 
 	// add an option with the provided _text
-	void addOption(std::string _text);
+	void addOption(std::string _text, sweet::EventManager::Listener _listener);
 
 	void select(unsigned long int _option);
 	void selectCurrent();
