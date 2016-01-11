@@ -46,7 +46,7 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	mouse(&Mouse::getInstance()),
 	joystick(nullptr)
 {
-
+	//init movement vars
 	playerSpeed = 0.1f;
 	mass = 1;
 	initSpeed = 2.0f;
@@ -55,10 +55,15 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	// player set-up
 	this->setColliderAsCapsule(1, 1.5f);
 	this->createRigidBody(1);
-	//this->body->setDamping(0.9, 0.8);
 	this->body->setFriction(1);
 	this->body->setAngularFactor(btVector3(0,1,0));
 	this->body->setLinearFactor(btVector3(1,0.9,1));
+	this->maxVelocity = btVector3(-1,-1,-1);
+
+	//Set how much camera drags behind mouse movement
+	playerCamera->interpolation = 0.8f;
+
+	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
 	headBobble->loopType = Animation<float>::LoopType::kLOOP;
 	headBobbleTween1 = new Tween<float>(0.15f,-0.005f,Easing::kEASE_IN_OUT_CUBIC);
@@ -68,6 +73,7 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	headBobble->tweens.push_back(headBobbleTween2);
 	headBobble->hasStart = true;
 
+	//Default Interpolation, controls how extremem head bobble is
 	bobbleInterpolation = 0.f;
 
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
@@ -82,19 +88,20 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	easeOutOfBobble->tweens.push_back(easeOutOfBobbleTween1);
 	easeOutOfBobble->hasStart = true;*/
 
-	this->maxVelocity = btVector3(-1,-1,-1);
-
 	
-	playerCamera->interpolation = 0.8f;
 };
 
 void Player::update(Step * _step){
-	
+
+	//get player velocity
 	btVector3 curVelocity = this->body->getLinearVelocity();
 	float xVelocity = curVelocity[0];
 	float zVelocity = curVelocity[2];
+
+	//get player position
 	btVector3 b = this->body->getWorldTransform().getOrigin();
 	
+	//restrict how player can rotate head upward and downward around x-axis
 	if(playerCamera->pitch > 80){
 		playerCamera->pitch = 80;
 	}
@@ -117,6 +124,7 @@ void Player::update(Step * _step){
 	forward = glm::normalize(forward);
 	right = glm::normalize(right);
 	
+	//create movement vector
 	glm::vec3 movement(0);
 	if (keyboard->keyDown(GLFW_KEY_W)){
 		movement += forward;
@@ -146,19 +154,23 @@ void Player::update(Step * _step){
 
 	float movementMag = glm::length(movement);
 
-	
-
+	//If player is moving
 	if(movementMag > 0){
 
-		//movement = movement/movementMag * playerSpeed * mass;
+		//set movement
 		movement = movement/movementMag * playerSpeed * mass;
+
+		//set initial walking speed so that there is no ease in
 		float initXSpeed = (movement/movementMag)[0]*initSpeed;
 		float initZSpeed = (movement/movementMag)[2]*initSpeed;
 
+		//set initial running speed
 		float sprintXSpeed = (movement/movementMag)[0]*sprintSpeed;
 		float sprintZSpeed = (movement/movementMag)[2]*sprintSpeed;
 
 		this->body->activate(true);
+
+		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
 			if(bobbleInterpolation<2){
 				bobbleInterpolation += 0.1f;
@@ -171,14 +183,14 @@ void Player::update(Step * _step){
 			}
 			this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
 		}
-		//this -> maxVelocity = btVector3(-1,-1,-1);
 		
 	}
 
-
+	//If the player is not moving
 	else if(movementMag <= 0){
-		float slideVal = 10.0f;
+		//float slideVal = 10.0f;
 		this->body->activate(true);
+		//slow down body by applying force in opposite direction of its velocity
 		this->body->applyCentralImpulse(btVector3(xVelocity*-0.2,0,zVelocity*-0.2));
 		if(bobbleInterpolation > 0){
 			bobbleInterpolation -= 0.1f;
@@ -202,7 +214,7 @@ void Player::update(Step * _step){
 		}*/
 	}
 
-
+	// If the player isnt moving vertically
 	if(abs(curVelocity[1]) <= 0.01f){
 			headBobble->update(_step);
 			playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
@@ -241,4 +253,14 @@ void Player::update(Step * _step){
 	}
 
 	NodeBulletBody::update(_step);
+}
+
+
+glm::vec3 Player::getPlayerPosition(){
+	btVector3 playerPos = this->body->getWorldTransform().getOrigin();
+	return glm::vec3(playerPos.x(), playerPos.y(), playerPos.z());
+}
+glm::vec3 Player::getPlayerLinearVelocity(){
+	btVector3 playerVel = this->body->getLinearVelocity(); 
+	return glm::vec3(playerVel.x(), playerVel.y(),playerVel.z());
 }

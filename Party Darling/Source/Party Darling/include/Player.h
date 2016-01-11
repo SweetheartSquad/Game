@@ -79,5 +79,8 @@ public:
 
 	Player(BulletWorld * bulletWorld, MousePerspectiveCamera * playerCamera);
 
+	glm::vec3 getPlayerLinearVelocity();
+	glm::vec3 getPlayerPosition();
+
 	virtual void update(Step * _step) override;
 };
