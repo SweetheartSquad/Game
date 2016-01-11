@@ -56,6 +56,8 @@ private:
 	int lastBobbleTween;
 	bool tweenBobbleChange;
 
+	bool isGrounded;
+
 	/*Animation<float> * easeIntoBobble;
 	Tween<float> * easeIntoBobbleTween1;
 	float easeIntoBobbleVal;
@@ -63,14 +65,18 @@ private:
 	Animation<float> * easeOutOfBobble;
 	Tween<float> * easeOutOfBobbleTween1;
 	float easeOutOfBobbleVal;*/
-
-	ComponentShaderBase * diffuseShader;
-
-	BulletWorld * bulletWorld;
-	BulletDebugDrawer * debugDrawer;
 	
 	OpenAL_SoundSimple * footSteps;
 	
+	OpenAL_SoundSimple * jumpSound;
+
+	OpenAL_SoundSimple * landSound;
+
+	float lastYVel;
+	float currentYVel;
+
+	float playerHeight;
+	float playerRad;
 
 	glm::vec3 lastPos;
 

@@ -57,13 +57,15 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	sprintSpeed = 5.0f;
 
 	// player set-up
-	this->setColliderAsCapsule(1, 1.5f);
+	playerRad = 1.f;
+	playerHeight = 1.5f;
+	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
 	this->body->setFriction(1);
 	this->body->setAngularFactor(btVector3(0,1,0));
 	this->body->setLinearFactor(btVector3(1,0.9,1));
 	this->maxVelocity = btVector3(-1,-1,-1);
-
+	
 	//Set how much camera drags behind mouse movement
 	playerCamera->interpolation = 0.8f;
 
@@ -84,8 +86,11 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	//Default Interpolation, controls how extremem head bobble is
 	bobbleInterpolation = 0.f;
 
-	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, true, "sfx");
+	lastYVel = 0;
 
+	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, true, "sfx");
+	jumpSound = new OpenAL_SoundSimple("assets/audio/jump.ogg", false, true, "sfx");
+	landSound = new OpenAL_SoundSimple("assets/audio/fall.ogg", false, true, "sfx");
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
 	easeIntoBobbleTween1 = new Tween<float>(0.25f,0.05f,Easing::kEASE_IN_CUBIC);
 	easeIntoBobble->startValue=0.f;
@@ -102,7 +107,7 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 };
 
 void Player::update(Step * _step){
-
+	
 	//get player velocity
 	btVector3 curVelocity = this->body->getLinearVelocity();
 	float xVelocity = curVelocity[0];
@@ -113,6 +118,8 @@ void Player::update(Step * _step){
 	//get player position
 	btVector3 b = this->body->getWorldTransform().getOrigin();
 	
+	
+
 	currentBobbleTween = headBobble->currentTween;
 	if(currentBobbleTween != lastBobbleTween && currentBobbleTween == 1)
 	{
@@ -121,6 +128,7 @@ void Player::update(Step * _step){
 	else{
 		tweenBobbleChange = false;
 	}
+
 	//restrict how player can rotate head upward and downward around x-axis
 	if(playerCamera->pitch > 80){
 		playerCamera->pitch = 80;
@@ -128,6 +136,23 @@ void Player::update(Step * _step){
 	else if(playerCamera->pitch < -80){
 		playerCamera->pitch = -80;
 	}
+
+	float rayRange = playerHeight * 1.25f;
+	btVector3 rayEnd = b + btVector3(0,-1,0)*rayRange;
+	btCollisionWorld::ClosestRayResultCallback GroundRayCallback(b, rayEnd);
+	world->world->rayTest(b, rayEnd, GroundRayCallback);
+	if(GroundRayCallback.hasHit()){
+		//std::cout << "HIT" << std::endl;
+		isGrounded = true;
+	}else{
+		isGrounded = false;
+	}
+
+	currentYVel = curVelocity.y();
+	if (currentYVel > 0 && lastYVel < 0 && isGrounded){
+		landSound->play();
+	}
+	lastYVel = currentYVel;
 
 	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
@@ -155,8 +180,10 @@ void Player::update(Step * _step){
 	}if (keyboard->keyDown(GLFW_KEY_D)){
 		movement += right;
 	}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+		if(isGrounded){
 			movement += glm::vec3(0,100,0);
-			footSteps->play();
+			jumpSound->play();
+		}
 	}
 
 
