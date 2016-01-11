@@ -23,9 +23,9 @@ public:
 
 	PD_Item(std::string _name, std::string _description, BulletWorld * _world, Texture * _texture, Shader * _shader, bool _collectable, bool _pixelPerfectInteraction);
 
-	// called when the player clicks on an item in the world
-	// _position, the world position of the intersection point, is used to potentially filter interactions
-	bool interact(glm::vec3 _position);
+	// if pixel perfect interaction is enabled, returns the result
+	// otherwise, returns true
+	bool actuallyHovered(glm::vec3 _position);
 
 	// given a _position in world space, checks for pixel perfect collision
 	// process: world space -> object space -> UV coordinates -> 

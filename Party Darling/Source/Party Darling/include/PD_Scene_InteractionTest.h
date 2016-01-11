@@ -36,6 +36,8 @@ public:
 
 	NodeUI * crosshairIndicator;
 
+	NodeBulletBody * currentHoverTarget;
+
 	PD_Scene_InteractionTest(Game * _game);
 	~PD_Scene_InteractionTest();
 };
