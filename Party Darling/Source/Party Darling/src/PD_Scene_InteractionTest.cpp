@@ -101,10 +101,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 		uiInventory->close();
 
 		// replace the crosshair texture with the item texture
-		while(crosshairIndicator->background->mesh->textureCount() > 0){
-			crosshairIndicator->background->mesh->popTexture2D();
-		}
-		crosshairIndicator->background->mesh->pushTexture2D(uiInventory->getSelected()->mesh->textures.at(0));
+		crosshairIndicator->background->mesh->replaceTextures(uiInventory->getSelected()->mesh->textures.at(0));
 		// TODO: update the UI to indicate the selected item to the player
 	});
 
@@ -230,10 +227,7 @@ void PD_Scene_InteractionTest::update(Step * _step){
 		}
 
 		// replace the crosshair itme texture with the actual crosshair texture
-		while(crosshairIndicator->background->mesh->textureCount() > 0){
-			crosshairIndicator->background->mesh->popTexture2D();
-		}
-		crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+		crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	}
 	
 	// inventory toggle

@@ -61,9 +61,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			// event listeners
 			cell->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 0.5f);
-				while(itemImage->background->mesh->textureCount() > 0){
-					itemImage->background->mesh->popTexture2D();
-				}
+				itemImage->background->mesh->clearTextures();
 				PD_Item * item = getItem(x, y);
 				if(item != nullptr){
 					//itemImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->defaultTexture->texture);
@@ -78,9 +76,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cell->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 1.f);
 				if(!itemHovered){
-					while(itemImage->background->mesh->textureCount() > 0){
-						itemImage->background->mesh->popTexture2D();
-					}
+					itemImage->background->mesh->clearTextures();
 					itemName->setText("");
 					itemDescription->setText("");
 				}
@@ -223,9 +219,7 @@ void PD_UI_Inventory::refreshGrid(){
 			NodeUI * cell = grid[y][x];
 
 			// remove any existing textures on the cell
-			while(cell->background->mesh->textures.size() > 0){
-				cell->background->mesh->popTexture2D();
-			}
+			cell->background->mesh->clearTextures();
 
 			// if there is an item which should belong to the cell, add it's texture
 			if(itemIdx < items.size()){
