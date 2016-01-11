@@ -163,13 +163,13 @@ void Player::update(Step * _step){
 			if(bobbleInterpolation<2){
 				bobbleInterpolation += 0.1f;
 			}
-			this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*100, sprintZSpeed+movement.z));
+			this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
 		}
 		else{
 			if(bobbleInterpolation<1){
 				bobbleInterpolation += 0.1f;
 			}
-			this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*100, initZSpeed+movement.z));
+			this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
 		}
 		//this -> maxVelocity = btVector3(-1,-1,-1);
 		
@@ -202,7 +202,8 @@ void Player::update(Step * _step){
 		}*/
 	}
 
-	if(curVelocity[1] <= 0.01f){
+
+	if(abs(curVelocity[1]) <= 0.01f){
 			headBobble->update(_step);
 			playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 		}
