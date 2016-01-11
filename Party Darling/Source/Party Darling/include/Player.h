@@ -12,6 +12,8 @@
 #include <Animation.h>
 #include <Tween.h>
 
+#include <OpenALSound.h>
+
 class Keyboard;
 class Mouse;
 class Joystick;
@@ -50,6 +52,9 @@ private:
 	Tween<float> * headBobbleTween2;
 	float bobbleVal;
 	float bobbleInterpolation;
+	int currentBobbleTween;
+	int lastBobbleTween;
+	bool tweenBobbleChange;
 
 	/*Animation<float> * easeIntoBobble;
 	Tween<float> * easeIntoBobbleTween1;
@@ -64,6 +69,9 @@ private:
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
 	
+	OpenAL_SoundSimple * footSteps;
+	
+
 	glm::vec3 lastPos;
 
 	glm::vec3 startPos;

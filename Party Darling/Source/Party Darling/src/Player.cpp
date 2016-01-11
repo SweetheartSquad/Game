@@ -39,6 +39,10 @@
 #include <Animation.h>
 #include <Tween.h>
 
+#include <OpenALSound.h>
+
+#include <NumberUtils.h>
+
 Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamera) : 
 	playerCamera(_playerCamera),
 	NodeBulletBody(_bulletWorld),
@@ -73,8 +77,14 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	headBobble->tweens.push_back(headBobbleTween2);
 	headBobble->hasStart = true;
 
+	currentBobbleTween = 0;
+	lastBobbleTween = 0;
+	tweenBobbleChange = false;
+
 	//Default Interpolation, controls how extremem head bobble is
 	bobbleInterpolation = 0.f;
+
+	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, true, "sfx");
 
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
 	easeIntoBobbleTween1 = new Tween<float>(0.25f,0.05f,Easing::kEASE_IN_CUBIC);
@@ -98,9 +108,19 @@ void Player::update(Step * _step){
 	float xVelocity = curVelocity[0];
 	float zVelocity = curVelocity[2];
 
+	float pitchRand = sweet::NumberUtils::randomFloat(0.75f,1.75f);
+
 	//get player position
 	btVector3 b = this->body->getWorldTransform().getOrigin();
 	
+	currentBobbleTween = headBobble->currentTween;
+	if(currentBobbleTween != lastBobbleTween && currentBobbleTween == 1)
+	{
+		tweenBobbleChange = true;
+	}
+	else{
+		tweenBobbleChange = false;
+	}
 	//restrict how player can rotate head upward and downward around x-axis
 	if(playerCamera->pitch > 80){
 		playerCamera->pitch = 80;
@@ -136,6 +156,7 @@ void Player::update(Step * _step){
 		movement += right;
 	}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			movement += glm::vec3(0,100,0);
+			footSteps->play();
 	}
 
 
@@ -157,6 +178,10 @@ void Player::update(Step * _step){
 	//If player is moving
 	if(movementMag > 0){
 
+		if(tweenBobbleChange){
+			footSteps->setPitch(pitchRand);
+			footSteps->play();
+		}
 		//set movement
 		movement = movement/movementMag * playerSpeed * mass;
 
@@ -176,6 +201,7 @@ void Player::update(Step * _step){
 				bobbleInterpolation += 0.1f;
 			}
 			this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
+			
 		}
 		else{
 			if(bobbleInterpolation<1){
@@ -252,6 +278,7 @@ void Player::update(Step * _step){
 		}
 	}
 
+	lastBobbleTween = currentBobbleTween;
 	NodeBulletBody::update(_step);
 }
 
