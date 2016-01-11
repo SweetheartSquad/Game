@@ -71,7 +71,13 @@ private:
 	Sprite * crosshair;
 	
 public:
-	Player(glm::vec3 sPos, BulletWorld * bulletWorld, MousePerspectiveCamera * playerCamera);
+
+	float playerSpeed;
+	float mass;
+	float initSpeed;
+	float sprintSpeed;
+
+	Player(BulletWorld * bulletWorld, MousePerspectiveCamera * playerCamera);
 
 	virtual void update(Step * _step) override;
 };

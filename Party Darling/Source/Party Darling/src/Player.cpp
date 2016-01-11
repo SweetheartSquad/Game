@@ -39,14 +39,18 @@
 #include <Animation.h>
 #include <Tween.h>
 
-Player::Player(glm::vec3  sPos, BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamera) : 
+Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamera) : 
 	playerCamera(_playerCamera),
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
 	joystick(nullptr)
 {
-	startPos = sPos;
+
+	playerSpeed = 0.1f;
+	mass = 1;
+	initSpeed = 2.0f;
+	sprintSpeed = 5.0f;
 
 	// player set-up
 	this->setColliderAsCapsule(1, 1.5f);
@@ -85,14 +89,10 @@ Player::Player(glm::vec3  sPos, BulletWorld * _bulletWorld, MousePerspectiveCame
 };
 
 void Player::update(Step * _step){
-	float playerSpeed = 0.1f;
-	float mass = 1;
-	float initSpeed = 2.0f;
-	float sprintSpeed = 5.0f;
+	
 	btVector3 curVelocity = this->body->getLinearVelocity();
 	float xVelocity = curVelocity[0];
 	float zVelocity = curVelocity[2];
-	
 	btVector3 b = this->body->getWorldTransform().getOrigin();
 	
 	if(playerCamera->pitch > 80){
@@ -126,7 +126,7 @@ void Player::update(Step * _step){
 		movement -= right;
 	}if (keyboard->keyDown(GLFW_KEY_D)){
 		movement += right;
-	}if (keyboard->keyJustUp(GLFW_KEY_SPACE)){
+	}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			movement += glm::vec3(0,100,0);
 	}
 

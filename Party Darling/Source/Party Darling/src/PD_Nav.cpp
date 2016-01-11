@@ -112,7 +112,7 @@ PD_Nav::PD_Nav(Game * _game) :
 	lights.push_back(light2);
 	playerCam->childTransform->addChild(light2);
 
-	playerEntity = new Player(glm::vec3(0,0,0), bulletWorld, playerCam);
+	playerEntity = new Player(bulletWorld, playerCam);
 	childTransform->addChild(playerEntity);
 }
 
