@@ -67,6 +67,12 @@
     },
 
 	{
+      "id": "YELLING-CONTEST-LOSTFRIENDSHIP",
+      "type": "texture",
+      "src": "yelling contest/lostFriendshipToken.png"
+    },
+
+	{
       "id": "YELLING-CONTEST-WIN",
       "type": "texture",
       "src": "yelling contest/win.png"

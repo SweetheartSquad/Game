@@ -15,6 +15,7 @@ private:
 
 	HorizontalLinearLayout * livesContainer;
 	std::vector<NodeUI *> lives;
+	std::vector<NodeUI *> lostLives;
 
 	float playerDelay;
 	float playerTimer;
