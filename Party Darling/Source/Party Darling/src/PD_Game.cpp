@@ -6,6 +6,7 @@
 #include <PD_Scene_FurnitureTest.h>
 #include <PD_Scene_InteractionTest.h>
 #include <PD_Scene_CombinedTests.h>
+#include <PD_Scene_RoomGenerationTest.h>
 #include <PD_Nav.h>
 
 

@@ -24,7 +24,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyCursor(new Sprite(_shader)),
 	confidence(50.f),
 	playerTimerLength(1.f),
-	playerTimer(1.f),
+	playerTimer(1.5f),
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
@@ -232,10 +232,13 @@ void PD_UI_YellingContest::update(Step * _step){
 
 						if(glyphIdx < glyphs.size()){
 							cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+							/*
 							std::wstringstream s;
 							s << glyphs.at(glyphIdx)->character;
 							selectedGlyphText->setText(s.str());
+							*/
 						}else{
+							// TODO: decrement confidence, but not yet! It's still too hard to interject!
 							setEnemyText();
 						}
 					}
@@ -311,8 +314,42 @@ void PD_UI_YellingContest::startNewFight(){
 	}
 
 	confidence = 50.f;
+
+	if(isGameOver){
+		// Reset layout
+		gameOverImage->setRationalWidth(0.5f);
+		gameOverImage->setRationalHeight(0.5f);
+		removeChild(gameOverContainer);
+		gameOverDuration = 0;
+
+		addChild(enemyBubble);
+		addChild(playerBubble);
+		addChild(playerTimerSlider);
+		
+		win = false;
+		isGameOver = false;
+		
+	}
+
 	setUIMode(false);
 	enable();
+}
+
+void PD_UI_YellingContest::gameOver(bool _win){
+	isGameOver = true;
+	win = _win;
+
+	removeChild(enemyBubble);
+	removeChild(playerBubble);
+	removeChild(playerTimerSlider);
+
+	if(_win){
+		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
+	}else{
+		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
+	}
+
+	addChild(gameOverContainer);
 }
 
 void PD_UI_YellingContest::complete(){
@@ -379,15 +416,23 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	enemyBubbleText->setText(insultGenerator.enemyInsult);
 
+	//enemyBubble->invalidateLayout();
+
 	glyphIdx = 0;
 	cursorDelayDuration = 0;
 	glyphs.clear();
 
 	for (auto label : enemyBubbleText->usedLines) {
 		for (int i = 0; i < label->usedGlyphs.size(); ++i){
+			std::wstringstream s;
+			s << label->usedGlyphs.at(i)->character;
+			std::wcout << s.str();
 			glyphs.push_back(label->usedGlyphs.at(i));
 		}
 	}
+
+	std::cout << std::endl;
+
 	if(glyphs.size() > 0){
 		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 	}
@@ -447,23 +492,6 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 	if(confidence >= 100){
 		gameOver(true);
 	}
-}
-
-void PD_UI_YellingContest::gameOver(bool _win){
-	isGameOver = true;
-	win = _win;
-
-	removeChild(enemyBubble);
-	removeChild(playerBubble);
-	removeChild(playerTimerSlider);
-
-	if(_win){
-		gameOverImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
-	}else{
-		gameOverImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
-	}
-
-	addChild(gameOverContainer);
 }
 
 UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
