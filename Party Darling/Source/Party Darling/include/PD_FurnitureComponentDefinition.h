@@ -11,9 +11,10 @@ public:
 	std::string componentType;
 	bool required;
 	std::vector<PD_FurnitureComponentDefinition *> outComponents;
+	std::vector<int>multipliers;
 	int multiplier;	
 
 	explicit PD_FurnitureComponentDefinition(Json::Value _jsonDef);
 	
-	MeshEntity * buildChildren(PD_FurnitureComponentContainer * _componentContainer) const;
+	MeshEntity * buildChildren(PD_FurnitureComponentContainer * _componentContainer, int _multiplier, std::vector<glm::vec3> _positions) const;
 };

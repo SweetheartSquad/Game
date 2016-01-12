@@ -11,8 +11,15 @@ PD_Furniture::PD_Furniture(Shader * _shader, PD_FurnitureDefinition * _def, PD_F
 	MeshEntity(new TriMesh(), _shader)
 {
 	std::vector<MeshEntity *>meshes;
-	for(auto component : _def->components) {
-		meshes.push_back(component->buildChildren(_components));
+	for(unsigned long int i = 0; i < _def->components.size(); ++i) {
+		auto component = _components->getComponentForType(_def->components.at(i)->componentType);
+		meshes.push_back(new MeshEntity(component->mesh));
+		for(unsigned long int j = 0; j < _def->components.at(i)->outComponents.size(); ++j) {
+			 MeshEntity * ent = _def->components.at(i)->outComponents.at(j)->buildChildren(
+				 _components,  _def->components.at(i)->multipliers.at(j), 
+				 component->connectors[_def->components.at(i)->outComponents.at(j)->componentType]);
+			 meshes.push_back(ent);
+		}
 	}
 	for(auto m : meshes) {
 		int indOffset = mesh->indices.size();
