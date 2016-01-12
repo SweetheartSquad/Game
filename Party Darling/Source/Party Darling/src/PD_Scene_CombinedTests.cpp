@@ -118,13 +118,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
 	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
-		Timeout * t = new Timeout(1000, [this, t](sweet::Event * _event){
-			uiYellingContest->disable();
-			childTransform->removeChild(t);
-			delete t;
-		});
-		childTransform->addChild(t, false);
-		t->start();
+		uiYellingContest->disable();
 	});
 
 	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
