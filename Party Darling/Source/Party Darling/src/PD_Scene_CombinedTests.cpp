@@ -157,85 +157,87 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 
 	// mouse interaction with world objects
-	
-	float range = 10;
-	glm::vec3 pos = activeCamera->childTransform->getWorldPos();
-	btVector3 start(pos.x, pos.y, pos.z);
-	btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
-	btVector3 end = start + dir*range;
-	btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
-	bulletWorld->world->rayTest(start, end, RayCallback);
-	if(RayCallback.hasHit()){
-		NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
+	if(player->isEnabled()){
+		float range = 4;
+		glm::vec3 pos = activeCamera->childTransform->getWorldPos();
+		btVector3 start(pos.x, pos.y, pos.z);
+		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
+		btVector3 end = start + dir*range;
+		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
+		bulletWorld->world->rayTest(start, end, RayCallback);
+		if(RayCallback.hasHit()){
+			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			
-		if(me != nullptr){
-			PD_Item * item = dynamic_cast<PD_Item *>(me);
-			if(item != nullptr){
-				if(item->actuallyHovered(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
-					// hover over item
-					if(item != currentHoverTarget){
-						// if we aren't already looking at the item,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						if(item->collectable){
-							uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
-								// remove the item from the scene
-								Transform * toDelete = item->firstParent();
-								toDelete->firstParent()->removeChild(toDelete);
-								toDelete->removeChild(item);
-								delete toDelete;
-								delete item->shape;
-								item->shape = nullptr;
-								bulletWorld->world->removeRigidBody(item->body);
-								item->body = nullptr;
+			if(me != nullptr){
+				PD_Item * item = dynamic_cast<PD_Item *>(me);
+				if(item != nullptr){
+					if(item->actuallyHovered(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
+						// hover over item
+						if(item != currentHoverTarget){
+							// if we aren't already looking at the item,
+							// clear out the bubble UI and add the relevant options
+							uiBubble->clear();
+							if(item->collectable){
+								uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
+									// remove the item from the scene
+									Transform * toDelete = item->firstParent();
+									toDelete->firstParent()->removeChild(toDelete);
+									toDelete->removeChild(item);
+									delete toDelete;
+									delete item->shape;
+									item->shape = nullptr;
+									bulletWorld->world->removeRigidBody(item->body);
+									item->body = nullptr;
 
-								// pickup the item
-								uiInventory->pickupItem(item);
+									// pickup the item
+									uiInventory->pickupItem(item);
+								});
+							}else{
+								uiBubble->addOption("interact", [](sweet::Event * _event){
+									std::cout << "hey gj you interacted" << std::endl;
+								});
+							}
+						}
+					}else{
+						// we hovered over an item, but it wasn't pixel-perfect
+						me = item = nullptr;
+					}
+				}else{
+					PersonButt * butt = dynamic_cast<PersonButt *>(me);
+					if(butt != nullptr){
+						// hover over person
+						if(butt != currentHoverTarget){
+							// if we aren't already looking at the person,
+							// clear out the bubble UI and add the relevant options
+							uiBubble->clear();
+							uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
+								uiDialogue->startEvent(butt->person->state.conversation);
+								player->disable();
 							});
-						}else{
-							uiBubble->addOption("interact", [](sweet::Event * _event){
-								std::cout << "hey gj you interacted" << std::endl;
+							uiBubble->addOption("yell at ", [this](sweet::Event * _event){
+								uiYellingContest->startNewFight();
+								uiBubble->clear();
+								player->disable();
+								// TODO: pass in the character that's fighting here
 							});
 						}
 					}
-				}else{
-					// we hovered over an item, but it wasn't pixel-perfect
-					me = item = nullptr;
-				}
-			}else{
-				PersonButt * butt = dynamic_cast<PersonButt *>(me);
-				if(butt != nullptr){
-					// hover over person
-					if(butt != currentHoverTarget){
-						// if we aren't already looking at the person,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-							uiDialogue->startEvent(butt->person->state.conversation);
-							player->disable();
-						});
-						uiBubble->addOption("yell at ", [this](sweet::Event * _event){
-							uiYellingContest->startNewFight();
-							player->disable();
-							// TODO: pass in the character that's fighting here
-						});
-					}
 				}
 			}
-		}
 
-		/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
-		if(ui != nullptr){
-			ui->setUpdateState(true);
-		}*/
+			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
+			if(ui != nullptr){
+				ui->setUpdateState(true);
+			}*/
 		
 
-		currentHoverTarget = me;
-	}else{
-		currentHoverTarget = nullptr;
-	}
-	if(currentHoverTarget == nullptr){
-		uiBubble->clear();
+			currentHoverTarget = me;
+		}else{
+			currentHoverTarget = nullptr;
+		}
+		if(currentHoverTarget == nullptr){
+			uiBubble->clear();
+		}
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_D)){
