@@ -174,6 +174,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	addChild(enemyBubble);
 	addChild(playerBubble);
 	addChild(playerTimerSlider);
+	
+
+	// disable and hide by default
+	disable();
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -371,10 +375,9 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 }
 
 void PD_UI_YellingContest::setEnemyText(){
-	// Generate full insult
-	std::wstring insult = L"Well, you got a set of lizard legs!";
+	insultGenerator.makeInsults();
 
-	enemyBubbleText->setText(insult);
+	enemyBubbleText->setText(insultGenerator.enemyInsult);
 
 	glyphIdx = 0;
 	cursorDelayDuration = 0;
@@ -394,21 +397,19 @@ void PD_UI_YellingContest::setEnemyText(){
 }
 
 void PD_UI_YellingContest::setPlayerText(){
-	// Generate partial insult
-	std::wstring insult = L"Your face is";
-	// Generate insult word choices
-	std::wstring optE = L"flat";
-	std::wstring optI = L"lovely";
-
-	bool btn1E = sweet::NumberUtils::randomInt(0, 1);
-
-	playerBubbleText->setText(insult);
+	insultGenerator.makeInsults();
+	// set the insult prompt
+	playerBubbleText->setText(insultGenerator.playerInsult);
+	
+	// randomize which of the two options
+	// presented to the user is effective
+	bool btn1E = sweet::NumberUtils::randomBool();
 
 	pBubbleBtn1->isEffective = btn1E;
 	pBubbleBtn2->isEffective = !btn1E;
 
-	pBubbleBtn1->setText(btn1E ? optE : optI);
-	pBubbleBtn2->setText(!btn1E ? optE : optI);
+	pBubbleBtn1->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
+	pBubbleBtn2->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
 	
 	// Reset timer
 	playerTimer = 0;

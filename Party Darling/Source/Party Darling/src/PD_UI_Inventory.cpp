@@ -136,6 +136,9 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		infoLayout->addChild(itemImage);
 		infoLayout->addChild(itemDescription);
 	}
+	
+	// disable and hide by default
+	close();
 }
 
 void PD_UI_Inventory::pickupItem(PD_Item * _item){

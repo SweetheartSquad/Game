@@ -53,5 +53,6 @@ public:
 	virtual void update(Step * _step) override;
 
 	// clear out all existing options
+	// specifically, it removes the "selected" event listeners, removes them from the layout, and puts them in the unused list
 	void clear();
 };

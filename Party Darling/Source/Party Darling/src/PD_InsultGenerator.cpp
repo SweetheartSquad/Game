@@ -7,9 +7,9 @@
 #include <regex>
 #include <NumberUtils.h>
 
-PD_InsultGenerator::PD_InsultGenerator(){
-	escapeChar = "*";
-
+PD_InsultGenerator::PD_InsultGenerator() :
+	escapeChar("*")
+{
 	makeDatabases();
 }
 

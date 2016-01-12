@@ -1,7 +1,7 @@
 #pragma once
 
-#include <PD_UI_YellingContest.h>
 #include <sweet/UI.h>
+#include <PD_InsultGenerator.h>
 
 class Shader;
 class PD_InsultButton;
@@ -11,6 +11,8 @@ class ComponentShaderText;
 
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
+	PD_InsultGenerator insultGenerator;
+
 	bool isEnabled;
 
 	HorizontalLinearLayout * livesContainer;

@@ -84,7 +84,6 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 }
 
 void PD_UI_Bubble::select(unsigned long int _option){
-	std::cout << "hey gj you clicked a bubble" << std::endl;
 	options.at(_option)->eventManager.triggerEvent("selected");
 }
 
