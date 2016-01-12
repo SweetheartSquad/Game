@@ -14,9 +14,13 @@
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
 
+class Conversation;
+class PersonRenderer;
+
 class PersonButt : public NodeBulletBody{
 public:
-	PersonButt(BulletWorld * _world);
+	PersonRenderer * person;
+	PersonButt(BulletWorld * _world, PersonRenderer * _person);
 };
 
 
@@ -44,9 +48,15 @@ public:
 	void addComponent(PersonComponent * _component, float _weight = 1.f);
 };
 
+class PersonState : public Node{
+public:
+	Conversation * conversation;
+	PersonState();
+};
 
 class PersonRenderer : public Entity{
 public:
+	PersonState state;
 	float timer;
 
 	PersonLimbSolver * solverArmR;

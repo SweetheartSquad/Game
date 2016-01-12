@@ -105,6 +105,10 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 		// TODO: update the UI to indicate the selected item to the player
 	});
 
+	uiDialogue = new PD_UI_Dialogue(uiLayer.world, uiBubble);
+	uiLayer.addChild(uiDialogue);
+	uiDialogue->setRationalHeight(1.f, &uiLayer);
+	uiDialogue->setRationalWidth(1.f, &uiLayer);
 
 	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
 	childTransform->addChild(testCharacter);
@@ -148,26 +152,23 @@ void PD_Scene_InteractionTest::update(Step * _step){
 						uiBubble->clear();
 						if(item->collectable){
 							uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
-								if(item->collectable){
-									// remove the item from the scene
-									Transform * toDelete = item->firstParent();
-									toDelete->firstParent()->removeChild(toDelete);
-									toDelete->removeChild(item);
-									delete toDelete;
-									delete item->shape;
-									item->shape = nullptr;
-									bulletWorld->world->removeRigidBody(item->body);
-									item->body = nullptr;
+								// remove the item from the scene
+								Transform * toDelete = item->firstParent();
+								toDelete->firstParent()->removeChild(toDelete);
+								toDelete->removeChild(item);
+								delete toDelete;
+								delete item->shape;
+								item->shape = nullptr;
+								bulletWorld->world->removeRigidBody(item->body);
+								item->body = nullptr;
 
-									// pickup the item
-									uiInventory->pickupItem(item);
-								}else{
-									// interact with the item
-									std::cout << "hey gj you clicked a thing" << std::endl;
-								}
+								// pickup the item
+								uiInventory->pickupItem(item);
 							});
 						}else{
-							uiBubble->addOption("interact", nullptr);
+							uiBubble->addOption("interact", [](sweet::Event * _event){
+								std::cout << "hey gj you interacted" << std::endl;
+							});
 						}
 					}
 				}else{
@@ -182,7 +183,8 @@ void PD_Scene_InteractionTest::update(Step * _step){
 						// if we aren't already looking at the person,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
-						uiBubble->addOption("talk to ", [](sweet::Event * _event){
+						uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
+							uiDialogue->startEvent(butt->person->state.conversation);
 							std::cout << "hey gj you talked" << std::endl;
 						});
 						uiBubble->addOption("yell at ", [](sweet::Event * _event){

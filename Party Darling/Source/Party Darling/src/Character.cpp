@@ -10,8 +10,9 @@
 
 #include <sweet/Input.h>
 
-PersonButt::PersonButt(BulletWorld * _world) :
-	NodeBulletBody(_world)
+PersonButt::PersonButt(BulletWorld * _world, PersonRenderer * _person) :
+	NodeBulletBody(_world),
+	person(_person)
 {
 
 }
@@ -109,6 +110,10 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 	jointsLocal.back()->childTransform->addChild(_component);
 	addJointToChain(j);
 	components.push_back(_component);
+}
+
+PersonState::PersonState(){
+	conversation = PD_ResourceManager::scenario->conversations["intro"];
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world) :
@@ -233,7 +238,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world) :
 	talk->hasStart = true;
 
 
-	PersonButt * butt = new PersonButt(_world);
+	PersonButt * butt = new PersonButt(_world, this);
 	childTransform->addChild(butt);
 	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.005f, solverBod->getChainLength() * 0.005f, 0.005f);
 	butt->createRigidBody(0);

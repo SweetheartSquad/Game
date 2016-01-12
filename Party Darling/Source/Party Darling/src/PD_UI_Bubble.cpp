@@ -28,7 +28,8 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	NodeUI(_world),
 	currentOption(0),
 	vl(new VerticalLinearLayout(world)),
-	displayOffset(0)
+	displayOffset(0),
+	childrenUpdated(false)
 {
 	textShader = new ComponentShaderText(true);
 	textShader->setColor(0,0,0);
@@ -79,6 +80,7 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 	optionBubble->eventManager.addEventListener("selected", _listener);
 
 	test->addChild(optionBubble->firstParent(), false);
+	childrenUpdated = true;
 }
 
 void PD_UI_Bubble::select(unsigned long int _option){
@@ -137,9 +139,14 @@ void PD_UI_Bubble::update(Step * _step){
 		if(std::abs(delta) > FLT_EPSILON){
 			displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
 			placeOptions();
+		}else if(childrenUpdated){
+			placeOptions();
 		}
+		if(childrenUpdated){
+			reorderChildren();
+		}
+		childrenUpdated = false;
 	}
-
 	NodeUI::update(_step);
 }
 
@@ -184,4 +191,5 @@ void PD_UI_Bubble::clear(){
 		options.pop_back();
 	}
 	currentOption = displayOffset = 0;
+	childrenUpdated = true;
 }

@@ -11,6 +11,7 @@
 
 #include <PD_UI_Inventory.h>
 #include <PD_UI_Bubble.h>
+#include <PD_UI_Dialogue.h>
 
 
 #include <Character.h>
@@ -32,6 +33,7 @@ public:
 
 	PD_UI_Inventory * uiInventory;
 	PD_UI_Bubble * uiBubble;
+	PD_UI_Dialogue * uiDialogue;
 	ComponentShaderBase * characterShader;
 
 	NodeUI * crosshairIndicator;

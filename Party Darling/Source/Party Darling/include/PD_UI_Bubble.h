@@ -15,8 +15,9 @@ public:
 class PD_UI_Bubble : public NodeUI{
 private:
 	float displayOffset;
-	Texture_NineSliced * bubbleTex;
+	bool childrenUpdated;
 public:
+	Texture_NineSliced * bubbleTex;
 	ComponentShaderText * textShader;
 	// all of the currently available options
 	std::vector<Bubble *> options;
