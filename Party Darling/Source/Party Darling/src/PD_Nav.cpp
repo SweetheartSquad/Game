@@ -94,26 +94,20 @@ PD_Nav::PD_Nav(Game * _game) :
 
 
 	
-	playerCam = new MousePerspectiveCamera();
-	//playerEntity->childTransform->addChild(playerCam);
-	childTransform->addChild(playerCam);
+	
 
-	cameras.push_back(playerCam);
-	playerCam->farClip = 1000.f;
-	playerCam->nearClip = 0.1f;
-	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->firstParent()->translate(0, 5, 0);
-	playerCam->yaw = 90.0f;
-	playerCam->pitch = -10.0f;
-	playerCam->speed = 1;
-	activeCamera = playerCam;
+	playerEntity = new Player(bulletWorld);
+	childTransform->addChild(playerEntity);
+	cameras.push_back(playerEntity->playerCamera);
+	activeCamera = playerEntity->playerCamera;
+	childTransform->addChild(playerEntity->playerCamera);
+	playerEntity->playerCamera->firstParent()->translate(0, 5, 0);
+	
+
 	
 	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
 	lights.push_back(light2);
-	playerCam->childTransform->addChild(light2);
-
-	playerEntity = new Player(bulletWorld, playerCam);
-	childTransform->addChild(playerEntity);
+	playerEntity->playerCamera->childTransform->addChild(light2);
 }
 
 PD_Nav::~PD_Nav(){
@@ -158,10 +152,6 @@ void PD_Nav::update(Step * _step){
 	
 	// update scene and physics
 	bulletWorld->update(_step);
-
-	
-	btVector3 b = playerEntity->body->getWorldTransform().getOrigin();
-	playerCam->firstParent()->translate(b.x(), b.y(), b.z(), false);
 
 	Scene::update(_step);
 

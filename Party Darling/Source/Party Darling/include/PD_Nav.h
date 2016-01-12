@@ -32,6 +32,7 @@ class NodeBulletBody;
 class BulletRagdoll;
 class ComponentShaderText;
 class TextureColourTable;
+class Player;
 
 class Room;
 
@@ -43,8 +44,7 @@ public:
 	BulletDebugDrawer * debugDrawer;
 	
 	PD_FirstPersonController * playerController;
-	MousePerspectiveCamera * playerCam;
-	NodeBulletBody * playerEntity;
+	Player * playerEntity;
 	glm::vec3 lastPos;
 
 	Sprite * crosshair;

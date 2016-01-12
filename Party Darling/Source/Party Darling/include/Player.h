@@ -40,11 +40,12 @@ class Room;
 
 class Player : public virtual NodeBulletBody{
 private:
+	bool enabled;
+
 	Keyboard * keyboard;
 	Mouse * mouse;
 	Joystick * joystick;
 
-	MousePerspectiveCamera * playerCamera;
 	float camYpos;
 
 	Animation<float> * headBobble;
@@ -85,16 +86,22 @@ private:
 	Sprite * crosshair;
 	
 public:
+	MousePerspectiveCamera * playerCamera;
 
 	float playerSpeed;
 	float mass;
 	float initSpeed;
 	float sprintSpeed;
 
-	Player(BulletWorld * bulletWorld, MousePerspectiveCamera * playerCamera);
+	Player(BulletWorld * bulletWorld);
+	~Player();
 
 	glm::vec3 getPlayerLinearVelocity();
 	glm::vec3 getPlayerPosition();
 
 	virtual void update(Step * _step) override;
+
+	void enable();
+	void disable();
+	bool isEnabled();
 };

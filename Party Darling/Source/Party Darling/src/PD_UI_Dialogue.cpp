@@ -73,3 +73,8 @@ void PD_UI_Dialogue::startEvent(Conversation * _conversation){
 	currentConversation->reset();
 	sayNext();
 }
+
+void PD_UI_Dialogue::end(){
+	ConversationIterator::end();
+	eventManager.triggerEvent("end");
+}

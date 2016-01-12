@@ -55,19 +55,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	delete cameras.at(0)->parents.at(0);
 	cameras.pop_back();
 
-	//Set up debug camera
-	MousePerspectiveCamera * playerCam = new MousePerspectiveCamera();
-	cameras.push_back(playerCam);
-	childTransform->addChild(playerCam);
-	playerCam->farClip = 1000.f;
-	playerCam->nearClip = 0.1f;
-	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->firstParent()->translate(0, 5, 0);
-	playerCam->yaw = 90.0f;
-	playerCam->pitch = -10.0f;
-	playerCam->speed = 1;
-	activeCamera = playerCam;
-
 	uiLayer.addMouseIndicator();
 
 	// add crosshair
@@ -112,6 +99,9 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiLayer.addChild(uiDialogue);
 	uiDialogue->setRationalHeight(1.f, &uiLayer);
 	uiDialogue->setRationalWidth(1.f, &uiLayer);
+	uiDialogue->eventManager.addEventListener("end", [this](sweet::Event * _event){
+		player->enable();
+	});
 
 	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->defaultFont->font, uiBubble->textShader, shader);
 	uiLayer.addChild(uiYellingContest);
@@ -119,6 +109,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
 	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
 		uiYellingContest->disable();
+		player->enable();
 	});
 
 	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
@@ -146,8 +137,12 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 	// add the player to the scene
-	player = new Player(bulletWorld, playerCam);
+	player = new Player(bulletWorld);
 	childTransform->addChild(player);
+	cameras.push_back(player->playerCamera);
+	activeCamera = player->playerCamera;
+	childTransform->addChild(player->playerCamera);
+	player->playerCamera->firstParent()->translate(0, 5, 0);
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
@@ -217,9 +212,11 @@ void PD_Scene_CombinedTests::update(Step * _step){
 						uiBubble->clear();
 						uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
 							uiDialogue->startEvent(butt->person->state.conversation);
+							player->disable();
 						});
 						uiBubble->addOption("yell at ", [this](sweet::Event * _event){
 							uiYellingContest->startNewFight();
+							player->disable();
 							// TODO: pass in the character that's fighting here
 						});
 					}

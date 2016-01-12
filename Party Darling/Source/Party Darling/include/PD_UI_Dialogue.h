@@ -15,4 +15,6 @@ public:
 	virtual bool sayNext() override;
 
 	void startEvent(Conversation * _conversation);
+
+	virtual void end() override;
 };
