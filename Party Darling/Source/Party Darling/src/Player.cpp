@@ -271,6 +271,12 @@ void Player::update(Step * _step){
 	if(abs(curVelocity[1]) <= 0.01f){
 		headBobble->update(_step);
 	}
+
+	lastBobbleTween = currentBobbleTween;
+	NodeBulletBody::update(_step);
+
+
+	
 	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
 
@@ -304,9 +310,6 @@ void Player::update(Step * _step){
 			}
 		}
 	}
-
-	lastBobbleTween = currentBobbleTween;
-	NodeBulletBody::update(_step);
 }
 
 
