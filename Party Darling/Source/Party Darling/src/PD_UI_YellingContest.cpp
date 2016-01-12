@@ -330,6 +330,7 @@ void PD_UI_YellingContest::startNewFight(){
 		isGameOver = false;
 		
 	}
+	isComplete = false;
 
 	setUIMode(false);
 	enable();
