@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Entity.h>
+#include <BulletMeshEntity.h>
+#include <MeshInterface.h>
 #include <BulletWorld.h>
 #include <vector>
 
@@ -22,16 +24,14 @@ class Sprite;
 
 class RoomObject;
 
-class Room: public Entity {
+class Room: public BulletMeshEntity {
 public:
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
-
-	std::vector<RoomObject *> boundaries;
 	
 	std::vector<RoomObject *> objects;
 
-	Room(BulletWorld * _world);
+	Room(BulletWorld * _world, MeshInterface * _mesh = new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
 	~Room(void);
 
 	void addComponent(RoomObject *);

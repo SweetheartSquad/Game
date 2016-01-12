@@ -18,6 +18,11 @@
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_Door.h" />
     <ClInclude Include="include\PD_FirstPersonController.h" />
+    <ClInclude Include="include\PD_Furniture.h" />
+    <ClInclude Include="include\PD_FurnitureComponent.h" />
+    <ClInclude Include="include\PD_FurnitureComponentDefinition.h" />
+    <ClInclude Include="include\PD_FurnitureDefinition.h" />
+    <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_Item.h" />
@@ -25,6 +30,7 @@
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
     <ClInclude Include="include\PD_Scene_InteractionTest.h" />
+    <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_Scene_YellingContestTest.h" />
     <ClInclude Include="include\PD_TalkToButton.h" />
     <ClInclude Include="include\PD_TestScene.h" />
@@ -48,6 +54,11 @@
     <ClCompile Include="src\PD_Button.cpp" />
     <ClCompile Include="src\PD_Door.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
+    <ClCompile Include="src\PD_Furniture.cpp" />
+    <ClCompile Include="src\PD_FurnitureComponent.cpp" />
+    <ClCompile Include="src\PD_FurnitureComponentDefinition.cpp" />
+    <ClCompile Include="src\PD_FurnitureDefinition.cpp" />
+    <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
@@ -55,6 +66,7 @@
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />
     <ClCompile Include="src\PD_Scene_InteractionTest.cpp" />
+    <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_Scene_YellingContestTest.cpp" />
     <ClCompile Include="src\PD_TalkToButton.cpp" />
     <ClCompile Include="src\PD_TestScene.cpp" />

@@ -11,7 +11,8 @@
 #include <RoomObject.h>
 #include <RoomBuilder.h>
 
-Room::Room(BulletWorld * _world):
+Room::Room(BulletWorld * _world, MeshInterface * _mesh):
+	BulletMeshEntity(_world, _mesh),
 	tilemapSprite(new Sprite())
 {
 }
@@ -22,6 +23,7 @@ void Room::addComponent(RoomObject * obj){
 }
 
 void Room::setShader(Shader * _shader, bool _default){
+	BulletMeshEntity::setShader(_shader, _default);
 	tilemapSprite->setShader(_shader, _default);
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->setShader(_shader, _default);

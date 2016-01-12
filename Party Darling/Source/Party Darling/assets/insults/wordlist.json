@@ -1,0 +1,119 @@
+{
+	"phrases": [
+		"you've got a *badBodies*!",
+		"you're a *badThings*!",
+		"your *familyMembers* is a *badThings*!",
+		"you've got the *abNouns* of a *animals*!"
+	],
+
+	"playerPhrases": [
+		"you're such a ____ *animals*!",
+		"you're so ____!",
+		"you've got a ____ *bodyParts*!"
+	],
+
+	"badBodies": [
+		"pair of *animals* *pluralBodyParts*",
+		"*animals* *bodyParts*"
+	],
+
+	"badThings": [
+		"*badAdj* *animals*",
+		"*badAdj* *nouns*"
+	],
+
+	"bodyParts": [
+		"head",
+		"tongue",
+		"nose",
+		"stomach",
+		"neck",
+		"chin"
+	],
+
+	"pluralBodyParts": [
+		"legs",
+		"arms",
+		"ears",
+		"hands",
+		"fingers",
+		"wrists",
+		"ankles",
+		"knees",
+		"cheeks"
+	],
+
+	"animals": [
+		"elephant",
+		"rhino",
+		"dog",
+		"cat",
+		"lizard",
+		"bat",
+		"bug",
+		"ostrich",
+		"pig",
+		"grasshopper",
+		"toad",
+		"frog"
+	],
+
+	"badAdj": [
+		"ugly",
+		"funny-looking",
+		"crooked",
+		"janky",
+		"gross",
+		"horrid",
+		"smelly",
+		"lumpy",
+		"rotten",
+		"wimpy",
+		"stupid",
+		"bad",
+		"messy",
+		"dirty",
+		"faulty",
+		"prepubescent",
+		"useless",
+		"broken-down",
+		"beat-up"
+	],
+
+	"goodAdj": [
+		"cute",
+		"beautiful",
+		"sexy",
+		"wonderful",
+		"bright",
+		"handsome",
+		"nice",
+		"charming",
+		"pretty"
+	],
+
+	"nouns": [
+		"trash compacter",
+		"dumpster",
+		"toilet-head",
+		"romance novel",
+		"booger"
+	],
+
+	"abNouns": [
+		"tenacity",
+		"manners",
+		"personality",
+		"attitude",
+		"habits",
+		"consistency",
+		"qualities"
+	],
+
+	"familyMembers": [
+		"mother",
+		"sister",
+		"father",
+		"brother"
+	]
+}

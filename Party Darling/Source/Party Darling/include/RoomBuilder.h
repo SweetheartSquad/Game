@@ -66,6 +66,7 @@ public:
 	Json::Value json;
 	BulletWorld * world;
 
+	std::vector<RoomObject *> boundaries;
 	std::vector<Tile *> tiles;
 	std::map<int, std::map<int, bool>> map;
 
@@ -82,7 +83,7 @@ public:
 
 	// Room boundaries builder functions
 	void createWalls(unsigned long int _thresh);
-	RoomObject * getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
+	void addWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
 	std::vector<Tile *> getTiles(unsigned long int _thresh);
 
 	// Create random room objects, including specified objects

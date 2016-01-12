@@ -431,11 +431,6 @@ void PD_TestScene::update(Step * _step){
 		PD_ResourceManager::scenario->getTexture("INDEXED-TEST2")->texture->saveImageData("INDEXED-TEST2.tga");
 	}*/
 	
-	if(keyboard->keyJustUp(GLFW_KEY_E)){	
-		std::wcout << L"Calling RequestJSONValueAsync..." << std::endl;
-		room->boundaries.at(2)->translatePhysical(glm::vec3(0, 0, 10.f));
-		//RequestJSONValueAsync(label);
-	}
 	if(keyboard->keyJustUp(GLFW_KEY_R)){	
 		std::stringstream sql;
 		sql << "DROP TABLE IF EXISTS TestTable;";

@@ -74,7 +74,7 @@ PD_Nav::PD_Nav(Game * _game) :
 	bulletCube->freezeTransformation();
 	bulletCube->setColliderAsBoundingBox();
 	bulletCube->createRigidBody(0);
-	bulletCube->body->translate(btVector3(20, 5, 0));
+	bulletCube->body->translate(btVector3(20, -1, 0));
 	bulletCube->body->setFriction(0);
 	bulletCube->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
@@ -102,7 +102,7 @@ PD_Nav::PD_Nav(Game * _game) :
 	playerCam->farClip = 1000.f;
 	playerCam->nearClip = 0.1f;
 	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	playerCam->firstParent()->translate(0, 2.5, 0);
+	playerCam->firstParent()->translate(0, 5, 0);
 	playerCam->yaw = 90.0f;
 	playerCam->pitch = -10.0f;
 	playerCam->speed = 1;
@@ -112,7 +112,7 @@ PD_Nav::PD_Nav(Game * _game) :
 	lights.push_back(light2);
 	playerCam->childTransform->addChild(light2);
 
-	playerEntity = new Player(glm::vec3(0,0,0), bulletWorld, playerCam);
+	playerEntity = new Player(bulletWorld, playerCam);
 	childTransform->addChild(playerEntity);
 }
 

@@ -17,10 +17,8 @@ private:
 	std::vector<NodeUI *> lives;
 	std::vector<NodeUI *> lostLives;
 
-	float playerDelay;
+	float playerTimerLength;
 	float playerTimer;
-
-	std::map<UIGlyph *, Sprite *> highlights;
 
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
@@ -69,6 +67,8 @@ public:
 	
 	PD_InsultButton * pBubbleBtn1;
 	PD_InsultButton * pBubbleBtn2;
+
+	SliderControlled * playerTimerSlider;
 
 	Keyboard * keyboard;
 

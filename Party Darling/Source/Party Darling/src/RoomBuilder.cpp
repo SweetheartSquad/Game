@@ -84,10 +84,10 @@ Room * RoomBuilder::getRoom(){
 
 	// list of available placed parent objects
 	std::vector<RoomObject *> availableParents;
-	for(unsigned int i = 0; i < room->boundaries.size(); ++i){
+	for(unsigned int i = 0; i < boundaries.size(); ++i){
 		// only walls in boundaries should have child slots (not floor, cieling)
-		if(room->boundaries.at(i)->emptySlots.size() > 0){
-			availableParents.push_back(room->boundaries.at(i));
+		if(boundaries.at(i)->emptySlots.size() > 0){
+			availableParents.push_back(boundaries.at(i));
 		}
 	}
 	
@@ -107,6 +107,10 @@ Room * RoomBuilder::getRoom(){
 	// Center room at origin
 	room->translatePhysical(glm::vec3(-size.x/2.f * ROOM_TILE, 0.f, -size.y/2.f * ROOM_TILE), true);
 	
+	for(int i = 0; i < boundaries.size(); ++i){
+		delete boundaries.at(i);
+	}
+
 	return room;
 }
 
@@ -215,7 +219,6 @@ void RoomBuilder::createWalls(unsigned long int _thresh){
 	}
 
 	// Reduce vertices
-
 	for (std::vector<Edge *>::iterator it = edges.begin(); it != edges.end();){
 		int idx = it - edges.begin();
 		int N = edges.size();
@@ -272,15 +275,22 @@ void RoomBuilder::createWalls(unsigned long int _thresh){
 	// TODO: make separate bullet colliders and a single mesh for walls
 	for(unsigned int i = 0; i < edges.size(); ++i){
 		Edge * e = edges.at(i);
-		room->boundaries.push_back(getWall(world, glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle));
-		room->addComponent(room->boundaries.back());
-		if(wallTexture != nullptr){
-			room->boundaries.back()->mesh->pushTexture2D(wallTexture->texture);
-		}
+		addWall(world, glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle);
+	}
+	
+	QuadMesh * m = new QuadMesh();
+	for(int i = 0; i < room->mesh->vertices.size(); ++i){
+		m->pushVert(room->mesh->vertices.at(i));
+	}
+	room->setColliderAsMesh(new TriMesh(m, true), false);
+	room->createRigidBody(0);
+	
+	if(wallTexture != nullptr){
+		room->mesh->pushTexture2D(wallTexture->texture);
 	}
 }
 
-RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 pos, float angle){
+void RoomBuilder::addWall(BulletWorld * _world, float width, glm::vec2 pos, float angle){
 	RoomObject * wall;
 
 	float posX = pos.x * ROOM_TILE;
@@ -293,6 +303,7 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 
 	glm::vec3 n = glm::vec3(0.0, 0.0 , 1.f);
 	
+	// Create Wall RoomObject
 	QuadMesh * m = new QuadMesh();
 	m->pushVert(Vertex(-halfW, H, 0));
 	m->pushVert(Vertex(-halfW, 0, 0));
@@ -306,14 +317,32 @@ RoomObject * RoomBuilder::getWall(BulletWorld * _world, float width, glm::vec2 p
 	m->setUV(1, 0.0, 1.0);
 	m->setUV(2, width, 1.0);
 	m->setUV(3, width, 0.0);
+
 	wall = new RoomObject(_world, m);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
 	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
+	boundaries.push_back(wall);
 
-	return wall;
+	n = glm::rotate(n, glm::radians(angle), axis);
+
+	QuadMesh * qM = new QuadMesh();
+	for(unsigned int i = 0; i < m->vertices.size(); ++i){
+		qM->pushVert(m->vertices.at(i));
+	}
+
+	MeshEntity * mE = new MeshEntity(qM);
+	mE->meshTransform->translate(posX, 0, posZ);
+	mE->meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
+	mE->freezeTransformation();
+
+	// Append to room's mesh
+	for(unsigned int i = 0; i < mE->mesh->vertices.size(); ++i){
+		Vertex v = mE->mesh->vertices.at(i);
+		room->mesh->pushVert(v);
+	}
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWorld * _world){
@@ -327,7 +356,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWo
 	// dining table set 1, tv couch set, bathroom set, ...
 
 	for(unsigned int i = 0; i < characters.size(); ++i){
-		objects.push_back(characters.at(i));
+		//objects.push_back(characters.at(i));
 	}
 
 	for(unsigned int i = 0; i < furniture.size(); ++i){
