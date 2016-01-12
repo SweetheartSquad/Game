@@ -4,6 +4,8 @@
 #include <json/json.h>
 #include "PD_FurnitureParser.h"
 
+class MeshEntity;
+
 class PD_FurnitureComponentDefinition {
 public:
 	std::string componentType;
@@ -13,5 +15,5 @@ public:
 
 	explicit PD_FurnitureComponentDefinition(Json::Value _jsonDef);
 	
-	PD_FurnitureComponent * build(PD_FurnitureComponentContainer * _componentContainer);
+	MeshEntity * buildChildren(PD_FurnitureComponentContainer * _componentContainer) const;
 };

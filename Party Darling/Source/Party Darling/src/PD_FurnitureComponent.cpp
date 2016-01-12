@@ -3,13 +3,6 @@
 #include <PD_FurnitureComponent.h>
 #include <Resource.h>
 
-PD_FurnitureConnector::PD_FurnitureConnector(Json::Value _jsonDef) {
-	description =_jsonDef.get("description", "UNDEFINED").asString();
-	positionX = _jsonDef.get("positionX", 0.0f).asFloat();
-	positionY = _jsonDef.get("positionY", 0.0f).asFloat();
-	positionZ = _jsonDef.get("positionZ", 0.0f).asFloat();
-}
-
 PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) {
 	id = _jsonDef.get("id", -1).asInt();
 	type = _jsonDef.get("type", -1).asString();
@@ -20,6 +13,14 @@ PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) {
 	}
 
 	for(auto jsonObj : _jsonDef["connectors"]) {
-		connectors.push_back(new PD_FurnitureConnector(jsonObj));
+		std::string compType = jsonObj.get("componentType", "UNDEFINED").asString();
+		connectors[compType] = std::vector<glm::vec3>();
+		
+		for(auto jnt : jsonObj["positions"]){
+			connectors[compType].push_back(glm::vec3(
+				jnt.get("positionX", 0.0f).asFloat(),
+				jnt.get("positionY", 0.0f).asFloat(),
+				jnt.get("positionZ", 0.0f).asFloat()));
+		}
 	}
 }

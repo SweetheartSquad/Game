@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_FurnitureComponentDefinition.h>
+#include <MeshEntity.h>
 
 PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _jsonDef) {
 	componentType = _jsonDef.get("componentType", "UNDEFINED").asString();
@@ -12,9 +13,29 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 	}
 }
 
-PD_FurnitureComponent * PD_FurnitureComponentDefinition::build(PD_FurnitureComponentContainer * _componentContainer) {
-	PD_FurnitureComponent * comp = _componentContainer->getComponentForType(componentType);
-	return comp;
+MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponentContainer* _componentContainer) const {
+	PD_FurnitureComponent * component = _componentContainer->getComponentForType(componentType);
+	MeshEntity * ent = new MeshEntity(component->mesh);
+	std::vector<MeshEntity *>meshes;
+	for(auto def : outComponents) {
+		MeshEntity * mesh = def->buildChildren(_componentContainer);
+		if(component->connectors.find(def->componentType) != component->connectors.end()) {
+			for(glm::vec3 pos : component->connectors[def->componentType]) {
+				mesh->meshTransform->translate(pos);
+			}
+		}
+		meshes.push_back(mesh);
+		mesh->freezeTransformation();
+	}
+	for(auto mesh : meshes) {
+		int offset = ent->mesh->vertices.size();
+		int indOffet = ent->mesh->indices.size();
+		ent->mesh->vertices.insert(ent->mesh->vertices.end(), mesh->mesh->vertices.begin(), mesh->mesh->vertices.end());
+		ent->mesh->indices.insert(ent->mesh->indices.end(), mesh->mesh->indices.begin(), mesh->mesh->indices.end());
+		for(unsigned long int i = indOffet; i < ent->mesh->indices.size(); ++i) {
+			ent->mesh->indices.at(i) = ent->mesh->indices.at(i) + offset;
+		}
+	}
+	ent->freezeTransformation();
+	return ent;
 }
-
-

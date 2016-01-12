@@ -17,15 +17,16 @@
 #include <sweet/Input.h>
 #include <PD_FurnitureParser.h>
 #include <PD_Furniture.h>
+#include <PointLight.h>
 
 PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	Scene(_game),
-	uiLayer(0,0,0,0),
-	shader(new ComponentShaderBase(false))
+	shader(new ComponentShaderBase(false)),
+	uiLayer(0,0,0,0)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
-	//shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
@@ -84,6 +85,13 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	auto c = b->getComponentForType("seat");
 	
 	childTransform->addChild(new PD_Furniture(shader, a->at(0), b));
+
+	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
+	childTransform->addChild(light2);
+	light2->firstParent()->translate(0.f, 10.f, 0.f);
+	lights.push_back(light2);
+
+	childTransform->addChild(new MeshEntity(MeshFactory::getPlaneMesh(), shader))->translate(0.f, -3.0f, 0.f);
 }
 
 PD_Scene_FurnitureTest::~PD_Scene_FurnitureTest(){
