@@ -19,16 +19,17 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 	std::vector<MeshEntity *>meshes;
 	for(auto def : outComponents) {
 		MeshEntity * mesh = def->buildChildren(_componentContainer);
-		ent->childTransform->addChild(mesh);
 		if(component->connectors.find(def->componentType) != component->connectors.end()) {
-			mesh->firstParent()->translate(component->connectors.at(def->componentType));
+			for(glm::vec3 pos : component->connectors[def->componentType]) {
+				mesh->meshTransform->translate(pos);
+			}
 		}
-		meshes.push_back(def->buildChildren(_componentContainer));
+		meshes.push_back(mesh);
+		mesh->freezeTransformation();
 	}
 	for(auto mesh : meshes) {
 		int offset = ent->mesh->vertices.size();
 		int indOffet = ent->mesh->indices.size();
-		mesh->freezeTransformation();
 		ent->mesh->vertices.insert(ent->mesh->vertices.end(), mesh->mesh->vertices.begin(), mesh->mesh->vertices.end());
 		ent->mesh->indices.insert(ent->mesh->indices.end(), mesh->mesh->indices.begin(), mesh->mesh->indices.end());
 		for(unsigned long int i = indOffet; i < ent->mesh->indices.size(); ++i) {

@@ -13,7 +13,7 @@ public:
 	std::string type;
 	std::string src;
 
-	std::map<std::string, glm::vec3> connectors; 
+	std::map<std::string, std::vector<glm::vec3>> connectors; 
 
 	MeshInterface * mesh;
 

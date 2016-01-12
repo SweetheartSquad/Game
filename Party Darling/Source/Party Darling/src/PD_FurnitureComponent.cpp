@@ -13,9 +13,14 @@ PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) {
 	}
 
 	for(auto jsonObj : _jsonDef["connectors"]) {
-		connectors[jsonObj.get("description", "UNDEFINED").asString()] = glm::vec3(
-			jsonObj.get("positionX", 0.0f).asFloat(),
-			jsonObj.get("positionY", 0.0f).asFloat(),
-			jsonObj.get("positionZ", 0.0f).asFloat());
+		std::string compType = jsonObj.get("componentType", "UNDEFINED").asString();
+		connectors[compType] = std::vector<glm::vec3>();
+		
+		for(auto jnt : jsonObj["positions"]){
+			connectors[compType].push_back(glm::vec3(
+				jnt.get("positionX", 0.0f).asFloat(),
+				jnt.get("positionY", 0.0f).asFloat(),
+				jnt.get("positionZ", 0.0f).asFloat()));
+		}
 	}
 }
