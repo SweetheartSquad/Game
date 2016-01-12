@@ -20,8 +20,8 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponentContainer * _componentContainer, int _multiplier, std::vector<glm::vec3> _positions) const {
 	std::vector<MeshEntity *>meshes;
 	MeshEntity * ent = new MeshEntity(new TriMesh());
+	PD_FurnitureComponent * component = _componentContainer->getComponentForType(componentType);
 	for(unsigned long int y = 0; y < _multiplier; y++){
-		PD_FurnitureComponent * component = _componentContainer->getComponentForType(componentType);
 		TriMesh * tempMesh = new TriMesh();
 		tempMesh->vertices.insert(tempMesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
 		tempMesh->indices.insert(tempMesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
