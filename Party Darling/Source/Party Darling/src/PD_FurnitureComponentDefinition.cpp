@@ -18,14 +18,14 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 	MeshEntity * ent = new MeshEntity(component->mesh);
 	std::vector<MeshEntity *>meshes;
 	for(auto def : outComponents) {
-		MeshEntity * mesh = def->buildChildren(_componentContainer);
-		if(component->connectors.find(def->componentType) != component->connectors.end()) {
-			for(glm::vec3 pos : component->connectors[def->componentType]) {
-				mesh->meshTransform->translate(pos);
+		for(unsigned long int i = 0; i < def->multiplier - 1; ++i){
+			MeshEntity * mesh = def->buildChildren(_componentContainer);
+			if(component->connectors.find(def->componentType) != component->connectors.end()) {
+				mesh->meshTransform->translate( component->connectors[def->componentType][i]);
 			}
+			meshes.push_back(mesh);
+			mesh->freezeTransformation();
 		}
-		meshes.push_back(mesh);
-		mesh->freezeTransformation();
 	}
 	for(auto mesh : meshes) {
 		int offset = ent->mesh->vertices.size();

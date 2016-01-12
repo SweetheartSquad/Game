@@ -56,22 +56,22 @@
           "componentType": "leg",
           "positions": [
             {
-              "positionX": 3.24,
+              "positionX": 1.24,
               "positionY": -0.29,
               "positionZ": 3.416
             },
             {
-              "positionX": 3.416,
+              "positionX": 4.416,
               "positionY": -0.29,
               "positionX": 3.416
             },
             {
-              "positionX": 3.24,
+              "positionX": 1.24,
               "positionY": -0.29,
               "positionZ": -3.416
             },
             {
-              "positionX": -3.24,
+              "positionX": 4.416,
               "positionY": -0.29,
               "positionZ": -3.416
             }
