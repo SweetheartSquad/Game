@@ -13,6 +13,7 @@
 #include <PD_UI_Bubble.h>
 #include <PD_UI_Dialogue.h>
 #include <PD_UI_YellingContest.h>
+#include <Player.h>
 
 
 #include <Character.h>
@@ -41,6 +42,8 @@ public:
 	NodeUI * crosshairIndicator;
 
 	NodeBulletBody * currentHoverTarget;
+
+	Player * player;
 
 	PD_Scene_CombinedTests(Game * _game);
 	~PD_Scene_CombinedTests();

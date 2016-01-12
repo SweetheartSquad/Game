@@ -56,16 +56,17 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	cameras.pop_back();
 
 	//Set up debug camera
-	MousePerspectiveCamera * debugCam = new MousePerspectiveCamera();
-	cameras.push_back(debugCam);
-	childTransform->addChild(debugCam);
-	debugCam->farClip = 1000.f;
-	debugCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
-	debugCam->yaw = 90.0f;
-	debugCam->pitch = -10.0f;
-	debugCam->speed = 1;
-	activeCamera = debugCam;
+	MousePerspectiveCamera * playerCam = new MousePerspectiveCamera();
+	cameras.push_back(playerCam);
+	childTransform->addChild(playerCam);
+	playerCam->farClip = 1000.f;
+	playerCam->nearClip = 0.1f;
+	playerCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
+	playerCam->firstParent()->translate(0, 5, 0);
+	playerCam->yaw = 90.0f;
+	playerCam->pitch = -10.0f;
+	playerCam->speed = 1;
+	activeCamera = playerCam;
 
 	uiLayer.addMouseIndicator();
 
@@ -88,7 +89,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	door->addToWorld();
 	childTransform->addChild(door);
 	
-	door->setTranslationPhysical(10,0,2);
+	door->setTranslationPhysical(10,2,2);
 	door->rotatePhysical(45,0,1,0,false);
 	
 
@@ -131,7 +132,28 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
 	testCharacter->load();
-	testCharacter->firstParent()->scale(0.005f);
+	testCharacter->firstParent()->scale(0.001f);
+	testCharacter->firstParent()->translate(0, 2, 0);
+	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
+
+
+
+
+
+	// add a ground to the scene
+	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh(), shader);
+	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
+	bulletGround->createRigidBody(0);
+	childTransform->addChild(bulletGround);
+	bulletGround->meshTransform->scale(1000,1000,1000);
+	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletGround->body->translate(btVector3(0, 0, 0));
+	bulletGround->body->setFriction(1);
+	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
+
+	// add the player to the scene
+	player = new Player(bulletWorld, playerCam);
+	childTransform->addChild(player);
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
@@ -236,7 +258,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 			
 			// figure out where to put the item
 			glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
-			targetPos.y = 0; // always put stuff on the ground
+			targetPos.y = 2; // always put stuff on the ground
 			item->setTranslationPhysical(targetPos, false);
 			// rotate the item to face the camera
 			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
@@ -264,7 +286,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		uiBubble->addOption("test", nullptr);
 	}
 
-
+	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){
 		game->toggleFullScreen();
 	}
@@ -290,24 +312,6 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	}
 	
 	
-	float speed = 1;
-	MousePerspectiveCamera * cam = dynamic_cast<MousePerspectiveCamera *>(activeCamera);
-	if(cam != nullptr){
-		speed = cam->speed;
-	}
-	// camera controls
-	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
-	}
 
 	Scene::update(_step);
 
