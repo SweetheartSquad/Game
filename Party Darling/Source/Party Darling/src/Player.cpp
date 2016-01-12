@@ -269,9 +269,9 @@ void Player::update(Step * _step){
 
 	// If the player isnt moving vertically
 	if(abs(curVelocity[1]) <= 0.01f){
-			headBobble->update(_step);
-			playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
-		}
+		headBobble->update(_step);
+	}
+	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
 
 	// mouse interaction with world objects
