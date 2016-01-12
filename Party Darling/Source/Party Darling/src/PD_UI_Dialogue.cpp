@@ -37,7 +37,8 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	text->setRationalWidth(1.f, vl2);
 	text->setText("test");
 	background->setVisible(false);
-
+	
+	// disable and hide by default
 	setVisible(false);
 }
 
@@ -71,4 +72,9 @@ void PD_UI_Dialogue::startEvent(Conversation * _conversation){
 
 	currentConversation->reset();
 	sayNext();
+}
+
+void PD_UI_Dialogue::end(){
+	ConversationIterator::end();
+	eventManager.triggerEvent("end");
 }

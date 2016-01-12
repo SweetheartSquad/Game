@@ -28,6 +28,12 @@ void PD_Button::setText(std::wstring _text){
 	}
 }
 
+void PD_Button::setText(std::string _text){
+	if (text->font && text->textShader){
+		text->setText(_text);
+	}
+}
+
 void PD_Button::update(Step * _step){
 	NodeUI::update(_step);
 	if(isHovered){

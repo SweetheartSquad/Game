@@ -56,6 +56,7 @@ public:
 
 class PersonRenderer : public Entity{
 public:
+	PersonButt * butt;
 	PersonState state;
 	float timer;
 

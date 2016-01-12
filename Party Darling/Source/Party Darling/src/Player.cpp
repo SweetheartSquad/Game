@@ -43,8 +43,7 @@
 
 #include <NumberUtils.h>
 
-Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamera) : 
-	playerCamera(_playerCamera),
+Player::Player(BulletWorld * _bulletWorld) : 
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
@@ -52,7 +51,7 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 {
 	//init movement vars
 	playerSpeed = 0.1f;
-	mass = 1;
+	mass = 1.f;
 	initSpeed = 2.0f;
 	sprintSpeed = 5.0f;
 
@@ -65,9 +64,6 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	this->body->setAngularFactor(btVector3(0,1,0));
 	this->body->setLinearFactor(btVector3(1,0.9,1));
 	this->maxVelocity = btVector3(-1,-1,-1);
-	
-	//Set how much camera drags behind mouse movement
-	playerCamera->interpolation = 0.8f;
 
 	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
@@ -88,9 +84,9 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 
 	lastYVel = 0;
 
-	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, true, "sfx");
-	jumpSound = new OpenAL_SoundSimple("assets/audio/jump.ogg", false, true, "sfx");
-	landSound = new OpenAL_SoundSimple("assets/audio/fall.ogg", false, true, "sfx");
+	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, false, "sfx");
+	jumpSound = new OpenAL_SoundSimple("assets/audio/jump.ogg", false, false, "sfx");
+	landSound = new OpenAL_SoundSimple("assets/audio/fall.ogg", false, false, "sfx");
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
 	easeIntoBobbleTween1 = new Tween<float>(0.25f,0.05f,Easing::kEASE_IN_CUBIC);
 	easeIntoBobble->startValue=0.f;
@@ -102,9 +98,22 @@ Player::Player(BulletWorld * _bulletWorld, MousePerspectiveCamera * _playerCamer
 	easeOutOfBobble->startValue=0.f;
 	easeOutOfBobble->tweens.push_back(easeOutOfBobbleTween1);
 	easeOutOfBobble->hasStart = true;*/
-
 	
+	playerCamera = new MousePerspectiveCamera();
+	playerCamera->interpolation = 0.8f;
+	playerCamera->farClip = 1000.f;
+	playerCamera->nearClip = 0.1f;
+	playerCamera->childTransform->rotate(90, 0, 1, 0, kWORLD);
+	playerCamera->yaw = 90.0f;
+	playerCamera->pitch = -10.0f;
+	playerCamera->speed = 1;
 };
+
+Player::~Player(){
+	delete footSteps;
+	delete jumpSound;
+	delete landSound;
+}
 
 void Player::update(Step * _step){
 	
@@ -114,9 +123,6 @@ void Player::update(Step * _step){
 	float zVelocity = curVelocity[2];
 
 	float pitchRand = sweet::NumberUtils::randomFloat(0.75f,1.75f);
-
-	//get player position
-	btVector3 b = this->body->getWorldTransform().getOrigin();
 	
 	
 
@@ -137,16 +143,7 @@ void Player::update(Step * _step){
 		playerCamera->pitch = -80;
 	}
 
-	float rayRange = playerHeight * 1.25f;
-	btVector3 rayEnd = b + btVector3(0,-1,0)*rayRange;
-	btCollisionWorld::ClosestRayResultCallback GroundRayCallback(b, rayEnd);
-	world->world->rayTest(b, rayEnd, GroundRayCallback);
-	if(GroundRayCallback.hasHit()){
-		//std::cout << "HIT" << std::endl;
-		isGrounded = true;
-	}else{
-		isGrounded = false;
-	}
+	
 
 	currentYVel = curVelocity.y();
 	if (currentYVel > 0 && lastYVel < 0 && isGrounded){
@@ -171,18 +168,20 @@ void Player::update(Step * _step){
 	
 	//create movement vector
 	glm::vec3 movement(0);
-	if (keyboard->keyDown(GLFW_KEY_W)){
-		movement += forward;
-	}if (keyboard->keyDown(GLFW_KEY_S)){
-		movement -= forward;
-	}if (keyboard->keyDown(GLFW_KEY_A)){
-		movement -= right;
-	}if (keyboard->keyDown(GLFW_KEY_D)){
-		movement += right;
-	}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-		if(isGrounded){
-			movement += glm::vec3(0,100,0);
-			jumpSound->play();
+	if(enabled){
+		if (keyboard->keyDown(GLFW_KEY_W)){
+			movement += forward;
+		}if (keyboard->keyDown(GLFW_KEY_S)){
+			movement -= forward;
+		}if (keyboard->keyDown(GLFW_KEY_A)){
+			movement -= right;
+		}if (keyboard->keyDown(GLFW_KEY_D)){
+			movement += right;
+		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+			if(isGrounded){
+				movement += glm::vec3(0,100,0);
+				jumpSound->play();
+			}
 		}
 	}
 
@@ -244,7 +243,7 @@ void Player::update(Step * _step){
 		//float slideVal = 10.0f;
 		this->body->activate(true);
 		//slow down body by applying force in opposite direction of its velocity
-		this->body->applyCentralImpulse(btVector3(xVelocity*-0.2,0,zVelocity*-0.2));
+		this->body->applyCentralImpulse(btVector3(xVelocity*-0.2f,0,zVelocity*-0.2f));
 		if(bobbleInterpolation > 0){
 			bobbleInterpolation -= 0.1f;
 		}
@@ -269,43 +268,28 @@ void Player::update(Step * _step){
 
 	// If the player isnt moving vertically
 	if(abs(curVelocity[1]) <= 0.01f){
-			headBobble->update(_step);
-			playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
-		}
-
-
-	// mouse interaction with world objects
-	
-	float range = 1000;
-	glm::vec3 pos = playerCamera->childTransform->getWorldPos();
-	btVector3 start(pos.x, pos.y, pos.z);
-	btVector3 dir(playerCamera->forwardVectorRotated.x, playerCamera->forwardVectorRotated.y, playerCamera->forwardVectorRotated.z);
-	btVector3 end = start + dir*range;
-
-	
-	//std::cout << dir.x() << "\t" << dir.y() << "\t" << dir.z() << std::endl;
-	//std::cout << start.x() << "\t" << start.y() << "\t" << start.z() << std::endl;
-
-	btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
-	this->world->world->rayTest(start, end, RayCallback);
-	//Log::info(std::to_string(RayCallback.hasHit()));
-	if(RayCallback.hasHit()){
-		NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
-			
-		if(me != nullptr){
-			if(mouse->leftJustPressed()){
-				/*me->body->activate(true);
-				me->body->applyImpulse(dir*-10, me->body->getWorldTransform().getOrigin());*/
-			}
-
-			NodeUI * ui = dynamic_cast<NodeUI *>(me);
-			if(ui != nullptr){
-				ui->setUpdateState(true);
-			}
-		}
+		headBobble->update(_step);
 	}
 
 	lastBobbleTween = currentBobbleTween;
+
+	
+
+	//get player position
+	const btVector3 & b = this->body->getWorldTransform().getOrigin();
+	float rayRange = playerHeight * 1.25f;
+	btVector3 rayEnd = b + btVector3(0,-1,0)*rayRange;
+	btCollisionWorld::ClosestRayResultCallback GroundRayCallback(b, rayEnd);
+	world->world->rayTest(b, rayEnd, GroundRayCallback);
+	if(GroundRayCallback.hasHit()){
+		//std::cout << "HIT" << std::endl;
+		isGrounded = true;
+	}else{
+		isGrounded = false;
+	}
+	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
+
+
 	NodeBulletBody::update(_step);
 }
 
@@ -317,4 +301,16 @@ glm::vec3 Player::getPlayerPosition(){
 glm::vec3 Player::getPlayerLinearVelocity(){
 	btVector3 playerVel = this->body->getLinearVelocity(); 
 	return glm::vec3(playerVel.x(), playerVel.y(),playerVel.z());
+}
+
+void Player::enable(){
+	enabled = true;
+}
+
+void Player::disable(){
+	enabled = false;
+}
+
+bool Player::isEnabled(){
+	return enabled;
 }

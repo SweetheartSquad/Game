@@ -238,9 +238,9 @@ PersonRenderer::PersonRenderer(BulletWorld * _world) :
 	talk->hasStart = true;
 
 
-	PersonButt * butt = new PersonButt(_world, this);
+	butt = new PersonButt(_world, this);
 	childTransform->addChild(butt);
-	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.005f, solverBod->getChainLength() * 0.005f, 0.005f);
+	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.001f, solverBod->getChainLength() * 0.001f, 0.001f); // TODO: make this scale factor not hard-coded
 	butt->createRigidBody(0);
 }
 
