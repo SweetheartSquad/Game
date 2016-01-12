@@ -24,4 +24,8 @@ PD_Furniture::PD_Furniture(Shader * _shader, PD_FurnitureDefinition * _def, PD_F
 		}
 	}
 	mesh->dirty = true;
+	for(auto m : meshes) {
+		childTransform->removeChild(m->firstParent());
+		delete m;
+	}
 }
