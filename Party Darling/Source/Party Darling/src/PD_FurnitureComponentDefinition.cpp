@@ -2,6 +2,7 @@
 
 #include <PD_FurnitureComponentDefinition.h>
 #include <MeshEntity.h>
+#include <NumberUtils.h>
 
 PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _jsonDef) {
 	componentType = _jsonDef.get("componentType", "UNDEFINED").asString();
@@ -53,12 +54,21 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 		for(unsigned long int compIdx = 0; compIdx < outComponents.size(); ++compIdx){
 			// Make sure we have the connector data for the 
 			if(component->connectors.find(outComponents.at(compIdx)->componentType) != component->connectors.end()) {
-				// Build the component and its children
-				MeshEntity * mesh = outComponents.at(compIdx)->buildChildren(
-					_componentContainer, multipliers[compIdx], 
-					component->connectors[outComponents.at(compIdx)->componentType]);
-				// Add the resulting mesh to the meshes vector
-				meshes.push_back(mesh);
+				// Create a build variable and set it to true
+				bool build = true;
+				// If the component isn't true then set build to a random bool
+				if(!outComponents.at(compIdx)->required) {
+					build = sweet::NumberUtils::randomBool();
+				}
+				// If build is true then actually create the component
+				if(build){
+					// Build the component and its children
+					MeshEntity * mesh = outComponents.at(compIdx)->buildChildren(
+						_componentContainer, multipliers[compIdx], 
+						component->connectors[outComponents.at(compIdx)->componentType]);
+					// Add the resulting mesh to the meshes vector
+					meshes.push_back(mesh);
+				}
 			}else {
 				ST_LOG_ERROR_V("Invalid connector data found when bulding furniture component");
 			}
