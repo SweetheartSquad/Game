@@ -184,15 +184,16 @@
         }, 
         {
             "connectors": [], 
-            "id": 8, 
+            "id": 9, 
             "src": "chair_Arm_2.obj", 
             "type": "arm"
         }, 
         {
             "connectors": [], 
-            "id": 9, 
+            "id": 10, 
             "src": "chair_legSupport_2.obj", 
             "type": "legSupport"
+<<<<<<< HEAD
         }, 
         {
             "connectors": [
@@ -285,6 +286,8 @@
             "id": 13, 
             "src": "chair_Arm_3.obj", 
             "type": "arm"
+=======
+>>>>>>> origin/master
         }
     ], 
     "furniture": [
