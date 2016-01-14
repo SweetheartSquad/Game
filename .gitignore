@@ -188,3 +188,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+Party Darling/Source/Party Darling/assets/meshes/furniture/*.mtl
