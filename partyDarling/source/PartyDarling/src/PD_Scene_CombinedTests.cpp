@@ -25,6 +25,8 @@
 #include <json\json.h>
 
 #include <sweet/Input.h>
+#include <PD_FurnitureParser.h>
+#include <PD_Furniture.h>
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	Scene(_game),
@@ -147,6 +149,20 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	activeCamera = player->playerCamera;
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
+
+	std::vector<PD_FurnitureDefinition*> * definitions = PD_FurnitureParser::parseFurnitureDefinitions();
+	PD_FurnitureComponentContainer * components = PD_FurnitureParser::parseFurnitureComponents();
+	// Add some generated furniture
+	for(unsigned long int i = 0; i < 10; ++i) {
+		int randIdx = sweet::NumberUtils::randomInt(0, definitions->size() - 1);
+		auto furn = new PD_Furniture(bulletWorld, shader, definitions->at(randIdx), components);
+		furn->meshTransform->scale(0.5f, 0.5f, 0.5f);
+		furn->freezeTransformation();
+		furn->setColliderAsBoundingBox();
+		furn->createRigidBody(1.0f);
+		furn->setTranslationPhysical(i * 10.0f, 5.f, 0.f);
+		childTransform->addChild(furn);
+	}
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){

@@ -84,7 +84,7 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 
 	auto c = b->getComponentForType("seat");
 	
-	childTransform->addChild(new PD_Furniture(shader, a->at(0), b));
+	//	childTransform->addChild(new PD_Furniture(shader, a->at(0), b));
 
 	PointLight * light2 = new PointLight(glm::vec3(1,1,1), 0.02f, 0.001f, -1);
 	childTransform->addChild(light2);

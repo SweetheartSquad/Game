@@ -288,15 +288,16 @@
         {
             "components": [
                 {
-                    "componentType": "seat", 
+                    "componentType": "seat",
+                    "multipliers" : [1, 4],
                     "outComponents": [
                         {
                             "componentType": "back", 
-                            "multiplier": 1, 
+                            "multipliers": [2], 
                             "outComponents": [
                                 {
                                     "componentType": "arm", 
-                                    "multiplier": 2, 
+                                    "multipliers": [], 
                                     "required": false
                                 }
                             ], 
@@ -304,11 +305,11 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multiplier": 4, 
+                            "multipliers": [2], 
                             "outComponents": [
                                 {
                                     "componentType": "legSupport", 
-                                    "multiplier": 2, 
+                                    "multipliers": [], 
                                     "required": false
                                 }
                             ], 

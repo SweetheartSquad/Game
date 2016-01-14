@@ -113,7 +113,7 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 }
 
 PersonState::PersonState(){
-	conversation = PD_ResourceManager::scenario->getConversation("intro")->conversation;
+	//conversation = PD_ResourceManager::scenario->getConversation("intro")->conversation;
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world) :

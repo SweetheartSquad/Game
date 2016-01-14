@@ -7,8 +7,8 @@
 #include <MeshEntity.h>
 #include <PD_FurnitureComponentDefinition.h>
 
-PD_Furniture::PD_Furniture(Shader * _shader, PD_FurnitureDefinition * _def, PD_FurnitureComponentContainer * _components) :
-	MeshEntity(new TriMesh(), _shader)
+PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, Shader * _shader, PD_FurnitureDefinition * _def, PD_FurnitureComponentContainer * _components) :
+	BulletMeshEntity(_bulletWorld, new TriMesh(), _shader)
 {
 	std::vector<MeshEntity *>meshes;
 	
@@ -56,5 +56,5 @@ PD_Furniture::PD_Furniture(Shader * _shader, PD_FurnitureDefinition * _def, PD_F
 	for(auto m : meshes) {
 		childTransform->removeChild(m->firstParent());
 		delete m;
-	}
+	}	
 }
