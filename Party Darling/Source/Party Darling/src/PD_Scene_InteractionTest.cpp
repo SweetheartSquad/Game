@@ -3,6 +3,7 @@
 #include <PD_Scene_InteractionTest.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
+#include <PD_Assets.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
@@ -20,8 +21,6 @@
 
 #include <RenderOptions.h>
 #include <json\json.h>
-
-#include <PD_Door.h>
 
 #include <sweet/Input.h>
 
@@ -82,12 +81,12 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiLayer.addChild(l);
 	l->addChild(crosshairIndicator);
 
-	PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
+	/*PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
 	door->addToWorld();
 	childTransform->addChild(door);
 	
 	door->setTranslationPhysical(10,0,2);
-	door->rotatePhysical(45,0,1,0,false);
+	door->rotatePhysical(45,0,1,0,false);*/
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
@@ -150,7 +149,7 @@ void PD_Scene_InteractionTest::update(Step * _step){
 						// if we aren't already looking at the item,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
-						if(item->collectable){
+						if(item->definition->collectable){
 							uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
 								// remove the item from the scene
 								Transform * toDelete = item->firstParent();

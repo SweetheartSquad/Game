@@ -266,13 +266,13 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	uiLayer.addChild(dialogueDisplay);
 
 	{
-	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test1"], bulletWorld, this);
+		PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->getConversation("test1")->conversation, bulletWorld, this);
 	childTransform->addChild(butt);
 	butt->setTranslationPhysical(-2, 1, 1, true);
 	}
 
 	{
-	PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->conversations["test2"], bulletWorld, this);
+		PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->getConversation("test2")->conversation, bulletWorld, this);
 	childTransform->addChild(butt);
 	butt->setTranslationPhysical(2, 4, -2, true);
 	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);

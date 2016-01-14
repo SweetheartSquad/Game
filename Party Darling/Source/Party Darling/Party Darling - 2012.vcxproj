@@ -15,8 +15,8 @@
     <ClInclude Include="include\DialogueDisplay.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\PD_Assets.h" />
     <ClInclude Include="include\PD_Button.h" />
-    <ClInclude Include="include\PD_Door.h" />
     <ClInclude Include="include\PD_FirstPersonController.h" />
     <ClInclude Include="include\PD_Furniture.h" />
     <ClInclude Include="include\PD_FurnitureComponent.h" />
@@ -53,8 +53,8 @@
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\PD_Assets.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
-    <ClCompile Include="src\PD_Door.cpp" />
     <ClCompile Include="src\PD_FirstPersonController.cpp" />
     <ClCompile Include="src\PD_Furniture.cpp" />
     <ClCompile Include="src\PD_FurnitureComponent.cpp" />

@@ -3,6 +3,7 @@
 #include <PD_Scene_CombinedTests.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
+#include <PD_Assets.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
@@ -22,8 +23,6 @@
 
 #include <RenderOptions.h>
 #include <json\json.h>
-
-#include <PD_Door.h>
 
 #include <sweet/Input.h>
 
@@ -55,8 +54,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	delete cameras.at(0)->parents.at(0);
 	cameras.pop_back();
 
-	uiLayer.addMouseIndicator();
-
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
 	l->setRationalHeight(1.f);
@@ -72,12 +69,18 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiLayer.addChild(l);
 	l->addChild(crosshairIndicator);
 
-	PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
-	door->addToWorld();
-	childTransform->addChild(door);
+	for(unsigned long int i = 0; i < 50; ++i){
+		std::map<std::string, Asset *>::iterator itemDef = PD_ResourceManager::scenario->assets["item"].begin();
+		if(itemDef != PD_ResourceManager::scenario->assets["item"].end()){
+			std::advance(itemDef, sweet::NumberUtils::randomInt(0, PD_ResourceManager::scenario->assets["item"].size()-1));
+			PD_Item * item = dynamic_cast<AssetItem *>(itemDef->second)->getItem(bulletWorld, shader);
+			item->addToWorld();
+			childTransform->addChild(item);
 	
-	door->setTranslationPhysical(10,2,2);
-	door->rotatePhysical(45,0,1,0,false);
+			item->setTranslationPhysical(sweet::NumberUtils::randomFloat(-50, 50), 2, sweet::NumberUtils::randomFloat(-50, 50));
+			item->rotatePhysical(45,0,1,0,false);
+		}
+	}
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
@@ -89,6 +92,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiLayer.addChild(uiInventory);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->close();
+		uiLayer.removeMouseIndicator();
 
 		// replace the crosshair texture with the item texture
 		crosshairIndicator->background->mesh->replaceTextures(uiInventory->getSelected()->mesh->textures.at(0));
@@ -177,7 +181,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							// if we aren't already looking at the item,
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
-							if(item->collectable){
+							if(item->definition->collectable){
 								uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
@@ -265,8 +269,10 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
 		if(uiInventory->isVisible()){
 			uiInventory->close();
+			uiLayer.removeMouseIndicator();
 		}else{
 			uiInventory->open();
+			uiLayer.addMouseIndicator();
 		}
 	}
 

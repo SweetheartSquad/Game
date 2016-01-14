@@ -2,6 +2,8 @@
 
 #include <PD_UI_Inventory.h>
 #include <PD_ResourceManager.h>
+#include <PD_Assets.h>
+
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
@@ -61,25 +63,12 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			// event listeners
 			cell->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 0.5f);
-				itemImage->background->mesh->clearTextures();
-				PD_Item * item = getItem(x, y);
-				if(item != nullptr){
-					//itemImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->defaultTexture->texture);
-					itemImage->background->mesh->pushTexture2D(item->mesh->textures.at(0));
-					
-					itemName->setText(item->name);
-					itemDescription->setText(item->description);
-				}
+				setInfoPanel(getItem(x, y));
 				infoLayout->invalidateLayout();
-				itemHovered = true;
 			});
 			cell->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 1.f);
-				if(!itemHovered){
-					itemImage->background->mesh->clearTextures();
-					itemName->setText("");
-					itemDescription->setText("");
-				}
+				setInfoPanel(nullptr);
 			});
 			cell->eventManager.addEventListener("click", [this, cell, y, x](sweet::Event * _event){
 				selectItem(getItem(x, y));
@@ -126,6 +115,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		itemImage->setHeight(300);
 		itemImage->setRationalWidth(1.f);
 		itemImage->setBackgroundColour(1,1,1,1);
+		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
 		itemDescription = new TextArea(world, PD_ResourceManager::scenario->defaultFont->font, textShader, 1.f);
 		itemDescription->setText("test");
@@ -139,6 +129,23 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	
 	// disable and hide by default
 	close();
+}
+
+void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
+	if(_item != nullptr){
+		// update to match the item's the image, name, and description
+		itemImage->background->mesh->replaceTextures(_item->mesh->textures.at(0));
+		itemName->setText(_item->definition->name);
+		itemDescription->setText(_item->definition->description);
+
+		// flag that we have set an item for this frame so that we don't accidentally clear it out later
+		itemHovered = true;
+	}else if(!itemHovered){
+		// no item, so just clear the panel
+		itemImage->background->mesh->clearTextures();
+		itemName->setText("");
+		itemDescription->setText("");
+	}
 }
 
 void PD_UI_Inventory::pickupItem(PD_Item * _item){
