@@ -1,16 +1,32 @@
 {
 	"phrases": [
-		"you've got a *badBodies*!",
-		"you're a *badThings*!",
-		"your *familyMembers* is a *badThings*!",
-		"you've got the *abNouns* of a *animals*!"
+		"You've got a *badBodies*!",
+		"You're a *badThings*!",
+		"Your *familyMembers* is a *badThings*!",
+		"You've got the *abNouns* of a *animals*!",
+        "*interjections* you've got a *badBodies*!",
+		"*interjections* you're a *badThings*!",
+		"*interjections* your *familyMembers* is a *badThings*!",
+		"*interjections* you've got the *abNouns* of a *animals*!"
 	],
 
 	"playerPhrases": [
-		"you're such a ____ *animals*!",
-		"you're so ____!",
-		"you've got a ____ *bodyParts*!"
+		"You're such a ____ *animals*!",
+		"You're so ____!",
+		"You've got a ____ *bodyParts*!"
 	],
+
+    "interjections":  [
+        "Listen,",
+        "Well,",
+        "Hey!",
+        "Listen up!",
+        "Ok, you punk.",
+        "Well, uh,",
+        "Shut up!",
+        "You think you're funny?",
+        "How about this?"
+    ],
 
 	"badBodies": [
 		"pair of *animals* *pluralBodyParts*",
@@ -55,7 +71,15 @@
 		"pig",
 		"grasshopper",
 		"toad",
-		"frog"
+		"frog",
+        "skunk",
+        "badger",
+        "walrus",
+        "seal",
+        "gecko",
+        "rat",
+        "mouse",
+        "snake"
 	],
 
 	"badAdj": [
@@ -77,7 +101,23 @@
 		"prepubescent",
 		"useless",
 		"broken-down",
-		"beat-up"
+		"beat-up",
+        "big",
+        "wrinkly",
+        "weak",
+        "trashy",
+        "goofy",
+        "childish",
+        "pock-marked",
+        "punchable",
+        "good-for-nothing",
+        "saggy",
+        "boring",
+        "crude",
+        "wart-covered",
+        "slimy",
+        "nasty",
+        "worthless"
 	],
 
 	"goodAdj": [
@@ -89,15 +129,43 @@
 		"handsome",
 		"nice",
 		"charming",
-		"pretty"
+		"pretty",
+        "good",
+        "high-quality",
+        "lovable",
+        "qualified",
+        "talented",
+        "exceptional",
+        "sweet",
+        "kind",
+        "loving",
+        "thoughtful"
 	],
 
 	"nouns": [
-		"trash compacter",
+		"trash compactor",
 		"dumpster",
 		"toilet-head",
-		"romance novel",
-		"booger"
+		"compostor",
+		"booger",
+        "butthead",
+        "buttmunch",
+        "freakazoid",
+        "goblin",
+        "troll",
+        "skank",
+        "doofus",
+        "needlenose",
+        "baby",
+        "diaper-pants",
+        "tin can",
+        "jerk",
+        "pooplord",
+        "dingus",
+        "hothead",
+        "bum",
+        "nerd",
+        "dork"
 	],
 
 	"abNouns": [
