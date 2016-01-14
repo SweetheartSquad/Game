@@ -185,47 +185,15 @@
         }, 
         {
             "connectors": [], 
-            "id": 8, 
+            "id": 9, 
             "src": "chair_Arm_2.obj", 
             "type": "arm"
         }, 
         {
             "connectors": [], 
-            "id": 9, 
+            "id": 10, 
             "src": "chair_legSupport_2.obj", 
             "type": "legSupport"
-        }, 
-        {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        {
-                            "positionX": 3.138447594959402, 
-                            "positionY": 1.017092030663997, 
-                            "positionZ": -1.7919038642782859
-                        }, 
-                        {
-                            "positionX": 3.138447594959402, 
-                            "positionY": 1.017092030663997, 
-                            "positionZ": 1.8813449594495344
-                        }, 
-                        {
-                            "positionX": -2.927470334008388, 
-                            "positionY": 1.017092030663997, 
-                            "positionZ": 1.9612930205054946
-                        }, 
-                        {
-                            "positionX": -2.927470334008388, 
-                            "positionY": 1.017092030663997, 
-                            "positionZ": -1.7919038642782859
-                        }
-                    ]
-                }
-            ], 
-            "id": 10, 
-            "src": "table.obj", 
-            "type": "table"
         }
     ], 
     "furniture": [
