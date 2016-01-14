@@ -16,24 +16,24 @@
                     "componentType": "leg", 
                     "positions": [
                         {
-                            "positionX": 1.24, 
+                            "positionX": 8.520355277135181, 
                             "positionY": -0.29, 
-                            "positionZ": 3.416
+                            "positionZ": 9.317503947235677
                         }, 
                         {
-                            "positionX": 3.416, 
-                            "positionY": -0.29,
-                            "positionZ": -3.416
+                            "positionX": 10.696355277135181, 
+                            "positionY": -0.29, 
+                            "positionZ": -16.35384878360518
                         }, 
                         {
-                            "positionX": 1.24, 
+                            "positionX": 8.520355277135181, 
                             "positionY": -0.29, 
-                            "positionZ": -3.416
+                            "positionZ": -6.893582945293298
                         }, 
                         {
-                            "positionX": 4.416, 
+                            "positionX": 11.696355277135181, 
                             "positionY": -0.29, 
-                            "positionZ": -3.416
+                            "positionZ": 18.521229200920818
                         }
                     ]
                 }
@@ -93,12 +93,12 @@
                     "positions": [
                         {
                             "positionX": -3.24, 
-                            "positionY": -0.29, 
+                            "positionY": -4.960886815270773, 
                             "positionZ": -3.416
                         }, 
                         {
                             "positionX": -3.24, 
-                            "positionY": -0.29, 
+                            "positionY": -7.382530532097026, 
                             "positionZ": 3.416
                         }
                     ]
@@ -185,13 +185,13 @@
         }, 
         {
             "connectors": [], 
-            "id": 9, 
+            "id": 8, 
             "src": "chair_Arm_2.obj", 
             "type": "arm"
         }, 
         {
             "connectors": [], 
-            "id": 10, 
+            "id": 9, 
             "src": "chair_legSupport_2.obj", 
             "type": "legSupport"
         }

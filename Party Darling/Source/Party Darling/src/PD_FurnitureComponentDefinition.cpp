@@ -42,15 +42,14 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 		tempMesh->vertices.insert(tempMesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
 		tempMesh->indices.insert(tempMesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
 		MeshEntity * compMesh = new MeshEntity(tempMesh);
-
+		// Loop through each of the out components for this component definition
 		// Translate the MeshEntity created from the temporary mesh
 		// by the value located in _positions at the current multiplier value
 		compMesh->meshTransform->translate(_positions[multIdx]);
 		// Freeze the transformations
-		compMesh->freezeTransformation();
+		// compMesh->freezeTransformation();
 		// Add it to the list of meshes
 		meshes.push_back(compMesh);
-		// Loop through each of the out components for this component definition
 		for(unsigned long int compIdx = 0; compIdx < outComponents.size(); ++compIdx){
 			// Make sure we have the connector data for the 
 			if(component->connectors.find(outComponents.at(compIdx)->componentType) != component->connectors.end()) {
@@ -67,13 +66,18 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 						_componentContainer, multipliers[compIdx], 
 						component->connectors[outComponents.at(compIdx)->componentType]);
 					// Add the resulting mesh to the meshes vector
+					//compMesh->meshTransform->addChild(mesh, false);
+					mesh->meshTransform->translate(_positions[multIdx]);
+					mesh->freezeTransformation();
 					meshes.push_back(mesh);
 				}
 			}else {
 				ST_LOG_ERROR_V("Invalid connector data found when bulding furniture component");
 			}
 		}
+		compMesh->freezeTransformation();
 	}
+
 	for(auto mesh : meshes) {
 		// Create a indice offset and vert offset
 		// Since each mesh has indices for its verts we need to take into account
@@ -87,6 +91,7 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 			ent->mesh->indices.at(i) = ent->mesh->indices.at(i) + vertOffset;
 		}
 	}
+
 	// Delete temporary meshes
 	for(auto m : meshes) {
 		delete m;
