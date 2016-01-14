@@ -46,8 +46,6 @@ MeshEntity * PD_FurnitureComponentDefinition::buildChildren(PD_FurnitureComponen
 		// Translate the MeshEntity created from the temporary mesh
 		// by the value located in _positions at the current multiplier value
 		compMesh->meshTransform->translate(_positions[multIdx]);
-		// Freeze the transformations
-		// compMesh->freezeTransformation();
 		// Add it to the list of meshes
 		meshes.push_back(compMesh);
 		for(unsigned long int compIdx = 0; compIdx < outComponents.size(); ++compIdx){

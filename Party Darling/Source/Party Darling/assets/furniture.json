@@ -16,24 +16,23 @@
                     "componentType": "leg", 
                     "positions": [
                         {
-                            "positionX": 8.520355277135181, 
+                            "positionX": 1.24, 
                             "positionY": -0.29, 
-                            "positionZ": 9.317503947235677
+                            "positionZ": 3.416
                         }, 
                         {
-                            "positionX": 10.696355277135181, 
-                            "positionY": -0.29, 
-                            "positionZ": -16.35384878360518
+                            "positionX": 3.416, 
+                            "positionY": -0.29
                         }, 
                         {
-                            "positionX": 8.520355277135181, 
+                            "positionX": 1.24, 
                             "positionY": -0.29, 
-                            "positionZ": -6.893582945293298
+                            "positionZ": -3.416
                         }, 
                         {
-                            "positionX": 11.696355277135181, 
+                            "positionX": 4.416, 
                             "positionY": -0.29, 
-                            "positionZ": 18.521229200920818
+                            "positionZ": -3.416
                         }
                     ]
                 }
@@ -93,13 +92,13 @@
                     "positions": [
                         {
                             "positionX": -3.24, 
-                            "positionY": -4.960886815270773, 
+                            "positionY": -0.29, 
                             "positionZ": -3.416
                         }, 
                         {
                             "positionX": -3.24, 
-                            "positionY": -7.382530532097026, 
-                            "positionZ": 3.416
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
                         }
                     ]
                 }
@@ -121,7 +120,7 @@
                         {
                             "positionX": -3.24, 
                             "positionY": -0.29, 
-                            "positionZ": 3.416
+                            "positionZ": -3.416
                         }
                     ]
                 }
@@ -185,15 +184,108 @@
         }, 
         {
             "connectors": [], 
-            "id": 8, 
+            "id": 9, 
             "src": "chair_Arm_2.obj", 
             "type": "arm"
         }, 
         {
             "connectors": [], 
-            "id": 9, 
+            "id": 10, 
             "src": "chair_legSupport_2.obj", 
             "type": "legSupport"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": 2.5661128722298288, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": -2.722423264495295
+                        }, 
+                        {
+                            "positionX": 2.5661128722298288, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": 3.2214892371922046
+                        }, 
+                        {
+                            "positionX": -2.600456333799952, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": 3.2214892371922046
+                        }, 
+                        {
+                            "positionX": -2.600456333799952, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": -2.722423264495295
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 1.227368010350328, 
+                            "positionZ": -4.202203721618325
+                        }
+                    ]
+                }
+            ], 
+            "id": 11, 
+            "src": "chair_Seat_3.obj", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": 3.378, 
+                            "positionY": 3.6006889838807843, 
+                            "positionZ": 0.07824044379548012
+                        }, 
+                        {
+                            "positionX": -3.3775853006469974, 
+                            "positionY": 3.6006889838807843, 
+                            "positionZ": 0.07824044379548012
+                        }
+                    ]
+                }
+            ], 
+            "id": 12, 
+            "src": "chair_Back_3.obj", 
+            "type": "back"
+        },
+		{
+            "connectors": [
+                {
+                    "componentType": "legSupport", 
+                    "positions": [
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }
+            ], 
+            "id": 13, 
+            "src": "chair_Leg_3.obj", 
+            "type": "leg"
+        }, 
+		{
+            "connectors": [], 
+            "id": 13, 
+            "src": "chair_Arm_3.obj", 
+            "type": "arm"
+
         }
     ], 
     "furniture": [
@@ -201,16 +293,11 @@
             "components": [
                 {
                     "componentType": "seat", 
-                    "multipliers": [
-                        1, 
-                        4
-                    ], 
+                    "multipliers":[1,4],
                     "outComponents": [
                         {
                             "componentType": "back", 
-                            "multipliers": [
-                                2
-                            ], 
+                            "multipliers": [2], 
                             "outComponents": [
                                 {
                                     "componentType": "arm", 
@@ -222,13 +309,11 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multipliers": [
-                                2
-                            ], 
+                            "multipliers": [2], 
                             "outComponents": [
                                 {
                                     "componentType": "legSupport", 
-                                    "multipliers": [], 
+                                    "multipliers":[], 
                                     "required": false
                                 }
                             ], 
