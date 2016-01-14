@@ -1,0 +1,3 @@
+[submodule "PartyDarling/source/PartyDarling/assets/scenarios"]
+	path = PartyDarling/source/PartyDarling/assets/scenarios
+	url = https://gitlab.com/OmarClean/PartyDarlingScenarios.git
