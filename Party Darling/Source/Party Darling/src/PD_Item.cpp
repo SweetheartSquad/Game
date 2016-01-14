@@ -5,14 +5,13 @@
 #include <MeshInterface.h>
 #include <TextureUtils.h>
 
-PD_Item::PD_Item(std::string _name, std::string _description, BulletWorld * _world, Texture * _texture, Shader * _shader, bool _collectable, bool _pixelPerfectInteraction) :
+#include <PD_Assets.h>
+
+PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader) :
 	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
-	collectable(_collectable),
-	pixelPerfectInteraction(_pixelPerfectInteraction),
-	name(_name),
-	description(_description)
+	definition(_definition)
 {
-	mesh->pushTexture2D(_texture);
+	mesh->pushTexture2D(definition->texture);
 	mesh->setScaleMode(GL_NEAREST);
 }
 
@@ -39,7 +38,7 @@ bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
 }
 
 bool PD_Item::actuallyHovered(glm::vec3 _position){
-	if(pixelPerfectInteraction){
+	if(definition->pixelPerfectInteraction){
 		return checkPixelPerfectCollision(_position);
 	}
 	return true;

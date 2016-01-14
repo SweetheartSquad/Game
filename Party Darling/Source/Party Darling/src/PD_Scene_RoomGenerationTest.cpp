@@ -21,8 +21,6 @@
 #include <RenderOptions.h>
 #include <json\json.h>
 
-#include <PD_Door.h>
-
 #include <sweet/Input.h>
 
 #include <Room.h>

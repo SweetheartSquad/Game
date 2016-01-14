@@ -1,27 +1,18 @@
 #pragma once
 
 #include <BulletMeshEntity.h>
+#include <EventManager.h>
 
 class Texture;
 class Shader;
 class BulletWorld;
 
+class AssetItem;
+
 class PD_Item : public BulletMeshEntity{
 public:
-	// the item's in-game name
-	std::string name;
-	// the item's in-game description
-	std::string description;
-
-	// if an item is collectable, interacting with it with cause it to be picked up
-	// if an item is not collectable, interacting with it will trigger its interaction event
-	bool collectable;
-
-	// if pixel perfect interaction is enabled, an additional check will be made after the ray intersection
-	// which will only succeed if the hovered pixel is not transparent
-	bool pixelPerfectInteraction;
-
-	PD_Item(std::string _name, std::string _description, BulletWorld * _world, Texture * _texture, Shader * _shader, bool _collectable, bool _pixelPerfectInteraction);
+	const AssetItem * const definition;
+	PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader);
 
 	// if pixel perfect interaction is enabled, returns the result
 	// otherwise, returns true

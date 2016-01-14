@@ -3,6 +3,7 @@
 #include <PD_Scene_CombinedTests.h>
 #include <PD_ResourceManager.h>
 #include <PD_Game.h>
+#include <PD_Assets.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderComponentTexture.h>
@@ -22,8 +23,6 @@
 
 #include <RenderOptions.h>
 #include <json\json.h>
-
-#include <PD_Door.h>
 
 #include <sweet/Input.h>
 
@@ -55,8 +54,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	delete cameras.at(0)->parents.at(0);
 	cameras.pop_back();
 
-	//uiLayer.addMouseIndicator();
-
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
 	l->setRationalHeight(1.f);
@@ -73,12 +70,16 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	l->addChild(crosshairIndicator);
 
 	for(unsigned long int i = 0; i < 50; ++i){
-		PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
-		door->addToWorld();
-		childTransform->addChild(door);
+		std::map<std::string, Asset *>::iterator itemDef = PD_ResourceManager::scenario->assets["item"].begin();
+		if(itemDef != PD_ResourceManager::scenario->assets["item"].end()){
+			std::advance(itemDef, sweet::NumberUtils::randomInt(0, PD_ResourceManager::scenario->assets["item"].size()-1));
+			PD_Item * item = dynamic_cast<AssetItem *>(itemDef->second)->getItem(bulletWorld, shader);
+			item->addToWorld();
+			childTransform->addChild(item);
 	
-		door->setTranslationPhysical(sweet::NumberUtils::randomFloat(-50, 50), 2, sweet::NumberUtils::randomFloat(-50, 50));
-		door->rotatePhysical(45,0,1,0,false);
+			item->setTranslationPhysical(sweet::NumberUtils::randomFloat(-50, 50), 2, sweet::NumberUtils::randomFloat(-50, 50));
+			item->rotatePhysical(45,0,1,0,false);
+		}
 	}
 	
 
@@ -180,7 +181,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							// if we aren't already looking at the item,
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
-							if(item->collectable){
+							if(item->definition->collectable){
 								uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();

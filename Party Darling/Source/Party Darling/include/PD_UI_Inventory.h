@@ -14,6 +14,12 @@ private:
 	// nullptr if nothing is selected
 	PD_Item * selectedItem;
 	bool itemHovered;
+
+	// sets the info panel on the side
+	// to match the contents of _item
+	// i.e. displays its texture, name, and description
+	// if _item == nullptr, clears the panel instead
+	void setInfoPanel(PD_Item * _item);
 public:
 	// all of the currently held inventory items
 	std::vector<PD_Item *> items;
