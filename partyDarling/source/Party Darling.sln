@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		partyDarlingSettings.props = partyDarlingSettings.props
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Party Darling - 2012", "Party Darling\Party Darling - 2012.vcxproj", "{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Party Darling - 2012", "PartyDarling\Party Darling - 2012.vcxproj", "{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Party Darling - 2013", "Party Darling\Party Darling - 2013.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Party Darling - 2013", "PartyDarling\Party Darling - 2013.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
