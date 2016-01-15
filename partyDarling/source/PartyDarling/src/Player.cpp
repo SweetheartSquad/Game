@@ -68,8 +68,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
 	headBobble->loopType = Animation<float>::LoopType::kLOOP;
-	headBobbleTween1 = new Tween<float>(0.15f,-0.005f,Easing::kEASE_IN_OUT_CUBIC);
-	headBobbleTween2 = new Tween<float>(0.15f,0.005f,Easing::kEASE_IN_OUT_CUBIC);
+	headBobbleTween1 = new Tween<float>(0.15f,-0.05f,Easing::kEASE_IN_OUT_CUBIC);
+	headBobbleTween2 = new Tween<float>(0.15f,0.05f,Easing::kEASE_IN_OUT_CUBIC);
 	headBobble->startValue= 0.f;
 	headBobble->tweens.push_back(headBobbleTween1);
 	headBobble->tweens.push_back(headBobbleTween2);
@@ -107,6 +107,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	playerCamera->yaw = 90.0f;
 	playerCamera->pitch = -10.0f;
 	playerCamera->speed = 1;
+
+	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
 };
 
 Player::~Player(){
@@ -119,11 +121,11 @@ void Player::update(Step * _step){
 	
 	//get player velocity
 	btVector3 curVelocity = this->body->getLinearVelocity();
+	glmCurVelocityXZ = glm::vec2(curVelocity.x(),curVelocity.z()); 
 	float xVelocity = curVelocity[0];
 	float zVelocity = curVelocity[2];
 
 	float pitchRand = sweet::NumberUtils::randomFloat(0.75f,1.75f);
-	
 	
 
 	currentBobbleTween = headBobble->currentTween;
@@ -156,6 +158,7 @@ void Player::update(Step * _step){
 	
 	// get direction vectors
 	glm::vec3 forward = playerCamera->forwardVectorRotated;
+	glm::vec2 forwardXZ = glm::vec2(forward.x, forward.z);
 	glm::vec3 right = playerCamera->rightVectorRotated;
 	
 	// remove y portion of direction vectors to avoid flying
@@ -165,7 +168,8 @@ void Player::update(Step * _step){
 	// normalize direction vectors for consistent motion regardless of viewing angle
 	forward = glm::normalize(forward);
 	right = glm::normalize(right);
-	
+	forwardXZ = glm::normalize(forwardXZ);
+
 	//create movement vector
 	glm::vec3 movement(0);
 	if(enabled){
@@ -200,6 +204,8 @@ void Player::update(Step * _step){
 	
 
 	float movementMag = glm::length(movement);
+	float forwardVecMagXZ = glm::length(forwardXZ);
+	float glmCurVelocityMagXZ = glm::length(glmCurVelocityXZ);
 
 	//If player is moving
 	if(movementMag > 0){
@@ -226,14 +232,29 @@ void Player::update(Step * _step){
 			if(bobbleInterpolation<2){
 				bobbleInterpolation += 0.1f;
 			}
-			this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
+
+			if(glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ))>=0.5){
+				this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
+				std::cout << "normal" << std::endl;
+			}
+			else{
+				this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
+				std::cout << "slowed" << std::endl;
+			}
+			
 			
 		}
 		else{
 			if(bobbleInterpolation<1){
 				bobbleInterpolation += 0.1f;
 			}
-			this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
+			if(glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ))>=0.5){
+				std::cout << "normal" << std::endl;
+				this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
+			}else{
+				this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
+				std::cout << "slowed" << std::endl;
+			}
 		}
 		
 	}
@@ -289,8 +310,10 @@ void Player::update(Step * _step){
 	}
 	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
+	//std::cout << glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ)) << std::endl;
 
 	NodeBulletBody::update(_step);
+	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
 }
 
 

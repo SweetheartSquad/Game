@@ -79,6 +79,9 @@ private:
 	float playerHeight;
 	float playerRad;
 
+	glm::vec2 glmLastVelocityXZ;
+	glm::vec2 glmCurVelocityXZ;
+
 	glm::vec3 lastPos;
 
 	glm::vec3 startPos;
