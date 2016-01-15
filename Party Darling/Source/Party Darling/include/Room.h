@@ -34,6 +34,8 @@ public:
 	Room(BulletWorld * _world, MeshInterface * _mesh = new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
 	~Room(void);
 
+	std::vector<RoomObject *> getAllComponents();
+
 	void addComponent(RoomObject *);
 	void setShader(Shader * _shader, bool _default);
 

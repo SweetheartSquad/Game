@@ -93,7 +93,7 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.005f);
 	*/
-	/*
+	
 	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh(), shader);
 	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
 	bulletGround->createRigidBody(0);
@@ -103,13 +103,15 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	bulletGround->body->translate(btVector3(0, -1, 0));
 	bulletGround->body->setFriction(1);
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
-	*/
-	room = RoomBuilder("{\"size\":{\"l\":20, \"w\":20}}",bulletWorld).getRoom();
+	
+	room = RoomBuilder("{\"size\":{\"l\":6, \"w\":6}}",bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	childTransform->addChild(room->tilemapSprite);
-	for(unsigned int i = 0; i < room->components.size(); ++i){
-		childTransform->addChild(room->components.at(i));
+
+	std::vector<RoomObject *> components = room->getAllComponents();
+	for(unsigned int i = 0; i < components.size(); ++i){
+		childTransform->addChild(components.at(i));
 	}
 
 }

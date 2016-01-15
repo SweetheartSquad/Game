@@ -5,7 +5,8 @@
 
 enum Anchor_t{
 	GROUND,
-	WALL
+	WALL,
+	CIELING
 };
 
 enum Side_t{
@@ -43,6 +44,7 @@ public:
 
 	bool addComponent(RoomObject *);
 	bool removeComponent(RoomObject *);
+	std::vector<RoomObject *> getAllComponents();
 	void setShader(Shader * _shader, bool _default) override;
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
 };

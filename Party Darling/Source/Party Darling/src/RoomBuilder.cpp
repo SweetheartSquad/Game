@@ -96,6 +96,7 @@ Room * RoomBuilder::getRoom(){
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		if(!search(objects.at(i), availableParents, room)){
 			// I don't know
+			int blah = true;
 		}
 	}
 
@@ -109,17 +110,7 @@ Room * RoomBuilder::getRoom(){
 		glm::mat4 bmm = boundaries.at(i)->childTransform->getCumulativeModelMatrix(); 
 
 		for(int j = 0; j < boundaries.at(i)->components.size(); ++j){
-			RoomObject * rO = boundaries.at(i)->components.at(j);
-
-			
-			if(boundaries.at(i)->removeComponent(rO)){
-				room->addComponent(rO);
-			}else{
-				// ???
-				int i = 0;
-			}
-			
-			
+			room->addComponent(boundaries.at(i)->components.at(j));
 		}
 		delete boundaries.at(i);
 		
@@ -130,32 +121,38 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects, Room * room){
 	// Look for parent
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
-		for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
-			// go through available slots of side
-			for(unsigned int j = 0; j < iterator->second.size(); ++j){
-				Side_t side = iterator->first;
-				Slot * slot = iterator->second.at(j);
-				sweet::Box childBox = child->mesh->calcBoundingBox();
+	if(child->anchor != Anchor_t::CIELING){
+		for(unsigned int i = 0; i < objects.size(); ++i){
+			if(objects.at(i)->anchor == Anchor_t::CIELING){
+				continue;
+			}
+
+			typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
+			for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
+				// go through available slots of side
+				for(unsigned int j = 0; j < iterator->second.size(); ++j){
+					Side_t side = iterator->first;
+					Slot * slot = iterator->second.at(j);
+					sweet::Box childBox = child->mesh->calcBoundingBox();
 					
-				// check length of slot
-				if(childBox.width > slot->length){
-					continue;
-				}
-				
-				// if the object can be placed without collision
-				if(arrange(child, objects.at(i), side, slot)){
-					
-					if(childBox.width < slot->length){
-						// adjust remaining slot space
-						slot->loc += childBox.width;
-						slot->length = slot->length - childBox.width;
-					}else{
-						// remove slot
-						iterator->second.erase(iterator->second.begin() + j);
+					// check length of slot
+					if(childBox.width > slot->length){
+						continue;
 					}
-					return true;
+				
+					// if the object can be placed without collision
+					if(arrange(child, objects.at(i), side, slot)){
+					
+						if(childBox.width < slot->length){
+							// adjust remaining slot space
+							slot->loc += childBox.width;
+							slot->length = slot->length - childBox.width;
+						}else{
+							// remove slot
+							iterator->second.erase(iterator->second.begin() + j);
+						}
+						return true;
+					}
 				}
 			}
 		}
@@ -177,13 +174,11 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects, 
 }
 
 bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
-	// check space around
-	if(false){
-		return false;
-	}
+	
 	// position
 	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
 	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
+	glm::vec3 n = glm::vec3(parent->mesh->vertices.at(0).nx, parent->mesh->vertices.at(0).ny, parent->mesh->vertices.at(0).nz);
 
 	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
@@ -206,12 +201,17 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 		case RIGHT:
 			pos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
 			pos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
-			break;
-								
+			break;						
 	}
 
+	// check space around
+	if(false){
+		return false;
+	}
+
+	child->body->getWorldTransform().setRotation(bOrient);
 	child->translatePhysical(pos);
-	child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
+	//child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
 
 	parent->addComponent(child);
 
@@ -396,8 +396,8 @@ std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld *
 	}
 
 	// Random
-	int n = rand() % 1;
-	for(unsigned int i = 0; i < n; ++i){
+	int n = rand() % 5;
+	for(unsigned int i = 0; i < 1; ++i){
 		MeshInterface * mesh = MeshFactory::getPlaneMesh(3);
 		Json::Value j;
 		j["texture"] = "INDEXED-TEST";
@@ -406,7 +406,7 @@ std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld *
 		characters.push_back(new Person(_world, MeshFactory::getPlaneMesh(3.f)));
 		
 		// stretching square planes for now
-		characters.at(i)->childTransform->scale(glm::vec3(1.f, 2.f, 1.f));
+		characters.at(i)->childTransform->scale(glm::vec3(1.f, 20.f, 1.f));
 		characters.at(i)->childTransform->translate(0.f, characters.at(i)->mesh->calcBoundingBox().height / 2.f, 0.f, true);
 	}
 	
@@ -423,8 +423,12 @@ std::vector<Furniture *> RoomBuilder::getFurniture(Json::Value json, BulletWorld
 	int n = rand() % 10;
 	for(unsigned int i = 0; i < 10; ++i){
 
-		MeshInterface * mesh = Resource::loadMeshFromObj("assets/meshes/RoomTest/couch.obj").at(0);
-		mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("")->texture);
+		MeshInterface * mesh = MeshFactory::getCubeMesh(ROOM_TILE * 0.4);//Resource::loadMeshFromObj("assets/meshes/RoomTest/couch.obj").at(0);
+		for(int i = 0; i < mesh->vertices.size(); ++i){
+			mesh->vertices.at(i).z *= 0.5;
+			mesh->vertices.at(i).y += ROOM_TILE * 0.2;
+		}
+		//mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("")->texture);
 		Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 
 		furniture.push_back(new Furniture(_world, mesh, WALL));
