@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Character.h" />
+    <ClInclude Include="include\PD_Character.h" />
     <ClInclude Include="include\DialogueDisplay.h" />
     <ClInclude Include="include\Furniture.h" />
     <ClInclude Include="include\Item.h" />
@@ -48,7 +48,7 @@
     <ClInclude Include="include\RoomObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\PD_Character.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
     <ClCompile Include="src\Furniture.cpp" />
     <ClCompile Include="src\Item.cpp" />

@@ -14,7 +14,7 @@
 #include <PD_UI_Dialogue.h>
 
 
-#include <Character.h>
+#include <PD_Character.h>
 
 class PD_Scene_InteractionTest : public Scene{
 public:

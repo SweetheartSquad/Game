@@ -13,7 +13,7 @@
 #include <PD_UI_Bubble.h>
 
 
-#include <Character.h>
+#include <PD_Character.h>
 
 class Room;
 
