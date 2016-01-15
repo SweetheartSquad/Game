@@ -269,6 +269,82 @@
             "id": 11, 
             "src": "table_tableTop_1.obj", 
             "type": "tabletop"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": 3.078, 
+                            "positionY": 2.141230472462833, 
+                            "positionZ": 0.4886904192204552
+                        }, 
+                        {
+                            "positionX": -3.077579044786222, 
+                            "positionY": 2.141230472462833, 
+                            "positionZ": 0.4886904192204552
+                        }
+                    ]
+                }
+            ], 
+            "id": 12, 
+            "src": "chair_Back_4.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [], 
+            "id": 13, 
+            "src": "chair_Arm_4.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -3.7076315202996186, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": 3.3098851024154
+                        }, 
+                        {
+                            "positionX": 3.708, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": 3.3098851024154
+                        }, 
+                        {
+                            "positionX": -2.859506286379621, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": -3.3360897185287532
+                        }, 
+                        {
+                            "positionX": 2.86, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": -3.3360897185287532
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.20076240559104774, 
+                            "positionZ": -3.446690688869433
+                        }
+                    ]
+                }
+            ], 
+            "id": 14, 
+            "src": "", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [], 
+            "id": 15, 
+            "src": "", 
+            "type": "leg"
         }
     ], 
     "furniture": [
@@ -297,7 +373,7 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multipliers": [],
+                            "multipliers": [], 
                             "outComponents": [], 
                             "required": true
                         }
@@ -306,8 +382,8 @@
                 }
             ], 
             "type": "chair"
-        },
-		{
+        }, 
+        {
             "components": [
                 {
                     "componentType": "tabletop", 
@@ -315,11 +391,9 @@
                         4
                     ], 
                     "outComponents": [
-                       
                         {
                             "componentType": "leg", 
-                            "multipliers": [
-                            ], 
+                            "multipliers": [], 
                             "required": true
                         }
                     ], 
