@@ -337,7 +337,7 @@
                 }
             ], 
             "id": 14, 
-            "src": "chair_Seat_4.obj", 
+            "src": "", 
             "type": "seat"
         }, 
         {
@@ -373,6 +373,38 @@
             "id": 17, 
             "src": "chair_Leg_3.obj", 
             "type": "leg"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": 6.216287299674219, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": 7.659543567020765
+                        }, 
+                        {
+                            "positionX": 6.216287299674219, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": -7.66
+                        }, 
+                        {
+                            "positionX": -6.216, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": -7.66
+                        }, 
+                        {
+                            "positionX": -6.216, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": 7.659543567020765
+                        }
+                    ]
+                }
+            ], 
+            "id": 18, 
+            "src": "table_tableTop_2.obj", 
+            "type": "tabletop"
         }
     ], 
     "furniture": [
