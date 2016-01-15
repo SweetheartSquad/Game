@@ -16,7 +16,7 @@
 #include <Player.h>
 
 
-#include <Character.h>
+#include <PD_Character.h>
 
 class PD_Scene_CombinedTests : public Scene{
 public:
