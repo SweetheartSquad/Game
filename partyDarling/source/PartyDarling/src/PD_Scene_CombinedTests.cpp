@@ -27,6 +27,7 @@
 #include <sweet/Input.h>
 #include <PD_FurnitureParser.h>
 #include <PD_Furniture.h>
+#include <PointLight.h>
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	Scene(_game),
@@ -39,7 +40,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader, 0));
-	//shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
@@ -152,17 +153,25 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 
 	std::vector<PD_FurnitureDefinition*> * definitions = PD_FurnitureParser::parseFurnitureDefinitions();
 	PD_FurnitureComponentContainer * components = PD_FurnitureParser::parseFurnitureComponents();
+	
+	sweet::NumberUtils::seed(3425577115);
+
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 10; ++i) {
 		int randIdx = sweet::NumberUtils::randomInt(0, definitions->size() - 1);
 		auto furn = new PD_Furniture(bulletWorld, shader, definitions->at(randIdx), components);
-		furn->meshTransform->scale(0.5f, 0.5f, 0.5f);
+		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
 		furn->freezeTransformation();
 		furn->setColliderAsBoundingBox();
 		furn->createRigidBody(1.0f);
-		furn->setTranslationPhysical(i * 10.0f, 5.f, 0.f);
+		furn->setTranslationPhysical(i * 10.0f, furn->mesh->calcBoundingBox().height * 0.5f, 0.f);
 		childTransform->addChild(furn);
 	}
+
+	PointLight * light2 = new PointLight(glm::vec3(5,5,5), 0.02f, 0.001f, -1);
+	childTransform->addChild(light2);
+	light2->firstParent()->translate(0.f, 20.f, 0.f);
+	lights.push_back(light2);
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){

@@ -16,21 +16,22 @@
                     "componentType": "leg", 
                     "positions": [
                         {
-                            "positionX": 1.24, 
+                            "positionX": -2.761, 
                             "positionY": -0.29, 
-                            "positionZ": 3.416
+                            "positionZ": 3.3334810666582944
                         }, 
                         {
-                            "positionX": 3.416, 
-                            "positionY": -0.29
+                            "positionX": 2.7608645383310577, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.3334810666582944
                         }, 
                         {
-                            "positionX": 1.24, 
+                            "positionX": -2.761, 
                             "positionY": -0.29, 
                             "positionZ": -3.416
                         }, 
                         {
-                            "positionX": 4.416, 
+                            "positionX": 2.7608645383310577, 
                             "positionY": -0.29, 
                             "positionZ": -3.416
                         }
@@ -49,12 +50,12 @@
                         {
                             "positionX": -3.24, 
                             "positionY": 5.0, 
-                            "positionZ": -3.416
+                            "positionZ": -0.11081788036269824
                         }, 
                         {
                             "positionX": 3.24, 
                             "positionY": 5.0, 
-                            "positionZ": -3.416
+                            "positionZ": -0.11081788036269824
                         }
                     ]
                 }
@@ -71,12 +72,12 @@
                         {
                             "positionX": -3.151, 
                             "positionY": 5.0, 
-                            "positionZ": -3.0
+                            "positionZ": 0.20638129780875714
                         }, 
                         {
                             "positionX": 3.151, 
                             "positionY": 5.0, 
-                            "positionZ": -3.0
+                            "positionZ": 0.20638129780875714
                         }
                     ]
                 }
@@ -157,23 +158,24 @@
                     "componentType": "leg", 
                     "positions": [
                         {
-                            "positionX": 1.24, 
-                            "positionY": -0.29, 
-                            "positionZ": 3.416
-                        }, 
-                        {
-                            "positionX": 3.416, 
-                            "positionY": -0.29
-                        }, 
-                        {
-                            "positionX": 1.24, 
+                            "positionX": 2.894444676814736, 
                             "positionY": -0.29, 
                             "positionZ": -3.416
                         }, 
                         {
-                            "positionX": 4.416, 
+                            "positionX": -2.894, 
                             "positionY": -0.29, 
                             "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -3.8292601661390737, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.153548427055315
+                        }, 
+                        {
+                            "positionX": 3.829, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.153548427055315
                         }
                     ]
                 }
@@ -239,21 +241,6 @@
         {
             "connectors": [
                 {
-                    "componentType": "arm", 
-                    "positions": [
-                        {
-                            "positionX": 3.378, 
-                            "positionY": 3.6006889838807843, 
-                            "positionZ": 0.07824044379548012
-                        }, 
-                        {
-                            "positionX": -3.3775853006469974, 
-                            "positionY": 3.6006889838807843, 
-                            "positionZ": 0.07824044379548012
-                        }
-                    ]
-                }, 
-                {
                     "componentType": "leg", 
                     "positions": [
                         {
@@ -288,12 +275,17 @@
         {
             "components": [
                 {
-                    "componentType": "seat",
-                    "multipliers" : [1, 4],
+                    "componentType": "seat", 
+                    "multipliers": [
+                        1, 
+                        4
+                    ], 
                     "outComponents": [
                         {
                             "componentType": "back", 
-                            "multipliers": [2], 
+                            "multipliers": [
+                                2
+                            ], 
                             "outComponents": [
                                 {
                                     "componentType": "arm", 
@@ -305,14 +297,8 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multipliers": [2], 
-                            "outComponents": [
-                                {
-                                    "componentType": "legSupport", 
-                                    "multipliers": [], 
-                                    "required": false
-                                }
-                            ], 
+                            "multipliers": [],
+                            "outComponents": [], 
                             "required": true
                         }
                     ], 
@@ -320,6 +306,27 @@
                 }
             ], 
             "type": "chair"
+        },
+		{
+            "components": [
+                {
+                    "componentType": "tabletop", 
+                    "multipliers": [
+                        4
+                    ], 
+                    "outComponents": [
+                       
+                        {
+                            "componentType": "leg", 
+                            "multipliers": [
+                            ], 
+                            "required": true
+                        }
+                    ], 
+                    "required": true
+                }
+            ], 
+            "type": "table"
         }
     ]
 }
