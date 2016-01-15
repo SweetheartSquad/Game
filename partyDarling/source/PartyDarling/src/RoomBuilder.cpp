@@ -11,7 +11,7 @@
 
 #include <Resource.h>
 
-#include <Character.h>
+#include <PD_Character.h>
 #include <Furniture.h>
 #include <Item.h>
 #include <PD_ResourceManager.h>

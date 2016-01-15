@@ -6,7 +6,7 @@
 #include <PD_Button.h>
 #include <PD_TalkToButton.h>
 
-#include <Character.h>
+#include <PD_Character.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>

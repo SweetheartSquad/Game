@@ -36,7 +36,8 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
-	currentHoverTarget(nullptr)
+	currentHoverTarget(nullptr),
+	selectedItem(nullptr)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader, 0));
@@ -194,6 +195,9 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		btVector3 end = start + dir*range;
 		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
 		bulletWorld->world->rayTest(start, end, RayCallback);
+		
+		
+		NodeBulletBody * lastHoverTarget = currentHoverTarget;
 		if(RayCallback.hasHit()){
 			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
 			
@@ -249,6 +253,14 @@ void PD_Scene_CombinedTests::update(Step * _step){
 								player->disable();
 								// TODO: pass in the character that's fighting here
 							});
+							// if we have an item, also add the "use on" option
+							if(uiInventory->getSelected() != nullptr){
+								uiBubble->addOption("use item on character", [this](sweet::Event * _event){
+									uiBubble->clear();
+									player->disable();
+									// TODO: pass in the character that's fighting here
+								});
+							}
 						}
 					}
 				}
@@ -264,30 +276,39 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		}else{
 			currentHoverTarget = nullptr;
 		}
-		if(currentHoverTarget == nullptr){
+		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
 			uiBubble->clear();
-		}
-	}
+			selectedItem = uiInventory->getSelected();
+			if(uiInventory->getSelected() != nullptr){
+				uiBubble->addOption("use item on self", [this](sweet::Event * _event){
+					//uiBubble->clear();
+					//player->disable();
+					// TODO: actually trigger item interaction
+				});
+				uiBubble->addOption("drop item", [this](sweet::Event * _event){
+					//uiBubble->clear();
 
-	if(keyboard->keyJustDown(GLFW_KEY_D)){
-
-		// dropping an item
-
-		if(PD_Item * item = uiInventory->removeSelected()){
-			// put the item back into the scene
-			childTransform->addChild(item);
-			item->addToWorld();
+					// dropping an item
+					if(PD_Item * item = uiInventory->removeSelected()){
+						// put the item back into the scene
+						childTransform->addChild(item);
+						item->addToWorld();
 			
-			// figure out where to put the item
-			glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
-			targetPos.y = 2; // always put stuff on the ground
-			item->setTranslationPhysical(targetPos, false);
-			// rotate the item to face the camera
-			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
-		}
+						// figure out where to put the item
+						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
+						targetPos.y = 2; // always put stuff on the ground
+						item->setTranslationPhysical(targetPos, false);
+						// rotate the item to face the camera
+						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+					}
 
-		// replace the crosshair itme texture with the actual crosshair texture
-		crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+					// replace the crosshair itme texture with the actual crosshair texture
+					crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+
+
+				});
+			}
+		}
 	}
 	
 	// inventory toggle

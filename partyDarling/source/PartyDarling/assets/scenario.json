@@ -114,22 +114,10 @@
       "id": "SLIDER-TRACK",
       "type": "texture",
       "src": "UI/track.png"
-    }
-  ],
-  "characters": [
-    {
-
     },
-    {
-      
-    },
-    {
-      
-    }
-  ],
-  "conversations": [
     {
       "id": "intro",
+      "type": "conversation",
       "dialogue": [
         {
           "speaker": "Leila",
@@ -159,6 +147,7 @@
     },
     {
       "id": "LeilaYes",
+      "type": "conversation",
       "dialogue": [
         {
           "speaker": "Leila",
@@ -190,6 +179,7 @@
     },
     {
       "id": "LeilaNo",
+      "type": "conversation",
       "dialogue": [
         {
           "speaker": "Leila",

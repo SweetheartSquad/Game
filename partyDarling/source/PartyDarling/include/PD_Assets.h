@@ -1,6 +1,7 @@
 #pragma once
 
 #include <scenario/Asset.h>
+#include <PD_Character.h>
 
 class PD_Item;
 class BulletWorld;
@@ -73,6 +74,14 @@ private:
 	// constructor is private; use create instead if you need to instantiate directly
 	AssetCharacter(Json::Value _json, Scenario * const _scenario);
 public:
+	// the character's in-game name
+	std::string name;
+	// states
+	std::vector<PersonState> states;
+	// items held by character on creation
+	// they are asset string ids; accessed using scenario->getAsset("item",items.at(#))
+	std::vector<std::string> items;
+	// 
 
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)

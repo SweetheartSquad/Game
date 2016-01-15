@@ -16,7 +16,7 @@
 #include <Player.h>
 
 
-#include <Character.h>
+#include <PD_Character.h>
 
 class PD_Scene_CombinedTests : public Scene{
 public:
@@ -32,8 +32,9 @@ public:
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
-
+	
 	PD_UI_Inventory * uiInventory;
+	PD_Item * selectedItem;
 	PD_UI_Bubble * uiBubble;
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;

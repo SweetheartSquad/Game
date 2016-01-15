@@ -6,8 +6,18 @@
 
 // character
 AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
-	Asset(_json, _scenario)
+	Asset(_json, _scenario),
+	name(_json.get("name", "NO_NAME").asString())
 {
+	Json::Value statesJson = _json["states"];
+	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
+		states.push_back(PersonState());
+		//statesJson[i]
+	}
+	Json::Value itemsJson = _json["items"];
+	for(Json::ArrayIndex i = 0; i < itemsJson.size(); ++i){
+		items.push_back(itemsJson[i].asString());
+	}
 }
 AssetCharacter * AssetCharacter::create(Json::Value _json, Scenario * const _scenario){
 	return new AssetCharacter(_json, _scenario);
