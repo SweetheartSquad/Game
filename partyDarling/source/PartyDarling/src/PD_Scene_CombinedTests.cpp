@@ -158,7 +158,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	sweet::NumberUtils::seed(3425577115);
 
 	// Add some generated furniture
-	for(unsigned long int i = 0; i < 10; ++i) {
+	for(unsigned long int i = 0; i < 50; ++i) {
 		int randIdx = sweet::NumberUtils::randomInt(0, definitions->size() - 1);
 		auto furn = new PD_Furniture(bulletWorld, shader, definitions->at(randIdx), components);
 		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);

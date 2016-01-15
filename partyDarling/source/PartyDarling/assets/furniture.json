@@ -335,7 +335,6 @@
                         }
                     ]
                 }
-				
             ], 
             "id": 14, 
             "src": "chair_Seat_4.obj", 
@@ -345,6 +344,34 @@
             "connectors": [], 
             "id": 15, 
             "src": "chair_Leg_4.obj", 
+            "type": "leg"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": 3.421, 
+                            "positionY": 3.079216577306704, 
+                            "positionZ": 0.0
+                        }, 
+                        {
+                            "positionX": -3.420635889311009, 
+                            "positionY": 3.079216577306704, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 16, 
+            "src": "chair_Back_3.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [], 
+            "id": 17, 
+            "src": "chair_Leg_3.obj", 
             "type": "leg"
         }
     ], 
