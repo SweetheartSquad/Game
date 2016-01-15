@@ -182,7 +182,12 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 		return false;
 	}
 	// position
-	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
+	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
+
+	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
+	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
+
 	sweet::Box p = parent->boundingBox;
 	sweet::Box c = child->boundingBox;
 	switch(side){
@@ -206,6 +211,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	}
 
 	child->translatePhysical(pos);
+	child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
 
 	parent->addComponent(child);
 
