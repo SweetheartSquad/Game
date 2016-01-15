@@ -18,11 +18,11 @@ Room::Room(BulletWorld * _world, MeshInterface * _mesh):
 }
 
 void Room::addComponent(RoomObject * obj){
-	childTransform->addChild(obj);
 	components.push_back(obj);
 }
 
 void Room::setShader(Shader * _shader, bool _default){
+	printHierarchy();
 	BulletMeshEntity::setShader(_shader, _default);
 	tilemapSprite->setShader(_shader, _default);
 	for(unsigned int i = 0; i < components.size(); ++i){
@@ -31,6 +31,7 @@ void Room::setShader(Shader * _shader, bool _default){
 }
 
 void Room::translatePhysical(glm::vec3 _v, bool _relative){
+	setTranslationPhysical(_v, true);
 	tilemapSprite->meshTransform->translate(_v, true);
 	//TODO: move room to an absolute position while moving components relatively? (maintain component spacing)
 	for(unsigned int i = 0; i < components.size(); ++i){

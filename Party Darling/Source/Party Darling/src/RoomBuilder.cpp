@@ -65,22 +65,24 @@ Room * RoomBuilder::getRoom(){
 	glm::vec2 size = glm::vec2(l, w);
 
 	// Generate tilemap image
-	tilemap = new PD_TilemapGenerator(10,10,true);
+	tilemap = new PD_TilemapGenerator(l,w,true);
 	unsigned long int pixelIncrement = 158;
 	tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 
+	room->tilemapSprite = new Sprite();
+	room->tilemapSprite->mesh->pushTexture2D(tilemap);
+	room->tilemapSprite->childTransform->scale(tilemap->width * ROOM_TILE, tilemap->height * ROOM_TILE, 1);
+	room->tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
+	room->tilemapSprite->mesh->scaleModeMag = GL_NEAREST;
+	room->tilemapSprite->mesh->scaleModeMin = GL_NEAREST;
+
+	room->tilemapSprite->childTransform->rotate(90, 1, 0, 0, kOBJECT);
+
 	unsigned long int thresh = 158;
 	// create room walls from tilemap
 	createWalls(thresh);
-	// get all available tile positions from tilemap
-	tiles = getTiles(thresh);
-	
-	// set map for coordinate access to tiles
-	for(unsigned int i = 0; i < tiles.size(); ++i){
-		map[tiles.at(i)->pos.x][tiles.at(i)->pos.y] = tiles.at(i)->free;
-	}
 
 	// list of available placed parent objects
 	std::vector<RoomObject *> availableParents;
@@ -92,29 +94,42 @@ Room * RoomBuilder::getRoom(){
 	}
 	
 	for(unsigned int i = 0; i < objects.size(); ++i){
-		// Stop if no tiles left
-		if(tiles.size() == 0){
-			break;
-		}
-		if(search(objects.at(i), availableParents)){
-			room->addComponent(objects.at(i));
-		}else{
-			room->addComponent(objects.at(i));
-			availableParents.push_back(objects.at(i));
+		if(!search(objects.at(i), availableParents, room)){
+			// I don't know
 		}
 	}
 
 	// Center room at origin
-	room->translatePhysical(glm::vec3(-size.x/2.f * ROOM_TILE, 0.f, -size.y/2.f * ROOM_TILE), true);
+	//room->translatePhysical(glm::vec3(-size.x/2.f * ROOM_TILE, 0.f, -size.y/2.f * ROOM_TILE), true);
 	
+	// Get rid of temporary boundary room objects
+	glm::mat4 rmm = room->childTransform->getCumulativeModelMatrix();
 	for(int i = 0; i < boundaries.size(); ++i){
+
+		glm::mat4 bmm = boundaries.at(i)->childTransform->getCumulativeModelMatrix(); 
+
+		for(int j = 0; j < boundaries.at(i)->components.size(); ++j){
+			RoomObject * rO = boundaries.at(i)->components.at(j);
+
+			
+			if(boundaries.at(i)->removeComponent(rO)){
+				room->addComponent(rO);
+			}else{
+				// ???
+				int i = 0;
+			}
+			
+			
+		}
 		delete boundaries.at(i);
+		
 	}
 
 	return room;
 }
 
-bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
+bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects, Room * room){
+	// Look for parent
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
 		for(it_type iterator = objects.at(i)->emptySlots.begin(); iterator != objects.at(i)->emptySlots.end(); iterator++) {
@@ -129,6 +144,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 					continue;
 				}
 				
+				// if the object can be placed without collision
 				if(arrange(child, objects.at(i), side, slot)){
 					
 					if(childBox.width < slot->length){
@@ -144,12 +160,27 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects){
 			}
 		}
 	}
+
+	// Look for space in room (20 tries)
+	for(unsigned int i = 0; i < 20; ++i){
+		// Find random point within w and h
+		glm::vec3 pos = glm::vec3();
+		// Validate bounding box is inside room
+		if(true){
+			child->translatePhysical(pos);
+			room->addComponent(child);
+			objects.push_back(child);
+			return true;
+		}
+	}
 	return false;
 }
 
 bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
 	// check space around
-
+	if(false){
+		return false;
+	}
 	// position
 	glm::vec3 pos = parent->childTransform->getTranslationVector();
 	sweet::Box p = parent->boundingBox;
@@ -176,28 +207,9 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	child->translatePhysical(pos);
 
+	parent->addComponent(child);
+
 	return true;
-}
-
-std::vector<Tile *> RoomBuilder::getTiles(unsigned long int _thresh){
-	std::vector<Tile *> tiles;
-
-	for(unsigned long int y = 0; y < tilemap->height; ++y){
-		for(unsigned long int x = 0; x < tilemap->width; ++x){
-			unsigned long int p = sweet::TextureUtils::getPixel(tilemap, x, y);
-
-			if(p > _thresh){ 
-				tiles.push_back(new Tile(glm::vec2(x - (tilemap->width/2.f) * ROOM_TILE, y - (tilemap->height/2.f) * ROOM_TILE)));
-				/*
-				Sprite * blah;
-				AssetTexture * blahTex = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "UV-TEST").asString());
-				blah->mesh->pushTexture2D(blahTex->texture);
-				room->addComponent(blah);
-				*/
-			}
-		}
-	}
-	return tiles;
 }
 
 void RoomBuilder::createWalls(unsigned long int _thresh){
@@ -269,7 +281,7 @@ void RoomBuilder::createWalls(unsigned long int _thresh){
 	}
 
 	// Get wall texture
-	AssetTexture * wallTexture = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "WALLS").asString());
+	Texture * wallTexture = PD_ResourceManager::scenario->getTexture(json.get("wallTexture", "WALLS").asString())->texture;
 
 	// Create walls from edges
 	// TODO: make separate bullet colliders and a single mesh for walls
@@ -286,7 +298,7 @@ void RoomBuilder::createWalls(unsigned long int _thresh){
 	room->createRigidBody(0);
 	
 	if(wallTexture != nullptr){
-		room->mesh->pushTexture2D(wallTexture->texture);
+		room->mesh->pushTexture2D(wallTexture);
 	}
 }
 
@@ -356,7 +368,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(Json::Value json, BulletWo
 	// dining table set 1, tv couch set, bathroom set, ...
 
 	for(unsigned int i = 0; i < characters.size(); ++i){
-		//objects.push_back(characters.at(i));
+		objects.push_back(characters.at(i));
 	}
 
 	for(unsigned int i = 0; i < furniture.size(); ++i){
@@ -378,13 +390,13 @@ std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld *
 	}
 
 	// Random
-	int n = rand() % 15;
+	int n = rand() % 1;
 	for(unsigned int i = 0; i < n; ++i){
 		MeshInterface * mesh = MeshFactory::getPlaneMesh(3);
 		Json::Value j;
-		j["src"] = "indexedColourTest.png";
-		AssetTexture * tex = AssetTexture::create(j);
-		mesh->pushTexture2D(tex->texture);
+		j["texture"] = "INDEXED-TEST";
+		Texture * tex = PD_ResourceManager::scenario->getTexture(j.get("texture", "DEFAULT").asString())->texture;
+		mesh->pushTexture2D(tex);
 		characters.push_back(new Person(_world, MeshFactory::getPlaneMesh(3.f)));
 		
 		// stretching square planes for now
@@ -403,8 +415,10 @@ std::vector<Furniture *> RoomBuilder::getFurniture(Json::Value json, BulletWorld
 
 	// Random
 	int n = rand() % 10;
-	for(unsigned int i = 0; i < 6; ++i){
+	for(unsigned int i = 0; i < 10; ++i){
+
 		MeshInterface * mesh = Resource::loadMeshFromObj("assets/meshes/RoomTest/couch.obj").at(0);
+		mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("")->texture);
 		Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 
 		furniture.push_back(new Furniture(_world, mesh, WALL));
@@ -423,9 +437,9 @@ std::vector<Item *> RoomBuilder::getItems(Json::Value _json, BulletWorld * _worl
 	for(unsigned int i = 0; i < n; ++i){
 		MeshInterface * mesh = MeshFactory::getPlaneMesh(2.f);
 		Json::Value j;
-		j["src"] = "uvs.png";
-		AssetTexture * tex = AssetTexture::create(j);
-		mesh->pushTexture2D(tex->texture);
+		j["texture"] = "UV-TEST";
+		Texture * tex = PD_ResourceManager::scenario->getTexture(j.get("texture", "DEFAULT").asString())->texture;
+		mesh->pushTexture2D(tex);
 
 		items.push_back(new Item(_world, mesh));
 	}
@@ -435,8 +449,8 @@ std::vector<Item *> RoomBuilder::getItems(Json::Value _json, BulletWorld * _worl
 
 Person * RoomBuilder::readCharacter(Json::Value _json, BulletWorld * _world){
 	MeshInterface * mesh = MeshFactory::getPlaneMesh(3);
-	AssetTexture * tex = AssetTexture::create(_json["texture"]);
-	mesh->pushTexture2D(tex->texture);
+	Texture * tex = PD_ResourceManager::scenario->getTexture(_json.get("texture", "DEFAULT").asString())->texture;
+	mesh->pushTexture2D(tex);
 	return new Person(_world, mesh);
 }
 

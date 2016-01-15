@@ -28,6 +28,7 @@
 #include <Room.h>
 #include <RoomBuilder.h>
 #include <RoomObject.h>
+#include <PD_TilemapGenerator.h>
 
 PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	Scene(_game),
@@ -92,9 +93,25 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.005f);
 	*/
-	room = RoomBuilder("{size:{l:5, w:15}}",bulletWorld).getRoom();
+	/*
+	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh(), shader);
+	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
+	bulletGround->createRigidBody(0);
+	childTransform->addChild(bulletGround);
+	bulletGround->meshTransform->scale(1000,1000,1000);
+	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletGround->body->translate(btVector3(0, -1, 0));
+	bulletGround->body->setFriction(1);
+	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
+	*/
+	room = RoomBuilder("{\"size\":{\"l\":20, \"w\":20}}",bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(shader, true);
+	childTransform->addChild(room->tilemapSprite);
+	for(unsigned int i = 0; i < room->components.size(); ++i){
+		childTransform->addChild(room->components.at(i));
+	}
+
 }
 
 PD_Scene_RoomGenerationTest::~PD_Scene_RoomGenerationTest(){
@@ -103,6 +120,10 @@ PD_Scene_RoomGenerationTest::~PD_Scene_RoomGenerationTest(){
 
 void PD_Scene_RoomGenerationTest::update(Step * _step){
 	bulletWorld->update(_step);
+
+	if(keyboard->keyJustDown(GLFW_KEY_E)){
+		printHierarchy();
+	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){
 		game->toggleFullScreen();
@@ -156,11 +177,6 @@ void PD_Scene_RoomGenerationTest::update(Step * _step){
 }
 
 void PD_Scene_RoomGenerationTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	GL_CULL_FACE;
-	GL_FRONT_FACE;
-	GL_CW;
-	GL_CULL_FACE;
-	GL_BACK;
 	
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();

@@ -6,7 +6,7 @@
 
 #define ROOM_HEIGHT 5
 #define DEFAULT_ROOM_LENGTH 15
-#define ROOM_TILE 4
+#define ROOM_TILE 5
 
 enum RoomLayout_t{
 	kRECT,
@@ -78,13 +78,12 @@ public:
 	Room * getRoom();
 
 	// Furniture placement
-	bool search(RoomObject * child, std::vector<RoomObject *> objects);
+	bool search(RoomObject * child, std::vector<RoomObject *> objects, Room * room);
 	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
 
 	// Room boundaries builder functions
 	void createWalls(unsigned long int _thresh);
 	void addWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
-	std::vector<Tile *> getTiles(unsigned long int _thresh);
 
 	// Create random room objects, including specified objects
 	static std::vector<RoomObject *> getRoomObjects(Json::Value _json, BulletWorld * _world);

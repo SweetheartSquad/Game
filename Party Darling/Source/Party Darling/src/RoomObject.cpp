@@ -11,7 +11,8 @@ Slot::Slot(float _loc, float _length) :
 RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	BulletMeshEntity(_world, _mesh),
 	anchor(_anchor),
-	boundingBox(mesh->calcBoundingBox())
+	boundingBox(mesh->calcBoundingBox()),
+	parent(nullptr)
 {
 	 
 }
@@ -19,9 +20,24 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _an
 RoomObject::~RoomObject(void){
 }
 
-void RoomObject::addComponent(RoomObject * obj){
-	childTransform->addChild(obj);
-	components.push_back(obj);
+bool RoomObject::addComponent(RoomObject * obj){
+	if(obj->parent == nullptr){
+		obj->parent = this;
+		components.push_back(obj);
+		return true;
+	}else{
+		return false;
+	}
+}
+
+bool RoomObject::removeComponent(RoomObject * obj){
+	for(int i = 0; i < components.size(); ++i){
+		if(obj == components.at(i)){
+			components.erase(components.begin() + i);
+			return true;
+		}
+	}
+	return false;
 }
 
 void RoomObject::setShader(Shader * _shader, bool _default){
