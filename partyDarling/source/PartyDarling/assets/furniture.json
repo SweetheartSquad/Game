@@ -335,15 +335,16 @@
                         }
                     ]
                 }
+				
             ], 
             "id": 14, 
-            "src": "", 
+            "src": "chair_Seat_4.obj", 
             "type": "seat"
         }, 
         {
             "connectors": [], 
             "id": 15, 
-            "src": "", 
+            "src": "chair_Leg_4.obj", 
             "type": "leg"
         }
     ], 
