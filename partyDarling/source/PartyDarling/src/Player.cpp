@@ -61,7 +61,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
 	this->body->setFriction(1);
-	this->body->setAngularFactor(btVector3(0,1,0));
+	this->body->setAngularFactor(btVector3(0,0,0));
 	this->body->setLinearFactor(btVector3(1,0.9,1));
 	this->maxVelocity = btVector3(-1,-1,-1);
 
@@ -233,13 +233,13 @@ void Player::update(Step * _step){
 				bobbleInterpolation += 0.1f;
 			}
 
-			if(glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ))>=0.5){
+			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
 				this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
-				std::cout << "normal" << std::endl;
+				std::cout << "1" << std::endl;
 			}
 			else{
 				this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
-				std::cout << "slowed" << std::endl;
+				std::cout << "2" << std::endl;
 			}
 			
 			
@@ -248,13 +248,20 @@ void Player::update(Step * _step){
 			if(bobbleInterpolation<1){
 				bobbleInterpolation += 0.1f;
 			}
-			if(glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ))>=0.5){
-				std::cout << "normal" << std::endl;
+			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
+				std::cout << "3" << std::endl;
 				this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
 			}else{
 				this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
-				std::cout << "slowed" << std::endl;
+				std::cout << "4" << std::endl;
 			}
+		}
+
+		//std::cout << glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ)) << std::endl;
+		//glmLastVelocityXZ = glm::normalize(glmLastVelocityXZ);
+		if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ)) < 0.3){
+			this->body->applyCentralImpulse(btVector3(xVelocity*-0.1f,0,zVelocity*-0.1f));
+			this->body->applyCentralImpulse(btVector3(glm::normalize(glmCurVelocityXZ).x*0.1f,0,glm::normalize(glmCurVelocityXZ).y*0.1f));
 		}
 		
 	}
@@ -310,7 +317,9 @@ void Player::update(Step * _step){
 	}
 	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
-	//std::cout << glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ)) << std::endl;
+	
+
+	
 
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
