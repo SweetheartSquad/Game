@@ -5,6 +5,8 @@
 #include <PD_Assets.h>
 
 Scenario * PD_ResourceManager::scenario = nullptr;
+Scenario * PD_ResourceManager::itemTextures = nullptr;
+Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
 
 void PD_ResourceManager::init(){
@@ -15,6 +17,10 @@ void PD_ResourceManager::init(){
 
 	// initialize assets
 	scenario = new Scenario("assets/scenario.json");
+	itemTextures = new Scenario("assets/item-textures.json");
+	componentTextures = new Scenario("assets/component-textures.json");
+
+
 	db = new DatabaseConnection("data/test.db");
 
 	resources.push_back(scenario);

@@ -12,7 +12,9 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
 	definition(_definition)
 {
-	mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(definition->texture)->texture);
+	AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(definition->texture);
+	tex->load();
+	mesh->pushTexture2D(tex->texture);
 	mesh->setScaleMode(GL_NEAREST);
 }
 
