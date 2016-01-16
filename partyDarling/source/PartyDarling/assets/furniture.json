@@ -443,6 +443,92 @@
             "id": 20, 
             "src": "table_tableTop_3.obj", 
             "type": "tabletop"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshade", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 1.9097709655761719, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 22, 
+            "src": "lamp_lampShaft_1.obj", 
+            "type": "lampshaft"
+        }, 
+        {
+            "connectors": [], 
+            "id": 23, 
+            "src": "lamp_lampShade_1.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [], 
+            "id": 24, 
+            "src": "lamp_lampShade_2.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [], 
+            "id": 25, 
+            "src": "lamp_lampShade_3.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshade", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 6.608179314903981, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 26, 
+            "src": "lamp_lampShaft_2.obj", 
+            "type": "lampshaft"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshaft", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.27063686294171424, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 27, 
+            "src": "lamp_lampBase_2.obj", 
+            "type": "lampbase"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshaft", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.8997349739074707, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 28, 
+            "src": "lamp_lampBase_1.obj", 
+            "type": "lampbase"
         }
     ], 
     "furniture": [
@@ -480,6 +566,34 @@
                 }
             ], 
             "type": "chair"
+        }, 
+		{
+		"components": [
+                {
+                    "componentType": "lampbase", 
+                    "multipliers": [
+                        1
+                    ], 
+                    "outComponents": [
+                        {
+                            "componentType": "lampshaft", 
+                            "multipliers": [
+                                1
+                            ], 
+                            "outComponents": [
+                                {
+                                    "componentType": "lampshade", 
+                                    "multipliers": [], 
+                                    "required": true
+                                }
+                            ], 
+                            "required": true
+                        }
+                    ], 
+                    "required": true
+                }
+            ], 
+            "type": "lamp"
         }, 
         {
             "components": [
