@@ -49,12 +49,12 @@
                     "positions": [
                         {
                             "positionX": -3.24, 
-                            "positionY": 5.0, 
+                            "positionY": 3.184130218380706, 
                             "positionZ": -0.11081788036269824
                         }, 
                         {
                             "positionX": 3.24, 
-                            "positionY": 5.0, 
+                            "positionY": 3.184130218380706, 
                             "positionZ": -0.11081788036269824
                         }
                     ]
@@ -71,12 +71,12 @@
                     "positions": [
                         {
                             "positionX": -3.151, 
-                            "positionY": 5.0, 
+                            "positionY": 2.2030506897238338, 
                             "positionZ": 0.20638129780875714
                         }, 
                         {
                             "positionX": 3.151, 
-                            "positionY": 5.0, 
+                            "positionY": 2.2030506897238338, 
                             "positionZ": 0.20638129780875714
                         }
                     ]
@@ -277,12 +277,12 @@
                     "positions": [
                         {
                             "positionX": 3.078, 
-                            "positionY": 2.141230472462833, 
+                            "positionY": 1.3098304554890343, 
                             "positionZ": 0.4886904192204552
                         }, 
                         {
                             "positionX": -3.077579044786222, 
-                            "positionY": 2.141230472462833, 
+                            "positionY": 1.3098304554890343, 
                             "positionZ": 0.4886904192204552
                         }
                     ]
@@ -353,12 +353,12 @@
                     "positions": [
                         {
                             "positionX": 3.421, 
-                            "positionY": 3.079216577306704, 
+                            "positionY": 3.1854941957445706, 
                             "positionZ": 0.0
                         }, 
                         {
                             "positionX": -3.420635889311009, 
-                            "positionY": 3.079216577306704, 
+                            "positionY": 3.1854941957445706, 
                             "positionZ": 0.0
                         }
                     ]
@@ -405,6 +405,130 @@
             "id": 18, 
             "src": "table_tableTop_2.obj", 
             "type": "tabletop"
+        }, 
+        {
+            "connectors": [], 
+            "id": 19, 
+            "src": "chair_Arm_3.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -6.479602826064344, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": 6.425402190619936
+                        }, 
+                        {
+                            "positionX": 6.48, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": 6.425402190619936
+                        }, 
+                        {
+                            "positionX": 6.48, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": -6.425
+                        }, 
+                        {
+                            "positionX": -6.479602826064344, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": -6.425
+                        }
+                    ]
+                }
+            ], 
+            "id": 20, 
+            "src": "table_tableTop_3.obj", 
+            "type": "tabletop"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshade", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 1.9097709655761719, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 22, 
+            "src": "lamp_lampShaft_1.obj", 
+            "type": "lampshaft"
+        }, 
+        {
+            "connectors": [], 
+            "id": 23, 
+            "src": "lamp_lampShade_1.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [], 
+            "id": 24, 
+            "src": "lamp_lampShade_2.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [], 
+            "id": 25, 
+            "src": "lamp_lampShade_3.obj", 
+            "type": "lampshade"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshade", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 6.608179314903981, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 26, 
+            "src": "lamp_lampShaft_2.obj", 
+            "type": "lampshaft"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshaft", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.27063686294171424, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 27, 
+            "src": "lamp_lampBase_2.obj", 
+            "type": "lampbase"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "lampshaft", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.8997349739074707, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 28, 
+            "src": "lamp_lampBase_1.obj", 
+            "type": "lampbase"
         }
     ], 
     "furniture": [
@@ -442,6 +566,34 @@
                 }
             ], 
             "type": "chair"
+        }, 
+		{
+		"components": [
+                {
+                    "componentType": "lampbase", 
+                    "multipliers": [
+                        1
+                    ], 
+                    "outComponents": [
+                        {
+                            "componentType": "lampshaft", 
+                            "multipliers": [
+                                1
+                            ], 
+                            "outComponents": [
+                                {
+                                    "componentType": "lampshade", 
+                                    "multipliers": [], 
+                                    "required": true
+                                }
+                            ], 
+                            "required": true
+                        }
+                    ], 
+                    "required": true
+                }
+            ], 
+            "type": "lamp"
         }, 
         {
             "components": [
