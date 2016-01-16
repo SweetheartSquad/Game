@@ -264,6 +264,26 @@
           ]
         }
       ]
+    },
+
+    {  
+      "name":"rsgresg",
+      "id":1,
+      "collectable":true,
+      "pixelPerfect":true,
+      "description":"grseg gres ges gres gresg",
+      "texture":3,
+      "effects":[  
+
+      ],
+      "type":"item"
+    },
+
+    {  
+      "id":3,
+      "src":"nineslicing.png",
+      "imageUrl":"https://gitlab.com/OmarClean/TestComponentProject2/raw/master/items/6b32b6cc-2481-417b-803d-9209560d4e5f.png",
+      "type":"texture"
     }
   ]
 }

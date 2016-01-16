@@ -112,13 +112,16 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 	components.push_back(_component);
 }
 
-PersonState::PersonState(){
-	conversation = PD_ResourceManager::scenario->getConversation("intro")->conversation;
+PersonState::PersonState(Json::Value _json) :
+	name(_json.get("name", "NO_NAME").asString()),
+	conversation(_json.get("convo", "NO_CONVO").asString())
+{
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world) :
 	paletteTex(new TextureColourTable(false)),
-	timer(0)
+	timer(0),
+	state(nullptr)
 {
 	paletteTex->load();
 

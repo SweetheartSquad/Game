@@ -128,6 +128,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	testCharacter->firstParent()->scale(0.001f);
 	testCharacter->firstParent()->translate(0, 2, 0);
 	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
+	testCharacter->state = &dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->states.at(0);
 
 
 
@@ -244,7 +245,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-								uiDialogue->startEvent(butt->person->state.conversation);
+								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(butt->person->state->conversation)->conversation);
 								player->disable();
 							});
 							uiBubble->addOption("yell at ", [this](sweet::Event * _event){

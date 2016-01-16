@@ -27,12 +27,11 @@ CharacterComponent::CharacterComponent(Json::Value _json) :
 AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
 	name(_json.get("name", "NO_NAME").asString()),
-	root(_json["root"])
+	root(_json["components"][0])
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
-		states.push_back(PersonState());
-		//statesJson[i]
+		states.push_back(PersonState(statesJson[i]));
 	}
 	Json::Value itemsJson = _json["items"];
 	for(Json::ArrayIndex i = 0; i < itemsJson.size(); ++i){
