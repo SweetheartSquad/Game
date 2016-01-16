@@ -20,11 +20,33 @@
 #include <MousePerspectiveCamera.h>
 #include <MeshFactory.h>
 #include <Timeout.h>
+#include <MatrixStack.h>
 
 #include <RenderOptions.h>
 #include <json\json.h>
 
 #include <sweet/Input.h>
+
+#include <PointLight.h>
+
+
+struct OculusEye{
+	ovrSizei			size;
+	GLuint              fboId;
+	struct TextureBuffer{
+		ovrSwapTextureSet*  TextureSet;
+		GLuint              texId;
+	} tbuffer;
+	struct DepthBuffer{
+		GLuint        texId;
+	} dbuffer;
+} eyes[2];
+ovrVector3f ViewOffset[2];
+ovrPosef    EyeRenderPose[2];
+double ftiming;
+double sensorSampleTime;
+float eyeSeparationScale = 0;
+float eyeSeparationScale_ui = 1.8;
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	Scene(_game),
@@ -38,7 +60,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader, 0));
-	//shader->addComponent(new ShaderComponentDiffuse(shader));
+	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
@@ -148,19 +170,103 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	activeCamera = player->playerCamera;
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
+
+
+	PointLight * light = new PointLight(glm::vec3(1.f), 0.f, 0.01f, -1.f);
+	lights.push_back(light);
+	childTransform->addChild(light)->translate(0, 5, 0);
+
+
+	// oculus setup
+	if(sweet::ovrInitialized){
+		for(unsigned long int eye = 0; eye < 2; ++eye){
+			//eyes[eye].size.w = sweet::hmdDesc.Resolution.w/2;
+			//eyes[eye].size.h = sweet::hmdDesc.Resolution.h/2;
+			eyes[eye].size = ovr_GetFovTextureSize(*sweet::hmd, ovrEyeType(eye), sweet::hmdDesc.DefaultEyeFov[eye], 1);
+			checkForOvrError(ovr_CreateSwapTextureSetGL(*sweet::hmd, GL_SRGB8_ALPHA8, eyes[eye].size.w, eyes[eye].size.h, &eyes[eye].tbuffer.TextureSet));
+
+			for (int i = 0; i < eyes[eye].tbuffer.TextureSet->TextureCount; ++i){
+				ovrGLTexture* tex = (ovrGLTexture*)&eyes[eye].tbuffer.TextureSet->Textures[i];
+				glBindTexture(GL_TEXTURE_2D, tex->OGL.TexId);
+		
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			}
+			glGenFramebuffers(1, &eyes[eye].fboId);
+
+
+			// depth
+			glGenTextures(1, &eyes[eye].dbuffer.texId);
+			glBindTexture(GL_TEXTURE_2D, eyes[eye].dbuffer.texId);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			GLenum internalFormat = GL_DEPTH_COMPONENT24;
+			GLenum type = GL_UNSIGNED_INT;
+			/*if (GLE_ARB_depth_buffer_float)
+			{
+				internalFormat = GL_DEPTH_COMPONENT32F;
+				type = GL_FLOAT;
+			}*/
+
+			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, eyes[eye].size.w, eyes[eye].size.h, 0, GL_DEPTH_COMPONENT, type, NULL);
+   
+		}
+	}
+
+	for(unsigned long int i = 0; i < 100; ++i){
+		Transform * t = childTransform->addChild(new MeshEntity(MeshFactory::getCubeMesh(), shader));
+		t->scale(sweet::NumberUtils::randomFloat(1, 10));
+		t->translate(sweet::NumberUtils::randomFloat(-100, 100), sweet::NumberUtils::randomFloat(-100, 100), sweet::NumberUtils::randomFloat(-100, 100));
+	}
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 	deleteChildTransform();
+
+	if(sweet::ovrInitialized){
+		for(unsigned long int eye = 0; eye < 2; ++eye){
+			ovr_DestroySwapTextureSet(*sweet::hmd, eyes[eye].tbuffer.TextureSet);
+			eyes[eye].tbuffer.TextureSet = nullptr;
+			glDeleteFramebuffers(1, &eyes[eye].fboId);
+			eyes[eye].fboId = 0;
+			glDeleteTextures(1, &eyes[eye].dbuffer.texId);
+			eyes[eye].dbuffer.texId = 0;
+		}
+	}
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
 	bulletWorld->update(_step);
 
+	
+	if(sweet::ovrInitialized){
+		// Get eye poses, feeding in correct IPD offset
+		ViewOffset[0] = sweet::EyeRenderDesc[0].HmdToEyeViewOffset;
+		ViewOffset[1] = sweet::EyeRenderDesc[1].HmdToEyeViewOffset;
+		ftiming = ovr_GetPredictedDisplayTime(*sweet::hmd, 0);
+		ovrTrackingState hmdState = ovr_GetTrackingState(*sweet::hmd, ftiming, ovrTrue);
+		ovr_CalcEyePoses(hmdState.HeadPose.ThePose, ViewOffset, EyeRenderPose);
+		sensorSampleTime = ovr_GetTimeInSeconds();
 
+		//player->playerCamera->firstParent()->translate(EyeRenderPose[0].Position.x, EyeRenderPose[0].Position.y, EyeRenderPose[0].Position.z);
+		//player->playerCamera->childTransform->setOrientation(glm::quat(EyeRenderPose[0].Orientation.w, EyeRenderPose[0].Orientation.z, EyeRenderPose[0].Orientation.y, EyeRenderPose[0].Orientation.x));
+	
+		if(keyboard->keyJustDown(GLFW_KEY_R)){
+			ovr_RecenterPose(*sweet::hmd);
+		}
 
-
-
+		if(keyboard->keyJustDown(GLFW_KEY_EQUAL)){
+			eyeSeparationScale += 0.1;
+		}else if(keyboard->keyJustDown(GLFW_KEY_MINUS)){
+			eyeSeparationScale -= 0.1;
+		}
+	}
+	
 	// mouse interaction with world objects
 	if(player->isEnabled()){
 		float range = 4;
@@ -341,10 +447,100 @@ void PD_Scene_CombinedTests::update(Step * _step){
 }
 
 void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+
 	_renderOptions->setClearColour(1,0,1,1);
-	_renderOptions->clear();
-	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+
+	if(sweet::ovrInitialized){
+		// render oculus eyes
+		for(unsigned long int eye = 0; eye < 2; ++eye){
+			// Increment to use next texture, just before writing
+			eyes[eye].tbuffer.TextureSet->CurrentIndex = (eyes[eye].tbuffer.TextureSet->CurrentIndex + 1) % eyes[eye].tbuffer.TextureSet->TextureCount;
+
+			// Switch to eye render target
+			// set render surface
+			auto tex = reinterpret_cast<ovrGLTexture*>(&eyes[eye].tbuffer.TextureSet->Textures[eyes[eye].tbuffer.TextureSet->CurrentIndex]);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, eyes[eye].fboId);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex->OGL.TexId, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eyes[eye].dbuffer.texId, 0);
+	
+			game->setViewport(0, 0, eyes[eye].size.w, eyes[eye].size.h);
+			glEnable(GL_FRAMEBUFFER_SRGB);
+	
+			// render scene
+			_matrixStack->pushMatrix();
+		
+			activeCamera->firstParent()->translate(-sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*eyeSeparationScale, -sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, -sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z);
+			uiLayer.childTransform->translate(-sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*eyeSeparationScale_ui*sweet::getWindowWidth(), -sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, -sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z);
+			
+			_renderOptions->clear();
+			Scene::render(_matrixStack, _renderOptions);
+			uiLayer.render(_matrixStack, _renderOptions);
+			_matrixStack->popMatrix();
+		
+			uiLayer.childTransform->translate(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*eyeSeparationScale_ui*sweet::getWindowWidth(), sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z);
+			activeCamera->firstParent()->translate(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*eyeSeparationScale, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z);
+		
+			// unset render surface
+			glBindFramebuffer(GL_FRAMEBUFFER, eyes[eye].fboId);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+			//glDisable(GL_FRAMEBUFFER_SRGB);
+		}
+
+
+
+		 // Set up positional data.
+		ovrViewScaleDesc viewScaleDesc;
+		viewScaleDesc.HmdSpaceToWorldScaleInMeters = 1.0f;
+		viewScaleDesc.HmdToEyeViewOffset[0] = ViewOffset[0];
+		viewScaleDesc.HmdToEyeViewOffset[1] = ViewOffset[1];
+
+		ovrLayerEyeFov ld;
+		ld.Header.Type  = ovrLayerType_EyeFov;
+		ld.Header.Flags = ovrLayerFlag_TextureOriginAtBottomLeft;   // Because OpenGL.
+	
+		ovrRecti recti;
+		for (int eye = 0; eye < 2; ++eye)
+		{
+			recti.Size = eyes[eye].size;
+			recti.Pos.x = 0;
+			recti.Pos.y = 0;
+			ld.ColorTexture[eye] = eyes[eye].tbuffer.TextureSet;
+			ld.Viewport[eye]     = recti;
+			ld.Fov[eye]          = sweet::hmdDesc.DefaultEyeFov[eye];
+			ld.RenderPose[eye]   = EyeRenderPose[eye];
+			ld.SensorSampleTime  = sensorSampleTime;
+		}
+		//ld.Viewport[1].Pos.x = windowSize.w;
+		//ld.Viewport[1].Pos.y = windowSize.h;
+
+		ovrLayerHeader* layers = &ld.Header;
+		checkForOvrError(ovr_SubmitFrame(*sweet::hmd, 0, &viewScaleDesc, &layers, 1));
+		//glfwSwapBuffers(sweet::currentContext);
+
+
+
+		// Render what the oculus sees to the screen 
+		// Blit mirror texture to back buffer
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, sweet::mirrorFBO);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		GLint w = sweet::mirrorTexture->OGL.Header.TextureSize.w;
+		GLint h = sweet::mirrorTexture->OGL.Header.TextureSize.h;
+		glBlitFramebuffer(0, h, w, 0,
+							0, 0, w, h,
+							GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	}else{
+		// standard scene rendering
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		_renderOptions->clear();
+		Scene::render(_matrixStack, _renderOptions);
+		uiLayer.render(_matrixStack, _renderOptions);
+	}
+	
+
+	glfwSwapBuffers(sweet::currentContext);
 }
 
 void PD_Scene_CombinedTests::load(){

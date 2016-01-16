@@ -118,11 +118,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(ANT_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ENGINE_DIR)\Source\S-Tengine2\include;include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(FREETYPE_DIR)\include;$(OPENAL_DIR)\include;$(CPPREST_DIR)\Release\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(ANT_DIR)\include;$(OVR_DIR)\Include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Debug;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Debug;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(ANT_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\src\Debug;$(OPENAL_DIR)\libs\Win32;$(CPPREST_DIR)\Binaries\Win32\Debug;$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(FREETYPE_DIR)\objs\vc2012\Win32;$(BULLET_DIR)\lib;$(ANT_DIR)\lib;$(OVR_DIR)\Lib\Windows\Win32\Debug\VS2012;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <LinkIncremental>false</LinkIncremental>
@@ -149,7 +149,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;freetype255MTd.lib;cpprest110d_2_5.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2012d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;freetype255MTd.lib;cpprest110d_2_5.lib;Box2D.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;LinearMath_vs2010_debug.lib;S-Tengine2 - 2012d.lib;LibOVR.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>true</PerUserRedirection>
       <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
