@@ -56,6 +56,7 @@ private:
 	int currentBobbleTween;
 	int lastBobbleTween;
 	bool tweenBobbleChange;
+	double jumpTime;
 
 	bool isGrounded;
 

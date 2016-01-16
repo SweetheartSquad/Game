@@ -47,7 +47,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
-	joystick(nullptr)
+	joystick(nullptr),
+	jumpTime(0.0)
 {
 	//init movement vars
 	playerSpeed = 0.1f;
@@ -145,14 +146,15 @@ void Player::update(Step * _step){
 		playerCamera->pitch = -80;
 	}
 
-	
-
 	currentYVel = curVelocity.y();
-	if (currentYVel > 0 && lastYVel < 0 && isGrounded){
+	if (currentYVel > 0.f && lastYVel < 0.f && isGrounded && jumpTime > 0.025f){
 		landSound->play();
+		jumpTime = 0.0;
 	}
+
 	lastYVel = currentYVel;
 
+	
 	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
 	
@@ -183,12 +185,12 @@ void Player::update(Step * _step){
 			movement += right;
 		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			if(isGrounded){
-				movement += glm::vec3(0,100,0);
+				movement += glm::vec3(0, 100,0);
 				jumpSound->play();
+				jumpTime = _step->time;
 			}
 		}
 	}
-
 
 	if(joystick != nullptr){
 		movement += forward * -joystick->getAxis(joystick->axisLeftY);
@@ -301,8 +303,6 @@ void Player::update(Step * _step){
 
 	lastBobbleTween = currentBobbleTween;
 
-	
-
 	//get player position
 	const btVector3 & b = this->body->getWorldTransform().getOrigin();
 	float rayRange = playerHeight * 1.25f;
@@ -314,12 +314,9 @@ void Player::update(Step * _step){
 		isGrounded = true;
 	}else{
 		isGrounded = false;
+		jumpTime += _step->time - jumpTime;
 	}
 	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
-
-	
-
-	
 
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
