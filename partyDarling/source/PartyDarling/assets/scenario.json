@@ -184,7 +184,7 @@
       "src": "UI/track.png"
     },
     {
-      "id": "intro",
+      "id": "1",
       "type": "conversation",
       "dialogue": [
         {
@@ -265,6 +265,57 @@
         }
       ]
     },
+
+
+
+
+    {  
+      "id":1,
+      "name":"character1",
+      "states":[  
+        {  
+          "id":1,
+          "name":"state1",
+          "convo":1
+        }
+      ],
+      "items":[  
+
+      ],
+      "type":"character",
+      "defaultState":1,
+      "components":[  
+        {  
+          "src":"",
+          "components":[  
+            {  
+              "src":"",
+              "components":[  
+                {  
+                  "src":""
+                },
+                {  
+                  "src":""
+                },
+                {  
+                  "src":""
+                }
+              ]
+            },
+            {  
+              "src":""
+            },
+            {  
+              "src":""
+            }
+          ]
+        }
+      ]
+    },
+
+
+
+
 
     {  
       "name":"rsgresg",
