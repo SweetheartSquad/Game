@@ -87,62 +87,62 @@
 
 
 	{
-      "id": "1",
+      "id": "ROOM_GEN_1",
       "type": "texture",
       "src": "room generation/1.png"
     },
 	{
-      "id": "2",
+      "id": "ROOM_GEN_2",
       "type": "texture",
       "src": "room generation/2.png"
     },
 	{
-      "id": "3",
+      "id": "ROOM_GEN_3",
       "type": "texture",
       "src": "room generation/3.png"
     },
 	{
-      "id": "4",
+      "id": "ROOM_GEN_4",
       "type": "texture",
       "src": "room generation/4.png"
     },
 	{
-      "id": "5",
+      "id": "ROOM_GEN_5",
       "type": "texture",
       "src": "room generation/5.png"
     },
 	{
-      "id": "6",
+      "id": "ROOM_GEN_6",
       "type": "texture",
       "src": "room generation/6.png"
     },
 	{
-      "id": "7",
+      "id": "ROOM_GEN_7",
       "type": "texture",
       "src": "room generation/7.png"
     },
 	{
-      "id": "8",
+      "id": "ROOM_GEN_8",
       "type": "texture",
       "src": "room generation/8.png"
     },
 	{
-      "id": "9",
+      "id": "ROOM_GEN_9",
       "type": "texture",
       "src": "room generation/9.png"
     },
 	{
-      "id": "10",
+      "id": "ROOM_GEN_10",
       "type": "texture",
       "src": "room generation/10.png"
     },
 	{
-      "id": "11",
+      "id": "ROOM_GEN_11",
       "type": "texture",
       "src": "room generation/11.png"
     },
 	{
-      "id": "12",
+      "id": "ROOM_GEN_12",
       "type": "texture",
       "src": "room generation/12.png"
     },
@@ -162,13 +162,6 @@
       "type": "texture",
       "src": "GRID.png"
     },
-
-    {
-      "id": "DOOR",
-      "type": "texture",
-      "src": "door.png"
-    },
-
 
     {
       "id": "SLIDER-THUMB",

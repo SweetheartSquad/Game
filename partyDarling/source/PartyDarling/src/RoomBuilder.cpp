@@ -92,7 +92,7 @@ Room * RoomBuilder::getRoom(){
 		if(boundaries.at(i)->emptySlots.size() > 0){
 			availableParents.push_back(boundaries.at(i));
 			std::stringstream s;
-			s << i+1;
+			s << "ROOM_GEN_" << i+1;
 			boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
 		}
 	}
