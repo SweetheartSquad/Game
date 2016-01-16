@@ -1,0 +1,466 @@
+{
+    "components": [
+        {
+            "connectors": [
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0, 
+                            "positionY": 0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -2.761, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.3334810666582944
+                        }, 
+                        {
+                            "positionX": 2.7608645383310577, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.3334810666582944
+                        }, 
+                        {
+                            "positionX": -2.761, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": 2.7608645383310577, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }
+            ], 
+            "id": 1, 
+            "src": "chair_Seat_1.obj", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": -3.24, 
+                            "positionY": 5.0, 
+                            "positionZ": -0.11081788036269824
+                        }, 
+                        {
+                            "positionX": 3.24, 
+                            "positionY": 5.0, 
+                            "positionZ": -0.11081788036269824
+                        }
+                    ]
+                }
+            ], 
+            "id": 2, 
+            "src": "chair_Back_1.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": -3.151, 
+                            "positionY": 5.0, 
+                            "positionZ": 0.20638129780875714
+                        }, 
+                        {
+                            "positionX": 3.151, 
+                            "positionY": 5.0, 
+                            "positionZ": 0.20638129780875714
+                        }
+                    ]
+                }
+            ], 
+            "id": 3, 
+            "src": "chair_Back_2.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "legSupport", 
+                    "positions": [
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }
+            ], 
+            "id": 4, 
+            "src": "chair_Leg_1.obj", 
+            "type": "leg"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "legSupport", 
+                    "positions": [
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -3.24, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }
+            ], 
+            "id": 5, 
+            "src": "chair_Leg_2.obj", 
+            "type": "leg"
+        }, 
+        {
+            "connectors": [], 
+            "id": 6, 
+            "src": "chair_legSupport_1.obj", 
+            "type": "legSupport"
+        }, 
+        {
+            "connectors": [], 
+            "id": 7, 
+            "src": "chair_Arm_1.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0, 
+                            "positionY": 0.29, 
+                            "positionZ": -3.416
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": 2.894444676814736, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -2.894, 
+                            "positionY": -0.29, 
+                            "positionZ": -3.416
+                        }, 
+                        {
+                            "positionX": -3.8292601661390737, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.153548427055315
+                        }, 
+                        {
+                            "positionX": 3.829, 
+                            "positionY": -0.29, 
+                            "positionZ": 3.153548427055315
+                        }
+                    ]
+                }
+            ], 
+            "id": 8, 
+            "src": "chair_Seat_2.obj", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [], 
+            "id": 8, 
+            "src": "chair_Arm_2.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [], 
+            "id": 9, 
+            "src": "chair_legSupport_2.obj", 
+            "type": "legSupport"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": 2.5661128722298288, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": -2.722423264495295
+                        }, 
+                        {
+                            "positionX": 2.5661128722298288, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": 3.2214892371922046
+                        }, 
+                        {
+                            "positionX": -2.600456333799952, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": 3.2214892371922046
+                        }, 
+                        {
+                            "positionX": -2.600456333799952, 
+                            "positionY": -0.2919154296586808, 
+                            "positionZ": -2.722423264495295
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 1.227368010350328, 
+                            "positionZ": -4.202203721618325
+                        }
+                    ]
+                }
+            ], 
+            "id": 10, 
+            "src": "chair_Seat_3.obj", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -9.0, 
+                            "positionY": -0.1983142790773161, 
+                            "positionZ": -18.0
+                        }, 
+                        {
+                            "positionX": -9.0, 
+                            "positionY": -0.1983142790773161, 
+                            "positionZ": 18.0
+                        }, 
+                        {
+                            "positionX": 9.0, 
+                            "positionY": -0.1983142790773161, 
+                            "positionZ": 18.0
+                        }, 
+                        {
+                            "positionX": 9.0, 
+                            "positionY": -0.1983142790773161, 
+                            "positionZ": -18.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 11, 
+            "src": "table_tableTop_1.obj", 
+            "type": "tabletop"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": 3.078, 
+                            "positionY": 2.141230472462833, 
+                            "positionZ": 0.4886904192204552
+                        }, 
+                        {
+                            "positionX": -3.077579044786222, 
+                            "positionY": 2.141230472462833, 
+                            "positionZ": 0.4886904192204552
+                        }
+                    ]
+                }
+            ], 
+            "id": 12, 
+            "src": "chair_Back_4.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [], 
+            "id": 13, 
+            "src": "chair_Arm_4.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -3.7076315202996186, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": 3.3098851024154
+                        }, 
+                        {
+                            "positionX": 3.708, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": 3.3098851024154
+                        }, 
+                        {
+                            "positionX": -2.859506286379621, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": -3.3360897185287532
+                        }, 
+                        {
+                            "positionX": 2.86, 
+                            "positionY": -0.20316717573282606, 
+                            "positionZ": -3.3360897185287532
+                        }
+                    ]
+                }, 
+                {
+                    "componentType": "back", 
+                    "positions": [
+                        {
+                            "positionX": 0.0, 
+                            "positionY": 0.20076240559104774, 
+                            "positionZ": -3.446690688869433
+                        }
+                    ]
+                }
+            ], 
+            "id": 14, 
+            "src": "", 
+            "type": "seat"
+        }, 
+        {
+            "connectors": [], 
+            "id": 15, 
+            "src": "chair_Leg_4.obj", 
+            "type": "leg"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "arm", 
+                    "positions": [
+                        {
+                            "positionX": 3.421, 
+                            "positionY": 3.079216577306704, 
+                            "positionZ": 0.0
+                        }, 
+                        {
+                            "positionX": -3.420635889311009, 
+                            "positionY": 3.079216577306704, 
+                            "positionZ": 0.0
+                        }
+                    ]
+                }
+            ], 
+            "id": 16, 
+            "src": "chair_Back_3.obj", 
+            "type": "back"
+        }, 
+        {
+            "connectors": [], 
+            "id": 17, 
+            "src": "chair_Leg_3.obj", 
+            "type": "leg"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": 6.216287299674219, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": 7.659543567020765
+                        }, 
+                        {
+                            "positionX": 6.216287299674219, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": -7.66
+                        }, 
+                        {
+                            "positionX": -6.216, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": -7.66
+                        }, 
+                        {
+                            "positionX": -6.216, 
+                            "positionY": -0.14429525249808162, 
+                            "positionZ": 7.659543567020765
+                        }
+                    ]
+                }
+            ], 
+            "id": 18, 
+            "src": "table_tableTop_2.obj", 
+            "type": "tabletop"
+        }
+    ], 
+    "furniture": [
+        {
+            "components": [
+                {
+                    "componentType": "seat", 
+                    "multipliers": [
+                        1, 
+                        4
+                    ], 
+                    "outComponents": [
+                        {
+                            "componentType": "back", 
+                            "multipliers": [
+                                2
+                            ], 
+                            "outComponents": [
+                                {
+                                    "componentType": "arm", 
+                                    "multipliers": [], 
+                                    "required": false
+                                }
+                            ], 
+                            "required": true
+                        }, 
+                        {
+                            "componentType": "leg", 
+                            "multipliers": [], 
+                            "outComponents": [], 
+                            "required": true
+                        }
+                    ], 
+                    "required": true
+                }
+            ], 
+            "type": "chair"
+        }, 
+        {
+            "components": [
+                {
+                    "componentType": "tabletop", 
+                    "multipliers": [
+                        4
+                    ], 
+                    "outComponents": [
+                        {
+                            "componentType": "leg", 
+                            "multipliers": [], 
+                            "required": true
+                        }
+                    ], 
+                    "required": true
+                }
+            ], 
+            "type": "table"
+        }
+    ]
+}
