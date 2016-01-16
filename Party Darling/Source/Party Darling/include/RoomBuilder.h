@@ -4,7 +4,7 @@
 #include <vector>
 #include <json\json.h>
 
-#define ROOM_HEIGHT 5
+#define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
 #define ROOM_TILE 5
 

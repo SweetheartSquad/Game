@@ -22,6 +22,7 @@
 #include <TextureUtils.h>
 #include <NumberUtils.h>
 #include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <Sprite.h>
 #include <Texture.h>
@@ -74,13 +75,13 @@ Room * RoomBuilder::getRoom(){
 	room->tilemapSprite = new Sprite();
 	room->tilemapSprite->mesh->pushTexture2D(tilemap);
 	room->tilemapSprite->childTransform->scale(tilemap->width * ROOM_TILE, tilemap->height * ROOM_TILE, 1);
-	room->tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
+	room->tilemapSprite->meshTransform->translate(1, 0.5, 0);
 	room->tilemapSprite->mesh->scaleModeMag = GL_NEAREST;
 	room->tilemapSprite->mesh->scaleModeMin = GL_NEAREST;
 
 	room->tilemapSprite->childTransform->rotate(90, 1, 0, 0, kOBJECT);
 
-	unsigned long int thresh = 158;
+	unsigned long int thresh = 5;
 	// create room walls from tilemap
 	createWalls(thresh);
 
@@ -90,13 +91,21 @@ Room * RoomBuilder::getRoom(){
 		// only walls in boundaries should have child slots (not floor, cieling)
 		if(boundaries.at(i)->emptySlots.size() > 0){
 			availableParents.push_back(boundaries.at(i));
+			std::stringstream s;
+			s << i+1;
+			boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
 		}
 	}
 	
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		if(!search(objects.at(i), availableParents, room)){
+			
 			// I don't know
 			int blah = true;
+		}else{
+			if(objects.at(i)->parent != nullptr && objects.at(i)->parent->mesh->textures.size() > 0){
+				objects.at(i)->mesh->pushTexture2D(objects.at(i)->parent->mesh->textures.at(0));
+			}
 		}
 	}
 
@@ -104,16 +113,17 @@ Room * RoomBuilder::getRoom(){
 	//room->translatePhysical(glm::vec3(-size.x/2.f * ROOM_TILE, 0.f, -size.y/2.f * ROOM_TILE), true);
 	
 	// Get rid of temporary boundary room objects
-	glm::mat4 rmm = room->childTransform->getCumulativeModelMatrix();
-	for(int i = 0; i < boundaries.size(); ++i){
-
-		glm::mat4 bmm = boundaries.at(i)->childTransform->getCumulativeModelMatrix(); 
+	for(int i = 0; i < boundaries.size(); ++i){ 
 
 		for(int j = 0; j < boundaries.at(i)->components.size(); ++j){
 			room->addComponent(boundaries.at(i)->components.at(j));
 		}
-		delete boundaries.at(i);
-		
+		//delete boundaries.at(i);
+		boundaries.at(i)->components.clear();
+		for(int v = 0; v < boundaries.at(v)->mesh->vertices.size(); ++v){
+			boundaries.at(i)->mesh->vertices.at(v).y *= 2;
+		}
+		room->addComponent(boundaries.at(i));
 	}
 
 	return room;
@@ -146,7 +156,7 @@ bool RoomBuilder::search(RoomObject * child, std::vector<RoomObject *> objects, 
 						if(childBox.width < slot->length){
 							// adjust remaining slot space
 							slot->loc += childBox.width;
-							slot->length = slot->length - childBox.width;
+							slot->length -= childBox.width;
 						}else{
 							// remove slot
 							iterator->second.erase(iterator->second.begin() + j);
@@ -185,24 +195,32 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	sweet::Box p = parent->boundingBox;
 	sweet::Box c = child->boundingBox;
+
+	// object side position
+	glm::vec3 sidePos = glm::vec3();
+
 	switch(side){
 		case FRONT:
-			pos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
-			pos.x += -parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f + slot->loc;
+			sidePos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
+			sidePos.x += -parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f + slot->loc;
 			break;
 		case BACK:
-			pos.z += -parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f;
-			pos.x += parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f - slot->loc;
+			sidePos.z += -parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f;
+			sidePos.x += parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f - slot->loc;
 			break;
 		case LEFT:
-			pos.x += -parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f;
-			pos.z += -parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f + slot->loc;
+			sidePos.x += -parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f;
+			sidePos.z += -parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f + slot->loc;
 			break;
 		case RIGHT:
-			pos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
-			pos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
+			sidePos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
+			sidePos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
 			break;						
 	}
+	// rotate side space translation vector
+	sidePos = glm::rotate(orient, sidePos);
+	// add side space translation vector to final pos
+	pos += sidePos;
 
 	// check space around
 	if(false){
@@ -406,7 +424,7 @@ std::vector<Person *> RoomBuilder::getCharacters(Json::Value json, BulletWorld *
 		characters.push_back(new Person(_world, MeshFactory::getPlaneMesh(3.f)));
 		
 		// stretching square planes for now
-		characters.at(i)->childTransform->scale(glm::vec3(1.f, 20.f, 1.f));
+		characters.at(i)->childTransform->scale(glm::vec3(1.f, ROOM_TILE * 1.2, 1.f));
 		characters.at(i)->childTransform->translate(0.f, characters.at(i)->mesh->calcBoundingBox().height / 2.f, 0.f, true);
 	}
 	

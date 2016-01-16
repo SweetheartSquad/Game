@@ -6,7 +6,7 @@ Furniture::Furniture(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anch
 	RoomObject(_world, _mesh, _anchor)
 {
 	setColliderAsBoundingBox();
-	createRigidBody(25);
+	createRigidBody(0);
 }
 
 Furniture::~Furniture(void){
