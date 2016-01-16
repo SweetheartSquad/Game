@@ -212,10 +212,11 @@ void Player::update(Step * _step){
 	//If player is moving
 	if(movementMag > 0){
 
-		if(tweenBobbleChange){
-			footSteps->setPitch(pitchRand);
-			footSteps->play();
+		if(tweenBobbleChange && glmCurVelocityMagXZ >= 1.0f){
+				footSteps->setPitch(pitchRand);
+				footSteps->play();
 		}
+		
 		//set movement
 		movement = movement/movementMag * playerSpeed * mass;
 
@@ -231,8 +232,11 @@ void Player::update(Step * _step){
 
 		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
-			if(bobbleInterpolation<2){
+			if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
+				
+			}else if(glmCurVelocityMagXZ < 1.0f){
+				bobbleInterpolation = 0.f;
 			}
 
 			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
@@ -247,9 +251,13 @@ void Player::update(Step * _step){
 			
 		}
 		else{
-			if(bobbleInterpolation<1){
+			if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
+			
+			}else if(glmCurVelocityMagXZ < 1.0f){
+				bobbleInterpolation = 0.f;
 			}
+
 			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
 				std::cout << "3" << std::endl;
 				this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));

@@ -49,12 +49,12 @@
                     "positions": [
                         {
                             "positionX": -3.24, 
-                            "positionY": 5.0, 
+                            "positionY": 3.184130218380706, 
                             "positionZ": -0.11081788036269824
                         }, 
                         {
                             "positionX": 3.24, 
-                            "positionY": 5.0, 
+                            "positionY": 3.184130218380706, 
                             "positionZ": -0.11081788036269824
                         }
                     ]
@@ -71,12 +71,12 @@
                     "positions": [
                         {
                             "positionX": -3.151, 
-                            "positionY": 5.0, 
+                            "positionY": 2.2030506897238338, 
                             "positionZ": 0.20638129780875714
                         }, 
                         {
                             "positionX": 3.151, 
-                            "positionY": 5.0, 
+                            "positionY": 2.2030506897238338, 
                             "positionZ": 0.20638129780875714
                         }
                     ]
@@ -277,12 +277,12 @@
                     "positions": [
                         {
                             "positionX": 3.078, 
-                            "positionY": 2.141230472462833, 
+                            "positionY": 1.3098304554890343, 
                             "positionZ": 0.4886904192204552
                         }, 
                         {
                             "positionX": -3.077579044786222, 
-                            "positionY": 2.141230472462833, 
+                            "positionY": 1.3098304554890343, 
                             "positionZ": 0.4886904192204552
                         }
                     ]
@@ -353,12 +353,12 @@
                     "positions": [
                         {
                             "positionX": 3.421, 
-                            "positionY": 3.079216577306704, 
+                            "positionY": 3.1854941957445706, 
                             "positionZ": 0.0
                         }, 
                         {
                             "positionX": -3.420635889311009, 
-                            "positionY": 3.079216577306704, 
+                            "positionY": 3.1854941957445706, 
                             "positionZ": 0.0
                         }
                     ]
@@ -404,6 +404,44 @@
             ], 
             "id": 18, 
             "src": "table_tableTop_2.obj", 
+            "type": "tabletop"
+        }, 
+        {
+            "connectors": [], 
+            "id": 19, 
+            "src": "chair_Arm_3.obj", 
+            "type": "arm"
+        }, 
+        {
+            "connectors": [
+                {
+                    "componentType": "leg", 
+                    "positions": [
+                        {
+                            "positionX": -6.479602826064344, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": 6.425402190619936
+                        }, 
+                        {
+                            "positionX": 6.48, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": 6.425402190619936
+                        }, 
+                        {
+                            "positionX": 6.48, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": -6.425
+                        }, 
+                        {
+                            "positionX": -6.479602826064344, 
+                            "positionY": -0.18084630960911172, 
+                            "positionZ": -6.425
+                        }
+                    ]
+                }
+            ], 
+            "id": 20, 
+            "src": "table_tableTop_3.obj", 
             "type": "tabletop"
         }
     ], 
