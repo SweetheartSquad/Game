@@ -4,10 +4,30 @@
 #include <PD_Item.h>
 
 
+//texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
+
 // character
+CharacterComponent::CharacterComponent(Json::Value _json) :
+	in(_json["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), _json["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()),
+	texture(_json.get("texture", "NO_TEXTURE").asString())
+{ 
+	// out joint percentages
+	Json::Value outJson = _json["out"];
+	for(Json::ArrayIndex i = 0; i < outJson.size(); ++i){
+		out.push_back(glm::vec2(outJson[i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), outJson[i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
+	}
+
+	// child components
+	Json::Value componentsJson = _json["components"];
+	for(Json::ArrayIndex i = 0; i < componentsJson.size(); ++i){
+		components.push_back(CharacterComponent(componentsJson[i]));
+	}
+}
+
 AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
-	name(_json.get("name", "NO_NAME").asString())
+	name(_json.get("name", "NO_NAME").asString()),
+	root(_json["root"])
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
@@ -44,32 +64,29 @@ AssetItem::AssetItem(Json::Value _json, Scenario * const _scenario) :
 	description(_json.get("description", "NO_DESCRIPTION").asString()),
 	collectable(_json.get("collectable", false).asBool()),
 	pixelPerfectInteraction(_json.get("pixelPerfect", true).asBool()),
-	texture(nullptr)
+	texture(_json.get("texture", "NO_TEXTURE").asString())
 {
 	Json::Value effectsJson = _json["effects"];
 	for(Json::ArrayIndex i = 0; i < effectsJson.size(); ++i){
 		effects.push_back(sweet::Event(effectsJson[i]));
 	}
-	Json::Value texJson = _json["texture"];
-	texture = new Texture("assets/SCENARIO_EDITOR_STUFF/items/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
 }
 AssetItem * AssetItem::create(Json::Value _json, Scenario * const _scenario){
 	return new AssetItem(_json, _scenario);
 }
 AssetItem::~AssetItem(){
-	delete texture;
 }
 
 void AssetItem::load(){
 	if(!loaded){
-		texture->load();
+	//	texture->load();
 	}
 	Asset::load();
 }
 
 void AssetItem::unload(){
 	if(loaded){
-		texture->unload();
+	//	texture->unload();
 	}
 	Asset::unload();
 }

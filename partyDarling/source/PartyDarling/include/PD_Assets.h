@@ -42,8 +42,8 @@ public:
 	std::string name;
 	// the item's in-game description
 	std::string description;
-	// the item's in-game texture
-	Texture * texture;
+	// reference to the asset id for the item's in-game texture
+	std::string texture;
 
 	// if an item is collectable, interacting with it with cause it to be picked up
 	// if an item is not collectable, interacting with it will trigger its interaction event
@@ -68,7 +68,17 @@ public:
 };
 
 
+class CharacterComponent : public NodeContent{
+public:
+	glm::vec2 in;
+	std::vector<glm::vec2> out;
+	// reference to the asset id for the component's in-game texture
+	std::string texture;
+	std::vector<CharacterComponent> components;
+	
+	CharacterComponent(Json::Value _json);
 
+};
 class AssetCharacter : public Asset{
 private:
 	// constructor is private; use create instead if you need to instantiate directly
@@ -82,6 +92,7 @@ public:
 	// they are asset string ids; accessed using scenario->getAsset("item",items.at(#))
 	std::vector<std::string> items;
 	// 
+	CharacterComponent root;
 
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)

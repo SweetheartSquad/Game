@@ -6,12 +6,13 @@
 #include <TextureUtils.h>
 
 #include <PD_Assets.h>
+#include <PD_ResourceManager.h>
 
 PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader) :
 	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
 	definition(_definition)
 {
-	mesh->pushTexture2D(definition->texture);
+	mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(definition->texture)->texture);
 	mesh->setScaleMode(GL_NEAREST);
 }
 
