@@ -157,8 +157,8 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 50; ++i) {
-		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions->size() - 1);
-		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions->at(randIdx));
+		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
+		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
 		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
 		furn->freezeTransformation();
 		furn->setColliderAsBoundingBox();

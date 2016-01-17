@@ -13,7 +13,7 @@ public:
 	static Scenario * itemTextures;
 	static Scenario * componentTextures;
 	static DatabaseConnection * db;
-	static std::vector<PD_FurnitureDefinition*> * furnitureDefinitions;
+	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;
 
 	static void init();

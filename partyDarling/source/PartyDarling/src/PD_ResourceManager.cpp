@@ -8,7 +8,7 @@ Scenario * PD_ResourceManager::scenario = nullptr;
 Scenario * PD_ResourceManager::itemTextures = nullptr;
 Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
-std::vector<PD_FurnitureDefinition*> * PD_ResourceManager::furnitureDefinitions = nullptr;
+std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 
 void PD_ResourceManager::init(){
@@ -22,8 +22,22 @@ void PD_ResourceManager::init(){
 	//itemTextures = new Scenario("assets/item-textures.json");
 	//componentTextures = new Scenario("assets/component-textures.json");
 
-	furnitureDefinitions = PD_FurnitureParser::parseFurnitureDefinitions();
-	furnitureComponents = PD_FurnitureParser::parseFurnitureComponents();
+
+	// parse furniture
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto furnDef : root["furniture"]) {
+				furnitureDefinitions.push_back( new PD_FurnitureDefinition(furnDef));
+			}
+		}
+	}
+	furnitureComponents = new PD_FurnitureComponentContainer("assets/furniture.json");
 
 	db = new DatabaseConnection("data/test.db");
 
