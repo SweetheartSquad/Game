@@ -1,0 +1,119 @@
+{
+    "assets": [
+        {
+            "id": 2,
+            "src": "components/c62c7a76-55fb-495b-a208-bcb4e3ff9310.png",
+            "type": "texture"
+        },
+        {
+            "id": 3,
+            "src": "components/151b5db5-9465-4df4-ab28-422184609b50.png",
+            "type": "texture"
+        },
+        {
+            "id": 4,
+            "src": "components/0953696d-37ee-4872-86e0-3be9e060269b.png",
+            "type": "texture"
+        },
+        {
+            "id": 5,
+            "src": "components/833214ff-a029-468c-aed4-d9b691786386.png",
+            "type": "texture"
+        },
+        {
+            "id": 6,
+            "src": "components/23d263a9-b139-445b-89ff-b4201d35c6cf.png",
+            "type": "texture"
+        },
+        {
+            "id": 7,
+            "src": "components/cfd7f629-f30f-482c-8811-78fb20a565ac.png",
+            "type": "texture"
+        },
+        {
+            "id": 8,
+            "src": "components/270dc215-46fd-4776-a187-80c3e6a420ef.png",
+            "type": "texture"
+        },
+        {
+            "id": 9,
+            "src": "components/ddc6c2e3-5ef1-40a6-a403-053960449ee7.png",
+            "type": "texture"
+        },
+        {
+            "id": 10,
+            "src": "components/efb534f1-e63c-4e9f-8106-6149dccfb425.png",
+            "type": "texture"
+        },
+        {
+            "id": 11,
+            "src": "components/5513b25d-fd50-46ce-b59c-7c1bc7258241.png",
+            "type": "texture"
+        },
+        {
+            "id": 12,
+            "src": "components/08d8a67f-7408-4210-9294-d550ec65d93f.png",
+            "type": "texture"
+        },
+        {
+            "id": 13,
+            "src": "components/8a031b64-2ba5-4bd9-bd1e-c75acb1fc1d6.png",
+            "type": "texture"
+        },
+        {
+            "id": 14,
+            "src": "components/c25fd6ce-79fd-476d-8174-47caeab2fc83.png",
+            "type": "texture"
+        },
+        {
+            "id": 15,
+            "src": "components/db4fc5ee-e4db-47aa-b75a-7d4ba188fd45.png",
+            "type": "texture"
+        },
+        {
+            "id": 16,
+            "src": "components/0e75486a-211d-451f-aeeb-1afbbfe341cf.png",
+            "type": "texture"
+        },
+        {
+            "id": 17,
+            "src": "components/7719d7d0-9fdd-4bb0-9d65-f762c7da8491.png",
+            "type": "texture"
+        },
+        {
+            "id": 18,
+            "src": "components/3719e455-19af-49ea-880a-a7aeaeeb7a13.png",
+            "type": "texture"
+        },
+        {
+            "id": 19,
+            "src": "components/ea1928fc-b12c-419c-96e7-d50dc5507660.png",
+            "type": "texture"
+        },
+        {
+            "id": 20,
+            "src": "components/6374b200-57ae-4eab-969e-646675764e6f.png",
+            "type": "texture"
+        },
+        {
+            "id": 21,
+            "src": "components/e953f759-bb9b-49d4-ad5d-d109fdbabf5e.png",
+            "type": "texture"
+        },
+        {
+            "id": 22,
+            "src": "components/63d47f77-0557-413f-82f3-3ca8c9b5d12d.png",
+            "type": "texture"
+        },
+        {
+            "id": 23,
+            "src": "components/0f266e2a-483d-4a57-a6f0-bb50e17dc64b.png",
+            "type": "texture"
+        },
+        {
+            "id": 24,
+            "src": "components/edf8879f-e87f-472e-b04b-07438b324a7f.png",
+            "type": "texture"
+        }
+    ]
+}

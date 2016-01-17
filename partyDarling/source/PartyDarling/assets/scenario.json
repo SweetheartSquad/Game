@@ -200,158 +200,120 @@
       "type": "texture",
       "src": "UI/track.png"
     },
-    {
-      "id": "1",
-      "type": "conversation",
-      "dialogue": [
-        {
-          "speaker": "Leila",
-          "text": [
-              "I'm suuuuuper hungry.",
-              "Hmm, do you happen to have a carton of milk on you?"
-          ],
-          "triggers": [
-              {
-                  //"type":  "gameover",
-                  "args": {}
-              }
-          ]
-        }
-      ], 
-      "options": [
-        {
-          "text" : "Yeah, here you go.",
-          "link" : "LeilaYes"
-        },
-        {
-          "text" : "Nope.",
-          "link" : "LeilaNo"
-
-        }
-      ]
-    },
-    {
-      "id": "LeilaYes",
-      "type": "conversation",
-      "dialogue": [
-        {
-          "speaker": "Leila",
-          "text": [
-              "Wow! Thanks a bunch! Here's a donut for your services."
-          ],
-          "triggers": [
-              {
-                  "type": "changeInventory",
-                  "owner": "Leila",
-                  "item": "Milk",
-                  "addOrRemove": "1"
-              },
-              {
-                  "type": "changeInventory",
-                  "owner": "Player",
-                  "item": "Milk",
-                  "addOrRemove": "-1"
-              },
-              {
-                  "type": "changeInventory",
-                  "owner": "Player",
-                  "item": "Donut",
-                  "addOrRemove": "1"
-              }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "LeilaNo",
-      "type": "conversation",
-      "dialogue": [
-        {
-          "speaker": "Leila",
-          "text": [
-              "Oh...ok. *Fine, I'll just steal something from you, you jerk.*"
-          ],
-          "triggers": [
-              {
-                  "type": "changeInventory",
-                  "owner": "Player",
-                  "item": "Milk",
-                  "addOrRemove": "-1"
-              }
-          ]
-        }
-      ]
-    },
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {  
       "id":1,
       "name":"character1",
       "states":[  
         {  
           "id":1,
-          "name":"state1",
+          "name":"DefaultState",
           "convo":1
         }
       ],
       "items":[  
-
+        1
       ],
       "type":"character",
       "defaultState":1,
       "components":[  
         {  
-          "src":"",
+          "src":"components/5feba1a6-9287-4ea1-a45e-058965d02fba.json",
           "components":[  
             {  
-              "src":"",
+              "src":"components/4d58a26b-0b7d-46c2-b7b1-e3013fedd035.json",
               "components":[  
                 {  
-                  "src":""
+                  "src":"components/0f83a20f-c1fd-4520-8cc3-3464fc13b9ab.json"
                 },
                 {  
-                  "src":""
+                  "src":"components/ad8ea6c5-cbb2-4862-97ab-ce5394b38beb.json"
                 },
                 {  
-                  "src":""
+                  "src":"components/ad8ea6c5-cbb2-4862-97ab-ce5394b38beb.json"
                 }
               ]
             },
             {  
-              "src":""
+              "src":"components/0f24527a-af57-4c6f-908f-5382783592df.json"
             },
             {  
-              "src":""
+              "src":"components/0f24527a-af57-4c6f-908f-5382783592df.json"
             }
           ]
         }
       ]
     },
-
-
-
-
-
     {  
-      "name":"rsgresg",
+      "id":1,
+      "name":"Conversation 1",
+      "dialogue":[  
+        {  
+          "text":[  
+            "hi"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":1,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "name":"It's Milk!",
       "id":1,
       "collectable":true,
       "pixelPerfect":true,
-      "description":"grseg gres ges gres gresg",
-      "texture":3,
+      "description":"i can't drink it :(",
+      "texture":1,
       "effects":[  
 
       ],
       "type":"item"
     },
-
     {  
-      "id":3,
-      "src":"nineslicing.png",
-      "imageUrl":"https://gitlab.com/OmarClean/TestComponentProject2/raw/master/items/6b32b6cc-2481-417b-803d-9209560d4e5f.png",
-      "type":"texture"
+      "name":"Room1",
+      "id":1,
+      "description":"room",
+      "furnitureTypes":[  
+
+      ],
+      "characters":[  
+        1
+      ],
+      "items":[  
+
+      ],
+      "tags":[  
+
+      ],
+      "size":"Small",
+      "type":"room",
+      "locked":false
     }
   ]
 }

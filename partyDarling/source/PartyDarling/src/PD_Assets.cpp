@@ -20,27 +20,35 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}
 
-		for(Json::ArrayIndex i = 0; i < componentJson["joints"].size(); ++i){
-			Json::Value jointPercentagesJson = componentJson["joints"][i]["percentages"];
-			glm::vec2 jointPercentages = glm::vec2(jointPercentagesJson.get("x", 0.5f).asFloat(), jointPercentagesJson.get("y", 0.5f).asFloat());
-			if(i == 0){
-				// first joint is in joint
-				in = jointPercentages;
-			}else{
-				// other joints are out joints
-				out.push_back(jointPercentages);
-			}
+		// there can't be components in both the skeletal definition and the component definition
+		// because what would that even do
+		if(componentJson["components"].size() > 0 && _json["components"].size() > 0){
+			throw "hey you can't do that dummy";
+		}
+
+		in = glm::vec2(componentJson["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat());
+
+		for(Json::ArrayIndex i = 0; i < componentJson["out"].size(); ++i){
+			Json::Value jointPercentagesJson = componentJson["out"][i];
+			// other joints are out joints
+			out.push_back(glm::vec2(componentJson["out"][i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["out"][i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
 		}
 		// get texture reference
-		texture = componentJson["textures"][0].get("id", "NO_TEXTURE").asString();
+		texture = componentJson.get("texture", "NO_TEXTURE").asString();
+
+		// parse child components from component definition
+		Json::Value childComponentsJson = componentJson["components"];
+		for(Json::ArrayIndex i = 0; i < childComponentsJson.size(); ++i){
+			components.push_back(CharacterComponentDefinition(childComponentsJson[i]));
+		}
 	}
 
 
 
-	// parse child components
-	Json::Value componentsJson = _json["components"];
-	for(Json::ArrayIndex i = 0; i < componentsJson.size(); ++i){
-		components.push_back(CharacterComponentDefinition(componentsJson[i]));
+	// parse child components from skeletal definition
+	Json::Value childComponentsJson = _json["components"];
+	for(Json::ArrayIndex i = 0; i < childComponentsJson.size(); ++i){
+		components.push_back(CharacterComponentDefinition(childComponentsJson[i]));
 	}
 }
 
