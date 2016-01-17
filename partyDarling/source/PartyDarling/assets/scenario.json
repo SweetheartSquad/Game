@@ -186,6 +186,12 @@
       "type": "texture",
       "src": "GRID.png"
     },
+    {
+      "id": "NINESLICED",
+      "type": "texture",
+      "src": "nineslicing.png",
+      "nineSliced": true
+    },
 
     {
       "id": "SLIDER-THUMB",
