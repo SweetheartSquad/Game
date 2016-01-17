@@ -15,7 +15,7 @@ void PD_Game::addSplashes(){
 }
 
 PD_Game::PD_Game() :
-	Game("test", new PD_Scene_RoomGenerationTest(this), true)
+	Game("test", new PD_Scene_CombinedTests(this), true)
 {
 	printFPS = false;
 }

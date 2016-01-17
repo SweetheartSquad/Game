@@ -11,10 +11,13 @@ public:
 	std::string componentType;
 	bool required;
 	std::vector<PD_FurnitureComponentDefinition *> outComponents;
-	std::vector<int>multipliers;
-	int multiplier;	
+	unsigned long int multiplier;
+
+	glm::vec3 scale;
 
 	explicit PD_FurnitureComponentDefinition(Json::Value _jsonDef);
-	
-	MeshEntity * buildChildren(PD_FurnitureComponentContainer * _componentContainer, int _multiplier, std::vector<glm::vec3> _positions) const;
+
+	// recusively builds this component and all of its children,
+	// returning the combined mesh
+	TriMesh * build();
 };

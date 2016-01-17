@@ -565,20 +565,15 @@
             "components": [
                 {
                     "componentType": "seat", 
-                    "multipliers": [
-                        1, 
-                        4
-                    ], 
+                    "multiplier": 1, 
                     "outComponents": [
                         {
                             "componentType": "back", 
-                            "multipliers": [
-                                2
-                            ], 
+                            "multiplier": 1, 
                             "outComponents": [
                                 {
                                     "componentType": "arm", 
-                                    "multipliers": [], 
+                                    "multiplier": 2,
                                     "required": false
                                 }
                             ], 
@@ -587,7 +582,7 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multipliers": [], 
+                            "multiplier": 4, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -603,19 +598,15 @@
             "components": [
                 {
                     "componentType": "lampbase", 
-                    "multipliers": [
-                        1
-                    ], 
+                    "multiplier": 1, 
                     "outComponents": [
                         {
                             "componentType": "lampshaft", 
-                            "multipliers": [
-                                1
-                            ], 
+                            "multiplier": 1, 
                             "outComponents": [
                                 {
                                     "componentType": "lampshade", 
-                                    "multipliers": [], 
+                                    "multiplier": 1,
                                     "required": true,
 									"scale": [1.0,1.0,1.0]
                                 }
@@ -634,13 +625,11 @@
             "components": [
                 {
                     "componentType": "tabletop", 
-                    "multipliers": [
-                        4
-                    ], 
+                    "multiplier": 1, 
                     "outComponents": [
                         {
                             "componentType": "leg", 
-                            "multipliers": [], 
+                            "multiplier": 4, 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         }

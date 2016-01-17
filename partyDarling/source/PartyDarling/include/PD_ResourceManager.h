@@ -4,6 +4,8 @@
 
 #include <scenario\Scenario.h>
 #include <DatabaseConnection.h>
+#include <PD_FurnitureDefinition.h>
+#include <PD_FurnitureParser.h>
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -11,6 +13,8 @@ public:
 	static Scenario * itemTextures;
 	static Scenario * componentTextures;
 	static DatabaseConnection * db;
+	static std::vector<PD_FurnitureDefinition*> * furnitureDefinitions;
+	static PD_FurnitureComponentContainer * furnitureComponents;
 
 	static void init();
 
