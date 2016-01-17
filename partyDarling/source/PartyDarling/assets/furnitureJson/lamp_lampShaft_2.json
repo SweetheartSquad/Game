@@ -1,0 +1,17 @@
+{
+            "connectors": [
+                {
+                    "componentType": "lampshade", 
+                    "positions": [
+                        [
+                            0.0, 
+                            6.608179314903981, 
+                            0.0
+                        ]
+                    ]
+                }
+            ], 
+            "id": 26, 
+            "src": "lamp_lampShaft_2.obj", 
+            "type": "lampshaft"
+        }

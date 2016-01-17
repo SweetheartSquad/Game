@@ -1,562 +1,163 @@
 {
     "components": [
         {
-            "connectors": [
-                {
-                    "componentType": "back", 
-                    "positions": [
-                        [
-                            0.0, 
-                            0.29, 
-                            -3.416
-                        ]
-                    ]
-                }, 
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            -2.761, 
-                            -0.29, 
-                            3.3334810666582944
-                        ], 
-                        [
-                            2.7608645383310577, 
-                            -0.29, 
-                            3.3334810666582944
-                        ], 
-                        [
-                            -2.761, 
-                            -0.29, 
-                            -3.416
-                        ], 
-                        [
-                            2.7608645383310577, 
-                            -0.29, 
-                            -3.416
-                        ]
-                    ]
-                }
-            ], 
             "id": 1, 
-            "src": "chair_Seat_1.obj", 
+            "src": "furnitureJson/chair_Seat_1.json", 
             "type": "seat"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "arm", 
-                    "positions": [
-                        [
-                            -3.24, 
-                            3.184130218380706, 
-                            -0.11081788036269824
-                        ], 
-                        [
-                            3.24, 
-                            3.184130218380706, 
-                            -0.11081788036269824
-                        ]
-                    ]
-                }
-            ], 
             "id": 2, 
-            "src": "chair_Back_1.obj", 
+            "src": "furnitureJson/chair_Back_1.json", 
             "type": "back"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "arm", 
-                    "positions": [
-                        [
-                            -3.151, 
-                            2.2030506897238338, 
-                            0.20638129780875714
-                        ], 
-                        [
-                            3.151, 
-                            2.2030506897238338, 
-                            0.20638129780875714
-                        ]
-                    ]
-                }
-            ], 
             "id": 3, 
-            "src": "chair_Back_2.obj", 
+            "src": "furnitureJson/chair_Back_2.json", 
             "type": "back"
         }, 
         {
-            "connectors": [], 
             "id": 4, 
-            "src": "chair_Leg_1.obj", 
+            "src": "furnitureJson/chair_Leg_1.json", 
             "type": "leg"
         }, 
         {
-            "connectors": [], 
             "id": 5, 
-            "src": "chair_Leg_2.obj", 
+            "src": "furnitureJson/chair_Leg_2.json", 
             "type": "leg"
         }, 
         {
-            "connectors": [], 
             "id": 6, 
-            "src": "chair_legSupport_1.obj", 
+            "src": "furnitureJson/chair_legSupport_1.json", 
             "type": "legSupport"
         }, 
         {
-            "connectors": [], 
             "id": 7, 
-            "src": "chair_Arm_1.obj", 
+            "src": "furnitureJson/chair_Arm_1.json", 
             "type": "arm"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "back", 
-                    "positions": [
-                        [
-                            2.894444676814736, 
-                            -0.29, 
-                            -3.416
-                        ], 
-                        [
-                            -2.894, 
-                            -0.29, 
-                            -3.416
-                        ], 
-                        [
-                            -3.8292601661390737, 
-                            -0.29, 
-                            3.153548427055315
-                        ], 
-                        [
-                            3.829, 
-                            -0.29, 
-                            3.153548427055315
-                        ]
-                    ]
-                }, 
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            2.894444676814736, 
-                            -0.29, 
-                            -3.416
-                        ], 
-                        [
-                            -2.894, 
-                            -0.29, 
-                            -3.416
-                        ], 
-                        [
-                            -3.8292601661390737, 
-                            -0.29, 
-                            3.153548427055315
-                        ], 
-                        [
-                            3.829, 
-                            -0.29, 
-                            3.153548427055315
-                        ]
-                    ]
-                }
-            ], 
             "id": 8, 
-            "src": "chair_Seat_2.obj", 
+            "src": "furnitureJson/chair_Seat_2.json", 
             "type": "seat"
         }, 
         {
-            "connectors": [], 
             "id": 8, 
-            "src": "chair_Arm_2.obj", 
+            "src": "furnitureJson/chair_Arm_2.json", 
             "type": "arm"
         }, 
         {
-            "connectors": [], 
             "id": 9, 
-            "src": "chair_legSupport_2.obj", 
+            "src": "furnitureJson/chair_legSupport_2.json", 
             "type": "legSupport"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            2.5661128722298288, 
-                            -0.2919154296586808, 
-                            -2.722423264495295
-                        ], 
-                        [
-                            2.5661128722298288, 
-                            -0.2919154296586808, 
-                            3.2214892371922046
-                        ], 
-                        [
-                            -2.600456333799952, 
-                            -0.2919154296586808, 
-                            3.2214892371922046
-                        ], 
-                        [
-                            -2.600456333799952, 
-                            -0.2919154296586808, 
-                            -2.722423264495295
-                        ]
-                    ]
-                }, 
-                {
-                    "componentType": "back", 
-                    "positions": [
-                        [
-                            0.0, 
-                            1.227368010350328, 
-                            -4.202203721618325
-                        ]
-                    ]
-                }
-            ], 
             "id": 10, 
-            "src": "chair_Seat_3.obj", 
+            "src": "furnitureJson/chair_Seat_3.json", 
             "type": "seat"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            -9.0, 
-                            -0.1983142790773161, 
-                            -18.0
-                        ], 
-                        [
-                            -9.0, 
-                            -0.1983142790773161, 
-                            18.0
-                        ], 
-                        [
-                            9.0, 
-                            -0.1983142790773161, 
-                            18.0
-                        ], 
-                        [
-                            9.0, 
-                            -0.1983142790773161, 
-                            -18.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 11, 
-            "src": "table_tableTop_1.obj", 
+            "src": "furnitureJson/table_tableTop_1.json", 
             "type": "tabletop"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "arm", 
-                    "positions": [
-                        [
-                            3.078, 
-                            1.3098304554890343, 
-                            0.4886904192204552
-                        ], 
-                        [
-                            -3.077579044786222, 
-                            1.3098304554890343, 
-                            0.4886904192204552
-                        ]
-                    ]
-                }
-            ], 
             "id": 12, 
-            "src": "chair_Back_4.obj", 
+            "src": "furnitureJson/chair_Back_4.json", 
             "type": "back"
         }, 
         {
-            "connectors": [], 
             "id": 13, 
-            "src": "chair_Arm_4.obj", 
+            "src": "furnitureJson/chair_Arm_4.json", 
             "type": "arm"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            -3.7076315202996186, 
-                            -0.20316717573282606, 
-                            3.3098851024154
-                        ], 
-                        [
-                            3.708, 
-                            -0.20316717573282606, 
-                            3.3098851024154
-                        ], 
-                        [
-                            -2.859506286379621, 
-                            -0.20316717573282606, 
-                            -3.3360897185287532
-                        ], 
-                        [
-                            2.86, 
-                            -0.20316717573282606, 
-                            -3.3360897185287532
-                        ]
-                    ]
-                }, 
-                {
-                    "componentType": "back", 
-                    "positions": [
-                        [
-                            0.0, 
-                            0.20076240559104774, 
-                            -3.446690688869433
-                        ]
-                    ]
-                }
-            ], 
             "id": 14, 
-            "src": "chair_Seat_4.obj", 
+            "src": "furnitureJson/chair_Seat_4.json", 
             "type": "seat"
         }, 
         {
-            "connectors": [], 
             "id": 15, 
-            "src": "chair_Leg_4.obj", 
+            "src": "furnitureJson/chair_Leg_4.json", 
             "type": "leg"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "arm", 
-                    "positions": [
-                        [
-                            3.421, 
-                            3.1854941957445706, 
-                            0.0
-                        ], 
-                        [
-                            -3.420635889311009, 
-                            3.1854941957445706, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 16, 
-            "src": "chair_Back_3.obj", 
+            "src": "furnitureJson/chair_Back_3.json", 
             "type": "back"
         }, 
         {
-            "connectors": [], 
             "id": 17, 
-            "src": "chair_Leg_3.obj", 
+            "src": "furnitureJson/chair_Leg_3.json", 
             "type": "leg"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            6.216287299674219, 
-                            -0.14429525249808162, 
-                            7.659543567020765
-                        ], 
-                        [
-                            6.216287299674219, 
-                            -0.14429525249808162, 
-                            -7.66
-                        ], 
-                        [
-                            -6.216, 
-                            -0.14429525249808162, 
-                            -7.66
-                        ], 
-                        [
-                            -6.216, 
-                            -0.14429525249808162, 
-                            7.659543567020765
-                        ]
-                    ]
-                }
-            ], 
             "id": 18, 
-            "src": "table_tableTop_2.obj", 
+            "src": "furnitureJson/table_tableTop_2.json", 
             "type": "tabletop"
         }, 
         {
-            "connectors": [], 
             "id": 19, 
-            "src": "chair_Arm_3.obj", 
+            "src": "furnitureJson/chair_Arm_3.json", 
             "type": "arm"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "leg", 
-                    "positions": [
-                        [
-                            -6.479602826064344, 
-                            -0.18084630960911172, 
-                            6.425402190619936
-                        ], 
-                        [
-                            6.48, 
-                            -0.18084630960911172, 
-                            6.425402190619936
-                        ], 
-                        [
-                            6.48, 
-                            -0.18084630960911172, 
-                            -6.425
-                        ], 
-                        [
-                            -6.479602826064344, 
-                            -0.18084630960911172, 
-                            -6.425
-                        ]
-                    ]
-                }
-            ], 
             "id": 20, 
-            "src": "table_tableTop_3.obj", 
+            "src": "furnitureJson/table_tableTop_3.json", 
             "type": "tabletop"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshade", 
-                    "positions": [
-                        [
-                            0.0, 
-                            1.9097709655761719, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 22, 
-            "src": "lamp_lampShaft_1.obj", 
+            "src": "furnitureJson/lamp_lampShaft_1.json", 
             "type": "lampshaft"
         }, 
         {
-            "connectors": [], 
             "id": 23, 
-            "src": "lamp_lampShade_1.obj", 
+            "src": "furnitureJson/lamp_lampShade_1.json", 
             "type": "lampshade"
         }, 
         {
-            "connectors": [], 
             "id": 24, 
-            "src": "lamp_lampShade_2.obj", 
+            "src": "furnitureJson/lamp_lampShade_2.json", 
             "type": "lampshade"
         }, 
         {
-            "connectors": [], 
             "id": 25, 
-            "src": "lamp_lampShade_3.obj", 
+            "src": "furnitureJson/lamp_lampShade_3.json", 
             "type": "lampshade"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshade", 
-                    "positions": [
-                        [
-                            0.0, 
-                            6.608179314903981, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 26, 
-            "src": "lamp_lampShaft_2.obj", 
+            "src": "furnitureJson/lamp_lampShaft_2.json", 
             "type": "lampshaft"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshaft", 
-                    "positions": [
-                        [
-                            0.0, 
-                            0.27063686294171424, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 27, 
-            "src": "lamp_lampBase_2.obj", 
+            "src": "furnitureJson/lamp_lampBase_2.json", 
             "type": "lampbase"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshaft", 
-                    "positions": [
-                        [
-                            0.0, 
-                            0.8997349739074707, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 28, 
-            "src": "lamp_lampBase_1.obj", 
+            "src": "furnitureJson/lamp_lampBase_1.json", 
             "type": "lampbase"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshaft", 
-                    "positions": [
-                        [
-                            0.0, 
-                            1.5826759934425354, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 29, 
-            "src": "lamp_lampBase_3.obj", 
+            "src": "furnitureJson/lamp_lampBase_3.json", 
             "type": "lampbase"
         }, 
         {
-            "connectors": [
-                {
-                    "componentType": "lampshade", 
-                    "positions": [
-                        [
-                            0.0, 
-                            1.8054739236831665, 
-                            0.0
-                        ]
-                    ]
-                }
-            ], 
             "id": 30, 
-            "src": "lamp_lampShaft_3.obj", 
+            "src": "furnitureJson/lamp_lampShaft_3.json", 
             "type": "lampshaft"
         }, 
         {
-            "connectors": [], 
             "id": 31, 
-            "src": "lamp_lampShade_4.obj", 
+            "src": "furnitureJson/lamp_lampShade_4.json", 
             "type": "lampshade"
         }, 
         {
-            "connectors": [], 
             "id": 32, 
-            "src": "lamp_lampShade_5.obj", 
+            "src": "furnitureJson/lamp_lampShade_5.obj", 
             "type": "lampshade"
         }
     ], 
