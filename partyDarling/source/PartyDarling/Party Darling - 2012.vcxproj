@@ -24,6 +24,8 @@
     <ClInclude Include="include\PD_FurnitureDefinition.h" />
     <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
+    <ClInclude Include="include\PD_House.h" />
+    <ClInclude Include="include\PD_HouseGenerator.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_InsultGenerator.h" />
     <ClInclude Include="include\PD_Item.h" />
@@ -62,6 +64,8 @@
     <ClCompile Include="src\PD_FurnitureDefinition.cpp" />
     <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
+    <ClCompile Include="src\PD_House.cpp" />
+    <ClCompile Include="src\PD_HouseGenerator.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
     <ClCompile Include="src\PD_InsultGenerator.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />

@@ -28,7 +28,8 @@ class Slot{
 
 class RoomObject: public BulletMeshEntity {
 public:
-	
+	std::vector<std::string> tags;
+
 	Anchor_t anchor;
 	sweet::Box boundingBox;
 	// map of vectors of available slots per side of an object
