@@ -163,13 +163,13 @@
     ], 
     "furniture": [
         {
-            "type": "chair"
+            "src": "furnitureTypes/chair.json"
         }, 
         {
-            "type": "lamp"
+            "src": "furnitureTypes/lamp.json"
         }, 
         {
-            "type": "table"
+            "src": "furnitureTypes/table.json"
         }
     ]
 }

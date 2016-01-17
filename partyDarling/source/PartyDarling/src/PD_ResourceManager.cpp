@@ -33,7 +33,14 @@ void PD_ResourceManager::init(){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
 		}else{
 			for(auto furnDef : root["furniture"]) {
-				furnitureDefinitions.push_back( new PD_FurnitureDefinition(furnDef));
+				// parse the external json file
+				Json::Value componentRoot;
+				parsingSuccessful = reader.parse(FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
+				if(!parsingSuccessful){
+					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+				}
+
+				furnitureDefinitions.push_back(new PD_FurnitureDefinition(componentRoot));
 			}
 		}
 	}
