@@ -1,6 +1,6 @@
 {
             "connectors": [], 
             "id": 23, 
-            "src": "lamp_lampShade_1.json", 
+            "src": "lamp_lampShade_1.obj", 
             "type": "lampshade"
         }

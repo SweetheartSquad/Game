@@ -157,7 +157,7 @@
         }, 
         {
             "id": 32, 
-            "src": "furnitureJson/lamp_lampShade_5.obj", 
+            "src": "furnitureJson/lamp_lampShade_5.json", 
             "type": "lampshade"
         }
     ], 

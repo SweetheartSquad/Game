@@ -38,22 +38,25 @@ std::vector<PD_FurnitureDefinition *> * PD_FurnitureParser::parseFurnitureDefini
 
 
 PD_FurnitureComponentContainer * PD_FurnitureParser::parseFurnitureComponents() {
-
 	PD_FurnitureComponentContainer * container = new PD_FurnitureComponentContainer();
-
 	Json::Value root;
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
-	bool parsingSuccessful = reader.parse( jsonLoaded, root );
+	bool parsingSuccessful = reader.parse( FileUtils::readFile("assets/furniture.json"), root );
 	if(!parsingSuccessful){
-		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 	}else{
 		for(auto furnDef : root["components"]) {
-			auto comp = new PD_FurnitureComponent(furnDef);
-			if(container->componentsMap.find(comp->type) == container->componentsMap.end()) {
-				container->componentsMap[comp->type] = std::vector<PD_FurnitureComponent *>();
+			// parse the external json file
+			Json::Value componentRoot;
+			parsingSuccessful = reader.parse(FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
+			if(!parsingSuccessful){
+				Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 			}
-			container->componentsMap[comp->type].push_back( new PD_FurnitureComponent(furnDef));
+
+			// create the component based on the external json file
+			// and store it in the map of vectors
+			auto comp = new PD_FurnitureComponent(componentRoot);
+			container->componentsMap[comp->type].push_back(comp);
 		}
 	}
 	return container;

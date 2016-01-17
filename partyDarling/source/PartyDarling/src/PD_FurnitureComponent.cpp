@@ -6,12 +6,12 @@
 PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) :
 	id(_jsonDef.get("id", -1).asInt()),
 	type(_jsonDef.get("type", -1).asString()),
-	src(_jsonDef.get("src", "UNDEFINED").asString()),
+	src(_jsonDef.get("src", "NO_SRC").asString()),
 	mesh(Resource::loadMeshFromObj("assets/meshes/furniture/" + src).at(0))
 {
 	
 	for(auto jsonObj : _jsonDef["connectors"]) {
-		std::string compType = jsonObj.get("componentType", "UNDEFINED").asString();
+		std::string compType = jsonObj.get("componentType", "NO_TYPE").asString();
 		connectors[compType] = std::vector<glm::vec3>();
 		
 
