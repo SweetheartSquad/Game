@@ -155,7 +155,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	std::vector<PD_FurnitureDefinition*> * definitions = PD_FurnitureParser::parseFurnitureDefinitions();
 	PD_FurnitureComponentContainer * components = PD_FurnitureParser::parseFurnitureComponents();
 	
-	sweet::NumberUtils::seed(876876478365);
+	sweet::NumberUtils::seed(87537658365);
 
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 50; ++i) {
