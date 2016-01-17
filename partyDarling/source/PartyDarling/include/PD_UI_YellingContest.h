@@ -19,8 +19,11 @@ private:
 	std::vector<NodeUI *> lives;
 	std::vector<NodeUI *> lostLives;
 
-	float playerTimerLength;
-	float playerTimer;
+	float playerQuestionTimerLength;
+	float playerQuestionTimer;
+
+	float playerAnswerTimerLength;
+	float playerAnswerTimer;
 
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;

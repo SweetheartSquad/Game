@@ -23,8 +23,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	confidence(50.f),
-	playerTimerLength(1.f),
-	playerTimer(1.5f),
+	playerQuestionTimerLength(2.f),
+	playerQuestionTimer(0),
+	playerAnswerTimerLength(1.f),
+	playerAnswerTimer(0),
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
@@ -126,7 +128,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleText->verticalAlignment = kMIDDLE;
 	playerBubble->addChild(playerBubbleText);
 	
-	playerTimerSlider = new SliderControlled(_bulletWorld, &playerTimer, 0, playerTimerLength, true, true);
+	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
 	playerTimerSlider->setRationalWidth(0.25f);
 	playerTimerSlider->setHeight(50.f);
 	playerTimerSlider->setBackgroundColour(0, 1.f, 0);
@@ -265,13 +267,18 @@ void PD_UI_YellingContest::update(Step * _step){
 					wordHighlight->childTransform->translate(pos, false);
 				}
 			}else{
-				// Increment player timer
-				if(playerTimer >= playerTimerLength){
-					// Out of time, enemy's turn!
-					incrementConfidence(-damage);
-					setUIMode(false);
+				if(playerQuestionTimer >= playerQuestionTimerLength){
+					// Increment player answer timer
+					if(playerAnswerTimer >= playerAnswerTimerLength){
+						// Out of time, enemy's turn!
+						incrementConfidence(-damage);
+						setUIMode(false);
+					}else{
+						playerAnswerTimer += _step->getDeltaTime();
+					}
 				}else{
-					playerTimer += _step->getDeltaTime();
+					// Increment player question timer
+					playerQuestionTimer += _step->getDeltaTime();
 				}
 			}
 		}else{
@@ -458,7 +465,8 @@ void PD_UI_YellingContest::setPlayerText(){
 	pBubbleBtn2->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
 	
 	// Reset timer
-	playerTimer = 0;
+	playerQuestionTimer = 0;
+	playerAnswerTimer = 0;
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective){

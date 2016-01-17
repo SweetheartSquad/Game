@@ -47,6 +47,30 @@
       "type": "texture",
       "src": "ryan.png"
     },
+	
+	{
+      "id": "YELLING-CONTEST-OFFENCE-BUBBLE",
+      "type": "texture",
+      "src": "yelling contest/blueBubble.png"
+    },
+	
+	{
+      "id": "YELLING-CONTEST-OFFENCE-BUBBLE-TAIL",
+      "type": "texture",
+      "src": "yelling contest/blueBubble-tail.png"
+    },
+
+	{
+      "id": "YELLING-CONTEST-OFFENCE-CHOICE",
+      "type": "texture",
+      "src": "yelling contest/blueBubble-text.png"
+    },
+
+	{
+      "id": "YELLING-CONTEST-OFFENCE-ARROWS",
+      "type": "texture",
+      "src": "yelling contest/blueBubble-arrows.png"
+    },
 
 	{
       "id": "YELLING-CONTEST-CURSOR",
