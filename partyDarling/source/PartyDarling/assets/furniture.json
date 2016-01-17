@@ -159,6 +159,10 @@
             "id": 32, 
             "src": "furnitureJson/lamp_lampShade_5.json", 
             "type": "lampshade"
+        }, 
+        {
+            "id": 33, 
+            "src": "furnitureJson/chair_Seat_5.json"
         }
     ], 
     "furniture": [
