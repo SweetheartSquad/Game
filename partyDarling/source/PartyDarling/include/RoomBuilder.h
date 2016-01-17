@@ -20,12 +20,6 @@ enum RoomObject_t{
 	ITEM
 };
 
-enum Tile_t{
-	kNONE,
-	kSIDE,
-	kCORNER
-};
-
 enum Side_t;
 
 class BulletWorld;
@@ -80,6 +74,7 @@ public:
 	// Furniture placement
 	bool search(RoomObject * child, std::vector<RoomObject *> objects, Room * room);
 	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
+	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 
 	// Room boundaries builder functions
 	void createWalls(unsigned long int _thresh);
