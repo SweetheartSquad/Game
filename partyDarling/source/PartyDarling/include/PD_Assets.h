@@ -68,15 +68,15 @@ public:
 };
 
 
-class CharacterComponent : public NodeContent{
+class CharacterComponentDefinition : public NodeContent{
 public:
 	glm::vec2 in;
 	std::vector<glm::vec2> out;
 	// reference to the asset id for the component's in-game texture
 	std::string texture;
-	std::vector<CharacterComponent> components;
+	std::vector<CharacterComponentDefinition> components;
 	
-	CharacterComponent(Json::Value _json);
+	CharacterComponentDefinition(Json::Value _json);
 
 };
 
@@ -100,7 +100,7 @@ public:
 	// they are asset string ids; accessed using scenario->getAsset("item",items.at(#))
 	std::vector<std::string> items;
 	// 
-	CharacterComponent root;
+	CharacterComponentDefinition root;
 
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)

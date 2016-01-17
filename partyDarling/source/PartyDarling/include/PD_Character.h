@@ -16,7 +16,8 @@
 
 class Conversation;
 class PersonRenderer;
-
+class AssetCharacter;
+class CharacterComponentDefinition;
 class PersonButt : public NodeBulletBody{
 public:
 	PersonRenderer * person;
@@ -35,6 +36,8 @@ public:
 	static std::vector<PersonComponent *> getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped = false);
 
 	glm::vec2 getOut(unsigned long int _index);
+
+	PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped);
 private:
 	PersonComponent(Json::Value _json, Texture * _paletteTex, bool _flipped);
 };
@@ -97,7 +100,7 @@ public:
 		* footR;
 
 	Texture * paletteTex;
-	PersonRenderer(BulletWorld * _world);
+	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition);
 	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default);

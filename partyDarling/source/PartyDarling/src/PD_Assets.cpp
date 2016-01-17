@@ -7,20 +7,40 @@
 //texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
 
 // character
-CharacterComponent::CharacterComponent(Json::Value _json) :
-	in(_json["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), _json["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()),
-	texture(_json.get("texture", "NO_TEXTURE").asString())
+CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
+	in(0,0),
+	texture("")
 { 
-	// out joint percentages
-	Json::Value outJson = _json["out"];
-	for(Json::ArrayIndex i = 0; i < outJson.size(); ++i){
-		out.push_back(glm::vec2(outJson[i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), outJson[i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
+	// parse external component file
+	{
+		Json::Reader reader;
+		Json::Value componentJson;
+		bool parsingSuccesful = reader.parse(FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
+		if(!parsingSuccesful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+		}
+
+		for(Json::ArrayIndex i = 0; i < componentJson["joints"].size(); ++i){
+			Json::Value jointPercentagesJson = componentJson["joints"][i]["percentages"];
+			glm::vec2 jointPercentages = glm::vec2(jointPercentagesJson.get("x", 0.5f).asFloat(), jointPercentagesJson.get("y", 0.5f).asFloat());
+			if(i == 0){
+				// first joint is in joint
+				in = jointPercentages;
+			}else{
+				// other joints are out joints
+				out.push_back(jointPercentages);
+			}
+		}
+		// get texture reference
+		texture = componentJson["textures"][0].get("id", "NO_TEXTURE").asString();
 	}
 
-	// child components
+
+
+	// parse child components
 	Json::Value componentsJson = _json["components"];
 	for(Json::ArrayIndex i = 0; i < componentsJson.size(); ++i){
-		components.push_back(CharacterComponent(componentsJson[i]));
+		components.push_back(CharacterComponentDefinition(componentsJson[i]));
 	}
 }
 
@@ -58,7 +78,7 @@ void AssetCharacter::unload(){
 }
 
 PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
-	PersonRenderer * res = new PersonRenderer(_world);
+	PersonRenderer * res = new PersonRenderer(_world, this);
 	res->setShader(_shader, true);
 	res->state = &states.at(defaultState);
 	return res;

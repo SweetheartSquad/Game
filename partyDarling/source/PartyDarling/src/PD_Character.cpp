@@ -1,10 +1,12 @@
 #pragma once
 
 #include <PD_Character.h>
+#include <PD_Assets.h>
 
 #include <MeshInterface.h>
 #include <MeshFactory.h>
 #include <PD_ResourceManager.h>
+#include <PD_Assets.h>
 #include <NumberUtils.h>
 #include <TextureColourTable.h>
 
@@ -19,7 +21,7 @@ PersonButt::PersonButt(BulletWorld * _world, PersonRenderer * _person) :
 
 Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor),
-	pr(new PersonRenderer(_world))
+	pr(new PersonRenderer(_world, nullptr)) // TODO: fix this
 {
 	setColliderAsCapsule(0.5f,1.f);
 	createRigidBody(25);
@@ -96,6 +98,46 @@ PersonComponent::PersonComponent(Json::Value _json, Texture * _paletteTex, bool 
 	mesh->scaleModeMin = GL_NEAREST;
 }
 
+PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped) :
+	Sprite(),
+	flipped(_flipped)
+{
+	// get texture
+	AssetTexture * tex = PD_ResourceManager::componentTextures->getTexture(_definition->texture);//new Texture("assets/textures/character components/" + _json["src"].asString(), true, true);
+	tex->load();
+
+	// apply palette + texture
+	mesh->pushTexture2D(_paletteTex);
+	mesh->pushTexture2D(tex->texture);
+	
+	in = _definition->in;
+	out = _definition->out;
+	// handle flipping
+	if(flipped){
+		meshTransform->scale(-1, 1, 1);
+		in.x = 1 - in.x;
+		for(glm::vec2 & o : out){
+			o.x = 1 - o.x;
+		}
+	}
+	
+	// multiply percentage coordinates by width/height to corresponding to specific texture
+	in.x *= tex->texture->width;
+	in.y *= tex->texture->height;
+	for(glm::vec2 & o : out){
+		o.x *= tex->texture->width;
+		o.y *= tex->texture->height;
+	}
+	
+	// scale and translate the mesh into position
+	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
+	meshTransform->translate(tex->texture->width*0.5f, tex->texture->height*0.5f, 0);
+	meshTransform->translate(-in.x, -in.y, 0);
+
+	mesh->scaleModeMag = GL_NEAREST;
+	mesh->scaleModeMin = GL_NEAREST;
+}
+
 glm::vec2 PersonComponent::getOut(unsigned long int _index){
 	return (out.size() > 0 ? out.at(_index) : glm::vec2(0,0)) - in;
 }
@@ -118,7 +160,7 @@ PersonState::PersonState(Json::Value _json) :
 {
 }
 
-PersonRenderer::PersonRenderer(BulletWorld * _world) :
+PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition) :
 	paletteTex(new TextureColourTable(false)),
 	timer(0),
 	state(nullptr)
@@ -139,9 +181,9 @@ PersonRenderer::PersonRenderer(BulletWorld * _world) :
 				Json::Value asset = assets[j];
 
 				if(asset["category"].asString() == "pelvis"){
-					pelvis = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
+					pelvis = new PersonComponent(&_definition->root, paletteTex, false);//PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
 				}else if(asset["category"].asString() == "torso"){
-					torso = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
+					torso = new PersonComponent(&_definition->root.components.at(0), paletteTex, false);// = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
 				}else if(asset["category"].asString() == "head"){
 					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
 					jaw = components.at(0);

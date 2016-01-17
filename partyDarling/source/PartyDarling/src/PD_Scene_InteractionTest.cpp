@@ -109,7 +109,7 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	uiDialogue->setRationalHeight(1.f, &uiLayer);
 	uiDialogue->setRationalWidth(1.f, &uiLayer);
 
-	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
+	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter*>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);
 	childTransform->addChild(testCharacter);
 	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
