@@ -47,7 +47,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
-	joystick(nullptr)
+	joystick(nullptr),
+	jumpTime(0.0)
 {
 	//init movement vars
 	playerSpeed = 0.1f;
@@ -63,7 +64,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	this->body->setFriction(1);
 	this->body->setAngularFactor(btVector3(0,0,0));
 	this->body->setLinearFactor(btVector3(1,0.9,1));
-	this->maxVelocity = btVector3(-1,-1,-1);
+	this->maxVelocity = btVector3(20,20,20);
 
 	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
@@ -78,6 +79,15 @@ Player::Player(BulletWorld * _bulletWorld) :
 	currentBobbleTween = 0;
 	lastBobbleTween = 0;
 	tweenBobbleChange = false;
+
+	headZoom = new Animation<float>(&zoomVal);
+	//headZoom->loopType = Animation<float>::LoopType::kCONSTANT;
+	headZoomTween1 = new Tween<float>(0.15f,2.0f,Easing::kEASE_IN_OUT_CUBIC);
+	headZoomTween2 = new Tween<float>(0.15f,0.0f,Easing::kEASE_IN_OUT_CUBIC);
+	headZoom->startValue= 1.f;
+	headZoom->tweens.push_back(headZoomTween1);
+	headZoom->tweens.push_back(headZoomTween2);
+	headZoom->hasStart = true;
 
 	//Default Interpolation, controls how extremem head bobble is
 	bobbleInterpolation = 0.f;
@@ -145,14 +155,15 @@ void Player::update(Step * _step){
 		playerCamera->pitch = -80;
 	}
 
-	
-
 	currentYVel = curVelocity.y();
-	if (currentYVel > 0 && lastYVel < 0 && isGrounded){
+	if (currentYVel > 0.f && lastYVel < 0.f && isGrounded && jumpTime > 0.025f){
 		landSound->play();
+		jumpTime = 0.0;
 	}
+
 	lastYVel = currentYVel;
 
+	
 	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
 	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
 	
@@ -174,21 +185,37 @@ void Player::update(Step * _step){
 	glm::vec3 movement(0);
 	if(enabled){
 		if (keyboard->keyDown(GLFW_KEY_W)){
-			movement += forward;
+			if(isGrounded){
+				movement += forward;
+			}else{
+				movement += (forward/2.0f);
+			}
 		}if (keyboard->keyDown(GLFW_KEY_S)){
-			movement -= forward;
+			if(isGrounded){
+				movement -= forward;
+			}else{
+				movement -= (forward/2.0f);
+			}
 		}if (keyboard->keyDown(GLFW_KEY_A)){
-			movement -= right;
+			if(isGrounded){
+				movement -= right;
+			}else{
+				movement -= (right/2.0f);
+			}
 		}if (keyboard->keyDown(GLFW_KEY_D)){
-			movement += right;
+			if(isGrounded){
+				movement += right;
+			}else{
+				movement += (right/2.0f);
+			}
 		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			if(isGrounded){
-				movement += glm::vec3(0,100,0);
+				movement += glm::vec3(0, 100,0);
 				jumpSound->play();
+				jumpTime = _step->time;
 			}
 		}
 	}
-
 
 	if(joystick != nullptr){
 		movement += forward * -joystick->getAxis(joystick->axisLeftY);
@@ -210,10 +237,11 @@ void Player::update(Step * _step){
 	//If player is moving
 	if(movementMag > 0){
 
-		if(tweenBobbleChange){
-			footSteps->setPitch(pitchRand);
-			footSteps->play();
+		if(tweenBobbleChange && glmCurVelocityMagXZ >= 1.0f){
+				footSteps->setPitch(pitchRand);
+				footSteps->play();
 		}
+		
 		//set movement
 		movement = movement/movementMag * playerSpeed * mass;
 
@@ -227,33 +255,44 @@ void Player::update(Step * _step){
 
 		this->body->activate(true);
 
+		if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
+
+			this->maxVelocity = btVector3(20,20,20);
+		}
+
 		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
-			if(bobbleInterpolation<2){
+			this->maxVelocity = btVector3(35,35,35);
+			if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
+				
+			}else if(glmCurVelocityMagXZ < 1.0f){
+				bobbleInterpolation = 0.f;
 			}
-
+			
 			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
 				this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
-				std::cout << "1" << std::endl;
+				//std::cout << "1" << std::endl;
 			}
 			else{
 				this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
-				std::cout << "2" << std::endl;
+				//std::cout << "2" << std::endl;
 			}
-			
-			
 		}
 		else{
-			if(bobbleInterpolation<1){
+			if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
+			
+			}else if(glmCurVelocityMagXZ < 1.0f){
+				bobbleInterpolation = 0.f;
 			}
+
 			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
-				std::cout << "3" << std::endl;
+				//std::cout << "3" << std::endl;
 				this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
 			}else{
 				this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
-				std::cout << "4" << std::endl;
+				//std::cout << "4" << std::endl;
 			}
 		}
 
@@ -301,8 +340,6 @@ void Player::update(Step * _step){
 
 	lastBobbleTween = currentBobbleTween;
 
-	
-
 	//get player position
 	const btVector3 & b = this->body->getWorldTransform().getOrigin();
 	float rayRange = playerHeight * 1.25f;
@@ -314,12 +351,9 @@ void Player::update(Step * _step){
 		isGrounded = true;
 	}else{
 		isGrounded = false;
+		jumpTime += _step->time - jumpTime;
 	}
 	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
-
-	
-
-	
 
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);

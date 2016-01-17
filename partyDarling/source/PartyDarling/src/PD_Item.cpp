@@ -12,7 +12,9 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
 	definition(_definition)
 {
-	mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(definition->texture)->texture);
+	AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(definition->texture);
+	tex->load();
+	mesh->pushTexture2D(tex->texture);
 	mesh->setScaleMode(GL_NEAREST);
 }
 
@@ -33,6 +35,10 @@ bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
 	t.y = 1 - t.y; // flip the V first though
 	t.x *= mesh->textures.at(0)->width;
 	t.y *= mesh->textures.at(0)->height;
+
+	// account for errors
+	t.x = std::min(mesh->textures.at(0)->width-1.f, std::max(0.f, t.x));
+	t.y = std::min(mesh->textures.at(0)->height-1.f, std::max(0.f, t.y));
 	
 	// return true if the pixel at the calculated coordinate is opaque (i.e. the alpha channel is 0xFF)
 	return sweet::TextureUtils::getPixel(mesh->textures.at(0), t.x, t.y, 3) == 255;

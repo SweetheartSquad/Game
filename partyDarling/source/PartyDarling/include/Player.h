@@ -56,9 +56,14 @@ private:
 	int currentBobbleTween;
 	int lastBobbleTween;
 	bool tweenBobbleChange;
+	double jumpTime;
 
 	bool isGrounded;
 
+	Animation<float> * headZoom;
+	Tween<float> * headZoomTween1;
+	Tween<float> * headZoomTween2;
+	float zoomVal;
 	/*Animation<float> * easeIntoBobble;
 	Tween<float> * easeIntoBobbleTween1;
 	float easeIntoBobbleVal;

@@ -183,7 +183,7 @@ void PD_Scene_InteractionTest::update(Step * _step){
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
 						uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-							uiDialogue->startEvent(butt->person->state.conversation);
+							uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(butt->person->state->conversation)->conversation);
 							std::cout << "hey gj you talked" << std::endl;
 						});
 						uiBubble->addOption("yell at ", [](sweet::Event * _event){

@@ -120,7 +120,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 		player->enable();
 	});
 
-	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
+	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);//new PersonRenderer(bulletWorld);
 	childTransform->addChild(testCharacter);
 	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
@@ -155,7 +155,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	std::vector<PD_FurnitureDefinition*> * definitions = PD_FurnitureParser::parseFurnitureDefinitions();
 	PD_FurnitureComponentContainer * components = PD_FurnitureParser::parseFurnitureComponents();
 	
-	sweet::NumberUtils::seed(3425577115);
+	sweet::NumberUtils::seed(87537658365);
 
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 50; ++i) {
@@ -244,7 +244,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-								uiDialogue->startEvent(butt->person->state.conversation);
+								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(butt->person->state->conversation)->conversation);
 								player->disable();
 							});
 							uiBubble->addOption("yell at ", [this](sweet::Event * _event){

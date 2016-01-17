@@ -79,15 +79,23 @@ public:
 	CharacterComponent(Json::Value _json);
 
 };
+
+// an asset containing a character definition
+// which can be used to instatiate new characters
 class AssetCharacter : public Asset{
 private:
 	// constructor is private; use create instead if you need to instantiate directly
 	AssetCharacter(Json::Value _json, Scenario * const _scenario);
 public:
+	// returns a new instance of the character based on this asset definition
+	PersonRenderer * getCharacter(BulletWorld * _world, Shader * _shader);
+
 	// the character's in-game name
 	std::string name;
 	// states
-	std::vector<PersonState> states;
+	std::map<std::string, PersonState> states;
+	// initial state upon creation
+	std::string defaultState;
 	// items held by character on creation
 	// they are asset string ids; accessed using scenario->getAsset("item",items.at(#))
 	std::vector<std::string> items;

@@ -54,7 +54,6 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, Shader * _shader, PD_Furn
 
 	// Cleanup all the meshes we created
 	for(auto m : meshes) {
-		childTransform->removeChild(m->firstParent());
 		delete m;
 	}	
 }

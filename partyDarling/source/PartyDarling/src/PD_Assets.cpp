@@ -27,12 +27,12 @@ CharacterComponent::CharacterComponent(Json::Value _json) :
 AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
 	name(_json.get("name", "NO_NAME").asString()),
-	root(_json["root"])
+	root(_json["components"][0]),
+	defaultState(_json.get("defaultState", "NO_STATE").asString())
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
-		states.push_back(PersonState());
-		//statesJson[i]
+		states.insert(std::make_pair(statesJson[i].get("id", "NO_ID").asString(), PersonState(statesJson[i])));
 	}
 	Json::Value itemsJson = _json["items"];
 	for(Json::ArrayIndex i = 0; i < itemsJson.size(); ++i){
@@ -55,6 +55,13 @@ void AssetCharacter::unload(){
 	if(loaded){
 	}
 	Asset::unload();
+}
+
+PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
+	PersonRenderer * res = new PersonRenderer(_world);
+	res->setShader(_shader, true);
+	res->state = &states.at(defaultState);
+	return res;
 }
 
 // item

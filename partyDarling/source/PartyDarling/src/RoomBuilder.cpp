@@ -89,7 +89,7 @@ Room * RoomBuilder::getRoom(){
 			availableParents.push_back(boundaries.at(i));
 			if(RG_DEBUG){
 				std::stringstream s;
-				s << i+1;
+				s << "ROOM_GEN_" << i+1;
 				boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
 			}
 		}
@@ -247,7 +247,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	// Collides with other objects? (not room object parent)
 
 	// Inside walls?
-
+	return true;
 }
 
 void RoomBuilder::createWalls(unsigned long int _thresh){

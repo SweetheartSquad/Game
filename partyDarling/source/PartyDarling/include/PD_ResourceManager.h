@@ -8,6 +8,8 @@
 class PD_ResourceManager : public ResourceManager{
 public:
 	static Scenario * scenario;
+	static Scenario * itemTextures;
+	static Scenario * componentTextures;
 	static DatabaseConnection * db;
 
 	static void init();

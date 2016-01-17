@@ -50,14 +50,18 @@ public:
 
 class PersonState : public Node{
 public:
-	Conversation * conversation;
-	PersonState();
+	// name of this state
+	std::string name;
+	// reference to the conversation which will launch
+	// if the character is spoken to while in this state
+	std::string conversation;
+	PersonState(Json::Value _json);
 };
 
 class PersonRenderer : public Entity{
 public:
 	PersonButt * butt;
-	PersonState state;
+	PersonState * state;
 	float timer;
 
 	PersonLimbSolver * solverArmR;
