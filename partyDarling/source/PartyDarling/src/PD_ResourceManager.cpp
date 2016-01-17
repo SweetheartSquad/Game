@@ -19,8 +19,8 @@ void PD_ResourceManager::init(){
 
 	// initialize assets
 	scenario = new Scenario("assets/scenario.json");
-	//itemTextures = new Scenario("assets/item-textures.json");
-	//componentTextures = new Scenario("assets/component-textures.json");
+	itemTextures = new Scenario("assets/item-textures.json");
+	componentTextures = new Scenario("assets/component-textures.json");
 
 
 	// parse furniture
