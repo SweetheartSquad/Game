@@ -163,93 +163,12 @@
     ], 
     "furniture": [
         {
-            "components": [
-                {
-                    "componentType": "seat", 
-                    "multipliers": [
-                        1, 
-                        4
-                    ], 
-                    "outComponents": [
-                        {
-                            "componentType": "back", 
-                            "multipliers": [
-                                2
-                            ], 
-                            "outComponents": [
-                                {
-                                    "componentType": "arm", 
-                                    "multipliers": [], 
-                                    "required": false
-                                }
-                            ], 
-                            "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }, 
-                        {
-                            "componentType": "leg", 
-                            "multipliers": [], 
-                            "outComponents": [], 
-                            "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }
-                    ], 
-                    "required": true,
-					"scale": [1.0,1.0,1.0]
-                }
-            ], 
             "type": "chair"
         }, 
         {
-            "components": [
-                {
-                    "componentType": "lampbase", 
-                    "multipliers": [
-                        1
-                    ], 
-                    "outComponents": [
-                        {
-                            "componentType": "lampshaft", 
-                            "multipliers": [
-                                1
-                            ], 
-                            "outComponents": [
-                                {
-                                    "componentType": "lampshade", 
-                                    "multipliers": [], 
-                                    "required": true,
-									"scale": [1.0,1.0,1.0]
-                                }
-                            ], 
-                            "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }
-                    ], 
-                    "required": true,
-					"scale": [1.0,1.0,1.0]
-                }
-            ], 
             "type": "lamp"
         }, 
         {
-            "components": [
-                {
-                    "componentType": "tabletop", 
-                    "multipliers": [
-                        4
-                    ], 
-                    "outComponents": [
-                        {
-                            "componentType": "leg", 
-                            "multipliers": [], 
-                            "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }
-                    ], 
-                    "required": true,
-					"scale": [1.0,1.0,1.0]
-                }
-            ], 
             "type": "table"
         }
     ]

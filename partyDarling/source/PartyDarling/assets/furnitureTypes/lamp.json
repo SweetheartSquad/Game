@@ -1,0 +1,31 @@
+{
+            "components": [
+                {
+                    "componentType": "lampbase", 
+                    "multipliers": [
+                        1
+                    ], 
+                    "outComponents": [
+                        {
+                            "componentType": "lampshaft", 
+                            "multipliers": [
+                                1
+                            ], 
+                            "outComponents": [
+                                {
+                                    "componentType": "lampshade", 
+                                    "multipliers": [], 
+                                    "required": true,
+									"scale": [1.0,1.0,1.0]
+                                }
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "lamp"
+        }
