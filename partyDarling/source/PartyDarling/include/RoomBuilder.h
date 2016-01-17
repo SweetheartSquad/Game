@@ -32,14 +32,6 @@ class Furniture;
 class Person;
 class Item;
 
-class Tile{
-public:
-	glm::vec2 pos;
-	bool free;
-
-	Tile(glm::vec2 _pos);
-};
-
 class Edge{
 public:
 	glm::vec2 p1;
@@ -61,12 +53,12 @@ public:
 	BulletWorld * world;
 
 	std::vector<RoomObject *> boundaries;
-	std::vector<Tile *> tiles;
 	std::map<int, std::map<int, bool>> map;
 
 	Room * room;
 
 	RoomBuilder(std::string _json, BulletWorld * _world);
+	RoomBuilder(Json::Value _json, BulletWorld * _world);
 	~RoomBuilder();
 
 	Room * getRoom();

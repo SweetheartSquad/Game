@@ -2,13 +2,11 @@
             "components": [
                 {
                     "componentType": "tabletop", 
-                    "multipliers": [
-                        4
-                    ], 
+                    "multiplier": 1, 
                     "outComponents": [
                         {
                             "componentType": "leg", 
-                            "multipliers": [], 
+                            "multiplier": 4, 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         }

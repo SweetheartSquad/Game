@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
-#include <json/json.h>
 #include <vector>
+#include <map>
+
+#include <json/json.h>
 #include <MeshInterface.h>
 
 class PD_FurnitureComponentContainer;
@@ -12,10 +14,10 @@ public:
 	int id;
 	std::string type;
 	std::string src;
+	const TriMesh * const mesh;
 
 	std::map<std::string, std::vector<glm::vec3>> connectors; 
 
-	MeshInterface * mesh;
 
 	explicit PD_FurnitureComponent(Json::Value _jsonDef);
 };

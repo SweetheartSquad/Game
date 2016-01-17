@@ -8,6 +8,8 @@ Scenario * PD_ResourceManager::scenario = nullptr;
 Scenario * PD_ResourceManager::itemTextures = nullptr;
 Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
+std::vector<PD_FurnitureDefinition*> * PD_ResourceManager::furnitureDefinitions = nullptr;
+PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -17,9 +19,11 @@ void PD_ResourceManager::init(){
 
 	// initialize assets
 	scenario = new Scenario("assets/scenario.json");
-	itemTextures = new Scenario("assets/item-textures.json");
-	componentTextures = new Scenario("assets/component-textures.json");
+	//itemTextures = new Scenario("assets/item-textures.json");
+	//componentTextures = new Scenario("assets/component-textures.json");
 
+	furnitureDefinitions = PD_FurnitureParser::parseFurnitureDefinitions();
+	furnitureComponents = PD_FurnitureParser::parseFurnitureComponents();
 
 	db = new DatabaseConnection("data/test.db");
 

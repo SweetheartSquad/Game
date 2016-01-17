@@ -102,7 +102,7 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	bulletGround->body->setFriction(1);
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 	
-	room = RoomBuilder("{\"size\":{\"l\":6, \"w\":6}}",bulletWorld).getRoom();
+	room = RoomBuilder(std::string("{\"size\":{\"l\":6, \"w\":6}}"),bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	childTransform->addChild(room->tilemapSprite);

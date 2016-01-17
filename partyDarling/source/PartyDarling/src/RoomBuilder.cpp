@@ -46,6 +46,12 @@ RoomBuilder::RoomBuilder(std::string _json, BulletWorld * _world):
 	}
 }
 
+RoomBuilder::RoomBuilder(Json::Value _json, BulletWorld * _world):
+	json(_json),
+	world(_world)
+{
+}
+
 RoomBuilder::~RoomBuilder(){
 }
 

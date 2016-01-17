@@ -147,7 +147,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 
-	room = RoomBuilder("{size:{l:5, w:15}}",bulletWorld).getRoom();
+	room = RoomBuilder(std::string("{size:{l:5, w:15}}"),bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 

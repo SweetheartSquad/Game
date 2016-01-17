@@ -1,21 +1,16 @@
 {
-            "components": [
+   "components": [
                 {
                     "componentType": "seat", 
-                    "multipliers": [
-                        1, 
-                        4
-                    ], 
+                    "multiplier": 1, 
                     "outComponents": [
                         {
                             "componentType": "back", 
-                            "multipliers": [
-                                2
-                            ], 
+                            "multiplier": 1, 
                             "outComponents": [
                                 {
                                     "componentType": "arm", 
-                                    "multipliers": [], 
+                                    "multiplier": 2,
                                     "required": false
                                 }
                             ], 
@@ -24,7 +19,7 @@
                         }, 
                         {
                             "componentType": "leg", 
-                            "multipliers": [], 
+                            "multiplier": 4, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -35,4 +30,4 @@
                 }
             ], 
             "type": "chair"
-}
+        }
