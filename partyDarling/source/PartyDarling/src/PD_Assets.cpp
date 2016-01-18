@@ -11,42 +11,44 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 	in(0,0),
 	texture("")
 { 
+	Json::Value componentJson, childComponentsJson;
 	// parse external component file
-	{
+	if(_json.isMember("src")){
 		Json::Reader reader;
-		Json::Value componentJson;
 		bool parsingSuccesful = reader.parse(FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
 		if(!parsingSuccesful){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}
 
+		// we don't care about the textures array, so just grab the joints
+		componentJson = componentJson["joints"];
 		// there can't be components in both the skeletal definition and the component definition
 		// because what would that even do
 		if(componentJson["components"].size() > 0 && _json["components"].size() > 0){
 			throw "hey you can't do that dummy";
+		}else if(componentJson["components"].size() > 0){
+			childComponentsJson = componentJson["components"];
+		}else{
+			childComponentsJson = _json["components"];
 		}
-
-		in = glm::vec2(componentJson["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat());
-
-		for(Json::ArrayIndex i = 0; i < componentJson["out"].size(); ++i){
-			Json::Value jointPercentagesJson = componentJson["out"][i];
-			// other joints are out joints
-			out.push_back(glm::vec2(componentJson["out"][i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["out"][i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
-		}
-		// get texture reference
-		texture = componentJson.get("texture", "NO_TEXTURE").asString();
-
-		// parse child components from component definition
-		Json::Value childComponentsJson = componentJson["components"];
-		for(Json::ArrayIndex i = 0; i < childComponentsJson.size(); ++i){
-			components.push_back(CharacterComponentDefinition(childComponentsJson[i]));
-		}
+	}else{
+		componentJson = _json;
+		childComponentsJson = componentJson["components"];
 	}
 
+	
 
+	in = glm::vec2(componentJson["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat());
 
-	// parse child components from skeletal definition
-	Json::Value childComponentsJson = _json["components"];
+	for(Json::ArrayIndex i = 0; i < componentJson["out"].size(); ++i){
+		Json::Value jointPercentagesJson = componentJson["out"][i];
+		// other joints are out joints
+		out.push_back(glm::vec2(componentJson["out"][i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["out"][i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
+	}
+	// get texture reference
+	texture = componentJson.get("texture", "NO_TEXTURE").asString();
+
+	// parse child components from component definition
 	for(Json::ArrayIndex i = 0; i < childComponentsJson.size(); ++i){
 		components.push_back(CharacterComponentDefinition(childComponentsJson[i]));
 	}

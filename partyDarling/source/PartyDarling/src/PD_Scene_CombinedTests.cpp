@@ -120,12 +120,12 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 		player->enable();
 	});
 
-/*	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);//new PersonRenderer(bulletWorld);
+	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);//new PersonRenderer(bulletWorld);
 	childTransform->addChild(testCharacter);
 	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
 	testCharacter->load();
-	testCharacter->firstParent()->scale(0.001f);
+	testCharacter->firstParent()->scale(0.005f);
 	testCharacter->firstParent()->translate(0, 2, 0);
 	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);*/
 

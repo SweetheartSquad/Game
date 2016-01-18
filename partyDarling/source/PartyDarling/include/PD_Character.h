@@ -81,10 +81,17 @@ public:
 	PersonComponent
 		* pelvis,
 		* torso,
+
 		* jaw,
 		* head,
 		* nose,
-		* eyes,
+		* eyebrowL,
+		* eyebrowR,
+		* eyeL,
+		* eyeR,
+		* pupilL,
+		* pupilR,
+
 		* armL,
 		* armR,
 		* forearmL,

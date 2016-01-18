@@ -166,54 +166,37 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	state(nullptr)
 {
 	paletteTex->load();
+	
+	pelvis = new PersonComponent(&_definition->root, paletteTex, false);
 
-	Json::Value root;
-	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::readFile("assets/skeletal_structure.json");
-	bool parsingSuccessful = reader.parse( jsonLoaded, root );
-	if(!parsingSuccessful){
-		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
-	}else{
-		 Json::Value charactersJson = root["characters"];
-		 for(auto i = 0; i < charactersJson.size(); ++i) {
-			Json::Value assets = charactersJson[i]["assets"];
-			for(auto j = 0; j < assets.size(); ++j) {
-				Json::Value asset = assets[j];
+	torso = new PersonComponent(&_definition->root.components.at(0), paletteTex, false);
 
-				if(asset["category"].asString() == "pelvis"){
-					pelvis = new PersonComponent(&_definition->root, paletteTex, false);//PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
-				}else if(asset["category"].asString() == "torso"){
-					torso = new PersonComponent(&_definition->root.components.at(0), paletteTex, false);// = PersonComponent::getComponentsFromJson(asset, paletteTex).at(0);
-				}else if(asset["category"].asString() == "head"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
-					jaw = components.at(0);
-					head = components.at(1);
-					nose = components.at(2);
-					eyes = components.at(3);
-				}else if(asset["category"].asString() == "arms"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
-					armR = components.at(0);
-					forearmR = components.at(1);
-					handR = components.at(2);
+	jaw = new PersonComponent(&_definition->root.components.at(0).components.at(0), paletteTex, false);
+	head = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0), paletteTex, false);
+	nose = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(0), paletteTex, false);
+	eyebrowL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(1), paletteTex, false);
+	eyebrowR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(2), paletteTex, false);
+	eyeL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(3), paletteTex, false);
+	eyeR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(4), paletteTex, false);
+	pupilL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(3).components.at(0), paletteTex, false);
+	pupilR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(4).components.at(0), paletteTex, false);
 
-					components = PersonComponent::getComponentsFromJson(asset, paletteTex, true);
-					armL = components.at(0);
-					forearmL = components.at(1);
-					handL = components.at(2);
-				}else if(asset["category"] == "legs"){
-					std::vector<PersonComponent *> components = PersonComponent::getComponentsFromJson(asset, paletteTex);
-					legR = components.at(0);
-					forelegR = components.at(1);
-					footR = components.at(2);
+	armR = new PersonComponent(&_definition->root.components.at(0).components.at(1), paletteTex, true);
+	forearmR = new PersonComponent(&_definition->root.components.at(0).components.at(1).components.at(0), paletteTex, true);
+	handR = new PersonComponent(&_definition->root.components.at(0).components.at(1).components.at(0).components.at(0), paletteTex, true);
 
-					components = PersonComponent::getComponentsFromJson(asset, paletteTex, true);
-					legL = components.at(0);
-					forelegL = components.at(1);
-					footL = components.at(2);
-				}
-			}
-		}
-	}
+	armL = new PersonComponent(&_definition->root.components.at(0).components.at(2), paletteTex, false);
+	forearmL = new PersonComponent(&_definition->root.components.at(0).components.at(2).components.at(0), paletteTex, false);
+	handL = new PersonComponent(&_definition->root.components.at(0).components.at(2).components.at(0).components.at(0), paletteTex, false);
+
+	legR = new PersonComponent(&_definition->root.components.at(1), paletteTex, true);
+	forelegR = new PersonComponent(&_definition->root.components.at(1).components.at(0), paletteTex, true);
+	footR = new PersonComponent(&_definition->root.components.at(1).components.at(0).components.at(0), paletteTex, true);
+					
+	legL = new PersonComponent(&_definition->root.components.at(2), paletteTex, false);
+	forelegL = new PersonComponent(&_definition->root.components.at(2).components.at(0), paletteTex, false);
+	footL = new PersonComponent(&_definition->root.components.at(2).components.at(0).components.at(0), paletteTex, false);
+
 	solverArmR = new PersonLimbSolver(torso->getOut(1));
 	solverArmL = new PersonLimbSolver(torso->getOut(2));
 	solverLegR = new PersonLimbSolver(pelvis->getOut(1));
@@ -249,7 +232,12 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	//solverBod->addComponent(head);
 	// no point in putting the nose/eyes into the skeletal structure
 	connect(head, nose);
-	connect(head, eyes);
+	connect(head, eyebrowL);
+	connect(head, eyebrowR);
+	connect(head, eyeL);
+	connect(head, eyeR);
+	connect(eyeL, pupilL);
+	connect(eyeR, pupilR);
 	
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
@@ -285,7 +273,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 
 	butt = new PersonButt(_world, this);
 	childTransform->addChild(butt);
-	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.001f, solverBod->getChainLength() * 0.001f, 0.001f); // TODO: make this scale factor not hard-coded
+	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.005f, solverBod->getChainLength() * 0.005f, 0.005f); // TODO: make this scale factor not hard-coded
 	butt->createRigidBody(0);
 }
 
@@ -309,7 +297,12 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 	head->setShader(_shader, _default);
 	
 	nose->setShader(_shader, _default);
-	eyes->setShader(_shader, _default);
+	eyebrowL->setShader(_shader, _default);
+	eyebrowR->setShader(_shader, _default);
+	eyeL->setShader(_shader, _default);
+	eyeR->setShader(_shader, _default);
+	pupilL->setShader(_shader, _default);
+	pupilR->setShader(_shader, _default);
 
 	armL->setShader(_shader, _default);
 	forearmL->setShader(_shader, _default);
