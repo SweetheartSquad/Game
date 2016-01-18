@@ -67,7 +67,7 @@ public:
 	NodeUI * enemyBubble;
 	TextArea * enemyBubbleText;
 
-	HorizontalLinearLayout * playerBubble;
+	NodeUI * playerBubble;
 	TextArea * playerBubbleText;
 	
 	PD_InsultButton * pBubbleBtn1;
