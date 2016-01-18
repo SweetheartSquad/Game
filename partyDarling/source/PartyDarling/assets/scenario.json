@@ -49,27 +49,42 @@
     },
 	
 	{
-      "id": "YELLING-CONTEST-OFFENCE-BUBBLE",
+      "id": "YELLING-CONTEST-OFFENSE-BUBBLE",
       "type": "texture",
-      "src": "yelling contest/blueBubble.png"
+      "src": "yelling contest/blueBubble.png",
+	  "nineSliced": true
     },
 	
 	{
-      "id": "YELLING-CONTEST-OFFENCE-BUBBLE-TAIL",
+      "id": "YELLING-CONTEST-OFFENSE-BUBBLE-TAIL",
       "type": "texture",
       "src": "yelling contest/blueBubble-tail.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-OFFENCE-CHOICE",
+      "id": "YELLING-CONTEST-OFFENSE-CHOICE",
       "type": "texture",
-      "src": "yelling contest/blueBubble-text.png"
+      "src": "yelling contest/blueBubble-text.png",
+	  "nineSliced": true
     },
 
 	{
-      "id": "YELLING-CONTEST-OFFENCE-ARROWS",
+      "id": "YELLING-CONTEST-OFFENSE-ARROWS",
       "type": "texture",
       "src": "yelling contest/blueBubble-arrows.png"
+    },
+
+	{
+      "id": "YELLING-CONTEST-DEFENSE-BUBBLE",
+      "type": "texture",
+      "src": "yelling contest/purpleBubble.png",
+	  "nineSliced": true
+    },
+	
+	{
+      "id": "YELLING-CONTEST-DEFENSE-BUBBLE-TAIL",
+      "type": "texture",
+      "src": "yelling contest/purpleBubble-tail.png"
     },
 
 	{
