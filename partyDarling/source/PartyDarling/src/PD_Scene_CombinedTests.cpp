@@ -128,7 +128,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.005f);
 	testCharacter->firstParent()->translate(0, 2, 0);
-	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);*/
+	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
 
 
 

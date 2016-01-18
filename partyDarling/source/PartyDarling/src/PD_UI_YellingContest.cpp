@@ -222,11 +222,11 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	HorizontalLinearLayout * interjectButtonPresses = new HorizontalLinearLayout(_bulletWorld);
 	interjectButtonPresses->setRationalWidth(1.f);
 	interjectButtonPresses->setRationalHeight(0.5f);
-
 	TextLabel * interjectTitle = new TextLabel(_bulletWorld, _font, _textShader);
 	interjectTitle->setText("INTERJECT: ");
-	offensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
-	offensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+
+	defensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	defensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
 
 	HorizontalLinearLayout * insultButtonPresses = new HorizontalLinearLayout(_bulletWorld);
 	TextLabel * insultTitle = new TextLabel(_bulletWorld, _font, _textShader);
@@ -234,16 +234,16 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	insultButtonPresses->setRationalWidth(1.f);
 	insultButtonPresses->setRationalHeight(0.5f);
 
-	defensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
-	defensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	offensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	offensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
 
 	interjectButtonPresses->addChild(interjectTitle);
-	interjectButtonPresses->addChild(offensiveCorrectLabel);
-	interjectButtonPresses->addChild(offensiveWrongLabel);
+	interjectButtonPresses->addChild(defensiveCorrectLabel);
+	interjectButtonPresses->addChild(defensiveWrongLabel);
 
 	insultButtonPresses->addChild(insultTitle);
-	insultButtonPresses->addChild(defensiveCorrectLabel);
-	insultButtonPresses->addChild(defensiveWrongLabel);
+	insultButtonPresses->addChild(offensiveCorrectLabel);
+	insultButtonPresses->addChild(offensiveWrongLabel);
 
 	buttonPresses->addChild(interjectButtonPresses);
 	buttonPresses->addChild(insultButtonPresses);
@@ -425,9 +425,9 @@ void PD_UI_YellingContest::startNewFight(){
 
 	// Set test stuff
 	offensiveCorrectLabel->setText("Correct: 0");
-	offensiveWrongLabel->setText("Incorrect: 0");
+	offensiveWrongLabel->setText("  Incorrect: 0");
 	defensiveCorrectLabel->setText("Correct: 0");
-	defensiveWrongLabel->setText("Incorrect: 0");
+	defensiveWrongLabel->setText("  Incorrect: 0");
 
 	buttonPresses->invalidateLayout();
 }
@@ -448,8 +448,8 @@ void PD_UI_YellingContest::gameOver(bool _win){
 
 	addChild(gameOverContainer);
 
-	std::cout << "INTERJECT correct: " << defensiveCorrect << " incorrect: " << defensiveWrong << std::endl;
-	std::cout << "INSULT    correct: " << offensiveCorrect << " incorrect: " << offensiveWrong << std::endl;
+	std::cout << "INTERJECT correct: " << defensiveCorrect << "  incorrect: " << defensiveWrong << std::endl;
+	std::cout << "INSULT    correct: " << offensiveCorrect << "  incorrect: " << offensiveWrong << std::endl;
 }
 
 void PD_UI_YellingContest::complete(){
@@ -667,7 +667,7 @@ void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive
 			offensiveCorrectLabel->setText(s.str());
 		}else{
 			++offensiveWrong;
-			s << " Incorrect: " << offensiveWrong;
+			s << "  Incorrect: " << offensiveWrong;
 			offensiveWrongLabel->setText(s.str());
 		}
 	}else{
@@ -677,7 +677,7 @@ void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive
 			defensiveCorrectLabel->setText(s.str());
 		}else{
 			++defensiveWrong;
-			s << " Incorrect: " << defensiveWrong;
+			s << "  Incorrect: " << defensiveWrong;
 			defensiveWrongLabel->setText(s.str());
 		}
 	}
