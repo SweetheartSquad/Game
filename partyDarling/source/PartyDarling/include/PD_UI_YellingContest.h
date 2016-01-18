@@ -55,6 +55,18 @@ private:
 
 	bool isComplete;
 
+	// TESTING
+	int offensiveCorrect;
+	int offensiveWrong;
+	int defensiveCorrect;
+	int defensiveWrong;
+
+	VerticalLinearLayout * buttonPresses;
+	TextLabel * offensiveCorrectLabel;
+	TextLabel * offensiveWrongLabel;
+	TextLabel * defensiveCorrectLabel;
+	TextLabel * defensiveWrongLabel;
+
 public:
 	Sprite * enemyCursor;
 
@@ -100,4 +112,6 @@ public:
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);
 	bool isPunctuation(UIGlyph * _glyph);
+
+	void countButtonPresses(bool _isCorrect, bool _isOffensive);
 };
