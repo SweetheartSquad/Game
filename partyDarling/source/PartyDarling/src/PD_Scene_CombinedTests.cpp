@@ -126,9 +126,9 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
 	testCharacter->load();
-	testCharacter->firstParent()->scale(0.001f);
+	testCharacter->firstParent()->scale(0.005f);
 	testCharacter->firstParent()->translate(0, 2, 0);
-	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
+	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);*/
 
 
 
@@ -153,15 +153,13 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
-	std::vector<PD_FurnitureDefinition*> * definitions = PD_FurnitureParser::parseFurnitureDefinitions();
-	PD_FurnitureComponentContainer * components = PD_FurnitureParser::parseFurnitureComponents();
 	
-	sweet::NumberUtils::seed(876876478365);
+	sweet::NumberUtils::seed(87537658365);
 
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 50; ++i) {
-		int randIdx = sweet::NumberUtils::randomInt(0, definitions->size() - 1);
-		auto furn = new PD_Furniture(bulletWorld, shader, definitions->at(randIdx), components);
+		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
+		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
 		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
 		furn->freezeTransformation();
 		furn->setColliderAsBoundingBox();

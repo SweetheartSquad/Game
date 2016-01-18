@@ -7,20 +7,50 @@
 //texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
 
 // character
-CharacterComponent::CharacterComponent(Json::Value _json) :
-	in(_json["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), _json["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()),
-	texture(_json.get("texture", "NO_TEXTURE").asString())
+CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
+	in(0,0),
+	texture("")
 { 
-	// out joint percentages
-	Json::Value outJson = _json["out"];
-	for(Json::ArrayIndex i = 0; i < outJson.size(); ++i){
-		out.push_back(glm::vec2(outJson[i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), outJson[i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
+	Json::Value componentJson, childComponentsJson;
+	// parse external component file
+	if(_json.isMember("src")){
+		Json::Reader reader;
+		bool parsingSuccesful = reader.parse(FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
+		if(!parsingSuccesful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+		}
+
+		// we don't care about the textures array, so just grab the joints
+		componentJson = componentJson["joints"];
+		// there can't be components in both the skeletal definition and the component definition
+		// because what would that even do
+		if(componentJson["components"].size() > 0 && _json["components"].size() > 0){
+			throw "hey you can't do that dummy";
+		}else if(componentJson["components"].size() > 0){
+			childComponentsJson = componentJson["components"];
+		}else{
+			childComponentsJson = _json["components"];
+		}
+	}else{
+		componentJson = _json;
+		childComponentsJson = componentJson["components"];
 	}
 
-	// child components
-	Json::Value componentsJson = _json["components"];
-	for(Json::ArrayIndex i = 0; i < componentsJson.size(); ++i){
-		components.push_back(CharacterComponent(componentsJson[i]));
+	
+
+	in = glm::vec2(componentJson["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat());
+
+	for(Json::ArrayIndex i = 0; i < componentJson["out"].size(); ++i){
+		Json::Value jointPercentagesJson = componentJson["out"][i];
+		// other joints are out joints
+		out.push_back(glm::vec2(componentJson["out"][i].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["out"][i].get(Json::Value::ArrayIndex(1), 0.5f).asFloat()));
+	}
+	// get texture reference
+	texture = componentJson.get("texture", "NO_TEXTURE").asString();
+
+	// parse child components from component definition
+	for(Json::ArrayIndex i = 0; i < childComponentsJson.size(); ++i){
+		components.push_back(CharacterComponentDefinition(childComponentsJson[i]));
 	}
 }
 
@@ -58,7 +88,7 @@ void AssetCharacter::unload(){
 }
 
 PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
-	PersonRenderer * res = new PersonRenderer(_world);
+	PersonRenderer * res = new PersonRenderer(_world, this);
 	res->setShader(_shader, true);
 	res->state = &states.at(defaultState);
 	return res;

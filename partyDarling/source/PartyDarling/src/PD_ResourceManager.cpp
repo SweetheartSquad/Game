@@ -8,6 +8,8 @@ Scenario * PD_ResourceManager::scenario = nullptr;
 Scenario * PD_ResourceManager::itemTextures = nullptr;
 Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
+std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
+PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -20,6 +22,29 @@ void PD_ResourceManager::init(){
 	itemTextures = new Scenario("assets/item-textures.json");
 	componentTextures = new Scenario("assets/component-textures.json");
 
+
+	// parse furniture
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto furnDef : root["furniture"]) {
+				// parse the external json file
+				Json::Value componentRoot;
+				parsingSuccessful = reader.parse(FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
+				if(!parsingSuccessful){
+					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+				}
+
+				furnitureDefinitions.push_back(new PD_FurnitureDefinition(componentRoot));
+			}
+		}
+	}
+	furnitureComponents = new PD_FurnitureComponentContainer("assets/furniture.json");
 
 	db = new DatabaseConnection("data/test.db");
 

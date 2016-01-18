@@ -49,8 +49,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	test = new Transform();
 	childTransform->addChild(test, false);
 
-	bubbleTex = new Texture_NineSliced("assets/textures/nineslicing.png", true);
-	bubbleTex->load();
+	bubbleTex = PD_ResourceManager::scenario->getNineSlicedTexture("NINESLICED");
 }
 
 PD_UI_Bubble::~PD_UI_Bubble(){

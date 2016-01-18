@@ -20,12 +20,6 @@ enum RoomObject_t{
 	ITEM
 };
 
-enum Tile_t{
-	kNONE,
-	kSIDE,
-	kCORNER
-};
-
 enum Side_t;
 
 class BulletWorld;
@@ -37,14 +31,6 @@ class RoomObject;
 class Furniture;
 class Person;
 class Item;
-
-class Tile{
-public:
-	glm::vec2 pos;
-	bool free;
-
-	Tile(glm::vec2 _pos);
-};
 
 class Edge{
 public:
@@ -67,12 +53,12 @@ public:
 	BulletWorld * world;
 
 	std::vector<RoomObject *> boundaries;
-	std::vector<Tile *> tiles;
 	std::map<int, std::map<int, bool>> map;
 
 	Room * room;
 
 	RoomBuilder(std::string _json, BulletWorld * _world);
+	RoomBuilder(Json::Value _json, BulletWorld * _world);
 	~RoomBuilder();
 
 	Room * getRoom();
@@ -80,6 +66,7 @@ public:
 	// Furniture placement
 	bool search(RoomObject * child, std::vector<RoomObject *> objects, Room * room);
 	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
+	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 
 	// Room boundaries builder functions
 	void createWalls(unsigned long int _thresh);

@@ -5,6 +5,7 @@
 #include <PD_ResourceManager.h>
 #include <PD_Button.h>
 #include <PD_TalkToButton.h>
+#include <PD_Assets.h>
 
 #include <PD_Character.h>
 
@@ -146,7 +147,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 
-	room = RoomBuilder("{size:{l:5, w:15}}",bulletWorld).getRoom();
+	room = RoomBuilder(std::string("{size:{l:5, w:15}}"),bulletWorld).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
@@ -338,7 +339,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	}*/
 
 
-	PersonRenderer * test = new PersonRenderer(bulletWorld);
+	PersonRenderer * test = dynamic_cast<AssetCharacter*>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);
 	childTransform->addChild(test);
 	test->setShader(characterShader, true);
 	test->unload();

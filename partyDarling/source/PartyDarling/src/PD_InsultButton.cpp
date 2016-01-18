@@ -2,15 +2,19 @@
 
 #include <PD_InsultButton.h>
 #include <PD_Scene_YellingContestTest.h>
+#include <PD_ResourceManager.h>
 
 PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _textShader, std::wstring _text) :
-	PD_Button(_world, 5, 5, _font, _textShader, _text),
+	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-CHOICE")),
 	isEffective(false)
 {
-}
+	setBorder(20.f);
 
-void PD_InsultButton::click(){
-	PD_Button::click();
-	// start conversation
-	std::cout << "Click!!! iseffective: " << isEffective << std::endl;;
+	label = new TextLabel(world, _font, _textShader);
+	label->horizontalAlignment = kCENTER;
+	label->verticalAlignment = kMIDDLE;
+	label->setRationalWidth(1.f, this);
+	label->setRationalHeight(1.f, this);
+
+	addChild(label);
 }

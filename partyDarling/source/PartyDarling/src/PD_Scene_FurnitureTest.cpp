@@ -78,11 +78,6 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	debugCam->pitch = -10.0f;
 	debugCam->speed = 1;
 	activeCamera = debugCam;
-
-	auto a = PD_FurnitureParser::parseFurnitureDefinitions();
-	auto b = PD_FurnitureParser::parseFurnitureComponents();
-
-	auto c = b->getComponentForType("seat");
 	
 	//	childTransform->addChild(new PD_Furniture(shader, a->at(0), b));
 

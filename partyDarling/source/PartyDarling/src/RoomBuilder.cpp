@@ -27,11 +27,7 @@
 #include <Sprite.h>
 #include <Texture.h>
 
-Tile::Tile(glm::vec2 _pos) :
-	pos(_pos),
-	free(false)
-{
-}
+#define RG_DEBUG 0
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
@@ -48,6 +44,12 @@ RoomBuilder::RoomBuilder(std::string _json, BulletWorld * _world):
 	{
 		// throw exception
 	}
+}
+
+RoomBuilder::RoomBuilder(Json::Value _json, BulletWorld * _world):
+	json(_json),
+	world(_world)
+{
 }
 
 RoomBuilder::~RoomBuilder(){
@@ -91,9 +93,11 @@ Room * RoomBuilder::getRoom(){
 		// only walls in boundaries should have child slots (not floor, cieling)
 		if(boundaries.at(i)->emptySlots.size() > 0){
 			availableParents.push_back(boundaries.at(i));
-			std::stringstream s;
-			s << "ROOM_GEN_" << i+1;
-			boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
+			if(RG_DEBUG){
+				std::stringstream s;
+				s << "ROOM_GEN_" << i+1;
+				boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
+			}
 		}
 	}
 	
@@ -103,8 +107,10 @@ Room * RoomBuilder::getRoom(){
 			// I don't know
 			int blah = true;
 		}else{
-			if(objects.at(i)->parent != nullptr && objects.at(i)->parent->mesh->textures.size() > 0){
-				objects.at(i)->mesh->pushTexture2D(objects.at(i)->parent->mesh->textures.at(0));
+			if(RG_DEBUG){
+				if(objects.at(i)->parent != nullptr && objects.at(i)->parent->mesh->textures.size() > 0){
+					objects.at(i)->mesh->pushTexture2D(objects.at(i)->parent->mesh->textures.at(0));
+				}
 			}
 		}
 	}
@@ -118,12 +124,16 @@ Room * RoomBuilder::getRoom(){
 		for(int j = 0; j < boundaries.at(i)->components.size(); ++j){
 			room->addComponent(boundaries.at(i)->components.at(j));
 		}
-		//delete boundaries.at(i);
-		boundaries.at(i)->components.clear();
-		for(int v = 0; v < boundaries.at(v)->mesh->vertices.size(); ++v){
-			boundaries.at(i)->mesh->vertices.at(v).y *= 2;
+			
+		if(RG_DEBUG){
+			boundaries.at(i)->components.clear();
+			for(int v = 0; v < boundaries.at(v)->mesh->vertices.size(); ++v){
+				boundaries.at(i)->mesh->vertices.at(v).y *= 2;
+			}
+			room->addComponent(boundaries.at(i));
+		}else{
+			delete boundaries.at(i);
 		}
-		room->addComponent(boundaries.at(i));
 	}
 
 	return room;
@@ -233,6 +243,16 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	parent->addComponent(child);
 
+	return true;
+}
+
+bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation){
+	// Collides with walls?
+
+
+	// Collides with other objects? (not room object parent)
+
+	// Inside walls?
 	return true;
 }
 

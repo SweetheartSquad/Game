@@ -23,8 +23,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	confidence(50.f),
-	playerTimerLength(1.f),
-	playerTimer(1.5f),
+	playerQuestionTimerLength(3.f),
+	playerQuestionTimer(0),
+	playerAnswerTimerLength(1.f),
+	playerAnswerTimer(0),
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
@@ -100,33 +102,68 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubble = new NodeUI(_bulletWorld);
 	enemyBubble->setRationalWidth(0.25f, this);
 	enemyBubble->setRationalHeight(0.25f, this);
-	enemyBubble->setBackgroundColour(0.682f, 0.439f, 0.670f, 1);
+	enemyBubble->background->setVisible(false);
+	//enemyBubble->setBackgroundColour(1, 1, 1, 1);
+
+	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-DEFENSE-BUBBLE"));
+	enemyBubbleBubble->setBorder(80.f);
+	enemyBubble->addChild(enemyBubbleBubble);
+	enemyBubbleBubble->setRationalWidth(1.f);
+	enemyBubbleBubble->setRationalHeight(1.f);
+	enemyBubbleBubble->setMarginLeft(0.2f);
+
 	enemyBubbleText = new TextArea(world, _font, _textShader, 0.9);
 	enemyBubbleText->setWrapMode(kWORD);
-	enemyBubbleText->setRationalWidth(1.0f, enemyBubble);
-	enemyBubbleText->setRationalHeight(1.0f, enemyBubble);
+	enemyBubbleText->setRationalWidth(0.95f, enemyBubble);
+	enemyBubbleText->setRationalHeight(0.95f, enemyBubble);
 	enemyBubbleText->horizontalAlignment = kCENTER;
 	enemyBubbleText->verticalAlignment = kMIDDLE;
-	enemyBubbleText->background->setVisible(false);
-	enemyBubble->uiElements->addChild(wordHighlight);
-	enemyBubble->uiElements->addChild(punctuationHighlight);
-	enemyBubble->addChild(enemyBubbleText);
+	enemyBubbleText->background->setVisible(true);
+	enemyBubbleBubble->uiElements->addChild(wordHighlight);
+	enemyBubbleBubble->uiElements->addChild(punctuationHighlight);
+	enemyBubbleBubble->addChild(enemyBubbleText);
 	
+	
+	NodeUI * enemyBubbleTail = new NodeUI(_bulletWorld);
+	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-DEFENSE-BUBBLE-TAIL")->texture);
+	enemyBubbleTail->setRationalWidth(1.f, enemyBubble);
+	enemyBubbleTail->setRationalHeight(1.f, enemyBubble);
+	enemyBubbleTail->setMarginRight(0.78f);
+	enemyBubbleTail->setMarginTop(0.5f);
 
-	playerBubble = new HorizontalLinearLayout(_bulletWorld);
-	playerBubble->verticalAlignment = kMIDDLE;
-	playerBubble->horizontalAlignment = kCENTER;
-	playerBubble->setRationalWidth(0.25f);
-	playerBubble->setRationalHeight(0.25f);
-	playerBubble->setBackgroundColour(0.451f, 0.439f, 0.675f, 1);
+	enemyBubble->addChild(enemyBubbleTail);
+
+	playerBubble = new NodeUI(_bulletWorld);
+	playerBubble->setRationalWidth(0.45f);
+	playerBubble->setRationalHeight(0.4f);
+	playerBubble->background->setVisible(false);
+	//playerBubble->setBackgroundColour(1, 1, 1, 1);
+
+	// The fancy nine sliced bubble
+	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-BUBBLE"));
+	playerBubbleBubble->setBorder(80.f);
+	playerBubble->addChild(playerBubbleBubble);
+	playerBubbleBubble->setRationalWidth(1.f);
+	playerBubbleBubble->setRationalHeight(1.f);
+	playerBubbleBubble->setMarginLeft(0.3f);
+	playerBubbleBubble->setMarginBottom(0.2f);
+
+	// The side by side text and button layout
+	HorizontalLinearLayout * playerBubbleLayout = new HorizontalLinearLayout(_bulletWorld);
+	playerBubbleLayout->verticalAlignment = kMIDDLE;
+	playerBubbleLayout->horizontalAlignment = kCENTER;
+	playerBubbleLayout->setRationalWidth(0.95f);
+	playerBubbleLayout->setRationalHeight(0.95f);
+	playerBubbleBubble->addChild(playerBubbleLayout);
+
 	playerBubbleText = new TextArea(world, _font, _textShader, 0.9f);
-	playerBubbleText->setRationalWidth(0.6f);
+	playerBubbleText->setRationalWidth(0.7f);
 	playerBubbleText->setRationalHeight(1.0f);
 	playerBubbleText->horizontalAlignment = kCENTER;
 	playerBubbleText->verticalAlignment = kMIDDLE;
-	playerBubble->addChild(playerBubbleText);
-	
-	playerTimerSlider = new SliderControlled(_bulletWorld, &playerTimer, 0, playerTimerLength, true, true);
+	playerBubbleLayout->addChild(playerBubbleText);
+
+	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
 	playerTimerSlider->setRationalWidth(0.25f);
 	playerTimerSlider->setHeight(50.f);
 	playerTimerSlider->setBackgroundColour(0, 1.f, 0);
@@ -134,26 +171,32 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerTimerSlider->thumb->setVisible(false);
 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
-	buttonLayout->setRationalWidth(0.4f);
-	buttonLayout->setRationalHeight(1.0f);
+	buttonLayout->setRationalWidth(0.3f);
+	buttonLayout->setRationalHeight(0.4f);
+	buttonLayout->verticalAlignment = kMIDDLE;
 
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	pBubbleBtn1->setRationalWidth(1.0f);
 	pBubbleBtn1->setRationalHeight(0.5f);
-	pBubbleBtn1->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
-	pBubbleBtn1->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn1->isEffective); });
 	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	pBubbleBtn2->setRationalWidth(1.0f);
 	pBubbleBtn2->setRationalHeight(0.5f);
-	pBubbleBtn2->setBackgroundColour(0.569f, 0.569f, 0.733f, 1);
-	pBubbleBtn2->eventManager.addEventListener("mousedown", [this](sweet::Event * _event){insult(pBubbleBtn2->isEffective); });
 	pBubbleBtn2->setMouseEnabled(false);
+
 	buttonLayout->addChild(pBubbleBtn1);
 	buttonLayout->addChild(pBubbleBtn2);
 
-	playerBubble->addChild(buttonLayout);
+	playerBubbleLayout->addChild(buttonLayout);
+
+	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
+	playerBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-BUBBLE-TAIL")->texture);
+	playerBubbleTail->setRationalWidth(1.f, playerBubble);
+	playerBubbleTail->setRationalHeight(1.f, playerBubble);
+	playerBubbleTail->setMarginRight(0.69f);
+	playerBubbleTail->setMarginTop(0.5f);
+	playerBubble->addChild(playerBubbleTail);
 
 	gameOverContainer = new VerticalLinearLayout(_bulletWorld);
 	gameOverContainer->horizontalAlignment = kCENTER;
@@ -265,13 +308,18 @@ void PD_UI_YellingContest::update(Step * _step){
 					wordHighlight->childTransform->translate(pos, false);
 				}
 			}else{
-				// Increment player timer
-				if(playerTimer >= playerTimerLength){
-					// Out of time, enemy's turn!
-					incrementConfidence(-damage);
-					setUIMode(false);
+				if(playerQuestionTimer >= playerQuestionTimerLength){
+					// Increment player answer timer
+					if(playerAnswerTimer >= playerAnswerTimerLength){
+						// Out of time, enemy's turn!
+						incrementConfidence(-damage);
+						setUIMode(false);
+					}else{
+						playerAnswerTimer += _step->getDeltaTime();
+					}
 				}else{
-					playerTimer += _step->getDeltaTime();
+					// Increment player question timer
+					playerQuestionTimer += _step->getDeltaTime();
 				}
 			}
 		}else{
@@ -454,11 +502,12 @@ void PD_UI_YellingContest::setPlayerText(){
 	pBubbleBtn1->isEffective = btn1E;
 	pBubbleBtn2->isEffective = !btn1E;
 
-	pBubbleBtn1->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
-	pBubbleBtn2->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
+	pBubbleBtn1->label->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
+	pBubbleBtn2->label->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
 	
 	// Reset timer
-	playerTimer = 0;
+	playerQuestionTimer = 0;
+	playerAnswerTimer = 0;
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective){

@@ -19,8 +19,11 @@ private:
 	std::vector<NodeUI *> lives;
 	std::vector<NodeUI *> lostLives;
 
-	float playerTimerLength;
-	float playerTimer;
+	float playerQuestionTimerLength;
+	float playerQuestionTimer;
+
+	float playerAnswerTimerLength;
+	float playerAnswerTimer;
 
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
@@ -64,7 +67,7 @@ public:
 	NodeUI * enemyBubble;
 	TextArea * enemyBubbleText;
 
-	HorizontalLinearLayout * playerBubble;
+	NodeUI * playerBubble;
 	TextArea * playerBubbleText;
 	
 	PD_InsultButton * pBubbleBtn1;
