@@ -91,6 +91,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	uiLayer.addChild(uiBubble);
 
 	uiBubble->addOption("test", nullptr);
+	uiBubble->addOption("test", [](sweet::Event * _event){});
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
