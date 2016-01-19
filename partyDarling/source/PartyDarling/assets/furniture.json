@@ -163,7 +163,15 @@
         {
             "id": 33, 
             "src": "furnitureJson/chair_Seat_5.json"
-        }
+        }, 
+        {
+            "id": 34, 
+            "src": "furnitureJson/chair_Back_5.json"
+        },
+		{
+			"id": 35, 
+            "src": "furnitureJson/chair_Seat_6.json"
+		}
     ], 
     "furniture": [
         {
