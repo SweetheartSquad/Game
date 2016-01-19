@@ -15,6 +15,27 @@
     },
 
 
+    // player sound effects
+    
+    {
+      "id": "PLAYER_FOOTSTEP",
+      "type": "audio",
+      "src": "crunchyStep.ogg",
+      "category": "sfx"
+    },
+    {
+      "id": "PLAYER_JUMP",
+      "type": "audio",
+      "src": "jump.ogg",
+      "category": "sfx"
+    },
+    {
+      "id": "PLAYER_FALL",
+      "type": "audio",
+      "src": "fall.ogg",
+      "category": "sfx"
+    },
+
 
     {
       "id": "UV-TEST",

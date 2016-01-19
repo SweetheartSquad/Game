@@ -2,6 +2,7 @@
 
 #include <Game.h>
 class OpenAL_Sound;
+class AutoDrums;
 
 class PD_Game : public Game{
 public:
@@ -27,10 +28,14 @@ public:
 
 
 	OpenAL_Sound * bgmTrack;
+	AutoDrums * fightTrack;
 
 	// picks a random BGM track and plays it, replacing the current track
 	void playBGM();
 
 	// generates a fight track and plays it, replacing the current track
 	void playFight();
+
+	
+	virtual void update(Step * _step) override;
 };

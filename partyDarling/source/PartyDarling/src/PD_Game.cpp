@@ -12,6 +12,7 @@
 
 #include <NumberUtils.h>
 #include <OpenAlSound.h>
+#include <AutoMusic.h>
 
 
 void PD_Game::addSplashes(){
@@ -20,18 +21,31 @@ void PD_Game::addSplashes(){
 
 PD_Game::PD_Game() :
 	Game("test", new PD_Scene_CombinedTests(this), true),
-	bgmTrack(nullptr)
+	bgmTrack(nullptr),
+	fightTrack(nullptr)
 {
 	printFPS = false;
 }
 
 PD_Game::~PD_Game(){
+	delete bgmTrack;
+	delete fightTrack;
+}
 
+void PD_Game::update(Step * _step){
+	if(fightTrack != nullptr){
+		fightTrack->update(_step);
+	}
+
+	Game::update(_step);
 }
 
 void PD_Game::playBGM(){
 	if(bgmTrack != nullptr){
 		bgmTrack->stop();
+	}if(fightTrack != nullptr){
+		delete fightTrack;
+		fightTrack = nullptr;
 	}
 	std::stringstream ss;
 	ss << "BGM" << sweet::NumberUtils::randomInt(1, 2);
@@ -41,5 +55,13 @@ void PD_Game::playBGM(){
 }
 
 void PD_Game::playFight(){
+	if(bgmTrack != nullptr){
+		bgmTrack->stop();
+	}if(fightTrack != nullptr){
+		delete fightTrack;
+		fightTrack = nullptr;
+	}
 	// TODO: implement generative song here
+	fightTrack = new AutoDrums(PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound);
+	fightTrack->generate();
 }
