@@ -590,11 +590,10 @@ void PD_UI_YellingContest::interject(){
 	}else{
 		isPunctuation = true;
 	}
+	countButtonPresses(isPunctuation, false);
 	countInterjectAccuracy(interjectTimer);
 
 	incrementConfidence(isPunctuation ? damage : -damage);
-	countButtonPresses(isPunctuation, false);
-
 
 	if(isPunctuation){
 		setUIMode(isPunctuation);
