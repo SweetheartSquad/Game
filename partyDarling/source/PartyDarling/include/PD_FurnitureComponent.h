@@ -16,7 +16,7 @@ public:
 	std::string src;
 	const TriMesh * const mesh;
 
-	std::map<std::string, std::vector<glm::vec3>> connectors; 
+	std::map<std::vector<std::string>, std::vector<glm::vec3>> connectors; 
 
 
 	explicit PD_FurnitureComponent(Json::Value _jsonDef);

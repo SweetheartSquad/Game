@@ -1,5 +1,42 @@
 {
   "assets": [
+    // bgm
+    {
+      "id": "BGM1",
+      "type": "audio",
+      "src": "bgm/01_Plumbing.ogg",
+      "category": "music"
+    },
+    {
+      "id": "BGM2",
+      "type": "audio",
+      "src": "bgm/02_Slugs.ogg",
+      "category": "music"
+    },
+
+
+    // player sound effects
+    
+    {
+      "id": "PLAYER_FOOTSTEP",
+      "type": "audio",
+      "src": "crunchyStep.ogg",
+      "category": "sfx"
+    },
+    {
+      "id": "PLAYER_JUMP",
+      "type": "audio",
+      "src": "jump.ogg",
+      "category": "sfx"
+    },
+    {
+      "id": "PLAYER_FALL",
+      "type": "audio",
+      "src": "fall.ogg",
+      "category": "sfx"
+    },
+
+
     {
       "id": "UV-TEST",
       "type": "texture",
@@ -249,33 +286,33 @@
         }
       ],
       "items":[  
-        1
+
       ],
       "type":"character",
       "defaultState":1,
       "components":[  
         {  
-          "src":"components/5feba1a6-9287-4ea1-a45e-058965d02fba.json",
+          "src":"components/8c6285ad-50fb-435d-9ba3-c3a4d074ca92.json",
           "components":[  
             {  
-              "src":"components/4d58a26b-0b7d-46c2-b7b1-e3013fedd035.json",
+              "src":"components/9ad7d828-6cb2-4caa-b7cf-0168e127168e.json",
               "components":[  
                 {  
-                  "src":"components/0f83a20f-c1fd-4520-8cc3-3464fc13b9ab.json"
+                  "src":"components/dbab00d2-1bb7-4384-92b9-f171bb8ca676.json"
                 },
                 {  
-                  "src":"components/ad8ea6c5-cbb2-4862-97ab-ce5394b38beb.json"
+                  "src":"components/1abafbf8-3a0c-411d-ab4c-392d005162fe.json"
                 },
                 {  
-                  "src":"components/ad8ea6c5-cbb2-4862-97ab-ce5394b38beb.json"
+                  "src":"components/1abafbf8-3a0c-411d-ab4c-392d005162fe.json"
                 }
               ]
             },
             {  
-              "src":"components/0f24527a-af57-4c6f-908f-5382783592df.json"
+              "src":"components/f04900a2-a27b-4688-966a-ad7a6761eaa9.json"
             },
             {  
-              "src":"components/0f24527a-af57-4c6f-908f-5382783592df.json"
+              "src":"components/f04900a2-a27b-4688-966a-ad7a6761eaa9.json"
             }
           ]
         }
@@ -287,7 +324,7 @@
       "dialogue":[  
         {  
           "text":[  
-            "hi"
+            "uh"
           ],
           "triggers":[  
 
@@ -304,22 +341,15 @@
       ],
       "type":"conversation"
     },
-    {  
-      "name":"It's Milk!",
-      "id":1,
-      "collectable":true,
-      "pixelPerfect":true,
-      "description":"i can't drink it :(",
-      "texture":1,
-      "effects":[  
 
-      ],
-      "type":"item"
-    },
+
+
+
+
     {  
-      "name":"Room1",
+      "name":"milk room",
       "id":1,
-      "description":"room",
+      "description":"room of milk",
       "furnitureTypes":[  
 
       ],
@@ -332,9 +362,12 @@
       "tags":[  
 
       ],
-      "size":"Small",
+      "size":"LARGE",
       "type":"room",
       "locked":false
     }
+
+
+
   ]
 }

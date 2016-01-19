@@ -1,7 +1,7 @@
 {
             "connectors": [
                 {
-                    "componentType": "arm", 
+                    "componentTypes": ["arm"], 
                     "positions": [
                         [
                             3.421, 

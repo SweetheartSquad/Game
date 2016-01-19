@@ -94,9 +94,9 @@ Player::Player(BulletWorld * _bulletWorld) :
 
 	lastYVel = 0;
 
-	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, false, "sfx");
-	jumpSound = new OpenAL_SoundSimple("assets/audio/jump.ogg", false, false, "sfx");
-	landSound = new OpenAL_SoundSimple("assets/audio/fall.ogg", false, false, "sfx");
+	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;
+	jumpSound = PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound;
+	landSound = PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound;
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
 	easeIntoBobbleTween1 = new Tween<float>(0.25f,0.05f,Easing::kEASE_IN_CUBIC);
 	easeIntoBobble->startValue=0.f;

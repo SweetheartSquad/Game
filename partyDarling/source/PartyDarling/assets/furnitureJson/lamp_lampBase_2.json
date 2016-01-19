@@ -1,7 +1,7 @@
 {
             "connectors": [
                 {
-                    "componentType": "lampshaft", 
+                    "componentTypes": ["lampshaft"], 
                     "positions": [
                         [
                             0.0, 

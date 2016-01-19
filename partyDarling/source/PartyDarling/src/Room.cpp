@@ -11,8 +11,8 @@
 #include <RoomObject.h>
 #include <RoomBuilder.h>
 
-Room::Room(BulletWorld * _world, MeshInterface * _mesh):
-	BulletMeshEntity(_world, _mesh),
+Room::Room(BulletWorld * _world) :
+	BulletMeshEntity(_world, new QuadMesh()),
 	tilemapSprite(new Sprite())
 {
 }

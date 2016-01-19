@@ -120,6 +120,30 @@ private:
 	// constructor is private; use create instead if you need to instantiate directly
 	AssetRoom(Json::Value _json, Scenario * const _scenario);
 public:
+	// this room's in-game name (probably not visible)
+	std::string name;
+	// this room's in-game description (probably not visible)
+	std::string description;
+	// the ids of the characters who belong in this room
+	std::vector<std::string> characters;
+	// the ids of the items that belong in this room
+	std::vector<std::string> items;
+
+	// the rooms size category
+	enum Size_t{
+		kSMALL,
+		kMEDIUM,
+		kLARGE
+	} size;
+
+	// whether entry to the room is blocked at creation
+	bool locked;
+
+
+	std::vector<AssetCharacter *> getCharacters();
+	AssetCharacter * getCharacter(unsigned long int _index);
+
+
 
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)

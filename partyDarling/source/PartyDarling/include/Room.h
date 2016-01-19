@@ -31,7 +31,7 @@ public:
 	
 	std::vector<RoomObject *> objects;
 
-	Room(BulletWorld * _world, MeshInterface * _mesh = new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
+	Room(BulletWorld * _world);
 	~Room(void);
 
 	std::vector<RoomObject *> getAllComponents();

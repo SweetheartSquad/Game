@@ -44,12 +44,12 @@ PD_HouseGenerator::~PD_HouseGenerator(){
 PD_House * PD_HouseGenerator::getHouse(){
 	PD_House * house = new PD_House();
 
-	Json::Value bundles = PD_HouseGenerator::bundleScenarios(json);
+	/*Json::Value bundles = PD_HouseGenerator::bundleScenarios(json);
 
 	for(Json::ArrayIndex i = 0; i < json.size(); ++i){
-		RoomBuilder * rb = new RoomBuilder(json[i], world);
+		RoomBuilder * rb = new RoomBuilder(json[i], world, nullptr, nullptr);
 		house->rooms.push_back(rb->getRoom());
-	}
+	}*/
 
 	return house;
 }
