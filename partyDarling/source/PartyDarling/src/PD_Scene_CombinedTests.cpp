@@ -90,6 +90,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	uiLayer.addChild(uiBubble);
 
 	uiBubble->addOption("test", nullptr);
+	uiBubble->addOption("test", [](sweet::Event * _event){});
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
@@ -126,7 +127,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.001f);
 	testCharacter->firstParent()->translate(0, 2, 0);
-	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);*/
+	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
 
 
 

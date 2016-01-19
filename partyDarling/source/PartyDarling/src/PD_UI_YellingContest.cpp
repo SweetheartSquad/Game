@@ -39,7 +39,11 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverDuration(0.f),
 	win(false),
 	isComplete(false),
-	isEnabled(true)
+	isEnabled(true),
+	offensiveCorrect(0),
+	offensiveWrong(0),
+	defensiveCorrect(0),
+	defensiveWrong(0)
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -103,7 +107,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubble->setRationalWidth(0.25f, this);
 	enemyBubble->setRationalHeight(0.25f, this);
 	enemyBubble->background->setVisible(false);
-	//enemyBubble->setBackgroundColour(1, 1, 1, 1);
 
 	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-DEFENSE-BUBBLE"));
 	enemyBubbleBubble->setBorder(80.f);
@@ -137,7 +140,6 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubble->setRationalWidth(0.45f);
 	playerBubble->setRationalHeight(0.4f);
 	playerBubble->background->setVisible(false);
-	//playerBubble->setBackgroundColour(1, 1, 1, 1);
 
 	// The fancy nine sliced bubble
 	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-BUBBLE"));
@@ -210,6 +212,43 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverImage->setRationalHeight(0.5f);
 	gameOverContainer->addChild(gameOverImage);
 	// don't add the container until yelling contest is over
+
+	// Debug stuff
+	buttonPresses = new VerticalLinearLayout(_bulletWorld);
+	buttonPresses->setRationalWidth(1.f);
+	buttonPresses->setRationalHeight(0.1f);
+	buttonPresses->horizontalAlignment = kLEFT;
+
+	HorizontalLinearLayout * interjectButtonPresses = new HorizontalLinearLayout(_bulletWorld);
+	interjectButtonPresses->setRationalWidth(1.f);
+	interjectButtonPresses->setRationalHeight(0.5f);
+	TextLabel * interjectTitle = new TextLabel(_bulletWorld, _font, _textShader);
+	interjectTitle->setText("INTERJECT: ");
+
+	defensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	defensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+
+	HorizontalLinearLayout * insultButtonPresses = new HorizontalLinearLayout(_bulletWorld);
+	TextLabel * insultTitle = new TextLabel(_bulletWorld, _font, _textShader);
+	insultTitle->setText("INSULT: ");
+	insultButtonPresses->setRationalWidth(1.f);
+	insultButtonPresses->setRationalHeight(0.5f);
+
+	offensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	offensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+
+	interjectButtonPresses->addChild(interjectTitle);
+	interjectButtonPresses->addChild(defensiveCorrectLabel);
+	interjectButtonPresses->addChild(defensiveWrongLabel);
+
+	insultButtonPresses->addChild(insultTitle);
+	insultButtonPresses->addChild(offensiveCorrectLabel);
+	insultButtonPresses->addChild(offensiveWrongLabel);
+
+	buttonPresses->addChild(interjectButtonPresses);
+	buttonPresses->addChild(insultButtonPresses);
+
+	addChild(buttonPresses);
 	
 	addChild(livesContainer);
 	addChild(confidenceSlider);
@@ -281,7 +320,8 @@ void PD_UI_YellingContest::update(Step * _step){
 							selectedGlyphText->setText(s.str());
 							*/
 						}else{
-							// TODO: decrement confidence, but not yet! It's still too hard to interject!
+							// Enemy insult successful, get next insult
+							incrementConfidence(-damage);
 							setEnemyText();
 						}
 					}
@@ -382,6 +422,14 @@ void PD_UI_YellingContest::startNewFight(){
 
 	setUIMode(false);
 	enable();
+
+	// Set test stuff
+	offensiveCorrectLabel->setText("Correct: 0");
+	offensiveWrongLabel->setText("  Incorrect: 0");
+	defensiveCorrectLabel->setText("Correct: 0");
+	defensiveWrongLabel->setText("  Incorrect: 0");
+
+	buttonPresses->invalidateLayout();
 }
 
 void PD_UI_YellingContest::gameOver(bool _win){
@@ -399,6 +447,9 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	}
 
 	addChild(gameOverContainer);
+
+	std::cout << "INTERJECT correct: " << defensiveCorrect << "  incorrect: " << defensiveWrong << std::endl;
+	std::cout << "INSULT    correct: " << offensiveCorrect << "  incorrect: " << offensiveWrong << std::endl;
 }
 
 void PD_UI_YellingContest::complete(){
@@ -439,7 +490,7 @@ void PD_UI_YellingContest::interject(){
 	}
 
 	incrementConfidence(isPunctuation ? damage : -damage);
-
+	countButtonPresses(isPunctuation, false);
 	setUIMode(isPunctuation);
 }
 
@@ -473,14 +524,9 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	for (auto label : enemyBubbleText->usedLines) {
 		for (int i = 0; i < label->usedGlyphs.size(); ++i){
-			std::wstringstream s;
-			s << label->usedGlyphs.at(i)->character;
-			std::wcout << s.str();
 			glyphs.push_back(label->usedGlyphs.at(i));
 		}
 	}
-
-	std::cout << std::endl;
 
 	if(glyphs.size() > 0){
 		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
@@ -511,6 +557,7 @@ void PD_UI_YellingContest::setPlayerText(){
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective){
+	countButtonPresses(_isEffective, true);
 	if (_isEffective){
 		// next insult
 		incrementConfidence(damage);
@@ -609,4 +656,30 @@ bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
 	}
 
 	return false;
+}
+
+void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive){
+	std::stringstream s;
+	if(_isOffensive){
+		if(_isCorrect){
+			++offensiveCorrect;
+			s << "Correct: " << offensiveCorrect;
+			offensiveCorrectLabel->setText(s.str());
+		}else{
+			++offensiveWrong;
+			s << "  Incorrect: " << offensiveWrong;
+			offensiveWrongLabel->setText(s.str());
+		}
+	}else{
+		if(_isCorrect){
+			++defensiveCorrect;
+			s << "Correct: " << defensiveCorrect;
+			defensiveCorrectLabel->setText(s.str());
+		}else{
+			++defensiveWrong;
+			s << "  Incorrect: " << defensiveWrong;
+			defensiveWrongLabel->setText(s.str());
+		}
+	}
+	buttonPresses->invalidateLayout();
 }
