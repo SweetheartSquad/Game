@@ -35,7 +35,7 @@ PersonComponent::PersonComponent(CharacterComponentDefinition * const _definitio
 	flipped(_flipped)
 {
 	// get texture
-	AssetTexture * tex = PD_ResourceManager::componentTextures->getTexture(_definition->texture);//new Texture("assets/textures/character components/" + _json["src"].asString(), true, true);
+	AssetTexture * tex = PD_ResourceManager::componentTextures->getTexture(_definition->texture);
 	tex->load();
 
 	// apply palette + texture
@@ -46,7 +46,7 @@ PersonComponent::PersonComponent(CharacterComponentDefinition * const _definitio
 	out = _definition->out;
 	// handle flipping
 	if(flipped){
-		meshTransform->scale(-1, 1, 1);
+		meshTransform->scale(-1, 1, 1, false);
 		in.x = 1 - in.x;
 		for(glm::vec2 & o : out){
 			o.x = 1 - o.x;
@@ -63,11 +63,9 @@ PersonComponent::PersonComponent(CharacterComponentDefinition * const _definitio
 	
 	// scale and translate the mesh into position
 	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
-	meshTransform->translate(tex->texture->width*0.5f, tex->texture->height*0.5f, 0);
-	meshTransform->translate(-in.x, -in.y, 0);
+	meshTransform->translate(tex->texture->width*0.5f -in.x, tex->texture->height*0.5f -in.y, 0, false);
 
-	mesh->scaleModeMag = GL_NEAREST;
-	mesh->scaleModeMin = GL_NEAREST;
+	mesh->setScaleMode(GL_NEAREST);
 }
 
 glm::vec2 PersonComponent::getOut(unsigned long int _index){
@@ -99,35 +97,65 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 {
 	paletteTex->load();
 	
-	pelvis = new PersonComponent(&_definition->root, paletteTex, false);
+	CharacterComponentDefinition
+		* pelvisDef			= &_definition->root,
+		* torsoDef			= &pelvisDef->components.at(0),
 
-	torso = new PersonComponent(&_definition->root.components.at(0), paletteTex, false);
+		* jawDef			= &torsoDef->components.at(0),
+		* headDef			= &jawDef->components.at(0),
+		* noseDef			= &headDef->components.at(0),
+		* eyebrowLDef		= &headDef->components.at(1),
+		* eyebrowRDef		= &headDef->components.at(2),
+		* eyeLDef			= &headDef->components.at(3),
+		* eyeRDef			= &headDef->components.at(4),
+		* pupilLDef			= &eyeLDef->components.at(0),
+		* pupilRDef			= &eyeRDef->components.at(0),
 
-	jaw = new PersonComponent(&_definition->root.components.at(0).components.at(0), paletteTex, false);
-	head = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0), paletteTex, false);
-	nose = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(0), paletteTex, false);
-	eyebrowL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(1), paletteTex, false);
-	eyebrowR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(2), paletteTex, false);
-	eyeL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(3), paletteTex, false);
-	eyeR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(4), paletteTex, false);
-	pupilL = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(3).components.at(0), paletteTex, false);
-	pupilR = new PersonComponent(&_definition->root.components.at(0).components.at(0).components.at(0).components.at(4).components.at(0), paletteTex, false);
+		* armLDef			= &torsoDef->components.at(2),
+		* armRDef			= &torsoDef->components.at(1),
+		* forearmLDef		= &armLDef->components.at(0),
+		* forearmRDef		= &armRDef->components.at(0),
+		* handLDef			= &forearmLDef->components.at(0),
+		* handRDef			= &forearmRDef->components.at(0),
+		
+		* legLDef			= &pelvisDef->components.at(2),
+		* legRDef			= &pelvisDef->components.at(1),
+		* forelegLDef		= &legLDef->components.at(0),
+		* forelegRDef		= &legRDef->components.at(0),
+		* footLDef			= &forelegLDef->components.at(0),
+		* footRDef			= &forelegRDef->components.at(0);
 
-	armR = new PersonComponent(&_definition->root.components.at(0).components.at(1), paletteTex, true);
-	forearmR = new PersonComponent(&_definition->root.components.at(0).components.at(1).components.at(0), paletteTex, true);
-	handR = new PersonComponent(&_definition->root.components.at(0).components.at(1).components.at(0).components.at(0), paletteTex, true);
 
-	armL = new PersonComponent(&_definition->root.components.at(0).components.at(2), paletteTex, false);
-	forearmL = new PersonComponent(&_definition->root.components.at(0).components.at(2).components.at(0), paletteTex, false);
-	handL = new PersonComponent(&_definition->root.components.at(0).components.at(2).components.at(0).components.at(0), paletteTex, false);
+	pelvis = new PersonComponent(pelvisDef, paletteTex, false);
 
-	legR = new PersonComponent(&_definition->root.components.at(1), paletteTex, true);
-	forelegR = new PersonComponent(&_definition->root.components.at(1).components.at(0), paletteTex, true);
-	footR = new PersonComponent(&_definition->root.components.at(1).components.at(0).components.at(0), paletteTex, true);
+	torso = new PersonComponent(torsoDef, paletteTex, false);
+
+	jaw = new PersonComponent(jawDef, paletteTex, false);
+	head = new PersonComponent(headDef, paletteTex, false);
+
+	nose = new PersonComponent(noseDef, paletteTex, false);
+	eyebrowL = new PersonComponent(eyebrowLDef, paletteTex, false);
+	eyebrowR = new PersonComponent(eyebrowRDef, paletteTex, false);
+	eyeL = new PersonComponent(eyeLDef, paletteTex, false);
+	eyeR = new PersonComponent(eyeRDef, paletteTex, false);
+	pupilL = new PersonComponent(pupilLDef, paletteTex, false);
+	pupilR = new PersonComponent(pupilRDef, paletteTex, false);
+
+	armR = new PersonComponent(armRDef, paletteTex, true);
+	forearmR = new PersonComponent(forearmRDef, paletteTex, true);
+	handR = new PersonComponent(handRDef, paletteTex, true);
+
+	armL = new PersonComponent(armLDef, paletteTex, false);
+	forearmL = new PersonComponent(forearmLDef, paletteTex, false);
+	handL = new PersonComponent(handLDef, paletteTex, false);
+
+	legR = new PersonComponent(legRDef, paletteTex, true);
+	forelegR = new PersonComponent(forelegRDef, paletteTex, true);
+	footR = new PersonComponent(footRDef, paletteTex, true);
 					
-	legL = new PersonComponent(&_definition->root.components.at(2), paletteTex, false);
-	forelegL = new PersonComponent(&_definition->root.components.at(2).components.at(0), paletteTex, false);
-	footL = new PersonComponent(&_definition->root.components.at(2).components.at(0).components.at(0), paletteTex, false);
+	legL = new PersonComponent(legLDef, paletteTex, false);
+	forelegL = new PersonComponent(forelegLDef, paletteTex, false);
+	footL = new PersonComponent(footLDef, paletteTex, false);
 
 	solverArmR = new PersonLimbSolver(torso->getOut(1));
 	solverArmL = new PersonLimbSolver(torso->getOut(2));
@@ -162,6 +190,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	connect(jaw, head);
 	//solverBod->addComponent(jaw);
 	//solverBod->addComponent(head);
+
 	// no point in putting the nose/eyes into the skeletal structure
 	connect(head, nose);
 	connect(head, eyebrowL);
@@ -176,7 +205,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	solverBod->jointsLocal.at(1)->addJoint(solverArmL);
 	solverBod->jointsLocal.at(0)->addJoint(solverLegR);
 	solverBod->jointsLocal.at(0)->addJoint(solverLegL);
-	childTransform->addChild(solverBod);
+	childTransform->addChild(solverBod, false);
 
 	
 	solvers.push_back(solverBod);
@@ -218,7 +247,7 @@ void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, boo
 	joints.back()->translate(
 		_from->out.at(_from->connections.size()).x - _from->in.x,
 		_from->out.at(_from->connections.size()).y - _from->in.y,
-		0); // use a small z translation to give some idea of layers until we implement a proper fix for z-fighting
+		0, false);
 	_from->connections.push_back(_to);
 }
 
