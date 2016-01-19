@@ -17,7 +17,7 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 	// parse external component file
 	if(_json.isMember("src")){
 		Json::Reader reader;
-		bool parsingSuccesful = reader.parse(FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
+		bool parsingSuccesful = reader.parse(sweet::FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
 		if(!parsingSuccesful){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}

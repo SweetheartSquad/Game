@@ -185,7 +185,7 @@ Transform * PD_Scene_FurnitureTest::createChair(){
 	int id;
 
 	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
+	std::string jsonLoaded = sweet::FileUtils::readFile("assets/furniture.json");
 	bool parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);

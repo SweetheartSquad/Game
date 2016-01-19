@@ -17,7 +17,7 @@ void PD_InsultGenerator::makeDatabases() {
 	Json::Value root;
 	Json::Reader reader;
 
-	std::string jsonLoaded = FileUtils::readFile("assets/insults/wordlist.json");
+	std::string jsonLoaded = sweet::FileUtils::readFile("assets/insults/wordlist.json");
 	bool parsingSuccessful = reader.parse(jsonLoaded, root);
 
 	//error check

@@ -13,14 +13,18 @@ class InterjectAccuracy {
 public:
 	wchar_t character;
 	float padding;
-	float time;
+	float targetTime;
 	float hitTime;
+	unsigned long int iteration;
 
-	InterjectAccuracy(wchar_t character, float _padding, float _time, float _hitTime);
+	InterjectAccuracy(wchar_t character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration);
 };
 
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
+	// number of punctuation marks passed
+	unsigned long int iteration;
+
 	PD_InsultGenerator insultGenerator;
 
 	bool isEnabled;
@@ -35,6 +39,7 @@ private:
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
+	UIGlyph * prevHighlightedPunctuation;
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
 	
@@ -75,7 +80,7 @@ private:
 	// Button Presses Speed
 	std::vector<float> insultTimes;
 	int punctuationCnt;
-	std::map<int, InterjectAccuracy *> interjectTimes;
+	std::vector<InterjectAccuracy> interjectTimes;
 	float interjectTimer;
 
 	VerticalLinearLayout * buttonPresses;

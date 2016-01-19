@@ -10,15 +10,18 @@
 #include <Sprite.h>
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
+#include <FileUtils.h>
 #include <shader/ComponentShaderText.h>
+#include <DateUtils.h>
 
 #define BORDER_SIZE 80.f
 
-InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _time, float _hitTime):
+InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
 	padding(_padding),
-	time(_time),
-	hitTime(_hitTime)
+	targetTime(_targetTime),
+	hitTime(_hitTime),
+	iteration(_iteration)
 {
 
 }
@@ -41,6 +44,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
+	prevHighlightedPunctuation(nullptr),
 	punctuationHighlight(new Sprite(_shader)),
 	highlightedWordStart(nullptr),
 	highlightedWordEnd(nullptr),
@@ -56,7 +60,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	defensiveCorrect(0),
 	defensiveWrong(0),
 	interjectTimer(0),
-	punctuationCnt(-1)
+	punctuationCnt(-1),
+	iteration(0)
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -322,6 +327,7 @@ void PD_UI_YellingContest::update(Step * _step){
 
 						// Find next punctuation
 						if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+							prevHighlightedPunctuation = highlightedPunctuation;
 							highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
 						}
 
@@ -344,12 +350,8 @@ void PD_UI_YellingContest::update(Step * _step){
 							s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
 							s->play();
 						}else{
-							// Enemy insult successful, get next insult
-							countInterjectAccuracy(NULL);
-
 							incrementConfidence(-damage);
 							setEnemyText();
-							interjectTimer = 0;
 						}
 					}
 			
@@ -425,7 +427,7 @@ void PD_UI_YellingContest::startNewFight(){
 	lostLives.clear();
 
 	// loop through friends and add tokens
-	for(unsigned int i = 0; i < 3; ++i){
+	for(unsigned int i = 0; i < 1; ++i){
 		NodeUI * l = new NodeUI(world);
 		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
 		l->background->mesh->pushTexture2D(tex);
@@ -483,28 +485,72 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	addChild(gameOverContainer);
 
 	// USER TESTING INFORMATION
-	std::cout << "\nYELLING CONTEST USER TEST RESULTS" << std::endl;
-	std::cout << "************************************" << std::endl;
+	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
+	{
+		std::stringstream filename;
+		std::ofstream file;
 
-	std::cout << "\nBUTTON PRESSES SUCCESS RATE " << std::endl;
-	std::cout << "============================" << std::endl;
-	std::cout << "INTERJECT \tcorrect: " << defensiveCorrect << " \tincorrect: " << defensiveWrong << std::endl;
-	std::cout << "INSULT \t\tcorrect: " << offensiveCorrect << " \tincorrect: " << offensiveWrong << std::endl;
-
-	std::cout << "\nBUTTON PRESSES ACCURACY (seconds)" << std::endl;
-	std::cout << "========================" << std::endl;
-	std::cout << "INTERJECT" << std::endl;
-	std::cout << "----------" << std::endl;
-	typedef std::map<int, InterjectAccuracy *>::iterator it_type;
-	for(it_type it = interjectTimes.begin(); it != interjectTimes.end(); it++) {
-		std::cout << "idx: " << it->first << " \tcharacter: " << it->second->character << " \thitPadding: " << it->second->padding << " \t hitTime: " << it->second->hitTime << std::endl;	
+		// success rate
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_SuccessRate.csv";
+		file.open(filename.str());
+		file << "correctInterject;incorrectInterject;correctInsult;incorrectInsult;" << std::endl;
+		file << defensiveCorrect << ";" << defensiveWrong << ";" << offensiveCorrect << ";" << offensiveWrong << std::endl;
+		file.close();
 	}
 
-	std::cout << "INSULT" << std::endl;
-	std::cout << "-------" << std::endl;
-	std::cout << "MAX TIME: " << playerAnswerTimerLength << " \tFAILED (Out of time): -1\n" << std::endl;
-	for(unsigned int i = 0; i < insultTimes.size(); ++i){
-		std::cout << "hitTime: " << insultTimes.at(i) << std::endl;
+
+	// interject statistics
+	{
+		std::stringstream filename;
+		std::ofstream file;
+		float prevTargetTime = 0;
+		float targetTime = 0;
+
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Interject.csv";
+		file.open(filename.str());
+		file << "iteration;character;hitPadding;hitTime;targetTime;diffToNext;diffToPrev;expectedTarget;percentageError;" << std::endl;
+		for(unsigned long int i = 0; i < interjectTimes.size(); ++i){
+			if(targetTime != interjectTimes.at(i).targetTime){
+				prevTargetTime = targetTime;
+				targetTime = interjectTimes.at(i).targetTime;
+			}
+
+			std::string expected;
+			float expectedDiff;
+			if(std::abs(interjectTimes.at(i).hitTime) < std::abs(targetTime - interjectTimes.at(i).hitTime)){
+				expectedDiff = std::abs(interjectTimes.at(i).hitTime);
+				expected = "PREV";
+			}else{
+				expectedDiff = std::abs(targetTime - interjectTimes.at(i).hitTime);
+				expected = "NEXT";
+			
+			}
+
+			file << interjectTimes.at(i).iteration
+				 << ";" << interjectTimes.at(i).character
+				 << ";" << interjectTimes.at(i).padding
+				 << ";" << interjectTimes.at(i).hitTime
+				 << ";" << targetTime
+				 << ";" << (targetTime - interjectTimes.at(i).hitTime)
+				 << ";" << (interjectTimes.at(i).hitTime)
+				 << ";" << expected
+				 << ";" << (expectedDiff / interjectTimes.at(i).padding)*100 << "%" << std::endl;
+		}
+		file.close();
+	}
+	
+	// insult statistics
+	{
+		std::stringstream filename;
+		std::ofstream file;
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Insult.csv";
+		file.open(filename.str());
+
+		file << "playerAnswerTimerLength FAILED (Out of time): -1;hitTime;" << std::endl;
+		for(unsigned int i = 0; i < insultTimes.size(); ++i){
+			file << playerAnswerTimerLength << ";" << insultTimes.at(i) << std::endl;
+		}
+		file.close();
 	}
 }
 
@@ -544,11 +590,11 @@ void PD_UI_YellingContest::interject(){
 	}else{
 		isPunctuation = true;
 	}
+	countInterjectAccuracy(interjectTimer);
 
 	incrementConfidence(isPunctuation ? damage : -damage);
 	countButtonPresses(isPunctuation, false);
 
-	countInterjectAccuracy(interjectTimer);
 
 	if(isPunctuation){
 		setUIMode(isPunctuation);
@@ -592,7 +638,9 @@ void PD_UI_YellingContest::setEnemyText(){
 	if(glyphs.size() > 0){
 		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 	}
-
+	
+	interjectTimer = 0;
+	prevHighlightedPunctuation = nullptr;
 	highlightedPunctuation = findFirstPunctuation();
 	highlightNextWord();
 }
@@ -664,6 +712,7 @@ UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
 			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
 			punctuationHighlight->setVisible(true);
 			++punctuationCnt;
+			++iteration;
 			return glyphs.at(i);
 		}
 	}
@@ -751,26 +800,35 @@ void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive
 
 void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 	if(highlightedPunctuation != nullptr){
-		float punctuationTimeStart = 0;
+		float punctuationTimeStart = 0, punctuationMeasureFromTime = 0;
 		float padding = 0;
+		
+		if(prevHighlightedPunctuation != nullptr){
+			for(int i = 0; i < glyphs.size(); ++i){
+				float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+				if(glyphs.at(i) != prevHighlightedPunctuation){
+					punctuationMeasureFromTime += glyphTime;
+				}else{
+					punctuationMeasureFromTime += glyphTime/2.f;
+					break;
+				}
+			}
+		}
+		
 		for(int i = 0; i < glyphs.size(); ++i){
 			float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 			if(glyphs.at(i) != highlightedPunctuation){
 				punctuationTimeStart += glyphTime;
 			}else{
 				padding += glyphTime;
-				exit;
+				break;
 			}
 		}
 
-		float time = punctuationTimeStart + padding/2.f;
-		float hitTime = _pressTime == NULL ? NULL : _pressTime - time;
+		float targetTime = (punctuationTimeStart - punctuationMeasureFromTime) + padding/2.f;
+		//float hitTime = _pressTime == NULL ? NULL : _pressTime - targetTime;
 
-		if(interjectTimes.find(punctuationCnt-1) != interjectTimes.end() && interjectTimes.at(punctuationCnt-1)->hitTime == NULL){
-			interjectTimes.at(punctuationCnt-1)->hitTime = _pressTime - interjectTimes.at(punctuationCnt-1)->time;
-		}else{
-			interjectTimes[punctuationCnt] = new InterjectAccuracy(highlightedPunctuation->character, padding, time, hitTime);
-		}
+		interjectTimes.push_back(InterjectAccuracy(highlightedPunctuation->character, padding, targetTime, (_pressTime-punctuationMeasureFromTime), iteration));
 	}
 
 	
