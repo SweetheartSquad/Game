@@ -12,6 +12,8 @@
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
+#define BORDER_SIZE 80.f
+
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _time, float _hitTime):
 	character(_character),
 	padding(_padding),
@@ -120,7 +122,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubble->background->setVisible(false);
 
 	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-DEFENSE-BUBBLE"));
-	enemyBubbleBubble->setBorder(80.f);
+	enemyBubbleBubble->setBorder(BORDER_SIZE);
 	enemyBubble->addChild(enemyBubbleBubble);
 	enemyBubbleBubble->setRationalWidth(1.f);
 	enemyBubbleBubble->setRationalHeight(1.f);
@@ -154,7 +156,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	// The fancy nine sliced bubble
 	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-BUBBLE"));
-	playerBubbleBubble->setBorder(80.f);
+	playerBubbleBubble->setBorder(BORDER_SIZE);
 	playerBubble->addChild(playerBubbleBubble);
 	playerBubbleBubble->setRationalWidth(1.f);
 	playerBubbleBubble->setRationalHeight(1.f);
