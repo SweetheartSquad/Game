@@ -10,8 +10,10 @@
 #include <shader/ShaderComponentDiffuse.h>
 #include <shader/ShaderComponentIndexedTexture.h>
 #include <shader/ShaderComponentDepthOffset.h>
+#include <shader/ShaderComponentToon.h>
 #include <shader/ComponentShaderText.h>
 
+#include <RampTexture.h>
 #include <NumberUtils.h>
 #include <StringUtils.h>
 #include <TextureUtils.h>
@@ -31,18 +33,24 @@
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	Scene(_game),
-	uiLayer(0,0,0,0),
 	shader(new ComponentShaderBase(false)),
-	characterShader(new ComponentShaderBase(false)),
+	toonShader(new ComponentShaderBase(false)),
+	uiLayer(0,0,0,0),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
-	currentHoverTarget(nullptr),
-	selectedItem(nullptr)
+	selectedItem(nullptr),
+	characterShader(new ComponentShaderBase(false)),
+	currentHoverTarget(nullptr)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader, 0));
 	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
+
+	toonShader->addComponent(new ShaderComponentMVP(toonShader));
+	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
+	toonShader->addComponent(new ShaderComponentToon(toonShader, new RampTexture(glm::vec3(0.5,0.5,0.5), glm::vec3(1,1,1), 3)));
+	toonShader->compileShader();
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
@@ -128,10 +136,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.005f);
 	testCharacter->firstParent()->translate(0, 2, 0);
-	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);*/
-
-
-
+	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
 
 
 	// add a ground to the scene
@@ -159,12 +164,14 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
 	// Add some generated furniture
 	for(unsigned long int i = 0; i < 50; ++i) {
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
-		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
+		auto furn = new PD_Furniture(bulletWorld, toonShader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
 		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
 		furn->freezeTransformation();
 		furn->setColliderAsBoundingBox();
 		furn->createRigidBody(1.0f);
 		furn->setTranslationPhysical(i * 10.0f, furn->mesh->calcBoundingBox().height * 0.5f, 0.f);
+		furn->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("wood")->texture);
+		furn->mesh->setScaleMode(GL_NEAREST);
 		childTransform->addChild(furn);
 	}
 

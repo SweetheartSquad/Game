@@ -21,6 +21,7 @@
 class PD_Scene_CombinedTests : public Scene{
 public:
 	ComponentShaderBase * shader;
+	ComponentShaderBase * toonShader;
 
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
@@ -39,6 +40,7 @@ public:
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;
 	ComponentShaderBase * characterShader;
+
 
 	NodeUI * crosshairIndicator;
 
