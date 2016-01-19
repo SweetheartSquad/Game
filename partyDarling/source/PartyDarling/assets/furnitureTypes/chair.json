@@ -1,15 +1,15 @@
 {
    "components": [
                 {
-                    "componentType": "seat", 
+                    "componentTypes": ["seat"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentType": "back", 
+                            "componentTypes": ["back"], 
                             "multiplier": 1, 
                             "outComponents": [
                                 {
-                                    "componentType": "arm", 
+                                    "componentTypes": ["arm"], 
                                     "multiplier": 2,
                                     "required": false
                                 }
@@ -18,7 +18,7 @@
 							"scale": [1.0,1.0,1.0]
                         }, 
                         {
-                            "componentType": "leg", 
+                            "componentTypes": ["leg"], 
                             "multiplier": 4, 
                             "outComponents": [], 
                             "required": true,

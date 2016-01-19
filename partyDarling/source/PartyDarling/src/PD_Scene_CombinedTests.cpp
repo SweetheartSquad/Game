@@ -28,6 +28,9 @@
 #include <PD_Furniture.h>
 #include <PointLight.h>
 
+#include <Room.h>
+#include <RoomBuilder.h>
+
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
@@ -53,9 +56,9 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 
 	// remove initial camera
-	childTransform->removeChild(cameras.at(0)->parents.at(0));
+	/*childTransform->removeChild(cameras.at(0)->parents.at(0));
 	delete cameras.at(0)->parents.at(0);
-	cameras.pop_back();
+	cameras.pop_back();*/
 
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
@@ -122,7 +125,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);//new PersonRenderer(bulletWorld);
 	childTransform->addChild(testCharacter);
-	testCharacter->setShader(characterShader, true);
 	testCharacter->unload();
 	testCharacter->load();
 	testCharacter->firstParent()->scale(0.001f);
@@ -153,10 +155,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
 	
-	sweet::NumberUtils::seed(87537658365);
+	//sweet::NumberUtils::seed(87537658365);
 
 	// Add some generated furniture
-	for(unsigned long int i = 0; i < 50; ++i) {
+	/*for(unsigned long int i = 0; i < 50; ++i) {
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
 		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
 		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
@@ -165,12 +167,23 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		furn->createRigidBody(1.0f);
 		furn->setTranslationPhysical(i * 10.0f, furn->mesh->calcBoundingBox().height * 0.5f, 0.f);
 		childTransform->addChild(furn);
-	}
+	}*/
 
 	PointLight * light2 = new PointLight(glm::vec3(5,5,5), 0.02f, 0.001f, -1);
 	childTransform->addChild(light2);
 	light2->firstParent()->translate(0.f, 20.f, 0.f);
 	lights.push_back(light2);
+
+
+	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, shader, characterShader).getRoom();
+	childTransform->addChild(room);
+	room->setShader(shader, true);
+	childTransform->addChild(room->tilemapSprite);
+	std::vector<RoomObject *> components = room->getAllComponents();
+	for(unsigned int i = 0; i < components.size(); ++i){
+		childTransform->addChild(components.at(i));
+		components.at(i)->setShader(characterShader, true);
+	}
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
@@ -332,6 +345,8 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_P)){
 		dynamic_cast<PD_Game*>(game)->playBGM();
+	}if(keyboard->keyJustDown(GLFW_KEY_O)){
+		dynamic_cast<PD_Game*>(game)->playFight();
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
@@ -352,6 +367,17 @@ void PD_Scene_CombinedTests::update(Step * _step){
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
+	}
+
+	
+	if(keyboard->keyDown(GLFW_KEY_UP)){
+		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * 0.03f);
+	}if(keyboard->keyDown(GLFW_KEY_DOWN)){
+		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * -0.03f);
+	}if(keyboard->keyDown(GLFW_KEY_LEFT)){
+		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * -0.03f);
+	}if(keyboard->keyDown(GLFW_KEY_RIGHT)){
+		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * 0.03f);
 	}
 	
 	

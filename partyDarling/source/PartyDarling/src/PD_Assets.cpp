@@ -3,6 +3,8 @@
 #include <PD_Assets.h>
 #include <PD_Item.h>
 
+#include <scenario/Scenario.h>
+
 
 //texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
 
@@ -134,8 +136,26 @@ PD_Item * AssetItem::getItem(BulletWorld * _world, Shader * _shader){
 
 // room
 AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
-	Asset(_json, _scenario)
+	Asset(_json, _scenario),
+	name(_json.get("name", "NO_NAME").asString()),
+	description(_json.get("description", "NO_DESCRIPTION").asString()),
+	locked(_json.get("locked", false).asBool())
 {
+	std::string sizeString = _json.get("size", "MEDIUM").asString();
+	if(sizeString == "SMALL"){
+		size = kSMALL;
+	}else if(sizeString == "MEDIUM"){
+		size = kMEDIUM;
+	}else{
+		size = kLARGE;
+	}
+	
+	for(auto c : _json["characters"]){
+		characters.push_back(c.asString());
+	}
+	for(auto i : _json["items"]){
+		items.push_back(i.asString());
+	}
 }
 AssetRoom * AssetRoom::create(Json::Value _json, Scenario * const _scenario){
 	return new AssetRoom(_json, _scenario);
@@ -153,4 +173,16 @@ void AssetRoom::unload(){
 	if(loaded){
 	}
 	Asset::unload();
+}
+
+AssetCharacter * AssetRoom::getCharacter(unsigned long int _index){
+	return dynamic_cast<AssetCharacter *>(scenario->getAsset("character", characters.at(_index)));
+}
+std::vector<AssetCharacter *> AssetRoom::getCharacters(){
+	std::vector<AssetCharacter *> res;
+	for(unsigned long int c = 0; c < characters.size(); ++c){
+		res.push_back(getCharacter(c));
+	}
+
+	return res;
 }

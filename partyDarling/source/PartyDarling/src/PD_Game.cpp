@@ -25,6 +25,8 @@ PD_Game::PD_Game() :
 	fightTrack(nullptr)
 {
 	printFPS = false;
+
+	playBGM();
 }
 
 PD_Game::~PD_Game(){
@@ -63,5 +65,6 @@ void PD_Game::playFight(){
 	}
 	// TODO: implement generative song here
 	fightTrack = new AutoDrums(PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound);
+	fightTrack->bpm = 128;
 	fightTrack->generate();
 }

@@ -8,7 +8,7 @@ class MeshEntity;
 
 class PD_FurnitureComponentDefinition {
 public:
-	std::string componentType;
+	std::vector<std::string> componentTypes;
 	bool required;
 	std::vector<PD_FurnitureComponentDefinition *> outComponents;
 	unsigned long int multiplier;

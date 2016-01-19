@@ -28,6 +28,8 @@
 #include <RoomObject.h>
 #include <PD_TilemapGenerator.h>
 
+#include <PD_Assets.h>
+
 PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
@@ -102,7 +104,7 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	bulletGround->body->setFriction(1);
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 	
-	room = RoomBuilder(std::string("{\"size\":{\"l\":6, \"w\":6}}"),bulletWorld).getRoom();
+	room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, shader, characterShader).getRoom();
 	childTransform->addChild(room);
 	room->setShader(shader, true);
 	childTransform->addChild(room->tilemapSprite);

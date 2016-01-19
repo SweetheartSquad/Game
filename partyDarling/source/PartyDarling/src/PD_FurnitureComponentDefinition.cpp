@@ -6,7 +6,6 @@
 #include <NumberUtils.h>
 
 PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _jsonDef) :
-	componentType(_jsonDef.get("componentType", "UNDEFINED").asString()),
 	required(_jsonDef.get("required", true).asBool()),
 	multiplier(_jsonDef.get("multiplier", 1).asInt()),
 	scale(_jsonDef.isMember("scale") ? (
@@ -16,6 +15,9 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 		: 1
 	)
 {
+	for(auto type : _jsonDef["componentTypes"]){
+		componentTypes.push_back(type.asString());
+	}
 	for(auto jsonComp : _jsonDef["outComponents"]) {
 		outComponents.push_back(new PD_FurnitureComponentDefinition(jsonComp));
 	}
@@ -23,7 +25,8 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 
 TriMesh * PD_FurnitureComponentDefinition::build(){
 	// Get a component for the component type - ex : Leg, Seat, Etc
-	PD_FurnitureComponent * component = PD_ResourceManager::furnitureComponents->getComponentForType(componentType);
+	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
+	PD_FurnitureComponent * component = PD_ResourceManager::furnitureComponents->getComponentForType(type);
 
 	TriMesh * res = new TriMesh();
 	res->vertices.insert(res->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
@@ -45,7 +48,7 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 
 				MeshEntity * tempMeshEntity = new MeshEntity(duplicateTempMesh);
 				// translate and scale the temporary mesh to match this components definition
-				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentType].at(i));
+				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentTypes].at(i));
 				tempMeshEntity->meshTransform->scale(outComponent->scale);
 				tempMeshEntity->freezeTransformation();
 

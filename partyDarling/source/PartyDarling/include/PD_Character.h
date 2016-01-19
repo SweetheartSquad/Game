@@ -119,11 +119,11 @@ public:
 
 class Person : public RoomObject {
 public:
-	Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
+	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 
-	//virtual void setShader(Shader * _shader, bool _default) override;
+	virtual void setShader(Shader * _shader, bool _default) override;
 	
 	PersonRenderer * pr;
 };

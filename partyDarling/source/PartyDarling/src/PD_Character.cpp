@@ -7,6 +7,7 @@
 #include <MeshFactory.h>
 #include <PD_ResourceManager.h>
 #include <PD_Assets.h>
+#include <PD_Character.h>
 #include <NumberUtils.h>
 #include <TextureColourTable.h>
 
@@ -19,15 +20,21 @@ PersonButt::PersonButt(BulletWorld * _world, PersonRenderer * _person) :
 
 }
 
-Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
+Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor),
-	pr(new PersonRenderer(_world, nullptr)) // TODO: fix this
+	pr(new PersonRenderer(_world, _definition)) // TODO: fix this
 {
 	setColliderAsCapsule(0.5f,1.f);
 	createRigidBody(25);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
+	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(0.001);
+}
+
+void Person::setShader(Shader * _shader, bool _configureDefault){
+	RoomObject::setShader(_shader, _configureDefault);
+	pr->setShader(_shader, _configureDefault);
 }
 
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped) :

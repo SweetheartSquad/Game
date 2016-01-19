@@ -340,6 +340,34 @@
 
       ],
       "type":"conversation"
+    },
+
+
+
+
+
+    {  
+      "name":"milk room",
+      "id":1,
+      "description":"room of milk",
+      "furnitureTypes":[  
+
+      ],
+      "characters":[  
+        1
+      ],
+      "items":[  
+
+      ],
+      "tags":[  
+
+      ],
+      "size":"LARGE",
+      "type":"room",
+      "locked":false
     }
+
+
+
   ]
 }
