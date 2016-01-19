@@ -30,74 +30,6 @@ Person::Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
 	childTransform->addChild(pr)->scale(0.001);
 }
 
-std::vector<PersonComponent *> PersonComponent::getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped){
-	Json::Value root;
-	Json::Reader reader;
-	std::string jsonLoaded = FileUtils::readFile("assets/"+_json["id"].asString());
-	bool parsingSuccessful = reader.parse( jsonLoaded, root );
-	if(!parsingSuccessful){
-		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
-	}
-
-	std::vector<PersonComponent *> res;
-
-	if(root.isMember("components")){
-		Json::Value componentsJson = root["components"];
-		for(auto i = 0; i < componentsJson.size(); ++i) {
-			res.push_back(new PersonComponent(componentsJson[i], _paletteTex, _flipped));
-		}
-	}else{
-		res.push_back(new PersonComponent(root, _paletteTex, _flipped));
-	}
-
-	return res;
-}
-
-PersonComponent::PersonComponent(Json::Value _json, Texture * _paletteTex, bool _flipped) :
-	Sprite(),
-	flipped(_flipped)
-{
-	// get texture
-	Texture * tex = new Texture("assets/textures/character components/" + _json["src"].asString(), true, true);
-	tex->load();
-
-	// apply palette + texture
-	mesh->pushTexture2D(_paletteTex);
-	mesh->pushTexture2D(tex);
-	
-	// parse coordinates
-	in = glm::vec2(_json["in"][0].asFloat(), _json["in"][1].asFloat());
-	Json::Value outJson = _json["out"];
-	for(auto i = 0; i < outJson.size(); ++i){
-		out.push_back(glm::vec2(outJson[i][0].asFloat(), outJson[i][1].asFloat()));
-	}
-
-	// handle flipping
-	if(flipped){
-		meshTransform->scale(-1, 1, 1);
-		in.x = 1 - in.x;
-		for(glm::vec2 & o : out){
-			o.x = 1 - o.x;
-		}
-	}
-	
-	// multiply percentage coordinates by width/height to corresponding to specific texture
-	in.x *= tex->width;
-	in.y *= tex->height;
-	for(glm::vec2 & o : out){
-		o.x *= tex->width;
-		o.y *= tex->height;
-	}
-	
-	// scale and translate the mesh into position
-	meshTransform->scale(tex->width, tex->height, 1);
-	meshTransform->translate(tex->width*0.5f, tex->height*0.5f, 0);
-	meshTransform->translate(-in.x, -in.y, 0);
-
-	mesh->scaleModeMag = GL_NEAREST;
-	mesh->scaleModeMin = GL_NEAREST;
-}
-
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped) :
 	Sprite(),
 	flipped(_flipped)
@@ -331,24 +263,24 @@ void PersonRenderer::update(Step * _step){
 		float l;
 
 		l = solverArmR->getChainLength();
-		solverArmR->target.x = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), 0);
-		solverArmR->target.y = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmR->getChainLength());
+		solverArmR->target.x = sweet::NumberUtils::randomFloat(-l, 0);
+		solverArmR->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		
 		l = solverArmL->getChainLength();
-		solverArmL->target.x = sweet::NumberUtils::randomFloat(solverArmL->getChainLength(), 0);
-		solverArmL->target.y = sweet::NumberUtils::randomFloat(-solverArmR->getChainLength(), solverArmL->getChainLength());
+		solverArmL->target.x = sweet::NumberUtils::randomFloat(l, 0);
+		solverArmL->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		
 		l = solverLegR->getChainLength();
-		solverLegR->target.x = sweet::NumberUtils::randomFloat(-solverLegL->getChainLength()*0.5, 0);
-		solverLegR->target.y = sweet::NumberUtils::randomFloat(-solverLegR->getChainLength(), -solverLegL->getChainLength()*0.8);
+		solverLegR->target.x = sweet::NumberUtils::randomFloat(0, l*0.5);
+		solverLegR->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
 		
 		l = solverLegL->getChainLength();
-		solverLegL->target.x = sweet::NumberUtils::randomFloat(0, solverLegR->getChainLength()*0.5);
-		solverLegL->target.y = sweet::NumberUtils::randomFloat(-solverLegL->getChainLength(), -solverLegL->getChainLength()*0.8);
+		solverLegL->target.x = sweet::NumberUtils::randomFloat(-l*0.5, 0);
+		solverLegL->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
 		
 		l = solverBod->getChainLength();
-		solverBod->target.x = sweet::NumberUtils::randomFloat(-solverBod->getChainLength()*0.5, solverBod->getChainLength()*0.5);
-		solverBod->target.y = sweet::NumberUtils::randomFloat(solverBod->getChainLength()*0.95, solverBod->getChainLength());
+		solverBod->target.x = sweet::NumberUtils::randomFloat(-l*0.5, l*0.5);
+		solverBod->target.y = sweet::NumberUtils::randomFloat(l*0.95, l);
 
 		/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
 		solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());

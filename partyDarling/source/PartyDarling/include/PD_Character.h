@@ -33,13 +33,9 @@ public:
 	
 	bool flipped;
 
-	static std::vector<PersonComponent *> getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped = false);
-
 	glm::vec2 getOut(unsigned long int _index);
 
 	PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped);
-private:
-	PersonComponent(Json::Value _json, Texture * _paletteTex, bool _flipped);
 };
 
 class PersonLimbSolver : public IkChain_CCD{
