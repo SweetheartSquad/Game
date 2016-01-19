@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Game.h>
+class OpenAL_Sound;
 
 class PD_Game : public Game{
 public:
@@ -23,4 +24,13 @@ public:
 		kCAT11 = 0x00400,
 		kCAT12 = 0x00800
 	};
+
+
+	OpenAL_Sound * bgmTrack;
+
+	// picks a random BGM track and plays it, replacing the current track
+	void playBGM();
+
+	// generates a fight track and plays it, replacing the current track
+	void playFight();
 };

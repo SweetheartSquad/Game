@@ -2,7 +2,6 @@
 
 #include <PD_Scene_CombinedTests.h>
 #include <PD_ResourceManager.h>
-#include <PD_Game.h>
 #include <PD_Assets.h>
 #include <Resource.h>
 #include <shader/ShaderComponentMVP.h>
@@ -29,7 +28,7 @@
 #include <PD_Furniture.h>
 #include <PointLight.h>
 
-PD_Scene_CombinedTests::PD_Scene_CombinedTests(Game * _game) :
+PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
 	shader(new ComponentShaderBase(false)),
@@ -330,8 +329,8 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	}
 
 	// debug controls
-	if(keyboard->keyJustDown(GLFW_KEY_F12)){
-		game->toggleFullScreen();
+	if(keyboard->keyJustDown(GLFW_KEY_P)){
+		dynamic_cast<PD_Game*>(game)->playBGM();
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){

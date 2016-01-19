@@ -1,5 +1,21 @@
 {
   "assets": [
+    // bgm
+    {
+      "id": "BGM1",
+      "type": "audio",
+      "src": "bgm/01_Plumbing.ogg",
+      "category": "music"
+    },
+    {
+      "id": "BGM2",
+      "type": "audio",
+      "src": "bgm/02_Slugs.ogg",
+      "category": "music"
+    },
+
+
+
     {
       "id": "UV-TEST",
       "type": "texture",
