@@ -9,6 +9,16 @@ class Keyboard;
 class Sprite;
 class ComponentShaderText;
 
+class InterjectAccuracy {
+public:
+	wchar_t character;
+	float padding;
+	float time;
+	float hitTime;
+
+	InterjectAccuracy(wchar_t character, float _padding, float _time, float _hitTime);
+};
+
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
 	PD_InsultGenerator insultGenerator;
@@ -55,11 +65,18 @@ private:
 
 	bool isComplete;
 
-	// TESTING
+	// USER TESTING VARIABLES
+	// Button Presses Success Rate
 	int offensiveCorrect;
 	int offensiveWrong;
 	int defensiveCorrect;
 	int defensiveWrong;
+
+	// Button Presses Speed
+	std::vector<float> insultTimes;
+	int punctuationCnt;
+	std::map<int, InterjectAccuracy *> interjectTimes;
+	float interjectTimer;
 
 	VerticalLinearLayout * buttonPresses;
 	TextLabel * offensiveCorrectLabel;
@@ -113,5 +130,8 @@ public:
 	void highlightNextWord(int startIdx = 0);
 	bool isPunctuation(UIGlyph * _glyph);
 
+	// USER TESTING FUNCTIONS
 	void countButtonPresses(bool _isCorrect, bool _isOffensive);
+	void countInterjectAccuracy(float _pressTime);
+	void countInsultAccuracy(float _insultHitTime);
 };
