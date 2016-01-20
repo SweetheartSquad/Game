@@ -23,9 +23,11 @@ class Texture;
 class Sprite;
 
 class RoomObject;
+class PD_TilemapGenerator;
 
 class Room: public BulletMeshEntity {
 public:
+	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
 	
@@ -40,4 +42,6 @@ public:
 	virtual void setShader(Shader * _shader, bool _default) override;
 
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
+
+	glm::vec3 getCenter() const;
 };

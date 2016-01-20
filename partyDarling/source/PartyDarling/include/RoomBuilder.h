@@ -24,7 +24,6 @@ enum Side_t;
 
 class BulletWorld;
 class MeshInterface;
-class PD_TilemapGenerator;
 
 class Room;
 class RoomObject;
@@ -54,7 +53,6 @@ private:
 	// the definition for this room
 	AssetRoom * const definition;
 public:
-	PD_TilemapGenerator * tilemap;
 	unsigned long int thresh;
 
 	BulletWorld * world;
