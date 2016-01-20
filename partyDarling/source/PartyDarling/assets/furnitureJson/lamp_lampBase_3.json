@@ -2,13 +2,21 @@
             "connectors": [
                 {
                     "componentTypes": ["lampshaft"], 
-                    "positions": [
+                    "out":[
+                    {
+                        "position": 
                         [
                             0.0, 
                             1.5826759934425354, 
                             0.0
-                        ]
+                        ],
+                        "rotation":[0,0,0],
+                        "scale":[1.0,1.0,1.0]
+                    }
+
                     ]
+                    
+                    
                 }
             ], 
             "id": 29, 

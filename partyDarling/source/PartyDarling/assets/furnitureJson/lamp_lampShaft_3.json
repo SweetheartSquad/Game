@@ -2,12 +2,17 @@
             "connectors": [
                 {
                     "componentTypes": ["lampshade"], 
-                    "positions": [
-                        [
-                            0.0, 
-                            1.8054739236831665, 
-                            0.0
-                        ]
+                    "out":[
+                        {
+                            "position": 
+                            [
+                                0.0, 
+                                1.8054739236831665, 
+                                0.0
+                            ],
+                            "rotation":[0,0,0],
+                            "scale":[1.0,1.0,1.0]
+                        }
                     ]
                 }
             ], 
