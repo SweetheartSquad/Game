@@ -92,9 +92,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
 	uiLayer.addChild(uiBubble);
 
-	uiBubble->addOption("test", nullptr);
-	uiBubble->addOption("test", [](sweet::Event * _event){});
-
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
@@ -123,14 +120,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		player->enable();
 	});
 
-	PersonRenderer * testCharacter = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "1"))->getCharacter(bulletWorld, characterShader);//new PersonRenderer(bulletWorld);
-	childTransform->addChild(testCharacter);
-	testCharacter->unload();
-	testCharacter->load();
-	testCharacter->firstParent()->scale(0.001f);
-	testCharacter->firstParent()->translate(0, 2, 0);
-	testCharacter->butt->setTranslationPhysical(0, 2, 0, true);
-
 
 
 
@@ -143,21 +132,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	activeCamera = player->playerCamera;
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
-
-	
-	//sweet::NumberUtils::seed(87537658365);
-
-	// Add some generated furniture
-	/*for(unsigned long int i = 0; i < 50; ++i) {
-		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
-		auto furn = new PD_Furniture(bulletWorld, shader, PD_ResourceManager::furnitureDefinitions.at(randIdx));
-		furn->meshTransform->scale(0.15f, 0.15f, 0.15f);
-		furn->freezeTransformation();
-		furn->setColliderAsBoundingBox();
-		furn->createRigidBody(1.0f);
-		furn->setTranslationPhysical(i * 10.0f, furn->mesh->calcBoundingBox().height * 0.5f, 0.f);
-		childTransform->addChild(furn);
-	}*/
 
 	PointLight * light2 = new PointLight(glm::vec3(5,5,5), 0.02f, 0.001f, -1);
 	childTransform->addChild(light2);
@@ -212,7 +186,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							if(item->definition->collectable){
-								uiBubble->addOption("pickup", [this, item](sweet::Event * _event){
+								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
 									toDelete->firstParent()->removeChild(toDelete);
@@ -227,7 +201,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 									uiInventory->pickupItem(item);
 								});
 							}else{
-								uiBubble->addOption("interact", [](sweet::Event * _event){
+								uiBubble->addOption("Use " + item->definition->name, [](sweet::Event * _event){
 									std::cout << "hey gj you interacted" << std::endl;
 								});
 							}
@@ -281,12 +255,12 @@ void PD_Scene_CombinedTests::update(Step * _step){
 			uiBubble->clear();
 			selectedItem = uiInventory->getSelected();
 			if(uiInventory->getSelected() != nullptr){
-				uiBubble->addOption("use item on self", [this](sweet::Event * _event){
+				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					//uiBubble->clear();
 					//player->disable();
 					// TODO: actually trigger item interaction
 				});
-				uiBubble->addOption("drop item", [this](sweet::Event * _event){
+				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					//uiBubble->clear();
 
 					// dropping an item
