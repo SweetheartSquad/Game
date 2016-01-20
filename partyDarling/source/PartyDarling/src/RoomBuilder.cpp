@@ -54,28 +54,6 @@ Room * RoomBuilder::getRoom(){
 	std::vector<RoomObject *> objects = getRoomObjects();
 
 	room = new Room(world);
-
-
-	// create floor/ceiling as static bullet planes
-	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
-	bulletFloor->createRigidBody(0);
-	room->childTransform->addChild(bulletFloor);
-	bulletFloor->meshTransform->scale(1000,1000,1000);
-	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletFloor->body->translate(btVector3(0, 0, 0));
-	bulletFloor->body->setFriction(1);
-	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
-
-	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletCeil->setColliderAsStaticPlane(0, -1, 0, -ROOM_HEIGHT * ROOM_TILE);
-	bulletCeil->createRigidBody(0);
-	room->childTransform->addChild(bulletCeil);
-	bulletCeil->meshTransform->scale(1000,1000,1000);
-	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
-	bulletCeil->body->setFriction(1);
-	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
@@ -86,6 +64,39 @@ Room * RoomBuilder::getRoom(){
 		break;
 	}
 
+	float fullL = l * ROOM_TILE, fullW = ROOM_TILE * w;
+
+	// create floor/ceiling as static bullet planes
+	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
+	bulletFloor->createRigidBody(0);
+	room->childTransform->addChild(bulletFloor);
+	bulletFloor->meshTransform->scale(fullL, fullW, 1.f);
+	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletFloor->meshTransform->translate(fullL * 0.5f, 0.f, fullW * 0.5f);
+	for(Vertex & v : bulletFloor->mesh->vertices){
+		v.u *= l;
+		v.v *= w;
+	}
+	bulletFloor->body->translate(btVector3(0, 0, 0));
+	bulletFloor->body->setFriction(1);
+	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
+
+	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	bulletCeil->setColliderAsStaticPlane(0, -1, 0, -ROOM_HEIGHT * ROOM_TILE);
+	bulletCeil->createRigidBody(0);
+	room->childTransform->addChild(bulletCeil);
+	bulletCeil->meshTransform->scale(fullL, fullW, 1.f);
+	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletCeil->meshTransform->translate(fullL * 0.5f, 0.f, fullW * 0.5f);
+	for(Vertex & v : bulletCeil->mesh->vertices){
+		v.u *= l;
+		v.v *= w;
+	}
+	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
+	bulletCeil->body->setFriction(1);
+	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
+
 	// Generate tilemap image
 	tilemap = new PD_TilemapGenerator(l, w, true);
 	unsigned long int pixelIncrement = 158;
@@ -95,7 +106,7 @@ Room * RoomBuilder::getRoom(){
 
 	room->tilemapSprite = new Sprite(baseShader);
 	room->tilemapSprite->mesh->pushTexture2D(tilemap);
-	room->tilemapSprite->childTransform->scale(tilemap->width * ROOM_TILE, tilemap->height * ROOM_TILE, 1);
+	room->tilemapSprite->childTransform->scale(fullL, fullW, 1);
 	room->tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
 	room->tilemapSprite->mesh->setScaleMode(GL_NEAREST);
 
