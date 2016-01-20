@@ -102,7 +102,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	livesContainer = new HorizontalLinearLayout(_bulletWorld);
 	livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
 	livesContainer->setRationalWidth(0.5f);
-	livesContainer->setHeight(50.f);
+	livesContainer->setRationalHeight(0.05f);
 	livesContainer->setPadding(0.01f);
 	livesContainer->setMarginTop(20.f);
 	livesContainer->setMarginBottom(20.f);
@@ -185,7 +185,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
 	playerTimerSlider->setRationalWidth(0.25f);
-	playerTimerSlider->setHeight(50.f);
+	playerTimerSlider->setRationalHeight(0.05f);
 	playerTimerSlider->setBackgroundColour(0, 1.f, 0);
 	playerTimerSlider->fill->setBackgroundColour(0, 0, 1.f);
 	playerTimerSlider->thumb->setVisible(false);
