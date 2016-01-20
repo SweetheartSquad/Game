@@ -379,22 +379,26 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 		axis(0.f, 1.f, 0.f),
 		n(glm::rotate(glm::vec3(0.f, 0.f, 1.f), angle, axis));
 	
-	// Create Wall RoomObject
-	QuadMesh * m = new QuadMesh();
-	m->pushVert(Vertex(-halfW, H, 0));
-	m->pushVert(Vertex(-halfW, 0, 0));
-	m->pushVert(Vertex(halfW, 0, 0));
-	m->pushVert(Vertex(halfW, H, 0));
-	m->setNormal(0, n.x, n.y, n.z);
-	m->setNormal(1, n.x, n.y, n.z);
-	m->setNormal(2, n.x, n.y, n.z);
-	m->setNormal(3, n.x, n.y, n.z);
-	m->setUV(0, 0.0, 0.0);
-	m->setUV(1, 0.0, 1.0);
-	m->setUV(2, width, 1.0);
-	m->setUV(3, width, 0.0);
+	// Create wall mesh
+	// Positions are unrotated
+	// Normals are rotated face-normal
+	// U is extended to allow repeating; V is standard
+	QuadMesh * wallMesh = new QuadMesh();
+	wallMesh->pushVert(Vertex(-halfW, H, 0));
+	wallMesh->pushVert(Vertex(-halfW, 0, 0));
+	wallMesh->pushVert(Vertex(halfW, 0, 0));
+	wallMesh->pushVert(Vertex(halfW, H, 0));
+	wallMesh->setNormal(0, n.x, n.y, n.z);
+	wallMesh->setNormal(1, n.x, n.y, n.z);
+	wallMesh->setNormal(2, n.x, n.y, n.z);
+	wallMesh->setNormal(3, n.x, n.y, n.z);
+	wallMesh->setUV(0, 0.0, 0.0);
+	wallMesh->setUV(1, 0.0, 1.0);
+	wallMesh->setUV(2, width, 1.0);
+	wallMesh->setUV(3, width, 0.0);
 
-	RoomObject * wall = new RoomObject(world, m, baseShader);
+	// Create wall object as a static mesh, and then rotate and translate the bullet collider
+	RoomObject * wall = new RoomObject(world, wallMesh, baseShader);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
 	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
@@ -402,24 +406,17 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
 	boundaries.push_back(wall);
 
+	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
+	QuadMesh tempMesh;
+	tempMesh.insertVertices(wallMesh);
+	// transform verts
+	Transform t;
+	t.translate(posX, 0, posZ);
+	t.rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
+	tempMesh.applyTransformation(&t);
 
-	QuadMesh * qM = new QuadMesh();
-	for(unsigned int i = 0; i < m->vertices.size(); ++i){
-		qM->pushVert(m->vertices.at(i));
-	}
-
-	MeshEntity mE(qM);
-	mE.meshTransform->translate(posX, 0, posZ);
-	mE.meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
-	mE.freezeTransformation();
-
-	// Append to room's mesh
-	for(unsigned int i = 0; i < mE.mesh->vertices.size(); ++i){
-		Vertex v = mE.mesh->vertices.at(i);
-		room->mesh->pushVert(v);
-	}
-
-	//delete qM; //we don't need to delete the mesh itself b/c of the auto-release
+	// Append transformed verts to room mesh
+	room->mesh->insertVertices(&tempMesh);
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){

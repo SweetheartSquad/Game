@@ -18,8 +18,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	TriMesh * tempMesh = _def->components.at(0)->build();
 	
 	// copy the furniture mesh into this entity's mesh
-	mesh->vertices.insert(mesh->vertices.end(), tempMesh->vertices.begin(), tempMesh->vertices.end());
-	mesh->indices.insert(mesh->indices.end(), tempMesh->indices.begin(), tempMesh->indices.end());
+	mesh->insertVertices(tempMesh);
 	
 	// delete the temporary mesh
 	delete tempMesh;

@@ -56,18 +56,9 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
 				tempMeshEntity->freezeTransformation();
 
-				// save the number of vertices and indices so we can offset them later
-				unsigned long int vertOffset = res->vertices.size();
-				unsigned long int indOffet = res->indices.size();
-		
-				// copy the verts from the temporary mesh into this one
-				res->vertices.insert(res->vertices.end(), duplicateTempMesh->vertices.begin(), duplicateTempMesh->vertices.end());
-				res->indices.insert(res->indices.end(), duplicateTempMesh->indices.begin(), duplicateTempMesh->indices.end());
-				
-				// offset the inserted indices
-				for(unsigned long int i = indOffet; i < res->indices.size(); ++i) {
-					res->indices.at(i) += vertOffset;
-				}
+				// transfer the temporary mesh verts
+				res->insertVertices(duplicateTempMesh);
+
 				// get rid of the individual temporary mesh
 				delete duplicateTempMesh;
 			}
