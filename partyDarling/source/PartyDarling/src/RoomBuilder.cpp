@@ -44,6 +44,14 @@ RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader *
 	characterShader(_characterShader),
 	definition(_definition)
 {
+	for(unsigned long int i = 1; i <= 5; ++i){
+		wallTexIdx.push(i);
+		ceilTexIdx.push(i);
+		floorTexIdx.push(i);
+	}
+	for(unsigned long int i = 1; i <= 12; ++i){
+		debugTexIdx.push(i);
+	}
 }
 
 RoomBuilder::~RoomBuilder(){
@@ -492,7 +500,7 @@ Texture * RoomBuilder::getFloorTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/floor/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	ss << "assets/textures/room/floor/" << floorTexIdx.pop() << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -505,7 +513,7 @@ Texture * RoomBuilder::getCeilTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/ceiling/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	ss << "assets/textures/room/ceiling/" << ceilTexIdx.pop() << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -518,16 +526,16 @@ Texture * RoomBuilder::getWallTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/walls/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	ss << "assets/textures/room/walls/" << wallTexIdx.pop() << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
 #endif
 }
 
-Texture * RoomBuilder::getDebugTex(unsigned long int _index){
+Texture * RoomBuilder::getDebugTex(){
 	std::stringstream s;
-	s << "assets/textures/room/debug/" << (_index%12+1) << ".png";
+	s << "assets/textures/room/debug/" << debugTexIdx.pop() << ".png";
 	Texture * res = new Texture(s.str(), false, true, true);
 	res->load();
 	return res;

@@ -3,6 +3,7 @@
 #include <glm\glm.hpp>
 #include <vector>
 #include <json\json.h>
+#include <NumberUtils.h>
 
 #define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
@@ -53,6 +54,11 @@ private:
 
 	// the definition for this room
 	AssetRoom * const definition;
+	
+	sweet::ShuffleVector<unsigned long int> debugTexIdx;
+	sweet::ShuffleVector<unsigned long int> wallTexIdx;
+	sweet::ShuffleVector<unsigned long int> ceilTexIdx;
+	sweet::ShuffleVector<unsigned long int> floorTexIdx;
 public:
 	unsigned long int thresh;
 
@@ -88,5 +94,5 @@ public:
 	Texture * getFloorTex();
 	Texture * getCeilTex();
 	Texture * getWallTex();
-	Texture * getDebugTex(unsigned long int _index);
+	Texture * getDebugTex();
 };
