@@ -411,7 +411,7 @@ void PD_UI_YellingContest::startNewFight(){
 	lostLives.clear();
 
 	// loop through friends and add tokens
-	for(unsigned int i = 0; i < 1; ++i){
+	for(unsigned int i = 0; i < 0; ++i){
 		NodeUI * l = new NodeUI(world);
 		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
 		l->background->mesh->pushTexture2D(tex);
@@ -676,15 +676,16 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 }
 
 UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
-	for(auto glyph : glyphs){
-		if(isPunctuation(glyph)){
-			float w = glyph->getWidth();
+	// No autos here, it starts at _startIdx
+	for (unsigned int i = _startIdx; i < glyphs.size(); ++i){
+		if(isPunctuation(glyphs.at(i))){
+			float w = glyphs.at(i)->getWidth();
 			float h = enemyBubbleText->font->getLineHeight();
 			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
 			punctuationHighlight->setVisible(true);
 			++punctuationCnt;
 			++iteration;
-			return glyph;
+			return glyphs.at(i);
 		}
 	}
 	punctuationHighlight->setVisible(false);
