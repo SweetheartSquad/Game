@@ -37,7 +37,7 @@ public:
 	std::vector<RoomObject *> getAllComponents();
 
 	void addComponent(RoomObject *);
-	void setShader(Shader * _shader, bool _default);
+	virtual void setShader(Shader * _shader, bool _default) override;
 
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
 };

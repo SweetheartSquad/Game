@@ -39,7 +39,8 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 			// retrieve a temporary mesh which is the combination of the outComponent and all of its child components
 			TriMesh * tempMesh = outComponent->build();
 
-			
+			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
+
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
 				TriMesh * duplicateTempMesh = new TriMesh();
 				// copy the verts from the temporary mesh into this one
@@ -48,8 +49,11 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 
 				MeshEntity * tempMeshEntity = new MeshEntity(duplicateTempMesh);
 				// translate and scale the temporary mesh to match this components definition
-				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentTypes].at(i));
-				tempMeshEntity->meshTransform->scale(outComponent->scale);
+				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentTypes].at(i).position);
+				tempMeshEntity->meshTransform->scale(component->connectors[outComponent->componentTypes].at(i).scale * outComponent->scale);
+				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
+				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
+				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
 				tempMeshEntity->freezeTransformation();
 
 				// save the number of vertices and indices so we can offset them later

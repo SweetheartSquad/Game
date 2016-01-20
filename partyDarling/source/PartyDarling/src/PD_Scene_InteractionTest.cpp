@@ -80,13 +80,6 @@ PD_Scene_InteractionTest::PD_Scene_InteractionTest(Game * _game) :
 	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
 	uiLayer.addChild(l);
 	l->addChild(crosshairIndicator);
-
-	/*PD_Door * door = new PD_Door(bulletWorld, PD_ResourceManager::scenario->getTexture("DOOR")->texture, shader);
-	door->addToWorld();
-	childTransform->addChild(door);
-	
-	door->setTranslationPhysical(10,0,2);
-	door->rotatePhysical(45,0,1,0,false);*/
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);

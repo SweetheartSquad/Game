@@ -93,7 +93,7 @@ Room * RoomBuilder::getRoom(){
 	tilemap->load();
 	tilemap->saveImageData("tilemap.tga");
 
-	room->tilemapSprite = new Sprite();
+	room->tilemapSprite = new Sprite(baseShader);
 	room->tilemapSprite->mesh->pushTexture2D(tilemap);
 	room->tilemapSprite->childTransform->scale(tilemap->width * ROOM_TILE, tilemap->height * ROOM_TILE, 1);
 	room->tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
