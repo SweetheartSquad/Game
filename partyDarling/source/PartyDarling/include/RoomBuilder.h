@@ -75,6 +75,8 @@ public:
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 
 	// Room boundaries builder functions
+
+	// create room walls from tilemap
 	void createWalls();
 	void addWall(float width, glm::vec2 pos, float angle);
 

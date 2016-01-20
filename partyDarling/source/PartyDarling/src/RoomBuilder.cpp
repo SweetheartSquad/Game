@@ -80,7 +80,6 @@ Room * RoomBuilder::getRoom(){
 	room->tilemapSprite->childTransform->rotate(90, 1, 0, 0, kOBJECT);
 
 	thresh = 5;
-	// create room walls from tilemap
 	createWalls();
 
 	// list of available placed parent objects
@@ -381,16 +380,18 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 		qM->pushVert(m->vertices.at(i));
 	}
 
-	MeshEntity * mE = new MeshEntity(qM);
-	mE->meshTransform->translate(posX, 0, posZ);
-	mE->meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
-	mE->freezeTransformation();
+	MeshEntity mE(qM);
+	mE.meshTransform->translate(posX, 0, posZ);
+	mE.meshTransform->rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
+	mE.freezeTransformation();
 
 	// Append to room's mesh
-	for(unsigned int i = 0; i < mE->mesh->vertices.size(); ++i){
-		Vertex v = mE->mesh->vertices.at(i);
+	for(unsigned int i = 0; i < mE.mesh->vertices.size(); ++i){
+		Vertex v = mE.mesh->vertices.at(i);
 		room->mesh->pushVert(v);
 	}
+
+	//delete qM; //we don't need to delete the mesh itself b/c of the auto-release
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
