@@ -272,8 +272,6 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 }
 
 void RoomBuilder::createWalls(){
-	std::vector<RoomObject *> walls;
-
 	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(tilemap, thresh, false, true);
 
 	std::vector<Edge *> edges;
@@ -368,9 +366,9 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	float halfW = width / 2.f * ROOM_TILE;
 	float H = ROOM_HEIGHT * ROOM_TILE;
 
-	glm::vec3 axis = glm::vec3(0.f, 1.f, 0.f);
-
-	glm::vec3 n = glm::vec3(0.0, 0.0 , 1.f);
+	glm::vec3
+		axis(0.f, 1.f, 0.f),
+		n(glm::rotate(glm::vec3(0.f, 0.f, 1.f), angle, axis));
 	
 	// Create Wall RoomObject
 	QuadMesh * m = new QuadMesh();
@@ -395,7 +393,6 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
 	boundaries.push_back(wall);
 
-	n = glm::rotate(n, glm::radians(angle), axis);
 
 	QuadMesh * qM = new QuadMesh();
 	for(unsigned int i = 0; i < m->vertices.size(); ++i){
