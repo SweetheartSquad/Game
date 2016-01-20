@@ -10,6 +10,7 @@
 #include <shader/ShaderComponentIndexedTexture.h>
 #include <shader/ShaderComponentDepthOffset.h>
 #include <shader/ComponentShaderText.h>
+#include <shader/ShaderComponentToon.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -22,6 +23,7 @@
 
 #include <RenderOptions.h>
 #include <json\json.h>
+#include <RampTexture.h>
 
 #include <sweet/Input.h>
 #include <PD_FurnitureParser.h>
@@ -34,7 +36,8 @@
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
-	shader(new ComponentShaderBase(false)),
+	shader(new ComponentShaderBase(false)), 
+	toonShader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
@@ -45,6 +48,12 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	shader->addComponent(new ShaderComponentTexture(shader, 0));
 	shader->addComponent(new ShaderComponentDiffuse(shader));
 	shader->compileShader();
+
+	toonShader->addComponent(new ShaderComponentMVP(toonShader));
+	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
+	toonShader->addComponent(new ShaderComponentToon(toonShader, new RampTexture(glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.8, 0.8, 0.8), 3)));
+	toonShader->compileShader();
+
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
@@ -121,10 +130,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	});
 
 
-
-
-
-
 	// add the player to the scene
 	player = new Player(bulletWorld);
 	childTransform->addChild(player);
@@ -139,7 +144,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	lights.push_back(light2);
 
 
-	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, shader, characterShader).getRoom();
+	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, toonShader, characterShader).getRoom();
 	childTransform->addChild(room);
 	childTransform->addChild(room->tilemapSprite);
 
