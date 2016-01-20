@@ -425,10 +425,17 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
+	PD_Listing * listing = new PD_Listing(this->definition->scenario);
 
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
-	std::vector<Item *> items = getItems();
+	//std::vector<Item *> items = getItems();
+
+	for(auto c : characters){
+		listing->addCharacter(c);
+	}/*for(auto i : items){
+		listing->addItem(i);
+	}*/
 
 	std::vector<RoomObject *> objects;
 	// calculate size of room, get random # of furniture/items?
@@ -436,7 +443,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	
 	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
-	objects.insert(objects.begin(), items.begin(), items.end());
+	//objects.insert(objects.begin(), items.begin(), items.end());
 
 	return objects;
 }

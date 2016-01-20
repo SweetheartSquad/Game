@@ -151,6 +151,21 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	for(unsigned int i = 0; i < components.size(); ++i){
 		childTransform->addChild(components.at(i));
 	}
+
+
+
+	// setup event listeners
+	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
+		std::stringstream characterName;
+		characterName << (int)glm::round(_event->getFloatData("Character"));
+		std::string	stateName = _event->getStringData("State");
+		std::cout << characterName.str() << "'s state changed to " << stateName << std::endl;
+
+		Scenario * scenario = PD_ResourceManager::scenario;
+		PD_Listing * listing = PD_Listing::listings[PD_ResourceManager::scenario];
+		Person * character = listing->characters[characterName.str()];
+		character->state = &character->definition->states.at(stateName);
+	});
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){

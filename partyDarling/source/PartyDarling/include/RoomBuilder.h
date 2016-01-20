@@ -4,6 +4,7 @@
 #include <vector>
 #include <json\json.h>
 #include <NumberUtils.h>
+#include <PD_Listing.h>
 
 #define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15

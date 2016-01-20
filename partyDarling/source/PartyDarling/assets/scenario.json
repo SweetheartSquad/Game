@@ -223,6 +223,11 @@
           "id":1,
           "name":"DefaultState",
           "convo":1
+        },
+        {  
+          "id":2,
+          "name":"OtherState",
+          "convo":2
         }
       ],
       "items":[  
@@ -265,6 +270,41 @@
         {  
           "text":[  
             "uh"
+          ],
+          "triggers":[  
+            {
+              "type": "changeState",
+              "args":{  
+                "State":{  
+                  "value":"OtherState",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":1,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":1,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":2,
+      "name":"Conversation 2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "uh 2"
           ],
           "triggers":[  
 
