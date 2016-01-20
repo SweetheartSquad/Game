@@ -67,8 +67,11 @@
       "type": "texture",
       "src": "../engine basics/cursor.png"
     },
-
-
+    {
+    	"id":"wood",
+    	"type":"texture",
+    	"src":"wood.png"
+	},
     {
       "id": "INDEXED-TEST",
       "type": "texture",
