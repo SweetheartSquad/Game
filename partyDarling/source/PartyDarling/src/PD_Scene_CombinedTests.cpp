@@ -139,8 +139,8 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
 	PointLight * light2 = new PointLight(glm::vec3(5,5,5), 0.02f, 0.001f, -1);
-	childTransform->addChild(light2);
-	light2->firstParent()->translate(0.f, 20.f, 0.f);
+	player->playerCamera->childTransform->addChild(light2);
+	light2->firstParent()->translate(0.f, 1.f, 0.f);
 	lights.push_back(light2);
 
 
