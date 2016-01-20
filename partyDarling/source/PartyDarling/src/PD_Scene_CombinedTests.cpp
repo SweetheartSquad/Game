@@ -135,16 +135,6 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 
 
-	// add a ground to the scene
-	BulletMeshEntity * bulletGround = new BulletMeshEntity(bulletWorld, MeshFactory::getPlaneMesh(), shader);
-	bulletGround->setColliderAsStaticPlane(0, 1, 0, 0);
-	bulletGround->createRigidBody(0);
-	childTransform->addChild(bulletGround);
-	bulletGround->meshTransform->scale(1000,1000,1000);
-	bulletGround->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletGround->body->translate(btVector3(0, 0, 0));
-	bulletGround->body->setFriction(1);
-	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 	// add the player to the scene
 	player = new Player(bulletWorld);

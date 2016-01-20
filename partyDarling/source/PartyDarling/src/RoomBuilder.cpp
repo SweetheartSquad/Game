@@ -54,6 +54,28 @@ Room * RoomBuilder::getRoom(){
 	std::vector<RoomObject *> objects = getRoomObjects();
 
 	room = new Room(world);
+
+
+	// create floor/ceiling as static bullet planes
+	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
+	bulletFloor->createRigidBody(0);
+	room->childTransform->addChild(bulletFloor);
+	bulletFloor->meshTransform->scale(1000,1000,1000);
+	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletFloor->body->translate(btVector3(0, 0, 0));
+	bulletFloor->body->setFriction(1);
+	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
+
+	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	bulletCeil->setColliderAsStaticPlane(0, -1, 0, -ROOM_HEIGHT * ROOM_TILE);
+	bulletCeil->createRigidBody(0);
+	room->childTransform->addChild(bulletCeil);
+	bulletCeil->meshTransform->scale(1000,1000,1000);
+	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
+	bulletCeil->body->setFriction(1);
+	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
