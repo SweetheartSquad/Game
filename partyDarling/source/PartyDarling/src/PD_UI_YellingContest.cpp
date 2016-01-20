@@ -684,14 +684,15 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
 	// No autos here, it starts at _startIdx
 	for (unsigned int i = _startIdx; i < glyphs.size(); ++i){
-		if(isPunctuation(glyphs.at(i))){
-			float w = glyphs.at(i)->getWidth();
+		UIGlyph * glyph = glyphs.at(i);
+		if(isPunctuation(glyph)){
+			float w = glyph->getWidth();
 			float h = enemyBubbleText->font->getLineHeight();
 			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
 			punctuationHighlight->setVisible(true);
 			++punctuationCnt;
 			++iteration;
-			return glyphs.at(i);
+			return glyph;
 		}
 	}
 	punctuationHighlight->setVisible(false);
@@ -773,9 +774,9 @@ void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 		float padding = 0;
 		
 		if(prevHighlightedPunctuation != nullptr){
-			for(unsigned long int i = 0; i < glyphs.size(); ++i){
-				float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
-				if(glyphs.at(i) != prevHighlightedPunctuation){
+			for(auto glyph : glyphs){
+				float glyphTime = glyph->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+				if(glyph != prevHighlightedPunctuation){
 					punctuationMeasureFromTime += glyphTime;
 				}else{
 					punctuationMeasureFromTime += glyphTime/2.f;
@@ -784,9 +785,9 @@ void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 			}
 		}
 		
-		for(unsigned long int i = 0; i < glyphs.size(); ++i){
-			float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
-			if(glyphs.at(i) != highlightedPunctuation){
+		for(auto glyph : glyphs){
+			float glyphTime = glyph->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+			if(glyph != highlightedPunctuation){
 				punctuationTimeStart += glyphTime;
 			}else{
 				padding += glyphTime;

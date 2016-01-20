@@ -31,6 +31,7 @@ class PD_Furniture;
 class Person;
 class Item;
 class Shader;
+class Texture;
 
 class Edge{
 public:
@@ -83,4 +84,9 @@ public:
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
 	std::vector<Item *> getItems();
+
+	Texture * getFloorTex();
+	Texture * getCeilTex();
+	Texture * getWallTex();
+	Texture * getDebugTex(unsigned long int _index);
 };

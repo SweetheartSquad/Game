@@ -82,14 +82,13 @@ Room * RoomBuilder::getRoom(){
 	bulletFloor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
 	bulletFloor->setTranslationPhysical(room->getCenter());
 	bulletFloor->mesh->setScaleMode(GL_NEAREST);
-#ifdef RG_DEBUG
-	bulletFloor->mesh->pushTexture2D(room->tilemap);
-#else
+	bulletFloor->mesh->pushTexture2D(getFloorTex());
+#ifndef RG_DEBUG
+	// adjust UVs so that the texture tiles in squares
 	for(Vertex & v : bulletFloor->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
-	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
 #endif
 
 	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
@@ -97,21 +96,19 @@ Room * RoomBuilder::getRoom(){
 	bulletCeil->createRigidBody(0);
 	bulletCeil->body->setFriction(1);
 	room->childTransform->addChild(bulletCeil);
-	bulletCeil->meshTransform->scale(-fullL, fullW, 1.f);
+	bulletCeil->meshTransform->scale(-fullL, fullW, -1.f);
 	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletCeil->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
 	bulletCeil->setTranslationPhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0));
 	bulletCeil->mesh->setScaleMode(GL_NEAREST);
-#ifdef RG_DEBUG
-	bulletCeil->mesh->pushTexture2D(room->tilemap);
-#else
+	bulletCeil->mesh->pushTexture2D(getCeilTex());
+#ifndef RG_DEBUG
+	// adjust UVs so that the texture tiles in squares
 	for(Vertex & v : bulletCeil->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
-	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
 #endif
-
 
 	thresh = 5;
 	createWalls();
@@ -120,47 +117,39 @@ Room * RoomBuilder::getRoom(){
 
 	// list of available placed parent objects
 	std::vector<RoomObject *> availableParents;
-	for(unsigned int i = 0; i < boundaries.size(); ++i){
+	for(auto boundary : boundaries){
 		// only walls in boundaries should have child slots (not floor, cieling)
-		if(boundaries.at(i)->emptySlots.size() > 0){
-			availableParents.push_back(boundaries.at(i));
+		if(boundary->emptySlots.size() > 0){
+			availableParents.push_back(boundary);
 #ifdef RG_DEBUG
-				std::stringstream s;
-				s << "assets/textures/room generation/" << (i%12+1) << ".png";
-				Texture * tex = new Texture(s.str(), false, true, true);
-				tex->load();
-				boundaries.at(i)->mesh->pushTexture2D(tex);
+			boundary->mesh->pushTexture2D(getDebugTex());
 #endif
 		}
 	}
 	
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		if(!search(objects.at(i), availableParents, room)){
+	for(auto obj : objects){
+		if(!search(obj, availableParents, room)){
 			Log::warn("Search failed; room object not placed.");
 		}else{
 #ifdef RG_DEBUG
-				if(objects.at(i)->parent != nullptr && objects.at(i)->parent->mesh->textures.size() > 0){
-					objects.at(i)->mesh->pushTexture2D(objects.at(i)->parent->mesh->textures.at(0));
-				}
+			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
+				obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
+			}
 #endif
 		}
 	}
 	
 	// Get rid of temporary boundary room objects
-	for(unsigned long int i = 0; i < boundaries.size(); ++i){ 
-
-		for(unsigned long int j = 0; j < boundaries.at(i)->components.size(); ++j){
-			room->addComponent(boundaries.at(i)->components.at(j));
+	for(auto boundary : boundaries){
+		for(auto component : boundary->components){
+			room->addComponent(component);
 		}
 			
 #ifdef RG_DEBUG
-			boundaries.at(i)->components.clear();
-			for(unsigned long int v = 0; v < boundaries.at(v)->mesh->vertices.size(); ++v){
-				boundaries.at(i)->mesh->vertices.at(v).y *= 2;
-			}
-			room->addComponent(boundaries.at(i));
+			boundary->components.clear();
+			room->addComponent(boundary);
 #else
-			delete boundaries.at(i);
+			delete boundary;
 #endif
 	}
 
@@ -369,10 +358,7 @@ void RoomBuilder::createWalls(){
 #endif
 
 	// Get wall texture
-	Texture * wallTexture = PD_ResourceManager::scenario->getTexture("WALLS")->texture; // TODO: replace this with random selection based on tags or something
-	if(wallTexture != nullptr){
-		room->mesh->pushTexture2D(wallTexture);
-	}
+	room->mesh->pushTexture2D(getWallTex());
 }
 
 void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
@@ -439,18 +425,10 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	std::vector<RoomObject *> objects;
 	// calculate size of room, get random # of furniture/items?
 	// dining table set 1, tv couch set, bathroom set, ...
-
-	for(unsigned int i = 0; i < characters.size(); ++i){
-		objects.push_back(characters.at(i));
-	}
-
-	for(unsigned int i = 0; i < furniture.size(); ++i){
-		objects.push_back(furniture.at(i));
-	}
-
-	for(unsigned int i = 0; i < items.size(); ++i){
-		objects.push_back(items.at(i));
-	}
+	
+	objects.insert(objects.begin(), characters.begin(), characters.end());
+	objects.insert(objects.begin(), furniture.begin(), furniture.end());
+	objects.insert(objects.begin(), items.begin(), items.end());
 
 	return objects;
 }
@@ -506,4 +484,51 @@ std::vector<Item *> RoomBuilder::getItems(){
 	}
 
 	return items;
+}
+
+Texture * RoomBuilder::getFloorTex(){
+#ifdef RG_DEBUG
+	return room->tilemap;
+#else
+	// grab a random floor texture
+	std::stringstream ss;
+	ss << "assets/textures/room/floor/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	Texture * res = new Texture(ss.str(), false, true, true);
+	res->load();
+	return res;
+#endif
+}
+
+Texture * RoomBuilder::getCeilTex(){
+#ifdef RG_DEBUG
+	return room->tilemap;
+#else
+	// grab a random floor texture
+	std::stringstream ss;
+	ss << "assets/textures/room/ceiling/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	Texture * res = new Texture(ss.str(), false, true, true);
+	res->load();
+	return res;
+#endif
+}
+
+Texture * RoomBuilder::getWallTex(){
+#ifdef RG_DEBUG
+	return room->tilemap;
+#else
+	// grab a random floor texture
+	std::stringstream ss;
+	ss << "assets/textures/room/walls/" << sweet::NumberUtils::randomInt(1, 5) << ".png";
+	Texture * res = new Texture(ss.str(), false, true, true);
+	res->load();
+	return res;
+#endif
+}
+
+Texture * RoomBuilder::getDebugTex(unsigned long int _index){
+	std::stringstream s;
+	s << "assets/textures/room/debug/" << (_index%12+1) << ".png";
+	Texture * res = new Texture(s.str(), false, true, true);
+	res->load();
+	return res;
 }
