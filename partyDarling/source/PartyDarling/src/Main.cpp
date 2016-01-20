@@ -7,6 +7,8 @@
 #include <Game.h>
 #include <PD_ResourceManager.h>
 #include <Log.h>
+#include <ctime>
+#include <NumberUtils.h>
 
 #include <PD_Game.h>
 
@@ -24,6 +26,8 @@ int main(void){
 #endif
 
 	Log::THROW_ON_ERROR = true;
+
+	sweet::NumberUtils::seed(time(nullptr));
 
 	sweet::initialize("Party, Darling? -test prepping");
 	PD_ResourceManager::init();
