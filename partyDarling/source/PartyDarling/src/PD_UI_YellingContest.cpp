@@ -142,6 +142,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubbleBubble->setRationalWidth(1.f);
 	enemyBubbleBubble->setRationalHeight(1.f);
 	enemyBubbleBubble->setMarginLeft(0.2f);
+	enemyBubbleBubble->setScaleMode(GL_NEAREST);
 
 	enemyBubbleText = new TextArea(world, _font, _textShader, 0.9);
 	enemyBubbleText->setWrapMode(kWORD);
@@ -161,6 +162,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubbleTail->setRationalHeight(1.f, enemyBubble);
 	enemyBubbleTail->setMarginRight(0.78f);
 	enemyBubbleTail->setMarginTop(0.5f);
+	enemyBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 
 	enemyBubble->addChild(enemyBubbleTail);
 
@@ -178,6 +180,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleBubble->setRationalHeight(1.f);
 	playerBubbleBubble->setMarginLeft(0.3f);
 	playerBubbleBubble->setMarginBottom(0.2f);
+	playerBubbleBubble->setScaleMode(GL_NEAREST);
 
 	// The side by side text and button layout
 	HorizontalLinearLayout * playerBubbleLayout = new HorizontalLinearLayout(_bulletWorld);
@@ -199,6 +202,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerArrows->setRationalWidth(0.1f);
 	playerArrows->setRationalHeight(0.4f);
 	playerBubbleLayout->addChild(playerArrows);
+	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
 	buttonLayout->setRationalWidth(0.3f);
@@ -226,6 +230,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleTail->setRationalHeight(1.f, playerBubble);
 	playerBubbleTail->setMarginRight(0.69f);
 	playerBubbleTail->setMarginTop(0.5f);
+	playerBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 	playerBubble->addChild(playerBubbleTail);
 
 	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
@@ -245,6 +250,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverImage = new NodeUI(_bulletWorld);
 	gameOverImage->setRationalWidth(0.5f);
 	gameOverImage->setRationalHeight(0.5f);
+	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
 	gameOverContainer->addChild(gameOverImage);
 	// don't add the container until yelling contest is over
 
