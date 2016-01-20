@@ -51,7 +51,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
-	toonShader->addComponent(new ShaderComponentToon(toonShader, new RampTexture(glm::vec3(0.2, 0.2, 0.2), glm::vec3(0.8, 0.8, 0.8), 3)));
+	toonShader->addComponent(new ShaderComponentToon(toonShader, new RampTexture(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.f), 5)));
 	toonShader->compileShader();
 
 
@@ -160,7 +160,12 @@ PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 void PD_Scene_CombinedTests::update(Step * _step){
 	bulletWorld->update(_step);
 
-
+	if(keyboard->keyJustDown(GLFW_KEY_R)){
+		std::stringstream ss;
+		ss << "COMBINED_TEST_" << _step->lastTimestamp;
+		game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(game));
+		game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+	}
 
 
 

@@ -49,7 +49,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// create the bullet stuff
 	setColliderAsBoundingBox();
-	createRigidBody(0);
+	createRigidBody(1);
 	
 	//setTranslationPhysical(0, mesh->calcBoundingBox().height * 0.5f, 0.f);
 }
