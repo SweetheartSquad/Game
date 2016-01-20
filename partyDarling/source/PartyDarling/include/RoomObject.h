@@ -5,7 +5,6 @@
 
 enum Anchor_t{
 	GROUND,
-	WALL,
 	CIELING
 };
 
@@ -29,6 +28,7 @@ class Slot{
 class RoomObject: public BulletMeshEntity {
 public:
 	std::vector<std::string> tags;
+	std::vector<std::string> parentTags;
 
 	Anchor_t anchor;
 	sweet::Box boundingBox;
