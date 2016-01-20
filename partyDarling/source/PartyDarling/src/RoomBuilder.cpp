@@ -83,17 +83,17 @@ Room * RoomBuilder::getRoom(){
 	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
 
 	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletCeil->setColliderAsStaticPlane(0, -1, 0, -ROOM_HEIGHT * ROOM_TILE);
+	bulletCeil->setColliderAsStaticPlane(0, -1, 0, 0);
 	bulletCeil->createRigidBody(0);
 	room->childTransform->addChild(bulletCeil);
 	bulletCeil->meshTransform->scale(fullL, fullW, 1.f);
 	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletCeil->meshTransform->translate(fullL * 0.5f, 0.f, fullW * 0.5f);
+	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
 	for(Vertex & v : bulletCeil->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
-	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
 	bulletCeil->body->setFriction(1);
 	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
 
