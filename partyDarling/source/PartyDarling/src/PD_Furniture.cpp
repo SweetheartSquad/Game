@@ -17,6 +17,14 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// build the furniture
 	TriMesh * tempMesh = _def->components.at(0)->build();
 	
+	// get a texture for the furniture type
+	std::stringstream ss;
+	ss << "assets/textures/furniture/" << _def->type << "_" << sweet::NumberUtils::randomInt(1, 2) << ".png";
+	Texture * tex = new Texture(ss.str(), false, true, true);
+	tex->load();
+	mesh->pushTexture2D(tex);
+	mesh->setScaleMode(GL_NEAREST);
+
 	// copy the furniture mesh into this entity's mesh
 	mesh->insertVertices(tempMesh);
 	
