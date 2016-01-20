@@ -1,15 +1,15 @@
 {
             "components": [
                 {
-                    "componentType": "lampbase", 
+                    "componentTypes": ["lampbase"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentType": "lampshaft", 
+                            "componentTypes": ["lampshaft"], 
                             "multiplier": 1, 
                             "outComponents": [
                                 {
-                                    "componentType": "lampshade", 
+                                    "componentTypes": ["lampshade"], 
                                     "multiplier": 1,
                                     "required": true,
 									"scale": [1.0,1.0,1.0]

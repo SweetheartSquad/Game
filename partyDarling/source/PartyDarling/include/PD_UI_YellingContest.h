@@ -9,8 +9,22 @@ class Keyboard;
 class Sprite;
 class ComponentShaderText;
 
+class InterjectAccuracy {
+public:
+	wchar_t character;
+	float padding;
+	float targetTime;
+	float hitTime;
+	unsigned long int iteration;
+
+	InterjectAccuracy(wchar_t character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration);
+};
+
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
+	// number of punctuation marks passed
+	unsigned long int iteration;
+
 	PD_InsultGenerator insultGenerator;
 
 	bool isEnabled;
@@ -25,6 +39,7 @@ private:
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
+	UIGlyph * prevHighlightedPunctuation;
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
 	
@@ -54,6 +69,25 @@ private:
 	bool win;
 
 	bool isComplete;
+
+	// USER TESTING VARIABLES
+	// Button Presses Success Rate
+	int offensiveCorrect;
+	int offensiveWrong;
+	int defensiveCorrect;
+	int defensiveWrong;
+
+	// Button Presses Speed
+	std::vector<float> insultTimes;
+	int punctuationCnt;
+	std::vector<InterjectAccuracy> interjectTimes;
+	float interjectTimer;
+
+	VerticalLinearLayout * buttonPresses;
+	TextLabel * offensiveCorrectLabel;
+	TextLabel * offensiveWrongLabel;
+	TextLabel * defensiveCorrectLabel;
+	TextLabel * defensiveWrongLabel;
 
 public:
 	Sprite * enemyCursor;
@@ -100,4 +134,9 @@ public:
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);
 	bool isPunctuation(UIGlyph * _glyph);
+
+	// USER TESTING FUNCTIONS
+	void countButtonPresses(bool _isCorrect, bool _isOffensive);
+	void countInterjectAccuracy(float _pressTime);
+	void countInsultAccuracy(float _insultHitTime);
 };

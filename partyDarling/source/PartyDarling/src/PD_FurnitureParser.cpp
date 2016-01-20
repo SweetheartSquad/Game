@@ -13,14 +13,14 @@
 PD_FurnitureComponentContainer::PD_FurnitureComponentContainer(std::string _src){
 	Json::Value root;
 	Json::Reader reader;
-	bool parsingSuccessful = reader.parse(FileUtils::readFile("assets/furniture.json"), root );
+	bool parsingSuccessful = reader.parse(sweet::FileUtils::readFile("assets/furniture.json"), root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 	}else{
 		for(auto furnDef : root["components"]) {
 			// parse the external json file
 			Json::Value componentRoot;
-			parsingSuccessful = reader.parse(FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
+			parsingSuccessful = reader.parse(sweet::FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
 			if(!parsingSuccessful){
 				Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 			}

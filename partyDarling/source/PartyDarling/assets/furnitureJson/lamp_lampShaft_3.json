@@ -1,7 +1,7 @@
 {
             "connectors": [
                 {
-                    "componentType": "lampshade", 
+                    "componentTypes": ["lampshade"], 
                     "positions": [
                         [
                             0.0, 

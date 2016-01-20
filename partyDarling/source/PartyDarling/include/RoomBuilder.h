@@ -28,9 +28,10 @@ class PD_TilemapGenerator;
 
 class Room;
 class RoomObject;
-class Furniture;
+class PD_Furniture;
 class Person;
 class Item;
+class Shader;
 
 class Edge{
 public:
@@ -42,14 +43,20 @@ public:
 };
 
 class Slot;
+class AssetRoom;
 
 // Use builder pattern (parsing flat data)
 class RoomBuilder{
-public: 
-	PD_TilemapGenerator * tilemap;
-	unsigned int thresh;
+private:
+	Shader * baseShader;
+	Shader * characterShader;
 
-	Json::Value json;
+	// the definition for this room
+	AssetRoom * const definition;
+public:
+	PD_TilemapGenerator * tilemap;
+	unsigned long int thresh;
+
 	BulletWorld * world;
 
 	std::vector<RoomObject *> boundaries;
@@ -57,8 +64,7 @@ public:
 
 	Room * room;
 
-	RoomBuilder(std::string _json, BulletWorld * _world);
-	RoomBuilder(Json::Value _json, BulletWorld * _world);
+	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader);
 	~RoomBuilder();
 
 	Room * getRoom();
@@ -69,17 +75,12 @@ public:
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 
 	// Room boundaries builder functions
-	void createWalls(unsigned long int _thresh);
-	void addWall(BulletWorld * _world, float width, glm::vec2 pos, float angle);
+	void createWalls();
+	void addWall(float width, glm::vec2 pos, float angle);
 
 	// Create random room objects, including specified objects
-	static std::vector<RoomObject *> getRoomObjects(Json::Value _json, BulletWorld * _world);
-	static std::vector<Person *> getCharacters(Json::Value _json, BulletWorld * _world);
-	static std::vector<Furniture *> getFurniture(Json::Value _json, BulletWorld * _world);
-	static std::vector<Item *> getItems(Json::Value _json, BulletWorld * _world);
-	
-	static Person * RoomBuilder::readCharacter(Json::Value _json, BulletWorld * _world);
-	static Furniture * RoomBuilder::readFurniture(Json::Value _json, BulletWorld * _world);
-	static Item * RoomBuilder::readItem(Json::Value _json, BulletWorld * _world);
-	static RoomObject * readRoomObject(Json::Value _roomObject, RoomObject_t _type, BulletWorld * _world);
+	std::vector<RoomObject *> getRoomObjects();
+	std::vector<Person *> getCharacters();
+	std::vector<PD_Furniture *> getFurniture();
+	std::vector<Item *> getItems();
 };

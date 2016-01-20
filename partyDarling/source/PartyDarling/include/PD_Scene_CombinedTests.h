@@ -13,6 +13,7 @@
 #include <PD_UI_Bubble.h>
 #include <PD_UI_Dialogue.h>
 #include <PD_UI_YellingContest.h>
+#include <PD_Game.h>
 #include <Player.h>
 
 
@@ -48,6 +49,6 @@ public:
 
 	Player * player;
 
-	PD_Scene_CombinedTests(Game * _game);
+	PD_Scene_CombinedTests(PD_Game * _game);
 	~PD_Scene_CombinedTests();
 };

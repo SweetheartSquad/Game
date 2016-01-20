@@ -94,9 +94,9 @@ Player::Player(BulletWorld * _bulletWorld) :
 
 	lastYVel = 0;
 
-	footSteps = new OpenAL_SoundSimple("assets/audio/crunchyStep.ogg", false, false, "sfx");
-	jumpSound = new OpenAL_SoundSimple("assets/audio/jump.ogg", false, false, "sfx");
-	landSound = new OpenAL_SoundSimple("assets/audio/fall.ogg", false, false, "sfx");
+	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;
+	jumpSound = PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound;
+	landSound = PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound;
 	/*easeIntoBobble = new Animation<float>(&easeIntoBobbleVal);
 	easeIntoBobbleTween1 = new Tween<float>(0.25f,0.05f,Easing::kEASE_IN_CUBIC);
 	easeIntoBobble->startValue=0.f;
@@ -188,31 +188,32 @@ void Player::update(Step * _step){
 			if(isGrounded){
 				movement += forward;
 			}else{
-				movement += (forward/2.0f);
+				movement += (forward/10.0f);
 			}
 		}if (keyboard->keyDown(GLFW_KEY_S)){
 			if(isGrounded){
 				movement -= forward;
 			}else{
-				movement -= (forward/2.0f);
+				movement -= (forward/10.0f);
 			}
 		}if (keyboard->keyDown(GLFW_KEY_A)){
 			if(isGrounded){
 				movement -= right;
 			}else{
-				movement -= (right/2.0f);
+				movement -= (right/10.0f);
 			}
 		}if (keyboard->keyDown(GLFW_KEY_D)){
 			if(isGrounded){
 				movement += right;
 			}else{
-				movement += (right/2.0f);
+				movement += (right/10.0f);
 			}
 		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			if(isGrounded){
 				movement += glm::vec3(0, 100,0);
 				jumpSound->play();
 				jumpTime = _step->time;
+				this->body->applyCentralImpulse(btVector3(xVelocity*-0.3f,0,zVelocity*-0.3f));
 			}
 		}
 	}
@@ -255,28 +256,30 @@ void Player::update(Step * _step){
 
 		this->body->activate(true);
 
-		if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
+		if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT) && isGrounded){
 
 			this->maxVelocity = btVector3(20,20,20);
 		}
 
 		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
-			this->maxVelocity = btVector3(35,35,35);
-			if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
-				bobbleInterpolation += 0.1f;
+			if(isGrounded){
+				this->maxVelocity = btVector3(35,35,35);
+				if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
+					bobbleInterpolation += 0.1f;
 				
-			}else if(glmCurVelocityMagXZ < 1.0f){
-				bobbleInterpolation = 0.f;
-			}
+				}else if(glmCurVelocityMagXZ < 1.0f){
+					bobbleInterpolation = 0.f;
+				}
 			
-			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
-				this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
-				//std::cout << "1" << std::endl;
-			}
-			else{
-				this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
-				//std::cout << "2" << std::endl;
+				if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
+					this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
+					//std::cout << "1" << std::endl;
+				}
+				else{
+					this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
+					//std::cout << "2" << std::endl;
+				}
 			}
 		}
 		else{
@@ -295,6 +298,8 @@ void Player::update(Step * _step){
 				//std::cout << "4" << std::endl;
 			}
 		}
+
+		
 
 		//std::cout << glm::dot((forwardXZ/forwardVecMagXZ),(glmCurVelocityXZ/glmCurVelocityMagXZ)) << std::endl;
 		//glmLastVelocityXZ = glm::normalize(glmLastVelocityXZ);

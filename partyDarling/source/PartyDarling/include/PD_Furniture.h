@@ -2,13 +2,14 @@
 
 #include <MeshEntity.h>
 #include <BulletMeshEntity.h>
+#include <RoomObject.h>
 
 class Shader;
 class PD_FurnitureComponentContainer;
 class PD_FurnitureDefinition;
 
-class PD_Furniture : public BulletMeshEntity{
+class PD_Furniture : public RoomObject{
 public:
 
-	PD_Furniture(BulletWorld * _bulletWorld, Shader * _shader, PD_FurnitureDefinition * _def);
+	PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Anchor_t _anchor = GROUND);
 };

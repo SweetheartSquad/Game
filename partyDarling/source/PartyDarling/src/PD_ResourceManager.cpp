@@ -27,7 +27,7 @@ void PD_ResourceManager::init(){
 	{
 		Json::Value root;
 		Json::Reader reader;
-		std::string jsonLoaded = FileUtils::readFile("assets/furniture.json");
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/furniture.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
@@ -35,7 +35,7 @@ void PD_ResourceManager::init(){
 			for(auto furnDef : root["furniture"]) {
 				// parse the external json file
 				Json::Value componentRoot;
-				parsingSuccessful = reader.parse(FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
+				parsingSuccessful = reader.parse(sweet::FileUtils::readFile("assets/" + furnDef.get("src", "NO_SRC").asString()), componentRoot);
 				if(!parsingSuccessful){
 					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 				}

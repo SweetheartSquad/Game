@@ -33,13 +33,9 @@ public:
 	
 	bool flipped;
 
-	static std::vector<PersonComponent *> getComponentsFromJson(Json::Value _json, Texture * _paletteTex, bool _flipped = false);
-
 	glm::vec2 getOut(unsigned long int _index);
 
 	PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped);
-private:
-	PersonComponent(Json::Value _json, Texture * _paletteTex, bool _flipped);
 };
 
 class PersonLimbSolver : public IkChain_CCD{
@@ -123,11 +119,11 @@ public:
 
 class Person : public RoomObject {
 public:
-	Person(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
+	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 
-	//virtual void setShader(Shader * _shader, bool _default) override;
+	virtual void setShader(Shader * _shader, bool _default) override;
 	
 	PersonRenderer * pr;
 };

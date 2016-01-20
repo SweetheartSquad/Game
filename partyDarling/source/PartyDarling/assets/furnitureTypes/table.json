@@ -1,11 +1,11 @@
 {
             "components": [
                 {
-                    "componentType": "tabletop", 
+                    "componentTypes": ["tabletop"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentType": "leg", 
+                            "componentTypes": ["leg"], 
                             "multiplier": 4, 
                             "required": true,
 							"scale": [1.0,1.0,1.0]

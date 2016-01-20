@@ -147,7 +147,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	bulletGround->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GREY")->texture);
 
 
-	room = RoomBuilder(std::string("{size:{l:5, w:15}}"),bulletWorld).getRoom();
+	/*room = RoomBuilder(std::string("{size:{l:5, w:15}}"),bulletWorld, diffuseShader, characterShader).getRoom();
 	childTransform->addChild(room);
 	room->setShader(diffuseShader, true);
 
@@ -162,7 +162,7 @@ PD_TestScene::PD_TestScene(Game * _game) :
 	tSprite->mesh->scaleModeMin = GL_NEAREST;
 	tSprite->setShader(diffuseShader, true);
 	room->translatePhysical(glm::vec3(-(tex->width/2.f) * ROOM_TILE, 0.f, -(tex->height/2.f) * ROOM_TILE), true);
-	childTransform->addChild(tSprite);
+	childTransform->addChild(tSprite);*/
 
 	/*std::vector<std::string> objs;
 	objs.push_back("assets/meshes/LOD_2/coffeeTable_LOD_2.obj");

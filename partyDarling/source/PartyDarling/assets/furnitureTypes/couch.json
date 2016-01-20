@@ -1,0 +1,63 @@
+{
+   "components": [
+                {
+                    "componentType": "couch_Right_Base", 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentType": "couch_Right_Back", 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentType": "couchLeg", 
+                            "multiplier": 2, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentType": "couch_Right_ArmRest", 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentType": "couch_Left_Base", 
+                            "multiplier": 1, 
+                            "outComponents": [
+										{
+											"componentType": "couch_Right_Back", 
+											"multiplier": 1, 
+											"outComponents": [], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										}, 
+										{
+											"componentType": "couchLeg", 
+											"multiplier": 2, 
+											"outComponents": [], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										},
+										{
+											"componentType": "couch_Right_ArmRest", 
+											"multiplier": 1, 
+											"outComponents": [], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										}
+							], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "loveseat"
+        }

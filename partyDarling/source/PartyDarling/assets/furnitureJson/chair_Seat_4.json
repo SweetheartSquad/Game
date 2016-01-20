@@ -1,7 +1,7 @@
 {
             "connectors": [
                 {
-                    "componentType": "leg", 
+                    "componentTypes": ["leg"], 
                     "positions": [
                         [
                             -3.7076315202996186, 
@@ -26,7 +26,7 @@
                     ]
                 }, 
                 {
-                    "componentType": "back", 
+                    "componentTypes": ["back"], 
                     "positions": [
                         [
                             0.0, 

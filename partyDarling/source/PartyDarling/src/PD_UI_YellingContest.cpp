@@ -10,7 +10,21 @@
 #include <Sprite.h>
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
+#include <FileUtils.h>
 #include <shader/ComponentShaderText.h>
+#include <DateUtils.h>
+
+#define BORDER_SIZE 80.f
+
+InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
+	character(_character),
+	padding(_padding),
+	targetTime(_targetTime),
+	hitTime(_hitTime),
+	iteration(_iteration)
+{
+
+}
 
 PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
@@ -23,13 +37,14 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	confidence(50.f),
-	playerQuestionTimerLength(3.f),
+	playerQuestionTimerLength(2.f),
 	playerQuestionTimer(0),
 	playerAnswerTimerLength(1.f),
 	playerAnswerTimer(0),
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
+	prevHighlightedPunctuation(nullptr),
 	punctuationHighlight(new Sprite(_shader)),
 	highlightedWordStart(nullptr),
 	highlightedWordEnd(nullptr),
@@ -39,7 +54,14 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverDuration(0.f),
 	win(false),
 	isComplete(false),
-	isEnabled(true)
+	isEnabled(true),
+	offensiveCorrect(0),
+	offensiveWrong(0),
+	defensiveCorrect(0),
+	defensiveWrong(0),
+	interjectTimer(0),
+	punctuationCnt(-1),
+	iteration(0)
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -103,10 +125,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubble->setRationalWidth(0.25f, this);
 	enemyBubble->setRationalHeight(0.25f, this);
 	enemyBubble->background->setVisible(false);
-	//enemyBubble->setBackgroundColour(1, 1, 1, 1);
 
 	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-DEFENSE-BUBBLE"));
-	enemyBubbleBubble->setBorder(80.f);
+	enemyBubbleBubble->setBorder(BORDER_SIZE);
 	enemyBubble->addChild(enemyBubbleBubble);
 	enemyBubbleBubble->setRationalWidth(1.f);
 	enemyBubbleBubble->setRationalHeight(1.f);
@@ -137,11 +158,10 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubble->setRationalWidth(0.45f);
 	playerBubble->setRationalHeight(0.4f);
 	playerBubble->background->setVisible(false);
-	//playerBubble->setBackgroundColour(1, 1, 1, 1);
 
 	// The fancy nine sliced bubble
 	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-BUBBLE"));
-	playerBubbleBubble->setBorder(80.f);
+	playerBubbleBubble->setBorder(BORDER_SIZE);
 	playerBubble->addChild(playerBubbleBubble);
 	playerBubbleBubble->setRationalWidth(1.f);
 	playerBubbleBubble->setRationalHeight(1.f);
@@ -210,6 +230,43 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverImage->setRationalHeight(0.5f);
 	gameOverContainer->addChild(gameOverImage);
 	// don't add the container until yelling contest is over
+
+	// Debug stuff
+	buttonPresses = new VerticalLinearLayout(_bulletWorld);
+	buttonPresses->setRationalWidth(1.f);
+	buttonPresses->setRationalHeight(0.1f);
+	buttonPresses->horizontalAlignment = kLEFT;
+
+	HorizontalLinearLayout * interjectButtonPresses = new HorizontalLinearLayout(_bulletWorld);
+	interjectButtonPresses->setRationalWidth(1.f);
+	interjectButtonPresses->setRationalHeight(0.5f);
+	TextLabel * interjectTitle = new TextLabel(_bulletWorld, _font, _textShader);
+	interjectTitle->setText("INTERJECT: ");
+
+	defensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	defensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+
+	HorizontalLinearLayout * insultButtonPresses = new HorizontalLinearLayout(_bulletWorld);
+	TextLabel * insultTitle = new TextLabel(_bulletWorld, _font, _textShader);
+	insultTitle->setText("INSULT: ");
+	insultButtonPresses->setRationalWidth(1.f);
+	insultButtonPresses->setRationalHeight(0.5f);
+
+	offensiveCorrectLabel = new TextLabel(_bulletWorld, _font, _textShader);
+	offensiveWrongLabel = new TextLabel(_bulletWorld, _font, _textShader);
+
+	interjectButtonPresses->addChild(interjectTitle);
+	interjectButtonPresses->addChild(defensiveCorrectLabel);
+	interjectButtonPresses->addChild(defensiveWrongLabel);
+
+	insultButtonPresses->addChild(insultTitle);
+	insultButtonPresses->addChild(offensiveCorrectLabel);
+	insultButtonPresses->addChild(offensiveWrongLabel);
+
+	buttonPresses->addChild(interjectButtonPresses);
+	buttonPresses->addChild(insultButtonPresses);
+
+	//addChild(buttonPresses);
 	
 	addChild(livesContainer);
 	addChild(confidenceSlider);
@@ -221,6 +278,11 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	// disable and hide by default
 	disable();
+
+	eventManager.addEventListener("wordspoken", [this](sweet::Event * _event){
+		// Stuff!!!
+		
+	});
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -242,6 +304,8 @@ void PD_UI_YellingContest::update(Step * _step){
 			}
 
 			if(!modeOffensive){
+				// INTERJECT
+				interjectTimer += _step->getDeltaTime();
 				// Cursor
 				if(glyphIdx < glyphs.size()){
 					glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
@@ -263,6 +327,7 @@ void PD_UI_YellingContest::update(Step * _step){
 
 						// Find next punctuation
 						if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+							prevHighlightedPunctuation = highlightedPunctuation;
 							highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
 						}
 
@@ -280,8 +345,12 @@ void PD_UI_YellingContest::update(Step * _step){
 							s << glyphs.at(glyphIdx)->character;
 							selectedGlyphText->setText(s.str());
 							*/
+							// play sound
+							OpenAL_Sound * s = PD_ResourceManager::scenario->getAudio("DEFAULT")->sound;
+							s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
+							s->play();
 						}else{
-							// TODO: decrement confidence, but not yet! It's still too hard to interject!
+							incrementConfidence(-damage);
 							setEnemyText();
 						}
 					}
@@ -294,7 +363,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					// text label
 					glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
 					pos = glm::vec3(mm* glm::vec4(pos, 1));
-			
+					
 					punctuationHighlight->childTransform->translate(pos, false);
 				}
 
@@ -308,10 +377,12 @@ void PD_UI_YellingContest::update(Step * _step){
 					wordHighlight->childTransform->translate(pos, false);
 				}
 			}else{
+				// INSULT
 				if(playerQuestionTimer >= playerQuestionTimerLength){
 					// Increment player answer timer
 					if(playerAnswerTimer >= playerAnswerTimerLength){
 						// Out of time, enemy's turn!
+						countInsultAccuracy(-1);
 						incrementConfidence(-damage);
 						setUIMode(false);
 					}else{
@@ -320,6 +391,11 @@ void PD_UI_YellingContest::update(Step * _step){
 				}else{
 					// Increment player question timer
 					playerQuestionTimer += _step->getDeltaTime();
+					if(playerQuestionTimer >= playerQuestionTimerLength){
+						pBubbleBtn1->setVisible(true);
+						pBubbleBtn2->setVisible(true);
+						playerTimerSlider->setVisible(true);
+					}
 				}
 			}
 		}else{
@@ -351,7 +427,7 @@ void PD_UI_YellingContest::startNewFight(){
 	lostLives.clear();
 
 	// loop through friends and add tokens
-	for(unsigned int i = 0; i < 3; ++i){
+	for(unsigned int i = 0; i < 1; ++i){
 		NodeUI * l = new NodeUI(world);
 		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
 		l->background->mesh->pushTexture2D(tex);
@@ -382,6 +458,14 @@ void PD_UI_YellingContest::startNewFight(){
 
 	setUIMode(false);
 	enable();
+
+	// Set test stuff
+	offensiveCorrectLabel->setText("Correct: 0");
+	offensiveWrongLabel->setText("  Incorrect: 0");
+	defensiveCorrectLabel->setText("Correct: 0");
+	defensiveWrongLabel->setText("  Incorrect: 0");
+
+	buttonPresses->invalidateLayout();
 }
 
 void PD_UI_YellingContest::gameOver(bool _win){
@@ -399,6 +483,75 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	}
 
 	addChild(gameOverContainer);
+
+	// USER TESTING INFORMATION
+	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
+	{
+		std::stringstream filename;
+		std::ofstream file;
+
+		// success rate
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_SuccessRate.csv";
+		file.open(filename.str());
+		file << "correctInterject;incorrectInterject;correctInsult;incorrectInsult;" << std::endl;
+		file << defensiveCorrect << ";" << defensiveWrong << ";" << offensiveCorrect << ";" << offensiveWrong << std::endl;
+		file.close();
+	}
+
+
+	// interject statistics
+	{
+		std::stringstream filename;
+		std::ofstream file;
+		float prevTargetTime = 0;
+		float targetTime = 0;
+
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Interject.csv";
+		file.open(filename.str());
+		file << "iteration;character;hitPadding;hitTime;targetTime;diffToNext;diffToPrev;expectedTarget;percentageError;" << std::endl;
+		for(unsigned long int i = 0; i < interjectTimes.size(); ++i){
+			if(targetTime != interjectTimes.at(i).targetTime){
+				prevTargetTime = targetTime;
+				targetTime = interjectTimes.at(i).targetTime;
+			}
+
+			std::string expected;
+			float expectedDiff;
+			if(std::abs(interjectTimes.at(i).hitTime) < std::abs(targetTime - interjectTimes.at(i).hitTime)){
+				expectedDiff = std::abs(interjectTimes.at(i).hitTime);
+				expected = "PREV";
+			}else{
+				expectedDiff = std::abs(targetTime - interjectTimes.at(i).hitTime);
+				expected = "NEXT";
+			
+			}
+
+			file << interjectTimes.at(i).iteration
+				 << ";" << interjectTimes.at(i).character
+				 << ";" << interjectTimes.at(i).padding
+				 << ";" << interjectTimes.at(i).hitTime
+				 << ";" << targetTime
+				 << ";" << (targetTime - interjectTimes.at(i).hitTime)
+				 << ";" << (interjectTimes.at(i).hitTime)
+				 << ";" << expected
+				 << ";" << (expectedDiff / interjectTimes.at(i).padding)*100 << "%" << std::endl;
+		}
+		file.close();
+	}
+	
+	// insult statistics
+	{
+		std::stringstream filename;
+		std::ofstream file;
+		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Insult.csv";
+		file.open(filename.str());
+
+		file << "playerAnswerTimerLength FAILED (Out of time): -1;hitTime;" << std::endl;
+		for(unsigned int i = 0; i < insultTimes.size(); ++i){
+			file << playerAnswerTimerLength << ";" << insultTimes.at(i) << std::endl;
+		}
+		file.close();
+	}
 }
 
 void PD_UI_YellingContest::complete(){
@@ -437,10 +590,14 @@ void PD_UI_YellingContest::interject(){
 	}else{
 		isPunctuation = true;
 	}
+	countButtonPresses(isPunctuation, false);
+	countInterjectAccuracy(interjectTimer);
 
 	incrementConfidence(isPunctuation ? damage : -damage);
 
-	setUIMode(isPunctuation);
+	if(isPunctuation){
+		setUIMode(isPunctuation);
+	}
 }
 
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
@@ -473,19 +630,16 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	for (auto label : enemyBubbleText->usedLines) {
 		for (int i = 0; i < label->usedGlyphs.size(); ++i){
-			std::wstringstream s;
-			s << label->usedGlyphs.at(i)->character;
-			std::wcout << s.str();
 			glyphs.push_back(label->usedGlyphs.at(i));
 		}
 	}
 
-	std::cout << std::endl;
-
 	if(glyphs.size() > 0){
 		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 	}
-
+	
+	interjectTimer = 0;
+	prevHighlightedPunctuation = nullptr;
 	highlightedPunctuation = findFirstPunctuation();
 	highlightNextWord();
 }
@@ -508,9 +662,15 @@ void PD_UI_YellingContest::setPlayerText(){
 	// Reset timer
 	playerQuestionTimer = 0;
 	playerAnswerTimer = 0;
+
+	pBubbleBtn1->setVisible(false);
+	pBubbleBtn2->setVisible(false);
+	playerTimerSlider->setVisible(false);
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective){
+	countButtonPresses(_isEffective, true);
+	countInsultAccuracy(playerAnswerTimer);
 	if (_isEffective){
 		// next insult
 		incrementConfidence(damage);
@@ -536,7 +696,6 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 			lives.pop_back();
 			confidence = 50.f;
 		}
-		
 	}
 
 	if(confidence >= 100){
@@ -551,7 +710,8 @@ UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
 			float h = enemyBubbleText->font->getLineHeight();
 			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
 			punctuationHighlight->setVisible(true);
-
+			++punctuationCnt;
+			++iteration;
 			return glyphs.at(i);
 		}
 	}
@@ -609,4 +769,70 @@ bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
 	}
 
 	return false;
+}
+
+void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive){
+	std::stringstream s;
+	if(_isOffensive){
+		if(_isCorrect){
+			++offensiveCorrect;
+			s << "Correct: " << offensiveCorrect;
+			offensiveCorrectLabel->setText(s.str());
+		}else{
+			++offensiveWrong;
+			s << "  Incorrect: " << offensiveWrong;
+			offensiveWrongLabel->setText(s.str());
+		}
+	}else{
+		if(_isCorrect){
+			++defensiveCorrect;
+			s << "Correct: " << defensiveCorrect;
+			defensiveCorrectLabel->setText(s.str());
+		}else{
+			++defensiveWrong;
+			s << "  Incorrect: " << defensiveWrong;
+			defensiveWrongLabel->setText(s.str());
+		}
+	}
+	buttonPresses->invalidateLayout();
+}
+
+void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
+	if(highlightedPunctuation != nullptr){
+		float punctuationTimeStart = 0, punctuationMeasureFromTime = 0;
+		float padding = 0;
+		
+		if(prevHighlightedPunctuation != nullptr){
+			for(int i = 0; i < glyphs.size(); ++i){
+				float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+				if(glyphs.at(i) != prevHighlightedPunctuation){
+					punctuationMeasureFromTime += glyphTime;
+				}else{
+					punctuationMeasureFromTime += glyphTime/2.f;
+					break;
+				}
+			}
+		}
+		
+		for(int i = 0; i < glyphs.size(); ++i){
+			float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+			if(glyphs.at(i) != highlightedPunctuation){
+				punctuationTimeStart += glyphTime;
+			}else{
+				padding += glyphTime;
+				break;
+			}
+		}
+
+		float targetTime = (punctuationTimeStart - punctuationMeasureFromTime) + padding/2.f;
+		//float hitTime = _pressTime == NULL ? NULL : _pressTime - targetTime;
+
+		interjectTimes.push_back(InterjectAccuracy(highlightedPunctuation->character, padding, targetTime, (_pressTime-punctuationMeasureFromTime), iteration));
+	}
+
+	
+}
+
+void PD_UI_YellingContest::countInsultAccuracy(float _hitTime){
+	insultTimes.push_back(_hitTime);
 }

@@ -72,11 +72,11 @@ private:
 	Tween<float> * easeOutOfBobbleTween1;
 	float easeOutOfBobbleVal;*/
 	
-	OpenAL_SoundSimple * footSteps;
+	OpenAL_Sound * footSteps;
 	
-	OpenAL_SoundSimple * jumpSound;
+	OpenAL_Sound * jumpSound;
 
-	OpenAL_SoundSimple * landSound;
+	OpenAL_Sound * landSound;
 
 	float lastYVel;
 	float currentYVel;

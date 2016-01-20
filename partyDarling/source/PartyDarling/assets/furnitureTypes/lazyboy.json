@@ -1,0 +1,41 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["couch_Middle_Base"],
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["couch_Middle_Back", "lazyboyback"],
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentType": "couchLeg", 
+                            "multiplier": 4, 
+                            "outComponents": [], 
+                            "required": false,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentType": "couch_Side_ArmRest", 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentType": "couch_Side_ArmRest", 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [-1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "lazyboy"
+        }
