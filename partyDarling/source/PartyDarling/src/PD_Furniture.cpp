@@ -7,6 +7,7 @@
 #include <MeshEntity.h>
 #include <PD_FurnitureComponentDefinition.h>
 #include <PD_ResourceManager.h>
+#include <NumberUtils.h>
 
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(), _shader, _anchor)
