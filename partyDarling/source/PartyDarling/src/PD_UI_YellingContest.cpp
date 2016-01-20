@@ -481,32 +481,32 @@ void PD_UI_YellingContest::gameOver(bool _win){
 		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Interject.csv";
 		file.open(filename.str());
 		file << "iteration;character;hitPadding;hitTime;targetTime;diffToNext;diffToPrev;expectedTarget;percentageError;" << std::endl;
-		for(unsigned long int i = 0; i < interjectTimes.size(); ++i){
-			if(targetTime != interjectTimes.at(i).targetTime){
+		for(auto i : interjectTimes){
+			if(targetTime != i.targetTime){
 				prevTargetTime = targetTime;
-				targetTime = interjectTimes.at(i).targetTime;
+				targetTime = i.targetTime;
 			}
 
 			std::string expected;
 			float expectedDiff;
-			if(std::abs(interjectTimes.at(i).hitTime) < std::abs(targetTime - interjectTimes.at(i).hitTime)){
-				expectedDiff = std::abs(interjectTimes.at(i).hitTime);
+			if(std::abs(i.hitTime) < std::abs(targetTime - i.hitTime)){
+				expectedDiff = std::abs(i.hitTime);
 				expected = "PREV";
 			}else{
-				expectedDiff = std::abs(targetTime - interjectTimes.at(i).hitTime);
+				expectedDiff = std::abs(targetTime - i.hitTime);
 				expected = "NEXT";
 			
 			}
 
-			file << interjectTimes.at(i).iteration
-				 << ";" << interjectTimes.at(i).character
-				 << ";" << interjectTimes.at(i).padding
-				 << ";" << interjectTimes.at(i).hitTime
+			file << i.iteration
+				 << ";" << i.character
+				 << ";" << i.padding
+				 << ";" << i.hitTime
 				 << ";" << targetTime
-				 << ";" << (targetTime - interjectTimes.at(i).hitTime)
-				 << ";" << (interjectTimes.at(i).hitTime)
+				 << ";" << (targetTime - i.hitTime)
+				 << ";" << (i.hitTime)
 				 << ";" << expected
-				 << ";" << (expectedDiff / interjectTimes.at(i).padding)*100 << "%" << std::endl;
+				 << ";" << (expectedDiff / i.padding)*100 << "%" << std::endl;
 		}
 		file.close();
 	}
@@ -519,8 +519,8 @@ void PD_UI_YellingContest::gameOver(bool _win){
 		file.open(filename.str());
 
 		file << "playerAnswerTimerLength FAILED (Out of time): -1;hitTime;" << std::endl;
-		for(unsigned int i = 0; i < insultTimes.size(); ++i){
-			file << playerAnswerTimerLength << ";" << insultTimes.at(i) << std::endl;
+		for(auto i : insultTimes){
+			file << playerAnswerTimerLength << ";" << i << std::endl;
 		}
 		file.close();
 	}
@@ -601,8 +601,8 @@ void PD_UI_YellingContest::setEnemyText(){
 	glyphs.clear();
 
 	for (auto label : enemyBubbleText->usedLines) {
-		for (int i = 0; i < label->usedGlyphs.size(); ++i){
-			glyphs.push_back(label->usedGlyphs.at(i));
+		for (auto glyph : label->usedGlyphs){
+			glyphs.push_back(glyph);
 		}
 	}
 
@@ -676,15 +676,15 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 }
 
 UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
-	for(int i = _startIdx; i < glyphs.size(); ++i){
-		if(isPunctuation(glyphs.at(i))){
-			float w = glyphs.at(i)->getWidth();
+	for(auto glyph : glyphs){
+		if(isPunctuation(glyph)){
+			float w = glyph->getWidth();
 			float h = enemyBubbleText->font->getLineHeight();
 			punctuationHighlight->childTransform->scale(w, h, 1.f, false);
 			punctuationHighlight->setVisible(true);
 			++punctuationCnt;
 			++iteration;
-			return glyphs.at(i);
+			return glyph;
 		}
 	}
 	punctuationHighlight->setVisible(false);
@@ -697,7 +697,7 @@ void PD_UI_YellingContest::highlightNextWord(int _startIdx){
 	highlightedWordStart = nullptr;
 	highlightedWordEnd = nullptr;
 
-	for(int i = _startIdx; i < glyphs.size(); ++i){
+	for(unsigned long int i = _startIdx; i < glyphs.size(); ++i){
 		// Search for start of next word
 		if(highlightedWordStart == nullptr){
 			if(i == 0 || glyphs.at(i-1)->character == ' '){
@@ -766,7 +766,7 @@ void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 		float padding = 0;
 		
 		if(prevHighlightedPunctuation != nullptr){
-			for(int i = 0; i < glyphs.size(); ++i){
+			for(unsigned long int i = 0; i < glyphs.size(); ++i){
 				float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 				if(glyphs.at(i) != prevHighlightedPunctuation){
 					punctuationMeasureFromTime += glyphTime;
@@ -777,7 +777,7 @@ void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 			}
 		}
 		
-		for(int i = 0; i < glyphs.size(); ++i){
+		for(unsigned long int i = 0; i < glyphs.size(); ++i){
 			float glyphTime = glyphs.at(i)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 			if(glyphs.at(i) != highlightedPunctuation){
 				punctuationTimeStart += glyphTime;

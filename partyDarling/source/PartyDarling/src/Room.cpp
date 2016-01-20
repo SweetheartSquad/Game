@@ -10,6 +10,7 @@
 #include <Texture.h>
 #include <RoomObject.h>
 #include <RoomBuilder.h>
+#include <PD_TilemapGenerator.h>
 
 Room::Room(BulletWorld * _world, Shader * _shader) :
 	BulletMeshEntity(_world, new QuadMesh(), _shader),
@@ -54,4 +55,8 @@ void Room::translatePhysical(glm::vec3 _v, bool _relative){
 }
 
 Room::~Room(void){
+}
+
+glm::vec3 Room::getCenter() const{
+	return glm::vec3((tilemap->width/2.f) * ROOM_TILE, 0.f, (tilemap->height/2.f) * ROOM_TILE);
 }

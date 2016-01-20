@@ -29,7 +29,7 @@
 
 #include <PD_Assets.h>
 
-#define RG_DEBUG 0
+//#define RG_DEBUG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
@@ -50,9 +50,6 @@ RoomBuilder::~RoomBuilder(){
 }
 
 Room * RoomBuilder::getRoom(){
-	
-	std::vector<RoomObject *> objects = getRoomObjects();
-
 	room = new Room(world, baseShader);
 	
 	// convert size enum to actual numbers
@@ -66,54 +63,60 @@ Room * RoomBuilder::getRoom(){
 
 	float fullL = l * ROOM_TILE, fullW = ROOM_TILE * w;
 
+	
+	// Generate tilemap image
+	room->tilemap = new PD_TilemapGenerator(l, w, true);
+	unsigned long int pixelIncrement = 158;
+	room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+	room->tilemap->load();
+	room->tilemap->saveImageData("tilemap.tga");
+
 	// create floor/ceiling as static bullet planes
 	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
 	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
 	bulletFloor->createRigidBody(0);
+	bulletFloor->body->setFriction(1);
 	room->childTransform->addChild(bulletFloor);
-	bulletFloor->meshTransform->scale(fullL, fullW, 1.f);
+	bulletFloor->meshTransform->scale(-fullL, fullW, 1.f);
 	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletFloor->meshTransform->translate(fullL * 0.5f, 0.f, fullW * 0.5f);
+	bulletFloor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	bulletFloor->setTranslationPhysical(room->getCenter());
+	bulletFloor->mesh->setScaleMode(GL_NEAREST);
+#ifdef RG_DEBUG
+	bulletFloor->mesh->pushTexture2D(room->tilemap);
+#else
 	for(Vertex & v : bulletFloor->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
-	bulletFloor->body->translate(btVector3(0, 0, 0));
-	bulletFloor->body->setFriction(1);
 	bulletFloor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
+#endif
 
 	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
 	bulletCeil->setColliderAsStaticPlane(0, -1, 0, 0);
 	bulletCeil->createRigidBody(0);
+	bulletCeil->body->setFriction(1);
 	room->childTransform->addChild(bulletCeil);
-	bulletCeil->meshTransform->scale(fullL, fullW, 1.f);
+	bulletCeil->meshTransform->scale(-fullL, fullW, 1.f);
 	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletCeil->meshTransform->translate(fullL * 0.5f, 0.f, fullW * 0.5f);
-	bulletCeil->body->translate(btVector3(0, ROOM_HEIGHT * ROOM_TILE, 0));
+	bulletCeil->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	bulletCeil->setTranslationPhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0));
+	bulletCeil->mesh->setScaleMode(GL_NEAREST);
+#ifdef RG_DEBUG
+	bulletCeil->mesh->pushTexture2D(room->tilemap);
+#else
 	for(Vertex & v : bulletCeil->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
-	bulletCeil->body->setFriction(1);
 	bulletCeil->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("RYAN")->texture);
+#endif
 
-	// Generate tilemap image
-	tilemap = new PD_TilemapGenerator(l, w, true);
-	unsigned long int pixelIncrement = 158;
-	tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
-	tilemap->load();
-	tilemap->saveImageData("tilemap.tga");
-
-	room->tilemapSprite = new Sprite(baseShader);
-	room->tilemapSprite->mesh->pushTexture2D(tilemap);
-	room->tilemapSprite->childTransform->scale(fullL, fullW, 1);
-	room->tilemapSprite->meshTransform->translate(0.5, 0.5, 0);
-	room->tilemapSprite->mesh->setScaleMode(GL_NEAREST);
-
-	room->tilemapSprite->childTransform->rotate(90, 1, 0, 0, kOBJECT);
 
 	thresh = 5;
 	createWalls();
+	
+	std::vector<RoomObject *> objects = getRoomObjects();
 
 	// list of available placed parent objects
 	std::vector<RoomObject *> availableParents;
@@ -121,11 +124,13 @@ Room * RoomBuilder::getRoom(){
 		// only walls in boundaries should have child slots (not floor, cieling)
 		if(boundaries.at(i)->emptySlots.size() > 0){
 			availableParents.push_back(boundaries.at(i));
-			if(RG_DEBUG){
+#ifdef RG_DEBUG
 				std::stringstream s;
-				s << "ROOM_GEN_" << i+1;
-				boundaries.at(i)->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(s.str())->texture);
-			}
+				s << "assets/textures/room generation/" << (i%12+1) << ".png";
+				Texture * tex = new Texture(s.str(), false, true, true);
+				tex->load();
+				boundaries.at(i)->mesh->pushTexture2D(tex);
+#endif
 		}
 	}
 	
@@ -133,11 +138,11 @@ Room * RoomBuilder::getRoom(){
 		if(!search(objects.at(i), availableParents, room)){
 			Log::warn("Search failed; room object not placed.");
 		}else{
-			/*if(RG_DEBUG){
+#ifdef RG_DEBUG
 				if(objects.at(i)->parent != nullptr && objects.at(i)->parent->mesh->textures.size() > 0){
 					objects.at(i)->mesh->pushTexture2D(objects.at(i)->parent->mesh->textures.at(0));
 				}
-			}*/
+#endif
 		}
 	}
 	
@@ -148,19 +153,19 @@ Room * RoomBuilder::getRoom(){
 			room->addComponent(boundaries.at(i)->components.at(j));
 		}
 			
-		if(RG_DEBUG){
+#ifdef RG_DEBUG
 			boundaries.at(i)->components.clear();
 			for(unsigned long int v = 0; v < boundaries.at(v)->mesh->vertices.size(); ++v){
 				boundaries.at(i)->mesh->vertices.at(v).y *= 2;
 			}
 			room->addComponent(boundaries.at(i));
-		}else{
+#else
 			delete boundaries.at(i);
-		}
+#endif
 	}
 
 	// Center room at origin
-	room->translatePhysical(glm::vec3(-(l/2.f) * ROOM_TILE, 0.f, -(w/2.f) * ROOM_TILE), true);
+	room->translatePhysical(-room->getCenter(), true);
 
 	return room;
 }
@@ -283,7 +288,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 }
 
 void RoomBuilder::createWalls(){
-	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(tilemap, thresh, false, true);
+	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(room->tilemap, thresh, false, true);
 
 	std::vector<Edge *> edges;
 
@@ -350,9 +355,6 @@ void RoomBuilder::createWalls(){
 		}
 	}
 
-	// Get wall texture
-	Texture * wallTexture = PD_ResourceManager::scenario->getTexture("WALLS")->texture; // TODO: replace this with random selection based on tags or something
-
 	// Create walls from edges
 	for(Edge * e : edges){
 		addWall(glm::distance(e->p1, e->p2), glm::vec2((e->p1.x+e->p2.x)/2.f, (e->p1.y+e->p2.y)/2.f), e->angle);
@@ -362,7 +364,12 @@ void RoomBuilder::createWalls(){
 	TriMesh tm(dynamic_cast<QuadMesh *>(room->mesh), false);
 	room->setColliderAsMesh(&tm, false);
 	room->createRigidBody(0);
+#ifdef RG_DEBUG
+	room->meshTransform->setVisible(false);
+#endif
 
+	// Get wall texture
+	Texture * wallTexture = PD_ResourceManager::scenario->getTexture("WALLS")->texture; // TODO: replace this with random selection based on tags or something
 	if(wallTexture != nullptr){
 		room->mesh->pushTexture2D(wallTexture);
 	}
@@ -384,18 +391,18 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	// Normals are rotated face-normal
 	// U is extended to allow repeating; V is standard
 	QuadMesh * wallMesh = new QuadMesh();
-	wallMesh->pushVert(Vertex(-halfW, H, 0));
-	wallMesh->pushVert(Vertex(-halfW, 0, 0));
-	wallMesh->pushVert(Vertex(halfW, 0, 0));
-	wallMesh->pushVert(Vertex(halfW, H, 0));
-	wallMesh->setNormal(0, n.x, n.y, n.z);
-	wallMesh->setNormal(1, n.x, n.y, n.z);
-	wallMesh->setNormal(2, n.x, n.y, n.z);
-	wallMesh->setNormal(3, n.x, n.y, n.z);
-	wallMesh->setUV(0, 0.0, 0.0);
-	wallMesh->setUV(1, 0.0, 1.0);
-	wallMesh->setUV(2, width, 1.0);
-	wallMesh->setUV(3, width, 0.0);
+	wallMesh->pushVert(Vertex(-halfW, H, 0.f));
+	wallMesh->pushVert(Vertex(-halfW, 0.f, 0.f));
+	wallMesh->pushVert(Vertex(halfW, 0.f, 0.f));
+	wallMesh->pushVert(Vertex(halfW, H, 0.f));
+	wallMesh->setNormal(0, 0.f, 0.f, 1.f);
+	wallMesh->setNormal(1, 0.f, 0.f, 1.f);
+	wallMesh->setNormal(2, 0.f, 0.f, 1.f);
+	wallMesh->setNormal(3, 0.f, 0.f, 1.f);
+	wallMesh->setUV(0, 0.f, 0.f);
+	wallMesh->setUV(1, 0.f, 1.f);
+	wallMesh->setUV(2, width, 1.f);
+	wallMesh->setUV(3, width, 0.f);
 
 	// Create wall object as a static mesh, and then rotate and translate the bullet collider
 	RoomObject * wall = new RoomObject(world, wallMesh, baseShader);
@@ -409,6 +416,10 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
 	QuadMesh tempMesh;
 	tempMesh.insertVertices(wallMesh);
+	tempMesh.setNormal(0, n.x, n.y, n.z);
+	tempMesh.setNormal(1, n.x, n.y, n.z);
+	tempMesh.setNormal(2, n.x, n.y, n.z);
+	tempMesh.setNormal(3, n.x, n.y, n.z);
 	// transform verts
 	Transform t;
 	t.translate(posX, 0, posZ);
