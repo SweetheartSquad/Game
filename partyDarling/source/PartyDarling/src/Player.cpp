@@ -213,7 +213,6 @@ void Player::update(Step * _step){
 				movement += glm::vec3(0, 100,0);
 				jumpSound->play();
 				jumpTime = _step->time;
-				this->body->applyCentralImpulse(btVector3(xVelocity*-0.3f,0,zVelocity*-0.3f));
 			}
 		}
 	}
@@ -256,19 +255,16 @@ void Player::update(Step * _step){
 
 		this->body->activate(true);
 
-		if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT) && isGrounded){
-
-			this->maxVelocity = btVector3(20,20,20);
-		}
 
 		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
+			
 			if(isGrounded){
 				this->maxVelocity = btVector3(35,35,35);
 				if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
 					bobbleInterpolation += 0.1f;
-				
-				}else if(glmCurVelocityMagXZ < 1.0f){
+				}
+				else if(glmCurVelocityMagXZ < 1.0f){
 					bobbleInterpolation = 0.f;
 				}
 			
@@ -280,22 +276,29 @@ void Player::update(Step * _step){
 					this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
 					//std::cout << "2" << std::endl;
 				}
+			}else{
+				this->maxVelocity = btVector3(20,20,20);
 			}
 		}
 		else{
-			if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
-				bobbleInterpolation += 0.1f;
+			if(isGrounded){
+				this->maxVelocity = btVector3(20,20,20);
+				if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
+					bobbleInterpolation += 0.1f;
 			
-			}else if(glmCurVelocityMagXZ < 1.0f){
-				bobbleInterpolation = 0.f;
-			}
+				}else if(glmCurVelocityMagXZ < 1.0f){
+					bobbleInterpolation = 0.f;
+				}
 
-			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
-				//std::cout << "3" << std::endl;
-				this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
+				if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
+					//std::cout << "3" << std::endl;
+					this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
+				}else{
+					this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
+					//std::cout << "4" << std::endl;
+				}
 			}else{
-				this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
-				//std::cout << "4" << std::endl;
+				this->maxVelocity = btVector3(20,20,20);
 			}
 		}
 
