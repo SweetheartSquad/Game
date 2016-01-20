@@ -38,7 +38,7 @@ public:
 	RoomObject * parent;
 	std::vector<RoomObject *> components;
 
-	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
+	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
 	~RoomObject(void);
 
 

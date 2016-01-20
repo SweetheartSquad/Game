@@ -90,7 +90,7 @@ void AssetCharacter::unload(){
 }
 
 PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
-	PersonRenderer * res = new PersonRenderer(_world, this);
+	PersonRenderer * res = new PersonRenderer(_world, this, _shader);
 	res->setShader(_shader, true);
 	return res;
 }

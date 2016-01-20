@@ -8,8 +8,8 @@ Slot::Slot(float _loc, float _length) :
 {
 }
 
-RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Anchor_t _anchor):
-	BulletMeshEntity(_world, _mesh),
+RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
+	BulletMeshEntity(_world, _mesh, _shader),
 	anchor(_anchor),
 	boundingBox(mesh->calcBoundingBox()),
 	parent(nullptr)

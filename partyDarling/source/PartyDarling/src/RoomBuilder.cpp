@@ -53,7 +53,7 @@ Room * RoomBuilder::getRoom(){
 	
 	std::vector<RoomObject *> objects = getRoomObjects();
 
-	room = new Room(world);
+	room = new Room(world, baseShader);
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
@@ -369,8 +369,6 @@ void RoomBuilder::createWalls(){
 }
 
 void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
-	RoomObject * wall;
-
 	float posX = pos.x * ROOM_TILE;
 	float posZ = pos.y * ROOM_TILE;
 
@@ -396,7 +394,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	m->setUV(2, width, 1.0);
 	m->setUV(3, width, 0.0);
 
-	wall = new RoomObject(world, m);
+	RoomObject * wall = new RoomObject(world, m, baseShader);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
 	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
@@ -436,17 +434,14 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 
 	for(unsigned int i = 0; i < characters.size(); ++i){
 		objects.push_back(characters.at(i));
-		characters.at(i)->setShader(characterShader, true);
 	}
 
 	for(unsigned int i = 0; i < furniture.size(); ++i){
 		objects.push_back(furniture.at(i));
-		furniture.at(i)->setShader(baseShader, true);
 	}
 
 	for(unsigned int i = 0; i < items.size(); ++i){
 		objects.push_back(items.at(i));
-		items.at(i)->setShader(baseShader, true);
 	}
 
 	return objects;
@@ -457,7 +452,7 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 	std::vector<Person*> characters;
 	
 	for(auto def : characterDefinitions){
-		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f)));
+		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader));
 	}
 
 	// Random
@@ -479,19 +474,9 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
 	for(unsigned int i = 0; i < 10; ++i){
+		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
-		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), WALL));
-
-
-		/*MeshInterface * mesh = MeshFactory::getCubeMesh(ROOM_TILE * 0.4);//Resource::loadMeshFromObj("assets/meshes/RoomTest/couch.obj").at(0);
-		for(int i = 0; i < mesh->vertices.size(); ++i){
-			mesh->vertices.at(i).z *= 0.5;
-			mesh->vertices.at(i).y += ROOM_TILE * 0.2;
-		}
-		//mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("")->texture);
-		Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
-
-		furniture.push_back(new Furniture(_world, mesh, WALL));*/
+		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, WALL));
 	}
 
 	return furniture;
@@ -509,7 +494,7 @@ std::vector<Item *> RoomBuilder::getItems(){
 		tex->load();
 		mesh->pushTexture2D(tex);
 
-		items.push_back(new Item(world, mesh));
+		items.push_back(new Item(world, mesh, baseShader));
 	}
 
 	return items;

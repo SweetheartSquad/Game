@@ -141,12 +141,11 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, shader, characterShader).getRoom();
 	childTransform->addChild(room);
-	room->setShader(shader, true);
 	childTransform->addChild(room->tilemapSprite);
+
 	std::vector<RoomObject *> components = room->getAllComponents();
 	for(unsigned int i = 0; i < components.size(); ++i){
 		childTransform->addChild(components.at(i));
-		components.at(i)->setShader(characterShader, true);
 	}
 }
 

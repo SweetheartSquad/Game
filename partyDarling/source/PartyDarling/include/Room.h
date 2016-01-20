@@ -31,7 +31,7 @@ public:
 	
 	std::vector<RoomObject *> objects;
 
-	Room(BulletWorld * _world);
+	Room(BulletWorld * _world, Shader * _shader);
 	~Room(void);
 
 	std::vector<RoomObject *> getAllComponents();

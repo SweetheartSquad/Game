@@ -13,16 +13,16 @@
 
 #include <sweet/Input.h>
 
-Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor):
-	RoomObject(_world, _mesh, _anchor),
-	pr(new PersonRenderer(_world, _definition)),
+Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
+	RoomObject(_world, _mesh, _shader, _anchor),
+	pr(new PersonRenderer(_world, _definition, _shader)),
 	state(&_definition->states.at(_definition->defaultState)),
 	definition(_definition)
 {
-	setColliderAsCapsule(0.5f,1.f);
+	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.5 *0.001f, pr->solverBod->getChainLength() * 0.001f);
 	createRigidBody(25);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
-	//meshTransform->setVisible(false);
+	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(0.001);
 }
@@ -32,8 +32,8 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 	pr->setShader(_shader, _configureDefault);
 }
 
-PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped) :
-	Sprite(),
+PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
+	Sprite(_shader),
 	flipped(_flipped)
 {
 	// get texture
@@ -92,7 +92,7 @@ PersonState::PersonState(Json::Value _json) :
 {
 }
 
-PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition) :
+PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader) :
 	paletteTex(new TextureColourTable(false)),
 	timer(0)
 {
@@ -127,36 +127,36 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 		* footRDef			= &forelegRDef->components.at(0);
 
 
-	pelvis = new PersonComponent(pelvisDef, paletteTex, false);
+	pelvis = new PersonComponent(pelvisDef, _shader, paletteTex, false);
 
-	torso = new PersonComponent(torsoDef, paletteTex, false);
+	torso = new PersonComponent(torsoDef, _shader, paletteTex, false);
 
-	jaw = new PersonComponent(jawDef, paletteTex, false);
-	head = new PersonComponent(headDef, paletteTex, false);
+	jaw = new PersonComponent(jawDef, _shader, paletteTex, false);
+	head = new PersonComponent(headDef, _shader, paletteTex, false);
 
-	nose = new PersonComponent(noseDef, paletteTex, false);
-	eyebrowL = new PersonComponent(eyebrowLDef, paletteTex, false);
-	eyebrowR = new PersonComponent(eyebrowRDef, paletteTex, false);
-	eyeL = new PersonComponent(eyeLDef, paletteTex, false);
-	eyeR = new PersonComponent(eyeRDef, paletteTex, false);
-	pupilL = new PersonComponent(pupilLDef, paletteTex, false);
-	pupilR = new PersonComponent(pupilRDef, paletteTex, false);
+	nose = new PersonComponent(noseDef, _shader, paletteTex, false);
+	eyebrowL = new PersonComponent(eyebrowLDef, _shader, paletteTex, false);
+	eyebrowR = new PersonComponent(eyebrowRDef, _shader, paletteTex, false);
+	eyeL = new PersonComponent(eyeLDef, _shader, paletteTex, false);
+	eyeR = new PersonComponent(eyeRDef, _shader, paletteTex, false);
+	pupilL = new PersonComponent(pupilLDef, _shader, paletteTex, false);
+	pupilR = new PersonComponent(pupilRDef, _shader, paletteTex, false);
 
-	armR = new PersonComponent(armRDef, paletteTex, true);
-	forearmR = new PersonComponent(forearmRDef, paletteTex, true);
-	handR = new PersonComponent(handRDef, paletteTex, true);
+	armR = new PersonComponent(armRDef, _shader, paletteTex, true);
+	forearmR = new PersonComponent(forearmRDef, _shader, paletteTex, true);
+	handR = new PersonComponent(handRDef, _shader, paletteTex, true);
 
-	armL = new PersonComponent(armLDef, paletteTex, false);
-	forearmL = new PersonComponent(forearmLDef, paletteTex, false);
-	handL = new PersonComponent(handLDef, paletteTex, false);
+	armL = new PersonComponent(armLDef, _shader, paletteTex, false);
+	forearmL = new PersonComponent(forearmLDef, _shader, paletteTex, false);
+	handL = new PersonComponent(handLDef, _shader, paletteTex, false);
 
-	legR = new PersonComponent(legRDef, paletteTex, true);
-	forelegR = new PersonComponent(forelegRDef, paletteTex, true);
-	footR = new PersonComponent(footRDef, paletteTex, true);
+	legR = new PersonComponent(legRDef, _shader, paletteTex, true);
+	forelegR = new PersonComponent(forelegRDef, _shader, paletteTex, true);
+	footR = new PersonComponent(footRDef, _shader, paletteTex, true);
 					
-	legL = new PersonComponent(legLDef, paletteTex, false);
-	forelegL = new PersonComponent(forelegLDef, paletteTex, false);
-	footL = new PersonComponent(footLDef, paletteTex, false);
+	legL = new PersonComponent(legLDef, _shader, paletteTex, false);
+	forelegL = new PersonComponent(forelegLDef, _shader, paletteTex, false);
+	footL = new PersonComponent(footLDef, _shader, paletteTex, false);
 
 	solverArmR = new PersonLimbSolver(torso->getOut(1));
 	solverArmL = new PersonLimbSolver(torso->getOut(2));

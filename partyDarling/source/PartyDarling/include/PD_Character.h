@@ -30,7 +30,7 @@ public:
 
 	glm::vec2 getOut(unsigned long int _index);
 
-	PersonComponent(CharacterComponentDefinition * const _definition, Texture * _paletteTex, bool _flipped);
+	PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped);
 };
 
 class PersonLimbSolver : public IkChain_CCD{
@@ -96,7 +96,7 @@ public:
 		* footR;
 
 	Texture * paletteTex;
-	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition);
+	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default);
@@ -117,7 +117,7 @@ public:
 	
 	AssetCharacter * const definition;
 
-	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
+	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 

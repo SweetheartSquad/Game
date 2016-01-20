@@ -11,5 +11,5 @@ class PD_FurnitureDefinition;
 class PD_Furniture : public RoomObject{
 public:
 
-	PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Anchor_t _anchor = GROUND);
+	PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor = GROUND);
 };

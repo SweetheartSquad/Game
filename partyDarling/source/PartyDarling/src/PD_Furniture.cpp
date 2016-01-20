@@ -8,8 +8,8 @@
 #include <PD_FurnitureComponentDefinition.h>
 #include <PD_ResourceManager.h>
 
-PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Anchor_t _anchor) :
-	RoomObject(_bulletWorld, new TriMesh(), _anchor)
+PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
+	RoomObject(_bulletWorld, new TriMesh(), _shader, _anchor)
 {
 	// make sure that there's only one root
 	assert(_def->components.size() == 1);
