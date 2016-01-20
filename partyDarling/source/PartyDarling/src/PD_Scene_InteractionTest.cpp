@@ -175,15 +175,15 @@ void PD_Scene_InteractionTest::update(Step * _step){
 					me = item = nullptr;
 				}
 			}else{
-				PersonButt * butt = dynamic_cast<PersonButt *>(me);
-				if(butt != nullptr){
+				Person * person = dynamic_cast<Person *>(me);
+				if(person != nullptr){
 					// hover over person
-					if(butt != currentHoverTarget){
+					if(person != currentHoverTarget){
 						// if we aren't already looking at the person,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
-						uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-							uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(butt->person->state->conversation)->conversation);
+						uiBubble->addOption("talk to ", [this, person](sweet::Event * _event){
+							uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(person->state->conversation)->conversation);
 							std::cout << "hey gj you talked" << std::endl;
 						});
 						uiBubble->addOption("yell at ", [](sweet::Event * _event){

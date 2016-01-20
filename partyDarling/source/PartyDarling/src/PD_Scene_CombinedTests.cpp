@@ -247,18 +247,18 @@ void PD_Scene_CombinedTests::update(Step * _step){
 						me = item = nullptr;
 					}
 				}else{
-					PersonButt * butt = dynamic_cast<PersonButt *>(me);
-					if(butt != nullptr){
+					Person * person = dynamic_cast<Person*>(me);
+					if(person != nullptr){
 						// hover over person
-						if(butt != currentHoverTarget){
+						if(person != currentHoverTarget){
 							// if we aren't already looking at the person,
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
-							uiBubble->addOption("talk to ", [this, butt](sweet::Event * _event){
-								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(butt->person->state->conversation)->conversation);
+							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
+								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(person->state->conversation)->conversation);
 								player->disable();
 							});
-							uiBubble->addOption("yell at ", [this](sweet::Event * _event){
+							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
 								uiYellingContest->startNewFight();
 								uiBubble->clear();
 								player->disable();
@@ -266,10 +266,10 @@ void PD_Scene_CombinedTests::update(Step * _step){
 							});
 							// if we have an item, also add the "use on" option
 							if(uiInventory->getSelected() != nullptr){
-								uiBubble->addOption("use item on character", [this](sweet::Event * _event){
+								uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
 									uiBubble->clear();
 									player->disable();
-									// TODO: pass in the character that's fighting here
+									// TODO: pass in the character that's interacting with the item here
 								});
 							}
 						}

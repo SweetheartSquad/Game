@@ -92,7 +92,6 @@ void AssetCharacter::unload(){
 PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
 	PersonRenderer * res = new PersonRenderer(_world, this);
 	res->setShader(_shader, true);
-	res->state = &states.at(defaultState);
 	return res;
 }
 

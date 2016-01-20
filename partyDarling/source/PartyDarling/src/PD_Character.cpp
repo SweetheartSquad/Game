@@ -13,21 +13,16 @@
 
 #include <sweet/Input.h>
 
-PersonButt::PersonButt(BulletWorld * _world, PersonRenderer * _person) :
-	NodeBulletBody(_world),
-	person(_person)
-{
-
-}
-
 Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _anchor),
-	pr(new PersonRenderer(_world, _definition)) // TODO: fix this
+	pr(new PersonRenderer(_world, _definition)),
+	state(&_definition->states.at(_definition->defaultState)),
+	definition(_definition)
 {
 	setColliderAsCapsule(0.5f,1.f);
 	createRigidBody(25);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
-	meshTransform->setVisible(false);
+	//meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(0.001);
 }
@@ -99,8 +94,7 @@ PersonState::PersonState(Json::Value _json) :
 
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition) :
 	paletteTex(new TextureColourTable(false)),
-	timer(0),
-	state(nullptr)
+	timer(0)
 {
 	paletteTex->load();
 	
@@ -237,12 +231,6 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	talk->tweens.push_back(new Tween<float>(0.1, -head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
 	talk->loopType = Animation<float>::LoopType::kLOOP;
 	talk->hasStart = true;
-
-
-	butt = new PersonButt(_world, this);
-	childTransform->addChild(butt);
-	butt->setColliderAsBox((torso->getOut(2).x - torso->getOut(1).x) * 0.005f, solverBod->getChainLength() * 0.005f, 0.005f); // TODO: make this scale factor not hard-coded
-	butt->createRigidBody(0);
 }
 
 PersonRenderer::~PersonRenderer(){

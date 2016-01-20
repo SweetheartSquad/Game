@@ -18,11 +18,6 @@ class Conversation;
 class PersonRenderer;
 class AssetCharacter;
 class CharacterComponentDefinition;
-class PersonButt : public NodeBulletBody{
-public:
-	PersonRenderer * person;
-	PersonButt(BulletWorld * _world, PersonRenderer * _person);
-};
 
 
 class PersonComponent : public Sprite{
@@ -59,8 +54,6 @@ public:
 
 class PersonRenderer : public Entity{
 public:
-	PersonButt * butt;
-	PersonState * state;
 	float timer;
 
 	PersonLimbSolver * solverArmR;
@@ -119,6 +112,11 @@ public:
 
 class Person : public RoomObject {
 public:
+	// the character's current state
+	const PersonState * state;
+	
+	AssetCharacter * const definition;
+
 	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
