@@ -29,15 +29,22 @@ private:
 
 	bool isEnabled;
 
+	VerticalLinearLayout * healthContainer;
+	VerticalLinearLayout * gameContainer;
+
 	HorizontalLinearLayout * livesContainer;
 	std::vector<NodeUI *> lives;
 	std::vector<NodeUI *> lostLives;
+
+	SliderControlled * confidenceSlider;
 
 	float playerQuestionTimerLength;
 	float playerQuestionTimer;
 
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
+
+	Sprite * enemyCursor;
 
 	UIGlyph * prevHighlightedPunctuation;
 	UIGlyph * highlightedPunctuation;
@@ -47,6 +54,17 @@ private:
 	UIGlyph * highlightedWordEnd;
 	Sprite * wordHighlight;
 	
+	NodeUI * enemyBubble;
+	TextArea * enemyBubbleText;
+
+	NodeUI * playerBubble;
+	TextArea * playerBubbleText;
+
+	PD_InsultButton * pBubbleBtn1;
+	PD_InsultButton * pBubbleBtn2;
+
+	SliderControlled * playerTimerSlider;
+
 	Shader * shader;
 
 	float baseCursorDelayLength;
@@ -83,31 +101,11 @@ private:
 	std::vector<InterjectAccuracy> interjectTimes;
 	float interjectTimer;
 
-	VerticalLinearLayout * buttonPresses;
-	TextLabel * offensiveCorrectLabel;
-	TextLabel * offensiveWrongLabel;
-	TextLabel * defensiveCorrectLabel;
-	TextLabel * defensiveWrongLabel;
-
 public:
-	Sprite * enemyCursor;
-
-	SliderControlled * confidenceSlider;
-
+	
 	TextArea * selectedGlyphText;
 	
 	float damage;
-
-	NodeUI * enemyBubble;
-	TextArea * enemyBubbleText;
-
-	NodeUI * playerBubble;
-	TextArea * playerBubbleText;
-	
-	PD_InsultButton * pBubbleBtn1;
-	PD_InsultButton * pBubbleBtn2;
-
-	SliderControlled * playerTimerSlider;
 
 	Keyboard * keyboard;
 
