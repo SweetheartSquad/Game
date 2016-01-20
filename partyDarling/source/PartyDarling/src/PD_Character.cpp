@@ -20,6 +20,10 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	definition(_definition)
 {
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.5 *0.001f, pr->solverBod->getChainLength() * 0.001f);
+	
+	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.5 *0.001f) * 2.f;
+	boundingBox.depth = boundingBox.width;
+
 	createRigidBody(25);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
 	meshTransform->setVisible(false);

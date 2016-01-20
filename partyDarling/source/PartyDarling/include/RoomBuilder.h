@@ -66,7 +66,8 @@ public:
 	BulletWorld * world;
 
 	std::vector<RoomObject *> boundaries;
-	std::map<int, std::map<int, bool>> map;
+
+	std::vector<RoomObject *> availableParents;
 
 	Room * room;
 
@@ -76,13 +77,14 @@ public:
 	Room * getRoom();
 
 	// Furniture placement
-	bool search(RoomObject * child, std::vector<RoomObject *> objects, Room * room);
+	bool search(RoomObject * child);
 	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
+	bool canBeParent(RoomObject * _obj, bool _addToList = true);
 
 	// Room boundaries builder functions
 
-	// create room walls from tilemap
+	// Create room walls from tilemap
 	void createWalls();
 	void addWall(float width, glm::vec2 pos, float angle);
 
