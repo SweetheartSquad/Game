@@ -57,7 +57,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	sprintSpeed = 5.0f;
 
 	// player set-up
-	playerRad = 1.f;
+	playerRad = 0.5f;
 	playerHeight = 1.5f;
 	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
@@ -361,7 +361,7 @@ void Player::update(Step * _step){
 		isGrounded = false;
 		jumpTime += _step->time - jumpTime;
 	}
-	playerCamera->firstParent()->translate(b.x(), bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
+	playerCamera->firstParent()->translate(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
