@@ -2,7 +2,32 @@
     "assets": [
         {
             "id": 1,
-            "src": "items/c164ac60-70c9-4b86-88fb-f8674e6b832c.png",
+            "src": "items/aea9aa93-9da9-4581-b086-b8344e041bbf.png",
+            "type": "texture"
+        },
+        {
+            "id": 2,
+            "src": "items/2653f127-7d84-4e0b-b522-b2616990ea9d.png",
+            "type": "texture"
+        },
+        {
+            "id": 3,
+            "src": "items/d209257d-a6cf-4bf8-ad57-e47ed2d72144.png",
+            "type": "texture"
+        },
+        {
+            "id": 4,
+            "src": "items/79e57d6f-19a5-41a2-9652-e2f409b2c9a0.png",
+            "type": "texture"
+        },
+        {
+            "id": 5,
+            "src": "items/e6645344-f2d0-4842-9ca3-5664686573b5.png",
+            "type": "texture"
+        },
+        {
+            "id": 6,
+            "src": "items/f288c511-77cf-4a6a-947a-6c4b89b0b065.png",
             "type": "texture"
         }
     ]
