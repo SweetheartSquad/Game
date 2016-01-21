@@ -8,14 +8,22 @@
 #include <PD_Assets.h>
 #include <PD_ResourceManager.h>
 
-PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader) :
-	BulletMeshEntity(_world, MeshFactory::getPlaneMesh(), _shader),
+PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader, Anchor_t _anchor) :
+	RoomObject(_world, MeshFactory::getPlaneMesh(2), _shader, _anchor),
 	definition(_definition)
 {
 	AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(definition->texture);
 	tex->load();
 	mesh->pushTexture2D(tex->texture);
 	mesh->setScaleMode(GL_NEAREST);
+	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
+	meshTransform->scale(CHARACTER_SCALE);
+	freezeTransformation();
+
+	setColliderAsBoundingBox();
+	createRigidBody(0);
+
+	boundingBox.depth = boundingBox.width;
 }
 
 bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
@@ -55,4 +63,17 @@ void PD_Item::addToWorld(){
 	
 	setColliderAsBoundingBox();
 	createRigidBody(0);
+}
+
+void PD_Item::triggerPickup(){
+	for(auto e : definition->pickupEffects){
+		sweet::Event * e2 = new sweet::Event(e);
+		PD_ResourceManager::scenario->eventManager.triggerEvent(e2);
+	}
+}
+void PD_Item::triggerInteract(){
+	for(auto e : definition->effects){
+		sweet::Event * e2 = new sweet::Event(e);
+		PD_ResourceManager::scenario->eventManager.triggerEvent(e2);
+	}
 }

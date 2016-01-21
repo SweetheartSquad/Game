@@ -92,7 +92,7 @@ public:
 	std::vector<RoomObject *> getRoomObjects();
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
-	std::vector<Item *> getItems();
+	std::vector<PD_Item *> getItems();
 
 	Texture * getFloorTex();
 	Texture * getCeilTex();

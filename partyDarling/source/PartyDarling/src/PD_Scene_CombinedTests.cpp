@@ -84,7 +84,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	uiLayer.addChild(l);
 	l->addChild(crosshairIndicator);
 
-	for(unsigned long int i = 0; i < 50; ++i){
+	/*for(unsigned long int i = 0; i < 50; ++i){
 		std::map<std::string, Asset *>::iterator itemDef = PD_ResourceManager::scenario->assets["item"].begin();
 		if(itemDef != PD_ResourceManager::scenario->assets["item"].end()){
 			std::advance(itemDef, sweet::NumberUtils::randomInt(0, PD_ResourceManager::scenario->assets["item"].size()-1));
@@ -95,7 +95,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 			item->setTranslationPhysical(sweet::NumberUtils::randomFloat(-50, 50), 2, sweet::NumberUtils::randomFloat(-50, 50));
 			item->rotatePhysical(45,0,1,0,false);
 		}
-	}
+	}*/
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
@@ -144,7 +144,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	lights.push_back(light2);
 
 
-	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room","1")), bulletWorld, toonShader, characterShader).getRoom();
+	// pick a random room to load
+	std::stringstream ss;
+	ss << sweet::NumberUtils::randomInt(1, 4);
+	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
 	childTransform->addChild(room);
 
 	std::vector<RoomObject *> components = room->getAllComponents();
@@ -222,10 +225,16 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 									// pickup the item
 									uiInventory->pickupItem(item);
+
+									// run item pickup triggers
+									item->triggerPickup();
 								});
 							}else{
-								uiBubble->addOption("Use " + item->definition->name, [](sweet::Event * _event){
+								uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
 									std::cout << "hey gj you interacted" << std::endl;
+
+									// run item interact triggers
+									item->triggerInteract();
 								});
 							}
 						}

@@ -447,13 +447,13 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
-	//std::vector<Item *> items = getItems();
+	std::vector<PD_Item *> items = getItems();
 
 	for(auto c : characters){
 		listing->addCharacter(c);
-	}/*for(auto i : items){
+	}for(auto i : items){
 		listing->addItem(i);
-	}*/
+	}
 
 	std::vector<RoomObject *> objects;
 	// calculate size of room, get random # of furniture/items?
@@ -461,7 +461,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	
 	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
-	//objects.insert(objects.begin(), items.begin(), items.end());
+	objects.insert(objects.begin(), items.begin(), items.end());
 
 	return objects;
 }
@@ -501,19 +501,12 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	return furniture;
 }
 
-std::vector<Item *> RoomBuilder::getItems(){
-	std::vector<Item *> items;
-
-	unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
-	for(unsigned long int i = 0; i < n; ++i){
-		MeshInterface * mesh = MeshFactory::getPlaneMesh(2.f);
-		Json::Value j;
-		j["texture"] = "UV-TEST";
-		Texture * tex = PD_ResourceManager::scenario->getTexture(j.get("texture", "DEFAULT").asString())->texture;
-		tex->load();
-		mesh->pushTexture2D(tex);
-
-		items.push_back(new Item(world, mesh, baseShader));
+std::vector<PD_Item *> RoomBuilder::getItems(){
+	std::vector<AssetItem *> itemDefinitions = definition->getItems();
+	std::vector<PD_Item *> items;
+	
+	for(auto def : itemDefinitions){
+		items.push_back(new PD_Item(def, world, baseShader));
 	}
 
 	return items;
