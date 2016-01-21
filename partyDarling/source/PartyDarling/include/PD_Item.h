@@ -9,6 +9,8 @@ class BulletWorld;
 
 class AssetItem;
 
+#define ITEM_POS_Y 2
+
 class PD_Item : public RoomObject{
 public:
 	const AssetItem * const definition;

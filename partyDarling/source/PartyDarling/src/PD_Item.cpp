@@ -16,12 +16,17 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	tex->load();
 	mesh->pushTexture2D(tex->texture);
 	mesh->setScaleMode(GL_NEAREST);
+	//meshTransform->translate(0, tex->texture->height, 0);
 	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
 	meshTransform->scale(CHARACTER_SCALE);
 	freezeTransformation();
 
+	boundingBox = mesh->calcBoundingBox();
+
 	setColliderAsBoundingBox();
 	createRigidBody(0);
+
+	setTranslationPhysical(0, ITEM_POS_Y, 0);
 
 	boundingBox.depth = boundingBox.width;
 }

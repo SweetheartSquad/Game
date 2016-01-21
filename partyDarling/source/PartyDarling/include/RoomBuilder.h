@@ -56,10 +56,12 @@ private:
 	// the definition for this room
 	AssetRoom * const definition;
 	
-	sweet::ShuffleVector<unsigned long int> debugTexIdx;
-	sweet::ShuffleVector<unsigned long int> wallTexIdx;
-	sweet::ShuffleVector<unsigned long int> ceilTexIdx;
-	sweet::ShuffleVector<unsigned long int> floorTexIdx;
+	static sweet::ShuffleVector<unsigned long int> debugTexIdx;
+	static sweet::ShuffleVector<unsigned long int> wallTexIdx;
+	static sweet::ShuffleVector<unsigned long int> ceilTexIdx;
+	static sweet::ShuffleVector<unsigned long int> floorTexIdx;
+	static bool staticInit();
+	static bool staticInitialized;
 public:
 	unsigned long int thresh;
 

@@ -37,13 +37,12 @@ Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	angle(glm::degrees(glm::atan(_normal.y, _normal.x)))
 {		
 }
+sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::floorTexIdx;
 
-RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
-	world(_world),
-	baseShader(_baseShader),
-	characterShader(_characterShader),
-	definition(_definition)
-{
+bool RoomBuilder::staticInit(){
 	for(unsigned long int i = 1; i <= 5; ++i){
 		wallTexIdx.push(i);
 		ceilTexIdx.push(i);
@@ -52,6 +51,17 @@ RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader *
 	for(unsigned long int i = 1; i <= 12; ++i){
 		debugTexIdx.push(i);
 	}
+	return true;
+}
+bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
+
+RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
+	world(_world),
+	baseShader(_baseShader),
+	characterShader(_characterShader),
+	definition(_definition)
+{
+	
 }
 
 RoomBuilder::~RoomBuilder(){
@@ -217,7 +227,7 @@ bool RoomBuilder::search(RoomObject * child){
 		glm::vec3 pos = glm::vec3();
 		// Validate bounding box is inside room
 		if(true){
-			child->translatePhysical(pos);
+			child->translatePhysical(pos, true);
 			room->addComponent(child);
 			canBeParent(child);
 			return true;
@@ -271,7 +281,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	}
 
 	child->body->getWorldTransform().setRotation(bOrient);
-	child->translatePhysical(pos);
+	child->translatePhysical(pos, true);
 	//child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
 
 	parent->addComponent(child);
