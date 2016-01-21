@@ -19,16 +19,17 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	state(&_definition->states.at(_definition->defaultState)),
 	definition(_definition)
 {
-	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.5 *0.001f, pr->solverBod->getChainLength() * 0.001f);
+	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, pr->solverBod->getChainLength() * CHARACTER_SCALE);
 	
-	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.5 *0.001f) * 2.f;
+	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
+	boundingBox.height = pr->solverBod->getChainLength() * CHARACTER_SCALE;
 	boundingBox.depth = boundingBox.width;
 
-	createRigidBody(25);
+	createRigidBody(5);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
 	meshTransform->setVisible(false);
 
-	childTransform->addChild(pr)->scale(0.001);
+	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
 }
 
 void Person::setShader(Shader * _shader, bool _configureDefault){
@@ -208,8 +209,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
 	solverBod->jointsLocal.at(1)->addJoint(solverArmL);
-	solverBod->jointsLocal.at(0)->addJoint(solverLegR);
-	solverBod->jointsLocal.at(0)->addJoint(solverLegL);
+	solverBod->jointsLocal.at(0)->addJoint(solverLegR, true);
+	solverBod->jointsLocal.at(0)->addJoint(solverLegL, true);
 	childTransform->addChild(solverBod, false);
 
 	
