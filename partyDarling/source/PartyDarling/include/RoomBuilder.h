@@ -78,6 +78,7 @@ public:
 	std::vector<RoomObject *> boundaries;
 
 	std::vector<RoomObject *> availableParents;
+	std::vector<RoomObject *> placedObjects;
 
 	Room * room;
 	glm::vec3 roomUpperBound;
@@ -94,7 +95,8 @@ public:
 	bool search(RoomObject * child);
 	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
-	bool canBeParent(RoomObject * _obj, bool _addToList = true);
+	void addObjectToLists(RoomObject * _obj);
+	bool canBeParent(RoomObject * _obj);
 
 	//transform vertices from a's space into b
 	std::vector<glm::vec3> getLocalBoundingBoxVertices(glm::vec3 _lowerBound, glm::vec3 _upperBound, glm::mat4 _mmA, glm::mat4 _mmB);
