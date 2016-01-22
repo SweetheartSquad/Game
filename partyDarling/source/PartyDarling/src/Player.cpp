@@ -353,6 +353,8 @@ void Player::update(Step * _step){
 	}
 	playerCamera->firstParent()->translate(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
 
+	//std::cout << isGrounded << std::endl;
+
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
 	
