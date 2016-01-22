@@ -30,6 +30,7 @@
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Nav.h" />
+    <ClInclude Include="include\PD_Palette.h" />
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scene_CombinedTests.h" />
     <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Nav.cpp" />
+    <ClCompile Include="src\PD_Palette.cpp" />
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scene_CombinedTests.cpp" />
     <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />

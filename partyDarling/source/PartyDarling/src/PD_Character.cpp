@@ -9,7 +9,7 @@
 #include <PD_Assets.h>
 #include <PD_Character.h>
 #include <NumberUtils.h>
-#include <TextureColourTable.h>
+#include <PD_Palette.h>
 
 #include <sweet/Input.h>
 
@@ -98,9 +98,10 @@ PersonState::PersonState(Json::Value _json) :
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader) :
-	paletteTex(new TextureColourTable(false)),
+	paletteTex(new PD_Palette(false)),
 	timer(0)
 {
+	dynamic_cast<PD_Palette *>(paletteTex)->generateRandomTable();
 	paletteTex->load();
 	
 	CharacterComponentDefinition
