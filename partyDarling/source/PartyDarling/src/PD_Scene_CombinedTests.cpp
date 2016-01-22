@@ -36,7 +36,6 @@
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
 	uiLayer(0,0,0,0),
-	shader(new ComponentShaderBase(false)), 
 	toonShader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
@@ -44,18 +43,17 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	currentHoverTarget(nullptr),
 	selectedItem(nullptr)
 {
-	shader->addComponent(new ShaderComponentMVP(shader));
-	shader->addComponent(new ShaderComponentTexture(shader, 0));
-	shader->addComponent(new ShaderComponentDiffuse(shader));
-	shader->compileShader();
-
+	toonRamp = new RampTexture(glm::vec3(0.3f), glm::vec3(1.f), 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
+	toonShader->addComponent(new ShaderComponentToon(toonShader, toonRamp, true));
+	//toonShader->addComponent(new ShaderComponentDiffuse(toonShader));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
-	toonShader->addComponent(new ShaderComponentToon(toonShader, new RampTexture(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(1.f), 5)));
 	toonShader->compileShader();
 
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
+	characterShader->addComponent(new ShaderComponentToon(characterShader, toonRamp, true));
+	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
 	characterShader->compileShader();
@@ -138,10 +136,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
-	PointLight * light2 = new PointLight(glm::vec3(5,5,5), 0.02f, 0.001f, -1);
-	player->playerCamera->childTransform->addChild(light2);
-	light2->firstParent()->translate(0.f, 1.f, 0.f);
-	lights.push_back(light2);
+	playerLight = new PointLight(glm::vec3(1,1,1), 0.0f, 0.003f, -1);
+	player->playerCamera->childTransform->addChild(playerLight);
+	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
+	lights.push_back(playerLight);
 
 
 	// pick a random room to load
@@ -183,6 +181,19 @@ PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
+	float a = playerLight->getAttenuation();
+	float newa = fmod(_step->time, 128.f/300.f)*0.01f+0.01f;
+	playerLight->setAttenuation(newa);
+	if(newa < a){
+		lightStart = glm::vec3(sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f));
+		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f));
+	}
+	toonRamp->setRamp(
+		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
+		toonRamp->end + (lightEnd - toonRamp->end) * 0.1f,
+		4);
+	toonRamp->bufferData();
+
 	PD_ResourceManager::scenario->eventManager.update(_step);
 
 	bulletWorld->update(_step);

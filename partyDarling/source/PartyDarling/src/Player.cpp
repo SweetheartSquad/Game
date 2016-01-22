@@ -57,7 +57,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	sprintSpeed = 6.0f;
 
 	// player set-up
-	playerRad = 0.5f;
+	playerRad = 0.25f;
 	playerHeight = 1.5f;
 	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
