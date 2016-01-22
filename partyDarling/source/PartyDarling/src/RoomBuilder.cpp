@@ -214,7 +214,7 @@ Room * RoomBuilder::getRoom(){
 
 	// Shuffle, and load into available parents
 	while(shuffleBoundaries.shuffleCount() < 2){
-		availableParents.push_back(shuffleBoundaries.pop());
+		addObjectToLists(shuffleBoundaries.pop());
 	}
 	
 	for(auto obj : objects){
@@ -252,7 +252,7 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING && sweet::NumberUtils::randomBool()){
+	if(child->anchor != Anchor_t::CIELING){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
@@ -273,7 +273,7 @@ bool RoomBuilder::search(RoomObject * child){
 				
 					// if the object can be placed without collision
 					if(arrange(child, availableParents.at(i), side, slot)){
-						canBeParent(child);
+						addObjectToLists(child);
 						if(childBox.width < slot->length){
 							// adjust remaining slot space
 							slot->loc += childBox.width;
@@ -311,9 +311,10 @@ bool RoomBuilder::search(RoomObject * child){
 
 		// Validate bounding box is inside room
 		if(canPlaceObject(child, pos, orient)){
+			//child->body->getWorldTransform().setRotation(orient);
 			child->translatePhysical(pos, true);
 			room->addComponent(child);
-			canBeParent(child);
+			addObjectToLists(child);
 			return true;
 		}
 	}
@@ -387,7 +388,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	glm::mat4 mm = trans *rot;
 
 	// Check for collision with other objects in room
-	for(auto o : availableParents){
+	for(auto o : placedObjects){
 		// get o's orientation
 		btQuaternion oBOrient = o->body->getWorldTransform().getRotation();
 		glm::quat oOrient = glm::quat(oBOrient.w(), oBOrient.x(), oBOrient.y(), oBOrient.z());
@@ -425,13 +426,16 @@ std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(glm::vec3 _lower
 	return vertices;
 }
 
-bool RoomBuilder::canBeParent(RoomObject * _obj, bool _addToList){
+void RoomBuilder::addObjectToLists(RoomObject * _obj){
+	placedObjects.push_back(_obj);
+	if(canBeParent(_obj)){
+		availableParents.push_back(_obj);
+	}
+}
+
+bool RoomBuilder::canBeParent(RoomObject * _obj){
+	placedObjects.push_back(_obj);
 	if(_obj->emptySlots.size() > 0){
-		if(_addToList){
-			// Insert at random index
-			int idx = sweet::NumberUtils::randomInt(0, availableParents.size() - 1);
-			availableParents.insert(availableParents.begin() + idx, _obj);
-		}
 		return true;
 	}
 	return false;
@@ -626,7 +630,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
-	for(unsigned int i = 0; i < 10; ++i){
+	for(unsigned int i = 0; i < 15; ++i){
 		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
 		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND));
