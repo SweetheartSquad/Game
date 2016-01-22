@@ -29,14 +29,76 @@
 
 #include <PD_Assets.h>
 
+#include <glm\gtc\quaternion.hpp>
+
 //#define RG_DEBUG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
 	p2(_p2),
-	angle(glm::degrees(glm::atan(_normal.y, _normal.x)))
-{		
+	angle(glm::degrees(glm::atan(_normal.y, _normal.x))),
+	slope((p2.y - p1.y) /  (p2.x - p1.x)),
+	yIntercept(p1.y - slope * p1.x)
+{
 }
+
+// https://github.com/sromku/polygon-contains-point/blob/master/Polygon/src/com/sromku/polygon/Polygon.java
+bool Edge::intersects(Edge * _ray, float _scale){
+	glm::vec2 intersectPoint;
+
+	// if both vectors aren't from the kind of x=1 lines then go into
+	if (!_ray->isVertical() && !isVertical()){
+		// check if both vectors are parallel. If they are parallel then no intersection point will exist
+		if (_ray->slope - slope == 0){
+			return false;
+		}
+
+		float x = ((yIntercept * _scale - _ray->yIntercept) / (_ray->slope - slope)); // x = (b2-b1)/(a1-a2)
+		float y = slope * x + yIntercept * _scale; // y = a2*x+b2
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else if (_ray->isVertical() && !isVertical()){
+		float x = _ray->p1.x;
+		float y = slope * x + yIntercept * _scale;
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else if (!_ray->isVertical() && isVertical()){
+		float x = p1.x * _scale;
+		float y = _ray->slope * x + _ray->yIntercept;
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else{
+		return false;
+	}
+
+	if (isInside(intersectPoint, _scale) && _ray->isInside(intersectPoint))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Edge::isVertical(){
+	return p2.x - p1.x == 0;
+}
+
+bool Edge::isInside(glm::vec2 _point, float _scale){
+	float maxX = p1.x > p2.x ? p1.x : p2.x;
+	float minX = p1.x < p2.x ? p1.x : p2.x;
+	float maxY = p1.y > p2.y ? p1.y : p2.y;
+	float minY = p1.y < p2.y ? p1.y : p2.y;
+
+	if ((_point.x >= minX * _scale && _point.x <= maxX * _scale) && (_point.y >= minY * _scale && _point.y <= maxY * _scale))
+	{
+		return true;
+	}
+	return false;
+}
+
 sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
@@ -132,6 +194,9 @@ Room * RoomBuilder::getRoom(){
 
 	thresh = 5;
 	createWalls();
+	sweet::Box boundingBox = room->mesh->calcBoundingBox();
+	roomUpperBound = boundingBox.getMaxCoordinate();
+	roomLowerBound = boundingBox.getMinCoordinate();
 	
 	std::vector<RoomObject *> objects = getRoomObjects();
 
@@ -155,6 +220,7 @@ Room * RoomBuilder::getRoom(){
 	for(auto obj : objects){
 		if(!search(obj)){
 			Log::warn("Search failed; room object not placed.");
+			delete obj;
 		}else{
 #ifdef RG_DEBUG
 			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
@@ -186,7 +252,7 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING){
+	if(child->anchor != Anchor_t::CIELING && sweet::NumberUtils::randomBool()){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
@@ -225,10 +291,26 @@ bool RoomBuilder::search(RoomObject * child){
 
 	// Look for space in room (20 tries)
 	for(unsigned int i = 0; i < 20; ++i){
-		// Find random point within w and h
-		glm::vec3 pos = glm::vec3();
+		// Find random point within bounding box of room (x, z)
+		glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
+		glm::quat orient = glm::quat();
+
+		// TODO: Check that the transformed origin will be inside the room
+		// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
+		Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
+		unsigned int intersections = 0;
+		for(auto e : edges){
+			if(e->intersects(ray, ROOM_TILE)){
+				++intersections;
+			}
+		}
+		// Random position not inside room, try again
+		if(intersections % 2 == 0){
+			continue;
+		}
+
 		// Validate bounding box is inside room
-		if(true){
+		if(canPlaceObject(child, pos, orient)){
 			child->translatePhysical(pos, true);
 			room->addComponent(child);
 			canBeParent(child);
@@ -242,11 +324,11 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	
 	// position
 	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
-	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
-	glm::vec3 n = glm::vec3(parent->mesh->vertices.at(0).nx, parent->mesh->vertices.at(0).ny, parent->mesh->vertices.at(0).nz);
-
-	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
+
+	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
+	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
+	
 
 	sweet::Box p = parent->boundingBox;
 	sweet::Box c = child->boundingBox;
@@ -277,14 +359,13 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	// add side space translation vector to final pos
 	pos += sidePos;
 
-	// check space around
-	if(false){
+	// check for collision/inside room
+	if(!canPlaceObject(child, pos, orient)){
 		return false;
 	}
 
 	child->body->getWorldTransform().setRotation(bOrient);
 	child->translatePhysical(pos, true);
-	//child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
 
 	parent->addComponent(child);
 
@@ -292,13 +373,56 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation){
-	// Collides with walls?
 
+	// Get object (A's)  model matrix
+	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
+	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
+	
+	glm::vec3 vMin = _obj->boundingBox.getMinCoordinate();	// left bottom back
+	glm::vec3 vMax = _obj->boundingBox.getMaxCoordinate();	// right top front
 
-	// Collides with other objects? (not room object parent)
+	// get object's bullet model matrix
+	glm::mat4 rot = glm::toMat4(_orientation);
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), _pos);
+	glm::mat4 mm = trans *rot;
 
-	// Inside walls?
+	// Check for collision with other objects in room
+	for(auto o : availableParents){
+		// get o's orientation
+		btQuaternion oBOrient = o->body->getWorldTransform().getRotation();
+		glm::quat oOrient = glm::quat(oBOrient.w(), oBOrient.x(), oBOrient.y(), oBOrient.z());
+
+		// get o's position
+		btVector3 oBPos = o->body->getWorldTransform().getOrigin();
+		glm::vec3 oPos = glm::vec3(oBPos.x(), oBPos.y(), oBPos.z());
+
+		// get o's bullet model matrix
+		glm::mat4 oRot = glm::toMat4(oOrient);
+		glm::mat4 oTrans = glm::translate(glm::mat4(1.0f), oPos);
+		glm::mat4 oMM = oTrans *oRot;
+		 
+		// Check if object intersects o
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(vMin, vMax, mm, oMM))){
+			return false;
+		}	
+	}
+
 	return true;
+}
+
+std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(glm::vec3 _lowerBound, glm::vec3 _upperBound, glm::mat4 _mmA, glm::mat4 _mmB){
+
+	glm::mat4 immA = glm::inverse(_mmA);
+	// Transform into a's local coordinate space
+	glm::vec4 min = _mmB * immA * glm::vec4(_lowerBound, 1);
+	glm::vec4 max = _mmB * immA * glm::vec4(_upperBound, 1);
+
+	std::vector<glm::vec3> vertices; 
+	// Only need the extremes
+	vertices.push_back(glm::vec3(min.x, min.y, min.z));	// left bottom back
+	vertices.push_back(glm::vec3(max.x, max.y, max.z));	// right top front
+
+	return vertices;
 }
 
 bool RoomBuilder::canBeParent(RoomObject * _obj, bool _addToList){
@@ -317,7 +441,7 @@ bool RoomBuilder::canBeParent(RoomObject * _obj, bool _addToList){
 void RoomBuilder::createWalls(){
 	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(room->tilemap, thresh, false, true);
 
-	std::vector<Edge *> edges;
+	edges.clear();
 
 	assert(verts.size() != 0);
 
@@ -468,8 +592,6 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	}
 
 	std::vector<RoomObject *> objects;
-	// calculate size of room, get random # of furniture/items?
-	// dining table set 1, tv couch set, bathroom set, ...
 	
 	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
