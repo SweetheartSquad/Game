@@ -19,10 +19,10 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	state(&_definition->states.at(_definition->defaultState)),
 	definition(_definition)
 {
-	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, pr->solverBod->getChainLength() * CHARACTER_SCALE);
+	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, pr->solverBod->getChainLength()*2.0f * CHARACTER_SCALE);
 	
 	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
-	boundingBox.height = pr->solverBod->getChainLength() * CHARACTER_SCALE;
+	boundingBox.height = pr->solverBod->getChainLength()*2.0f * CHARACTER_SCALE;
 	boundingBox.depth = boundingBox.width;
 	boundingBox.y = 0;
 
@@ -102,7 +102,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	paletteTex(new PD_Palette(false)),
 	timer(0)
 {
-	dynamic_cast<PD_Palette *>(paletteTex)->generateRandomTable();
+	paletteTex->generateRandomTable();
 	paletteTex->load();
 	
 	CharacterComponentDefinition
@@ -285,7 +285,11 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 }
 
 void PersonRenderer::update(Step * _step){
-	
+	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
+		paletteTex->generateRandomTable();
+		paletteTex->unload();
+		paletteTex->load();
+	}
 
 	timer += _step->deltaTime;
 
