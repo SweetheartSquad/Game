@@ -81,6 +81,8 @@ public:
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 	bool canBeParent(RoomObject * _obj, bool _addToList = true);
 
+	//transform vertices from a's space into b
+	std::vector<glm::vec3> getLocalBoundingBoxVertices(glm::vec3 _lowerBound, glm::vec3 _upperBound, glm::mat4 _mmA, glm::mat4 _mmB);
 	// Room boundaries builder functions
 
 	// Create room walls from tilemap

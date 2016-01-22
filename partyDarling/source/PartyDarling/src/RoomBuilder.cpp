@@ -29,6 +29,8 @@
 
 #include <PD_Assets.h>
 
+#include <glm\gtc\quaternion.hpp>
+
 //#define RG_DEBUG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
@@ -143,6 +145,7 @@ Room * RoomBuilder::getRoom(){
 	for(auto obj : objects){
 		if(!search(obj)){
 			Log::warn("Search failed; room object not placed.");
+			delete obj;
 		}else{
 #ifdef RG_DEBUG
 			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
@@ -215,8 +218,9 @@ bool RoomBuilder::search(RoomObject * child){
 	for(unsigned int i = 0; i < 20; ++i){
 		// Find random point within w and h
 		glm::vec3 pos = glm::vec3();
+		glm::quat orient = glm::quat();
 		// Validate bounding box is inside room
-		if(true){
+		if(canPlaceObject(child, pos, orient)){
 			child->translatePhysical(pos);
 			room->addComponent(child);
 			canBeParent(child);
@@ -230,11 +234,11 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	
 	// position
 	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
-	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
-	glm::vec3 n = glm::vec3(parent->mesh->vertices.at(0).nx, parent->mesh->vertices.at(0).ny, parent->mesh->vertices.at(0).nz);
-
-	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
+
+	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
+	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
+	
 
 	sweet::Box p = parent->boundingBox;
 	sweet::Box c = child->boundingBox;
@@ -266,13 +270,12 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	pos += sidePos;
 
 	// check space around
-	if(false){
+	if(!canPlaceObject(child, pos, orient)){
 		return false;
 	}
 
 	child->body->getWorldTransform().setRotation(bOrient);
 	child->translatePhysical(pos);
-	//child->rotatePhysical(glm::degrees(orient.y), 0, 1.f, 0);
 
 	parent->addComponent(child);
 
@@ -280,13 +283,56 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation){
-	// Collides with walls?
+	// Get object (A's)  model matrix
+	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
+	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
+	
+	glm::vec3 vMin = _obj->boundingBox.getMinCoordinate();	// left bottom back
+	glm::vec3 vMax = _obj->boundingBox.getMaxCoordinate();	// right top front
 
+	// get object's bullet model matrix
+	glm::mat4 rot = glm::toMat4(_orientation);
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), _pos);
+	glm::mat4 mm = trans *rot;
 
-	// Collides with other objects? (not room object parent)
+	// Check for collision with other objects in room
+	for(auto o : availableParents){
+		// get o's orientation
+		btQuaternion oBOrient = o->body->getWorldTransform().getRotation();
+		glm::quat oOrient = glm::quat(oBOrient.w(), oBOrient.x(), oBOrient.y(), oBOrient.z());
 
-	// Inside walls?
+		// get o's position
+		btVector3 oBPos = o->body->getWorldTransform().getOrigin();
+		glm::vec3 oPos = glm::vec3(oBPos.x(), oBPos.y(), oBPos.z());
+
+		// get o's bullet model matrix
+		glm::mat4 oRot = glm::toMat4(oOrient);
+		glm::mat4 oTrans = glm::translate(glm::mat4(1.0f), oPos);
+		glm::mat4 oMM = oTrans *oRot;
+		 
+		// Check if object intersects o
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(vMin, vMax, mm, oMM))){
+			return false;
+		}	
+	}
+
+	// TODO: Check that the origin is inside the room
 	return true;
+}
+
+std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(glm::vec3 _lowerBound, glm::vec3 _upperBound, glm::mat4 _mmA, glm::mat4 _mmB){
+
+	glm::mat4 immA = glm::inverse(_mmA);
+	// Transform into a's local coordinate space
+	glm::vec4 min = _mmB * immA * glm::vec4(_lowerBound, 1);
+	glm::vec4 max = _mmB * immA * glm::vec4(_upperBound, 1);
+
+	std::vector<glm::vec3> vertices; 
+	// Only need the extremes
+	vertices.push_back(glm::vec3(min.x, min.y, min.z));	// left bottom back
+	vertices.push_back(glm::vec3(max.x, max.y, max.z));	// right top front
+
+	return vertices;
 }
 
 bool RoomBuilder::canBeParent(RoomObject * _obj, bool _addToList){
@@ -449,8 +495,6 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	std::vector<Item *> items = getItems();
 
 	std::vector<RoomObject *> objects;
-	// calculate size of room, get random # of furniture/items?
-	// dining table set 1, tv couch set, bathroom set, ...
 	
 	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());

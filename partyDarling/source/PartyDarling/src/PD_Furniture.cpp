@@ -31,12 +31,13 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	
 	// delete the temporary mesh
 	delete tempMesh;
-
+	/* Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below????
 	// move all of the vertices up so that the origin is at the base of the mesh
-	/*float h = mesh->calcBoundingBox().height * 0.5f;
+	float h = mesh->calcBoundingBox().height * 0.5f;
 	for(Vertex & v : mesh->vertices){
 		v.y += h;
-	}*/
+	}
+	*/
 
 	// Make the mesh dirty since the verts have changed
 	// May be redunant but do it as a safe guard
@@ -47,6 +48,8 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
+	// temp until we figure out how to get the bullet body on the ground
+	boundingBox.y = 0;
 
 	// create the bullet stuff
 	setColliderAsBoundingBox();
