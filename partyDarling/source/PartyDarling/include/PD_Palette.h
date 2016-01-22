@@ -1,6 +1,7 @@
 #pragma once
 
 #include <TextureColourTable.h>
+#include <Colour.h>
 
 typedef enum Palette_t{
 	kHAT_DARK        = 0,

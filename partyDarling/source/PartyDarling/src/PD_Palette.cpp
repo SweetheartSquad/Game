@@ -23,39 +23,49 @@ PD_Palette::~PD_Palette(){
 
 void PD_Palette::generateRandomTable(){
 	// TODO: put some RNG and actual logic into this
-	glm::uvec3 colours[kSIZE];
-	colours[kHAT_DARK      ] = glm::uvec3(0,	255,	255);
-	colours[kHAT_LIGHT     ] = glm::uvec3(0,	255,	0);
-	colours[kNOSE_DARK     ] = glm::uvec3(255,	255,	255);
-	colours[kNOSE_LIGHT    ] = glm::uvec3(255,	255,	255);
-	colours[kEYEBROWS_DARK ] = glm::uvec3(255,	255,	255);
-	colours[kEYEBROWS_LIGHT] = glm::uvec3(255,	255,	255);
-	colours[kEYES_DARK     ] = glm::uvec3(255,	255,	255);
-	colours[kEYES_LIGHT    ] = glm::uvec3(0,	0,	255);
-	colours[kPUPILS_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kPUPILS_LIGHT  ] = glm::uvec3(255,	0,	0);
-	colours[kSKIN_DARK     ] = glm::uvec3(255,	255,	255);
-	colours[kSKIN_LIGHT    ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT1_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT1_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT2_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT2_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT3_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHIRT3_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS1_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS1_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS2_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS2_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS3_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kPANTS3_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES1_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES1_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES2_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES2_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES3_DARK   ] = glm::uvec3(255,	255,	255);
-	colours[kSHOES3_LIGHT  ] = glm::uvec3(255,	255,	255);
-	colours[kTRANSPARENT   ] = glm::uvec3(255,	255,	255);
-	colours[kBLACK         ] = glm::uvec3(0,	0,	0);
+
+	Colour root = Colour::getRandomInRgbRange();
+
+	Colour colours[kSIZE];
+	colours[kHAT_LIGHT     ] = Colour::getRandomInRgbRange();
+
+	colours[kHAT_DARK      ] = colours[kHAT_LIGHT].darker();
+	colours[kNOSE_LIGHT    ] = root;
+	colours[kNOSE_DARK     ] = colours[kNOSE_LIGHT].darker();
+	colours[kEYEBROWS_LIGHT] = root;
+	colours[kEYEBROWS_DARK ] = colours[kEYEBROWS_LIGHT].darker();
+	colours[kEYES_LIGHT    ] = root;
+	colours[kEYES_DARK     ] = colours[kEYES_LIGHT].darker();
+	colours[kPUPILS_LIGHT  ] = root;
+	colours[kPUPILS_DARK   ] = colours[kPUPILS_LIGHT].darker();
+	colours[kSKIN_LIGHT    ] = root;
+	colours[kSKIN_DARK     ] = colours[kSKIN_LIGHT].darker();
+
+	Colour shirtRoot = root.hsvMod(glm::uvec3(0));
+	Colour pantsRoot = root.hsvMod(glm::uvec3(0));
+	Colour shoesRoot = root.hsvMod(glm::uvec3(0));
+	
+
+	colours[kSHIRT1_LIGHT  ] = shirtRoot;
+	colours[kSHIRT1_DARK   ] = colours[kSHIRT1_LIGHT].darker();
+	colours[kSHIRT2_LIGHT  ] = shirtRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kSHIRT2_DARK   ] = colours[kSHIRT2_LIGHT].darker();
+	colours[kSHIRT3_LIGHT  ] = shirtRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kSHIRT3_DARK   ] = colours[kSHIRT3_LIGHT].darker();
+	colours[kPANTS1_LIGHT  ] = pantsRoot;
+	colours[kPANTS1_DARK   ] = colours[kPANTS1_LIGHT].darker();
+	colours[kPANTS2_LIGHT  ] = pantsRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kPANTS2_DARK   ] = colours[kPANTS2_LIGHT].darker();
+	colours[kPANTS3_LIGHT  ] = pantsRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kPANTS3_DARK   ] = colours[kPANTS3_LIGHT].darker();
+	colours[kSHOES1_LIGHT  ] = shoesRoot;
+	colours[kSHOES1_DARK   ] = colours[kSHOES1_LIGHT].darker();
+	colours[kSHOES2_LIGHT  ] = shoesRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));;
+	colours[kSHOES2_DARK   ] = colours[kSHOES2_LIGHT].darker();
+	colours[kSHOES3_LIGHT  ] = shoesRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));;
+	colours[kSHOES3_DARK   ] = colours[kSHOES3_LIGHT].darker();
+	colours[kTRANSPARENT   ] = Colour(255,	255,	255);
+	colours[kBLACK         ] = Colour(0,	0,	0);
 
 	// transfer the generated colours to the texture
 	for(unsigned long int i = 0; i < kSIZE; ++i){
