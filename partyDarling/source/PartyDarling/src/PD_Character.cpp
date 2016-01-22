@@ -287,8 +287,7 @@ void PersonRenderer::setShader(Shader * _shader, bool _default){
 void PersonRenderer::update(Step * _step){
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
-		paletteTex->unload();
-		paletteTex->load();
+		paletteTex->bufferData();
 	}
 
 	timer += _step->deltaTime;
