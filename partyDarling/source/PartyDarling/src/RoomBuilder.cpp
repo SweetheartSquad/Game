@@ -136,6 +136,7 @@ Room * RoomBuilder::getRoom(){
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
+	definition->size = AssetRoom::Size_t::kSMALL;
 	switch (definition->size){
 		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(4, 6); w = sweet::NumberUtils::randomInt(4, 6); break;
 		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(4, 8); w = sweet::NumberUtils::randomInt(4, 8); break;
@@ -218,10 +219,15 @@ Room * RoomBuilder::getRoom(){
 	}
 	
 	for(auto obj : objects){
+		Log::info("\nAttempting to place OBJECT");
+		std::stringstream s;
+		s << "Total Placed Objects: " << placedObjects.size();
+		Log::info(s.str());
 		if(!search(obj)){
-			Log::warn("Search failed; room object not placed.");
+			Log::warn("Search FAILED; room object not placed.");
 			delete obj;
 		}else{
+			Log::info("Search SUCCEEDED.");
 #ifdef RG_DEBUG
 			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
 				obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
@@ -252,12 +258,12 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING){
+	if(child->anchor != Anchor_t::CIELING && sweet::NumberUtils::randomBool()){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
 			}
-
+			Log::info("Checking parent.");
 			typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
 			for(it_type iterator = availableParents.at(i)->emptySlots.begin(); iterator != availableParents.at(i)->emptySlots.end(); iterator++) {
 				// go through available slots of side
@@ -268,9 +274,10 @@ bool RoomBuilder::search(RoomObject * child){
 					
 					// check length of slot
 					if(childBox.width > slot->length){
+						Log::warn("Not enough SPACE along side.");
 						continue;
 					}
-				
+					Log::info("Side found.");
 					// if the object can be placed without collision
 					if(arrange(child, availableParents.at(i), side, slot)){
 						addObjectToLists(child);
@@ -282,15 +289,19 @@ bool RoomBuilder::search(RoomObject * child){
 							// remove slot
 							iterator->second.erase(iterator->second.begin() + j);
 						}
+						Log::info("Parenting and placing object.");
 						return true;
 					}
 				}
 			}
+			Log::warn("No sides availalble.");
 		}
 	}
+	Log::warn("NO PARENT found.");
 
 	// Look for space in room (20 tries)
 	for(unsigned int i = 0; i < 20; ++i){
+		Log::info("Randomly finding a position.");
 		// Find random point within bounding box of room (x, z)
 		glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
 		glm::quat orient = glm::quat();
@@ -309,6 +320,7 @@ bool RoomBuilder::search(RoomObject * child){
 			continue;
 		}
 
+		Log::info("Position found.");
 		// Validate bounding box is inside room
 		if(canPlaceObject(child, pos, orient)){
 			//child->body->getWorldTransform().setRotation(orient);
@@ -404,6 +416,9 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		 
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(vMin, vMax, mm, oMM))){
+			std::stringstream s;
+			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
+			Log::warn(s.str());
 			return false;
 		}	
 	}
@@ -434,7 +449,6 @@ void RoomBuilder::addObjectToLists(RoomObject * _obj){
 }
 
 bool RoomBuilder::canBeParent(RoomObject * _obj){
-	placedObjects.push_back(_obj);
 	if(_obj->emptySlots.size() > 0){
 		return true;
 	}
@@ -629,7 +643,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
 	// Random
-	unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
+	unsigned long int n = sweet::NumberUtils::randomInt(0, 20);
 	for(unsigned int i = 0; i < 15; ++i){
 		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
