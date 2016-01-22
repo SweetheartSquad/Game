@@ -14,6 +14,8 @@
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
 
+#define CHARACTER_SCALE 0.001f
+
 class Conversation;
 class PersonRenderer;
 class AssetCharacter;

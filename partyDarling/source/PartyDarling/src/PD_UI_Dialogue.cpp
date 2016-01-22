@@ -46,7 +46,11 @@ bool PD_UI_Dialogue::sayNext(){
 	invalidateLayout();
 	uiBubble->clear();
 	if (ConversationIterator::sayNext()){
-		text->setText(currentConversation->getCurrentDialogue()->getCurrentText());
+		if(Dialogue * dialogue = currentConversation->getCurrentDialogue()){
+			text->setText(dialogue->getCurrentText());
+		}else{
+			text->setText("");
+		}
 
 		if (waitingForInput){
 			for(unsigned long int i = 0; i < currentConversation->options.size(); ++i){

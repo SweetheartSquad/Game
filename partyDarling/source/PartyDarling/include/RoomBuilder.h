@@ -4,6 +4,7 @@
 #include <vector>
 #include <json\json.h>
 #include <NumberUtils.h>
+#include <PD_Listing.h>
 
 #define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
@@ -55,10 +56,12 @@ private:
 	// the definition for this room
 	AssetRoom * const definition;
 	
-	sweet::ShuffleVector<unsigned long int> debugTexIdx;
-	sweet::ShuffleVector<unsigned long int> wallTexIdx;
-	sweet::ShuffleVector<unsigned long int> ceilTexIdx;
-	sweet::ShuffleVector<unsigned long int> floorTexIdx;
+	static sweet::ShuffleVector<unsigned long int> debugTexIdx;
+	static sweet::ShuffleVector<unsigned long int> wallTexIdx;
+	static sweet::ShuffleVector<unsigned long int> ceilTexIdx;
+	static sweet::ShuffleVector<unsigned long int> floorTexIdx;
+	static bool staticInit();
+	static bool staticInitialized;
 public:
 	unsigned long int thresh;
 
@@ -93,7 +96,7 @@ public:
 	std::vector<RoomObject *> getRoomObjects();
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
-	std::vector<Item *> getItems();
+	std::vector<PD_Item *> getItems();
 
 	Texture * getFloorTex();
 	Texture * getCeilTex();

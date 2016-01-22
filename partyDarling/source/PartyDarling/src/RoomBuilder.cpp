@@ -39,13 +39,12 @@ Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	angle(glm::degrees(glm::atan(_normal.y, _normal.x)))
 {		
 }
+sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::floorTexIdx;
 
-RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
-	world(_world),
-	baseShader(_baseShader),
-	characterShader(_characterShader),
-	definition(_definition)
-{
+bool RoomBuilder::staticInit(){
 	for(unsigned long int i = 1; i <= 5; ++i){
 		wallTexIdx.push(i);
 		ceilTexIdx.push(i);
@@ -54,6 +53,17 @@ RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader *
 	for(unsigned long int i = 1; i <= 12; ++i){
 		debugTexIdx.push(i);
 	}
+	return true;
+}
+bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
+
+RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
+	world(_world),
+	baseShader(_baseShader),
+	characterShader(_characterShader),
+	definition(_definition)
+{
+	
 }
 
 RoomBuilder::~RoomBuilder(){
@@ -221,7 +231,7 @@ bool RoomBuilder::search(RoomObject * child){
 		glm::quat orient = glm::quat();
 		// Validate bounding box is inside room
 		if(canPlaceObject(child, pos, orient)){
-			child->translatePhysical(pos);
+			child->translatePhysical(pos, true);
 			room->addComponent(child);
 			canBeParent(child);
 			return true;
@@ -275,7 +285,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	}
 
 	child->body->getWorldTransform().setRotation(bOrient);
-	child->translatePhysical(pos);
+	child->translatePhysical(pos, true);
 
 	parent->addComponent(child);
 
@@ -316,7 +326,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		}	
 	}
 
-	// TODO: Check that the origin is inside the room
+	// TODO: Check that the origin is inside the room 
 	return true;
 }
 
@@ -489,10 +499,17 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
+	PD_Listing * listing = new PD_Listing(this->definition->scenario);
 
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
-	std::vector<Item *> items = getItems();
+	std::vector<PD_Item *> items = getItems();
+
+	for(auto c : characters){
+		listing->addCharacter(c);
+	}for(auto i : items){
+		listing->addItem(i);
+	}
 
 	std::vector<RoomObject *> objects;
 	
@@ -538,20 +555,17 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	return furniture;
 }
 
-std::vector<Item *> RoomBuilder::getItems(){
-	std::vector<Item *> items;
-
-	unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
-	for(unsigned long int i = 0; i < n; ++i){
-		MeshInterface * mesh = MeshFactory::getPlaneMesh(2.f);
-		Json::Value j;
-		j["texture"] = "UV-TEST";
-		Texture * tex = PD_ResourceManager::scenario->getTexture(j.get("texture", "DEFAULT").asString())->texture;
-		tex->load();
-		mesh->pushTexture2D(tex);
-
-		items.push_back(new Item(world, mesh, baseShader));
+std::vector<PD_Item *> RoomBuilder::getItems(){
+	std::vector<AssetItem *> itemDefinitions = definition->getItems();
+	std::vector<PD_Item *> items;
+	
+	for(auto def : itemDefinitions){
+		items.push_back(new PD_Item(def, world, baseShader));
 	}
+
+
+	// add a door manually
+	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR")), world, baseShader));
 
 	return items;
 }

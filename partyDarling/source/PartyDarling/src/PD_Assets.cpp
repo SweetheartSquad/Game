@@ -108,6 +108,10 @@ AssetItem::AssetItem(Json::Value _json, Scenario * const _scenario) :
 	for(Json::ArrayIndex i = 0; i < effectsJson.size(); ++i){
 		effects.push_back(sweet::Event(effectsJson[i]));
 	}
+	effectsJson = _json["pixelEffects"];
+	for(Json::ArrayIndex i = 0; i < effectsJson.size(); ++i){
+		pickupEffects.push_back(sweet::Event(effectsJson[i]));
+	}
 }
 AssetItem * AssetItem::create(Json::Value _json, Scenario * const _scenario){
 	return new AssetItem(_json, _scenario);
@@ -181,6 +185,18 @@ std::vector<AssetCharacter *> AssetRoom::getCharacters(){
 	std::vector<AssetCharacter *> res;
 	for(unsigned long int c = 0; c < characters.size(); ++c){
 		res.push_back(getCharacter(c));
+	}
+
+	return res;
+}
+
+AssetItem * AssetRoom::getItem(unsigned long int _index){
+	return dynamic_cast<AssetItem *>(scenario->getAsset("item", items.at(_index)));
+}
+std::vector<AssetItem *> AssetRoom::getItems(){
+	std::vector<AssetItem *> res;
+	for(unsigned long int i = 0; i < items.size(); ++i){
+		res.push_back(getItem(i));
 	}
 
 	return res;

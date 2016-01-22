@@ -52,10 +52,13 @@ public:
 	// if pixel perfect interaction is enabled, an additional check will be made after the ray intersection
 	// which will only succeed if the hovered pixel is not transparent
 	bool pixelPerfectInteraction;
-
+	
 	// effects are stored as Events
 	// in order to trigger the effects, they will be copied and added to an EventManager
 	std::vector<sweet::Event> effects;
+	// effects are stored as Events
+	// in order to trigger the effects, they will be copied and added to an EventManager
+	std::vector<sweet::Event> pickupEffects;
 	
 
 	// substitute for public constructor (we can't take the address of the constructor,
@@ -138,10 +141,13 @@ public:
 
 	// whether entry to the room is blocked at creation
 	bool locked;
-
+	
 
 	std::vector<AssetCharacter *> getCharacters();
 	AssetCharacter * getCharacter(unsigned long int _index);
+
+	std::vector<AssetItem *> getItems();
+	AssetItem * getItem(unsigned long int _index);
 
 
 

@@ -212,17 +212,29 @@
 
 
 
-
-
-    
     {  
-      "id":1,
-      "name":"character1",
+      "id":2,
+      "name":"Gladys",
       "states":[  
         {  
           "id":1,
           "name":"DefaultState",
-          "convo":1
+          "convo":2
+        },
+        {  
+          "id":2,
+          "name":"QuestUncomplete",
+          "convo":11
+        },
+        {  
+          "id":3,
+          "name":"QuestComplete",
+          "convo":12
+        },
+        {  
+          "id":4,
+          "name":"AfterQuest",
+          "convo":13
         }
       ],
       "items":[  
@@ -232,27 +244,619 @@
       "defaultState":1,
       "components":[  
         {  
-          "src":"components/8c6285ad-50fb-435d-9ba3-c3a4d074ca92.json",
+          "tags":{  
+            "not":[  
+
+            ],
+            "required":[  
+
+            ],
+            "preferred":[  
+
+            ]
+          },
+          "src":"components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
           "components":[  
             {  
-              "src":"components/9ad7d828-6cb2-4caa-b7cf-0168e127168e.json",
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
               "components":[  
                 {  
-                  "src":"components/dbab00d2-1bb7-4384-92b9-f171bb8ca676.json"
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
                 },
                 {  
-                  "src":"components/1abafbf8-3a0c-411d-ab4c-392d005162fe.json"
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
                 },
                 {  
-                  "src":"components/1abafbf8-3a0c-411d-ab4c-392d005162fe.json"
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
                 }
               ]
             },
             {  
-              "src":"components/f04900a2-a27b-4688-966a-ad7a6761eaa9.json"
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
             },
             {  
-              "src":"components/f04900a2-a27b-4688-966a-ad7a6761eaa9.json"
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {  
+      "id":3,
+      "name":"Evelyn",
+      "states":[  
+        {  
+          "id":1,
+          "name":"DefaultState",
+          "convo":1
+        },
+        {  
+          "id":2,
+          "name":"QuestUncomplete",
+          "convo":7
+        },
+        {  
+          "id":3,
+          "name":"AfterQuest",
+          "convo":10
+        }
+      ],
+      "items":[  
+
+      ],
+      "type":"character",
+      "defaultState":1,
+      "components":[  
+        {  
+          "tags":{  
+            "not":[  
+
+            ],
+            "required":[  
+
+            ],
+            "preferred":[  
+
+            ]
+          },
+          "src":"components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+          "components":[  
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+              "components":[  
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                }
+              ]
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {  
+      "id":4,
+      "name":"Halcyon",
+      "states":[  
+        {  
+          "id":1,
+          "name":"DefaultState",
+          "convo":20
+        },
+        {  
+          "id":2,
+          "name":"AfterQuest",
+          "convo":21
+        }
+      ],
+      "items":[  
+        4
+      ],
+      "type":"character",
+      "defaultState":1,
+      "components":[  
+        {  
+          "tags":{  
+            "not":[  
+
+            ],
+            "required":[  
+
+            ],
+            "preferred":[  
+
+            ]
+          },
+          "src":"components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+          "components":[  
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+              "components":[  
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                }
+              ]
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {  
+      "id":5,
+      "name":"Bexley",
+      "states":[  
+        {  
+          "id":1,
+          "name":"DefaultState",
+          "convo":22
+        },
+        {  
+          "id":2,
+          "name":"Carrot",
+          "convo":24
+        },
+        {  
+          "id":3,
+          "name":"AfterQuest",
+          "convo":25
+        }
+      ],
+      "items":[  
+
+      ],
+      "type":"character",
+      "defaultState":1,
+      "components":[  
+        {  
+          "tags":{  
+            "not":[  
+
+            ],
+            "required":[  
+
+            ],
+            "preferred":[  
+
+            ]
+          },
+          "src":"components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+          "components":[  
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+              "components":[  
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                }
+              ]
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            }
+          ]
+        }
+      ]
+    },
+    {  
+      "id":6,
+      "name":"Leila",
+      "states":[  
+        {  
+          "id":1,
+          "name":"DefaultState",
+          "convo":23
+        },
+        {  
+          "id":2,
+          "name":"QuestComplete",
+          "convo":28
+        },
+        {  
+          "id":3,
+          "name":"AfterQuest",
+          "convo":29
+        }
+      ],
+      "items":[  
+        3
+      ],
+      "type":"character",
+      "defaultState":1,
+      "components":[  
+        {  
+          "tags":{  
+            "not":[  
+
+            ],
+            "required":[  
+
+            ],
+            "preferred":[  
+
+            ]
+          },
+          "src":"components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+          "components":[  
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+              "components":[  
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                },
+                {  
+                  "tags":{  
+                    "not":[  
+
+                    ],
+                    "required":[  
+
+                    ],
+                    "preferred":[  
+
+                    ]
+                  },
+                  "src":"components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                }
+              ]
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+            },
+            {  
+              "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+              },
+              "src":"components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
             }
           ]
         }
@@ -260,11 +864,14 @@
     },
     {  
       "id":1,
-      "name":"Conversation 1",
+      "name":"EvelynDefault",
       "dialogue":[  
         {  
           "text":[  
-            "uh"
+            "what am I going to do?",
+            "Omar’s gone and we need to take inventory of the furniture in the house so we can sell it.",
+            "But there’s no way I can keep track of everything by myslef.",
+            "This is all horrible."
           ],
           "triggers":[  
 
@@ -272,7 +879,103 @@
           "conditions":[  
 
           ],
-          "speaker":1,
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":4,
+          "label":"Miss? Are you alright?"
+        },
+        {  
+          "convoId":4,
+          "label":"Hey, what’s the matter?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":2,
+      "name":"GladysDefault",
+      "dialogue":[  
+
+      ],
+      "options":[  
+        {  
+          "convoId":14,
+          "label":"Hey, have you heard anything about Omar clean?"
+        },
+        {  
+          "convoId":14,
+          "label":"Hello, do you know who Omar Clean is?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":4,
+      "name":"EvelynDefault2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "I hope I don’t lose my job.",
+            "What’s going to happen to me?",
+            "How will I feed my cats?",
+            "*finally seems to notice you*",
+            "Oh, you seem like you’re not doing much, can you do me a favour?",
+            "Could you help me count the number of chairs around the house?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":5,
+          "label":"Sure, I'lI help you."
+        },
+        {  
+          "convoId":6,
+          "label":"Uh, sorry, I’m busy actually."
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":5,
+      "name":"EvelynDefault2yes",
+      "dialogue":[  
+        {  
+          "text":[  
+            "That would be wonderful.",
+            "Just get back to me when you’ve counted all of them."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"QuestUncomplete",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":3,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
           "name":"Dialogue 0"
         }
       ],
@@ -281,32 +984,935 @@
       ],
       "type":"conversation"
     },
-
-
-
-
-
     {  
-      "name":"milk room",
+      "id":6,
+      "name":"EvelynDefault2no",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Oh boy, what am I going to do.",
+            "How will we get anything done.",
+            "Everything’s a mess now that Omar’s gone.",
+            "A MESS I tell you.",
+            "*she walks away*"
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"QuestUncomplete",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":3,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":7,
+      "name":"EvelynQuestComplete",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Oh did you count them?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":8,
+          "label":"Yeah, I counted 5 chairs."
+        },
+        {  
+          "convoId":9,
+          "label":"Yeah, I counted 50 chairs."
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":8,
+      "name":"EvelynQuestComplete1",
+      "dialogue":[  
+        {  
+          "text":[  
+            "5?",
+            "Ok, let me write that down...",
+            "Great, thanks!",
+            "As a token of thanks, I'll come help you if you ever get into a fight.",
+            "Hmmm, I’m not sure if you’ve met him yet but look out for Halcyon, I think he needed help with something."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"AfterQuest",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":3,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":9,
+      "name":"EvelynQuestComplete2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Whaaaaat in the world?",
+            "Are you crazy?",
+            "Go talk to Gladys, maybe she can teach you how to count."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"AfterQuest",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":3,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":1,
+          "label":""
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":10,
+      "name":"EvelynDefaultafter",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Hopefully the real estate agent will be here by next week..."
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":11,
+      "name":"GladysQuestUncomplete",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Oh, it's you."
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":18,
+          "label":"Hi Gladys. Sorry, I forgot where to get the sword from."
+        },
+        {  
+          "convoId":18,
+          "label":"How to I get into the armory?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":12,
+      "name":"GladysQuestComplete",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Oh, so you managed to get the sword.",
+            "Well well well, not bad, newbie.",
+            "Alright, so what do you want to know about our dear Omar?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 1"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":19,
+          "label":"Anything you can tell me would be super helpful."
+        },
+        {  
+          "convoId":19,
+          "label":"Do you know about the kinds of people he associated with?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":13,
+      "name":"GladysDefaultAfter",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Woohoo!",
+            "I love this sword.",
+            "Don't get too close or I'll slice off a fine piece of you."
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":14,
+      "name":"GladysDefault2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Well, I happen to know things about his death, yeah.",
+            "What’s it to you?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":15,
+          "label":"I’m trying to find clues about him. Can you help me?"
+        },
+        {  
+          "convoId":15,
+          "label":"Can you tell me about him?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":15,
+      "name":"GladysDefault3",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Why should I help you?",
+            "What’s in it for me?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":16,
+          "label":"Umm, you can help me out of the goodness of youe heart?"
+        },
+        {  
+          "convoId":17,
+          "label":"Is there anything you want?"
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":16,
+      "name":"GladysDefault4",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Yeah right, kiddo.",
+            "Let me tell you what, I’ve heard that Bastien keeps a long-sword in the armory.",
+            "But it’s always locked.",
+            "I’d like to get my hands on that."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"QuestUncomplete",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":2,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":17,
+      "name":"GladysDefault5",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Well, I’ve been hearing that Bastien keeps a long-sword in the armory.",
+            "But it’s always locked.",
+            "Get me the sword, and then we'll talk."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"QuestUncomplete",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":2,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":18,
+      "name":"GladysQuestUncomplete2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "*Sigh*",
+            "Ok, listen careully, dimwit.",
+            "You need the key from Bastien to open the armory to get the sword.",
+            "Don't ask me how, just get it."
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":3,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":19,
+      "name":"GladysQuestComplete2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "So here's the scoop.",
+            "I heard that Omar has a friend in the FBI.",
+            "That's all I can tell you.",
+            "See ya!"
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"AfterQuest",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":2,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":2,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":20,
+      "name":"HalcyonDefault",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Hey, I need you to pass this to Bexley for me. Thanks. [gives carrot] Gotta run!"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":4,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":21,
+      "name":"HalcyonAfter",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Hey, carrot-head, I'll always back you up in a fight!"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":4,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":22,
+      "name":"BexleyDefault",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Who do you think you’re looking at. You wanna fight, punk?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":5,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":23,
+      "name":"LeilaDefault",
+      "dialogue":[  
+        {  
+          "text":[  
+            "WAHHHHHHHHHH IM HUNGRY",
+            "GIVE ME A DONUT?"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":6,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+        {  
+          "convoId":27,
+          "label":"I don't have one right now, but I'll go find you one."
+        },
+        {  
+          "convoId":26,
+          "label":"No way."
+        }
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":24,
+      "name":"BexleyCarrot",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Ugh, I hate carrots. Fight me, punk."
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":5,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":25,
+      "name":"BexleyAfter",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Heyo, I'll come fight for you if you ever need me!"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":5,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":26,
+      "name":"LeilaDefault2",
+      "dialogue":[  
+        {  
+          "text":[  
+            "I HATE YOU",
+            "*she steals one of your items*"
+          ],
+          "triggers":[  
+
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":6,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":27,
+      "name":"LeilaDefault3",
+      "dialogue":[  
+        {  
+          "text":[  
+            "...ok..."
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"questUncomplete",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":6,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":6,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":28,
+      "name":"LeilaComplete",
+      "dialogue":[  
+        {  
+          "text":[  
+            "Yayyy thank you!",
+            "Here, you can have this shiny key i found on the floor.",
+            "Bye bye!"
+          ],
+          "triggers":[  
+            {  
+              "type":"changeState",
+              "args":{  
+                "State":{  
+                  "value":"AfterQuest",
+                  "type":"STRING"
+                },
+                "Character":{  
+                  "value":6,
+                  "type":"CHARACTER"
+                }
+              }
+            }
+          ],
+          "conditions":[  
+
+          ],
+          "speaker":6,
+          "name":"Dialogue 0"
+        }
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "id":29,
+      "name":"LeilaAfter",
+      "dialogue":[  
+
+      ],
+      "options":[  
+
+      ],
+      "type":"conversation"
+    },
+    {  
+      "name":"Milk",
       "id":1,
-      "description":"room of milk",
+      "collectable":true,
+      "pixelPerfect":true,
+      "description":"Great source of calcium!",
+      "texture":1,
+      "effects":[  
+        {  
+          "type":"changeDISSStat",
+          "args":{  
+            "stat":{  
+              "value":"defense",
+              "type":"STRING"
+            },
+            "delta":{  
+              "value":5,
+              "type":"INT"
+            }
+          }
+        }
+      ],
+      "type":"item"
+    },
+    {  
+      "name":"LongSword",
+      "id":2,
+      "collectable":true,
+      "pixelPerfect":true,
+      "description":"Medieval weapon",
+      "texture":2,
+      "effects":[  
+        {  
+          "type":"changeState",
+          "args":{  
+            "State":{  
+              "value":"questcomplete",
+              "type":"STRING"
+            },
+            "Character":{  
+              "value":2,
+              "type":"CHARACTER"
+            }
+          }
+        }
+      ],
+      "type":"item"
+    },
+    {  
+      "name":"Key",
+      "id":3,
+      "collectable":true,
+      "pixelPerfect":false,
+      "description":"What does it unlock? Try the armory!",
+      "texture":5,
+      "effects":[  
+        {  
+          "type":"unlockRoom",
+          "args":{  
+            "room":{  
+              "value":3,
+              "type":"ROOM"
+            }
+          }
+        }
+      ],
+      "type":"item"
+    },
+    {  
+      "name":"Carrot",
+      "id":4,
+      "collectable":true,
+      "pixelPerfect":false,
+      "description":"orangey veggie",
+      "texture":6,
+      "effects":[  
+
+      ],
+      "type":"item"
+    },
+    {  
+      "name":"Donut",
+      "id":5,
+      "collectable":true,
+      "pixelPerfect":true,
+      "description":"With sprinlkes!",
+      "texture":4,
+      "effects":[  
+        {  
+          "type":"changeState",
+          "args":{  
+            "State":{  
+              "value":"QuestComplete",
+              "type":"STRING"
+            },
+            "Character":{  
+              "value":6,
+              "type":"CHARACTER"
+            }
+          }
+        }
+      ],
+      "type":"item"
+    },
+    {  
+      "name":"Kitchen",
+      "id":1,
+      "description":"food items",
+      "furnitureTypes":"",
+      "characters":[  
+        5
+      ],
+      "tags":{  
+        "not":[  
+
+        ],
+        "required":[  
+
+        ],
+        "preferred":[  
+
+        ]
+      },
+      "size":"LARGE",
+      "type":"room",
+      "locked":false,
+      "items":[  
+        1,
+        5
+      ]
+    },
+    {  
+      "name":"Room2",
+      "id":2,
+      "description":"general room",
       "furnitureTypes":[  
 
       ],
       "characters":[  
-        1
+        6,
+        3
       ],
-      "items":[  
+      "tags":{  
+        "not":[  
 
-      ],
-      "tags":[  
+        ],
+        "required":[  
 
-      ],
+        ],
+        "preferred":[  
+
+        ]
+      },
       "size":"LARGE",
       "type":"room",
-      "locked":false
-    }
+      "locked":false,
+      "items":[  
 
+      ]
+    },
+    {  
+      "name":"Armoury",
+      "id":3,
+      "description":"secret room",
+      "furnitureTypes":[  
+
+      ],
+      "characters":[  
+
+      ],
+      "tags":{  
+        "not":[  
+
+        ],
+        "required":[  
+
+        ],
+        "preferred":[  
+
+        ]
+      },
+      "size":"SMALL",
+      "type":"room",
+      "locked":true,
+      "items":[  
+        2
+      ]
+    },
+    {  
+      "name":"Room4",
+      "id":4,
+      "description":"another room",
+      "furnitureTypes":[  
+
+      ],
+      "characters":[  
+        4,
+        2
+      ],
+      "tags":{  
+        "not":[  
+
+        ],
+        "required":[  
+
+        ],
+        "preferred":[  
+
+        ]
+      },
+      "size":"SMALL",
+      "type":"room",
+      "locked":false,
+      "items":[  
+
+      ]
+    }
 
 
   ]
