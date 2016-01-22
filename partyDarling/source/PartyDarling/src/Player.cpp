@@ -53,8 +53,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	//init movement vars
 	playerSpeed = 0.1f;
 	mass = 1.f;
-	initSpeed = 2.0f;
-	sprintSpeed = 5.0f;
+	initSpeed = 3.0f;
+	sprintSpeed = 6.0f;
 
 	// player set-up
 	playerRad = 0.5f;
@@ -228,7 +228,10 @@ void Player::update(Step * _step){
 	}
 	
 	
-	glm::vec2 normMovementXZ = glm::normalize(glmCurVelocityXZ);
+	glm::vec2 normCurvelocityXZ = glm::normalize(glmCurVelocityXZ);
+	glm::vec2 movementXZ = glm::vec2(movement.x,movement.z);
+	glm::vec2 normMovementXZ = glm::normalize(movementXZ);
+
 	float movementMag = glm::length(movement);
 	float forwardVecMagXZ = glm::length(forwardXZ);
 	float glmCurVelocityMagXZ = glm::length(glmCurVelocityXZ);
@@ -261,7 +264,7 @@ void Player::update(Step * _step){
 		//Shift key for sprint
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
 			if(isGrounded){
-				if(glmCurVelocityMagXZ<20){
+				if(glmCurVelocityMagXZ<12){
 					if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
 						bobbleInterpolation += 0.1f;
 					}
@@ -281,7 +284,7 @@ void Player::update(Step * _step){
 			{ 
 				if(isGrounded)
 				{
-					if(glmCurVelocityMagXZ<15)
+					if(glmCurVelocityMagXZ<8)
 					{
 						if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
 							bobbleInterpolation += 0.1f;
@@ -300,15 +303,15 @@ void Player::update(Step * _step){
 			}
 		if(keyboard->keyJustUp(GLFW_KEY_LEFT_SHIFT)||keyboard->keyJustDown(GLFW_KEY_SPACE)){
 
-			this->body->applyCentralImpulse(btVector3(normMovementXZ.x*glmCurVelocityMagXZ*-0.5, 0, normMovementXZ.y*glmCurVelocityMagXZ*-0.5));
+			this->body->applyCentralImpulse(btVector3(normCurvelocityXZ.x*glmCurVelocityMagXZ*-0.3, 0, normCurvelocityXZ.y*glmCurVelocityMagXZ*-0.3));
 			std::cout << "SLOW" << std::endl;
 		}
 		
-	
-			if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ)) < 0.3)
+		
+			if(glm::dot(normMovementXZ,normCurvelocityXZ) < 0.7)
 			{
-				this->body->applyCentralImpulse(btVector3(xVelocity*-0.1f,0,zVelocity*-0.1f));
-				this->body->applyCentralImpulse(btVector3(glm::normalize(glmCurVelocityXZ).x*0.1f,0,glm::normalize(glmCurVelocityXZ).y*0.1f));
+				this->body->applyCentralImpulse(btVector3(glmCurVelocityXZ.x*-.5f,0,glmCurVelocityXZ.y*-.5f));
+				this->body->applyCentralImpulse(btVector3(movementXZ.x*.5f,0,movementXZ.y*.5f));
 			}
 		}
 
