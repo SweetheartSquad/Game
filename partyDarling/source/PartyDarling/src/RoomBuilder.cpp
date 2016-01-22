@@ -41,12 +41,14 @@ sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::floorTexIdx;
+sweet::ShuffleVector<unsigned long int> RoomBuilder::doorTexIdx;
 
 bool RoomBuilder::staticInit(){
 	for(unsigned long int i = 1; i <= 5; ++i){
 		wallTexIdx.push(i);
 		ceilTexIdx.push(i);
 		floorTexIdx.push(i);
+		doorTexIdx.push(i);
 	}
 	for(unsigned long int i = 1; i <= 12; ++i){
 		debugTexIdx.push(i);
@@ -521,7 +523,9 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 
 
 	// add a door manually
-	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR")), world, baseShader));
+	std::stringstream ss;
+	ss << doorTexIdx.pop();
+	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader));
 
 	return items;
 }

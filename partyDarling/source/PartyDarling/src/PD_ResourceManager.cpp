@@ -24,13 +24,16 @@ void PD_ResourceManager::init(){
 
 
 	// add door asset manually
-	Json::Value root;
-	Json::Reader reader;
-	reader.parse("{\"id\": \"DOOR\",\"src\": \"items/door.png\",\"type\": \"texture\"}", root);
-	itemTextures->assets["texture"]["DOOR"] = Asset::getAsset(root, itemTextures);
-	reader.parse("{\"name\":\"Door\",\"id\":\"DOOR\",\"collectable\":false,\"pixelPerfect\":true,\"description\":\"Who knows where it leads?\",\"texture\":\"DOOR\",\"effects\":[{\"type\":\"reset\",\"args\":{}}],\"type\":\"item\"}", root);
-	scenario->assets["item"]["DOOR"] = Asset::getAsset(root, scenario);
-
+	for(unsigned long int i = 1; i <= 5; ++i){
+		std::stringstream ss;
+		ss << i;
+		Json::Value root;
+		Json::Reader reader;
+		reader.parse("{\"id\": \"DOOR_" + ss.str() + "\",\"src\": \"items/door_" + ss.str() + ".png\",\"type\": \"texture\"}", root);
+		itemTextures->assets["texture"]["DOOR_" + ss.str()] = Asset::getAsset(root, itemTextures);
+		reader.parse("{\"name\":\"Door\",\"id\":\"DOOR_" + ss.str() + "\",\"collectable\":false,\"pixelPerfect\":true,\"description\":\"Who knows where it leads?\",\"texture\":\"DOOR_" + ss.str() + "\",\"effects\":[{\"type\":\"reset\",\"args\":{}}],\"type\":\"item\"}", root);
+		scenario->assets["item"]["DOOR_" + ss.str()] = Asset::getAsset(root, scenario);
+	}
 	// parse furniture
 	{
 		Json::Value root;

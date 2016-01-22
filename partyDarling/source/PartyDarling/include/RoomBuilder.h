@@ -60,6 +60,7 @@ private:
 	static sweet::ShuffleVector<unsigned long int> wallTexIdx;
 	static sweet::ShuffleVector<unsigned long int> ceilTexIdx;
 	static sweet::ShuffleVector<unsigned long int> floorTexIdx;
+	static sweet::ShuffleVector<unsigned long int> doorTexIdx;
 	static bool staticInit();
 	static bool staticInitialized;
 public:
