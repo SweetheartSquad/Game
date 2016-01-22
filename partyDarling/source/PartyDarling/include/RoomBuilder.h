@@ -41,7 +41,14 @@ public:
 	glm::vec2 p2;
 	float angle;
 
+	float slope;
+	float yIntercept;
+
 	Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal = glm::vec2(0));
+
+	bool intersects(Edge * _ray, float _scale = 1.f);
+	bool isVertical();
+	bool isInside(glm::vec2 _point, float _scale = 1.f);
 };
 
 class Slot;
@@ -72,6 +79,10 @@ public:
 	std::vector<RoomObject *> availableParents;
 
 	Room * room;
+	glm::vec3 roomUpperBound;
+	glm::vec3 roomLowerBound;
+
+	std::vector<Edge *> edges;
 
 	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader);
 	~RoomBuilder();

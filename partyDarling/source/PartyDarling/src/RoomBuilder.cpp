@@ -36,9 +36,69 @@
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
 	p2(_p2),
-	angle(glm::degrees(glm::atan(_normal.y, _normal.x)))
-{		
+	angle(glm::degrees(glm::atan(_normal.y, _normal.x))),
+	slope((p2.y - p1.y) /  (p2.x - p1.x)),
+	yIntercept(p1.y - slope * p1.x)
+{
 }
+
+// https://github.com/sromku/polygon-contains-point/blob/master/Polygon/src/com/sromku/polygon/Polygon.java
+bool Edge::intersects(Edge * _ray, float _scale){
+	glm::vec2 intersectPoint;
+
+	// if both vectors aren't from the kind of x=1 lines then go into
+	if (!_ray->isVertical() && !isVertical()){
+		// check if both vectors are parallel. If they are parallel then no intersection point will exist
+		if (_ray->slope - slope == 0){
+			return false;
+		}
+
+		float x = ((yIntercept * _scale - _ray->yIntercept) / (_ray->slope - slope)); // x = (b2-b1)/(a1-a2)
+		float y = slope * x + yIntercept * _scale; // y = a2*x+b2
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else if (_ray->isVertical() && !isVertical()){
+		float x = _ray->p1.x;
+		float y = slope * x + yIntercept * _scale;
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else if (!_ray->isVertical() && isVertical()){
+		float x = p1.x * _scale;
+		float y = _ray->slope * x + _ray->yIntercept;
+		intersectPoint = glm::vec2(x, y);
+	}
+
+	else{
+		return false;
+	}
+
+	if (isInside(intersectPoint, _scale) && _ray->isInside(intersectPoint))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Edge::isVertical(){
+	return p2.x - p1.x == 0;
+}
+
+bool Edge::isInside(glm::vec2 _point, float _scale){
+	float maxX = p1.x > p2.x ? p1.x : p2.x;
+	float minX = p1.x < p2.x ? p1.x : p2.x;
+	float maxY = p1.y > p2.y ? p1.y : p2.y;
+	float minY = p1.y < p2.y ? p1.y : p2.y;
+
+	if ((_point.x >= minX * _scale && _point.x <= maxX * _scale) && (_point.y >= minY * _scale && _point.y <= maxY * _scale))
+	{
+		return true;
+	}
+	return false;
+}
+
 sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
 sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
@@ -132,6 +192,9 @@ Room * RoomBuilder::getRoom(){
 
 	thresh = 5;
 	createWalls();
+	sweet::Box boundingBox = room->mesh->calcBoundingBox();
+	roomUpperBound = boundingBox.getMaxCoordinate();
+	roomLowerBound = boundingBox.getMinCoordinate();
 	
 	std::vector<RoomObject *> objects = getRoomObjects();
 
@@ -187,7 +250,7 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING){
+	if(child->anchor != Anchor_t::CIELING && sweet::NumberUtils::randomBool()){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
@@ -226,9 +289,24 @@ bool RoomBuilder::search(RoomObject * child){
 
 	// Look for space in room (20 tries)
 	for(unsigned int i = 0; i < 20; ++i){
-		// Find random point within w and h
-		glm::vec3 pos = glm::vec3();
+		// Find random point within bounding box of room (x, z)
+		glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
 		glm::quat orient = glm::quat();
+
+		// TODO: Check that the transformed origin will be inside the room
+		// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
+		Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
+		unsigned int intersections = 0;
+		for(auto e : edges){
+			if(e->intersects(ray, ROOM_TILE)){
+				++intersections;
+			}
+		}
+		// Random position not inside room, try again
+		if(intersections % 2 == 0){
+			continue;
+		}
+
 		// Validate bounding box is inside room
 		if(canPlaceObject(child, pos, orient)){
 			child->translatePhysical(pos, true);
@@ -279,7 +357,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	// add side space translation vector to final pos
 	pos += sidePos;
 
-	// check space around
+	// check for collision/inside room
 	if(!canPlaceObject(child, pos, orient)){
 		return false;
 	}
@@ -293,6 +371,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation){
+
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
@@ -326,7 +405,6 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		}	
 	}
 
-	// TODO: Check that the origin is inside the room 
 	return true;
 }
 
@@ -361,7 +439,7 @@ bool RoomBuilder::canBeParent(RoomObject * _obj, bool _addToList){
 void RoomBuilder::createWalls(){
 	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(room->tilemap, thresh, false, true);
 
-	std::vector<Edge *> edges;
+	edges.clear();
 
 	assert(verts.size() != 0);
 
