@@ -31,7 +31,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	
 	// delete the temporary mesh
 	delete tempMesh;
-	/* Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below????
+	/**** Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below???? *****
 	// move all of the vertices up so that the origin is at the base of the mesh
 	float h = mesh->calcBoundingBox().height * 0.5f;
 	for(Vertex & v : mesh->vertices){
@@ -53,7 +53,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// create the bullet stuff
 	setColliderAsBoundingBox();
-	createRigidBody(1);
+	createRigidBody(0);
 	
-	//setTranslationPhysical(0, mesh->calcBoundingBox().height * 0.5f, 0.f);
+	setTranslationPhysical(0, mesh->calcBoundingBox().height * 0.5f, 0.f);
 }
