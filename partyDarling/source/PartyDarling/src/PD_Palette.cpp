@@ -24,48 +24,65 @@ PD_Palette::~PD_Palette(){
 void PD_Palette::generateRandomTable(){
 	// TODO: put some RNG and actual logic into this
 
-	Colour root = Colour::getRandomInRgbRange();
+	Colour skinRoot = Colour::getRandomFromHsvRange(glm::ivec3(0, 80, 25), glm::ivec3(360, 100, 100));
+	glm::ivec3 temp = Colour::rgbToHsv(skinRoot);
+	if(temp.y + temp.z > 150){
+		if(sweet::NumberUtils::randomBool()){
+			temp.y /= 2;
+		}else if(sweet::NumberUtils::randomBool()){
+			temp.z /= 2;
+		}else{
+			temp.y /= 2;
+			temp.z /= 2;
+		}
+	}
+	skinRoot = Colour::hsvToRgb(temp);
+
+	Colour shirtRoot = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(0, 360), sweet::NumberUtils::randomInt(-25,50), sweet::NumberUtils::randomInt(-25,50)));
+	Colour pantsRoot = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(0, 360), sweet::NumberUtils::randomInt(-5,10), sweet::NumberUtils::randomInt(-5,10)));
+	Colour shoesRoot = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(0, 360), sweet::NumberUtils::randomInt(-5,10), sweet::NumberUtils::randomInt(-5,10)));
+	Colour hairRoot = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(0, 360), sweet::NumberUtils::randomInt(-5,10), sweet::NumberUtils::randomInt(-5,10)));
 
 	Colour colours[kSIZE];
-	colours[kHAT_LIGHT     ] = Colour::getRandomInRgbRange();
-
-	colours[kHAT_DARK      ] = colours[kHAT_LIGHT].darker();
-	colours[kNOSE_LIGHT    ] = root;
-	colours[kNOSE_DARK     ] = colours[kNOSE_LIGHT].darker();
-	colours[kEYEBROWS_LIGHT] = root;
-	colours[kEYEBROWS_DARK ] = colours[kEYEBROWS_LIGHT].darker();
-	colours[kEYES_LIGHT    ] = root;
-	colours[kEYES_DARK     ] = colours[kEYES_LIGHT].darker();
-	colours[kPUPILS_LIGHT  ] = root;
-	colours[kPUPILS_DARK   ] = colours[kPUPILS_LIGHT].darker();
-	colours[kSKIN_LIGHT    ] = root;
-	colours[kSKIN_DARK     ] = colours[kSKIN_LIGHT].darker();
-
-	Colour shirtRoot = root.hsvMod(glm::uvec3(0));
-	Colour pantsRoot = root.hsvMod(glm::uvec3(0));
-	Colour shoesRoot = root.hsvMod(glm::uvec3(0));
+	// main
+	colours[kHAIR_FILL        ] = hairRoot;
+	colours[kNOSE_FILL        ] = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-50,50), sweet::NumberUtils::randomInt(-50,50)));
+	colours[kEYEBROWS_FILL    ] = hairRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kEYES_FILL        ] = Colour::getRandomFromHsvRange(glm::ivec3(0, 0, 90), glm::ivec3(360, 100, 100));
+	colours[kPUPILS_FILL      ] = shirtRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-10, 10), sweet::NumberUtils::randomInt(-50,50), sweet::NumberUtils::randomInt(-50,50)));
+	colours[kSKIN_FILL        ] = skinRoot;
 	
+	// clothes
+	colours[kSHIRT1_FILL      ] = shirtRoot;
+	colours[kSHIRT2_FILL      ] = shirtRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(160, 200), sweet::NumberUtils::randomInt(-50,50), sweet::NumberUtils::randomInt(-50,50)));
+	colours[kSHIRT3_FILL      ] = shirtRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kPANTS1_FILL      ] = pantsRoot;
+	colours[kPANTS2_FILL      ] = pantsRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kPANTS3_FILL      ] = pantsRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kSHOES1_FILL      ] = shoesRoot;
+	colours[kSHOES2_FILL      ] = shoesRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	colours[kSHOES3_FILL      ] = shoesRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
+	
+	// outlines
+	glm::ivec3 outlineMod(sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(10,20));
+	colours[kHAIR_OUTLINE     ] = generateOutline(colours[kHAIR_FILL], outlineMod);
+	colours[kNOSE_OUTLINE     ] = generateOutline(colours[kNOSE_FILL], outlineMod);
+	colours[kEYEBROWS_OUTLINE ] = generateOutline(colours[kEYEBROWS_FILL], outlineMod);
+	colours[kEYES_OUTLINE     ] = generateOutline(colours[kEYES_FILL], outlineMod);
+	colours[kPUPILS_OUTLINE   ] = generateOutline(colours[kPUPILS_FILL], outlineMod);
+	colours[kSKIN_OUTLINE     ] = generateOutline(colours[kSKIN_FILL], outlineMod);
+	colours[kSHIRT1_OUTLINE   ] = generateOutline(colours[kSHIRT1_FILL], outlineMod);
+	colours[kSHIRT2_OUTLINE   ] = generateOutline(colours[kSHIRT2_FILL], outlineMod);
+	colours[kSHIRT3_OUTLINE   ] = generateOutline(colours[kSHIRT3_FILL], outlineMod);
+	colours[kPANTS1_OUTLINE   ] = generateOutline(colours[kPANTS1_FILL], outlineMod);
+	colours[kPANTS2_OUTLINE   ] = generateOutline(colours[kPANTS2_FILL], outlineMod);
+	colours[kPANTS3_OUTLINE   ] = generateOutline(colours[kPANTS3_FILL], outlineMod);
+	colours[kSHOES1_OUTLINE   ] = generateOutline(colours[kSHOES1_FILL], outlineMod);
+	colours[kSHOES2_OUTLINE   ] = generateOutline(colours[kSHOES2_FILL], outlineMod);
+	colours[kSHOES3_OUTLINE   ] = generateOutline(colours[kSHOES3_FILL], outlineMod);
 
-	colours[kSHIRT1_LIGHT  ] = shirtRoot;
-	colours[kSHIRT1_DARK   ] = colours[kSHIRT1_LIGHT].darker();
-	colours[kSHIRT2_LIGHT  ] = shirtRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
-	colours[kSHIRT2_DARK   ] = colours[kSHIRT2_LIGHT].darker();
-	colours[kSHIRT3_LIGHT  ] = shirtRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
-	colours[kSHIRT3_DARK   ] = colours[kSHIRT3_LIGHT].darker();
-	colours[kPANTS1_LIGHT  ] = pantsRoot;
-	colours[kPANTS1_DARK   ] = colours[kPANTS1_LIGHT].darker();
-	colours[kPANTS2_LIGHT  ] = pantsRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
-	colours[kPANTS2_DARK   ] = colours[kPANTS2_LIGHT].darker();
-	colours[kPANTS3_LIGHT  ] = pantsRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
-	colours[kPANTS3_DARK   ] = colours[kPANTS3_LIGHT].darker();
-	colours[kSHOES1_LIGHT  ] = shoesRoot;
-	colours[kSHOES1_DARK   ] = colours[kSHOES1_LIGHT].darker();
-	colours[kSHOES2_LIGHT  ] = shoesRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(120, 240), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));;
-	colours[kSHOES2_DARK   ] = colours[kSHOES2_LIGHT].darker();
-	colours[kSHOES3_LIGHT  ] = shoesRoot.hsvMod(glm::uvec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));;
-	colours[kSHOES3_DARK   ] = colours[kSHOES3_LIGHT].darker();
-	colours[kTRANSPARENT   ] = Colour(255,	255,	255);
-	colours[kBLACK         ] = Colour(0,	0,	0);
+	colours[kTRANSPARENT      ] = Colour(255,	255,	255);
+	colours[kBLACK            ] = Colour(0,	0,	0);
 
 	// transfer the generated colours to the texture
 	for(unsigned long int i = 0; i < kSIZE; ++i){
@@ -74,4 +91,8 @@ void PD_Palette::generateRandomTable(){
 
 	// make sure that the alpha is handled properly
 	sweet::TextureUtils::setPixel(this, kTRANSPARENT, 0, glm::uvec4(0,0,0,0));
+}
+
+Colour PD_Palette::generateOutline(Colour _fill, glm::ivec3 _outlineMod){
+	return _fill.hsvMod(_outlineMod * ((Colour::rgbToHsv(_fill).z > 50) ? -2 : 1));
 }

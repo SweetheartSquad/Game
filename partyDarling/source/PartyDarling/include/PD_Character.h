@@ -20,6 +20,7 @@ class Conversation;
 class PersonRenderer;
 class AssetCharacter;
 class CharacterComponentDefinition;
+class PD_Palette;
 
 
 class PersonComponent : public Sprite{
@@ -97,7 +98,7 @@ public:
 		* footL,
 		* footR;
 
-	Texture * paletteTex;
+	PD_Palette * paletteTex;
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();
 
