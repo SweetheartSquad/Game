@@ -181,6 +181,19 @@ PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
+	float a = playerLight->getAttenuation();
+	float newa = fmod(_step->time, 128.f/300.f)*0.01f+0.01f;
+	playerLight->setAttenuation(newa);
+	if(newa < a){
+		lightStart = glm::vec3(sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f));
+		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f));
+	}
+	toonRamp->setRamp(
+		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
+		toonRamp->end + (lightEnd - toonRamp->end) * 0.1f,
+		4);
+	toonRamp->bufferData();
+
 	PD_ResourceManager::scenario->eventManager.update(_step);
 
 	bulletWorld->update(_step);

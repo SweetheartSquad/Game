@@ -52,6 +52,8 @@ public:
 	Player * player;
 	PointLight * playerLight;
 	RampTexture * toonRamp;
+	glm::vec3 lightStart;
+	glm::vec3 lightEnd;
 
 	PD_Scene_CombinedTests(PD_Game * _game);
 	~PD_Scene_CombinedTests();
