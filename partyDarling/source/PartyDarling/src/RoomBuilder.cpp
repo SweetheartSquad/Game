@@ -519,6 +519,10 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 		items.push_back(new PD_Item(def, world, baseShader));
 	}
 
+
+	// add a door manually
+	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR")), world, baseShader));
+
 	return items;
 }
 

@@ -169,6 +169,13 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		Person * character = listing->characters[characterName.str()];
 		character->state = &character->definition->states.at(stateName);
 	});
+
+	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game](sweet::Event * _event){
+		std::stringstream ss;
+		ss << "COMBINED_TEST_" << sweet::lastTimestamp;
+		_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
+		_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+	});
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
@@ -176,13 +183,12 @@ PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
+	PD_ResourceManager::scenario->eventManager.update(_step);
+
 	bulletWorld->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_R)){
-		std::stringstream ss;
-		ss << "COMBINED_TEST_" << _step->lastTimestamp;
-		game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(game));
-		game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
 	}
 
 
