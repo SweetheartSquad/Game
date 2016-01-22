@@ -210,7 +210,7 @@ void Player::update(Step * _step){
 			}
 		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			if(isGrounded){
-				movement += glm::vec3(0, 100,0);
+				this->body->applyCentralImpulse(btVector3(0.0f,4.f,0.0f));
 				jumpSound->play();
 				jumpTime = _step->time;
 			}
@@ -252,6 +252,9 @@ void Player::update(Step * _step){
 		float sprintXSpeed = (movement/movementMag)[0]*sprintSpeed;
 		float sprintZSpeed = (movement/movementMag)[2]*sprintSpeed;
 
+		float jumpXSpeed = (movement/movementMag)[0]*0.1;
+		float jumpZSpeed = (movement/movementMag)[2]*0.1;
+
 		this->body->activate(true);
 
 
@@ -266,42 +269,36 @@ void Player::update(Step * _step){
 						bobbleInterpolation = 0.f;
 					}
 			
-					if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
 						this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
 						//std::cout << "1" << std::endl;
 					}
-					else{
-						this->body->applyCentralImpulse(btVector3((sprintXSpeed+movement.x)*0.5, movement.y*50, (sprintZSpeed+movement.z)*0.5));
-						//std::cout << "2" << std::endl;
-					}
-				
 				}
-				}
+			else{
+				this->body->applyCentralImpulse(btVector3(jumpXSpeed, movement.y*50, jumpZSpeed));
+			}
 			}
 			else if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT))
-			{ std::cout << "1" << std::endl;
+			{ 
 				if(isGrounded)
-				{std::cout << "2" << std::endl;
+				{
 					if(glmCurVelocityMagXZ<15)
-					{std::cout << "3" << std::endl;
+					{
 						if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
 							bobbleInterpolation += 0.1f;
 			
 						}else if(glmCurVelocityMagXZ < 1.0f){
 							bobbleInterpolation = 0.f;
 						}
-
-						if(glm::dot(glm::normalize(forwardXZ),glm::normalize(glmCurVelocityXZ))>=0.5){
 							//std::cout << "3" << std::endl;
 							this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
-						}else{
-							this->body->applyCentralImpulse(btVector3((initXSpeed+movement.x)*0.8, movement.y*50, (initZSpeed+movement.z)*0.8));
-							//std::cout << "4" << std::endl;
-						}
+						
 					}
 				}
+				else{
+				this->body->applyCentralImpulse(btVector3(jumpXSpeed, movement.y*50, jumpZSpeed));
 			}
-		if(keyboard->keyJustUp(GLFW_KEY_LEFT_SHIFT)){
+			}
+		if(keyboard->keyJustUp(GLFW_KEY_LEFT_SHIFT)||keyboard->keyJustDown(GLFW_KEY_SPACE)){
 
 			this->body->applyCentralImpulse(btVector3(normMovementXZ.x*glmCurVelocityMagXZ*-0.5, 0, normMovementXZ.y*glmCurVelocityMagXZ*-0.5));
 			std::cout << "SLOW" << std::endl;
