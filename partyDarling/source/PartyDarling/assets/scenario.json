@@ -15,6 +15,16 @@
     },
 
 
+
+    // fonts
+    {
+      "id": "FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": 24
+    },
+    
+
     // player sound effects
     
     {
