@@ -234,9 +234,11 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	// screen surface update
 	float transitionDelta = transitionTarget - transition;
 	if(glm::abs(transitionDelta) >= FLT_EPSILON){
-		transition += transitionDelta * 0.1f;
-		if(transition + FLT_EPSILON >= 1.f){
+		transition += transitionDelta * 0.2f;
+		if(transition >= 0.999f){
 			transition = 1.f;
+		}else if(transition <= 0.001f){
+			transition = 0.f;
 		}
 		screenSurfaceShader->bindShader();
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "transition");
