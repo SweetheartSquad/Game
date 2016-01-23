@@ -40,7 +40,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	confidence(50.f),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
-	playerAnswerTimerLength(1.f),
+	playerAnswerTimerLength(1.5f),
 	playerAnswerTimer(0),
 	playerResult(false),
 	playerResultEffective(false),
@@ -340,6 +340,9 @@ void PD_UI_YellingContest::update(Step * _step){
 
 						// Find next punctuation
 						if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+							sweet::Event * e = new sweet::Event("miss");
+							eventManager.triggerEvent(e);
+
 							prevHighlightedPunctuation = highlightedPunctuation;
 							highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
 						}

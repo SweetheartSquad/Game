@@ -23,6 +23,7 @@ public:
 /**
 * Events:
 *	interject:	data "success"		int
+*	miss									// missed punctuation opportunity
 *   insult:		data "success"		int
 *	changeturn	data "isPlayerTurn"	int
 *   confidence	data "value"		float	// the value the confidence is being incremented by
