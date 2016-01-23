@@ -262,7 +262,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/8ff1c538-f1ae-40bc-90b0-7959ec535a55.json"
+                  "src": "components/definitions/8ff1c538-f1ae-40bc-90b0-7959ec535a55.json"
                 },
                 {
                   "tags": {
@@ -270,7 +270,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
+                  "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
                 },
                 {
                   "tags": {
@@ -278,10 +278,10 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
+                  "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
                 }
               ],
-              "src": "components/b0552ec8-ef7a-422a-b37b-eb221da9fc6e.json"
+              "src": "components/definitions/b0552ec8-ef7a-422a-b37b-eb221da9fc6e.json"
             },
             {
               "tags": {
@@ -289,7 +289,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
+              "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
             },
             {
               "tags": {
@@ -297,10 +297,10 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
+              "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
             }
           ],
-          "src": "components/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json"
+          "src": "components/definitions/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json"
         }
       ]
     },
@@ -348,7 +348,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/d7992589-9329-4950-b258-c69e6eabc041.json"
+                  "src": "components/definitions/d7992589-9329-4950-b258-c69e6eabc041.json"
                 },
                 {
                   "tags": {
@@ -356,7 +356,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/f3412ca9-9b01-420c-a131-fb282710f2f7.json"
+                  "src": "components/definitions/f3412ca9-9b01-420c-a131-fb282710f2f7.json"
                 },
                 {
                   "tags": {
@@ -364,10 +364,10 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/f3412ca9-9b01-420c-a131-fb282710f2f7.json"
+                  "src": "components/definitions/f3412ca9-9b01-420c-a131-fb282710f2f7.json"
                 }
               ],
-              "src": "components/5bf34e38-f66f-4c4e-ba1b-5fac77999171.json"
+              "src": "components/definitions/5bf34e38-f66f-4c4e-ba1b-5fac77999171.json"
             },
             {
               "tags": {
@@ -375,7 +375,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/a673389d-20d5-45da-95ef-dde7b80e51f7.json"
+              "src": "components/definitions/a673389d-20d5-45da-95ef-dde7b80e51f7.json"
             },
             {
               "tags": {
@@ -383,10 +383,10 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/a673389d-20d5-45da-95ef-dde7b80e51f7.json"
+              "src": "components/definitions/a673389d-20d5-45da-95ef-dde7b80e51f7.json"
             }
           ],
-          "src": "components/def56b91-6950-4f76-bced-c0b71020fc0b.json"
+          "src": "components/definitions/def56b91-6950-4f76-bced-c0b71020fc0b.json"
         }
       ]
     },
@@ -431,7 +431,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/9baa167e-4e60-4d0f-88ae-e95c2201a67a.json"
+                  "src": "components/definitions/9baa167e-4e60-4d0f-88ae-e95c2201a67a.json"
                 },
                 {
                   "tags": {
@@ -439,7 +439,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/048e68c4-a11d-4d18-9692-b2b17f364b62.json"
+                  "src": "components/definitions/048e68c4-a11d-4d18-9692-b2b17f364b62.json"
                 },
                 {
                   "tags": {
@@ -447,10 +447,10 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/048e68c4-a11d-4d18-9692-b2b17f364b62.json"
+                  "src": "components/definitions/048e68c4-a11d-4d18-9692-b2b17f364b62.json"
                 }
               ],
-              "src": "components/06ccc960-895f-4e82-a891-b361e3febf6d.json"
+              "src": "components/definitions/06ccc960-895f-4e82-a891-b361e3febf6d.json"
             },
             {
               "tags": {
@@ -458,7 +458,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/1ca17133-2b19-4bda-af56-fc0a250f102b.json"
+              "src": "components/definitions/1ca17133-2b19-4bda-af56-fc0a250f102b.json"
             },
             {
               "tags": {
@@ -466,10 +466,10 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/1ca17133-2b19-4bda-af56-fc0a250f102b.json"
+              "src": "components/definitions/1ca17133-2b19-4bda-af56-fc0a250f102b.json"
             }
           ],
-          "src": "components/3b53b3a2-fbbb-4bfa-8c33-4e7a0c16b4b3.json"
+          "src": "components/definitions/3b53b3a2-fbbb-4bfa-8c33-4e7a0c16b4b3.json"
         }
       ]
     },
@@ -503,7 +503,7 @@
             "required": [],
             "preferred": []
           },
-          "src": "components/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+          "src": "components/definitions/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
           "components": [
             {
               "tags": {
@@ -511,7 +511,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+              "src": "components/definitions/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
               "components": [
                 {
                   "tags": {
@@ -519,7 +519,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
+                  "src": "components/definitions/fbc172de-a0d0-469b-93c3-d2c28d260793.json"
                 },
                 {
                   "tags": {
@@ -527,7 +527,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                  "src": "components/definitions/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
                 },
                 {
                   "tags": {
@@ -535,7 +535,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
+                  "src": "components/definitions/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json"
                 }
               ]
             },
@@ -545,7 +545,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+              "src": "components/definitions/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
             },
             {
               "tags": {
@@ -553,7 +553,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
+              "src": "components/definitions/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json"
             }
           ]
         }
@@ -605,7 +605,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/0c70d90a-bd20-4003-aa1d-c4b3b99b8dcc.json"
+                  "src": "components/definitions/0c70d90a-bd20-4003-aa1d-c4b3b99b8dcc.json"
                 },
                 {
                   "tags": {
@@ -613,7 +613,7 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json"
+                  "src": "components/definitions/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json"
                 },
                 {
                   "tags": {
@@ -621,10 +621,10 @@
                     "required": [],
                     "preferred": []
                   },
-                  "src": "components/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json"
+                  "src": "components/definitions/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json"
                 }
               ],
-              "src": "components/8287f694-3c7c-47a0-ba5a-a21331f90ef3.json"
+              "src": "components/definitions/8287f694-3c7c-47a0-ba5a-a21331f90ef3.json"
             },
             {
               "tags": {
@@ -632,7 +632,7 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/68c940ab-70e7-45e0-aa71-b04543f9d12b.json"
+              "src": "components/definitions/68c940ab-70e7-45e0-aa71-b04543f9d12b.json"
             },
             {
               "tags": {
@@ -640,10 +640,10 @@
                 "required": [],
                 "preferred": []
               },
-              "src": "components/68c940ab-70e7-45e0-aa71-b04543f9d12b.json"
+              "src": "components/definitions/68c940ab-70e7-45e0-aa71-b04543f9d12b.json"
             }
           ],
-          "src": "components/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json"
+          "src": "components/definitions/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json"
         }
       ]
     },
@@ -653,9 +653,9 @@
       "dialogue": [
         {
           "text": [
-            "what am I going to do?",
+            "What am I going to do?",
             "Omar's gone and we need to take inventory of the furniture in the house so we can sell it.",
-            "But there's no way I can keep track of everything by myslef.",
+            "But there's no way I can keep track of everything by myself.",
             "This is all horrible."
           ],
           "triggers": [],
@@ -949,7 +949,7 @@
         },
         {
           "convoId": 18,
-          "label": "How to I get into the armory?"
+          "label": "How do I get into the armory?"
         }
       ],
       "type": "conversation"
@@ -1011,7 +1011,7 @@
         {
           "text": [
             "Woohoo!",
-            "I love this sword.",
+            "I love this sword!",
             "Don't get too close or I'll slice off a fine piece of you."
           ],
           "triggers": [],
@@ -1068,7 +1068,7 @@
       "options": [
         {
           "convoId": 16,
-          "label": "Umm, you can help me out of the goodness of youe heart?"
+          "label": "Umm, you can help me out of the goodness of your heart?"
         },
         {
           "convoId": 17,
@@ -1084,7 +1084,7 @@
         {
           "text": [
             "Yeah right, kiddo.",
-            "Let me tell you what, I've heard that Bastien keeps a long-sword in the armory.",
+            "Let me tell you what, I've heard that Bastien keeps a longsword in the armory.",
             "But it's always locked.",
             "I'd like to get my hands on that."
           ],
@@ -1120,7 +1120,7 @@
       "dialogue": [
         {
           "text": [
-            "Well, I've been hearing that Bastien keeps a long-sword in the armory.",
+            "Well, I've been hearing that Bastien keeps a longsword in the armory.",
             "But it's always locked.",
             "Get me the sword, and then we'll talk."
           ],
@@ -1157,7 +1157,7 @@
         {
           "text": [
             "*Sigh*",
-            "Ok, listen careully, dimwit.",
+            "Ok, listen carefully, dimwit.",
             "You need the key from Bastien to open the armory to get the sword.",
             "Don't ask me how, just get it."
           ],
@@ -1301,7 +1301,7 @@
       "dialogue": [
         {
           "text": [
-            "Who do you think you're looking at. You wanna fight, punk?"
+            "Who do you think you're looking at? You wanna fight, punk?"
           ],
           "triggers": [
             {
@@ -1446,7 +1446,7 @@
         {
           "text": [
             "I HATE YOU",
-            "*she steals one of your items*"
+            "*she bites you and you lose defense*"
           ],
           "triggers": [],
           "conditions": [],
@@ -1482,7 +1482,7 @@
           "text": [
             "Yayyy thank you!",
             "Here, you can have this shiny key I found on the floor.",
-            "Bye bye!"
+            "Bye-bye!"
           ],
           "triggers": [
             {
@@ -1681,7 +1681,7 @@
       "id": 5,
       "collectable": true,
       "pixelPerfect": true,
-      "description": "With sprinlkes!",
+      "description": "With sprinkles!",
       "texture": 4,
       "effects": [
         {
