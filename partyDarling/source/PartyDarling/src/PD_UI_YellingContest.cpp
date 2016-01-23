@@ -292,10 +292,10 @@ void PD_UI_YellingContest::update(Step * _step){
 			VerticalLinearLayout::update(_step);
 
 			if(modeOffensive){
-				if(keyboard->keyJustDown(GLFW_KEY_UP)){
+				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
 					insult(pBubbleBtn1->isEffective);
 				}
-				if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
+				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
 					insult(pBubbleBtn2->isEffective);
 				}
 			}else{
