@@ -125,12 +125,13 @@ Player::Player(BulletWorld * _bulletWorld) :
 
 	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
 
-	shakeTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+	shakeTimeout = new Timeout(0.5f, [this](sweet::Event * _event){
 		camOffset = glm::vec3(0);
 	});
 	shakeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		camOffset = glm::vec3(sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity)) * (1.f - _event->getFloatData("progress"));
+		camOffset = glm::vec3(sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity)) * Easing::easeOutCirc(_event->getFloatData("progress"), 1.f, -1.f, 1.f);
 	});
+	childTransform->addChild(shakeTimeout);
 };
 
 Player::~Player(){
@@ -363,7 +364,7 @@ void Player::update(Step * _step){
 		isGrounded = false;
 		jumpTime += _step->time - jumpTime;
 	}
-	playerCamera->firstParent()->translate(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
+	playerCamera->firstParent()->translate(glm::vec3(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z()) + camOffset, false);
 
 	//std::cout << isGrounded << std::endl;
 

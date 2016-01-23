@@ -152,6 +152,16 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		uiYellingContest->disable();
 		player->enable();
 	});
+	uiYellingContest->eventManager.addEventListener("interject", [this](sweet::Event * _event){
+		if(!_event->getIntData("success")){
+			player->shakeTimeout->restart();
+		}
+	});
+	uiYellingContest->eventManager.addEventListener("insult", [this](sweet::Event * _event){
+		if(!_event->getIntData("success")){
+			player->shakeTimeout->restart();
+		}
+	});
 
 
 	// add the player to the scene
@@ -276,6 +286,10 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 	if(keyboard->keyJustDown(GLFW_KEY_R)){
 		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_X)){
+		uiYellingContest->eventManager.triggerEvent("interject");
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_L)){
