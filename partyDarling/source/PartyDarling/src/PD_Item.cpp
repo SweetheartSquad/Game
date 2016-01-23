@@ -28,7 +28,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 
 	translatePhysical(glm::vec3(0, ITEM_POS_Y, 0), false);
 
-	boundingBox.depth = boundingBox.width;
+	boundingBox.depth = boundingBox.width*0.1f;
 }
 
 bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){

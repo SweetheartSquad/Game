@@ -16,6 +16,8 @@
 #include <PD_Game.h>
 #include <Player.h>
 
+#include <Colour.h>
+
 
 #include <PD_Character.h>
 
@@ -57,6 +59,14 @@ public:
 	glm::vec3 lightStart;
 	glm::vec3 lightEnd;
 	float lightIntensity;
+	
+	// how much the screen has transitioned in
+	// i.e. 0 is completely out, 1 is normal
+	float transition;
+	// how much the screen should transitioned in
+	// i.e. 0 is completely out, 1 is normal
+	float transitionTarget;
+	static Colour wipeColour;
 
 	PD_Scene_CombinedTests(PD_Game * _game);
 	~PD_Scene_CombinedTests();

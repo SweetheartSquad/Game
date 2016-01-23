@@ -115,8 +115,10 @@ Player::Player(BulletWorld * _bulletWorld) :
 	playerCamera->nearClip = 0.1f;
 	playerCamera->childTransform->rotate(90, 0, 1, 0, kWORLD);
 	playerCamera->yaw = 90.0f;
-	playerCamera->pitch = -10.0f;
+	playerCamera->pitch = 0.0f;
 	playerCamera->speed = 1;
+
+	playerCamera->alignMouse();
 
 	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
 };
@@ -373,10 +375,12 @@ glm::vec3 Player::getPlayerLinearVelocity(){
 
 void Player::enable(){
 	enabled = true;
+	playerCamera->enable();
 }
 
 void Player::disable(){
 	enabled = false;
+	playerCamera->disable();
 }
 
 bool Player::isEnabled(){

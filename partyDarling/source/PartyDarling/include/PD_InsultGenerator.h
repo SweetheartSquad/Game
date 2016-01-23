@@ -17,6 +17,8 @@ public:
 	std::string playerGoodChoice;
 	std::string playerBadChoice;
 
+	std::string playerBlank;
+
 private:
 	std::map<std::string, std::vector<std::string>> terms;
 	std::string escapeChar;

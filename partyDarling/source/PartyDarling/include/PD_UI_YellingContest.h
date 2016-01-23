@@ -44,6 +44,11 @@ private:
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
+	bool playerResult;
+	bool playerResultEffective;
+	float playerResultTimerLength;
+	float playerResultTimer;
+
 	Sprite * enemyCursor;
 
 	UIGlyph * prevHighlightedPunctuation;
@@ -119,7 +124,7 @@ public:
 
 	void setUIMode(bool _isOffensive);
 	void interject();
-	void insult(bool _isEffective);
+	void insult(bool _isEffective, std::wstring _word);
 
 	void incrementConfidence(float _value);
 

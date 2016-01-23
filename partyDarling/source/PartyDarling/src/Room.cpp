@@ -16,6 +16,7 @@ Room::Room(BulletWorld * _world, Shader * _shader) :
 	BulletMeshEntity(_world, new QuadMesh(), _shader),
 	tilemapSprite(new Sprite())
 {
+	mesh->setScaleMode(GL_NEAREST);
 }
 
 void Room::addComponent(RoomObject * obj){

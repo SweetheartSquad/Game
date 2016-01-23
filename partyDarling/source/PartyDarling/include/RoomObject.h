@@ -5,6 +5,7 @@
 
 enum Anchor_t{
 	GROUND,
+	WALL,
 	CIELING
 };
 

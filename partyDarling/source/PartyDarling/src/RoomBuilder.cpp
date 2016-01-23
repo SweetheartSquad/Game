@@ -255,12 +255,16 @@ Room * RoomBuilder::getRoom(){
 	// Center room at origin
 	room->translatePhysical(-room->getCenter(), true);
 
+	availableParents.clear();
+	placedObjects.clear();
+	edges.clear();
+
 	return room;
 }
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING && sweet::NumberUtils::randomBool()){
+	if(child->anchor != Anchor_t::CIELING && (child->anchor == Anchor_t::WALL || sweet::NumberUtils::randomBool())){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
@@ -301,35 +305,38 @@ bool RoomBuilder::search(RoomObject * child){
 	}
 	Log::warn("NO PARENT found.");
 	
-	// Look for space in room (20 tries)
-	for(unsigned int i = 0; i < 20; ++i){
-		Log::info("Randomly finding a position.");
-		// Find random point within bounding box of room (x, z)
-		glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
+	if(child->anchor != Anchor_t::WALL){
+		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
+		// Look for space in room (20 tries)
+		for(unsigned int i = 0; i < 20; ++i){
+			Log::info("Randomly finding a position.");
+			// Find random point within bounding box of room (x, z)
+			glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
 		
-		btQuaternion bOrient = child->body->getWorldTransform().getRotation();
-		glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
+			btQuaternion bOrient = child->body->getWorldTransform().getRotation();
+			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
-		// TODO: Check that the transformed origin will be inside the room
-		// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
-		Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
-		unsigned int intersections = 0;
-		for(auto e : edges){
-			if(e->intersects(ray, ROOM_TILE)){
-				++intersections;
+			// TODO: Check that the transformed origin will be inside the room
+			// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
+			Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
+			unsigned int intersections = 0;
+			for(auto e : edges){
+				if(e->intersects(ray, ROOM_TILE)){
+					++intersections;
+				}
 			}
-		}
-		// Random position not inside room, try again
-		if(intersections % 2 == 0){
-			continue;
-		}
+			// Random position not inside room, try again
+			if(intersections % 2 == 0){
+				continue;
+			}
 
-		Log::info("Position found.");
-		// Validate bounding box is inside room
-		if(canPlaceObject(child, pos, orient)){
-			room->addComponent(child);
-			addObjectToLists(child);
-			return true;
+			Log::info("Position found.");
+			// Validate bounding box is inside room
+			if(canPlaceObject(child, pos, orient)){
+				room->addComponent(child);
+				addObjectToLists(child);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -337,13 +344,9 @@ bool RoomBuilder::search(RoomObject * child){
 
 bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
 	
-	// position
-	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
-	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
+	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	glm::quat orient = parent->childTransform->getOrientationQuat();
 
-	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
-	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
-	
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -387,6 +390,9 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
 	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 	
+	float angle = glm::angle(_orientation);
+	glm::vec3 axis = glm::axis(_orientation);
+	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	_obj->translatePhysical(_pos, true);
 	_obj->realign();
 
@@ -401,8 +407,10 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
 			Log::warn(s.str());
-			return false;
 			_obj->translatePhysical(-_pos, true);
+			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+			_obj->realign();
+			return false;
 		}
 	}
 
@@ -444,8 +452,6 @@ bool RoomBuilder::canBeParent(RoomObject * _obj){
 
 void RoomBuilder::createWalls(){
 	std::vector<glm::vec2> verts = sweet::TextureUtils::getMarchingSquaresContour(room->tilemap, thresh, false, true);
-
-	edges.clear();
 
 	assert(verts.size() != 0);
 
@@ -560,7 +566,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	RoomObject * wall = new RoomObject(world, wallMesh, baseShader);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
-	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
+	wall->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
@@ -644,15 +650,14 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::vector<AssetItem *> itemDefinitions = definition->getItems();
 	std::vector<PD_Item *> items;
 	
-	for(auto def : itemDefinitions){
-		items.push_back(new PD_Item(def, world, baseShader));
-	}
-
-
 	// add a door manually
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
-	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader));
+	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL));
+
+	for(auto def : itemDefinitions){
+		items.push_back(new PD_Item(def, world, baseShader));
+	}
 
 	return items;
 }

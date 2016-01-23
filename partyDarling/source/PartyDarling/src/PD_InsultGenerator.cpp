@@ -8,7 +8,8 @@
 #include <NumberUtils.h>
 
 PD_InsultGenerator::PD_InsultGenerator() :
-	escapeChar("*")
+	escapeChar("*"),
+	playerBlank("____")
 {
 	makeDatabases();
 }

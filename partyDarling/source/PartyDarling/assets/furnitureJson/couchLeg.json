@@ -1,0 +1,6 @@
+{
+    "connectors": [], 
+    "id": 39, 
+    "src": "couchLeg.obj", 
+    "type": "couch_leg"
+}
