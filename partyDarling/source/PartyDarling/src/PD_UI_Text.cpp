@@ -22,6 +22,11 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 			onDown(_event);
 		}
 	});
+
+	eventManager.addEventListener("mouseup", [this](sweet::Event * _event){
+		curTextColour = overColour;
+		textColourDirty = true;
+	});
 	
 	eventManager.addEventListener("mousein", [this](sweet::Event * _event){
 		curTextColour = overColour;
@@ -37,7 +42,9 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	});
 
 	eventManager.addEventListener("click", [this](sweet::Event * _event){
-		onClick(_event);
+		if(onClick != nullptr){
+			onClick(_event);
+		}
 	});
 }
 

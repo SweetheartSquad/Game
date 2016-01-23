@@ -42,13 +42,16 @@
 #include <OpenALSound.h>
 
 #include <NumberUtils.h>
+#include <Timeout.h>
 
 Player::Player(BulletWorld * _bulletWorld) : 
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
 	joystick(nullptr),
-	jumpTime(0.0)
+	jumpTime(0.0),
+	camOffset(0),
+	shakeIntensity(0.3f)
 {
 	//init movement vars
 	playerSpeed = 0.1f;
@@ -121,6 +124,14 @@ Player::Player(BulletWorld * _bulletWorld) :
 	playerCamera->alignMouse();
 
 	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
+
+	shakeTimeout = new Timeout(0.5f, [this](sweet::Event * _event){
+		camOffset = glm::vec3(0);
+	});
+	shakeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		camOffset = glm::vec3(sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity)) * Easing::easeOutCirc(_event->getFloatData("progress"), 1.f, -1.f, 1.f);
+	});
+	childTransform->addChild(shakeTimeout);
 };
 
 Player::~Player(){
@@ -353,7 +364,7 @@ void Player::update(Step * _step){
 		isGrounded = false;
 		jumpTime += _step->time - jumpTime;
 	}
-	playerCamera->firstParent()->translate(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
+	playerCamera->firstParent()->translate(glm::vec3(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z()) + camOffset, false);
 
 	//std::cout << isGrounded << std::endl;
 

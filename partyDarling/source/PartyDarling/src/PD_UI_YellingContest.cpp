@@ -40,7 +40,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	confidence(50.f),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
-	playerAnswerTimerLength(1.f),
+	playerAnswerTimerLength(1.5f),
 	playerAnswerTimer(0),
 	playerResult(false),
 	playerResultEffective(false),
@@ -340,6 +340,9 @@ void PD_UI_YellingContest::update(Step * _step){
 
 						// Find next punctuation
 						if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+							sweet::Event * e = new sweet::Event("miss");
+							eventManager.triggerEvent(e);
+
 							prevHighlightedPunctuation = highlightedPunctuation;
 							highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
 						}
@@ -363,6 +366,7 @@ void PD_UI_YellingContest::update(Step * _step){
 							s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
 							s->play();
 						}else{
+							// Enemy's insult effective!
 							incrementConfidence(-damage);
 							setEnemyText();
 						}
@@ -478,6 +482,7 @@ void PD_UI_YellingContest::startNewFight(){
 		gameOverDuration = 0;
 
 		addChild(gameContainer);
+		childTransform->addChild(enemyCursor->firstParent(), false);
 		
 		win = false;
 		isGameOver = false;
@@ -490,10 +495,15 @@ void PD_UI_YellingContest::startNewFight(){
 }
 
 void PD_UI_YellingContest::gameOver(bool _win){
+	sweet::Event * e = new sweet::Event("gameover");
+	e->setIntData("win", _win);
+	eventManager.triggerEvent(e);
+
 	isGameOver = true;
 	win = _win;
 
 	removeChild(gameContainer);
+	childTransform->removeChild(enemyCursor->firstParent());
 
 	if(_win){
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
@@ -724,6 +734,10 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){
+	sweet::Event * e = new sweet::Event("confidence");
+	e->setFloatData("value", _value);
+	eventManager.triggerEvent(e);
+
 	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value;
 
 	if(confidence <= 0){

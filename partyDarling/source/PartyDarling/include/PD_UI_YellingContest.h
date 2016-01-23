@@ -23,9 +23,12 @@ public:
 /**
 * Events:
 *	interject:	data "success"		int
+*	miss									// missed punctuation opportunity
 *   insult:		data "success"		int
 *	changeturn	data "isPlayerTurn"	int
-*	complete:	data "win"			int
+*   confidence	data "value"		float	// the value the confidence is being incremented by
+*	gameover	data "win"			int		// occurs immediately when the player wins or loses
+*	complete:	data "win"			int		// occurs after the game over animation
 */
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
