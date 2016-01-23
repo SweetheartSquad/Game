@@ -33,16 +33,20 @@
 
 #include <Room.h>
 #include <RoomBuilder.h>
+#include <RenderSurface.h>
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
-	uiLayer(0,0,0,0),
 	toonShader(new ComponentShaderBase(false)),
+	uiLayer(0,0,0,0),
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
-	currentHoverTarget(nullptr),
 	selectedItem(nullptr),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
+	screenSurface(new RenderSurface(screenSurfaceShader)),
+	screenFBO(new StandardFrameBuffer(true)),
+	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
 	lightIntensity(1.f)
@@ -61,6 +65,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
 	characterShader->compileShader();
+
+	screenSurfaceShader->referenceCount++;
+	screenFBO->referenceCount++;
+	screenSurface->referenceCount++;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
@@ -183,6 +191,9 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 	deleteChildTransform();
+	screenSurfaceShader->decrementAndDelete();
+	screenFBO->decrementAndDelete();
+	screenSurface->decrementAndDelete();
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
@@ -202,8 +213,6 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	toonRamp->bufferData();
 	playerLight->setIntensities(playerLight->getIntensities() + (glm::vec3(lightIntensity) - playerLight->getIntensities() * 0.1f));
 
-
-
 	PD_ResourceManager::scenario->eventManager.update(_step);
 
 	bulletWorld->update(_step);
@@ -212,7 +221,17 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
 	}
 
+	bulletWorld->update(_step);
 
+	if(keyboard->keyJustDown(GLFW_KEY_R)){
+		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_L)){
+		screenSurfaceShader->unload();
+		screenSurfaceShader->loadFromFile(screenSurfaceShader->vertSource, screenSurfaceShader->fragSource);
+		screenSurfaceShader->load();
+	}
 
 	// mouse interaction with world objects
 	if(player->isEnabled()){
@@ -402,8 +421,6 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	}if(keyboard->keyDown(GLFW_KEY_RIGHT)){
 		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * 0.03f);
 	}
-	
-	
 
 	Scene::update(_step);
 
@@ -413,18 +430,33 @@ void PD_Scene_CombinedTests::update(Step * _step){
 }
 
 void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->bindFrameBuffer();
+	
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
+
 	Scene::render(_matrixStack, _renderOptions);
+	
+	screenSurface->render(screenFBO->getTextureId());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_CombinedTests::load(){
 	Scene::load();	
 	uiLayer.load();
+	screenSurface->load();
+	screenSurfaceShader->load();
+	screenFBO->load();
 }
 
 void PD_Scene_CombinedTests::unload(){
 	uiLayer.unload();
 	Scene::unload();	
+	screenSurface->unload();
+	screenSurfaceShader->unload();
+	screenFBO->unload();
 }
