@@ -159,13 +159,14 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
 		std::stringstream characterName;
 		characterName << (int)glm::round(_event->getFloatData("Character"));
-		std::string	stateName = _event->getStringData("State");
-		std::cout << characterName.str() << "'s state changed to " << stateName << std::endl;
+		std::stringstream stateName;
+		stateName << (int)glm::round(_event->getFloatData("State"));
+		std::cout << characterName.str() << "'s state changed to " << stateName.str() << std::endl;
 
 		Scenario * scenario = PD_ResourceManager::scenario;
 		PD_Listing * listing = PD_Listing::listings[PD_ResourceManager::scenario];
 		Person * character = listing->characters[characterName.str()];
-		character->state = &character->definition->states.at(stateName);
+		character->state = &character->definition->states.at(stateName.str());
 	});
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game](sweet::Event * _event){
