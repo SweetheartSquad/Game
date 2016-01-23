@@ -31,6 +31,8 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
+
+	translatePhysical(glm::vec3(0, (boundingBox.height+boundingBox.width) * 0.5f, 0.f), false);
 }
 
 void Person::setShader(Shader * _shader, bool _configureDefault){
