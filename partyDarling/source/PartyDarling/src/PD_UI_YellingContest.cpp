@@ -614,6 +614,10 @@ void PD_UI_YellingContest::interject(){
 
 	incrementConfidence(isPunctuation ? damage : -damage);
 
+	sweet::Event * e = new sweet::Event("interject");
+	e->setIntData("success", isPunctuation);
+	eventManager.triggerEvent(e);
+
 	if(isPunctuation){
 		setUIMode(isPunctuation);
 	}
@@ -634,6 +638,10 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 		setPlayerText();
 	}
 	invalidateLayout();
+
+	sweet::Event * e = new sweet::Event("changeturn");
+	e->setIntData("isPlayerTurn", _isOffensive);
+	eventManager.triggerEvent(e);
 }
 
 void PD_UI_YellingContest::setEnemyText(){
@@ -709,6 +717,10 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 	countInsultAccuracy(playerAnswerTimer);
 
 	playerResultEffective = _isEffective;
+
+	sweet::Event * e = new sweet::Event("insult");
+	e->setIntData("success", _isEffective);
+	eventManager.triggerEvent(e);
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){

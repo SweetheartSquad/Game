@@ -20,6 +20,13 @@ public:
 	InterjectAccuracy(wchar_t character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration);
 };
 
+/**
+* Events:
+*	interject:	data "success"		int
+*   insult:		data "success"		int
+*	changeturn	data "isPlayerTurn"	int
+*	complete:	data "win"			int
+*/
 class PD_UI_YellingContest : public VerticalLinearLayout{
 private:
 	// number of punctuation marks passed
