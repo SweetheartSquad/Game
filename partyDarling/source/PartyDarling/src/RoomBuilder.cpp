@@ -219,7 +219,10 @@ Room * RoomBuilder::getRoom(){
 	}
 	
 	for(auto obj : objects){
-		Log::info("\nAttempting to place OBJECT");
+		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
+		std::stringstream s1;
+		s1 << "\nAttempting to place OBJECT: " << name;
+		Log::info(s1.str());
 		std::stringstream s;
 		s << "Total Placed Objects: " << placedObjects.size();
 		Log::info(s.str());
@@ -298,13 +301,15 @@ bool RoomBuilder::search(RoomObject * child){
 		}
 	}
 	Log::warn("NO PARENT found.");
-
+	
 	// Look for space in room (20 tries)
 	for(unsigned int i = 0; i < 20; ++i){
 		Log::info("Randomly finding a position.");
 		// Find random point within bounding box of room (x, z)
 		glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
-		glm::quat orient = glm::quat();
+		
+		btQuaternion bOrient = child->body->getWorldTransform().getRotation();
+		glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
 		// TODO: Check that the transformed origin will be inside the room
 		// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
@@ -390,9 +395,10 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
-	
-	glm::vec3 vMin = _obj->boundingBox.getMinCoordinate();	// left bottom back
-	glm::vec3 vMax = _obj->boundingBox.getMaxCoordinate();	// right top front
+	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
+	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices(); 
+	//glm::vec3 vMin = _obj->boundingBox.getMinCoordinate();	// left bottom back
+	//glm::vec3 vMax = _obj->boundingBox.getMaxCoordinate();	// right top front
 
 	// get object's bullet model matrix
 	glm::mat4 rot = glm::toMat4(_orientation);
@@ -415,28 +421,31 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		glm::mat4 oMM = oTrans *oRot;
 		 
 		// Check if object intersects o
-		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(vMin, vMax, mm, oMM))){
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM))){
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
 			Log::warn(s.str());
 			return false;
-		}	
+		}
 	}
 
 	return true;
 }
 
-std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(glm::vec3 _lowerBound, glm::vec3 _upperBound, glm::mat4 _mmA, glm::mat4 _mmB){
+std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB){
 
-	glm::mat4 immA = glm::inverse(_mmA);
-	// Transform into a's local coordinate space
-	glm::vec4 min = _mmB * immA * glm::vec4(_lowerBound, 1);
-	glm::vec4 max = _mmB * immA * glm::vec4(_upperBound, 1);
+	glm::mat4 immB = glm::inverse(_mmB);
+	glm::mat4 m = immB * _mmA;
+
+	std::vector<glm::vec4> transformed; 
+	for(auto v : _verts){
+		transformed.push_back(m * glm::vec4(v, 1));
+	}
 
 	std::vector<glm::vec3> vertices; 
-	// Only need the extremes
-	vertices.push_back(glm::vec3(min.x, min.y, min.z));	// left bottom back
-	vertices.push_back(glm::vec3(max.x, max.y, max.z));	// right top front
+	for(auto t : transformed){
+		vertices.push_back(glm::vec3(t.x, t.y, t.z));
+	}
 
 	return vertices;
 }
@@ -582,15 +591,15 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
 	QuadMesh tempMesh;
 	tempMesh.insertVertices(wallMesh);
-	tempMesh.setNormal(0, n.x, n.y, n.z);
-	tempMesh.setNormal(1, n.x, n.y, n.z);
-	tempMesh.setNormal(2, n.x, n.y, n.z);
-	tempMesh.setNormal(3, n.x, n.y, n.z);
 	// transform verts
 	Transform t;
 	t.translate(posX, 0, posZ);
 	t.rotate(angle, axis.x, axis.y, axis.z, kOBJECT);
 	tempMesh.applyTransformation(&t);
+	tempMesh.setNormal(0, n.x, n.y, n.z);
+	tempMesh.setNormal(1, n.x, n.y, n.z);
+	tempMesh.setNormal(2, n.x, n.y, n.z);
+	tempMesh.setNormal(3, n.x, n.y, n.z);
 
 	// Append transformed verts to room mesh
 	room->mesh->insertVertices(&tempMesh);
@@ -644,7 +653,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, 20);
-	for(unsigned int i = 0; i < 15; ++i){
+	for(unsigned int i = 0; i < 20; ++i){
 		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
 		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND));
