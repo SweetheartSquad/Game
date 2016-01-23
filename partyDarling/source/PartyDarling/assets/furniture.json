@@ -167,11 +167,27 @@
         {
             "id": 34, 
             "src": "furnitureJson/chair_Back_5.json"
-        },
-		{
-			"id": 35, 
+        }, 
+        {
+            "id": 35, 
             "src": "furnitureJson/chair_Seat_6.json"
-		}
+        }, 
+        {
+            "id": 36, 
+            "src": "furnitureJson/couch_couch_Side_Base_1.json"
+        }, 
+        {
+            "id": 37, 
+            "src": "furnitureJson/couch_ArmRest_1.json"
+        }, 
+        {
+            "id": 38, 
+            "src": "furnitureJson/couch_Side_Back_1.json"
+        }, 
+        {
+            "id": 39, 
+            "src": "furnitureJson/couchLeg.json"
+        }
     ], 
     "furniture": [
         {
