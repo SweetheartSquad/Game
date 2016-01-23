@@ -95,6 +95,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->invalidateLayout();
+	for(auto & v : crosshairIndicator->background->mesh->vertices){
+		v.x -= 0.5f;
+		v.y -= 0.5f;
+	}crosshairIndicator->background->mesh->dirty = true;
 	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
 	uiLayer.addChild(l);
 	l->addChild(crosshairIndicator);
@@ -124,9 +128,10 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		player->enable();
 
 		// replace the crosshair texture with the item texture
-		crosshairIndicator->background->mesh->replaceTextures(uiInventory->getSelected()->mesh->textures.at(0));
-		crosshairIndicator->setWidth(64);
-		crosshairIndicator->setHeight(64);
+		Texture * itemTex = uiInventory->getSelected()->mesh->textures.at(0);
+		crosshairIndicator->background->mesh->replaceTextures(itemTex);
+		crosshairIndicator->setWidth(itemTex->width);
+		crosshairIndicator->setHeight(itemTex->height);
 		crosshairIndicator->invalidateLayout();
 		// TODO: update the UI to indicate the selected item to the player
 	});
