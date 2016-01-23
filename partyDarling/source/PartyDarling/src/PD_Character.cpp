@@ -243,6 +243,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 }
 
 PersonRenderer::~PersonRenderer(){
+	// TODO: Prevent memory leak here without just deleting the paletteTex here
 	//delete paletteTex;
 }
 

@@ -337,13 +337,9 @@ bool RoomBuilder::search(RoomObject * child){
 
 bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
 	
-	// position
-	btVector3 bPos = parent->body->getWorldTransform().getOrigin();
-	glm::vec3 pos = glm::vec3(bPos.x(), bPos.y(), bPos.z());
+	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	glm::quat orient = parent->childTransform->getOrientationQuat();
 
-	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
-	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
-	
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -387,6 +383,9 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
 	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 	
+	float angle = glm::angle(_orientation);
+	glm::vec3 axis = glm::axis(_orientation);
+	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	_obj->translatePhysical(_pos, true);
 	_obj->realign();
 
@@ -401,8 +400,10 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
 			Log::warn(s.str());
-			return false;
 			_obj->translatePhysical(-_pos, true);
+			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+			_obj->realign();
+			return false;
 		}
 	}
 
@@ -560,7 +561,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	RoomObject * wall = new RoomObject(world, wallMesh, baseShader);
 	wall->setColliderAsBoundingBox();
 	wall->createRigidBody(0);
-	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
+	wall->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
