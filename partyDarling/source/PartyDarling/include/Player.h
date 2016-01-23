@@ -37,6 +37,7 @@ class ComponentShaderText;
 class TextureColourTable;
 
 class Room;
+class Timeout;
 
 class Player : public virtual NodeBulletBody{
 private:
@@ -95,6 +96,9 @@ private:
 	
 public:
 	MousePerspectiveCamera * playerCamera;
+	glm::vec3 camOffset;
+	float shakeIntensity;
+	Timeout * shakeTimeout;
 
 	float playerSpeed;
 	float mass;
