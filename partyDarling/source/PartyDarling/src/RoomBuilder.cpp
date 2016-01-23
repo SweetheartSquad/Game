@@ -306,7 +306,7 @@ bool RoomBuilder::search(RoomObject * child){
 	Log::warn("NO PARENT found.");
 	
 	if(child->anchor != Anchor_t::WALL){
-		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180, 180.f), 0, 1.f, 0);
+		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < 20; ++i){
 			Log::info("Randomly finding a position.");

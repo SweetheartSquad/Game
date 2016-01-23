@@ -511,8 +511,8 @@ void PD_Scene_CombinedTests::load(){
 
 void PD_Scene_CombinedTests::unload(){
 	uiLayer.unload();
-	Scene::unload();	
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
+	Scene::unload();	
 }

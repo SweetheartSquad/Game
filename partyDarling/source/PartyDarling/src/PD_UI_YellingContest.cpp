@@ -13,6 +13,7 @@
 #include <FileUtils.h>
 #include <shader/ComponentShaderText.h>
 #include <DateUtils.h>
+#include <regex>
 
 #define BORDER_SIZE 60.f
 
@@ -37,10 +38,14 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
 	confidence(50.f),
-	playerQuestionTimerLength(2.f),
+	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
 	playerAnswerTimerLength(1.f),
 	playerAnswerTimer(0),
+	playerResult(false),
+	playerResultEffective(false),
+	playerResultTimerLength(1.5f),
+	playerResultTimer(0.f),
 	damage(20.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
@@ -193,7 +198,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleBubble->setScaleMode(GL_NEAREST);
 
 	// The side by side text and button layout
-	HorizontalLinearLayout * playerBubbleLayout = new HorizontalLinearLayout(_bulletWorld);
+	playerBubbleLayout = new HorizontalLinearLayout(_bulletWorld);
 	playerBubbleLayout->verticalAlignment = kMIDDLE;
 	playerBubbleLayout->horizontalAlignment = kCENTER;
 	playerBubbleLayout->setRationalWidth(0.95f);
@@ -207,15 +212,22 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleText->verticalAlignment = kMIDDLE;
 	playerBubbleLayout->addChild(playerBubbleText);
 
+	playerBubbleOptions = new HorizontalLinearLayout(_bulletWorld);
+	playerBubbleOptions->setRationalWidth(0.4f);
+	playerBubbleOptions->setRationalHeight(1.f);
+	playerBubbleOptions->horizontalAlignment = kCENTER;
+	playerBubbleOptions->verticalAlignment = kMIDDLE;
+	playerBubbleLayout->addChild(playerBubbleOptions);
+
 	NodeUI * playerArrows = new NodeUI(_bulletWorld);
 	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-ARROWS")->texture);
-	playerArrows->setRationalWidth(0.1f);
+	playerArrows->setRationalWidth(0.25f);
 	playerArrows->setRationalHeight(0.4f);
-	playerBubbleLayout->addChild(playerArrows);
+	playerBubbleOptions->addChild(playerArrows);
 	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
-	buttonLayout->setRationalWidth(0.3f);
+	buttonLayout->setRationalWidth(0.75f);
 	buttonLayout->setRationalHeight(0.4f);
 	buttonLayout->verticalAlignment = kMIDDLE;
 
@@ -232,7 +244,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	buttonLayout->addChild(pBubbleBtn1);
 	buttonLayout->addChild(pBubbleBtn2);
 
-	playerBubbleLayout->addChild(buttonLayout);
+	playerBubbleOptions->addChild(buttonLayout);
 
 	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
 	playerBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-BUBBLE-TAIL")->texture);
@@ -291,12 +303,12 @@ void PD_UI_YellingContest::update(Step * _step){
 		if(!isGameOver){
 			VerticalLinearLayout::update(_step);
 
-			if(modeOffensive){
+			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
-					insult(pBubbleBtn1->isEffective);
+					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->textDisplayed);
 				}
 				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
-					insult(pBubbleBtn2->isEffective);
+					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->textDisplayed);
 				}
 			}else{
 				if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
@@ -380,21 +392,39 @@ void PD_UI_YellingContest::update(Step * _step){
 			}else{
 				// INSULT
 				if(playerQuestionTimer >= playerQuestionTimerLength){
-					// Increment player answer timer
-					if(playerAnswerTimer >= playerAnswerTimerLength){
-						// Out of time, enemy's turn!
-						countInsultAccuracy(-1);
-						incrementConfidence(-damage);
-						setUIMode(false);
+					if(!playerResult){
+						// Increment player answer timer
+						if(playerAnswerTimer >= playerAnswerTimerLength){
+							// Out of time, enemy's turn!
+							countInsultAccuracy(-1);
+							incrementConfidence(-damage);
+							setUIMode(false);
+						}else{
+							playerAnswerTimer += _step->getDeltaTime();
+						}
 					}else{
-						playerAnswerTimer += _step->getDeltaTime();
+						// Increment player result timer
+						if(playerResultTimer >= playerResultTimerLength){
+							if (playerResultEffective){
+								// next insult
+								incrementConfidence(damage);
+								setPlayerText();
+							}
+							else{
+								//fail
+								incrementConfidence(-damage);
+								setUIMode(false);
+							}
+							
+						}else{
+							playerResultTimer += _step->getDeltaTime();
+						}
 					}
 				}else{
 					// Increment player question timer
 					playerQuestionTimer += _step->getDeltaTime();
 					if(playerQuestionTimer >= playerQuestionTimerLength){
-						pBubbleBtn1->setVisible(true);
-						pBubbleBtn2->setVisible(true);
+						playerBubbleOptions->setVisible(true);
 						playerTimerSlider->setVisible(true);
 					}
 				}
@@ -634,6 +664,11 @@ void PD_UI_YellingContest::setEnemyText(){
 }
 
 void PD_UI_YellingContest::setPlayerText(){
+	if(playerResult){
+		playerBubbleLayout->addChild(playerBubbleOptions);
+		playerBubble->invalidateLayout();
+	}
+
 	insultGenerator.makeInsults();
 	// set the insult prompt
 	playerBubbleText->setText(insultGenerator.playerInsult);
@@ -651,25 +686,29 @@ void PD_UI_YellingContest::setPlayerText(){
 	// Reset timer
 	playerQuestionTimer = 0;
 	playerAnswerTimer = 0;
-
-	pBubbleBtn1->setVisible(false);
-	pBubbleBtn2->setVisible(false);
+	playerResultTimer = 0;
+	playerResult = false;
+	
+	playerBubbleOptions->setVisible(false);
 	playerTimerSlider->setVisible(false);
 }
 
-void PD_UI_YellingContest::insult(bool _isEffective){
+void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
+	// Make resulting insult
+	const std::string constText = insultGenerator.playerInsult;
+	std::regex rg(insultGenerator.playerBlank);
+	std::string text = std::regex_replace(constText, rg, std::string(_word.begin(), _word.end()));
+
+	playerBubbleText->setText(text);
+	playerBubbleLayout->removeChild(playerBubbleOptions);
+	playerBubble->invalidateLayout();
+
+	playerResult = true;
+
 	countButtonPresses(_isEffective, true);
 	countInsultAccuracy(playerAnswerTimer);
-	if (_isEffective){
-		// next insult
-		incrementConfidence(damage);
-		setPlayerText();
-	}
-	else{
-		//fail
-		incrementConfidence(-damage);
-		setUIMode(false);
-	}
+
+	playerResultEffective = _isEffective;
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){

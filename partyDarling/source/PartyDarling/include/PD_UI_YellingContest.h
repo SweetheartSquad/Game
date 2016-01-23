@@ -44,6 +44,11 @@ private:
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
+	bool playerResult;
+	bool playerResultEffective;
+	float playerResultTimerLength;
+	float playerResultTimer;
+
 	Sprite * enemyCursor;
 
 	UIGlyph * prevHighlightedPunctuation;
@@ -58,8 +63,10 @@ private:
 	TextArea * enemyBubbleText;
 
 	NodeUI * playerBubble;
+	HorizontalLinearLayout * playerBubbleLayout;
 	TextArea * playerBubbleText;
 
+	HorizontalLinearLayout * playerBubbleOptions;
 	PD_InsultButton * pBubbleBtn1;
 	PD_InsultButton * pBubbleBtn2;
 
@@ -119,7 +126,7 @@ public:
 
 	void setUIMode(bool _isOffensive);
 	void interject();
-	void insult(bool _isEffective);
+	void insult(bool _isEffective, std::wstring _word);
 
 	void incrementConfidence(float _value);
 
