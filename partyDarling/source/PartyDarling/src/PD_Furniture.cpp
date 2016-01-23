@@ -48,8 +48,6 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
-	// temp until we figure out how to get the bullet body on the ground
-	boundingBox.y = 0;
 
 	// create the bullet stuff
 	setColliderAsBoundingBox();
