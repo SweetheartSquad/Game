@@ -186,6 +186,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		ss << "COMBINED_TEST_" << sweet::lastTimestamp;
 		_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
 		_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+		PD_ResourceManager::scenario->eventManager.listeners.clear();
 	});
 }
 
