@@ -34,7 +34,7 @@
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,
-											"scale": [-1.0,1.0,1.0]
+											"scale": [1.0,1.0,1.0]
 										}, 
 										{
 											"componentTypes": ["couch_leg"], 
@@ -48,7 +48,7 @@
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,
-											"scale": [-1.0,1.0,1.0]
+											"scale": [1.0,1.0,1.0]
 										}
 							], 
                             "required": true,
