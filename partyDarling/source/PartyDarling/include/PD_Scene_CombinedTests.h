@@ -25,7 +25,9 @@ class RampTexture;
 class PD_Scene_CombinedTests : public Scene{
 public:
 	ComponentShaderBase * toonShader;
-
+	Shader* screenSurfaceShader;
+	RenderSurface* screenSurface;
+	StandardFrameBuffer* screenFBO;
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
@@ -54,6 +56,7 @@ public:
 	RampTexture * toonRamp;
 	glm::vec3 lightStart;
 	glm::vec3 lightEnd;
+	float lightIntensity;
 
 	PD_Scene_CombinedTests(PD_Game * _game);
 	~PD_Scene_CombinedTests();

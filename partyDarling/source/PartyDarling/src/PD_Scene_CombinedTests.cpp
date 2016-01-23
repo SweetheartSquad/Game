@@ -11,6 +11,7 @@
 #include <shader/ShaderComponentDepthOffset.h>
 #include <shader/ComponentShaderText.h>
 #include <shader/ShaderComponentToon.h>
+#include <PD_ShaderComponentSpecialToon.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -32,31 +33,42 @@
 
 #include <Room.h>
 #include <RoomBuilder.h>
+#include <RenderSurface.h>
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
-	uiLayer(0,0,0,0),
 	toonShader(new ComponentShaderBase(false)),
+	uiLayer(0,0,0,0),
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
+	selectedItem(nullptr),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
+	screenSurface(new RenderSurface(screenSurfaceShader)),
+	screenFBO(new StandardFrameBuffer(true)),
 	currentHoverTarget(nullptr),
-	selectedItem(nullptr)
+	lightStart(0.3f),
+	lightEnd(1.f),
+	lightIntensity(1.f)
 {
-	toonRamp = new RampTexture(glm::vec3(0.3f), glm::vec3(1.f), 4);
+	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
-	toonShader->addComponent(new ShaderComponentToon(toonShader, toonRamp, true));
+	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	//toonShader->addComponent(new ShaderComponentDiffuse(toonShader));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	toonShader->compileShader();
 
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
-	characterShader->addComponent(new ShaderComponentToon(characterShader, toonRamp, true));
+	characterShader->addComponent(new PD_ShaderComponentSpecialToon(characterShader, toonRamp, true));
 	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
 	characterShader->compileShader();
+
+	screenSurfaceShader->referenceCount++;
+	screenFBO->referenceCount++;
+	screenSurface->referenceCount++;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
@@ -136,7 +148,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
-	playerLight = new PointLight(glm::vec3(1,1,1), 0.0f, 0.003f, -1);
+	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
 	lights.push_back(playerLight);
@@ -179,21 +191,27 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
 	deleteChildTransform();
+	screenSurfaceShader->decrementAndDelete();
+	screenFBO->decrementAndDelete();
+	screenSurface->decrementAndDelete();
 }
 
 void PD_Scene_CombinedTests::update(Step * _step){
+	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;
 	playerLight->setAttenuation(newa);
 	if(newa < a){
 		lightStart = glm::vec3(sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f));
-		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f),sweet::NumberUtils::randomFloat(0.9f, 1.2f));
+		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f));
+		lightIntensity = sweet::NumberUtils::randomFloat(1.f, 1.25f);
 	}
 	toonRamp->setRamp(
 		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
 		toonRamp->end + (lightEnd - toonRamp->end) * 0.1f,
 		4);
 	toonRamp->bufferData();
+	playerLight->setIntensities(playerLight->getIntensities() + (glm::vec3(lightIntensity) - playerLight->getIntensities() * 0.1f));
 
 	PD_ResourceManager::scenario->eventManager.update(_step);
 
@@ -203,7 +221,11 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
 	}
 
-
+	if(keyboard->keyJustDown(GLFW_KEY_L)){
+		screenSurfaceShader->unload();
+		screenSurfaceShader->loadFromFile(screenSurfaceShader->vertSource, screenSurfaceShader->fragSource);
+		screenSurfaceShader->load();
+	}
 
 	// mouse interaction with world objects
 	if(player->isEnabled()){
@@ -393,8 +415,6 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	}if(keyboard->keyDown(GLFW_KEY_RIGHT)){
 		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * 0.03f);
 	}
-	
-	
 
 	Scene::update(_step);
 
@@ -404,18 +424,33 @@ void PD_Scene_CombinedTests::update(Step * _step){
 }
 
 void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->bindFrameBuffer();
+	
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
+
 	Scene::render(_matrixStack, _renderOptions);
+	
+	screenSurface->render(screenFBO->getTextureId());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_CombinedTests::load(){
 	Scene::load();	
 	uiLayer.load();
+	screenSurface->load();
+	screenSurfaceShader->load();
+	screenFBO->load();
 }
 
 void PD_Scene_CombinedTests::unload(){
 	uiLayer.unload();
 	Scene::unload();	
+	screenSurface->unload();
+	screenSurfaceShader->unload();
+	screenFBO->unload();
 }

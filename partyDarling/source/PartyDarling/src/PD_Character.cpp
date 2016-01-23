@@ -19,10 +19,10 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	state(&_definition->states.at(_definition->defaultState)),
 	definition(_definition)
 {
-	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, pr->solverBod->getChainLength()*2.0f * CHARACTER_SCALE);
+	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
 	
 	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
-	boundingBox.height = pr->solverBod->getChainLength()*2.0f * CHARACTER_SCALE;
+	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE;
 	boundingBox.depth = boundingBox.width;
 	boundingBox.y = 0;
 

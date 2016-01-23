@@ -40,6 +40,7 @@
     <ClInclude Include="include\PD_TalkToButton.h" />
     <ClInclude Include="include\PD_TestScene.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
+    <ClInclude Include="include\PD_ShaderComponentSpecialToon.h" />
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="src\PD_TalkToButton.cpp" />
     <ClCompile Include="src\PD_TestScene.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
+    <ClCompile Include="src\PD_ShaderComponentSpecialToon.cpp" />
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
