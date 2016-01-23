@@ -190,7 +190,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		transitionTarget = 0;
 		
 		screenSurfaceShader->bindShader();
-		wipeColour = Colour::getRandomFromHsvRange(glm::ivec3(0, 90, 90), glm::ivec3(360, 100, 100));
+		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
 		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
 			std::stringstream ss;
