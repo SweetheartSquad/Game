@@ -35,6 +35,8 @@
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
 
+Colour PD_Scene_CombinedTests::wipeColour(glm::ivec3(0));
+
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
 	toonShader(new ComponentShaderBase(false)),
@@ -43,13 +45,15 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
-	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
+	screenSurfaceShader(new Shader("assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
-	lightIntensity(1.f)
+	lightIntensity(1.f),
+	transition(0.f),
+	transitionTarget(1.f)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -181,11 +185,22 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		character->state = &character->definition->states.at(stateName.str());
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game](sweet::Event * _event){
-		std::stringstream ss;
-		ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-		_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
-		_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
+		player->disable();
+		transitionTarget = 0;
+		
+		screenSurfaceShader->bindShader();
+		wipeColour = Colour::getRandomFromHsvRange(glm::ivec3(0, 90, 90), glm::ivec3(360, 100, 100));
+		
+		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
+			std::stringstream ss;
+			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
+			_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
+			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+		});
+		t->start();
+		childTransform->addChild(t, false);
+
 		PD_ResourceManager::scenario->eventManager.listeners.clear();
 	});
 }
@@ -213,6 +228,31 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		4);
 	toonRamp->bufferData();
 	playerLight->setIntensities(playerLight->getIntensities() + (glm::vec3(lightIntensity) - playerLight->getIntensities() * 0.1f));
+
+
+	// screen surface update
+	float transitionDelta = transitionTarget - transition;
+	if(glm::abs(transitionDelta) >= FLT_EPSILON){
+		transition += transitionDelta * 0.1f;
+		if(transition + FLT_EPSILON >= 1.f){
+			transition = 1.f;
+		}
+		screenSurfaceShader->bindShader();
+		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "transition");
+		checkForGlError(0,__FILE__,__LINE__);
+		if(test != -1){
+			glUniform1f(test, transition);
+			checkForGlError(0,__FILE__,__LINE__);
+		}
+	}
+	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "wipeColour");
+	checkForGlError(0,__FILE__,__LINE__);
+	if(test != -1){
+		glUniform3f(test, wipeColour.r/255.f, wipeColour.g/255.f, wipeColour.b/255.f);
+		checkForGlError(0,__FILE__,__LINE__);
+	}
+
+
 
 	PD_ResourceManager::scenario->eventManager.update(_step);
 
@@ -433,11 +473,11 @@ void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOpt
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
+	uiLayer.render(_matrixStack, _renderOptions);
 	
 	screenSurface->render(screenFBO->getTextureId());
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_CombinedTests::load(){
