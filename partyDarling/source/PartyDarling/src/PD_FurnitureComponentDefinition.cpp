@@ -8,11 +8,11 @@
 PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _jsonDef) :
 	required(_jsonDef.get("required", true).asBool()),
 	multiplier(_jsonDef.get("multiplier", 1).asInt()),
-	scale(_jsonDef.isMember("scale") ? (
+	scale(_jsonDef.isMember("scale") ? glm::vec3(
 		_jsonDef["scale"].get(Json::Value::ArrayIndex(0), 1.f).asFloat(),
 		_jsonDef["scale"].get(Json::Value::ArrayIndex(1), 1.f).asFloat(),
 		_jsonDef["scale"].get(Json::Value::ArrayIndex(2), 1.f).asFloat())
-		: 1
+		: glm::vec3(1)
 	)
 {
 	for(auto type : _jsonDef["componentTypes"]){
