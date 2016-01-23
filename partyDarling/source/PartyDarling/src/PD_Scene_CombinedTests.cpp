@@ -221,12 +221,6 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
 	}
 
-	bulletWorld->update(_step);
-
-	if(keyboard->keyJustDown(GLFW_KEY_R)){
-		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
-	}
-
 	if(keyboard->keyJustDown(GLFW_KEY_L)){
 		screenSurfaceShader->unload();
 		screenSurfaceShader->loadFromFile(screenSurfaceShader->vertSource, screenSurfaceShader->fragSource);
