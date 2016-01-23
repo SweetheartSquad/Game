@@ -136,7 +136,6 @@ Room * RoomBuilder::getRoom(){
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
-	definition->size = AssetRoom::Size_t::kSMALL;
 	switch (definition->size){
 		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(4, 6); w = sweet::NumberUtils::randomInt(4, 6); break;
 		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(4, 8); w = sweet::NumberUtils::randomInt(4, 8); break;
@@ -328,8 +327,6 @@ bool RoomBuilder::search(RoomObject * child){
 		Log::info("Position found.");
 		// Validate bounding box is inside room
 		if(canPlaceObject(child, pos, orient)){
-			//child->body->getWorldTransform().setRotation(orient);
-			child->translatePhysical(pos, true);
 			room->addComponent(child);
 			addObjectToLists(child);
 			return true;
@@ -347,10 +344,6 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	btQuaternion bOrient = parent->body->getWorldTransform().getRotation();
 	glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 	
-
-	sweet::Box p = parent->boundingBox;
-	sweet::Box c = child->boundingBox;
-
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -381,10 +374,6 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	if(!canPlaceObject(child, pos, orient)){
 		return false;
 	}
-
-	child->body->getWorldTransform().setRotation(bOrient);
-	child->translatePhysical(pos, true);
-
 	parent->addComponent(child);
 
 	return true;
@@ -396,29 +385,16 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
-	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices(); 
-	//glm::vec3 vMin = _obj->boundingBox.getMinCoordinate();	// left bottom back
-	//glm::vec3 vMax = _obj->boundingBox.getMaxCoordinate();	// right top front
+	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
+	
+	_obj->translatePhysical(_pos, true);
+	_obj->realign();
 
-	// get object's bullet model matrix
-	glm::mat4 rot = glm::toMat4(_orientation);
-	glm::mat4 trans = glm::translate(glm::mat4(1.0f), _pos);
-	glm::mat4 mm = trans *rot;
+	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
 
 	// Check for collision with other objects in room
 	for(auto o : placedObjects){
-		// get o's orientation
-		btQuaternion oBOrient = o->body->getWorldTransform().getRotation();
-		glm::quat oOrient = glm::quat(oBOrient.w(), oBOrient.x(), oBOrient.y(), oBOrient.z());
-
-		// get o's position
-		btVector3 oBPos = o->body->getWorldTransform().getOrigin();
-		glm::vec3 oPos = glm::vec3(oBPos.x(), oBPos.y(), oBPos.z());
-
-		// get o's bullet model matrix
-		glm::mat4 oRot = glm::toMat4(oOrient);
-		glm::mat4 oTrans = glm::translate(glm::mat4(1.0f), oPos);
-		glm::mat4 oMM = oTrans *oRot;
+		glm::mat4 oMM = o->meshTransform->getCumulativeModelMatrix();
 		 
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM))){
@@ -426,6 +402,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
 			Log::warn(s.str());
 			return false;
+			_obj->translatePhysical(-_pos, true);
 		}
 	}
 
@@ -585,6 +562,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->createRigidBody(0);
 	wall->body->getWorldTransform().setRotation(btQuaternion(btVector3(0.f, 1.f, 0.f), glm::radians(angle)));
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
+	wall->realign();
 	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
 	boundaries.push_back(wall);
 
