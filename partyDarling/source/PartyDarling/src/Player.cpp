@@ -57,7 +57,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	sprintSpeed = 6.0f;
 
 	// player set-up
-	playerRad = 0.5f;
+	playerRad = 0.25f;
 	playerHeight = 1.5f;
 	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
@@ -210,7 +210,7 @@ void Player::update(Step * _step){
 			}
 		}if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			if(isGrounded){
-				this->body->applyCentralImpulse(btVector3(0.0f,4.f,0.0f));
+				this->body->applyCentralImpulse(btVector3(0.0f,5.f,0.0f));
 				jumpSound->play();
 				jumpTime = _step->time;
 			}
@@ -340,7 +340,7 @@ void Player::update(Step * _step){
 
 	//get player position
 	const btVector3 & b = this->body->getWorldTransform().getOrigin();
-	float rayRange = playerHeight * 1.25f;
+	float rayRange = playerHeight * 0.9f;
 	btVector3 rayEnd = b + btVector3(0,-1,0)*rayRange;
 	btCollisionWorld::ClosestRayResultCallback GroundRayCallback(b, rayEnd);
 	world->world->rayTest(b, rayEnd, GroundRayCallback);
@@ -352,6 +352,8 @@ void Player::update(Step * _step){
 		jumpTime += _step->time - jumpTime;
 	}
 	playerCamera->firstParent()->translate(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z(), false);
+
+	//std::cout << isGrounded << std::endl;
 
 	NodeBulletBody::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);

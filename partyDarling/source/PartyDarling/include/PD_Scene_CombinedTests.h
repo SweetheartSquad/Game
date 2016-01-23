@@ -19,9 +19,11 @@
 
 #include <PD_Character.h>
 
+class PointLight;
+class RampTexture;
+
 class PD_Scene_CombinedTests : public Scene{
 public:
-	ComponentShaderBase * shader;
 	ComponentShaderBase * toonShader;
 
 	virtual void update(Step * _step) override;
@@ -48,6 +50,10 @@ public:
 	NodeBulletBody * currentHoverTarget;
 
 	Player * player;
+	PointLight * playerLight;
+	RampTexture * toonRamp;
+	glm::vec3 lightStart;
+	glm::vec3 lightEnd;
 
 	PD_Scene_CombinedTests(PD_Game * _game);
 	~PD_Scene_CombinedTests();
