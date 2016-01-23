@@ -183,7 +183,11 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		Scenario * scenario = PD_ResourceManager::scenario;
 		PD_Listing * listing = PD_Listing::listings[PD_ResourceManager::scenario];
 		Person * character = listing->characters[characterName.str()];
-		character->state = &character->definition->states.at(stateName.str());
+		if(character == nullptr){
+			Log::warn("Character not found in state change event");
+		}else{
+			character->state = &character->definition->states.at(stateName.str());
+		}
 	});
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
