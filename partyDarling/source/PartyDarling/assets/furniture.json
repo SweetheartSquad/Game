@@ -198,6 +198,9 @@
         }, 
         {
             "src": "furnitureTypes/table.json"
+        },
+		{
+            "src": "furnitureTypes/loveseat.json"
         }
     ]
 }
