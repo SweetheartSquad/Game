@@ -120,6 +120,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->close();
 		uiLayer.removeMouseIndicator();
+		player->enable();
 
 		// replace the crosshair texture with the item texture
 		crosshairIndicator->background->mesh->replaceTextures(uiInventory->getSelected()->mesh->textures.at(0));
@@ -404,9 +405,11 @@ void PD_Scene_CombinedTests::update(Step * _step){
 		if(uiInventory->isVisible()){
 			uiInventory->close();
 			uiLayer.removeMouseIndicator();
+			player->enable();
 		}else{
 			uiInventory->open();
 			uiLayer.addMouseIndicator();
+			player->disable();
 		}
 	}
 
