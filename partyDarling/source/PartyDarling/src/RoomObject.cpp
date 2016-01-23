@@ -63,7 +63,7 @@ void RoomObject::setShader(Shader * _shader, bool _default){
 }
 
 void RoomObject::translatePhysical(glm::vec3 _v, bool _relative){
-	setTranslationPhysical(_v, _relative);
+	BulletMeshEntity::translatePhysical(_v, _relative);
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->translatePhysical(_v, _relative);
 	}

@@ -163,7 +163,7 @@ Room * RoomBuilder::getRoom(){
 	bulletFloor->meshTransform->scale(-fullL, fullW, 1.f);
 	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletFloor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletFloor->setTranslationPhysical(room->getCenter());
+	bulletFloor->translatePhysical(room->getCenter(), false);
 	bulletFloor->mesh->setScaleMode(GL_NEAREST);
 	bulletFloor->mesh->pushTexture2D(getFloorTex());
 #ifndef RG_DEBUG
@@ -182,7 +182,7 @@ Room * RoomBuilder::getRoom(){
 	bulletCeil->meshTransform->scale(-fullL, fullW, -1.f);
 	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	bulletCeil->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletCeil->setTranslationPhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0));
+	bulletCeil->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	bulletCeil->mesh->setScaleMode(GL_NEAREST);
 	bulletCeil->mesh->pushTexture2D(getCeilTex());
 #ifndef RG_DEBUG

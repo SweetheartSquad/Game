@@ -26,7 +26,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	setColliderAsBoundingBox();
 	createRigidBody(0);
 
-	setTranslationPhysical(0, ITEM_POS_Y, 0);
+	translatePhysical(glm::vec3(0, ITEM_POS_Y, 0), false);
 
 	boundingBox.depth = boundingBox.width;
 }

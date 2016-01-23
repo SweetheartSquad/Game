@@ -268,16 +268,16 @@ PD_TestScene::PD_TestScene(Game * _game) :
 
 	{
 		PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->getConversation("test1")->conversation, bulletWorld, this);
-	childTransform->addChild(butt);
-	butt->setTranslationPhysical(-2, 1, 1, true);
+		childTransform->addChild(butt);
+		butt->translatePhysical(glm::vec3(-2, 1, 1), true);
 	}
 
 	{
 		PD_TalkToButton * butt = new PD_TalkToButton(PD_ResourceManager::scenario->getConversation("test2")->conversation, bulletWorld, this);
-	childTransform->addChild(butt);
-	butt->setTranslationPhysical(2, 4, -2, true);
-	butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
-	butt->parents.at(0)->scale(0.1);
+		childTransform->addChild(butt);
+		butt->translatePhysical(glm::vec3(2, 4, -2), true);
+		butt->parents.at(0)->rotate(45, 1, 1, 0, kOBJECT);
+		butt->parents.at(0)->scale(0.1);
 	}
 	/*
 

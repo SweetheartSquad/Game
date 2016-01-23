@@ -215,7 +215,7 @@ void PD_Scene_InteractionTest::update(Step * _step){
 			// figure out where to put the item
 			glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
 			targetPos.y = 0; // always put stuff on the ground
-			item->setTranslationPhysical(targetPos, false);
+			item->translatePhysical(targetPos, false);
 			// rotate the item to face the camera
 			item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
 		}

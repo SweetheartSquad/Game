@@ -356,6 +356,7 @@ void Player::update(Step * _step){
 	//std::cout << isGrounded << std::endl;
 
 	NodeBulletBody::update(_step);
+	Entity::update(_step);
 	glmLastVelocityXZ = glm::vec2(glmCurVelocityXZ);
 	
 }

@@ -55,5 +55,5 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	setColliderAsBoundingBox();
 	createRigidBody(0);
 	
-	setTranslationPhysical(0, mesh->calcBoundingBox().height * 0.5f, 0.f);
+	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);
 }
