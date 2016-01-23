@@ -13,6 +13,7 @@
 #include <NumberUtils.h>
 #include <OpenAlSound.h>
 #include <AutoMusic.h>
+#include <PD_Scene_MainMenu.h>
 
 
 void PD_Game::addSplashes(){
@@ -20,11 +21,13 @@ void PD_Game::addSplashes(){
 }
 
 PD_Game::PD_Game() :
-	Game("test", new PD_Scene_CombinedTests(this), true),
+	Game("test", new PD_Scene_MainMenu(this), true),
 	bgmTrack(nullptr),
 	fightTrack(nullptr)
 {
 	printFPS = false;
+
+	scenes["game"] = new PD_Scene_CombinedTests(this);
 
 	playBGM();
 }

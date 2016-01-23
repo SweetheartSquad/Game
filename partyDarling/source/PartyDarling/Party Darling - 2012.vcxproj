@@ -35,6 +35,7 @@
     <ClInclude Include="include\PD_Scene_CombinedTests.h" />
     <ClInclude Include="include\PD_Scene_FurnitureTest.h" />
     <ClInclude Include="include\PD_Scene_InteractionTest.h" />
+    <ClInclude Include="include\PD_Scene_MainMenu.h" />
     <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_Scene_YellingContestTest.h" />
     <ClInclude Include="include\PD_TalkToButton.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
+    <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
     <ClInclude Include="include\Player.h" />
@@ -77,6 +79,7 @@
     <ClCompile Include="src\PD_Scene_CombinedTests.cpp" />
     <ClCompile Include="src\PD_Scene_FurnitureTest.cpp" />
     <ClCompile Include="src\PD_Scene_InteractionTest.cpp" />
+    <ClCompile Include="src\PD_Scene_MainMenu.cpp" />
     <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_Scene_YellingContestTest.cpp" />
     <ClCompile Include="src\PD_TalkToButton.cpp" />
@@ -86,6 +89,7 @@
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
+    <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_YellingContest.cpp" />
     <ClCompile Include="src\Player.cpp" />

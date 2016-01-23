@@ -14,6 +14,13 @@
       "category": "music"
     },
 
+    {
+      "id":"main-menu-font",
+      "type":"font",
+      "src":"DobkinPlain.ttf",
+      "size":60
+    },
+
 
     // player sound effects
     
@@ -34,6 +41,13 @@
       "type": "audio",
       "src": "fall.ogg",
       "category": "sfx"
+    },
+
+    // Main Menu Textures
+    {
+      "id":"main-menu-background-1",
+      "type":"texture",
+      "src":"menu/main-menu-01.png"
     },
 
 
