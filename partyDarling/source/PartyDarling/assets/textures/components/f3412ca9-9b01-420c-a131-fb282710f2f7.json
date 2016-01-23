@@ -1,0 +1,65 @@
+{
+    "joints": {
+        "components": [
+            {
+                "components": [
+                    {
+                        "id": "Hand",
+                        "in": [
+                            0.780105,
+                            0.826718
+                        ],
+                        "out": [
+                            [
+                                0.144678,
+                                0.219062,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": "56"
+                    }
+                ],
+                "id": "Lower Arm",
+                "in": [
+                    0.314023,
+                    0.896
+                ],
+                "out": [
+                    [
+                        0.656112,
+                        0.032564,
+                        "ANY"
+                    ]
+                ],
+                "texture": "55"
+            }
+        ],
+        "id": "Upper Arm",
+        "in": [
+            0.848692,
+            0.900638
+        ],
+        "out": [
+            [
+                0.433248,
+                0.120863,
+                "ANY"
+            ]
+        ],
+        "texture": "54"
+    },
+    "textures": [
+        {
+            "component":"Upper Arm",
+            "id":"54"
+        },
+        {
+             "component":"Lower Arm",
+            "id":"55"
+        },
+        {
+             "component":"Hand",
+            "id":"56"
+        }
+    ]
+}
