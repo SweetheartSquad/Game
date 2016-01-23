@@ -26,7 +26,7 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-	playBGM();
+	//playBGM();
 }
 
 PD_Game::~PD_Game(){

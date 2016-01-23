@@ -1,50 +1,50 @@
 {
    "components": [
                 {
-                    "componentType": "couch_Side_Base", 
+                    "componentTypes": ["couch_side_base"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentType": "couch_Side_Back", 
+                            "componentTypes": ["couch_side_back"], 
                             "multiplier": 1, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         }, 
                         {
-                            "componentType": "couchLeg", 
+                            "componentTypes": ["couch_leg"], 
                             "multiplier": 2, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         },
 						{
-                            "componentType": "couch_ArmRest", 
+                            "componentTypes": ["couch_armrest"], 
                             "multiplier": 1, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         },
 						{
-                            "componentType": "couch_Side_Base", 
+                            "componentTypes": ["couch_side_base"], 
                             "multiplier": 1, 
                             "outComponents": [
 										{
-											"componentType": "couch_Side_Back", 
+											"componentTypes": ["couch_side_back"], 
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,
 											"scale": [-1.0,1.0,1.0]
 										}, 
 										{
-											"componentType": "couchLeg", 
+											"componentTypes": ["couch_leg"], 
 											"multiplier": 2, 
 											"outComponents": [], 
 											"required": true,
 											"scale": [1.0,1.0,1.0]
 										},
 										{
-											"componentType": "couch_ArmRest", 
+											"componentTypes": ["couch_armrest"], 
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,

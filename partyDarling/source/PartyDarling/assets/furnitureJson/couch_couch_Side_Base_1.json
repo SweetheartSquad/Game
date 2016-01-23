@@ -50,7 +50,7 @@
         }, 
         {
             "componentTypes": [
-                "couchleg"
+                "couch_leg"
             ], 
             "out": [
                 {
