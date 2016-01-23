@@ -63,8 +63,10 @@ private:
 	TextArea * enemyBubbleText;
 
 	NodeUI * playerBubble;
+	HorizontalLinearLayout * playerBubbleLayout;
 	TextArea * playerBubbleText;
 
+	HorizontalLinearLayout * playerBubbleOptions;
 	PD_InsultButton * pBubbleBtn1;
 	PD_InsultButton * pBubbleBtn2;
 
