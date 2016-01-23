@@ -42,13 +42,16 @@
 #include <OpenALSound.h>
 
 #include <NumberUtils.h>
+#include <Timeout.h>
 
 Player::Player(BulletWorld * _bulletWorld) : 
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
 	joystick(nullptr),
-	jumpTime(0.0)
+	jumpTime(0.0),
+	camOffset(0),
+	shakeIntensity(0.3f)
 {
 	//init movement vars
 	playerSpeed = 0.1f;
@@ -121,6 +124,13 @@ Player::Player(BulletWorld * _bulletWorld) :
 	playerCamera->alignMouse();
 
 	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
+
+	shakeTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		camOffset = glm::vec3(0);
+	});
+	shakeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		camOffset = glm::vec3(sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity), sweet::NumberUtils::randomFloat(-shakeIntensity, shakeIntensity)) * (1.f - _event->getFloatData("progress"));
+	});
 };
 
 Player::~Player(){

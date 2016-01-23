@@ -144,7 +144,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		player->enable();
 	});
 
-	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->defaultFont->font, uiBubble->textShader, uiLayer.shader);
+	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader, uiLayer.shader);
 	uiLayer.addChild(uiYellingContest);
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);

@@ -106,7 +106,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		ComponentShaderText * textShader = new ComponentShaderText(true);
 		textShader->load();
 
-		itemName = new TextLabel(world, PD_ResourceManager::scenario->defaultFont->font, textShader, 1.f);
+		itemName = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader, 1.f);
 		itemName->setText("test");
 		itemName->setRationalWidth(1.f);
 
@@ -117,7 +117,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
-		itemDescription = new TextArea(world, PD_ResourceManager::scenario->defaultFont->font, textShader, 1.f);
+		itemDescription = new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader, 1.f);
 		itemDescription->setText("test");
 		itemDescription->setRationalWidth(1.f);
 		itemDescription->verticalAlignment = kTOP;

@@ -7,7 +7,7 @@
 Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textShader) :
 	NodeUI_NineSliced(_world, _tex)
 {
-	label = new TextLabel(world, PD_ResourceManager::scenario->defaultFont->font, _textShader);
+	label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	setBorder(15.f);
 	setWidth(350);
