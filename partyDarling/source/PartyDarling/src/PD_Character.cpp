@@ -241,7 +241,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 }
 
 PersonRenderer::~PersonRenderer(){
-	delete paletteTex;
+	//delete paletteTex;
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){

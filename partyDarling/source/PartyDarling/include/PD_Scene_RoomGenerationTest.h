@@ -40,4 +40,6 @@ public:
 
 	PD_Scene_RoomGenerationTest(Game * _game);
 	~PD_Scene_RoomGenerationTest();
+
+	std::vector<glm::vec3> getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB);
 };

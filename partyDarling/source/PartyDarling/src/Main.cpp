@@ -20,6 +20,32 @@
 #endif
 
 int main(void){
+
+	//  Against
+	sweet::Box a1 = sweet::Box(0, 0, 0, 1, 1, 1);
+	sweet::Box a2 = sweet::Box(-1, 0, 0, 1, 1, 1);
+	bool a = a1.intersects(a2);
+
+	// Corner intersection
+	sweet::Box b1 = sweet::Box(0, 0, 0, 1, 1, 1);
+	sweet::Box b2 = sweet::Box(0.5, 0, 0.5, 1, 1, 1);
+	bool b = b1.intersects(b2);
+
+	// Totaly inside
+	sweet::Box c1 = sweet::Box(0, 0, 0, 1, 1, 1);
+	sweet::Box c2 = sweet::Box(0.25, 0, 0.25, 0.5, 0.5, 0.5);
+	bool c = c1.intersects(c2);
+
+	// No collision
+	sweet::Box d1 = sweet::Box(0, 0, 0, 1, 1, 1);
+	sweet::Box d2 = sweet::Box(-1.5, 0, 0, 1, 1, 1);
+	bool d = d1.intersects(d2);
+	
+	std::stringstream s;
+	s << "Against Edge = " << a << " Corner Intersection = " << b << " Completely Inside = " << c << " Completely Left = " << d;
+
+	//Log::info(s.str());
+
 #ifdef _DEBUG
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
