@@ -49,6 +49,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContaner->verticalAlignment = kMIDDLE;
 	textContaner->setVisible(true);
 	textContaner->setMarginTop(270);
+	textContaner->setMarginLeft(100);
 
 	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world,
 		menuFont,
@@ -100,8 +101,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContaner->addChild(callNightText);
 	
 	mainContainer->addChild(textContaner);
+	
 	uiLayer.addChild(mainContainer);
 	mainContainer->invalidateLayout();
+
 	textContaner->firstParent()->rotate(10, 0, 0, 1, kOBJECT);
 }
 
