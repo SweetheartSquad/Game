@@ -1,7 +1,7 @@
 {
    "components": [
                 {
-                    "componentType": "couch_Base", 
+                    "componentType": "couch_Side_Base", 
                     "multiplier": 1, 
                     "outComponents": [
                         {
@@ -26,7 +26,7 @@
 							"scale": [1.0,1.0,1.0]
                         },
 						{
-                            "componentType": "couch_Base", 
+                            "componentType": "couch_Side_Base", 
                             "multiplier": 1, 
                             "outComponents": [
 										{
@@ -34,7 +34,7 @@
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,
-											"scale": [1.0,1.0,1.0]
+											"scale": [-1.0,1.0,1.0]
 										}, 
 										{
 											"componentType": "couchLeg", 
@@ -48,11 +48,11 @@
 											"multiplier": 1, 
 											"outComponents": [], 
 											"required": true,
-											"scale": [1.0,1.0,1.0]
+											"scale": [-1.0,1.0,1.0]
 										}
 							], 
                             "required": true,
-							"scale": [1.0,1.0,1.0]
+							"scale": [-1.0,1.0,1.0]
                         }
                     ], 
                     "required": true,
