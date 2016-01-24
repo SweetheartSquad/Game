@@ -37,5 +37,6 @@
 					}
             ], 
             "type": "loveseat",
-			"mass": 60
+			"mass": 80,
+            "detailedCollider": false
         }

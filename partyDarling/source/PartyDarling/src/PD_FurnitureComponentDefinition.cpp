@@ -25,7 +25,7 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 
 PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	_scale *= scale;
-
+	
 	PD_BuildResult res;
 	// Get a component for the component type - ex : Leg, Seat, Etc
 	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
@@ -123,7 +123,6 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	Transform t;
 	t.scale(scale);
 	res.mesh->applyTransformation(&t);
-
 	_scale /= scale;
 
 	return res;
