@@ -56,6 +56,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		textShaderJoinParty,
 		400, 60);
 
+	joinPartyText->horizontalAlignment = kCENTER;
 	joinPartyText->setText("Join the party");
 	joinPartyText->setMouseEnabled(true);
 
@@ -71,12 +72,11 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		textShaderOptions,
 		400, 60);
 
+	optionsText->horizontalAlignment = kCENTER;
 	optionsText->setText("Options");
 	optionsText->setMouseEnabled(true);
-
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-
 	optionsText->setMarginTop(50);
 
 	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world,
@@ -87,6 +87,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->onClick = [this](sweet::Event * _event){
 		game->exit();		
 	}; 
+
+	callNightText->horizontalAlignment = kCENTER;
 
 	callNightText->setText("Call it a night");
 	callNightText->setMouseEnabled(true);
