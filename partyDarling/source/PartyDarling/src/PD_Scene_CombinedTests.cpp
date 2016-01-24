@@ -217,8 +217,9 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
 		player->disable();
-		transitionTarget = 0;
-		
+		transition = 0.f;
+		transitionTarget = 1.f;
+
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
@@ -232,7 +233,36 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		childTransform->addChild(t, false);
 
 		PD_ResourceManager::scenario->eventManager.listeners.clear();
+
+		
+		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
+		checkForGlError(0,__FILE__,__LINE__);
+		if(test != -1){
+			glUniform1i(test, 0);
+			checkForGlError(0,__FILE__,__LINE__);
+		}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
+		checkForGlError(0,__FILE__,__LINE__);
+		if(test != -1){
+			glUniform1f(test, 1);
+			checkForGlError(0,__FILE__,__LINE__);
+		}
 	});
+
+
+
+	
+	screenSurfaceShader->bindShader();
+	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
+	checkForGlError(0,__FILE__,__LINE__);
+	if(test != -1){
+		glUniform1i(test, 1);
+		checkForGlError(0,__FILE__,__LINE__);
+	}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
+	checkForGlError(0,__FILE__,__LINE__);
+	if(test != -1){
+		glUniform1f(test, 1);
+		checkForGlError(0,__FILE__,__LINE__);
+	}
 }
 
 PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
