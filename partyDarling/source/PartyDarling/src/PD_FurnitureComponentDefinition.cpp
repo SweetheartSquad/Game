@@ -34,8 +34,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	// copy the component mesh (we don't want to directly edit it since it's re-used for other furniture)
 	res.mesh = new TriMesh();
 	if(component->mesh != nullptr){
-		res.mesh->vertices.insert(res.mesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
-		res.mesh->indices.insert(res.mesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+		res.mesh->insertVertices(component->mesh);
 	}
 
 	res.collider = new btCompoundShape();
