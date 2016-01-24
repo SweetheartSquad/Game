@@ -380,6 +380,8 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 									// run item pickup triggers
 									item->triggerPickup();
+
+									uiBubble->clear();
 								});
 							}else{
 								uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
