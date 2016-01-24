@@ -32,6 +32,7 @@
     <ClInclude Include="include/Room.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src/Character.cpp" />
@@ -56,6 +57,12 @@
     <ClCompile Include="src/PD_TestScene.cpp" />
     <ClCompile Include="src/Room.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Party Darling - 2013.aps" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Party Darling - 2013.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
@@ -152,11 +159,11 @@ copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
