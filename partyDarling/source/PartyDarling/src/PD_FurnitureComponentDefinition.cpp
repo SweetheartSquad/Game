@@ -24,14 +24,16 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 }
 
 TriMesh * PD_FurnitureComponentDefinition::build(){
+	TriMesh * res = new TriMesh();
+	
 	// Get a component for the component type - ex : Leg, Seat, Etc
 	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
 	PD_FurnitureComponent * component = PD_ResourceManager::furnitureComponents->getComponentForType(type);
 
-	TriMesh * res = new TriMesh();
-	res->vertices.insert(res->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
-	res->indices.insert(res->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
-
+	if(component->mesh != nullptr){
+		res->vertices.insert(res->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
+		res->indices.insert(res->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+	}
 	for(auto outComponent : outComponents){
 		// we always build the child components which are required
 		// but randomize whether we build non-required components
