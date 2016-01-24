@@ -270,6 +270,11 @@
       "src": "yelling contest/lose.png"
     },
 
+	{
+      "id": "YELLING-CONTEST-INTERJECT",
+      "type": "texture",
+      "src": "yelling contest/interject.png"
+    },
 
 
 
