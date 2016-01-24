@@ -67,5 +67,9 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 		}
 	}
 
+	Transform t;
+	t.scale(scale);
+	res->applyTransformation(&t);
+
 	return res;
 }
