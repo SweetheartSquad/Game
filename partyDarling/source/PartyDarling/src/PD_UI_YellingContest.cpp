@@ -535,6 +535,7 @@ void PD_UI_YellingContest::startNewFight(){
 	}
 	isComplete = false;
 
+	interjected = false;
 	interjectBubble->setVisible(false);
 	setUIMode(false);
 	enable();
