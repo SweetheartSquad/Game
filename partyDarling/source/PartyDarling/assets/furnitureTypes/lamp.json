@@ -12,15 +12,15 @@
                                     "componentTypes": ["lampshade"], 
                                     "multiplier": 1,
                                     "required": true,
-									"scale": [1.0,1.0,1.0]
+									"scale": [1.0,0.5,1.0]
                                 }
                             ], 
                             "required": true,
-							"scale": [1.0,1.0,1.0]
+							"scale": [1.0,2.0,1.0]
                         }
                     ], 
                     "required": true,
-					"scale": [1.0,1.0,1.0]
+					"scale": [2.0,2.0,2.0]
                 }
             ], 
             "type": "lamp"
