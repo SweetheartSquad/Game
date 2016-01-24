@@ -1,4 +1,4 @@
-newmtl initialShadingGroup
+newmtl lamp_lampBase_3_initialShadingGroup
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
