@@ -47,14 +47,14 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 				duplicateTempMesh->vertices.insert(duplicateTempMesh->vertices.end(), tempMesh->vertices.begin(), tempMesh->vertices.end());
 				duplicateTempMesh->indices.insert(duplicateTempMesh->indices.end(), tempMesh->indices.begin(), tempMesh->indices.end());
 
-				MeshEntity * tempMeshEntity = new MeshEntity(duplicateTempMesh);
 				// translate and scale the temporary mesh to match this components definition
-				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentTypes].at(i).position);
-				tempMeshEntity->meshTransform->scale(component->connectors[outComponent->componentTypes].at(i).scale/* * outComponent->scale*/);
-				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
-				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
-				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
-				tempMeshEntity->freezeTransformation();
+				Transform t;
+				t.translate(component->connectors[outComponent->componentTypes].at(i).position);
+				t.scale(component->connectors[outComponent->componentTypes].at(i).scale/* * outComponent->scale*/);
+				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
+				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
+				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
+				duplicateTempMesh->applyTransformation(&t);
 
 				// transfer the temporary mesh verts
 				res->insertVertices(duplicateTempMesh);
