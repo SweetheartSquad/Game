@@ -16,8 +16,10 @@
 #include <regex>
 
 #define BORDER_SIZE 60.f
-#define FAIL_INSULT "recordScratch"
-#define PASSED_INSULT_TIME_LIMIT "recordScratch"
+
+#define FAIL_INSULT	"glassBreak"
+#define PASSED_INSULT_TIME_LIMIT "glassBreak"
+#define INTERJECT "recordScratch"
 
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
@@ -700,6 +702,8 @@ void PD_UI_YellingContest::interject(){
 		// Play sound effect for missing
 		auto sound = missInterjectSounds.pop();
 		sound->play();
+	}else {
+		PD_ResourceManager::scenario->getAudio(INTERJECT)->sound->play();
 	}
 
 	eventManager.triggerEvent(e);
