@@ -82,6 +82,13 @@ private:
 
 	SliderControlled * playerTimerSlider;
 
+	Sprite * interjectBubble;
+	bool interjected; // interjected successfully
+	float interjectBubbleTimerBaseLength;
+	float interjectBubbleTimerLength;
+	float interjectBubbleTimer;
+	float interjectBubbleScale;
+
 	Shader * shader;
 
 	float baseCursorDelayLength;

@@ -37,6 +37,11 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
+	interjectBubble(new Sprite(_shader)),
+	interjected(false),
+	interjectBubbleTimerBaseLength(1.f),
+	interjectBubbleTimerLength(1.f),
+	interjectBubbleTimer(0.f),
 	confidence(50.f),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
@@ -46,7 +51,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerResultEffective(false),
 	playerResultTimerLength(1.5f),
 	playerResultTimer(0.f),
-	damage(20.f),
+	damage(10.f),
 	shader(_shader),
 	highlightedPunctuation(nullptr),
 	prevHighlightedPunctuation(nullptr),
@@ -266,9 +271,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverContainer = new VerticalLinearLayout(_bulletWorld);
 	gameOverContainer->horizontalAlignment = kCENTER;
 	gameOverContainer->verticalAlignment = kMIDDLE;
-	gameOverContainer->setRationalWidth(0.5f);
-	gameOverContainer->setRationalHeight(0.4f);
-	gameOverContainer->setBackgroundColour(0.5, 0.5, 1.f);
+	gameOverContainer->setRationalWidth(0.8f);
+	gameOverContainer->setRationalHeight(0.85f);
 
 	gameOverImage = new NodeUI(_bulletWorld);
 	gameOverImage->setRationalWidth(0.5f);
@@ -276,8 +280,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
 	gameOverContainer->addChild(gameOverImage);
 	// don't add the container until yelling contest is over
-
-
+	
 	healthContainer->addChild(livesContainer);
 	healthContainer->addChild(confidenceSlider);
 
@@ -288,6 +291,19 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	
 	addChild(healthContainer);
 	addChild(gameContainer);
+
+	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
+	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
+	interjectBubble->meshTransform->scale(0, 0, 0);
+	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
+	interjectBubble->setVisible(false);
+
+	// move the interject bubble's mesh up so that the origin is aligned with the bottom
+	for (unsigned long int i = 0; i < interjectBubble->mesh->vertices.size(); ++i){
+		interjectBubble->mesh->vertices.at(i).x += 0.5f;
+		interjectBubble->mesh->vertices.at(i).y += 0.5f;
+	}
+	childTransform->addChild(interjectBubble);
 
 	// disable and hide by default
 	disable();
@@ -317,82 +333,110 @@ void PD_UI_YellingContest::update(Step * _step){
 			}
 
 			if(!modeOffensive){
-				// INTERJECT
-				interjectTimer += _step->getDeltaTime();
-				// Cursor
-				if(glyphIdx < glyphs.size()){
-					glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
-					float w = glyphs.at(glyphIdx)->getWidth();
-
-					glm::vec3 screenPos1 = screenPos;
-					glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
-			
-					cursorDelayDuration += _step->getDeltaTime();
-
-					if(cursorDelayDuration < cursorDelayLength){
-						float dx = screenPos2.x - screenPos1.x;
-						float dy = screenPos2.y - screenPos1.y;
-						float tx = Easing::linear(cursorDelayDuration, screenPos1.x, dx, cursorDelayLength);
-						float ty = Easing::linear(cursorDelayDuration, screenPos1.y, dy, cursorDelayLength);
-						enemyCursor->childTransform->translate(tx, ty, 0, false);
+				// update interject bubble
+				if(interjectBubble->isVisible()){
+					if(interjectBubbleTimer >= interjectBubbleTimerLength){
+						// hide bubble
+						interjectBubble->setVisible(false);
+						if(interjected){
+							// Switch to player turn
+							interjected = false;
+							setUIMode(true);
+						}
 					}else{
-						// Get next glyph
+						interjectBubbleTimer += _step->getDeltaTime();
 
-						// Find next punctuation
-						if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
-							sweet::Event * e = new sweet::Event("miss");
-							eventManager.triggerEvent(e);
-
-							prevHighlightedPunctuation = highlightedPunctuation;
-							highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
-						}
-
-						if(highlightedWordEnd != nullptr && glyphs.at(glyphIdx) == highlightedWordEnd){
-							highlightNextWord(glyphIdx+1);
-						}
-
-						++glyphIdx;
-						cursorDelayDuration = 0;
-
-						if(glyphIdx < glyphs.size()){
-							cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
-							/*
-							std::wstringstream s;
-							s << glyphs.at(glyphIdx)->character;
-							selectedGlyphText->setText(s.str());
-							*/
-							// play sound
-							OpenAL_Sound * s = PD_ResourceManager::scenario->getAudio("DEFAULT")->sound;
-							s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
-							s->play();
+						float s = 0.f;
+						// animate bubble
+						if(!interjected){
+							s = interjectBubbleTimer / interjectBubbleTimerLength <= 0.5 ? Easing::easeOutCubic(interjectBubbleTimer, 0, interjectBubbleScale, interjectBubbleTimerLength * 0.5f) : Easing::easeInCubic(interjectBubbleTimer - interjectBubbleTimerLength * 0.5f, interjectBubbleScale, -interjectBubbleScale, interjectBubbleTimerLength * 0.5f);
 						}else{
-							// Enemy's insult effective!
-							incrementConfidence(-damage);
-							setEnemyText();
+							s = interjectBubbleTimer / interjectBubbleTimerLength <= 0.7 ? Easing::easeOutElastic(interjectBubbleTimer, 0, interjectBubbleScale, interjectBubbleTimerLength * 0.7f) : Easing::easeInBack(interjectBubbleTimer - interjectBubbleTimerLength * 0.7f, interjectBubbleScale, -interjectBubbleScale, interjectBubbleTimerLength * 0.3f);
 						}
+						interjectBubble->meshTransform->scale(s, s, 1, false);
 					}
-			
 				}
 
-				// Punctuation Highlight
-				if(highlightedPunctuation != nullptr){
-					glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
-					// text label
-					glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
-					pos = glm::vec3(mm* glm::vec4(pos, 1));
+				// update enemy turn
+				if(!interjected){
+					// INTERJECT
+					interjectTimer += _step->getDeltaTime();
+					// Cursor
+					if(glyphIdx < glyphs.size()){
+						glm::vec3 screenPos = glyphs.at(glyphIdx)->childTransform->getWorldPos();
+						float w = glyphs.at(glyphIdx)->getWidth();
+
+						glm::vec3 screenPos1 = screenPos;
+						glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
+			
+						cursorDelayDuration += _step->getDeltaTime();
+
+						if(cursorDelayDuration < cursorDelayLength){
+							float dx = screenPos2.x - screenPos1.x;
+							float dy = screenPos2.y - screenPos1.y;
+							float tx = Easing::linear(cursorDelayDuration, screenPos1.x, dx, cursorDelayLength);
+							float ty = Easing::linear(cursorDelayDuration, screenPos1.y, dy, cursorDelayLength);
+							enemyCursor->childTransform->translate(tx, ty, 0, false);
+						}else{
+							// Get next glyph
+
+							// Find next punctuation
+							if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
+								sweet::Event * e = new sweet::Event("miss");
+								eventManager.triggerEvent(e);
+
+								prevHighlightedPunctuation = highlightedPunctuation;
+								highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
+							}
+
+							if(highlightedWordEnd != nullptr && glyphs.at(glyphIdx) == highlightedWordEnd){
+								highlightNextWord(glyphIdx+1);
+							}
+
+							++glyphIdx;
+							cursorDelayDuration = 0;
+
+							if(glyphIdx < glyphs.size()){
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+								/*
+								std::wstringstream s;
+								s << glyphs.at(glyphIdx)->character;
+								selectedGlyphText->setText(s.str());
+								*/
+								// play sound
+								OpenAL_Sound * s = PD_ResourceManager::scenario->getAudio("DEFAULT")->sound;
+								s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
+								s->play();
+							}else{
+								// Enemy's insult effective!
+								incrementConfidence(-damage);
+								setEnemyText();
+							}
+						}
+			
+					}
+
+					// Punctuation Highlight
+					if(highlightedPunctuation != nullptr){
+						glm::vec3 pos = highlightedPunctuation->firstParent()->getTranslationVector();
+						// text label
+						glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
+						pos = glm::vec3(mm* glm::vec4(pos, 1));
 					
-					punctuationHighlight->childTransform->translate(pos, false);
+						punctuationHighlight->childTransform->translate(pos, false);
+					}
+
+					// Word Highlight
+					if(highlightedWordStart != nullptr){
+						glm::vec3 pos = highlightedWordStart->firstParent()->getTranslationVector();
+						// text label
+						glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
+						pos = glm::vec3(mm* glm::vec4(pos, 1));
+			
+						wordHighlight->childTransform->translate(pos, false);
+					}
 				}
 
-				// Word Highlight
-				if(highlightedWordStart != nullptr){
-					glm::vec3 pos = highlightedWordStart->firstParent()->getTranslationVector();
-					// text label
-					glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
-					pos = glm::vec3(mm* glm::vec4(pos, 1));
-			
-					wordHighlight->childTransform->translate(pos, false);
-				}
 			}else{
 				// INSULT
 				if(playerQuestionTimer >= playerQuestionTimerLength){
@@ -483,6 +527,7 @@ void PD_UI_YellingContest::startNewFight(){
 
 		addChild(gameContainer);
 		childTransform->addChild(enemyCursor->firstParent(), false);
+		interjectBubble->setVisible(true);
 		
 		win = false;
 		isGameOver = false;
@@ -490,6 +535,7 @@ void PD_UI_YellingContest::startNewFight(){
 	}
 	isComplete = false;
 
+	interjectBubble->setVisible(false);
 	setUIMode(false);
 	enable();
 }
@@ -504,6 +550,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 
 	removeChild(gameContainer);
 	childTransform->removeChild(enemyCursor->firstParent());
+	interjectBubble->setVisible(false);
 
 	if(_win){
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
@@ -605,6 +652,7 @@ void PD_UI_YellingContest::enable(){
 }
 
 void PD_UI_YellingContest::interject(){
+	// Determine Success
 	bool isPunctuation = false;
 	if(glyphs.size() > 0 && glyphIdx < glyphs.size()){
 		UIGlyph * g = glyphs.at(glyphIdx);
@@ -619,18 +667,28 @@ void PD_UI_YellingContest::interject(){
 	}else{
 		isPunctuation = true;
 	}
+
+	// Get User Test data
 	countButtonPresses(isPunctuation, false);
 	countInterjectAccuracy(interjectTimer);
 
+	// Get interject bubble animation ready
+	interjectBubbleTimerLength = interjectBubbleTimerBaseLength * (isPunctuation ? 1.f : 0.25);
+	interjectBubbleTimer = 0.f;
+	interjectBubbleScale = isPunctuation ? 1.f : 0.4f;
+	interjectBubble->meshTransform->scale(0, 0, 0, false);
+	interjectBubble->setVisible(true);
+
+	// Add/Remove confidence
 	incrementConfidence(isPunctuation ? damage : -damage);
 
+	// Trigger interject event
 	sweet::Event * e = new sweet::Event("interject");
 	e->setIntData("success", isPunctuation);
 	eventManager.triggerEvent(e);
 
-	if(isPunctuation){
-		setUIMode(isPunctuation);
-	}
+	// Set flag if interjectionn was successful
+	interjected = isPunctuation;
 }
 
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
