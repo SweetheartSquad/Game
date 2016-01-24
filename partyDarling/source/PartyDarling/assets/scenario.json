@@ -107,13 +107,18 @@
       "src":"slap9.ogg",
       "category":"sfx"
     },
-      {
+    {
       "id":"slap10",
       "type":"audio",
       "src":"slap10.ogg",
       "category":"sfx"
     },
-     
+    {
+      "id":"glassBreak",
+      "type":"audio",
+      "src":"glassBreak.ogg",
+      "category":"sfx"
+    }, 
 
     // player sound effects
     
