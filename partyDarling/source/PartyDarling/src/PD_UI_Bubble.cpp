@@ -10,7 +10,7 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 	label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	setBorder(15.f);
-	setWidth(350);
+	setWidth(1000);
 	setHeight(75);
 	invalidateLayout();
 
@@ -92,7 +92,7 @@ void PD_UI_Bubble::selectCurrent(){
 
 void PD_UI_Bubble::placeOptions(){
 	float verticalSpacing = 50.f;
-	float bubbleWidth = 200;
+	float bubbleWidth = 500;
 	for(unsigned long int i = 0; i < options.size(); ++i){
 		float offset = (float)i / options.size();
 		offset -= displayOffset;
