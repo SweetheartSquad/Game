@@ -15,5 +15,6 @@
 					"scale": [1.0,1.0,1.0]
                 }
             ], 
-            "type": "table"
+            "type": "table",
+			"mass": 40
         }

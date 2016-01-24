@@ -9,6 +9,8 @@
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
 
+#define FURNITURE_MASS_SCALE 0.05
+
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(), _shader, _anchor)
 {
@@ -51,7 +53,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// create the bullet stuff
 	setColliderAsBoundingBox();
-	createRigidBody(0);
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE);
 	
 	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);
 }

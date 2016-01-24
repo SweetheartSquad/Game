@@ -29,5 +29,6 @@
 					"scale": [0.1,0.1,0.1]
                 }
             ], 
-            "type": "chair"
+            "type": "chair",
+			"mass": 20
         }
