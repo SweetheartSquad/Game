@@ -26,9 +26,6 @@ public:
 	std::function<void(sweet::Event * _event)> onDown;
 
 private:
-
-	bool textColourDirty;
-
 	glm::vec3 curTextColour;
 	glm::vec3 textColour;
 	glm::vec3 overColour;

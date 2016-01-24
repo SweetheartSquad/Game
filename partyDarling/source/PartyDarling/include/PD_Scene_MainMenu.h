@@ -14,9 +14,7 @@ public:
 	RenderSurface* screenSurface;
 	StandardFrameBuffer* screenFBO;
 
-	ComponentShaderText * textShaderJoinParty;
-	ComponentShaderText * textShaderOptions;
-	ComponentShaderText * textShaderLeave;
+	ComponentShaderText * textShader;
 
 	UILayer uiLayer;
 	Font* menuFont;

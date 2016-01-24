@@ -20,9 +20,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)), 
-	textShaderJoinParty(new ComponentShaderText(true)),
-	textShaderOptions(new ComponentShaderText(true)),
-	textShaderLeave(new ComponentShaderText(true)),
+	textShader(new ComponentShaderText(true)),
 	uiLayer(0,0,0,0),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
 {
@@ -39,6 +37,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	mainContainer->horizontalAlignment = kCENTER;
 	mainContainer->verticalAlignment = kMIDDLE;
 	mainContainer->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("main-menu-background-1")->texture);
+	mainContainer->background->mesh->setScaleMode(GL_NEAREST);
 	mainContainer->setRationalWidth(1.f, &uiLayer);
 	mainContainer->setRationalHeight(1.f, &uiLayer);
 	mainContainer->setVisible(true);
@@ -48,12 +47,11 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContaner->horizontalAlignment = kCENTER;
 	textContaner->verticalAlignment = kMIDDLE;
 	textContaner->setVisible(true);
-	textContaner->setMarginTop(270);
-	textContaner->setMarginLeft(100);
+	textContaner->setMarginTop(0.25f);
 
 	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world,
 		menuFont,
-		textShaderJoinParty,
+		textShader,
 		400, 60);
 
 	joinPartyText->horizontalAlignment = kCENTER;
@@ -69,7 +67,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world,
 		menuFont,
-		textShaderOptions,
+		textShader,
 		400, 60);
 
 	optionsText->horizontalAlignment = kCENTER;
@@ -77,11 +75,11 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	optionsText->setMouseEnabled(true);
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-	optionsText->setMarginTop(50);
+	optionsText->setMarginTop(0.05f);
 
 	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world,
 		menuFont,
-		textShaderLeave,
+		textShader,
 		400, 60);
 	
 	callNightText->onClick = [this](sweet::Event * _event){
@@ -96,7 +94,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	callNightText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
-	callNightText->setMarginTop(50);
+	callNightText->setMarginTop(0.05f);
 
 	textContaner->addChild(joinPartyText);
 	textContaner->addChild(optionsText);
