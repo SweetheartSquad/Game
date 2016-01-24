@@ -52,7 +52,12 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	boundingBox = mesh->calcBoundingBox();
 
 	// create the bullet stuff
-	shape = buildResult.collider;
+	if(_def->detailedCollider){
+		shape = buildResult.collider;
+	}else{
+		delete buildResult.collider;
+		setColliderAsBoundingBox();
+	}
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE);
 	
 	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);

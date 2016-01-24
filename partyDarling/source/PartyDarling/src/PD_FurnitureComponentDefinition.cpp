@@ -31,19 +31,34 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 
 	// copy the component mesh (we don't want to directly edit it since it's re-used for other furniture)
 	res.mesh = new TriMesh();
-	res.mesh->vertices.insert(res.mesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
-	res.mesh->indices.insert(res.mesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+	if(component->mesh != nullptr){
+		res.mesh->vertices.insert(res.mesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
+		res.mesh->indices.insert(res.mesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+	}
 
 	res.collider = new btCompoundShape();
 
 	// collider for the component mesh
 	sweet::Box bb = res.mesh->calcBoundingBox();
 	btVector3 boxHalfExtents(bb.width*0.5f, bb.height*0.5f, bb.depth*0.5f);
-	btBoxShape * box = new btBoxShape(boxHalfExtents * /*btVector3(scale.x, scale.y, scale.z) * */0.15f);
+	btBoxShape * box = new btBoxShape(boxHalfExtents);
 	btTransform local;
 	local.setIdentity();
-	local.setOrigin(btVector3(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f) * /*btVector3(scale.x, scale.y, scale.z) * */-0.15f);
+	local.setOrigin(btVector3(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f)/* * btVector3(scale.x, scale.y, scale.z)*/ * 0.15f);
+	box->setLocalScaling(btVector3(scale.x, scale.y, scale.z) * 0.15f);
 	res.collider->addChildShape(local, box);
+
+	
+	/*btConvexHullShape * shape = new btConvexHullShape();
+	for (unsigned long int i = 0; i < res.mesh->vertices.size(); i++){
+		btVector3 v = btVector3(res.mesh->vertices[i].x * 0.15f, res.mesh->vertices[i].y * 0.15f, res.mesh->vertices[i].z * 0.15f);
+		static_cast<btConvexHullShape *>(shape)->addPoint(v);
+	}
+	btTransform local;
+	local.setIdentity();
+	//local.setOrigin(btVector3(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f) * btVector3(scale.x, scale.y, scale.z) * -0.15f);
+	res.collider->addChildShape(local, shape);*/
+
 
 	for(auto outComponent : outComponents){
 		// we always build the child components which are required
@@ -67,9 +82,9 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 					component->connectors[outComponent->componentTypes].at(i).position.x * component->connectors[outComponent->componentTypes].at(i).scale.x * outComponent->scale.x * 0.15f,
 					component->connectors[outComponent->componentTypes].at(i).position.y * component->connectors[outComponent->componentTypes].at(i).scale.y * outComponent->scale.y * 0.15f,
 					component->connectors[outComponent->componentTypes].at(i).position.z * component->connectors[outComponent->componentTypes].at(i).scale.z * outComponent->scale.z * 0.15f));
-				s->setLocalScaling(btVector3(component->connectors[outComponent->componentTypes].at(i).scale.x * outComponent->scale.x,
-											 component->connectors[outComponent->componentTypes].at(i).scale.y * outComponent->scale.y,
-											 component->connectors[outComponent->componentTypes].at(i).scale.z * outComponent->scale.z));
+				s->setLocalScaling(btVector3(component->connectors[outComponent->componentTypes].at(i).scale.x/* * outComponent->scale.x*/,
+											 component->connectors[outComponent->componentTypes].at(i).scale.y/* * outComponent->scale.y*/,
+											 component->connectors[outComponent->componentTypes].at(i).scale.z/* * outComponent->scale.z*/));
 				childShapeTransform.setRotation(btQuaternion(
 					component->connectors[outComponent->componentTypes].at(i).rotation.x,
 					component->connectors[outComponent->componentTypes].at(i).rotation.y,

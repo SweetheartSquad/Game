@@ -10,6 +10,7 @@ public:
 
 	std::string type;
 	float mass;
+	bool detailedCollider;
 	std::vector<PD_FurnitureComponentDefinition *> components;
 
 	explicit PD_FurnitureDefinition(Json::Value _jsonDef);

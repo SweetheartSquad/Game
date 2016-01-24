@@ -2,6 +2,8 @@
 
 #include <sweet/UI.h>
 #include <PD_InsultGenerator.h>
+#include <OpenALSound.h>
+#include <NumberUtils.h>
 
 class Shader;
 class PD_InsultButton;
@@ -82,6 +84,13 @@ private:
 
 	SliderControlled * playerTimerSlider;
 
+	Sprite * interjectBubble;
+	bool interjected; // interjected successfully
+	float interjectBubbleTimerBaseLength;
+	float interjectBubbleTimerLength;
+	float interjectBubbleTimer;
+	float interjectBubbleScale;
+
 	Shader * shader;
 
 	float baseCursorDelayLength;
@@ -117,6 +126,9 @@ private:
 	int punctuationCnt;
 	std::vector<InterjectAccuracy> interjectTimes;
 	float interjectTimer;
+
+	//Sounds
+	sweet::ShuffleVector<OpenAL_Sound *> missInterjectSounds;
 
 public:
 	

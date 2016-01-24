@@ -191,6 +191,22 @@
         {
             "id": 40, 
             "src": "furnitureJson/couch_Side_Base_2.json"
+        }, 
+        {
+            "id": 41, 
+            "src": "furnitureJson/loveseat_origin.json"
+        }, 
+        {
+            "id": 42, 
+            "src": "furnitureJson/couch_ArmRest_2.json"
+        }, 
+        {
+            "id": 43, 
+            "src": "furnitureJson/couch_Side_back_2.json"
+        }, 
+        {
+            "id": 44, 
+            "src": "furnitureJson/couch_leg_2.json"
         }
     ], 
     "furniture": [
