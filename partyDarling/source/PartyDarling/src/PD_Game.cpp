@@ -15,13 +15,20 @@
 #include <AutoMusic.h>
 #include <PD_Scene_MainMenu.h>
 
+sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
+bool PD_Game::staticInit(){
+	bgmTrackIdx.push(1);
+	bgmTrackIdx.push(2);
+	return true;
+}
+bool PD_Game::staticInitialized = staticInit();
 
 void PD_Game::addSplashes(){
 	//Game::addSplashes(); // add default splashes
 }
 
 PD_Game::PD_Game() :
-	Game("test", new PD_Scene_MainMenu(this), true),
+	Game("menu", new PD_Scene_MainMenu(this), true),
 	bgmTrack(nullptr),
 	fightTrack(nullptr)
 {
@@ -53,7 +60,7 @@ void PD_Game::playBGM(){
 		fightTrack = nullptr;
 	}
 	std::stringstream ss;
-	ss << "BGM" << sweet::NumberUtils::randomInt(1, 2);
+	ss << "BGM" << bgmTrackIdx.pop();
 
 	bgmTrack = PD_ResourceManager::scenario->getAudio(ss.str())->sound;
 	bgmTrack->play(true);

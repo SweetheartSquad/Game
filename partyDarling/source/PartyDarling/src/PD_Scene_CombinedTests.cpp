@@ -325,6 +325,11 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 	bulletWorld->update(_step);
 
+	if(keyboard->keyJustDown(GLFW_KEY_ESCAPE)){
+		game->switchScene("menu", false);
+		game->scenes["game"] = this;
+	}
+
 	if(keyboard->keyJustDown(GLFW_KEY_R)){
 		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
 	}
@@ -380,6 +385,8 @@ void PD_Scene_CombinedTests::update(Step * _step){
 
 									// run item pickup triggers
 									item->triggerPickup();
+
+									uiBubble->clear();
 								});
 							}else{
 								uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){

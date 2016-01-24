@@ -62,7 +62,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	joinPartyText->onClick = [this](sweet::Event * _event){
-		game->switchScene("game", true);		
+		game->switchScene("game", false);		
 	};
 
 	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world,
