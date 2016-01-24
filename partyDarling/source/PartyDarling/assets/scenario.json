@@ -46,6 +46,75 @@
     },
 
 
+    //Yelling Contest SFX
+    {
+      "id":"recordScratch",
+      "type":"audio",
+      "src":"recordScratch.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"slap1",
+      "type":"audio",
+      "src":"slap1.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"slap2",
+      "type":"audio",
+      "src":"slap2.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap3",
+      "type":"audio",
+      "src":"slap3.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap4",
+      "type":"audio",
+      "src":"slap4.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap5",
+      "type":"audio",
+      "src":"slap5.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap6",
+      "type":"audio",
+      "src":"slap6.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap7",
+      "type":"audio",
+      "src":"slap7.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap8",
+      "type":"audio",
+      "src":"slap8.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap9",
+      "type":"audio",
+      "src":"slap9.ogg",
+      "category":"sfx"
+    },
+      {
+      "id":"slap10",
+      "type":"audio",
+      "src":"slap10.ogg",
+      "category":"sfx"
+    },
+     
+
     // player sound effects
     
     {

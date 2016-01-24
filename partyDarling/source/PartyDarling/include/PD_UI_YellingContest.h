@@ -2,6 +2,8 @@
 
 #include <sweet/UI.h>
 #include <PD_InsultGenerator.h>
+#include <OpenALSound.h>
+#include <NumberUtils.h>
 
 class Shader;
 class PD_InsultButton;
@@ -117,6 +119,9 @@ private:
 	int punctuationCnt;
 	std::vector<InterjectAccuracy> interjectTimes;
 	float interjectTimer;
+
+	//Sounds
+	sweet::ShuffleVector<OpenAL_Sound *> missInterjectSounds;
 
 public:
 	

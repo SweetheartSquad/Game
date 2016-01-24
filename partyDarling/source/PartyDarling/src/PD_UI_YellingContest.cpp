@@ -16,6 +16,9 @@
 #include <regex>
 
 #define BORDER_SIZE 60.f
+#define FAIL_INSULT "recordScratch"
+#define PASSED_INSULT_TIME_LIMIT "recordScratch"
+
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
@@ -296,6 +299,11 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 		// Stuff!!!
 		
 	});
+
+	// Init sound vectors
+	for(unsigned long int i = 1; i < 11; ++i) {
+		missInterjectSounds.push(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
+	}
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -402,6 +410,7 @@ void PD_UI_YellingContest::update(Step * _step){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
+							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();	
 							setUIMode(false);
 						}else{
 							playerAnswerTimer += _step->getDeltaTime();
@@ -626,10 +635,13 @@ void PD_UI_YellingContest::interject(){
 
 	sweet::Event * e = new sweet::Event("interject");
 	e->setIntData("success", isPunctuation);
-	eventManager.triggerEvent(e);
-
+	eventManager.triggerEvent(e); 
 	if(isPunctuation){
 		setUIMode(isPunctuation);
+	}else {
+		// Play sound effect for missing
+		auto sound = missInterjectSounds.pop();
+		sound->play();
 	}
 }
 
@@ -712,6 +724,11 @@ void PD_UI_YellingContest::setPlayerText(){
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
+
+	if(!_isEffective) {
+		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
+	}
+
 	// Make resulting insult
 	const std::string constText = insultGenerator.playerInsult;
 	std::regex rg(insultGenerator.playerBlank);
