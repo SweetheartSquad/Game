@@ -42,12 +42,11 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 
 	// collider for the component mesh
 	sweet::Box bb = res.mesh->calcBoundingBox();
-	btVector3 boxHalfExtents(bb.width*0.5f, bb.height*0.5f, bb.depth*0.5f);
+	btVector3 boxHalfExtents(bb.width*0.5f*_scale.x, bb.height*0.5f*_scale.y, bb.depth*0.5f*_scale.z);
 	btBoxShape * box = new btBoxShape(boxHalfExtents);
 	btTransform local;
 	local.setIdentity();
 	local.setOrigin(btVector3(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f) * btVector3(_scale.x, _scale.y, _scale.z));
-	box->setLocalScaling(btVector3(_scale.x, _scale.y, _scale.z));
 	res.collider->addChildShape(local, box);
 
 	
