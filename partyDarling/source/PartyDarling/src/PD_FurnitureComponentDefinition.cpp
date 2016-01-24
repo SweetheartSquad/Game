@@ -50,7 +50,7 @@ TriMesh * PD_FurnitureComponentDefinition::build(){
 				MeshEntity * tempMeshEntity = new MeshEntity(duplicateTempMesh);
 				// translate and scale the temporary mesh to match this components definition
 				tempMeshEntity->meshTransform->translate(component->connectors[outComponent->componentTypes].at(i).position);
-				tempMeshEntity->meshTransform->scale(component->connectors[outComponent->componentTypes].at(i).scale * outComponent->scale);
+				tempMeshEntity->meshTransform->scale(component->connectors[outComponent->componentTypes].at(i).scale/* * outComponent->scale*/);
 				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
 				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
 				tempMeshEntity->meshTransform->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
