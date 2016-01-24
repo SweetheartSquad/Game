@@ -23,53 +23,86 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 	}
 }
 
-TriMesh * PD_FurnitureComponentDefinition::build(){
+PD_BuildResult PD_FurnitureComponentDefinition::build(){
+	PD_BuildResult res;
 	// Get a component for the component type - ex : Leg, Seat, Etc
 	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
 	PD_FurnitureComponent * component = PD_ResourceManager::furnitureComponents->getComponentForType(type);
 
-	TriMesh * res = new TriMesh();
-	res->vertices.insert(res->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
-	res->indices.insert(res->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+	// copy the component mesh (we don't want to directly edit it since it's re-used for other furniture)
+	res.mesh = new TriMesh();
+	res.mesh->vertices.insert(res.mesh->vertices.end(), component->mesh->vertices.begin(), component->mesh->vertices.end());
+	res.mesh->indices.insert(res.mesh->indices.end(), component->mesh->indices.begin(), component->mesh->indices.end());
+
+	res.collider = new btCompoundShape();
+
+	// collider for the component mesh
+	sweet::Box bb = res.mesh->calcBoundingBox();
+	btVector3 boxHalfExtents(bb.width*0.5f, bb.height*0.5f, bb.depth*0.5f);
+	btBoxShape * box = new btBoxShape(boxHalfExtents * /*btVector3(scale.x, scale.y, scale.z) * */0.15f);
+	btTransform local;
+	local.setIdentity();
+	local.setOrigin(btVector3(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f) * /*btVector3(scale.x, scale.y, scale.z) * */-0.15f);
+	res.collider->addChildShape(local, box);
 
 	for(auto outComponent : outComponents){
 		// we always build the child components which are required
 		// but randomize whether we build non-required components
 		if(outComponent->required || sweet::NumberUtils::randomBool()){
 			// retrieve a temporary mesh which is the combination of the outComponent and all of its child components
-			TriMesh * tempMesh = outComponent->build();
+			PD_BuildResult componentBuildResult = outComponent->build();
 
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
 
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
 				TriMesh * duplicateTempMesh = new TriMesh();
-				// copy the verts from the temporary mesh into this one
-				duplicateTempMesh->vertices.insert(duplicateTempMesh->vertices.end(), tempMesh->vertices.begin(), tempMesh->vertices.end());
-				duplicateTempMesh->indices.insert(duplicateTempMesh->indices.end(), tempMesh->indices.begin(), tempMesh->indices.end());
+				// copy the mesh verts from the build result into a temp
+				duplicateTempMesh->insertVertices(componentBuildResult.mesh);
 
+				// copy the collider from the build result into a temp
+				btCompoundShape * s = new btCompoundShape(*componentBuildResult.collider);
+				btTransform childShapeTransform;
+				childShapeTransform.setIdentity();
+				childShapeTransform.setOrigin(btVector3(
+					component->connectors[outComponent->componentTypes].at(i).position.x * component->connectors[outComponent->componentTypes].at(i).scale.x * outComponent->scale.x * 0.15f,
+					component->connectors[outComponent->componentTypes].at(i).position.y * component->connectors[outComponent->componentTypes].at(i).scale.y * outComponent->scale.y * 0.15f,
+					component->connectors[outComponent->componentTypes].at(i).position.z * component->connectors[outComponent->componentTypes].at(i).scale.z * outComponent->scale.z * 0.15f));
+				s->setLocalScaling(btVector3(component->connectors[outComponent->componentTypes].at(i).scale.x * outComponent->scale.x,
+											 component->connectors[outComponent->componentTypes].at(i).scale.y * outComponent->scale.y,
+											 component->connectors[outComponent->componentTypes].at(i).scale.z * outComponent->scale.z));
+				childShapeTransform.setRotation(btQuaternion(
+					component->connectors[outComponent->componentTypes].at(i).rotation.x,
+					component->connectors[outComponent->componentTypes].at(i).rotation.y,
+					component->connectors[outComponent->componentTypes].at(i).rotation.z));
+				res.collider->addChildShape(childShapeTransform, s);
+				
+				
 				// translate and scale the temporary mesh to match this components definition
 				Transform t;
 				t.translate(component->connectors[outComponent->componentTypes].at(i).position);
-				t.scale(component->connectors[outComponent->componentTypes].at(i).scale/* * outComponent->scale*/);
+				t.scale(component->connectors[outComponent->componentTypes].at(i).scale);
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
 				duplicateTempMesh->applyTransformation(&t);
 
 				// transfer the temporary mesh verts
-				res->insertVertices(duplicateTempMesh);
+				res.mesh->insertVertices(duplicateTempMesh);
+				
 
 				// get rid of the individual temporary mesh
 				delete duplicateTempMesh;
 			}
 			// get rid of the global temporary mesh
-			delete tempMesh;
+			delete componentBuildResult.mesh;
+			//delete componentBuildResult.collider;
 		}
 	}
 
+	// scale the combined result by this component's scale
 	Transform t;
 	t.scale(scale);
-	res->applyTransformation(&t);
+	res.mesh->applyTransformation(&t);
 
 	return res;
 }

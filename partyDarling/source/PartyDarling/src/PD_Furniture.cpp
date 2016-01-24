@@ -18,7 +18,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	assert(_def->components.size() == 1);
 
 	// build the furniture
-	TriMesh * tempMesh = _def->components.at(0)->build();
+	PD_BuildResult buildResult = _def->components.at(0)->build();
 	
 	// get a texture for the furniture type
 	std::stringstream ss;
@@ -29,10 +29,10 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	mesh->setScaleMode(GL_NEAREST);
 
 	// copy the furniture mesh into this entity's mesh
-	mesh->insertVertices(tempMesh);
+	mesh->insertVertices(buildResult.mesh);
 	
 	// delete the temporary mesh
-	delete tempMesh;
+	delete buildResult.mesh;
 	/**** Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below???? *****
 	// move all of the vertices up so that the origin is at the base of the mesh
 	float h = mesh->calcBoundingBox().height * 0.5f;
@@ -52,7 +52,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	boundingBox = mesh->calcBoundingBox();
 
 	// create the bullet stuff
-	setColliderAsBoundingBox();
+	shape = buildResult.collider;
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE);
 	
 	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);

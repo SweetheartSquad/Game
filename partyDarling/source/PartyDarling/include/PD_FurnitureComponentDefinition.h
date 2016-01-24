@@ -3,8 +3,14 @@
 #include <vector>
 #include <json/json.h>
 #include "PD_FurnitureParser.h"
+#include <BulletMeshEntity.h>
 
 class MeshEntity;
+
+struct PD_BuildResult{
+	TriMesh * mesh;
+	btCompoundShape * collider;
+};
 
 class PD_FurnitureComponentDefinition {
 public:
@@ -19,5 +25,5 @@ public:
 
 	// recusively builds this component and all of its children,
 	// returning the combined mesh
-	TriMesh * build();
+	PD_BuildResult build();
 };

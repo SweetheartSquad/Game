@@ -20,7 +20,7 @@ public:
 	int id;
 	std::string type;
 	std::string src;
-	const TriMesh * const mesh;
+	TriMesh * const mesh;
 
 	std::map<std::vector<std::string>, std::vector<PD_FurnitureConnector>> connectors; 
 
