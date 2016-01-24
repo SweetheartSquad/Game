@@ -48,7 +48,7 @@ void PD_Palette::generateRandomTable(){
 	colours[kHAIR_FILL        ] = hairRoot;
 	colours[kNOSE_FILL        ] = skinRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-60, 60), sweet::NumberUtils::randomInt(-50,50), sweet::NumberUtils::randomInt(-50,50)));
 	colours[kEYEBROWS_FILL    ] = hairRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10), sweet::NumberUtils::randomInt(-10,10)));
-	colours[kEYES_FILL        ] = Colour::getRandomFromHsvRange(glm::ivec3(0, 0, 90), glm::ivec3(360, 100, 100));
+	colours[kEYES_FILL        ] = sweet::NumberUtils::randomFloat() > 0.9f ? Colour::getRandomFromHsvRange(glm::ivec3(0, 0, 90), glm::ivec3(360, 100, 100)) : Colour::getRandomFromHsvRange(glm::ivec3(0, 0, 90), glm::ivec3(360, 10, 100));
 	colours[kPUPILS_FILL      ] = shirtRoot.hsvMod(glm::ivec3(sweet::NumberUtils::randomInt(-10, 10), sweet::NumberUtils::randomInt(-50,50), sweet::NumberUtils::randomInt(-50,50)));
 	colours[kSKIN_FILL        ] = skinRoot;
 	
