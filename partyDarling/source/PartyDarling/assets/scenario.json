@@ -31,6 +31,20 @@
       "size": 24
     },
     
+    //Enviromental SFx
+    {
+      "id":"doorOpen",
+      "type":"audio",
+      "src":"doorOpen.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"doorClose",
+      "type":"audio",
+      "src":"doorClose.ogg",
+      "category":"sfx"
+    },
+
 
     // player sound effects
     

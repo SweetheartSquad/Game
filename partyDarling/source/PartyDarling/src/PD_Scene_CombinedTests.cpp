@@ -215,7 +215,11 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		}
 	});
 
+	// Called when going through a door
 	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
+		
+		PD_ResourceManager::scenario->getAudio("doorOpen")->sound->play();
+		
 		player->disable();
 		transition = 0.f;
 		transitionTarget = 1.f;
@@ -228,6 +232,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
 			_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
 			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
 		t->start();
 		childTransform->addChild(t, false);
