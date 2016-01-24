@@ -153,14 +153,20 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		player->enable();
 	});
 	uiYellingContest->eventManager.addEventListener("interject", [this](sweet::Event * _event){
+		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
 	});
 	uiYellingContest->eventManager.addEventListener("insult", [this](sweet::Event * _event){
+		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
+	});
+	uiYellingContest->eventManager.addEventListener("miss", [this](sweet::Event * _event){
+		player->shakeIntensity = 0.1f;
+		player->shakeTimeout->restart();
 	});
 
 
