@@ -23,7 +23,9 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 	}
 }
 
-PD_BuildResult PD_FurnitureComponentDefinition::build(){
+PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
+	_scale *= scale;
+
 	PD_BuildResult res;
 	// Get a component for the component type - ex : Leg, Seat, Etc
 	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
@@ -44,8 +46,8 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 	btBoxShape * box = new btBoxShape(boxHalfExtents);
 	btTransform local;
 	local.setIdentity();
-	local.setOrigin(btVector3(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f)/* * btVector3(scale.x, scale.y, scale.z)*/ * 0.15f);
-	box->setLocalScaling(btVector3(scale.x, scale.y, scale.z) * 0.15f);
+	local.setOrigin(btVector3(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f) * btVector3(_scale.x, _scale.y, _scale.z));
+	box->setLocalScaling(btVector3(_scale.x, _scale.y, _scale.z));
 	res.collider->addChildShape(local, box);
 
 	
@@ -64,12 +66,15 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 		// we always build the child components which are required
 		// but randomize whether we build non-required components
 		if(outComponent->required || sweet::NumberUtils::randomBool()){
+			_scale *= outComponent->scale;
 			// retrieve a temporary mesh which is the combination of the outComponent and all of its child components
-			PD_BuildResult componentBuildResult = outComponent->build();
+			PD_BuildResult componentBuildResult = outComponent->build(_scale);
 
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
 
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
+				_scale *= component->connectors[outComponent->componentTypes].at(i).scale;
+
 				TriMesh * duplicateTempMesh = new TriMesh();
 				// copy the mesh verts from the build result into a temp
 				duplicateTempMesh->insertVertices(componentBuildResult.mesh);
@@ -79,12 +84,12 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 				btTransform childShapeTransform;
 				childShapeTransform.setIdentity();
 				childShapeTransform.setOrigin(btVector3(
-					component->connectors[outComponent->componentTypes].at(i).position.x * component->connectors[outComponent->componentTypes].at(i).scale.x * outComponent->scale.x * 0.15f,
-					component->connectors[outComponent->componentTypes].at(i).position.y * component->connectors[outComponent->componentTypes].at(i).scale.y * outComponent->scale.y * 0.15f,
-					component->connectors[outComponent->componentTypes].at(i).position.z * component->connectors[outComponent->componentTypes].at(i).scale.z * outComponent->scale.z * 0.15f));
-				s->setLocalScaling(btVector3(component->connectors[outComponent->componentTypes].at(i).scale.x/* * outComponent->scale.x*/,
-											 component->connectors[outComponent->componentTypes].at(i).scale.y/* * outComponent->scale.y*/,
-											 component->connectors[outComponent->componentTypes].at(i).scale.z/* * outComponent->scale.z*/));
+					component->connectors[outComponent->componentTypes].at(i).position.x * _scale.x,
+					component->connectors[outComponent->componentTypes].at(i).position.y * _scale.y,
+					component->connectors[outComponent->componentTypes].at(i).position.z * _scale.z));
+				/*s->setLocalScaling(btVector3(_scale.x,
+											 _scale.y,
+											 _scale.z));*/
 				childShapeTransform.setRotation(btQuaternion(
 					component->connectors[outComponent->componentTypes].at(i).rotation.x,
 					component->connectors[outComponent->componentTypes].at(i).rotation.y,
@@ -107,10 +112,12 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 
 				// get rid of the individual temporary mesh
 				delete duplicateTempMesh;
+				_scale /= component->connectors[outComponent->componentTypes].at(i).scale;
 			}
 			// get rid of the global temporary mesh
 			delete componentBuildResult.mesh;
 			//delete componentBuildResult.collider;
+			_scale /= outComponent->scale;
 		}
 	}
 
@@ -118,6 +125,8 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(){
 	Transform t;
 	t.scale(scale);
 	res.mesh->applyTransformation(&t);
+
+	_scale /= scale;
 
 	return res;
 }

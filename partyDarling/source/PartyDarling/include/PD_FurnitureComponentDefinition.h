@@ -25,5 +25,5 @@ public:
 
 	// recusively builds this component and all of its children,
 	// returning the combined mesh
-	PD_BuildResult build();
+	PD_BuildResult build(glm::vec3 _scale = glm::vec3(0.15f));
 };
