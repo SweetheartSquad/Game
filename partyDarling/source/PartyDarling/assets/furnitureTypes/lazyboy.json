@@ -37,5 +37,6 @@
 					"scale": [1.0,1.0,1.0]
                 }
             ], 
-            "type": "lazyboy"
+            "type": "lazyboy",
+			"mass": 60
         }

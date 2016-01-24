@@ -23,5 +23,6 @@
 					"scale": [2.0,2.0,2.0]
                 }
             ], 
-            "type": "lamp"
+            "type": "lamp",
+			"mass": 10
         }

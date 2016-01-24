@@ -59,5 +59,6 @@
 					"scale": [1.0,1.0,1.0]
                 }
             ], 
-            "type": "loveseat"
+            "type": "loveseat",
+			"mass": 80
         }
