@@ -1,13 +1,8 @@
 #pragma once
 
 #include <PD_Game.h>
-#include <PD_TestScene.h>
-#include <PD_Scene_YellingContestTest.h>
-#include <PD_Scene_FurnitureTest.h>
-#include <PD_Scene_InteractionTest.h>
 #include <PD_Scene_CombinedTests.h>
 #include <PD_Scene_RoomGenerationTest.h>
-#include <PD_Nav.h>
 #include <PD_ResourceManager.h>
 
 #include <NumberUtils.h>

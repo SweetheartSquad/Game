@@ -1,7 +1,6 @@
 #pragma once
 
 #include <PD_InsultButton.h>
-#include <PD_Scene_YellingContestTest.h>
 #include <PD_ResourceManager.h>
 
 PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _textShader, std::wstring _text) :
