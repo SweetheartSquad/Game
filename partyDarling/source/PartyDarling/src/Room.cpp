@@ -13,7 +13,7 @@
 #include <PD_TilemapGenerator.h>
 
 Room::Room(BulletWorld * _world, Shader * _shader) :
-	BulletMeshEntity(_world, new QuadMesh(), _shader),
+	BulletMeshEntity(_world, new QuadMesh(true), _shader),
 	tilemapSprite(new Sprite())
 {
 	mesh->setScaleMode(GL_NEAREST);

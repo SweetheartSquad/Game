@@ -32,7 +32,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	PD_FurnitureComponent * component = PD_ResourceManager::furnitureComponents->getComponentForType(type);
 
 	// copy the component mesh (we don't want to directly edit it since it's re-used for other furniture)
-	res.mesh = new TriMesh();
+	res.mesh = new TriMesh(true);
 	if(component->mesh != nullptr){
 		res.mesh->insertVertices(component->mesh);
 	}
@@ -73,7 +73,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
 				_scale *= component->connectors[outComponent->componentTypes].at(i).scale;
 
-				TriMesh * duplicateTempMesh = new TriMesh();
+				TriMesh * duplicateTempMesh = new TriMesh(false);
 				// copy the mesh verts from the build result into a temp
 				duplicateTempMesh->insertVertices(componentBuildResult.mesh);
 

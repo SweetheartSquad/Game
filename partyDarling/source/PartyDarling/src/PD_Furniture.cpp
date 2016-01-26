@@ -12,7 +12,7 @@
 #define FURNITURE_MASS_SCALE 0.05
 
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
-	RoomObject(_bulletWorld, new TriMesh(), _shader, _anchor)
+	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
 	// make sure that there's only one root
 	assert(_def->components.size() == 1);

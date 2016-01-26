@@ -548,7 +548,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	// Positions are unrotated
 	// Normals are rotated face-normal
 	// U is extended to allow repeating; V is standard
-	QuadMesh * wallMesh = new QuadMesh();
+	QuadMesh * wallMesh = new QuadMesh(true);
 	wallMesh->pushVert(Vertex(-halfW, H, 0.f));
 	wallMesh->pushVert(Vertex(-halfW, 0.f, 0.f));
 	wallMesh->pushVert(Vertex(halfW, 0.f, 0.f));
@@ -573,7 +573,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	boundaries.push_back(wall);
 
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
-	QuadMesh tempMesh;
+	QuadMesh tempMesh(false);
 	tempMesh.insertVertices(wallMesh);
 	// transform verts
 	Transform t;

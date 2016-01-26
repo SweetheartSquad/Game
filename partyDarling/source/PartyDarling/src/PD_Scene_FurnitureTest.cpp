@@ -46,7 +46,7 @@ PD_Scene_FurnitureTest::PD_Scene_FurnitureTest(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 
-	MeshInterface * lamp = Resource::loadMeshFromObj("assets/meshes/LOD_2/lamp_LOD_2.obj").at(0);
+	MeshInterface * lamp = Resource::loadMeshFromObj("assets/meshes/LOD_2/lamp_LOD_2.obj", true).at(0);
 	lamp->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);
 	MeshEntity * meshEntity = new MeshEntity(lamp, shader);
 
