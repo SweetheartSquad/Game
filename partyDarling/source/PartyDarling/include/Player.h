@@ -82,9 +82,6 @@ private:
 	float lastYVel;
 	float currentYVel;
 
-
-	glm::vec2 glmLastVelocityXZ;
-	glm::vec2 glmCurVelocityXZ;
 	const float playerHeight;
 	const float playerRad;
 
@@ -100,16 +97,19 @@ public:
 	float shakeIntensity;
 	Timeout * shakeTimeout;
 
+	// base player speed
 	float playerSpeed;
-	float mass;
-	float initSpeed;
+	// sprint multiplier (cumulative with playerSpeed)
 	float sprintSpeed;
+	// impulse applied upwards when jumping
+	float jumpSpeed;
+	float mass;
 
 	Player(BulletWorld * bulletWorld);
 	~Player();
 
-	glm::vec3 getPlayerLinearVelocity();
-	glm::vec3 getPlayerPosition();
+	glm::vec3 getLinearVelocity() const;
+	glm::vec3 getPosition() const;
 
 	virtual void update(Step * _step) override;
 
