@@ -82,11 +82,11 @@ private:
 	float lastYVel;
 	float currentYVel;
 
-	float playerHeight;
-	float playerRad;
 
 	glm::vec2 glmLastVelocityXZ;
 	glm::vec2 glmCurVelocityXZ;
+	const float playerHeight;
+	const float playerRad;
 
 	glm::vec3 lastPos;
 

@@ -52,16 +52,17 @@ Player::Player(BulletWorld * _bulletWorld) :
 	jumpTime(0.0),
 	camOffset(0),
 	shakeIntensity(0.3f)
+	// collider
+	playerRad(0.25f),
+	playerHeight(1.5f),
+	mass(1.f)
 {
 	//init movement vars
 	playerSpeed = 0.1f;
-	mass = 1.f;
 	initSpeed = 3.0f;
 	sprintSpeed = 6.0f;
 
 	// player set-up
-	playerRad = 0.25f;
-	playerHeight = 1.5f;
 	this->setColliderAsCapsule(playerRad, playerHeight);
 	this->createRigidBody(1);
 	this->body->setFriction(1);
