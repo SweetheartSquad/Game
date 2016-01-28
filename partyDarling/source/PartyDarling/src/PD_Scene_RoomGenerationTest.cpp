@@ -66,7 +66,6 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	debugCam->parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	debugCam->yaw = 90.0f;
 	debugCam->pitch = -10.0f;
-	debugCam->speed = 1;
 	activeCamera = debugCam;
 
 	uiLayer.addMouseIndicator();
@@ -238,25 +237,6 @@ void PD_Scene_RoomGenerationTest::update(Step * _step){
 		}
 	}
 	
-	
-	float speed = 1;
-	MousePerspectiveCamera * cam = dynamic_cast<MousePerspectiveCamera *>(activeCamera);
-	if(cam != nullptr){
-		speed = cam->speed;
-	}
-	// camera controls
-	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
-	}
-	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
-	}
 
 	Scene::update(_step);
 

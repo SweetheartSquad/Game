@@ -116,12 +116,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	playerCamera->interpolation = 0.8f;
 	playerCamera->farClip = 1000.f;
 	playerCamera->nearClip = 0.1f;
-	playerCamera->childTransform->rotate(90, 0, 1, 0, kWORLD);
 	playerCamera->yaw = 90.0f;
 	playerCamera->pitch = 0.0f;
-	playerCamera->speed = 1;
-
-	playerCamera->alignMouse();
 
 	glm::vec2 glmLastVelocityXZ = glm::vec2(0,0);
 
@@ -280,40 +276,30 @@ void Player::update(Step * _step){
 				if(glmCurVelocityMagXZ<12){
 					if(bobbleInterpolation<2.0f && glmCurVelocityMagXZ >= 1.0f){
 						bobbleInterpolation += 0.1f;
-					}
-					else if(glmCurVelocityMagXZ < 1.0f){
+					}else if(glmCurVelocityMagXZ < 1.0f){
 						bobbleInterpolation = 0.f;
 					}
 			
-						this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
-						//std::cout << "1" << std::endl;
-					}
+					this->body->applyCentralImpulse(btVector3(sprintXSpeed+movement.x, movement.y*50, sprintZSpeed+movement.z));
+					//std::cout << "1" << std::endl;
 				}
-			else{
+			}else{
 				this->body->applyCentralImpulse(btVector3(jumpXSpeed, movement.y*50, jumpZSpeed));
 			}
-			}
-			else if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT))
-			{ 
-				if(isGrounded)
-				{
-					if(glmCurVelocityMagXZ<8)
-					{
-						if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
-							bobbleInterpolation += 0.1f;
+		}else if(!keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){ 
+			if(isGrounded){
+				if(glmCurVelocityMagXZ<8){
+					if(bobbleInterpolation<1.0f && glmCurVelocityMagXZ >= 1.0f){
+						bobbleInterpolation += 0.1f;
 			
-						}else if(glmCurVelocityMagXZ < 1.0f){
-							bobbleInterpolation = 0.f;
-						}
-							//std::cout << "3" << std::endl;
-							this->body->applyCentralImpulse(btVector3(initXSpeed+movement.x, movement.y*50, initZSpeed+movement.z));
-						
+					}else if(glmCurVelocityMagXZ < 1.0f){
+						bobbleInterpolation = 0.f;
 					}
 				}
-				else{
+			}else{
 				this->body->applyCentralImpulse(btVector3(jumpXSpeed, movement.y*50, jumpZSpeed));
 			}
-			}
+		}
 		if(keyboard->keyJustUp(GLFW_KEY_LEFT_SHIFT)||keyboard->keyJustDown(GLFW_KEY_SPACE)){
 
 			this->body->applyCentralImpulse(btVector3(normCurvelocityXZ.x*glmCurVelocityMagXZ*-0.3, 0, normCurvelocityXZ.y*glmCurVelocityMagXZ*-0.3));
@@ -321,24 +307,19 @@ void Player::update(Step * _step){
 		}
 		
 		
-			if(glm::dot(normMovementXZ,normCurvelocityXZ) < 0.7)
-			{
-				this->body->applyCentralImpulse(btVector3(glmCurVelocityXZ.x*-.5f,0,glmCurVelocityXZ.y*-.5f));
-				this->body->applyCentralImpulse(btVector3(movementXZ.x*.5f,0,movementXZ.y*.5f));
-			}
+		if(glm::dot(normMovementXZ,normCurvelocityXZ) < 0.7){
+			this->body->applyCentralImpulse(btVector3(glmCurVelocityXZ.x*-.5f,0,glmCurVelocityXZ.y*-.5f));
+			this->body->applyCentralImpulse(btVector3(movementXZ.x*.5f,0,movementXZ.y*.5f));
 		}
-
-
-	//If the player is not moving
-	else if(movementMag <= 0){
+	}else if(movementMag <= 0){
+		//If the player is not moving
 		//float slideVal = 10.0f;
 		this->body->activate(true);
 		//slow down body by applying force in opposite direction of its velocity
 		this->body->applyCentralImpulse(btVector3(xVelocity*-0.2f,0,zVelocity*-0.2f));
 		if(bobbleInterpolation > 0){
 			bobbleInterpolation -= 0.1f;
-		}
-		else{
+		}else{
 			bobbleInterpolation = 0.f;
 		}
 		
@@ -386,12 +367,14 @@ glm::vec3 Player::getPlayerLinearVelocity(){
 
 void Player::enable(){
 	enabled = true;
-	playerCamera->enable();
+	playerCamera->controller->movementEnabled = true;
+	playerCamera->controller->rotationEnabled = true;
 }
 
 void Player::disable(){
 	enabled = false;
-	playerCamera->disable();
+	playerCamera->controller->movementEnabled = false;
+	playerCamera->controller->rotationEnabled = false;
 }
 
 bool Player::isEnabled(){
