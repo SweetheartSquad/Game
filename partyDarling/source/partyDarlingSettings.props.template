@@ -9,6 +9,8 @@
 		<BOX2D_DIR>C:\Users\Cat\Documents\dev\Box2D-2.3.1\Box2D</BOX2D_DIR>
 		<BULLET_DIR>C:\Users\Cat\Documents\dev\Bullet-2.83-alpha</BULLET_DIR>
 		<FREETYPE_DIR>C:\Users\Cat\Documents\dev\freetype-2.5.5</FREETYPE_DIR>
+    <ANT_DIR>C:\Users\Cat\Documents\dev\AntTweakBar</ANT_DIR>
+    <OVR_DIR>C:\Users\Cat\Documents\dev\LibOVR</OVR_DIR>
 		<CPPREST_DIR>C:\Users\Cat\Documents\dev\RestCpp</CPPREST_DIR>
 		<ENGINE_DIR>C:\Users\Cat\Documents\GitHub\STengine2\S-Tengine2\S-Tengine2</ENGINE_DIR>
 	</PropertyGroup>
