@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PD_Game.h>
-#include <PD_Scene_CombinedTests.h>
+#include <PD_Scene_Main.h>
 #include <PD_Scene_RoomGenerationTest.h>
 #include <PD_ResourceManager.h>
 
@@ -29,7 +29,7 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-	scenes["game"] = new PD_Scene_CombinedTests(this);
+	scenes["game"] = new PD_Scene_Main(this);
 
 	playBGM();
 }

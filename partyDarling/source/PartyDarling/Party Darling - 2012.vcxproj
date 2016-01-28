@@ -31,7 +31,7 @@
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Palette.h" />
     <ClInclude Include="include\PD_ResourceManager.h" />
-    <ClInclude Include="include\PD_Scene_CombinedTests.h" />
+    <ClInclude Include="include\PD_Scene_Main.h" />
     <ClInclude Include="include\PD_Scene_MainMenu.h" />
     <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
@@ -70,7 +70,7 @@
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />
     <ClCompile Include="src\PD_ResourceManager.cpp" />
-    <ClCompile Include="src\PD_Scene_CombinedTests.cpp" />
+    <ClCompile Include="src\PD_Scene_Main.cpp" />
     <ClCompile Include="src\PD_Scene_MainMenu.cpp" />
     <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />

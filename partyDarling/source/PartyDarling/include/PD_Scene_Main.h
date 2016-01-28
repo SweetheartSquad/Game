@@ -24,7 +24,7 @@
 class PointLight;
 class RampTexture;
 
-class PD_Scene_CombinedTests : public Scene{
+class PD_Scene_Main : public Scene{
 public:
 	ComponentShaderBase * toonShader;
 	Shader * screenSurfaceShader;
@@ -68,6 +68,6 @@ public:
 	float transitionTarget;
 	static Colour wipeColour;
 
-	PD_Scene_CombinedTests(PD_Game * _game);
-	~PD_Scene_CombinedTests();
+	PD_Scene_Main(PD_Game * _game);
+	~PD_Scene_Main();
 };

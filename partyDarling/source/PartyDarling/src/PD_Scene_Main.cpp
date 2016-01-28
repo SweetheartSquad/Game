@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PD_Scene_CombinedTests.h>
+#include <PD_Scene_Main.h>
 #include <PD_ResourceManager.h>
 #include <PD_Assets.h>
 #include <Resource.h>
@@ -35,9 +35,9 @@
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
 
-Colour PD_Scene_CombinedTests::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
+Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
-PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
+PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
 	toonShader(new ComponentShaderBase(false)),
 	uiLayer(0,0,0,0),
@@ -230,7 +230,7 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
 			std::stringstream ss;
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-			_game->scenes[ss.str()] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game *>(_game));
+			_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
 			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
@@ -270,14 +270,14 @@ PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	}
 }
 
-PD_Scene_CombinedTests::~PD_Scene_CombinedTests(){
+PD_Scene_Main::~PD_Scene_Main(){
 	deleteChildTransform();
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
 }
 
-void PD_Scene_CombinedTests::update(Step * _step){
+void PD_Scene_Main::update(Step * _step){
 	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;
@@ -548,7 +548,7 @@ void PD_Scene_CombinedTests::update(Step * _step){
 	uiLayer.update(_step);
 }
 
-void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 		
 
@@ -565,7 +565,7 @@ void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOpt
 	screenSurface->render(screenFBO->getTextureId());
 }
 
-void PD_Scene_CombinedTests::load(){
+void PD_Scene_Main::load(){
 	Scene::load();	
 	uiLayer.load();
 	screenSurface->load();
@@ -573,7 +573,7 @@ void PD_Scene_CombinedTests::load(){
 	screenFBO->load();
 }
 
-void PD_Scene_CombinedTests::unload(){
+void PD_Scene_Main::unload(){
 	uiLayer.unload();
 	screenSurface->unload();
 	screenSurfaceShader->unload();

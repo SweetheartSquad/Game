@@ -12,7 +12,7 @@
 #include <TextArea.h>
 #include <Game.h>
 #include <PD_UI_Text.h>
-#include <PD_Scene_CombinedTests.h>
+#include <PD_Scene_Main.h>
 
 class PD_UI_Text;
 
@@ -65,7 +65,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->onClick = [this](sweet::Event * _event){
 		auto it = game->scenes.find("game");
 		if(it == game->scenes.end() || it->second == nullptr){
-			game->scenes["game"] = new PD_Scene_CombinedTests(dynamic_cast<PD_Game*>(game));
+			game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(game));
 		}
 		game->switchScene("game", false);
 		
