@@ -104,6 +104,7 @@ public:
 	// impulse applied upwards when jumping
 	float jumpSpeed;
 	float mass;
+	float maxSpeed;
 
 	Player(BulletWorld * bulletWorld);
 	~Player();

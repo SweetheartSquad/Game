@@ -69,6 +69,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	body->setAngularFactor(btVector3(0,0,0));
 	body->setLinearFactor(btVector3(1,0.9,1));
 	maxVelocity = btVector3(20,20,20);
+	maxSpeed = 12.0f;
 
 	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
@@ -194,14 +195,15 @@ void Player::update(Step * _step){
 			movement += right;
 		}
 		if(isGrounded){
-			// player has less control over movement while in the air
-			movement *= airControl;
 			// jump controls
 			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 				body->applyCentralImpulse(btVector3(0.f, jumpSpeed, 0.f));
 				jumpSound->play();
 				jumpTime = _step->time;
 			}
+		}else{
+			// player has less control over movement while in the air
+			movement *= airControl;
 		}
 	}
 
@@ -222,9 +224,11 @@ void Player::update(Step * _step){
 
 	float movementMag = glm::length(movement);
 	float glmCurVelocityMagXZ = glm::length(glmCurVelocityXZ);
-
 	// If player is moving
 	if(movementMag > FLT_EPSILON){
+		if(glmCurVelocityMagXZ <= FLT_EPSILON){
+			movement *= 10;
+		}
 
 		// randomize pitch of footsteps and play sound when the animation loops over
 		if(tweenBobbleChange && glmCurVelocityMagXZ >= 1.0f){
@@ -234,23 +238,26 @@ void Player::update(Step * _step){
 		}
 		
 		// recalculate movement speed based on intended playerSpeed and mass
-		movement = movement/movementMag * playerSpeed * mass;
+		movement *= playerSpeed * mass;
 		// if the player is running, multiply speed by a constant
-		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)){
+		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)&&isGrounded){
 			movement *= sprintSpeed;
+			maxSpeed = 15.0f;
+		}else{
+			maxSpeed = 12.0f;
 		}
 
 		body->activate(true);
 
-		if(glmCurVelocityMagXZ < 12){
+		if(glmCurVelocityMagXZ < maxSpeed){
 			if(bobbleInterpolation < 2.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
 			}else if(glmCurVelocityMagXZ < 1.0f){
 				bobbleInterpolation = 0.f;
 			}
-			
+			body->applyCentralImpulse(btVector3(movement.x, 0, movement.z));
 		}
-		body->applyCentralImpulse(btVector3(movement.x, 0, movement.z));
+		
 
 		// slows down the player when they're about to jump
 		// (there's no friction once the player is off the ground, so we slow them down beforehand to compensate)
@@ -258,19 +265,20 @@ void Player::update(Step * _step){
 			if(glmCurVelocityMagXZ > FLT_EPSILON){
 				body->applyCentralImpulse(btVector3(normCurvelocityXZ.x, 0, normCurvelocityXZ.y) * glmCurVelocityMagXZ * -0.3f);
 			}
-		}
+		}*/
 		
 		// if you aren't moving in the same direction as you are already going
-		float d =glm::dot(normMovementXZ, normCurvelocityXZ);
+		/*float d =glm::dot(normMovementXZ, normCurvelocityXZ);
 		if(d < 0.7f){
 			body->applyCentralImpulse(btVector3(curVelocity.x, 0, curVelocity.y) * -0.5f);
-			body->applyCentralImpulse(btVector3(movement.x, 0, movement.y) * 0.5f);
+			//body->applyCentralImpulse(btVector3(movement.x, 0, movement.y) * 1.f);
 		}*/
 	}else{
 		//If the player is not moving
 		body->activate(true);
 		//slow down body by applying force in opposite direction of its velocity
-		//body->applyCentralImpulse(btVector3(curVelocity.x, 0, curVelocity.z) * -0.2f);
+		glm::vec3 v = getLinearVelocity();
+		body->applyCentralImpulse(btVector3(v.x, 0, v.z) * -0.5f);
 		if(bobbleInterpolation > 0){
 			bobbleInterpolation -= 0.1f;
 		}else{
