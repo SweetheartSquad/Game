@@ -126,16 +126,18 @@ void PD_Scene_MainMenu::update(Step* _step) {
 
 void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-	screenFBO->bindFrameBuffer();
+	
+
+	FrameBufferInterface::pushFbo(screenFBO);
 	
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
+	uiLayer.render(_matrixStack, _renderOptions);
 	
-	screenSurface->render(screenFBO->getTextureId());
+	FrameBufferInterface::popFbo();
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
