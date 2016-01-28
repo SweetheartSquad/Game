@@ -35,7 +35,7 @@
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
 
-Colour PD_Scene_CombinedTests::wipeColour(glm::ivec3(0));
+Colour PD_Scene_CombinedTests::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_CombinedTests::PD_Scene_CombinedTests(PD_Game * _game) :
 	Scene(_game),
@@ -549,18 +549,20 @@ void PD_Scene_CombinedTests::update(Step * _step){
 }
 
 void PD_Scene_CombinedTests::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-	
+		
+
+	FrameBufferInterface::pushFbo(screenFBO);
+
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
-		FrameBufferInterface::pushFbo(screenFBO);
-
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 	
-		FrameBufferInterface::popFbo();
+	FrameBufferInterface::popFbo();
 
+
+	screenSurface->render(screenFBO->getTextureId());
 }
 
 void PD_Scene_CombinedTests::load(){

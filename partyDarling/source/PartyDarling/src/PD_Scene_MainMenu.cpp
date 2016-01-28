@@ -144,7 +144,8 @@ void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* 
 	
 	FrameBufferInterface::popFbo();
 
-	uiLayer.render(_matrixStack, _renderOptions);
+
+	screenSurface->render(screenFBO->getTextureId());
 }
 
 void PD_Scene_MainMenu::load() {
