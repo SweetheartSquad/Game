@@ -10,7 +10,7 @@
 #include <MeshFactory.h>
 #include <RenderOptions.h>
 #include <shader/ShaderComponentTexture.h>
-
+#include <Keyboard.h>
 
 
 Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_world) {
@@ -119,13 +119,17 @@ void PD_Scene_Animation::update(Step * _step) {
 	glm::uvec2 sd = sweet::getWindowDimensions();
 
 	glm::vec3 mPos = uiLayer.mouseIndicator->firstParent()->getTranslationVector();
-	glm::vec3 pos =  glm::vec3(2.f * (mPos.x - sd.x * 0.5f), 2.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
+	glm::vec3 pos =  glm::vec3(2.f * (mPos.x - sd.x * 0.5f), 4.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
 
 	leftArmEffector->setPos(mPos, pos);
 	rightArmEffector->setPos(mPos, pos);
 	rightLegEffector->setPos(mPos, pos);
 	leftLegEffector->setPos(mPos, pos);
 	bodyEffector->setPos(mPos, pos);
+
+	if(keyboard->keyJustUp(GLFW_KEY_J)) {
+		copyJsonToClipboard();
+	}
 
 	Scene::update(_step);
 
@@ -148,4 +152,18 @@ void PD_Scene_Animation::load() {
 void PD_Scene_Animation::unload() {
 
 	Scene::unload();
+}
+
+void PD_Scene_Animation::copyJsonToClipboard() const {
+	std::stringstream json;
+	json << "{" << std::endl;
+	json << "\t" << "\"interpolation\" : LINEAR," << std::endl;
+	json << "\t" << "\"time\" : 0.0," << std::endl;
+	json << "\t" << "\"leftArm\" : [" << character->pr->solverArmL->target.x  << ", " << character->pr->solverArmL->target.y << "],"<< std::endl;
+	json << "\t" << "\"rightArm\" : [" << character->pr->solverArmR->target.x  << ", " << character->pr->solverArmR->target.y << "],"<< std::endl;
+	json << "\t" << "\"leftLeg\" : [" << character->pr->solverLegL->target.x  << ", " << character->pr->solverLegL->target.y << "],"<< std::endl;
+	json << "\t" << "\"rightLeg\" : [" << character->pr->solverLegR->target.x  << ", " << character->pr->solverLegR->target.y << "]"<< std::endl;
+	json << "\t" << "\"body\" : [" << character->pr->solverBod->target.x  << ", " << character->pr->solverBod->target.y << "]"<< std::endl;
+	json << "}" << std::endl;
+	glfwSetClipboardString(glfwGetCurrentContext(), json.str().c_str());
 }

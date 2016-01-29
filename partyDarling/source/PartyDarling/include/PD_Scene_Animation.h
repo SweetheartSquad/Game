@@ -34,6 +34,9 @@ public:
 	Effector * leftLegEffector;
 	Effector * rightLegEffector;
 	Effector * bodyEffector;
+
+	explicit PD_Scene_Animation(Game * _game);
+	~PD_Scene_Animation();
 	
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
@@ -41,8 +44,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	explicit PD_Scene_Animation(Game * _game);
-	~PD_Scene_Animation();
+	void copyJsonToClipboard() const;
 };
 
 
