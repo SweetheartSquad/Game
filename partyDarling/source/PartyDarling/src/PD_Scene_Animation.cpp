@@ -11,6 +11,42 @@
 #include <RenderOptions.h>
 #include <shader/ShaderComponentTexture.h>
 
+
+
+Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_world) {
+	solver = _solver;
+	mouseEnabled = true;
+	active = false;
+	setBackgroundColour(1, 1, 1, 1);
+	setWidth(25);
+	setHeight(25);
+
+	eventManager.addEventListener("click", [this](sweet::Event * event){
+		active = !active;
+		if(active) {
+			setBackgroundColour(1, 0, 0);
+		}else {
+			setBackgroundColour(1, 1, 1);	
+		}
+	});
+
+}
+
+void Effector::update(Step* _step) {
+	if(active) {
+		glm::uvec2 sd = sweet::getWindowDimensions();
+		
+	}
+	NodeUI::update(_step);
+}
+
+void Effector::setPos(glm::vec3 _mpos, glm::vec3 _pos) {
+	if(active) {
+		solver->target =  glm::vec2(_pos.x, _pos.y );
+		firstParent()->translate(_mpos.x - 12.5, _mpos.y - 12.5f, 0.f, false);
+	}
+}
+
 PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	Scene(_game), 
 	characterShader(new ComponentShaderBase(false)),
@@ -31,13 +67,6 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 
-	uiLayer.addMouseIndicator();
-
-	// remove initial camera
-	childTransform->removeChild(cameras.at(0)->parents.at(0));
-	delete cameras.at(0)->parents.at(0);
-	cameras.pop_back();
-
 	//Set up debug camera
 	OrthographicCamera * debugCam = new OrthographicCamera(-4, 4, -2.25, 2.25, 0.1, 1000);
 	cameras.push_back(debugCam);
@@ -51,22 +80,55 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	auto charAsset = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "2"));
 	character = new Person(bulletWorld, charAsset, MeshFactory::getPlaneMesh(3.f), characterShader);
 	character->pr->randomAnimations = false;
-	childTransform->addChild(character);
+	uiLayer.childTransform->addChild(character);
 		
 	for(auto solver : character->pr->solvers) {
 		solver->setJointsVisible(true);
 	}
 
-	character->pr->solverLegR->target.x += 200.f;
-	character->pr->solverLegL->target.x -= 200.f;
+	character->firstParent()->scale(100)->translate(sd.x * 0.5f, sd.y * 0.5f - 150.f, 0.f);
+
+	leftArmEffector = new Effector(uiLayer.world, character->pr->solverArmR);
+	uiLayer.childTransform->addChild(leftArmEffector);
+	leftArmEffector->firstParent()->translate(sd.x * 0.5f - 300, 700, 0.f, false);
+
+	rightArmEffector = new Effector(uiLayer.world, character->pr->solverArmL);
+	uiLayer.childTransform->addChild(rightArmEffector);
+	rightArmEffector->firstParent()->translate(sd.x * 0.5f + 300, 700, 0.f, false);
+
+	rightLegEffector = new Effector(uiLayer.world, character->pr->solverLegR);
+	uiLayer.childTransform->addChild(rightLegEffector);
+	rightLegEffector->firstParent()->translate(sd.x * 0.5f + 300, 200, 0.f, false);
+
+	leftLegEffector = new Effector(uiLayer.world, character->pr->solverLegL);
+	uiLayer.childTransform->addChild(leftLegEffector);
+	leftLegEffector->firstParent()->translate(sd.x * 0.5f - 300, 200, 0.f, false);
+
+	bodyEffector = new Effector(uiLayer.world, character->pr->solverBod);
+	uiLayer.childTransform->addChild(bodyEffector);
+	bodyEffector->firstParent()->translate(sd.x * 0.5f - 12.5f, sd.y * 0.5f, 0.f, false);
+
+	uiLayer.addMouseIndicator();
 }
 
 PD_Scene_Animation::~PD_Scene_Animation() {
 }
 
 void PD_Scene_Animation::update(Step * _step) {
-	Scene::update(_step);
+
 	glm::uvec2 sd = sweet::getWindowDimensions();
+
+	glm::vec3 mPos = uiLayer.mouseIndicator->firstParent()->getTranslationVector();
+	glm::vec3 pos =  glm::vec3(2.f * (mPos.x - sd.x * 0.5f), 2.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
+
+	leftArmEffector->setPos(mPos, pos);
+	rightArmEffector->setPos(mPos, pos);
+	rightLegEffector->setPos(mPos, pos);
+	leftLegEffector->setPos(mPos, pos);
+	bodyEffector->setPos(mPos, pos);
+
+	Scene::update(_step);
+
 	uiLayer.resize(0,sd.x,0,sd.y);
 	uiLayer.update(_step);
 }
