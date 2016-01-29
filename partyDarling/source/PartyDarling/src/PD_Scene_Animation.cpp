@@ -33,11 +33,6 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 
 	uiLayer.addMouseIndicator();
 
-	// remove initial camera
-	childTransform->removeChild(cameras.at(0)->parents.at(0));
-	delete cameras.at(0)->parents.at(0);
-	cameras.pop_back();
-
 	//Set up debug camera
 	OrthographicCamera * debugCam = new OrthographicCamera(-4, 4, -2.25, 2.25, 0.1, 1000);
 	cameras.push_back(debugCam);
