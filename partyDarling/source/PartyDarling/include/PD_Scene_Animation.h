@@ -5,7 +5,7 @@
 #include <UILayer.h>
 #include "PD_Assets.h"
 
-class PD_AnimationScene : public Scene {
+class PD_Scene_Animation : public Scene {
 public:
 
 	Person * character;
@@ -23,8 +23,8 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	explicit PD_AnimationScene(Game * _game);
-	~PD_AnimationScene();
+	explicit PD_Scene_Animation(Game * _game);
+	~PD_Scene_Animation();
 };
 
 
