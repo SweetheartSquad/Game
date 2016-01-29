@@ -9,7 +9,7 @@
 #include <OpenAlSound.h>
 #include <AutoMusic.h>
 #include <PD_Scene_MainMenu.h>
-#include <PD_AnimationScene.h>
+#include <PD_Scene_Animation.h>
 
 sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
 bool PD_Game::staticInit(){
@@ -30,7 +30,7 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-	scenes["game"] = new PD_AnimationScene(this);
+	scenes["game"] = new PD_Scene_Animation(this);
 
 	playBGM();
 }

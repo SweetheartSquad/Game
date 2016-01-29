@@ -11,7 +11,7 @@
 #include <RenderOptions.h>
 #include <shader/ShaderComponentTexture.h>
 
-PD_AnimationScene::PD_AnimationScene(Game* _game) :
+PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	Scene(_game), 
 	characterShader(new ComponentShaderBase(false)),
 	baseShader(new ComponentShaderBase(false)),
@@ -31,6 +31,8 @@ PD_AnimationScene::PD_AnimationScene(Game* _game) :
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 
+	uiLayer.addMouseIndicator();
+
 	// remove initial camera
 	childTransform->removeChild(cameras.at(0)->parents.at(0));
 	delete cameras.at(0)->parents.at(0);
@@ -46,37 +48,42 @@ PD_AnimationScene::PD_AnimationScene(Game* _game) :
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 
-	uiLayer.addMouseIndicator();
-
 	auto charAsset = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "2"));
 	character = new Person(bulletWorld, charAsset, MeshFactory::getPlaneMesh(3.f), characterShader);
+	character->pr->randomAnimations = false;
 	childTransform->addChild(character);
 		
 	for(auto solver : character->pr->solvers) {
 		solver->setJointsVisible(true);
 	}
+
+	character->pr->solverLegR->target.x += 200.f;
+	character->pr->solverLegL->target.x -= 200.f;
 }
 
-PD_AnimationScene::~PD_AnimationScene() {
+PD_Scene_Animation::~PD_Scene_Animation() {
 }
 
-void PD_AnimationScene::update(Step * _step) {
+void PD_Scene_Animation::update(Step * _step) {
 	Scene::update(_step);
+	glm::uvec2 sd = sweet::getWindowDimensions();
+	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer.update(_step);
 }
 
-void PD_AnimationScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
+void PD_Scene_Animation::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	_renderOptions->setClearColour(0,0,0,1);
 	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
-void PD_AnimationScene::load() {
+void PD_Scene_Animation::load() {
 
 	Scene::load();
 }
 
-void PD_AnimationScene::unload() {
+void PD_Scene_Animation::unload() {
 
 	Scene::unload();
 }

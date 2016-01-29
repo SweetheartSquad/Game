@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\PD_AnimationScene.h" />
+    <ClInclude Include="include\PD_Scene_Animation.h" />
     <ClInclude Include="include\PD_Character.h" />
     <ClInclude Include="include\DialogueDisplay.h" />
     <ClInclude Include="include\Item.h" />
@@ -50,7 +50,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\PD_AnimationScene.cpp" />
+    <ClCompile Include="src\PD_Scene_Animation.cpp" />
     <ClCompile Include="src\PD_Character.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
     <ClCompile Include="src\Item.cpp" />
