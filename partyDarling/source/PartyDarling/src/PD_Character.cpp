@@ -328,6 +328,7 @@ void PersonRenderer::update(Step * _step){
 			solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
 			solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		}*/
+
 	}
 
 
