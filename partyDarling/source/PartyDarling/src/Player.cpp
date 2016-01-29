@@ -140,7 +140,7 @@ Player::~Player(){
 
 void Player::update(Step * _step){
 	
-	//get player velocity
+	// get player velocity
 	glm::vec3 curVelocity = getLinearVelocity();
 	
 
@@ -197,7 +197,7 @@ void Player::update(Step * _step){
 		if(isGrounded){
 			// jump controls
 			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-				body->applyCentralImpulse(btVector3(0.f, jumpSpeed, 0.f));
+				applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed, 0.f));
 				jumpSound->play();
 				jumpTime = _step->time;
 			}
@@ -255,7 +255,7 @@ void Player::update(Step * _step){
 			}else if(glmCurVelocityMagXZ < 1.0f){
 				bobbleInterpolation = 0.f;
 			}
-			body->applyCentralImpulse(btVector3(movement.x, 0, movement.z));
+			applyLinearImpulseToCenter(glm::vec3(movement.x, 0, movement.z));
 		}
 		
 
@@ -278,7 +278,7 @@ void Player::update(Step * _step){
 		body->activate(true);
 		//slow down body by applying force in opposite direction of its velocity
 		glm::vec3 v = getLinearVelocity();
-		body->applyCentralImpulse(btVector3(v.x, 0, v.z) * -0.5f);
+		applyLinearImpulseToCenter(glm::vec3(v.x, 0, v.z) * -0.5f);
 		if(bobbleInterpolation > 0){
 			bobbleInterpolation -= 0.1f;
 		}else{
