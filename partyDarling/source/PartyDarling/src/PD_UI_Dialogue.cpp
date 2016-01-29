@@ -43,8 +43,11 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 }
 
 bool PD_UI_Dialogue::sayNext(){
-	invalidateLayout();
+	
+invalidateLayout();
+	
 	uiBubble->clear();
+	
 	if (ConversationIterator::sayNext()){
 		if(Dialogue * dialogue = currentConversation->getCurrentDialogue()){
 			text->setText(dialogue->getCurrentText());
@@ -64,10 +67,9 @@ bool PD_UI_Dialogue::sayNext(){
 			});
 		}
 		return true;
-	}else{
-		setVisible(false);
-		return false;
 	}
+	setVisible(false);
+	return false;
 }
 
 void PD_UI_Dialogue::startEvent(Conversation * _conversation){

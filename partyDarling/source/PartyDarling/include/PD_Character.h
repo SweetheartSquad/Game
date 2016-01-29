@@ -99,6 +99,9 @@ public:
 		* footR;
 
 	PD_Palette * paletteTex;
+
+	bool randomAnimations;
+
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();
 
@@ -115,6 +118,7 @@ public:
 
 class Person : public RoomObject {
 public:
+
 	// the character's current state
 	const PersonState * state;
 	

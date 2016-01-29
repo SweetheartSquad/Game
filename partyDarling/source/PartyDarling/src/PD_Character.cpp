@@ -101,7 +101,8 @@ PersonState::PersonState(Json::Value _json) :
 
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader) :
 	paletteTex(new PD_Palette(false)),
-	timer(0)
+	timer(0),
+	randomAnimations(true)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -294,7 +295,7 @@ void PersonRenderer::update(Step * _step){
 
 	timer += _step->deltaTime;
 
-	if(timer > 1){
+	if(randomAnimations && timer > 1){
 		timer = 0;
 		float l;
 
@@ -328,6 +329,7 @@ void PersonRenderer::update(Step * _step){
 			solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
 			solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		}*/
+
 	}
 
 
