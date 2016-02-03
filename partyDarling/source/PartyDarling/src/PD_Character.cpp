@@ -10,6 +10,7 @@
 #include <PD_Character.h>
 #include <NumberUtils.h>
 #include <PD_Palette.h>
+#include <PD_CharacterAnimationSet.h>
 
 #include <sweet/Input.h>
 
@@ -38,6 +39,7 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 	RoomObject::setShader(_shader, _configureDefault);
 	pr->setShader(_shader, _configureDefault);
 }
+
 
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
 	Sprite(_shader),
@@ -102,7 +104,9 @@ PersonState::PersonState(Json::Value _json) :
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader) :
 	paletteTex(new PD_Palette(false)),
 	timer(0),
-	randomAnimations(true)
+	randomAnimations(false),
+	animate(true),
+	currentAnimation(nullptr)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -245,6 +249,27 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 PersonRenderer::~PersonRenderer(){
 	// TODO: Prevent memory leak here without just deleting the paletteTex here
 	//delete paletteTex;
+	delete currentAnimation;
+}
+
+void PersonRenderer::setAnimation(std::string _name) {
+	
+	delete currentAnimation;
+
+	currentAnimation = new PD_CharacterAnimationSet(this);
+
+	if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
+		for(auto step : PD_ResourceManager::characterAnimations[_name]) {
+			currentAnimation->leftArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftArm, Easing::getTypeByName(step.interpolation)));
+			currentAnimation->rightArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightArm, Easing::getTypeByName(step.interpolation)));
+			currentAnimation->leftLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg, Easing::getTypeByName(step.interpolation)));
+			currentAnimation->rightLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg, Easing::getTypeByName(step.interpolation)));
+			currentAnimation->body.tweens.push_back(new Tween<glm::vec2>(step.time, step.body, Easing::getTypeByName(step.interpolation)));
+		}	
+	}else {
+		ST_LOG_ERROR("Animation " + _name + " does not exist");
+	}
+	
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
@@ -295,41 +320,45 @@ void PersonRenderer::update(Step * _step){
 
 	timer += _step->deltaTime;
 
-	if(randomAnimations && timer > 1){
-		timer = 0;
-		float l;
+	if(animate){
+		if(randomAnimations && timer > 1){
+			timer = 0;
+			float l;
 
-		l = solverArmR->getChainLength();
-		solverArmR->target.x = sweet::NumberUtils::randomFloat(-l, 0);
-		solverArmR->target.y = sweet::NumberUtils::randomFloat(-l, l);
+			l = solverArmR->getChainLength();
+			solverArmR->target.x = sweet::NumberUtils::randomFloat(-l, 0);
+			solverArmR->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		
-		l = solverArmL->getChainLength();
-		solverArmL->target.x = sweet::NumberUtils::randomFloat(l, 0);
-		solverArmL->target.y = sweet::NumberUtils::randomFloat(-l, l);
+			l = solverArmL->getChainLength();
+			solverArmL->target.x = sweet::NumberUtils::randomFloat(l, 0);
+			solverArmL->target.y = sweet::NumberUtils::randomFloat(-l, l);
 		
-		l = solverLegR->getChainLength();
-		solverLegR->target.x = sweet::NumberUtils::randomFloat(0, l*0.5);
-		solverLegR->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
+			l = solverLegR->getChainLength();
+			solverLegR->target.x = sweet::NumberUtils::randomFloat(0, l*0.5);
+			solverLegR->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
 		
-		l = solverLegL->getChainLength();
-		solverLegL->target.x = sweet::NumberUtils::randomFloat(-l*0.5, 0);
-		solverLegL->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
+			l = solverLegL->getChainLength();
+			solverLegL->target.x = sweet::NumberUtils::randomFloat(-l*0.5, 0);
+			solverLegL->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
 		
-		l = solverBod->getChainLength();
-		solverBod->target.x = sweet::NumberUtils::randomFloat(-l*0.5, l*0.5);
-		solverBod->target.y = sweet::NumberUtils::randomFloat(l*0.95, l);
+			l = solverBod->getChainLength();
+			solverBod->target.x = sweet::NumberUtils::randomFloat(-l*0.5, l*0.5);
+			solverBod->target.y = sweet::NumberUtils::randomFloat(l*0.95, l);
 
-		/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
-		solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
-		solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
-		solverBod->target = glm::vec2(0, solverBod->getChainLength());
+			/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
+			solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
+			solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
+			solverBod->target = glm::vec2(0, solverBod->getChainLength());
 		
-		for(unsigned long int s = 1; s < solvers.size(); ++s){
-			float l = solvers.at(s)->getChainLength();
-			solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
-			solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
-		}*/
+			for(unsigned long int s = 1; s < solvers.size(); ++s){
+				float l = solvers.at(s)->getChainLength();
+				solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
+				solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
+			}*/
 
+		}else if(currentAnimation != nullptr) {
+			currentAnimation->update(_step);
+		}
 	}
 
 

@@ -6,6 +6,8 @@
 #include <DatabaseConnection.h>
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureParser.h>
+#include <map>
+#include <PD_CharacterAnimationStep.h>
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -15,6 +17,7 @@ public:
 	static DatabaseConnection * db;
 	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;
+	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 
 	static void init();
 

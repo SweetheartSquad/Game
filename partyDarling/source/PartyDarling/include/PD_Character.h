@@ -13,6 +13,7 @@
 #include <IkChain.h>
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
+#include "PD_CharacterAnimationSet.h"
 
 #define CHARACTER_SCALE 0.001f
 
@@ -101,6 +102,11 @@ public:
 	PD_Palette * paletteTex;
 
 	bool randomAnimations;
+	bool animate;
+
+	PD_CharacterAnimationSet * currentAnimation;
+
+	virtual void setAnimation(std::string _name);
 
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();

@@ -32,7 +32,7 @@ Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_wo
 
 }
 
-void Effector::update(Step* _step) {
+void Effector::update(Step * _step) {
 	if(active) {
 		glm::uvec2 sd = sweet::getWindowDimensions();
 		
@@ -108,6 +108,8 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	uiLayer.childTransform->addChild(bodyEffector);
 	bodyEffector->firstParent()->translate(sd.x * 0.5f - 12.5f, sd.y * 0.5f, 0.f, false);
 
+	character->pr->setAnimation("test");
+
 	uiLayer.addMouseIndicator();
 }
 
@@ -127,8 +129,12 @@ void PD_Scene_Animation::update(Step * _step) {
 	leftLegEffector->setPos(mPos, pos);
 	bodyEffector->setPos(mPos, pos);
 
-	if(keyboard->keyJustUp(GLFW_KEY_J)) {
+	if(keyboard->keyJustUp(GLFW_KEY_D)) {
 		copyJsonToClipboard();
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_F)) {
+		character->pr->animate = !character->pr->animate; 
 	}
 
 	Scene::update(_step);

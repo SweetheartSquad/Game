@@ -1,0 +1,29 @@
+[
+	{
+		"interpolation" : "EASE_IN_OUT_ELASTIC",
+		"time" : 0.0,
+		"leftArm" : [1047.25, 0],
+		"rightArm" : [-580, 663],
+		"leftLeg" : [-868, -447],
+		"rightLeg" : [0, -1267.1],
+		"body" : [110, -167.1]
+	},
+	{
+		"interpolation" : "EASE_IN_OUT_ELASTIC",
+		"time" : 1.0,
+		"leftArm" : [0.25, 500],
+		"rightArm" : [-580, 663],
+		"leftLeg" : [-868, -447],
+		"rightLeg" : [0, -1267.1],
+		"body" : [1100, -167.1]
+	},
+	{
+		"interpolation" : "EASE_IN_OUT_ELASTIC",
+		"time" : 2.0,
+		"leftArm" : [-500, -1000],
+		"rightArm" : [-580, 663],
+		"leftLeg" : [-868, -447],
+		"rightLeg" : [0, -1267.1],
+		"body" : [110, -167.1]
+	}
+]
