@@ -2,28 +2,64 @@
 {
 	"interpolation" : "LINEAR",
 	"time" : 0,
-	"leftArm" : [596, 368],
-	"rightArm" : [-552, 416],
-	"leftLeg" : [-520, -848],
-	"rightLeg" : [772, -392],
-	"body" : [-220, 1630]
+	"leftArm" : [348, 808],
+	"rightArm" : [-404, 776],
+	"leftLeg" : [-408, -880],
+	"rightLeg" : [836, -560],
+	"body" : [4, 772]
 },
 {
 	"interpolation" : "LINEAR",
-	"time" : 1,
-	"leftArm" : [396, 1864],
-	"rightArm" : [-456, 1000],
+	"time" : 0.25,
+	"leftArm" : [152, 72],
+	"rightArm" : [-112, 40],
 	"leftLeg" : [0, 0],
 	"rightLeg" : [0, 0],
-	"body" : [140, 594]
+	"body" : [0, -450]
 },
 {
 	"interpolation" : "LINEAR",
-	"time" : 2,
+	"time" : 0.25,
+	"leftArm" : [-204, -72],
+	"rightArm" : [252, 16],
+	"leftLeg" : [0, 0],
+	"rightLeg" : [0, 0],
+	"body" : [-8, 758]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 0.25,
 	"leftArm" : [0, 0],
 	"rightArm" : [0, 0],
-	"leftLeg" : [356, -536],
-	"rightLeg" : [-228, -1184],
-	"body" : [0, -300]
+	"leftLeg" : [-76, -152],
+	"rightLeg" : [-64, -144],
+	"body" : [0, -400]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 0.25,
+	"leftArm" : [900, 248],
+	"rightArm" : [-932, 248],
+	"leftLeg" : [-388, -216],
+	"rightLeg" : [260, -368],
+	"body" : [0, -500]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 0.25,
+	"leftArm" : [0, 0],
+	"rightArm" : [0, 0],
+	"leftLeg" : [0, 0],
+	"rightLeg" : [0, 0],
+	"body" : [12, 554]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 0.25,
+	"leftArm" : [-1096, -1064],
+	"rightArm" : [1044, -640],
+	"leftLeg" : [424, 584],
+	"rightLeg" : [-388, 600],
+	"body" : [-4, 586]
 }
 ]

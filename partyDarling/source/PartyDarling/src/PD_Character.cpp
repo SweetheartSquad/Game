@@ -271,6 +271,14 @@ void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps)
 		currentAnimation->rightLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg, Easing::getTypeByName(step.interpolation)));
 		currentAnimation->body.tweens.push_back(new Tween<glm::vec2>(step.time, step.body, Easing::getTypeByName(step.interpolation)));
 	}	
+
+	if(_steps.size() > 0) {
+		solverArmL->target = glm::vec2();
+		solverArmR->target = glm::vec2();
+		solverLegL->target = glm::vec2();
+		solverLegR->target = glm::vec2();
+		solverBod->target  = glm::vec2();
+	}
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
@@ -282,7 +290,7 @@ void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, boo
 	_from->connections.push_back(_to);
 }
 
-void PersonRenderer::setShader(Shader * _shader, bool _default){
+void PersonRenderer::setShader(Shader * _shader, bool _default) const {
 	pelvis->setShader(_shader, _default);
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);

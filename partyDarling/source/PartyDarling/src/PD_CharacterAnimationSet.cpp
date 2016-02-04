@@ -15,6 +15,12 @@ PD_CharacterAnimationSet::PD_CharacterAnimationSet(PersonRenderer* _pr):
 	leftLeg.hasStart = true;
 	rightLeg.hasStart = true;
 	body.hasStart = true;
+
+	leftArm.startValue = glm::vec2();
+	rightArm.startValue = glm::vec2();
+	leftLeg.startValue = glm::vec2();
+	rightLeg.startValue = glm::vec2();
+	body.startValue = glm::vec2();
 }
 
 PD_CharacterAnimationSet::~PD_CharacterAnimationSet() {

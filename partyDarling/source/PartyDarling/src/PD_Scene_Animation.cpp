@@ -155,6 +155,15 @@ void PD_Scene_Animation::update(Step * _step) {
 		}
 	}
 
+	if(keyboard->keyJustUp(GLFW_KEY_L)) {
+		loadFromTestFile();
+		character->pr->animate = true;
+	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_M)) {
+		character->pr->animate = false;
+	}
+
 	if(keyboard->keyJustUp(GLFW_KEY_F)) {
 		character->pr->animate = !character->pr->animate; 
 	}
@@ -281,6 +290,7 @@ void PD_Scene_Animation::writeToFile() const {
 }
 
 void PD_Scene_Animation::loadFromTestFile() {
+	testSteps.clear();
 	sweet::FileUtils::createFileIfNotExists("assets/animations/test.json");
 	std::string json = sweet::FileUtils::readFile("assets/animations/test.json");
 	if(json == "") {
