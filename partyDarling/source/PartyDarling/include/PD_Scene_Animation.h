@@ -4,6 +4,19 @@
 #include <BulletDebugDrawer.h>
 #include <UILayer.h>
 #include "PD_Assets.h"
+#include <HorizontalLinearLayout.h>
+
+class PD_CharacterAnimationStep;
+
+class Keyframe : public NodeUI {
+public:
+
+	PD_CharacterAnimationStep * step;
+	Person * character;
+	
+	explicit Keyframe(BulletWorld * _world, Person * _character);
+
+};
 
 class Effector : public NodeUI {
 public:
@@ -26,6 +39,8 @@ public:
 	ComponentShaderBase * baseShader;
 	UILayer uiLayer;
 
+	HorizontalLinearLayout * keyFrameLayout;
+
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
 
@@ -34,6 +49,11 @@ public:
 	Effector * leftLegEffector;
 	Effector * rightLegEffector;
 	Effector * bodyEffector;
+
+	std::vector<PD_CharacterAnimationStep> testSteps;
+
+	std::vector<Keyframe *> keyframes;
+	Keyframe * currentKeyFrame;
 
 	explicit PD_Scene_Animation(Game * _game);
 	~PD_Scene_Animation();
@@ -44,7 +64,9 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	void copyJsonToClipboard() const;
+	void updateEffectors() const;
+	void writeToFile() const;
+	void loadFromTestFile();
 };
 
 

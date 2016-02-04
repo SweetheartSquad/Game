@@ -17,6 +17,7 @@
 
 #define CHARACTER_SCALE 0.001f
 
+class PD_CharacterAnimationStep;
 class Conversation;
 class PersonRenderer;
 class AssetCharacter;
@@ -107,6 +108,7 @@ public:
 	PD_CharacterAnimationSet * currentAnimation;
 
 	virtual void setAnimation(std::string _name);
+	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
 
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();

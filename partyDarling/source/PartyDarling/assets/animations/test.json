@@ -1,29 +1,29 @@
 [
-	{
-		"interpolation" : "EASE_IN_OUT_ELASTIC",
-		"time" : 0.0,
-		"leftArm" : [1047.25, 0],
-		"rightArm" : [-580, 663],
-		"leftLeg" : [-868, -447],
-		"rightLeg" : [0, -1267.1],
-		"body" : [110, -167.1]
-	},
-	{
-		"interpolation" : "EASE_IN_OUT_ELASTIC",
-		"time" : 1.0,
-		"leftArm" : [0.25, 500],
-		"rightArm" : [-580, 663],
-		"leftLeg" : [-868, -447],
-		"rightLeg" : [0, -1267.1],
-		"body" : [1100, -167.1]
-	},
-	{
-		"interpolation" : "EASE_IN_OUT_ELASTIC",
-		"time" : 2.0,
-		"leftArm" : [-500, -1000],
-		"rightArm" : [-580, 663],
-		"leftLeg" : [-868, -447],
-		"rightLeg" : [0, -1267.1],
-		"body" : [110, -167.1]
-	}
+{
+	"interpolation" : "LINEAR",
+	"time" : 0,
+	"leftArm" : [596, 368],
+	"rightArm" : [-552, 416],
+	"leftLeg" : [-520, -848],
+	"rightLeg" : [772, -392],
+	"body" : [-220, 1630]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 1,
+	"leftArm" : [396, 1864],
+	"rightArm" : [-456, 1000],
+	"leftLeg" : [0, 0],
+	"rightLeg" : [0, 0],
+	"body" : [140, 594]
+},
+{
+	"interpolation" : "LINEAR",
+	"time" : 2,
+	"leftArm" : [0, 0],
+	"rightArm" : [0, 0],
+	"leftLeg" : [356, -536],
+	"rightLeg" : [-228, -1184],
+	"body" : [0, -300]
+}
 ]

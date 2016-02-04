@@ -253,23 +253,24 @@ PersonRenderer::~PersonRenderer(){
 }
 
 void PersonRenderer::setAnimation(std::string _name) {
-	
-	delete currentAnimation;
-
-	currentAnimation = new PD_CharacterAnimationSet(this);
-
 	if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
-		for(auto step : PD_ResourceManager::characterAnimations[_name]) {
-			currentAnimation->leftArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftArm, Easing::getTypeByName(step.interpolation)));
-			currentAnimation->rightArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightArm, Easing::getTypeByName(step.interpolation)));
-			currentAnimation->leftLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg, Easing::getTypeByName(step.interpolation)));
-			currentAnimation->rightLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg, Easing::getTypeByName(step.interpolation)));
-			currentAnimation->body.tweens.push_back(new Tween<glm::vec2>(step.time, step.body, Easing::getTypeByName(step.interpolation)));
-		}	
+		setAnimation(PD_ResourceManager::characterAnimations[_name]);
 	}else {
 		ST_LOG_ERROR("Animation " + _name + " does not exist");
 	}
+}
+
+void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
+	delete currentAnimation;
+	currentAnimation = new PD_CharacterAnimationSet(this);
 	
+	for(auto step : _steps) {
+		currentAnimation->leftArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftArm, Easing::getTypeByName(step.interpolation)));
+		currentAnimation->rightArm.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightArm, Easing::getTypeByName(step.interpolation)));
+		currentAnimation->leftLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg, Easing::getTypeByName(step.interpolation)));
+		currentAnimation->rightLeg.tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg, Easing::getTypeByName(step.interpolation)));
+		currentAnimation->body.tweens.push_back(new Tween<glm::vec2>(step.time, step.body, Easing::getTypeByName(step.interpolation)));
+	}	
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){

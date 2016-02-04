@@ -18,4 +18,5 @@ public:
 	glm::vec2 body;
 
 	explicit PD_CharacterAnimationStep(Json::Value _jsonDef);
+	explicit PD_CharacterAnimationStep();
 };

@@ -13,6 +13,20 @@
 #include <Keyboard.h>
 
 
+Keyframe::Keyframe(BulletWorld * _bulletWorld, Person * _character) : 
+	NodeUI(_bulletWorld),
+	character(_character)
+{
+	step = new PD_CharacterAnimationStep();
+	setWidth(20.f);
+	setHeight(20.f);
+	setBackgroundColour(1.f, 0.f, 0.f);
+	setMarginRight(5.f);
+	mouseEnabled = true;
+
+	
+}
+
 Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_world) {
 	solver = _solver;
 	mouseEnabled = true;
@@ -29,7 +43,6 @@ Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_wo
 			setBackgroundColour(1, 1, 1);	
 		}
 	});
-
 }
 
 void Effector::update(Step * _step) {
@@ -53,7 +66,8 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	baseShader(new ComponentShaderBase(false)),
 	uiLayer(0, 0, 0, 0),
 	bulletWorld(new BulletWorld()),
-	debugDrawer(nullptr)
+	debugDrawer(nullptr),
+	currentKeyFrame(nullptr)
 {
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
@@ -108,9 +122,20 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	uiLayer.childTransform->addChild(bodyEffector);
 	bodyEffector->firstParent()->translate(sd.x * 0.5f - 12.5f, sd.y * 0.5f, 0.f, false);
 
-	character->pr->setAnimation("test");
+	keyFrameLayout = new HorizontalLinearLayout(uiLayer.world);
+	keyFrameLayout->setRationalWidth(1.0f, &uiLayer);
+	keyFrameLayout->setPixelHeight(20.0f);
+	keyFrameLayout->invalidateLayout();
+
+	uiLayer.addChild(keyFrameLayout);
 
 	uiLayer.addMouseIndicator();
+
+	uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+
+	character->pr->animate = false;
+	
+	loadFromTestFile();
 }
 
 PD_Scene_Animation::~PD_Scene_Animation() {
@@ -118,27 +143,77 @@ PD_Scene_Animation::~PD_Scene_Animation() {
 
 void PD_Scene_Animation::update(Step * _step) {
 
-	glm::uvec2 sd = sweet::getWindowDimensions();
-
-	glm::vec3 mPos = uiLayer.mouseIndicator->firstParent()->getTranslationVector();
-	glm::vec3 pos =  glm::vec3(2.f * (mPos.x - sd.x * 0.5f), 4.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
-
-	leftArmEffector->setPos(mPos, pos);
-	rightArmEffector->setPos(mPos, pos);
-	rightLegEffector->setPos(mPos, pos);
-	leftLegEffector->setPos(mPos, pos);
-	bodyEffector->setPos(mPos, pos);
+	updateEffectors();
 
 	if(keyboard->keyJustUp(GLFW_KEY_D)) {
-		copyJsonToClipboard();
+		if(!character->pr->animate){
+			writeToFile();
+			loadFromTestFile();
+			character->pr->animate = true;
+		}else {
+			character->pr->animate = false;
+		}
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F)) {
 		character->pr->animate = !character->pr->animate; 
 	}
 
+	if(keyboard->keyJustUp(GLFW_KEY_K)) {
+		
+		Keyframe * keyframe;
+
+		if(currentKeyFrame != nullptr){
+			currentKeyFrame->setBackgroundColour(1.f, 0.f, 0.f);
+			keyframe = currentKeyFrame;
+		}else {
+			keyframe = new Keyframe(uiLayer.world, character);
+		}			
+
+		keyframe->step->leftArm = glm::vec2(
+			character->pr->solverArmL->target.x,
+			character->pr->solverArmL->target.y);
+
+		keyframe->step->rightArm = glm::vec2(
+			character->pr->solverArmR->target.x,
+			character->pr->solverArmR->target.y);
+
+		keyframe->step->leftLeg = glm::vec2(
+			character->pr->solverLegL->target.x,
+			character->pr->solverLegL->target.y);
+
+		keyframe->step->rightLeg = glm::vec2(
+			character->pr->solverLegR->target.x,
+			character->pr->solverLegR->target.y);
+
+		keyframe->step->body = glm::vec2(
+			character->pr->solverBod->target.x,
+			character->pr->solverBod->target.y);
+		
+		keyframe->eventManager.addEventListener("click", [this, keyframe](sweet::Event * _event){
+			if(currentKeyFrame != nullptr){
+				currentKeyFrame->setBackgroundColour(1.f, 0.f, 0.f);
+			}
+			character->pr->solverArmL->target = keyframe->step->leftArm;
+			character->pr->solverArmR->target = keyframe->step->rightArm;
+			character->pr->solverLegL->target = keyframe->step->leftLeg;
+			character->pr->solverLegR->target = keyframe->step->rightLeg;
+			character->pr->solverBod->target =  keyframe->step->body;
+			currentKeyFrame = keyframe;
+			currentKeyFrame->setBackgroundColour(1.f, 1.f, 1.f);
+		});
+
+		if(currentKeyFrame == nullptr) {
+			keyframes.push_back(keyframe);
+			keyFrameLayout->addChild(keyframe);
+		}else {
+			currentKeyFrame = nullptr;
+		}
+	}
+
 	Scene::update(_step);
 
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 	uiLayer.update(_step);
 }
@@ -160,16 +235,66 @@ void PD_Scene_Animation::unload() {
 	Scene::unload();
 }
 
-void PD_Scene_Animation::copyJsonToClipboard() const {
+void PD_Scene_Animation::updateEffectors() const {
+	
+	glm::uvec2 sd = sweet::getWindowDimensions();
+
+	glm::vec3 mPos = uiLayer.mouseIndicator->firstParent()->getTranslationVector();
+	glm::vec3 pos =  glm::vec3(4.f * (mPos.x - sd.x * 0.5f), 8.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
+
+	leftArmEffector->setPos(mPos, pos);
+	rightArmEffector->setPos(mPos, pos);
+	rightLegEffector->setPos(mPos, pos);
+	leftLegEffector->setPos(mPos, pos);
+	bodyEffector->setPos(mPos, pos);
+}
+
+void PD_Scene_Animation::writeToFile() const {
+
+	PD_CharacterAnimationStep * lastStep = new PD_CharacterAnimationStep();
+
 	std::stringstream json;
-	json << "{" << std::endl;
-	json << "\t" << "\"interpolation\" : LINEAR," << std::endl;
-	json << "\t" << "\"time\" : 0.0," << std::endl;
-	json << "\t" << "\"leftArm\" : [" << character->pr->solverArmL->target.x  << ", " << character->pr->solverArmL->target.y << "],"<< std::endl;
-	json << "\t" << "\"rightArm\" : [" << character->pr->solverArmR->target.x  << ", " << character->pr->solverArmR->target.y << "],"<< std::endl;
-	json << "\t" << "\"leftLeg\" : [" << character->pr->solverLegL->target.x  << ", " << character->pr->solverLegL->target.y << "],"<< std::endl;
-	json << "\t" << "\"rightLeg\" : [" << character->pr->solverLegR->target.x  << ", " << character->pr->solverLegR->target.y << "]"<< std::endl;
-	json << "\t" << "\"body\" : [" << character->pr->solverBod->target.x  << ", " << character->pr->solverBod->target.y << "]"<< std::endl;
-	json << "}" << std::endl;
-	glfwSetClipboardString(glfwGetCurrentContext(), json.str().c_str());
+	json << "[" << std::endl;
+	float time = 0.0f;
+	for(auto key : keyframes){
+		json << "{" << std::endl;
+		json << "\t" << "\"interpolation\" : \"LINEAR\"," << std::endl;
+		json << "\t" << "\"time\" : " << time << "," << std::endl;
+		json << "\t" << "\"leftArm\" : [" << key->step->leftArm.x - lastStep->leftArm.x << ", " << key->step->leftArm.y - lastStep->leftArm.y << "],"<< std::endl;
+		json << "\t" << "\"rightArm\" : [" << key->step->rightArm.x - lastStep->rightArm.x  << ", " << key->step->rightArm.y - lastStep->rightArm.y << "],"<< std::endl;
+		json << "\t" << "\"leftLeg\" : [" << key->step->leftLeg.x - lastStep->leftLeg.x << ", " << key->step->leftLeg.y - lastStep->leftLeg.y << "],"<< std::endl;
+		json << "\t" << "\"rightLeg\" : [" << key->step->rightLeg.x - lastStep->rightLeg.x << ", " << key->step->rightLeg.y - lastStep->rightLeg.y << "],"<< std::endl;
+		json << "\t" << "\"body\" : [" << key->step->body.x - lastStep->body.x  << ", " << key->step->body.y - lastStep->body.y << "]"<< std::endl;
+		if(key == keyframes.back()){
+			json << "}" << std::endl;
+		}else {
+			json << "}," << std::endl;
+		}
+		lastStep = key->step;
+		time += 1.0f;
+	}
+	json << "]";
+
+	std::ofstream file("assets/animations/test.json");
+	file << json.str();
+	file.close();
+}
+
+void PD_Scene_Animation::loadFromTestFile() {
+	sweet::FileUtils::createFileIfNotExists("assets/animations/test.json");
+	std::string json = sweet::FileUtils::readFile("assets/animations/test.json");
+	if(json == "") {
+		json = "[]";
+	}	
+	Json::Reader reader;
+	Json::Value animStep;
+	bool parsingSuccessful = reader.parse( json, animStep );
+	if(!parsingSuccessful){
+		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+	}else{					
+		for(auto step : animStep) {
+			testSteps.push_back(PD_CharacterAnimationStep(step));	
+		}
+	}
+	character->pr->setAnimation(testSteps);
 }
