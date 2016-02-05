@@ -38,5 +38,13 @@
             ], 
             "type": "loveseat",
 			"mass": 80,
-            "detailedCollider": false
+            "detailedCollider": false,
+            "roomTypes" : ["LIVING_ROOM"],
+            "sides" : {
+                    "LEFT":"RIGHT",
+                    "RIGTH":"LEFT",
+                    "FRONT":"BACK"
+                },
+            "parents":["wall"],
+            "padding":1
         }

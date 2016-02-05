@@ -24,5 +24,17 @@
                 }
             ], 
             "type": "lamp",
-			"mass": 10
+			"mass": 10,
+            "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
+            "sides" : {
+                    "TOP":[],
+                    "LEFT":[],
+                    "RIGTH":[],
+                    "BOTTOM":[],
+                    "RIGHT":[],
+                    "FRONT":[],
+                    "BACK":[]
+                },
+            "parents":["wall", "table"],
+            "padding":0
         }

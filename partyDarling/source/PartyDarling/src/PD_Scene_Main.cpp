@@ -296,7 +296,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			ST_LOG_ERROR_V("Missing field in trigger changerOwnership")
 		}
 	});
-	
 
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");

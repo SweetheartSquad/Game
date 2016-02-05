@@ -60,5 +60,13 @@
                 }
             ], 
             "type": "loveseat",
-			"mass": 80
+			"mass": 80,
+            "roomTypes" : ["LIVING_ROOM"],
+            "sides" : {
+                    "FRONT":"BACK",
+                    "LEFT":"RIGHT",
+                    "RIGHT":"LEFT"
+                },
+            "parents":["wall"],    
+            "padding":1   
         }
