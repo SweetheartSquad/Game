@@ -59,7 +59,11 @@ Player::Player(BulletWorld * _bulletWorld) :
 	// collider
 	playerRad(0.25f),
 	playerHeight(1.5f),
-	mass(1.f)
+	mass(1.f),
+	sass(0),
+	strenth(0),
+	defense(0),
+	insight(0)
 {
 
 	// player set-up

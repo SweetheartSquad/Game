@@ -106,6 +106,11 @@ public:
 	float mass;
 	float maxSpeed;
 
+	int defense;
+	int insight;
+	int strenth;
+	int sass;
+
 	Player(BulletWorld * bulletWorld);
 	~Player();
 
