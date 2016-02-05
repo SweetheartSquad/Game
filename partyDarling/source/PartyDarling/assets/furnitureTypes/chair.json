@@ -33,13 +33,6 @@
 			"mass": 20,
             "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
             "sides" : {
-                    "TOP":[],
-                    "LEFT":[],
-                    "RIGTH":[],
-                    "BOTTOM":[],
-                    "RIGHT":[],
-                    "FRONT":[],
-                    "BACK":[]
                 },
             "parents":["wall", "table"],
             "padding":0    

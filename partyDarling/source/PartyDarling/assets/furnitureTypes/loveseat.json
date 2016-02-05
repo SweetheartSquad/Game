@@ -42,7 +42,7 @@
             "roomTypes" : ["LIVING_ROOM"],
             "sides" : {
                     "LEFT":"RIGHT",
-                    "RIGTH":"LEFT",
+                    "RIGHT":"LEFT",
                     "FRONT":"BACK"
                 },
             "parents":["wall"],
