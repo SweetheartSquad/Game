@@ -27,18 +27,20 @@ class PD_TilemapGenerator;
 
 class Room: public BulletMeshEntity {
 public:
+	std::string id;
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
 	
-	std::vector<RoomObject *> objects;
+	BulletMeshEntity * floor;
+	BulletMeshEntity * ceiling;
+	RoomObject * door;
 
 	Room(BulletWorld * _world, Shader * _shader);
 	~Room(void);
 
-	std::vector<RoomObject *> getAllComponents();
-
-	void addComponent(RoomObject *);
+	void addComponent(RoomObject * _obj);
+	void removeComponent(RoomObject * _obj);
 	virtual void setShader(Shader * _shader, bool _default) override;
 
 	void translatePhysical(glm::vec3 _v, bool _relative = false);

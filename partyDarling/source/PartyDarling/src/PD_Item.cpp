@@ -9,7 +9,7 @@
 #include <PD_ResourceManager.h>
 
 PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader, Anchor_t _anchor) :
-	RoomObject(_world, MeshFactory::getPlaneMesh(2), _shader, _anchor),
+	RoomObject(_world, MeshFactory::getPlaneMesh(), _shader, _anchor),
 	definition(_definition)
 {
 	AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(definition->texture);
@@ -18,7 +18,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	mesh->setScaleMode(GL_NEAREST);
 	//meshTransform->translate(0, tex->texture->height, 0);
 	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
-	meshTransform->scale(CHARACTER_SCALE);
+	meshTransform->scale(ITEM_SCALE, ITEM_SCALE, 1);
 	freezeTransformation();
 
 	boundingBox = mesh->calcBoundingBox();
