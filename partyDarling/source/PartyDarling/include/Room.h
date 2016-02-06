@@ -30,13 +30,9 @@ public:
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
-	
-	std::vector<RoomObject *> objects;
 
 	Room(BulletWorld * _world, Shader * _shader);
 	~Room(void);
-
-	std::vector<RoomObject *> getAllComponents();
 
 	void addComponent(RoomObject *);
 	virtual void setShader(Shader * _shader, bool _default) override;

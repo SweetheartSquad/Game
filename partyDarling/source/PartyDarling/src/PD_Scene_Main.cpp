@@ -189,10 +189,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	ss << sweet::NumberUtils::randomInt(1, 4);
 	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
 	childTransform->addChild(room);
-
-	std::vector<RoomObject *> components = room->getAllComponents();
-	for(unsigned int i = 0; i < components.size(); ++i){
-		childTransform->addChild(components.at(i));
+	
+	for(unsigned int i = 0; i < room->components.size(); ++i){
+		childTransform->addChild(room->components.at(i));
 	}
 
 

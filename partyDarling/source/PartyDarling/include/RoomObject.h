@@ -37,16 +37,7 @@ public:
 	std::map<Side_t, std::vector<Slot *>> emptySlots;
 
 	RoomObject * parent;
-	std::vector<RoomObject *> components;
 
 	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
 	~RoomObject(void);
-
-
-
-	bool addComponent(RoomObject *);
-	bool removeComponent(RoomObject *);
-	std::vector<RoomObject *> getAllComponents();
-	virtual void setShader(Shader * _shader, bool _default) override;
-	void translatePhysical(glm::vec3 _v, bool _relative = false);
 };
