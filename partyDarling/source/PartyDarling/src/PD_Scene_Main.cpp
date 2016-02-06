@@ -381,8 +381,6 @@ void PD_Scene_Main::goToNewRoom(){
 
 	
 
-
-
 	// make sure the door is up-to-date, and then place the player in front of it
 	currentRoom->door->realign();
 	glm::quat o = currentRoom->door->childTransform->getOrientationQuat();
