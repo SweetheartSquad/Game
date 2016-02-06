@@ -18,7 +18,8 @@
       "id":"main-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":60
+      "size":60,
+      "antiAliased": false
     },
 
 
@@ -28,12 +29,14 @@
       "id": "FONT",
       "type": "font",
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
-      "size": 24
+      "size": 24,
+      "antiAliased": false
     },{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
-      "size": 24
+      "size": 24,
+      "antiAliased": false
     },
     
     //Enviromental SFx
