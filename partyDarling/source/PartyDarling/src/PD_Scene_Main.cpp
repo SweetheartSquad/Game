@@ -340,17 +340,48 @@ void PD_Scene_Main::goToNewRoom(){
 		bulletWorld->world->removeRigidBody(currentRoom->body);
 		bulletWorld->world->removeRigidBody(currentRoom->floor->body);
 		bulletWorld->world->removeRigidBody(currentRoom->ceiling->body);
+
+		// save the room for later
+		PD_Listing::listings[PD_ResourceManager::scenario]->addRoom(currentRoom);
 	}
+
+
 
 	// pick a random room to load
 	std::stringstream ss;
 	ss << sweet::NumberUtils::randomInt(1, 4);
-	currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
-	childTransform->addChild(currentRoom);
 
-	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-		childTransform->addChild(currentRoom->components.at(i));
+	if(PD_Listing::listings.count(PD_ResourceManager::scenario) == 0){
+		PD_Listing::listings.insert(std::make_pair(PD_ResourceManager::scenario, new PD_Listing(PD_ResourceManager::scenario)));
 	}
+
+	auto room = PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.find(ss.str());
+	if(room != PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.end()){
+		// get the previously saved room
+		currentRoom = room->second;
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			bulletWorld->world->addRigidBody(currentRoom->components.at(i)->body);
+		}
+		bulletWorld->world->addRigidBody(currentRoom->body);
+		bulletWorld->world->addRigidBody(currentRoom->floor->body);
+		bulletWorld->world->addRigidBody(currentRoom->ceiling->body);
+		childTransform->addChild(currentRoom->firstParent(), false);
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
+		}
+	}else{
+		// build a new room
+		currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room", ss.str())), bulletWorld, toonShader, characterShader).getRoom();
+		childTransform->addChild(currentRoom);
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->addChild(currentRoom->components.at(i));
+		}
+	}
+
+
+	
+
+
 
 	// make sure the door is up-to-date, and then place the player in front of it
 	currentRoom->door->realign();
@@ -467,7 +498,7 @@ void PD_Scene_Main::update(Step * _step){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
 
-									//currentRoom->removeComponent(item);
+									currentRoom->removeComponent(item);
 
 									toDelete->firstParent()->removeChild(toDelete);
 									toDelete->removeChild(item);
@@ -562,6 +593,8 @@ void PD_Scene_Main::update(Step * _step){
 						item->translatePhysical(targetPos, false);
 						// rotate the item to face the camera
 						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+
+						currentRoom->addComponent(item);
 					}
 
 					// replace the crosshair item texture with the actual crosshair texture

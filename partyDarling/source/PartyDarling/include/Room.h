@@ -27,6 +27,7 @@ class PD_TilemapGenerator;
 
 class Room: public BulletMeshEntity {
 public:
+	std::string id;
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;

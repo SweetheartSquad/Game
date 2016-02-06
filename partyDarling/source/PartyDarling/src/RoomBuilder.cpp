@@ -133,6 +133,7 @@ RoomBuilder::~RoomBuilder(){
 
 Room * RoomBuilder::getRoom(){
 	room = new Room(world, baseShader);
+	room->id = definition->id;
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
@@ -586,11 +587,11 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
-	PD_Listing * listing = new PD_Listing(this->definition->scenario);
-
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
 	std::vector<PD_Item *> items = getItems();
+
+	PD_Listing * listing = PD_Listing::listings.at(PD_ResourceManager::scenario);
 
 	for(auto c : characters){
 		listing->addCharacter(c);
