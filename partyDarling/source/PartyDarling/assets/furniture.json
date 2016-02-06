@@ -203,6 +203,22 @@
         {
             "id": 43, 
             "src": "furnitureJson/loveseat_back_2.json"
+        }, 
+        {
+            "id": 44, 
+            "src": "furnitureJson/loveseat_sides_3.json"
+        }, 
+        {
+            "id": 45, 
+            "src": "furnitureJson/loveseat_back_3.json"
+        }, 
+        {
+            "id": 46, 
+            "src": "furnitureJson/couch_leg_3.json"
+        }, 
+        {
+            "id": 47, 
+            "src": "furnitureJson/couch_leg_4.json"
         }
     ], 
     "furniture": [

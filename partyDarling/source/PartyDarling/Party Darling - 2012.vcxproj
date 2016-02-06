@@ -95,9 +95,6 @@
   <ItemGroup>
     <None Include="Party Darling - 2012.aps" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Party Darling - 2012.rc" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
