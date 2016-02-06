@@ -255,15 +255,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1i(test, 0);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, 1);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	});
 
@@ -313,15 +313,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1i(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1f(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }
 
@@ -360,19 +360,19 @@ void PD_Scene_Main::update(Step * _step){
 		}else if(transition <= 0.001f){
 			transition = 0.f;
 		}
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "transition");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, transition);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	}
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "wipeColour");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform3f(test, wipeColour.r/255.f, wipeColour.g/255.f, wipeColour.b/255.f);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 
 
