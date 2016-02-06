@@ -185,8 +185,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lights.push_back(playerLight);
 
 
-	
-
 	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
 	
 	// Set the scenario condition implentations pointer
@@ -333,10 +331,9 @@ void PD_Scene_Main::goToNewRoom(){
 	
 	// clear out the old room's stuff
 	if(currentRoom != nullptr){
-		std::vector<RoomObject *> components = currentRoom->getAllComponents();
-		for(unsigned int i = 0; i < components.size(); ++i){
-			childTransform->removeChild(components.at(i)->firstParent());
-			bulletWorld->world->removeRigidBody(components.at(i)->body);
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
+			bulletWorld->world->removeRigidBody(currentRoom->components.at(i)->body);
 		}
 
 		childTransform->removeChild(currentRoom->firstParent());
@@ -351,9 +348,8 @@ void PD_Scene_Main::goToNewRoom(){
 	currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
 	childTransform->addChild(currentRoom);
 
-	std::vector<RoomObject *> components = currentRoom->getAllComponents();
-	for(unsigned int i = 0; i < components.size(); ++i){
-		childTransform->addChild(components.at(i));
+	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+		childTransform->addChild(currentRoom->components.at(i));
 	}
 
 	// make sure the door is up-to-date, and then place the player in front of it

@@ -240,12 +240,7 @@ Room * RoomBuilder::getRoom(){
 	
 	// Get rid of temporary boundary room objects
 	for(auto boundary : boundaries){
-		for(auto component : boundary->components){
-			room->addComponent(component);
-		}
-			
 #ifdef RG_DEBUG
-			boundary->components.clear();
 			room->addComponent(boundary);
 #else
 			delete boundary;
@@ -377,7 +372,7 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 	if(!canPlaceObject(child, pos, orient)){
 		return false;
 	}
-	parent->addComponent(child);
+	room->addComponent(child);
 
 	return true;
 }

@@ -34,15 +34,12 @@ public:
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
 	RoomObject * door;
-	
-	std::vector<RoomObject *> objects;
 
 	Room(BulletWorld * _world, Shader * _shader);
 	~Room(void);
 
-	std::vector<RoomObject *> getAllComponents();
-
-	void addComponent(RoomObject *);
+	void addComponent(RoomObject * _obj);
+	void removeComponent(RoomObject * _obj);
 	virtual void setShader(Shader * _shader, bool _default) override;
 
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
