@@ -10,6 +10,7 @@ Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
 std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
+std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -56,6 +57,32 @@ void PD_ResourceManager::init(){
 		}
 	}
 	furnitureComponents = new PD_FurnitureComponentContainer("assets/furniture.json");
+
+	// Parse Animations
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/animations.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto animation : root["animations"]) {
+				Json::Value animStep;
+				jsonLoaded = sweet::FileUtils::readFile("assets/animations/" + animation.get("src", "NO_SRC").asString());
+				parsingSuccessful = reader.parse( jsonLoaded, animStep );
+				if(!parsingSuccessful){
+					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+				}else{					
+					std::vector<PD_CharacterAnimationStep> steps;
+					for(auto step : animStep) {
+						steps.push_back(PD_CharacterAnimationStep(step));	
+					}
+					characterAnimations[animation.get("name", "NO_NAME").asString()] = steps;
+				}
+			}
+		}
+	}
 
 	db = new DatabaseConnection("data/test.db");
 

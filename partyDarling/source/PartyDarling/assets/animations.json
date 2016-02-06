@@ -1,0 +1,8 @@
+{
+	"animations":[
+		{
+			"name":"test",
+			"src":"test.json"
+		}
+	]	
+}

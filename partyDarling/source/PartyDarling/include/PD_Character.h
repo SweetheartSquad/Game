@@ -13,9 +13,11 @@
 #include <IkChain.h>
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
+#include "PD_CharacterAnimationSet.h"
 
 #define CHARACTER_SCALE 0.001f
 
+class PD_CharacterAnimationStep;
 class Conversation;
 class PersonRenderer;
 class AssetCharacter;
@@ -101,11 +103,17 @@ public:
 	PD_Palette * paletteTex;
 
 	bool randomAnimations;
+	bool animate;
+
+	PD_CharacterAnimationSet * currentAnimation;
+
+	virtual void setAnimation(std::string _name);
+	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
 
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
 	~PersonRenderer();
 
-	void setShader(Shader * _shader, bool _default);
+	void setShader(Shader * _shader, bool _default) const;
 
 
 	// creates a parent-child relationship between two components

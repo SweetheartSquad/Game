@@ -254,8 +254,49 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 
+	PD_ResourceManager::scenario->eventManager.addEventListener("changeDISSStat", [this](sweet::Event * _event){
+		// Trigger
+		// Modifies the DISS stats of the player. The stat can be chose from Defense, Insight, Strength, Sass. Delta is the amount to change the stat by, and can be positive or negative.
+		// STRING stat
+		// INT delta
 
+		std::string stat = _event->getStringData("stat");
+		int delta = _event->getIntData("delta", -1);
+
+		if(stat == "" || delta == -1) {
+			ST_LOG_ERROR_V("Missing field in trigger changeDISSStat")
+		}
+
+		std::transform(stat.begin(), stat.end(), stat.begin(), ::tolower);
+		if(stat == "strength") {
+			player->strenth += delta;	
+		}else if(stat == "defense") {
+			player->defense += delta;		
+		}else if(stat == "insight") {
+			player->insight += delta;		
+		}else if(stat == "sass") {
+			player->sass += delta;		
+		}else {
+			ST_LOG_ERROR_V("Invalid argument provided for argumet 'stat' in trigger changeDISSStat");
+		}
+	});
+
+	PD_ResourceManager::scenario->eventManager.addEventListener("changerOwnership", [](sweet::Event * _event){
+		// Trigger
+		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
+		// CHARACTER newOwner
+		// ITEM item
+		// CHARACTER prevOwner
 	
+		std::string ownerCharId = _event->getStringData("newOwner");
+		std::string itemId = _event->getStringData("newOwner");
+		std::string prevOwnerCharId = _event->getStringData("prevOwner");
+
+		if(ownerCharId == "" || itemId == "" || prevOwnerCharId == "") {
+			ST_LOG_ERROR_V("Missing field in trigger changerOwnership")
+		}
+	});
+
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 	checkForGlError(0,__FILE__,__LINE__);

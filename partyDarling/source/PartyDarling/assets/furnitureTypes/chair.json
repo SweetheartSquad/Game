@@ -30,5 +30,11 @@
                 }
             ], 
             "type": "chair",
-			"mass": 20
+			"mass": 20,
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "sides" : {
+                },
+            "parents":["wall", "table"],
+            "padding":0    
+
         }

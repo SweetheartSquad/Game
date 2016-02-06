@@ -10,7 +10,17 @@
 Player::Player(BulletWorld * _bulletWorld) : 
 	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
 	NodeBulletBody(_bulletWorld),
-	shakeIntensity(0.3f)
+	shakeIntensity(0.3f),
+	// speed
+	playerSpeed(0.3f),
+	sprintSpeed(2.f),
+	jumpSpeed(5.f),
+	// collider
+	mass(1.f),
+	sass(0),
+	strenth(0),
+	defense(0),
+	insight(0)
 {
 	// override sounds
 	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;

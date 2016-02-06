@@ -38,5 +38,11 @@
                 }
             ], 
             "type": "lazyboy",
-			"mass": 60
+			"mass": 60,
+            "roomTypes" : ["LIVING_ROOM"],
+            "sides" : {
+                    
+                },
+            "parents":["wall"],
+            "padding":0
         }

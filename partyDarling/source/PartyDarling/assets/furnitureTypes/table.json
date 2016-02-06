@@ -16,5 +16,15 @@
                 }
             ], 
             "type": "table",
-			"mass": 40
+			"mass": 40,
+            "roomTypes" : ["LIVING_ROOM"],
+            "sides" : {
+                    "TOP":"BOTTOM",
+                    "FRONT":"FRONT",
+                    "BACK":"FRONT",
+                    "LEFT":"FRONT",
+                    "RIGHT":"FRONT"
+                },
+            "parents":["wall"],
+            "padding":0
         }
