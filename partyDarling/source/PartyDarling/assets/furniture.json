@@ -174,39 +174,35 @@
         }, 
         {
             "id": 36, 
-            "src": "furnitureJson/couch_Side_Base_1.json"
-        }, 
-        {
-            "id": 37, 
-            "src": "furnitureJson/couch_ArmRest_1.json"
-        }, 
-        {
-            "id": 38, 
-            "src": "furnitureJson/couch_Side_Back_1.json"
-        }, 
-        {
-            "id": 39, 
             "src": "furnitureJson/couchLeg.json"
         }, 
         {
+            "id": 37, 
+            "src": "furnitureJson/couch_leg_2.json"
+        }, 
+        {
+            "id": 38, 
+            "src": "furnitureJson/loveseat_base_1.json"
+        }, 
+        {
+            "id": 39, 
+            "src": "furnitureJson/loveseat_sides_1.json"
+        }, 
+        {
             "id": 40, 
-            "src": "furnitureJson/couch_Side_Base_2.json"
+            "src": "furnitureJson/loveseat_back_1.json"
         }, 
         {
             "id": 41, 
-            "src": "furnitureJson/loveseat_origin.json"
+            "src": "furnitureJson/loveseat_base_2.json"
         }, 
         {
             "id": 42, 
-            "src": "furnitureJson/couch_ArmRest_2.json"
+            "src": "furnitureJson/loveseat_sides_2.json"
         }, 
         {
             "id": 43, 
-            "src": "furnitureJson/couch_Side_back_2.json"
-        }, 
-        {
-            "id": 44, 
-            "src": "furnitureJson/couch_leg_2.json"
+            "src": "furnitureJson/loveseat_back_2.json"
         }
     ], 
     "furniture": [
@@ -218,7 +214,7 @@
         }, 
         {
             "src": "furnitureTypes/table.json"
-        },
+        }, 
         {
             "src": "furnitureTypes/loveseat.json"
         }
