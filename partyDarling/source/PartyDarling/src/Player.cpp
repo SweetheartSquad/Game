@@ -8,7 +8,7 @@
 #include <Timeout.h>
 
 Player::Player(BulletWorld * _bulletWorld) : 
-	FirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
+	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
 	NodeBulletBody(_bulletWorld),
 	shakeIntensity(0.3f)
 {

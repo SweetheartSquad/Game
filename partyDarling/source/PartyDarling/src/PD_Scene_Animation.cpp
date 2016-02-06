@@ -54,6 +54,8 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 
 	character->pr->solverLegR->target.x += 200.f;
 	character->pr->solverLegL->target.x -= 200.f;
+
+	uiLayer.complexHitTest = true;
 }
 
 PD_Scene_Animation::~PD_Scene_Animation() {
