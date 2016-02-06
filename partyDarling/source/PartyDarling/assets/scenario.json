@@ -29,6 +29,11 @@
       "type": "font",
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
       "size": 24
+    },{
+      "id": "FIGHT-FONT",
+      "type": "font",
+      "src": "fight-font.ttf",
+      "size": 24
     },
     
     //Enviromental SFx
