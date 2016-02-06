@@ -195,7 +195,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		childTransform->addChild(components.at(i));
 	}
 
+	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
+	
+	// Set the scenario condition implentations pointer
+	PD_ResourceManager::scenario->conditionImplementations = PD_ResourceManager::conditionImplementations;
 
+	// Setup conditions
+
+	// TODO - Actually implement this
+	(*PD_ResourceManager::conditionImplementations)["checkState"] = [this](sweet::Event * _event){
+		//Check if the character is in a certain state.
+		// CHARACTER character
+		// CHARACTER_STATE state
+
+		return true;
+	};
 
 	// setup event listeners
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
