@@ -13,7 +13,6 @@
     <OVR_DIR>C:\Users\Cat\Documents\dev\LibOVR</OVR_DIR>
 		<CPPREST_DIR>C:\Users\Cat\Documents\dev\RestCpp</CPPREST_DIR>
 		<ENGINE_DIR>C:\Users\Cat\Documents\GitHub\STengine2\S-Tengine2\S-Tengine2</ENGINE_DIR>
-		<OVR_DIR>C:\dev\LibOVR</OVR_DIR>
 	</PropertyGroup>
 	<ItemDefinitionGroup />
 	<ItemGroup />
