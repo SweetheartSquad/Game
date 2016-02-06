@@ -340,6 +340,7 @@ bool RoomBuilder::search(RoomObject * child){
 bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
 	
 	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	pos.y = 0;
 	glm::quat orient = parent->childTransform->getOrientationQuat();
 
 	// object side position
