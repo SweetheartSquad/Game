@@ -11,6 +11,7 @@ DatabaseConnection * PD_ResourceManager::db = nullptr;
 std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
+ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
 
 void PD_ResourceManager::init(){
 	// register custom asset types

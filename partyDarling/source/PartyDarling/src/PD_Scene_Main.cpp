@@ -144,7 +144,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->enable();
 	});
 
-	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader, uiLayer.shader);
+	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer.shader);
 	uiLayer.addChild(uiYellingContest);
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
@@ -194,7 +194,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		childTransform->addChild(room->components.at(i));
 	}
 
+	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
+	
+	// Set the scenario condition implentations pointer
+	PD_ResourceManager::scenario->conditionImplementations = PD_ResourceManager::conditionImplementations;
 
+	// Setup conditions
+
+	// TODO - Actually implement this
+	(*PD_ResourceManager::conditionImplementations)["checkState"] = [this](sweet::Event * _event){
+		//Check if the character is in a certain state.
+		// CHARACTER character
+		// CHARACTER_STATE state
+
+		return true;
+	};
 
 	// setup event listeners
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
@@ -240,15 +254,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1i(test, 0);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, 1);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	});
 
@@ -298,15 +312,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1i(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1f(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }
 
@@ -345,19 +359,19 @@ void PD_Scene_Main::update(Step * _step){
 		}else if(transition <= 0.001f){
 			transition = 0.f;
 		}
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "transition");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, transition);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	}
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "wipeColour");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform3f(test, wipeColour.r/255.f, wipeColour.g/255.f, wipeColour.b/255.f);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 
 

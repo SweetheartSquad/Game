@@ -18,6 +18,7 @@ public:
 	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
+	static ConditionImplementations * conditionImplementations;
 
 	static void init();
 
