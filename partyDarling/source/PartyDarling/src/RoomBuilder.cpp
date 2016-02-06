@@ -154,39 +154,39 @@ Room * RoomBuilder::getRoom(){
 	room->tilemap->saveImageData("tilemap.tga");
 
 	// create floor/ceiling as static bullet planes
-	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
-	bulletFloor->createRigidBody(0);
-	bulletFloor->body->setFriction(1);
-	room->childTransform->addChild(bulletFloor);
-	bulletFloor->meshTransform->scale(-fullL, fullW, 1.f);
-	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletFloor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletFloor->translatePhysical(room->getCenter(), false);
-	bulletFloor->mesh->setScaleMode(GL_NEAREST);
-	bulletFloor->mesh->pushTexture2D(getFloorTex());
+	room->floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	room->floor->setColliderAsStaticPlane(0, 1, 0, 0);
+	room->floor->createRigidBody(0);
+	room->floor->body->setFriction(1);
+	room->childTransform->addChild(room->floor);
+	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
+	room->floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	room->floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	room->floor->translatePhysical(room->getCenter(), false);
+	room->floor->mesh->setScaleMode(GL_NEAREST);
+	room->floor->mesh->pushTexture2D(getFloorTex());
 #ifndef RG_DEBUG
 	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : bulletFloor->mesh->vertices){
+	for(Vertex & v : room->floor->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
 #endif
 
-	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletCeil->setColliderAsStaticPlane(0, -1, 0, 0);
-	bulletCeil->createRigidBody(0);
-	bulletCeil->body->setFriction(1);
-	room->childTransform->addChild(bulletCeil);
-	bulletCeil->meshTransform->scale(-fullL, fullW, -1.f);
-	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletCeil->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletCeil->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
-	bulletCeil->mesh->setScaleMode(GL_NEAREST);
-	bulletCeil->mesh->pushTexture2D(getCeilTex());
+	room->ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	room->ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
+	room->ceiling->createRigidBody(0);
+	room->ceiling->body->setFriction(1);
+	room->childTransform->addChild(room->ceiling);
+	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
+	room->ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	room->ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
+	room->ceiling->mesh->setScaleMode(GL_NEAREST);
+	room->ceiling->mesh->pushTexture2D(getCeilTex());
 #ifndef RG_DEBUG
 	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : bulletCeil->mesh->vertices){
+	for(Vertex & v : room->ceiling->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
@@ -653,7 +653,9 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	// add a door manually
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
-	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL));
+	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
+	room->door = door;
+	items.push_back(door);
 
 	for(auto def : itemDefinitions){
 		items.push_back(new PD_Item(def, world, baseShader));

@@ -70,4 +70,8 @@ public:
 
 	PD_Scene_Main(PD_Game * _game);
 	~PD_Scene_Main();
+
+
+	Room * currentRoom;
+	void goToNewRoom();
 };

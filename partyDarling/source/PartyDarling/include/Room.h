@@ -31,6 +31,10 @@ public:
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
 	
+	BulletMeshEntity * floor;
+	BulletMeshEntity * ceiling;
+	RoomObject * door;
+	
 	std::vector<RoomObject *> objects;
 
 	Room(BulletWorld * _world, Shader * _shader);

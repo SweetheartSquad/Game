@@ -53,7 +53,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lightEnd(1.f),
 	lightIntensity(1.f),
 	transition(0.f),
-	transitionTarget(1.f)
+	transitionTarget(1.f),
+	currentRoom(nullptr)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -184,16 +185,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lights.push_back(playerLight);
 
 
-	// pick a random room to load
-	std::stringstream ss;
-	ss << sweet::NumberUtils::randomInt(1, 4);
-	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
-	childTransform->addChild(room);
-
-	std::vector<RoomObject *> components = room->getAllComponents();
-	for(unsigned int i = 0; i < components.size(); ++i){
-		childTransform->addChild(components.at(i));
-	}
+	
 
 	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
 	
@@ -241,17 +233,20 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
-		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
+		Timeout * t = new Timeout(1.f, [this, _game](sweet::Event * _event){
 			std::stringstream ss;
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-			_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
-			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
+			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+
+			goToNewRoom();
+
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
 		t->start();
 		childTransform->addChild(t, false);
 
-		PD_ResourceManager::scenario->eventManager.listeners.clear();
+		//PD_ResourceManager::scenario->eventManager.listeners.clear();
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
@@ -311,6 +306,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+
+
+
+	goToNewRoom();
+}
+
+
+void PD_Scene_Main::goToNewRoom(){
+	// transition
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 	checkForGlError(false);
@@ -323,6 +327,44 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		glUniform1f(test, 1);
 		checkForGlError(false);
 	}
+	transition = 0.f;
+	transitionTarget = 1.f;
+	player->enable();
+	
+	// clear out the old room's stuff
+	if(currentRoom != nullptr){
+		std::vector<RoomObject *> components = currentRoom->getAllComponents();
+		for(unsigned int i = 0; i < components.size(); ++i){
+			childTransform->removeChild(components.at(i)->firstParent());
+			bulletWorld->world->removeRigidBody(components.at(i)->body);
+		}
+
+		childTransform->removeChild(currentRoom->firstParent());
+		bulletWorld->world->removeRigidBody(currentRoom->body);
+		bulletWorld->world->removeRigidBody(currentRoom->floor->body);
+		bulletWorld->world->removeRigidBody(currentRoom->ceiling->body);
+	}
+
+	// pick a random room to load
+	std::stringstream ss;
+	ss << sweet::NumberUtils::randomInt(1, 4);
+	currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
+	childTransform->addChild(currentRoom);
+
+	std::vector<RoomObject *> components = currentRoom->getAllComponents();
+	for(unsigned int i = 0; i < components.size(); ++i){
+		childTransform->addChild(components.at(i));
+	}
+
+	// make sure the door is up-to-date, and then place the player in front of it
+	currentRoom->door->realign();
+	glm::quat o = currentRoom->door->childTransform->getOrientationQuat();
+	btVector3 p = currentRoom->door->body->getWorldTransform().getOrigin();
+	glm::vec3 p2(0,0,3);
+	p2 = o * p2;
+	p2 += glm::vec3(p.x(), p.y(), p.z());
+
+	player->translatePhysical(p2, false);
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -428,6 +470,9 @@ void PD_Scene_Main::update(Step * _step){
 								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
+
+									//currentRoom->removeComponent(item);
+
 									toDelete->firstParent()->removeChild(toDelete);
 									toDelete->removeChild(item);
 									delete toDelete;
@@ -492,7 +537,6 @@ void PD_Scene_Main::update(Step * _step){
 			if(ui != nullptr){
 				ui->setUpdateState(true);
 			}*/
-		
 
 			currentHoverTarget = me;
 		}else{
