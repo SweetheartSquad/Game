@@ -23,8 +23,6 @@ Keyframe::Keyframe(BulletWorld * _bulletWorld, Person * _character) :
 	setBackgroundColour(1.f, 0.f, 0.f);
 	setMarginRight(5.f);
 	mouseEnabled = true;
-
-	
 }
 
 Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_world) {
@@ -262,6 +260,12 @@ void PD_Scene_Animation::writeToFile() const {
 
 	PD_CharacterAnimationStep * lastStep = new PD_CharacterAnimationStep();
 
+	float lenAL = character->pr->solverArmL->getChainLength();
+	float lenAR = character->pr->solverArmR->getChainLength();
+	float lenLL = character->pr->solverLegL->getChainLength();
+	float lenLR = character->pr->solverLegR->getChainLength();
+	float lenB = character->pr->solverBod->getChainLength();
+
 	std::stringstream json;
 	json << "[" << std::endl;
 	float time = 0.0f;
@@ -269,11 +273,11 @@ void PD_Scene_Animation::writeToFile() const {
 		json << "{" << std::endl;
 		json << "\t" << "\"interpolation\" : \"LINEAR\"," << std::endl;
 		json << "\t" << "\"time\" : " << time << "," << std::endl;
-		json << "\t" << "\"leftArm\" : [" << key->step->leftArm.x - lastStep->leftArm.x << ", " << key->step->leftArm.y - lastStep->leftArm.y << "],"<< std::endl;
-		json << "\t" << "\"rightArm\" : [" << key->step->rightArm.x - lastStep->rightArm.x  << ", " << key->step->rightArm.y - lastStep->rightArm.y << "],"<< std::endl;
-		json << "\t" << "\"leftLeg\" : [" << key->step->leftLeg.x - lastStep->leftLeg.x << ", " << key->step->leftLeg.y - lastStep->leftLeg.y << "],"<< std::endl;
-		json << "\t" << "\"rightLeg\" : [" << key->step->rightLeg.x - lastStep->rightLeg.x << ", " << key->step->rightLeg.y - lastStep->rightLeg.y << "],"<< std::endl;
-		json << "\t" << "\"body\" : [" << key->step->body.x - lastStep->body.x  << ", " << key->step->body.y - lastStep->body.y << "]"<< std::endl;
+		json << "\t" << "\"leftArm\" : [" << (key->step->leftArm.x - lastStep->leftArm.x)/lenAL << ", " << (key->step->leftArm.y - lastStep->leftArm.y)/lenAL << "],"<< std::endl;
+		json << "\t" << "\"rightArm\" : [" << (key->step->rightArm.x - lastStep->rightArm.x)/lenAR  << ", " << (key->step->rightArm.y - lastStep->rightArm.y)/lenAR << "],"<< std::endl;
+		json << "\t" << "\"leftLeg\" : [" << (key->step->leftLeg.x - lastStep->leftLeg.x)/lenLL << ", " << (key->step->leftLeg.y - lastStep->leftLeg.y)/lenLL << "],"<< std::endl;
+		json << "\t" << "\"rightLeg\" : [" << (key->step->rightLeg.x - lastStep->rightLeg.x)/lenLR << ", " << (key->step->rightLeg.y - lastStep->rightLeg.y)/lenLR << "],"<< std::endl;
+		json << "\t" << "\"body\" : [" << (key->step->body.x - lastStep->body.x)/lenB  << ", " << (key->step->body.y - lastStep->body.y)/lenB << "]"<< std::endl;
 		if(key == keyframes.back()){
 			json << "}" << std::endl;
 		}else {

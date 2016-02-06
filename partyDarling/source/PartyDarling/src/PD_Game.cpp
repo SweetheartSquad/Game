@@ -30,7 +30,7 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-	scenes["game"] = new PD_Scene_Main(this);
+	scenes["game"] = new PD_Scene_Animation(this);
 
 	playBGM();
 }
