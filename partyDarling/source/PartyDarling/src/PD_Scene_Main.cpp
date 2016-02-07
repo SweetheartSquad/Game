@@ -340,14 +340,12 @@ void PD_Scene_Main::goToNewRoom(){
 		bulletWorld->world->removeRigidBody(currentRoom->body);
 		bulletWorld->world->removeRigidBody(currentRoom->floor->body);
 		bulletWorld->world->removeRigidBody(currentRoom->ceiling->body);
-
-		// save the room for later
-		PD_Listing::listings[PD_ResourceManager::scenario]->addRoom(currentRoom);
 	}
 
 
 
 	// pick a random room to load
+	// TODO: replace this with actually picking a room properly
 	std::stringstream ss;
 	ss << sweet::NumberUtils::randomInt(1, 4);
 
@@ -376,6 +374,9 @@ void PD_Scene_Main::goToNewRoom(){
 		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
 			childTransform->addChild(currentRoom->components.at(i));
 		}
+
+		// save the room for later access
+		PD_Listing::listings[currentRoom->definition->scenario]->addRoom(currentRoom);
 	}
 
 

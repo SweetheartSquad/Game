@@ -132,8 +132,7 @@ RoomBuilder::~RoomBuilder(){
 }
 
 Room * RoomBuilder::getRoom(){
-	room = new Room(world, baseShader);
-	room->id = definition->id;
+	room = new Room(world, baseShader, definition);
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;

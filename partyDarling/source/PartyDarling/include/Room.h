@@ -24,10 +24,11 @@ class Sprite;
 
 class RoomObject;
 class PD_TilemapGenerator;
+class AssetRoom;
 
 class Room: public BulletMeshEntity {
 public:
-	std::string id;
+	AssetRoom * const definition;
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
@@ -36,7 +37,7 @@ public:
 	BulletMeshEntity * ceiling;
 	RoomObject * door;
 
-	Room(BulletWorld * _world, Shader * _shader);
+	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);
 
 	void addComponent(RoomObject * _obj);
