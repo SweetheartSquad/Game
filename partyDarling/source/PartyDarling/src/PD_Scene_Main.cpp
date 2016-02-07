@@ -361,6 +361,16 @@ void PD_Scene_Main::buildHouse(){
 				t->addChild(room->components.at(i), false);
 			}
 
+			// run the physics simulation for a few seconds to let things settle
+			Log::info("Letting the bodies hit the floor...");
+			Step s;
+			s.setDeltaTime(10);
+			unsigned long int i = bulletWorld->maxSubSteps;
+			bulletWorld->maxSubSteps = 10000;
+			bulletWorld->update(&s);
+			bulletWorld->maxSubSteps = i;
+			Log::info("The bodies have finished hitting the floor.");
+
 			// remove the physics bodies (we'll put them back in as needed)
 			room->removePhysics();
 
