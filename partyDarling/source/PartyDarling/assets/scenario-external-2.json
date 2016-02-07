@@ -1,0 +1,145 @@
+{
+	"assets":[
+		{
+      "id": 2,
+      "name": "Scenario 2 Character",
+      "states": [
+        {
+          "id": 1,
+          "name": "DefaultState",
+          "convo": 1
+        }
+      ],
+      "items": [],
+      "type": "character",
+      "defaultState": 1,
+      "components": [
+        {
+          "tags": {
+            "not": [],
+            "required": [],
+            "preferred": []
+          },
+          "components": [
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "components": [
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/8ff1c538-f1ae-40bc-90b0-7959ec535a55.json"
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json"
+                }
+              ],
+              "src": "components/definitions/b0552ec8-ef7a-422a-b37b-eb221da9fc6e.json"
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json"
+            }
+          ],
+          "src": "components/definitions/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "test convo",
+      "dialogue": [
+        {
+          "text": [
+            "Hi i'm from the second scenario."
+          ],
+          "triggers": [],
+          "conditions": [],
+          "speaker": 2,
+          "name": "Dialogue 0"
+        }
+      ],
+      "options": [],
+      "type": "conversation"
+    },
+    {
+      "name": "Scenario Item 2",
+      "id": 1,
+      "collectable": true,
+      "pixelPerfect": true,
+      "description": "An item from the second scenario",
+      "texture": 1,
+      "effects": [
+        {
+          "type": "changeDISSStat",
+          "args": {
+            "stat": {
+              "value": "defense",
+              "type": "STRING",
+              "dependsOn": "NONE"
+            },
+            "delta": {
+              "value": 5,
+              "type": "INT",
+              "dependsOn": "NONE"
+            }
+          },
+          "id": 2
+        }
+      ],
+      "pickupEffects": [],
+      "type": "item"
+    },
+    {
+      "name": "Kitchen",
+      "id": 1,
+      "description": "food items",
+      "furnitureTypes": "",
+      "characters": [
+        2
+      ],
+      "tags": {
+        "not": [],
+        "required": [],
+        "preferred": []
+      },
+      "size": "LARGE",
+      "type": "room",
+      "locked": false,
+      "items": [
+        1
+      ]
+    }
+	]
+}

@@ -330,8 +330,9 @@ void PD_Scene_Main::pickScenarios(){
 	// random from static shuffle vector
 
 	// TODO: all of this
-
+	
 	activeScenarios.push_back(new Scenario("assets/scenario-external-1.json"));
+	activeScenarios.push_back(new Scenario("assets/scenario-external-2.json"));
 
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){
@@ -414,13 +415,14 @@ void PD_Scene_Main::goToNewRoom(){
 
 	// pick a random room to load
 	// TODO: replace this with actually picking a room properly based on direction and location within the house
+	
+	Scenario * s = activeScenarios.at(sweet::NumberUtils::randomInt(0, activeScenarios.size()-1));
 	std::stringstream ss;
 	ss << sweet::NumberUtils::randomInt(1, 4);
 
-	auto room = PD_Listing::listings.at(activeScenarios.at(0))->rooms.find(ss.str());
-	if(room == PD_Listing::listings.at(activeScenarios.at(0))->rooms.end()){
-		Log::error("Room not found");
-	}
+	auto & m = PD_Listing::listings.at(s)->rooms;
+	auto & room = m.begin();
+	std::advance( room, sweet::NumberUtils::randomInt(0, m.size()-1));
 
 	// get the previously saved room
 	currentRoom = room->second;
