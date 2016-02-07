@@ -56,7 +56,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lightIntensity(1.f),
 	transition(0.f),
 	transitionTarget(1.f),
-	currentRoom(nullptr)
+	currentRoom(nullptr),
+	currentHousePosition(0)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -238,7 +239,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
 			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
 
-			goToNewRoom();
+			navigate(glm::ivec2(1,0)); // TODO: replace this with actual navigation vector
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
@@ -311,7 +312,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bundleScenarios();
 	buildHouse();
 
-	goToNewRoom();
+	// move the player to the entrance of the first room
+	navigate(glm::ivec2(0,0), false);
 }
 
 
@@ -346,6 +348,8 @@ void PD_Scene_Main::bundleScenarios(){
 }
 
 void PD_Scene_Main::buildHouse(){
+	glm::ivec2 startPos(0);
+
 	// build all of the rooms contained in the selected scenarios
 	for(auto s : activeScenarios){
 		
@@ -380,11 +384,14 @@ void PD_Scene_Main::buildHouse(){
 
 			// save the room for later access
 			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
+
+			houseGrid[std::make_pair(startPos.x, startPos.y)] = room;
+			startPos.x += 1;
 		}
 	}
 }
 
-void PD_Scene_Main::goToNewRoom(){
+void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// transition
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
@@ -412,20 +419,19 @@ void PD_Scene_Main::goToNewRoom(){
 	}
 
 
+	// update position within house
+	if(_relative){
+		currentHousePosition += _movement;
+	}else{
+		currentHousePosition = _movement;
+	}
 
-	// pick a random room to load
-	// TODO: replace this with actually picking a room properly based on direction and location within the house
-	
-	Scenario * s = activeScenarios.at(sweet::NumberUtils::randomInt(0, activeScenarios.size()-1));
-	std::stringstream ss;
-	ss << sweet::NumberUtils::randomInt(1, 4);
-
-	auto & m = PD_Listing::listings.at(s)->rooms;
-	auto & room = m.begin();
-	std::advance( room, sweet::NumberUtils::randomInt(0, m.size()-1));
-
-	// get the previously saved room
-	currentRoom = room->second;
+	// get the room for the new position
+	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
+	if(houseGrid.count(key) != 1){
+		Log::error("Room not found.");
+	}
+	currentRoom = houseGrid.at(key);
 
 	// put the room into the scene/physics world
 	currentRoom->addPhysics();
@@ -446,6 +452,8 @@ void PD_Scene_Main::goToNewRoom(){
 	p2 += glm::vec3(p.x(), p.y(), p.z());
 
 	player->translatePhysical(p2, false);
+
+	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
