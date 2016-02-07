@@ -2,9 +2,9 @@
 
 #include <PhraseGenerator.h>
 
-class PD_InsultGenerator : public PhraseGenerator {
+class PD_PhraseGenerator_Insults : public PhraseGenerator {
 public:
-	PD_InsultGenerator();
+	PD_PhraseGenerator_Insults();
 	void makeInsults();
 
 	std::string enemyInsult;

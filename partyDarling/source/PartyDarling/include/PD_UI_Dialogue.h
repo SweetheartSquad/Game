@@ -9,12 +9,13 @@ public:
 	PD_UI_Bubble * uiBubble;
 	NodeUI_NineSliced * textBubble;
 	TextArea * text;
+	bool temporaryConvo;
 
 	PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble);
 
 	virtual bool sayNext() override;
 
-	void startEvent(Conversation * _conversation);
+	void startEvent(Conversation * _conversation, bool _temporaryConvo);
 
 	virtual void end() override;
 };

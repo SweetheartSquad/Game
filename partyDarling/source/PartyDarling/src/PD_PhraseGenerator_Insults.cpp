@@ -1,14 +1,14 @@
 #pragma once
 
-#include<PD_InsultGenerator.h>
+#include<PD_PhraseGenerator_Insults.h>
 
-PD_InsultGenerator::PD_InsultGenerator() :
+PD_PhraseGenerator_Insults::PD_PhraseGenerator_Insults() :
 	playerBlank("____")
 {
-	makeDatabases("assets/insults/wordlist.json");
+	makeDatabases("assets/wordlists/insults.json");
 }
 
-void PD_InsultGenerator::makeInsults() {
+void PD_PhraseGenerator_Insults::makeInsults() {
 	std::string eInsult = replaceWords("*phrases*");
 	std::string pInsult = replaceWords("*playerPhrases*");
 	std::string pGood   = replaceWords("*goodAdj*");

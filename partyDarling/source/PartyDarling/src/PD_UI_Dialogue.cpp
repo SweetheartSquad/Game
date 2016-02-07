@@ -72,8 +72,9 @@ invalidateLayout();
 	return false;
 }
 
-void PD_UI_Dialogue::startEvent(Conversation * _conversation){
+void PD_UI_Dialogue::startEvent(Conversation * _conversation, bool _temporaryConvo){
 	currentConversation = _conversation;
+	temporaryConvo = _temporaryConvo;
 	setVisible(true);
 
 	currentConversation->reset();
@@ -81,6 +82,9 @@ void PD_UI_Dialogue::startEvent(Conversation * _conversation){
 }
 
 void PD_UI_Dialogue::end(){
+	if(temporaryConvo){
+		delete currentConversation;
+	}
 	ConversationIterator::end();
 	eventManager.triggerEvent("end");
 }

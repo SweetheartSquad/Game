@@ -20,6 +20,7 @@
 
 
 #include <PD_Character.h>
+#include <PD_PhraseGenerator_Incidental.h>
 
 class PointLight;
 class RampTexture;
@@ -47,7 +48,8 @@ public:
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;
 	ComponentShaderBase * characterShader;
-
+	
+	PD_PhraseGenerator_Incidental incidentalPhraseGenerator;
 
 	NodeUI * crosshairIndicator;
 

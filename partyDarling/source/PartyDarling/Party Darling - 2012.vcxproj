@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="include\PD_CharacterAnimationSet.h" />
     <ClInclude Include="include\PD_CharacterAnimationStep.h" />
+    <ClInclude Include="include\PD_PhraseGenerator_Incidental.h" />
     <ClInclude Include="include\PD_Scene_Animation.h" />
     <ClInclude Include="include\PD_Character.h" />
     <ClInclude Include="include\DialogueDisplay.h" />
@@ -29,7 +30,7 @@
     <ClInclude Include="include\PD_House.h" />
     <ClInclude Include="include\PD_HouseGenerator.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
-    <ClInclude Include="include\PD_InsultGenerator.h" />
+    <ClInclude Include="include\PD_PhraseGenerator_Insults.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Palette.h" />
@@ -54,6 +55,7 @@
   <ItemGroup>
     <ClCompile Include="src\PD_CharacterAnimationSet.cpp" />
     <ClCompile Include="src\PD_CharacterAnimationStep.cpp" />
+    <ClCompile Include="src\PD_PhraseGenerator_Incidental.cpp" />
     <ClCompile Include="src\PD_Scene_Animation.cpp" />
     <ClCompile Include="src\PD_Character.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
@@ -71,7 +73,7 @@
     <ClCompile Include="src\PD_House.cpp" />
     <ClCompile Include="src\PD_HouseGenerator.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
-    <ClCompile Include="src\PD_InsultGenerator.cpp" />
+    <ClCompile Include="src\PD_PhraseGenerator_Insults.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />

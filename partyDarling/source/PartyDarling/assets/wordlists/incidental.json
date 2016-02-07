@@ -1,0 +1,12 @@
+{
+	"escapeChar": "*",
+	"phrases": [
+		"Sorry, I'm busy.",
+		"Sorry, I'm *emphasis* busy."
+	],
+	"emphasis": [
+		"very",
+		"really",
+		"*emphasis* *emphasis*"
+	]
+}

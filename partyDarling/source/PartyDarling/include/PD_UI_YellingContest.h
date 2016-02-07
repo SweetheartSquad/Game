@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sweet/UI.h>
-#include <PD_InsultGenerator.h>
+#include <PD_PhraseGenerator_Insults.h>
 #include <OpenALSound.h>
 #include <NumberUtils.h>
 
@@ -37,7 +37,7 @@ private:
 	// number of punctuation marks passed
 	unsigned long int iteration;
 
-	PD_InsultGenerator insultGenerator;
+	PD_PhraseGenerator_Insults insultGenerator;
 
 	bool isEnabled;
 

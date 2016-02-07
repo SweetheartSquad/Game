@@ -13,6 +13,8 @@
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
 
+#include <PD_PhraseGenerator_Incidental.h>
+
 #include <NumberUtils.h>
 #include <StringUtils.h>
 #include <TextureUtils.h>
@@ -283,7 +285,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}else if(stat == "sass") {
 			player->sass += delta;		
 		}else {
-			ST_LOG_ERROR_V("Invalid argument provided for argumet 'stat' in trigger changeDISSStat");
+			ST_LOG_ERROR_V("Invalid argument provided for argument 'stat' in trigger changeDISSStat");
 		}
 	});
 
@@ -588,8 +590,24 @@ void PD_Scene_Main::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-								uiDialogue->startEvent(person->definition->scenario->getConversation(person->state->conversation)->conversation);
-								player->disable();
+								std::string c = person->state->conversation;
+								if(c == "NO_CONVO"){
+									// incidental conversation
+									Json::Value dialogue;
+									dialogue["text"].append(incidentalPhraseGenerator.getLine());
+									dialogue["speaker"] = person->definition->id;
+									Json::Value root;
+									root["dialogue"] = Json::Value();
+									root["dialogue"].append(dialogue);
+
+									Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+									uiDialogue->startEvent(tempConvo, true);
+									player->disable();
+								}else{
+									// start a proper conversation
+									uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+									player->disable();
+								}
 							});
 							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
 								uiYellingContest->startNewFight();

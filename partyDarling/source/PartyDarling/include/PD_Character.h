@@ -24,7 +24,6 @@ class AssetCharacter;
 class CharacterComponentDefinition;
 class PD_Palette;
 
-
 class PersonComponent : public Sprite{
 public:
 	glm::vec2 in;
