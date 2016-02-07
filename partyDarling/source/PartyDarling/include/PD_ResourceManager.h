@@ -9,6 +9,7 @@
 #include <map>
 #include <PD_CharacterAnimationStep.h>
 #include "PD_Assets.h"
+#include <NumberUtils.h>
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -20,7 +21,7 @@ public:
 	static PD_FurnitureComponentContainer * furnitureComponents;
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
-	static std::map<std::string, std::vector<std::string>> characterDefinitions;
+	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
 
 	static void init();
 

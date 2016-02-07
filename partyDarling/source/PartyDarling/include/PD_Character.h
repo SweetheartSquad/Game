@@ -17,6 +17,7 @@
 
 #define CHARACTER_SCALE 0.001f
 
+class Scenario;
 class PD_CharacterAnimationStep;
 class Conversation;
 class PersonRenderer;
@@ -139,4 +140,6 @@ public:
 	virtual void setShader(Shader * _shader, bool _default) override;
 	
 	PersonRenderer * pr;
+
+	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader);
 };

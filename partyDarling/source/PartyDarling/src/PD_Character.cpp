@@ -13,6 +13,7 @@
 #include <PD_CharacterAnimationSet.h>
 
 #include <sweet/Input.h>
+#include <PD_IncidentalDialogue.h>
 
 Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
@@ -40,6 +41,45 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 	pr->setShader(_shader, _configureDefault);
 }
 
+Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader) {
+	Json::Value pelvis;
+	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
+	Json::Value arm;
+	arm["src"] = PD_ResourceManager::characterDefinitions["ARM"].pop();
+	Json::Value leg;	
+	leg["src"] = PD_ResourceManager::characterDefinitions["LEG"].pop();
+	Json::Value torso;  
+	torso["src"] = PD_ResourceManager::characterDefinitions["TORSO"].pop();
+	Json::Value head;  
+	head["src"] = PD_ResourceManager::characterDefinitions["HEAD"].pop();
+
+	torso ["components"].append(head);
+	torso ["components"].append(arm);
+	torso ["components"].append(arm);
+	pelvis["components"].append(torso);
+	pelvis["components"].append(leg);
+	pelvis["components"].append(leg);
+
+	std::string id = std::to_string(sweet::NumberUtils::randomFloat(100000, 999999));
+	id += std::to_string(sweet::step.time);
+
+	Json::Value charDef;
+	charDef["name"]         = "Big Boy Bert";
+	charDef["id"]			= id;
+	charDef["defaultState"] = id;
+	charDef["components"].append(pelvis);
+
+	Json::Value stateDef;
+	stateDef["id"] = id; 
+	stateDef["convo"] = PD_IncidentalDialogue::createDialogue(id, _scenario);
+	stateDef["name"] = "defaultState";
+
+	charDef["states"].append(stateDef);
+
+	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
+	
+	return new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader);
+}
 
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
 	Sprite(_shader),
