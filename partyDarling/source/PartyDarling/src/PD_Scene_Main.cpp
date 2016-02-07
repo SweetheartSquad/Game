@@ -198,7 +198,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// CHARACTER character
 		// CHARACTER_STATE state
 
-		return true;
+		return false;
 	};
 
 	// setup event listeners

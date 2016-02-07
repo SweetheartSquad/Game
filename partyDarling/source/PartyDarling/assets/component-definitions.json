@@ -1,0 +1,108 @@
+{
+    "components": [
+        {
+            "src": "components/definitions/fbc172de-a0d0-469b-93c3-d2c28d260793.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/02af5b26-5d07-4b0c-887d-4b00de73ff2e.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/9baa167e-4e60-4d0f-88ae-e95c2201a67a.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/1ca17133-2b19-4bda-af56-fc0a250f102b.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/048e68c4-a11d-4d18-9692-b2b17f364b62.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/06ccc960-895f-4e82-a891-b361e3febf6d.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/3b53b3a2-fbbb-4bfa-8c33-4e7a0c16b4b3.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/d7992589-9329-4950-b258-c69e6eabc041.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/5bf34e38-f66f-4c4e-ba1b-5fac77999171.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/a673389d-20d5-45da-95ef-dde7b80e51f7.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/f3412ca9-9b01-420c-a131-fb282710f2f7.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/def56b91-6950-4f76-bced-c0b71020fc0b.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/68c940ab-70e7-45e0-aa71-b04543f9d12b.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/8287f694-3c7c-47a0-ba5a-a21331f90ef3.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/0c70d90a-bd20-4003-aa1d-c4b3b99b8dcc.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/8ff1c538-f1ae-40bc-90b0-7959ec535a55.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/1a6f37a4-c510-4862-91c3-20e5ee611ed9.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/b0552ec8-ef7a-422a-b37b-eb221da9fc6e.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/2f25a0b5-d469-4810-8e81-941f948834a4.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/d823f73a-c4b7-4adb-a034-a7b439c48b67.json",
+            "type": "TORSO"
+        }
+    ]
+}

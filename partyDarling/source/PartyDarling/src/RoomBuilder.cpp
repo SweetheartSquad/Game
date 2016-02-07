@@ -615,6 +615,46 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader));
 	}
 
+	int pelivsIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterDefinitions["PELVIS"].size() - 1);
+	int armIdx    = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterDefinitions["ARM"].size() - 1);
+	int legIdx	  = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterDefinitions["LEG"].size() - 1);
+	int torsoIdx  = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterDefinitions["TORSO"].size() - 1);
+	int headIdx	  = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterDefinitions["HEAD"].size() - 1);
+
+	Json::Value pelvis;
+	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"][pelivsIdx];
+	Json::Value arm;
+	arm["src"] = PD_ResourceManager::characterDefinitions["ARM"][armIdx];
+	Json::Value leg;	
+	leg["src"] = PD_ResourceManager::characterDefinitions["LEG"][legIdx];
+	Json::Value torso;  
+	torso["src"] = PD_ResourceManager::characterDefinitions["TORSO"][torsoIdx];
+	Json::Value head;  
+	head["src"] = PD_ResourceManager::characterDefinitions["HEAD"][headIdx];
+
+	torso ["components"].append(head);
+	torso ["components"].append(arm);
+	torso ["components"].append(arm);
+	pelvis["components"].append(torso);
+	pelvis["components"].append(leg);
+	pelvis["components"].append(leg);
+
+	Json::Value charDef;
+	charDef["name"]         = "Big Boy Bert";
+	charDef["defaultState"] = "0";
+	charDef["components"].append(pelvis);
+
+	Json::Value stateDef;
+	stateDef["id"] = "0";
+	stateDef["conversation"] = "0";
+	stateDef["name"] = "defaultState";
+
+	charDef["states"].append(stateDef);
+
+	AssetCharacter * newChar = AssetCharacter::create(charDef, PD_ResourceManager::scenario);
+
+
+	characters.push_back(new Person(world, newChar, MeshFactory::getPlaneMesh(3.f), characterShader));
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
 	/*for(unsigned int i = 0; i < 1; ++i){
