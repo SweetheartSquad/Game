@@ -3,9 +3,11 @@
 #include <PD_Listing.h>
 
 std::map<Scenario *, PD_Listing *> PD_Listing::listings;
+std::map<std::string, PD_Listing *> PD_Listing::listingsById;
 
 PD_Listing::PD_Listing(Scenario * _scenario){
 	listings[_scenario] = this;
+	listingsById[_scenario->id] = this;
 }
 
 void PD_Listing::addCharacter(Person * _person){
