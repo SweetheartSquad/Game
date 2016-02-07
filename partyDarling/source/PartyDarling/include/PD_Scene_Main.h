@@ -74,4 +74,15 @@ public:
 
 	Room * currentRoom;
 	void goToNewRoom();
+
+
+
+	std::vector<Scenario *> activeScenarios;
+
+	// randomly pick one main plot scenario and a few side plot scenarios
+	void pickScenarios();
+	// try to combine definitions in the scenarios
+	void bundleScenarios();
+	// convert the bundled scenarios into actual rooms and stuff
+	void buildHouse();
 };

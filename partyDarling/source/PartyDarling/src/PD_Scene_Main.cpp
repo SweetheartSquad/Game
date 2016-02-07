@@ -209,8 +209,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		stateName << (int)glm::round(_event->getFloatData("State"));
 		std::cout << characterName.str() << "'s state changed to " << stateName.str() << std::endl;
 
-		Scenario * scenario = PD_ResourceManager::scenario;
-		PD_Listing * listing = PD_Listing::listings[PD_ResourceManager::scenario];
+		PD_Listing * listing = PD_Listing::listingsById[_event->getStringData("scenario")];
 		Person * character = listing->characters[characterName.str()];
 		if(character == nullptr){
 			Log::warn("Character not found in state change event");
@@ -305,11 +304,72 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 
-
+	// build house
+	pickScenarios();
+	bundleScenarios();
+	buildHouse();
 
 	goToNewRoom();
 }
 
+
+void PD_Scene_Main::pickScenarios(){
+	// grab the current main plot scenario
+	// these go in order
+
+
+	// pick an omar scenario
+	// first is always the tutorial/intro
+	// middle are random from the a given set
+	// last is always the final
+
+
+	// pick side scenarios
+	// random from static shuffle vector
+
+	// TODO: all of this
+
+	activeScenarios.push_back(new Scenario("assets/scenario-external-1.json"));
+
+	// set event managers on selected scenarios as children of the global scenario
+	for(auto s : activeScenarios){
+		PD_ResourceManager::scenario->eventManager.addChildManager(&s->eventManager);
+	}
+}
+
+void PD_Scene_Main::bundleScenarios(){
+	// find matching assets in scenarios and merge them
+	// TODO: all of this
+}
+
+void PD_Scene_Main::buildHouse(){
+	// build all of the rooms contained in the selected scenarios
+	for(auto s : activeScenarios){
+		
+		// create a listing for this scenario
+		PD_Listing * listing = new PD_Listing(s);
+
+		// build the rooms in this scenario
+		for(auto rd : s->assets.at("room")){
+			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader).getRoom();
+			
+			// setup the first parents, but don't actually add anything to the scene yet
+			Transform * t = new Transform();
+			t->addChild(room, false);
+			for(unsigned int i = 0; i < room->components.size(); ++i){
+				t = new Transform();
+				t->addChild(room->components.at(i), false);
+			}
+
+			// remove the physics bodies (we'll put them back in as needed)
+			room->removePhysics();
+
+
+			// save the room for later access
+			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
+		}
+	}
+}
 
 void PD_Scene_Main::goToNewRoom(){
 	// transition
@@ -333,50 +393,31 @@ void PD_Scene_Main::goToNewRoom(){
 	if(currentRoom != nullptr){
 		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
 			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
-			bulletWorld->world->removeRigidBody(currentRoom->components.at(i)->body);
 		}
-
 		childTransform->removeChild(currentRoom->firstParent());
-		bulletWorld->world->removeRigidBody(currentRoom->body);
-		bulletWorld->world->removeRigidBody(currentRoom->floor->body);
-		bulletWorld->world->removeRigidBody(currentRoom->ceiling->body);
+		currentRoom->removePhysics();
 	}
 
 
 
 	// pick a random room to load
-	// TODO: replace this with actually picking a room properly
+	// TODO: replace this with actually picking a room properly based on direction and location within the house
 	std::stringstream ss;
 	ss << sweet::NumberUtils::randomInt(1, 4);
 
-	if(PD_Listing::listings.count(PD_ResourceManager::scenario) == 0){
-		PD_Listing::listings.insert(std::make_pair(PD_ResourceManager::scenario, new PD_Listing(PD_ResourceManager::scenario)));
+	auto room = PD_Listing::listings.at(activeScenarios.at(0))->rooms.find(ss.str());
+	if(room == PD_Listing::listings.at(activeScenarios.at(0))->rooms.end()){
+		Log::error("Room not found");
 	}
 
-	auto room = PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.find(ss.str());
-	if(room != PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.end()){
-		// get the previously saved room
-		currentRoom = room->second;
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			bulletWorld->world->addRigidBody(currentRoom->components.at(i)->body);
-		}
-		bulletWorld->world->addRigidBody(currentRoom->body);
-		bulletWorld->world->addRigidBody(currentRoom->floor->body);
-		bulletWorld->world->addRigidBody(currentRoom->ceiling->body);
-		childTransform->addChild(currentRoom->firstParent(), false);
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
-		}
-	}else{
-		// build a new room
-		currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room", ss.str())), bulletWorld, toonShader, characterShader).getRoom();
-		childTransform->addChild(currentRoom);
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->addChild(currentRoom->components.at(i));
-		}
+	// get the previously saved room
+	currentRoom = room->second;
 
-		// save the room for later access
-		PD_Listing::listings[currentRoom->definition->scenario]->addRoom(currentRoom);
+	// put the room into the scene/physics world
+	currentRoom->addPhysics();
+	childTransform->addChild(currentRoom->firstParent(), false);
+	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+		childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
 	}
 
 
@@ -537,7 +578,7 @@ void PD_Scene_Main::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(person->state->conversation)->conversation);
+								uiDialogue->startEvent(person->definition->scenario->getConversation(person->state->conversation)->conversation);
 								player->disable();
 							});
 							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){

@@ -590,7 +590,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	std::vector<PD_Furniture *> furniture = getFurniture();
 	std::vector<PD_Item *> items = getItems();
 
-	PD_Listing * listing = PD_Listing::listings.at(PD_ResourceManager::scenario);
+	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
 	for(auto c : characters){
 		listing->addCharacter(c);
