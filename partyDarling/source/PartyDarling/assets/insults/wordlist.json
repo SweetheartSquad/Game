@@ -1,4 +1,5 @@
 {
+	"escapeChar": "*",
 	"phrases": [
 		"You've got a *badBodies*!",
 		"You're a *badThings*!",

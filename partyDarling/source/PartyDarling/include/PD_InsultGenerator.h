@@ -1,13 +1,8 @@
 #pragma once
 
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <map>
+#include <PhraseGenerator.h>
 
-class PD_InsultGenerator {
+class PD_InsultGenerator : public PhraseGenerator {
 public:
 	PD_InsultGenerator();
 	void makeInsults();
@@ -18,12 +13,4 @@ public:
 	std::string playerBadChoice;
 
 	std::string playerBlank;
-
-private:
-	std::map<std::string, std::vector<std::string>> terms;
-	std::string escapeChar;
-	std::string replaceWords(std::string phrase);
-	//std::string fixVowels(std::string phrase);
-	
-	void makeDatabases();
 };
