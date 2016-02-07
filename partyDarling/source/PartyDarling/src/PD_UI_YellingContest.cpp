@@ -739,8 +739,6 @@ void PD_UI_YellingContest::setEnemyText(){
 
 	enemyBubbleText->setText(insultGenerator.enemyInsult);
 
-	//enemyBubble->invalidateLayout();
-
 	glyphIdx = 0;
 	cursorDelayDuration = 0;
 	glyphs.clear();

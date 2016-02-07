@@ -53,7 +53,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lightEnd(1.f),
 	lightIntensity(1.f),
 	transition(0.f),
-	transitionTarget(1.f)
+	transitionTarget(1.f),
+	currentRoom(nullptr)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -184,17 +185,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lights.push_back(playerLight);
 
 
-	// pick a random room to load
-	std::stringstream ss;
-	ss << sweet::NumberUtils::randomInt(1, 4);
-	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
-	childTransform->addChild(room);
-
-	std::vector<RoomObject *> components = room->getAllComponents();
-	for(unsigned int i = 0; i < components.size(); ++i){
-		childTransform->addChild(components.at(i));
-	}
-
 	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
 	
 	// Set the scenario condition implentations pointer
@@ -241,29 +231,32 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
-		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
+		Timeout * t = new Timeout(1.f, [this, _game](sweet::Event * _event){
 			std::stringstream ss;
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-			_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
-			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
+			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+
+			goToNewRoom();
+
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
 		t->start();
 		childTransform->addChild(t, false);
 
-		PD_ResourceManager::scenario->eventManager.listeners.clear();
+		//PD_ResourceManager::scenario->eventManager.listeners.clear();
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1i(test, 0);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, 1);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	});
 
@@ -311,18 +304,93 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+
+
+
+	goToNewRoom();
+}
+
+
+void PD_Scene_Main::goToNewRoom(){
+	// transition
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1i(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "xMult");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform1f(test, 1);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
+	transition = 0.f;
+	transitionTarget = 1.f;
+	player->enable();
+	
+	// clear out the old room's stuff
+	if(currentRoom != nullptr){
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
+			bulletWorld->world->removeRigidBody(currentRoom->components.at(i)->body);
+		}
+
+		childTransform->removeChild(currentRoom->firstParent());
+		bulletWorld->world->removeRigidBody(currentRoom->body);
+		bulletWorld->world->removeRigidBody(currentRoom->floor->body);
+		bulletWorld->world->removeRigidBody(currentRoom->ceiling->body);
+	}
+
+
+
+	// pick a random room to load
+	// TODO: replace this with actually picking a room properly
+	std::stringstream ss;
+	ss << sweet::NumberUtils::randomInt(1, 4);
+
+	if(PD_Listing::listings.count(PD_ResourceManager::scenario) == 0){
+		PD_Listing::listings.insert(std::make_pair(PD_ResourceManager::scenario, new PD_Listing(PD_ResourceManager::scenario)));
+	}
+
+	auto room = PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.find(ss.str());
+	if(room != PD_Listing::listings.at(PD_ResourceManager::scenario)->rooms.end()){
+		// get the previously saved room
+		currentRoom = room->second;
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			bulletWorld->world->addRigidBody(currentRoom->components.at(i)->body);
+		}
+		bulletWorld->world->addRigidBody(currentRoom->body);
+		bulletWorld->world->addRigidBody(currentRoom->floor->body);
+		bulletWorld->world->addRigidBody(currentRoom->ceiling->body);
+		childTransform->addChild(currentRoom->firstParent(), false);
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
+		}
+	}else{
+		// build a new room
+		currentRoom = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room", ss.str())), bulletWorld, toonShader, characterShader).getRoom();
+		childTransform->addChild(currentRoom);
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->addChild(currentRoom->components.at(i));
+		}
+
+		// save the room for later access
+		PD_Listing::listings[currentRoom->definition->scenario]->addRoom(currentRoom);
+	}
+
+
+	
+
+	// make sure the door is up-to-date, and then place the player in front of it
+	currentRoom->door->realign();
+	glm::quat o = currentRoom->door->childTransform->getOrientationQuat();
+	btVector3 p = currentRoom->door->body->getWorldTransform().getOrigin();
+	glm::vec3 p2(0,0,3);
+	p2 = o * p2;
+	p2 += glm::vec3(p.x(), p.y(), p.z());
+
+	player->translatePhysical(p2, false);
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -360,19 +428,19 @@ void PD_Scene_Main::update(Step * _step){
 		}else if(transition <= 0.001f){
 			transition = 0.f;
 		}
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "transition");
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		if(test != -1){
 			glUniform1f(test, transition);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 		}
 	}
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "wipeColour");
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(test != -1){
 		glUniform3f(test, wipeColour.r/255.f, wipeColour.g/255.f, wipeColour.b/255.f);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 
 
@@ -428,6 +496,9 @@ void PD_Scene_Main::update(Step * _step){
 								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
+
+									currentRoom->removeComponent(item);
+
 									toDelete->firstParent()->removeChild(toDelete);
 									toDelete->removeChild(item);
 									delete toDelete;
@@ -492,7 +563,6 @@ void PD_Scene_Main::update(Step * _step){
 			if(ui != nullptr){
 				ui->setUpdateState(true);
 			}*/
-		
 
 			currentHoverTarget = me;
 		}else{
@@ -522,6 +592,8 @@ void PD_Scene_Main::update(Step * _step){
 						item->translatePhysical(targetPos, false);
 						// rotate the item to face the camera
 						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+
+						currentRoom->addComponent(item);
 					}
 
 					// replace the crosshair item texture with the actual crosshair texture

@@ -1,35 +1,27 @@
 {
    "components": [
 					{
-						"componentTypes": ["loveseat_origin"], 
+						"componentTypes": ["loveseat_base"], 
 						"multiplier": 1, 
 						"outComponents": [
 							{
-								"componentTypes": ["couch_side_base"], 
-								"multiplier": 2, 
-								"outComponents": [
-									{
-										"componentTypes": ["couch_side_back"], 
-										"multiplier": 1, 
-										"outComponents": [], 
-										"required": true,
-										"scale": [1.0,1.0,1.0]
-									}, 
-									{
-										"componentTypes": ["couch_leg"], 
-										"multiplier": 2, 
-										"outComponents": [], 
-										"required": true,
-										"scale": [1.0,1.0,1.0]
-									},
-									{
-										"componentTypes": ["couch_armrest"], 
-										"multiplier": 1, 
-										"outComponents": [], 
-										"required": true,
-										"scale": [1.0,1.0,1.0]
-									}
-								], 
+								"componentTypes": ["loveseat_sides"], 
+								"multiplier": 1, 
+								"outComponents": [], 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+							},
+							{
+								"componentTypes": ["loveseat_back"], 
+								"multiplier": 1, 
+								"outComponents": [], 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+							},
+							{
+								"componentTypes": ["couch_leg"], 
+								"multiplier": 4, 
+								"outComponents": [], 
 								"required": true,
 								"scale": [1.0,1.0,1.0]
 							}
@@ -38,7 +30,7 @@
             ], 
             "type": "loveseat",
 			"mass": 80,
-            "detailedCollider": false,
+            "detailedCollider": true,
             "roomTypes" : ["LIVING_ROOM"],
             "sides" : {
                     "LEFT":"RIGHT",
