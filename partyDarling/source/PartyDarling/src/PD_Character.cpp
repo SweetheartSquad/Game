@@ -13,7 +13,6 @@
 #include <PD_CharacterAnimationSet.h>
 
 #include <sweet/Input.h>
-#include <PD_IncidentalDialogue.h>
 
 Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
@@ -70,8 +69,7 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	charDef["components"].append(pelvis);
 
 	Json::Value stateDef;
-	stateDef["id"] = id; 
-	stateDef["convo"] = PD_IncidentalDialogue::createDialogue(id, _scenario);
+	stateDef["id"] = id;
 	stateDef["name"] = "defaultState";
 
 	charDef["states"].append(stateDef);
