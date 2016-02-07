@@ -57,3 +57,23 @@ Room::~Room(void){
 glm::vec3 Room::getCenter() const{
 	return glm::vec3((tilemap->width/2.f) * ROOM_TILE, 0.f, (tilemap->height/2.f) * ROOM_TILE);
 }
+
+void Room::removePhysics(){
+	for(unsigned int i = 0; i < components.size(); ++i){
+		world->world->removeRigidBody(components.at(i)->body);
+	}
+
+	world->world->removeRigidBody(body);
+	world->world->removeRigidBody(floor->body);
+	world->world->removeRigidBody(ceiling->body);
+}
+
+void Room::addPhysics(){
+	for(unsigned int i = 0; i < components.size(); ++i){
+		world->world->addRigidBody(components.at(i)->body);
+	}
+
+	world->world->addRigidBody(body);
+	world->world->addRigidBody(floor->body);
+	world->world->addRigidBody(ceiling->body);
+}

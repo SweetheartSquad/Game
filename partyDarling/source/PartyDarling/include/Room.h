@@ -47,4 +47,10 @@ public:
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
 
 	glm::vec3 getCenter() const;
+
+
+	// removes all of the rigid bodies associated with the room from the world
+	void removePhysics();
+	// adds all of the rigid bodies associatedw with the room to the world
+	void addPhysics();
 };
