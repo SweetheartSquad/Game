@@ -12,6 +12,7 @@ std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
+std::map<std::string, std::vector<std::string>> PD_ResourceManager::characterDefinitions;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -84,6 +85,20 @@ void PD_ResourceManager::init(){
 			}
 		}
 	}
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/component-definitions.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto comp : root["components"]) {
+				characterDefinitions[comp["type"].asString()].push_back(comp["src"].asString());
+			}
+		}
+	}
+	
 
 	db = new DatabaseConnection("data/test.db");
 
