@@ -709,8 +709,10 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
 	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
+	door->parentTypes.push_back("wall");
 	room->door = door;
 	items.push_back(door);
+	
 
 	for(auto def : itemDefinitions){
 		items.push_back(new PD_Item(def, world, baseShader));
