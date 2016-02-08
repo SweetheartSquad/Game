@@ -8,6 +8,7 @@
 
 #define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
+// world space units per pixel inthe tilemap
 #define ROOM_TILE 5
 
 enum RoomLayout_t{

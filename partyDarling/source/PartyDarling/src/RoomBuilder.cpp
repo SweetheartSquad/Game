@@ -137,9 +137,9 @@ Room * RoomBuilder::getRoom(){
 	// convert size enum to actual numbers
 	unsigned long int l, w;
 	switch (definition->size){
-		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(4, 6); w = sweet::NumberUtils::randomInt(4, 6); break;
-		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(4, 8); w = sweet::NumberUtils::randomInt(4, 8); break;
-		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(6, 12); w = sweet::NumberUtils::randomInt(6, 12); break;
+		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); break;
+		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
+		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); break;
 		break;
 	}
 
@@ -264,17 +264,19 @@ bool RoomBuilder::search(RoomObject * child){
 			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
 				continue;
 			}
-			Log::info("Checking parent.");
+			//std::stringstream s;
+			//s << "parent: " << availableParents.at(i);
+			//Log::warn(s.str());
+			//Log::info("Checking parent.");
 			typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
 			for(it_type iterator = availableParents.at(i)->emptySlots.begin(); iterator != availableParents.at(i)->emptySlots.end(); iterator++) {
 				// go through available slots of side
 				for(unsigned int j = 0; j < iterator->second.size(); ++j){
 					Side_t side = iterator->first;
 					Slot * slot = iterator->second.at(j);
-					sweet::Box childBox = child->mesh->calcBoundingBox();
 					
 					// check length of slot
-					if(childBox.width > slot->length){
+					if(child->boundingBox.width > slot->length){
 						Log::warn("Not enough SPACE along side.");
 						continue;
 					}
@@ -282,10 +284,10 @@ bool RoomBuilder::search(RoomObject * child){
 					// if the object can be placed without collision
 					if(arrange(child, availableParents.at(i), side, slot)){
 						addObjectToLists(child);
-						if(childBox.width < slot->length){
+						if(child->boundingBox.width < slot->length){
 							// adjust remaining slot space
-							slot->loc += childBox.width;
-							slot->length -= childBox.width;
+							slot->loc += child->boundingBox.width;
+							slot->length -= child->boundingBox.width;
 						}else{
 							// remove slot
 							iterator->second.erase(iterator->second.begin() + j);
@@ -401,7 +403,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM))){
 			std::stringstream s;
-			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
+			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
 			Log::warn(s.str());
 			_obj->translatePhysical(-_pos, true);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
@@ -414,21 +416,14 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 }
 
 std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB){
+	glm::mat4 m = glm::inverse(_mmB) * _mmA;
 
-	glm::mat4 immB = glm::inverse(_mmB);
-	glm::mat4 m = immB * _mmA;
-
-	std::vector<glm::vec4> transformed; 
+	std::vector<glm::vec3> transformed; 
 	for(auto v : _verts){
-		transformed.push_back(m * glm::vec4(v, 1));
+		transformed.push_back(glm::vec3(m * glm::vec4(v, 1)));
 	}
 
-	std::vector<glm::vec3> vertices; 
-	for(auto t : transformed){
-		vertices.push_back(glm::vec3(t.x, t.y, t.z));
-	}
-
-	return vertices;
+	return transformed;
 }
 
 void RoomBuilder::addObjectToLists(RoomObject * _obj){
