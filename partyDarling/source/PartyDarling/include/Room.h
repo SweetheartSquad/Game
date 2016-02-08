@@ -6,6 +6,8 @@
 #include <BulletWorld.h>
 #include <vector>
 
+#define ROOM_SIZE_MAX 12
+
 enum Room_t{
 	BEDROOM,
 	LIVINGROOM,
