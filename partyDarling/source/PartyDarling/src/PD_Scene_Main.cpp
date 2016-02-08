@@ -318,6 +318,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+	PD_ResourceManager::scenario->eventManager.addEventListener("emote", [](sweet::Event * _event){
+		std::string charId = _event->getStringData("character");
+		std::string emote = _event->getStringData("emote");
+		float duration = _event->getFloatData("duration");
+		std::string scenario = _event->getStringData("scenario");
+		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
+	});
 
 	// build house
 	pickScenarios();

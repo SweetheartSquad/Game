@@ -154,7 +154,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	randomAnimations(false),
 	animate(true),
 	currentAnimation(nullptr),
-	emote(nullptr)
+	emote(nullptr),
+	emoteTimeout(nullptr)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -297,8 +298,6 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	emote->setVisible(false);
 	head->childTransform->addChild(emote);
 	emote->firstParent()->scale(1/CHARACTER_SCALE);
-
-	setEmote("test");
 }
 
 PersonRenderer::~PersonRenderer(){
@@ -343,11 +342,15 @@ void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps)
 	}
 }
 
-void PersonRenderer::setEmote(std::string _id) {
+void PersonRenderer::setEmote(std::string _id, float _duration) {
+	delete emoteTimeout;
+	emoteTimeout = nullptr;
+
 	if(_id == "NONE") {
-		setVisible(false);
+		emote->setVisible(false);
 		return;
 	}
+
 	auto eDef = PD_ResourceManager::emotes[_id];
 	emote->setVisible(true);
 	emote->setSpriteSheet(eDef.spriteSheet, "main");
@@ -355,10 +358,17 @@ void PersonRenderer::setEmote(std::string _id) {
 	float height = b.height/CHARACTER_SCALE;
 	float width  = b.width/CHARACTER_SCALE;
 	emote->firstParent()->translate(width * eDef.offset.x, height * eDef.offset.y, 0.f, false);
+	
+	if(_duration > 0.f){
+		emoteTimeout = new Timeout(_duration, [this](sweet::Event * _event){
+			setEmoteNone();
+		});
+		emoteTimeout->start();
+	}
 }
 
 void PersonRenderer::setEmoteNone() {
-	setEmote("NONE");
+	setEmote("NONE", -1.f);
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
@@ -408,6 +418,10 @@ void PersonRenderer::update(Step * _step){
 	}
 
 	timer += _step->deltaTime;
+
+	if(emoteTimeout != nullptr) {
+		emoteTimeout->update(_step);
+	}
 
 	if(animate){
 		if(randomAnimations && timer > 1){

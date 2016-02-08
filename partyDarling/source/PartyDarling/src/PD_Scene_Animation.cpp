@@ -147,7 +147,7 @@ void PD_Scene_Animation::update(Step * _step) {
 
 	updateEffectors();
 
-	if(keyboard->keyJustUp(GLFW_KEY_D)) {
+	if(keyboard->keyJustUp(GLFW_KEY_S) && keyboard->control) {
 		if(!character->pr->animate){
 			writeToFile();
 			loadFromTestFile();
@@ -157,20 +157,17 @@ void PD_Scene_Animation::update(Step * _step) {
 		}
 	}
 
-	if(keyboard->keyJustUp(GLFW_KEY_L)) {
+	if(keyboard->keyJustUp(GLFW_KEY_A)) {
 		loadFromTestFile();
 		character->pr->animate = true;
 	}
 
-	if(keyboard->keyJustUp(GLFW_KEY_M)) {
-		character->pr->animate = false;
-	}
-
-	if(keyboard->keyJustUp(GLFW_KEY_F)) {
+	if(keyboard->keyJustUp(GLFW_KEY_D)) {
 		character->pr->animate = !character->pr->animate; 
 	}
+	
 
-	if(keyboard->keyJustUp(GLFW_KEY_K)) {
+	if(keyboard->keyJustUp(GLFW_KEY_W)) {
 		
 		Keyframe * keyframe;
 

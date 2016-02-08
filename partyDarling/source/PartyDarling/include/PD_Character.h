@@ -14,6 +14,7 @@
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
 #include "PD_CharacterAnimationSet.h"
+#include <Timeout.h>
 
 #define CHARACTER_SCALE 0.001f
 
@@ -109,9 +110,11 @@ public:
 	PD_CharacterAnimationSet * currentAnimation;
 	Sprite * emote;
 
+	Timeout * emoteTimeout;
+
 	virtual void setAnimation(std::string _name);
 	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
-	virtual void setEmote(std::string _id);
+	virtual void setEmote(std::string _id, float _duration);
 	virtual void setEmoteNone();
 
 	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder);
