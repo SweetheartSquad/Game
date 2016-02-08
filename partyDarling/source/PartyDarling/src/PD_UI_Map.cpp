@@ -27,7 +27,7 @@ bool PD_UI_Map::isEnabled(){
 	return enabled;
 }
 
-void PD_UI_Map::updateMap(std::map<std::pair<int, int>, Room *> _houseGrid){
+void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// clear out the old map
 	if(layout != nullptr){
 		removeChild(layout);
@@ -37,6 +37,8 @@ void PD_UI_Map::updateMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	layout = new VerticalLinearLayout(world);
 	layout->setRationalWidth(1.f);
 	layout->setRationalHeight(1.f);
+	layout->horizontalAlignment = kRIGHT;
+	layout->verticalAlignment = kTOP;
 	addChild(layout);
 	grid.clear();
 	
@@ -53,15 +55,18 @@ void PD_UI_Map::updateMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	for(unsigned long int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
 		hl->setRationalWidth(1.f);
-		hl->setRationalHeight(1.f/height);
+		hl->horizontalAlignment = layout->horizontalAlignment;
+		hl->verticalAlignment = kMIDDLE;
+		hl->setHeight(ROOM_SIZE_MAX*MAP_SIZE);
 		layout->addChild(hl);
 
 		for(unsigned long int x = x1; x <= x2; ++x){
 			NodeUI * cell = new NodeUI(world);
-			cell->setRationalHeight(1.f);
-			cell->setRationalWidth(1.f/width);
+			cell->setWidth(ROOM_SIZE_MAX*MAP_SIZE);
+			cell->setHeight(ROOM_SIZE_MAX*MAP_SIZE);
 			cell->background->mesh->setScaleMode(GL_NEAREST);
 			cell->setVisible(false);
+			cell->boxSizing = kCONTENT_BOX;
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
 		}
@@ -71,8 +76,22 @@ void PD_UI_Map::updateMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	for(auto & room : _houseGrid){
 		NodeUI * cell = grid[room.first];
 		cell->background->mesh->replaceTextures(room.second->tilemap);
+		cell->setWidth(room.second->tilemap->width*MAP_SIZE);
+		cell->setHeight(room.second->tilemap->height*MAP_SIZE);
+		cell->setMargin(((ROOM_SIZE_MAX - room.second->tilemap->width)*0.5f)*MAP_SIZE, ((ROOM_SIZE_MAX - room.second->tilemap->height)*0.5f)*MAP_SIZE);
 		cell->setVisible(true);
 	}
 
 	invalidateLayout();
+}
+
+void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
+	auto k = std::make_pair(_currentPosition.x, _currentPosition.y);
+	for(auto & cell : grid){
+		if(cell.first == k){
+			cell.second->setBackgroundColour(1,1,1, 1);
+		}else{
+			cell.second->setBackgroundColour(1,1,1, 0.5f);
+		}
+	}
 }

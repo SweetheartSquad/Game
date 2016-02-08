@@ -175,8 +175,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	uiMap = new PD_UI_Map(uiLayer.world);
 	uiLayer.addChild(uiMap);
-	uiMap->setRationalHeight(0.1f, &uiLayer);
-	uiMap->setRationalWidth(0.1f, &uiLayer);
+	uiMap->setRationalHeight(1.f, &uiLayer);
+	uiMap->setRationalWidth(1.f, &uiLayer);
 	uiMap->disable();
 
 	// add the player to the scene
@@ -397,7 +397,7 @@ void PD_Scene_Main::buildHouse(){
 	}
 
 	// update the map
-	uiMap->updateMap(houseGrid);
+	uiMap->buildMap(houseGrid);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
@@ -434,6 +434,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}else{
 		currentHousePosition = _movement;
 	}
+	uiMap->updateMap(currentHousePosition);
 
 	// get the room for the new position
 	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
@@ -463,6 +464,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	player->translatePhysical(p2, false);
 
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
