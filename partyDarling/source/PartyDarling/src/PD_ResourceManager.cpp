@@ -3,6 +3,7 @@
 #include <PD_ResourceManager.h>
 
 #include <PD_Assets.h>
+#include <PD_Listing.h>
 
 Scenario * PD_ResourceManager::scenario = nullptr;
 Scenario * PD_ResourceManager::itemTextures = nullptr;
@@ -13,6 +14,8 @@ PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullp
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
 std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::characterDefinitions;
+sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
+PD_Listing * PD_ResourceManager::globalScenarioListing;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -98,11 +101,31 @@ void PD_ResourceManager::init(){
 			}
 		}
 	}
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/characterNames.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto name : root["names"]) {
+				characterNames.push(name.asString());
+			}
+		}
+	}
 	
 
 	db = new DatabaseConnection("data/test.db");
 
 	resources.push_back(scenario);
+	/*
+	globalScenarioListing = new PD_Listing(scenario);
+	
+	for(unsigned long int i = 0; i < 100; i++) {
+		
+	}
+	*/
 }
 
 int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){

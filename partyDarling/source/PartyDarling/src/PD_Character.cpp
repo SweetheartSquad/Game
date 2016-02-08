@@ -13,6 +13,7 @@
 #include <PD_CharacterAnimationSet.h>
 
 #include <sweet/Input.h>
+#include <PD_Listing.h>
 
 Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
@@ -41,6 +42,7 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 }
 
 Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader) {
+
 	Json::Value pelvis;
 	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
 	Json::Value arm;
@@ -63,7 +65,7 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	id += std::to_string(sweet::step.time);
 
 	Json::Value charDef;
-	charDef["name"]         = "Big Boy Bert";
+	charDef["name"]         = PD_ResourceManager::characterNames.pop();
 	charDef["id"]			= id;
 	charDef["defaultState"] = id;
 	charDef["components"].append(pelvis);
@@ -76,7 +78,9 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
 	
-	return new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader);
+	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader);
+
+	return p;
 }
 
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
