@@ -34,6 +34,8 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
 
 	translatePhysical(glm::vec3(0, (boundingBox.height+boundingBox.width) * 0.5f, 0.f), false);
+
+	pr->setAnimation(state->animation);
 }
 
 void Person::setShader(Shader * _shader, bool _configureDefault){
@@ -139,7 +141,8 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 
 PersonState::PersonState(Json::Value _json) :
 	name(_json.get("name", "NO_NAME").asString()),
-	conversation(_json.get("convo", "NO_CONVO").asString())
+	conversation(_json.get("convo", "NO_CONVO").asString()),
+	animation(_json.get("animation", "RANDOM").asString())
 {
 }
 
@@ -295,10 +298,17 @@ PersonRenderer::~PersonRenderer(){
 }
 
 void PersonRenderer::setAnimation(std::string _name) {
-	if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
-		setAnimation(PD_ResourceManager::characterAnimations[_name]);
+	if(_name == "RANDOM"){
+		auto it = PD_ResourceManager::characterAnimations.begin();
+		int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
+		std::advance(it, idx);
+		setAnimation(it->second);
 	}else {
-		ST_LOG_ERROR("Animation " + _name + " does not exist");
+		if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
+			setAnimation(PD_ResourceManager::characterAnimations[_name]);
+		}else {
+			ST_LOG_ERROR("Animation " + _name + " does not exist");
+		}
 	}
 }
 

@@ -54,6 +54,7 @@ public:
 	// reference to the conversation which will launch
 	// if the character is spoken to while in this state
 	std::string conversation;
+	std::string animation;
 	PersonState(Json::Value _json);
 };
 

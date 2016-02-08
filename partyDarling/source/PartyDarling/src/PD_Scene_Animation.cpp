@@ -89,8 +89,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 
-	auto charAsset = dynamic_cast<AssetCharacter *>(PD_ResourceManager::scenario->getAsset("character", "2"));
-	character = new Person(bulletWorld, charAsset, MeshFactory::getPlaneMesh(3.f), characterShader);
+	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer.world, characterShader);
 	character->pr->randomAnimations = false;
 	uiLayer.childTransform->addChild(character);
 		
