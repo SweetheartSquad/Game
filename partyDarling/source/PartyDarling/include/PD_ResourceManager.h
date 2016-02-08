@@ -10,6 +10,8 @@
 #include <PD_CharacterAnimationStep.h>
 #include "PD_Assets.h"
 #include <NumberUtils.h>
+#include <string>
+#include "PD_Listing.h"
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -22,6 +24,8 @@ public:
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
 	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
+	static sweet::ShuffleVector<std::string> characterNames;
+	static PD_Listing * globalScenarioListing;
 
 	static void init();
 
