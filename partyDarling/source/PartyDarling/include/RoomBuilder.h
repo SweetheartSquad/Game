@@ -106,7 +106,6 @@ public:
 
 	// Create random room objects, including specified objects
 	std::vector<RoomObject *> getRoomObjects();
-	bool sortRoomObjects(RoomObject * i, RoomObject *j);
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
 	std::vector<PD_Item *> getItems();

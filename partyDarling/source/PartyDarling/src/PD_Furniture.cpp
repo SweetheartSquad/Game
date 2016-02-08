@@ -58,7 +58,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		delete buildResult.collider;
 		setColliderAsBoundingBox();
 	}
-	createRigidBody(_def->mass * FURNITURE_MASS_SCALE * 0);
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
 

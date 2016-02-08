@@ -290,15 +290,10 @@ bool RoomBuilder::search(RoomObject * child){
 					Log::info("Side found.");
 					// if the object can be placed without collision
 					if(arrange(child, parent, side, slot)){
-						addObjectToLists(child);
-						if(childBox.width < slot->length){
-							// adjust remaining slot space
-							slot->loc += childBox.width;
-							slot->length -= childBox.width;
-						}else{
-							// remove slot
+						if(slot->length <= 0){
 							iterator->second.erase(iterator->second.begin() + j);
 						}
+						addObjectToLists(child);
 						Log::info("Parenting and placing object.");
 						return true;
 					}
@@ -358,11 +353,9 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 	pos.y = 0;
 	glm::quat orient = parent->childTransform->getOrientationQuat();
 
-	// child side position
-	glm::vec3 childSidePos = glm::vec3(child->boundingBox.width / 2.f, child->boundingBox.height / 2.f, child->boundingBox.depth / 2.f);
-	
 	float angle = 0;
-
+	glm::vec3 childDimensions = glm::vec3(child->boundingBox.width, child->boundingBox.height, child->boundingBox.depth);
+	
 	// Rotate child according to childSide
 	if(slot->childSide != PD_Side::kBACK && slot->childSide != PD_Side::kTOP && side != PD_Side::kBOTTOM){
 		float childAngle = 0.f;
@@ -380,12 +373,14 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 		}
 		angle += childAngle;
 	}
-	
+	childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
+	/*
 	std::stringstream tex;
 	tex << "assets/textures/room/debug/" << int(side)+1 << ".png";
 	Texture * res = new Texture(tex.str(), false, true, true);
 	res->load();
 	child->mesh->replaceTextures(res);
+	*/
 	// Orient child to side
 	if(side != PD_Side::kFRONT && side != PD_Side::kTOP && side != PD_Side::kBOTTOM){
 		float sideAngle = 0.f;
@@ -437,9 +432,14 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 	// check for collision/inside room
 	if(!canPlaceObject(child, pos, orient)){
 		Log::warn("Collided");
-		//child->rotatePhysical(-angle, 0, 1.f, 0);
-		//return false;
+		child->rotatePhysical(-angle, 0, 1.f, 0);
+		return false;
 	}
+
+	// adjust remaining slot space
+	slot->loc += abs(childDimensions.x);
+	slot->length -= abs(childDimensions.x);
+
 	room->addComponent(child);
 
 	return true;
@@ -466,13 +466,13 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		glm::mat4 oMM = o->meshTransform->getCumulativeModelMatrix();
 		 
 		// Check if object intersects o
-		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM))){
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.01f)){
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
 			Log::warn(s.str());
-			//_obj->translatePhysical(-_pos);
-			//_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
-			//_obj->realign();
+			_obj->translatePhysical(-_pos);
+			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+			_obj->realign();
 			return false;
 		}
 	}
@@ -668,15 +668,11 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 
 	std::vector<RoomObject *> objects;
 	
-	//objects.insert(objects.begin(), characters.begin(), characters.end());
+	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
 
 	return objects;
-}
-
-bool RoomBuilder::sortRoomObjects(RoomObject * i, RoomObject * j){
-	return i->parentTypes.size() > j->parentTypes.size();
 }
 
 std::vector<Person *> RoomBuilder::getCharacters(){
@@ -703,23 +699,13 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(2), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(0), baseShader, GROUND));
-	/*
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
 	for(unsigned int i = 0; i < n; ++i){
 		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
 		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND));
-	}*/
+	}
 
 	return furniture;
 }
