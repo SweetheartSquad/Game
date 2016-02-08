@@ -10,7 +10,7 @@ PD_PhraseGenerator_Incidental::PD_PhraseGenerator_Incidental()
 }
 
 std::string PD_PhraseGenerator_Incidental::getLine(){
-	std::vector<std::string> names;
+	sweet::ShuffleVector<std::string> names;
 	/* Uncomment once characters aren't deleted by RoomBuilder 
 	for(auto l : PD_Listing::listingsById) {
 		for(auto c : l.second->characters) {
@@ -20,7 +20,7 @@ std::string PD_PhraseGenerator_Incidental::getLine(){
 			}
 		}
 	}*/
-	names.push_back("NAME");
+	names.push("NAME");
 	terms["name"] = names;
 	return replaceWords("*phrases*");
 }
