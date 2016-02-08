@@ -43,6 +43,7 @@
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
+    <ClInclude Include="include\PD_UI_Map.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
+    <ClCompile Include="src\PD_UI_Map.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_YellingContest.cpp" />

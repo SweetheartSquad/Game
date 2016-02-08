@@ -173,6 +173,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
+	uiMap = new PD_UI_Map(uiLayer.world);
+	uiLayer.addChild(uiMap);
+	uiMap->setRationalHeight(0.1f, &uiLayer);
+	uiMap->setRationalWidth(0.1f, &uiLayer);
+	uiMap->disable();
 
 	// add the player to the scene
 	player = new Player(bulletWorld);
@@ -389,6 +394,9 @@ void PD_Scene_Main::buildHouse(){
 			startPos.x += 1;
 		}
 	}
+
+	// update the map
+	uiMap->updateMap(houseGrid);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
@@ -697,6 +705,17 @@ void PD_Scene_Main::update(Step * _step){
 			uiInventory->open();
 			uiLayer.addMouseIndicator();
 			player->disable();
+		}
+	}
+	
+	// map toggle
+	if(keyboard->keyJustDown(GLFW_KEY_M)){
+		if(uiMap->isEnabled()){
+			uiMap->disable();
+			//player->enable();
+		}else{
+			uiMap->enable();
+			//player->disable();
 		}
 	}
 

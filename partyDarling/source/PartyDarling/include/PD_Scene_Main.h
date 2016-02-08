@@ -13,6 +13,7 @@
 #include <PD_UI_Bubble.h>
 #include <PD_UI_Dialogue.h>
 #include <PD_UI_YellingContest.h>
+#include <PD_UI_Map.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -47,6 +48,7 @@ public:
 	PD_UI_Bubble * uiBubble;
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;
+	PD_UI_Map * uiMap;
 	ComponentShaderBase * characterShader;
 	
 	PD_PhraseGenerator_Incidental incidentalPhraseGenerator;
