@@ -59,6 +59,7 @@ class RoomBuilder{
 private:
 	Shader * baseShader;
 	Shader * characterShader;
+	Shader * emoteShader;
 
 	// the definition for this room
 	AssetRoom * const definition;
@@ -86,7 +87,7 @@ public:
 
 	std::vector<Edge *> edges;
 
-	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader);
+	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader);
 	~RoomBuilder();
 
 	Room * getRoom();

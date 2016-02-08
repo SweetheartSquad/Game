@@ -4,6 +4,7 @@
 
 #include <PD_Assets.h>
 #include <PD_Listing.h>
+#include <SpriteSheet.h>
 
 Scenario * PD_ResourceManager::scenario = nullptr;
 Scenario * PD_ResourceManager::itemTextures = nullptr;
@@ -14,6 +15,7 @@ PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullp
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
 std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::characterDefinitions;
+std::map<std::string, EmoteDef> PD_ResourceManager::emotes;
 sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
 PD_Listing * PD_ResourceManager::globalScenarioListing;
 
@@ -114,7 +116,32 @@ void PD_ResourceManager::init(){
 			}
 		}
 	}
-	
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/emotes.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto emote : root) {
+				auto tex = new Texture("assets/textures/emotes/" + emote["src"].asString(), true, false);
+				tex->load();
+				SpriteSheet * spriteSheet = new SpriteSheet(tex);
+				SpriteSheetAnimation * mainAnim = new SpriteSheetAnimation(emote["secondsPerFrame"].asFloat());
+				mainAnim->pushFramesInRange(
+					0, emote["frames"].asInt() - 1, 
+					emote["frameWidth"].asInt(), 
+					emote["frameHeight"].asInt(),
+					tex->width, tex->height);
+				spriteSheet->addAnimation("main", mainAnim);
+				EmoteDef def;
+				def.spriteSheet = spriteSheet;
+				def.offset = glm::vec2(emote["offset"][0].asFloat(), emote["offset"][1].asFloat());
+				emotes[emote["name"].asString()] = def;
+			}
+		}
+	}
 
 	db = new DatabaseConnection("data/test.db");
 

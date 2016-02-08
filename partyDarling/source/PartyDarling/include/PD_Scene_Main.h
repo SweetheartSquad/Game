@@ -50,6 +50,7 @@ public:
 	PD_UI_YellingContest * uiYellingContest;
 	PD_UI_Map * uiMap;
 	ComponentShaderBase * characterShader;
+	ComponentShaderBase * emoteShader;
 	
 	PD_PhraseGenerator_Incidental incidentalPhraseGenerator;
 

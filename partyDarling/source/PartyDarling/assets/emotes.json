@@ -1,0 +1,11 @@
+[
+	{
+		"src":"spritesheet.png",
+		"name":"test",
+		"frameWidth" : 240,
+		"frameHeight" : 296,
+		"frames"     : 30,
+		"secondsPerFrame": 0.1,
+		"offset" : [1, 1]
+	} 
+]

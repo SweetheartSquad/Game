@@ -107,11 +107,14 @@ public:
 	bool animate;
 
 	PD_CharacterAnimationSet * currentAnimation;
+	Sprite * emote;
 
 	virtual void setAnimation(std::string _name);
 	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
+	virtual void setEmote(std::string _id);
+	virtual void setEmoteNone();
 
-	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
+	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder);
 	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default) const;
@@ -133,7 +136,7 @@ public:
 	
 	AssetCharacter * const definition;
 
-	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
+	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 
@@ -141,5 +144,5 @@ public:
 	
 	PersonRenderer * pr;
 
-	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader);
+	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
 };

@@ -89,7 +89,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 
-	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer.world, characterShader);
+	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer.world, characterShader, baseShader);
 	character->pr->randomAnimations = false;
 	uiLayer.childTransform->addChild(character);
 		

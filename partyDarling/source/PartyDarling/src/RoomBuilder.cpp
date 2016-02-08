@@ -119,13 +119,13 @@ bool RoomBuilder::staticInit(){
 }
 bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
 
-RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
+RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader):
 	world(_world),
 	baseShader(_baseShader),
 	characterShader(_characterShader),
-	definition(_definition)
+	definition(_definition),
+	emoteShader(_emoteShader)
 {
-	
 }
 
 RoomBuilder::~RoomBuilder(){
@@ -612,10 +612,10 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 	std::vector<Person*> characters;
 	
 	for(auto def : characterDefinitions){
-		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader));
+		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader));
 	}
 
-	characters.push_back(Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader));
+	characters.push_back(Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader));
 
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
