@@ -58,7 +58,30 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		delete buildResult.collider;
 		setColliderAsBoundingBox();
 	}
-	createRigidBody(_def->mass * FURNITURE_MASS_SCALE);
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE * 0);
 	
-	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);
+	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
+
+	// Get type
+	type = _def->type;
+
+	// Get parent types
+	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
+
+	// Get the sides information
+	if(_def->sides.front != PD_Side::kNONE){
+		emptySlots[PD_Side::kFRONT] = std::vector<Slot *>(1, new Slot(_def->sides.front, 0.f, boundingBox.width));
+	}
+	if(_def->sides.back != PD_Side::kNONE){
+		emptySlots[PD_Side::kBACK] = std::vector<Slot *>(1, new Slot(_def->sides.back, 0.f, boundingBox.width));
+	}
+	if(_def->sides.right != PD_Side::kNONE){
+		emptySlots[PD_Side::kRIGHT] = std::vector<Slot *>(1, new Slot(_def->sides.right, 0.f, boundingBox.depth));
+	}
+	if(_def->sides.left != PD_Side::kNONE){
+		emptySlots[PD_Side::kLEFT] = std::vector<Slot *>(1, new Slot(_def->sides.left, 0.f, boundingBox.depth));
+	}
+	if(_def->sides.top != PD_Side::kNONE){
+		emptySlots[PD_Side::kTOP] = std::vector<Slot *>(1, new Slot(_def->sides.top, 0.f, boundingBox.width));
+	}
 }

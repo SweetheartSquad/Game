@@ -2,7 +2,8 @@
 #include <MeshInterface.h>
 #include <Box.h>
 
-Slot::Slot(float _loc, float _length) :
+Slot::Slot(PD_Side _childSide, float _loc, float _length) :
+	childSide(_childSide),
 	loc(_loc),
 	length(_length)
 {
@@ -12,7 +13,8 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	BulletMeshEntity(_world, _mesh, _shader),
 	anchor(_anchor),
 	boundingBox(mesh->calcBoundingBox()),
-	parent(nullptr)
+	parent(nullptr),
+	type("")
 {
 	 
 }

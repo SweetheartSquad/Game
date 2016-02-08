@@ -19,7 +19,6 @@
 			"mass": 40,
             "roomTypes" : ["LIVING_ROOM"],
             "sides" : {
-                    "TOP":"BOTTOM",
                     "FRONT":"FRONT",
                     "BACK":"FRONT",
                     "LEFT":"FRONT",

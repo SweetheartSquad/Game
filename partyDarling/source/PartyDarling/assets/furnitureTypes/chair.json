@@ -34,7 +34,7 @@
             "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
             "sides" : {
                 },
-            "parents":["table", "wall"],
+            "parents":["table"],
             "padding":0    
 
         }

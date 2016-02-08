@@ -22,8 +22,6 @@ enum RoomObject_t{
 	ITEM
 };
 
-enum Side_t;
-
 class BulletWorld;
 class MeshInterface;
 
@@ -93,7 +91,7 @@ public:
 
 	// Furniture placement
 	bool search(RoomObject * child);
-	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
+	bool arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot);
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 	void addObjectToLists(RoomObject * _obj);
 	bool canBeParent(RoomObject * _obj);
@@ -108,6 +106,7 @@ public:
 
 	// Create random room objects, including specified objects
 	std::vector<RoomObject *> getRoomObjects();
+	bool sortRoomObjects(RoomObject * i, RoomObject *j);
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
 	std::vector<PD_Item *> getItems();
