@@ -223,6 +223,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			Log::warn("Character not found in state change event");
 		}else{
 			character->state = &character->definition->states.at(stateName.str());
+			character->pr->setAnimation(character->state->animation);
 		}
 	});
 

@@ -3,6 +3,18 @@
 		{
 			"name":"test",
 			"src":"test.json"
+		},
+		{
+			"name":"WAVE",
+			"src":"wave.json"
+		},
+		{
+			"name":"DANCE_1",
+			"src":"dance1.json"
+		},
+		{
+			"name":"DANCE_2",
+			"src":"dance2.json"
 		}
 	]	
 }
