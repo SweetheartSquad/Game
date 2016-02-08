@@ -13,6 +13,8 @@
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
 
+#include <PD_PhraseGenerator_Incidental.h>
+
 #include <NumberUtils.h>
 #include <StringUtils.h>
 #include <TextureUtils.h>
@@ -42,6 +44,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonShader(new ComponentShaderBase(false)),
 	uiLayer(0,0,0,0),
 	characterShader(new ComponentShaderBase(false)),
+	emoteShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
@@ -53,7 +56,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lightEnd(1.f),
 	lightIntensity(1.f),
 	transition(0.f),
-	transitionTarget(1.f)
+	transitionTarget(1.f),
+	currentRoom(nullptr),
+	currentHousePosition(0)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -69,6 +74,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
 	characterShader->compileShader();
+
+	emoteShader->addComponent(new ShaderComponentMVP(emoteShader));
+	emoteShader->addComponent(new ShaderComponentTexture(emoteShader));
+	emoteShader->addComponent(new ShaderComponentDepthOffset(emoteShader));
+	emoteShader->compileShader();
 
 	screenSurfaceShader->referenceCount++;
 	screenFBO->referenceCount++;
@@ -169,6 +179,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
+	uiMap = new PD_UI_Map(uiLayer.world);
+	uiLayer.addChild(uiMap);
+	uiMap->setRationalHeight(0.1f, &uiLayer);
+	uiMap->setRationalWidth(0.1f, &uiLayer);
+	uiMap->disable();
 
 	// add the player to the scene
 	player = new Player(bulletWorld);
@@ -184,16 +199,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	lights.push_back(playerLight);
 
 
-	// pick a random room to load
-	std::stringstream ss;
-	ss << sweet::NumberUtils::randomInt(1, 4);
-	Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(PD_ResourceManager::scenario->getAsset("room",ss.str())), bulletWorld, toonShader, characterShader).getRoom();
-	childTransform->addChild(room);
-	
-	for(unsigned int i = 0; i < room->components.size(); ++i){
-		childTransform->addChild(room->components.at(i));
-	}
-
 	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
 	
 	// Set the scenario condition implentations pointer
@@ -207,7 +212,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// CHARACTER character
 		// CHARACTER_STATE state
 
-		return true;
+		return false;
 	};
 
 	// setup event listeners
@@ -218,13 +223,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		stateName << (int)glm::round(_event->getFloatData("State"));
 		std::cout << characterName.str() << "'s state changed to " << stateName.str() << std::endl;
 
-		Scenario * scenario = PD_ResourceManager::scenario;
-		PD_Listing * listing = PD_Listing::listings[PD_ResourceManager::scenario];
+		PD_Listing * listing = PD_Listing::listingsById[_event->getStringData("scenario")];
 		Person * character = listing->characters[characterName.str()];
 		if(character == nullptr){
 			Log::warn("Character not found in state change event");
 		}else{
 			character->state = &character->definition->states.at(stateName.str());
+			character->pr->setAnimation(character->state->animation);
 		}
 	});
 
@@ -240,17 +245,20 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
-		Timeout * t = new Timeout(1.f, [_game](sweet::Event * _event){
+		Timeout * t = new Timeout(1.f, [this, _game](sweet::Event * _event){
 			std::stringstream ss;
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-			_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
-			_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
+			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
+
+			navigate(glm::ivec2(1,0)); // TODO: replace this with actual navigation vector
+
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 		});
 		t->start();
 		childTransform->addChild(t, false);
 
-		PD_ResourceManager::scenario->eventManager.listeners.clear();
+		//PD_ResourceManager::scenario->eventManager.listeners.clear();
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
@@ -290,7 +298,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}else if(stat == "sass") {
 			player->sass += delta;		
 		}else {
-			ST_LOG_ERROR_V("Invalid argument provided for argumet 'stat' in trigger changeDISSStat");
+			ST_LOG_ERROR_V("Invalid argument provided for argument 'stat' in trigger changeDISSStat");
 		}
 	});
 
@@ -310,6 +318,96 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+
+	// build house
+	pickScenarios();
+	bundleScenarios();
+	buildHouse();
+
+	// move the player to the entrance of the first room
+	navigate(glm::ivec2(0,0), false);
+}
+
+
+void PD_Scene_Main::pickScenarios(){
+	// grab the current main plot scenario
+	// these go in order
+
+
+	// pick an omar scenario
+	// first is always the tutorial/intro
+	// middle are random from the a given set
+	// last is always the final
+
+
+	// pick side scenarios
+	// random from static shuffle vector
+
+	// TODO: all of this
+	
+	activeScenarios.push_back(new Scenario("assets/scenario-external-1.json"));
+	activeScenarios.push_back(new Scenario("assets/scenario-external-2.json"));
+
+	// set event managers on selected scenarios as children of the global scenario
+	for(auto s : activeScenarios){
+		PD_ResourceManager::scenario->eventManager.addChildManager(&s->eventManager);
+	}
+}
+
+void PD_Scene_Main::bundleScenarios(){
+	// find matching assets in scenarios and merge them
+	// TODO: all of this
+}
+
+void PD_Scene_Main::buildHouse(){
+	glm::ivec2 startPos(0);
+
+	// build all of the rooms contained in the selected scenarios
+	for(auto s : activeScenarios){
+		
+		// create a listing for this scenario
+		PD_Listing * listing = new PD_Listing(s);
+
+		// build the rooms in this scenario
+		for(auto rd : s->assets.at("room")){
+			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
+			
+			// setup the first parents, but don't actually add anything to the scene yet
+			Transform * t = new Transform();
+			t->addChild(room, false);
+			for(unsigned int i = 0; i < room->components.size(); ++i){
+				t = new Transform();
+				t->addChild(room->components.at(i), false);
+			}
+
+			// run the physics simulation for a few seconds to let things settle
+			Log::info("Letting the bodies hit the floor...");
+			Step s;
+			s.setDeltaTime(10);
+			unsigned long int i = bulletWorld->maxSubSteps;
+			bulletWorld->maxSubSteps = 10000;
+			bulletWorld->update(&s);
+			bulletWorld->maxSubSteps = i;
+			Log::info("The bodies have finished hitting the floor.");
+
+			// remove the physics bodies (we'll put them back in as needed)
+			room->removePhysics();
+
+
+			// save the room for later access
+			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
+
+			houseGrid[std::make_pair(startPos.x, startPos.y)] = room;
+			startPos.x += 1;
+		}
+	}
+
+	// update the map
+	uiMap->updateMap(houseGrid);
+}
+
+void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
+	// transition
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 	checkForGlError(false);
@@ -322,6 +420,55 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		glUniform1f(test, 1);
 		checkForGlError(false);
 	}
+	transition = 0.f;
+	transitionTarget = 1.f;
+	player->enable();
+	
+	// clear out the old room's stuff
+	if(currentRoom != nullptr){
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
+		}
+		childTransform->removeChild(currentRoom->firstParent());
+		currentRoom->removePhysics();
+	}
+
+
+	// update position within house
+	if(_relative){
+		currentHousePosition += _movement;
+	}else{
+		currentHousePosition = _movement;
+	}
+
+	// get the room for the new position
+	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
+	if(houseGrid.count(key) != 1){
+		Log::error("Room not found.");
+	}
+	currentRoom = houseGrid.at(key);
+
+	// put the room into the scene/physics world
+	currentRoom->addPhysics();
+	childTransform->addChild(currentRoom->firstParent(), false);
+	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+		childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
+	}
+
+
+	
+
+	// make sure the door is up-to-date, and then place the player in front of it
+	currentRoom->door->realign();
+	glm::quat o = currentRoom->door->childTransform->getOrientationQuat();
+	btVector3 p = currentRoom->door->body->getWorldTransform().getOrigin();
+	glm::vec3 p2(0,0,3);
+	p2 = o * p2;
+	p2 += glm::vec3(p.x(), p.y(), p.z());
+
+	player->translatePhysical(p2, false);
+
+	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -427,6 +574,9 @@ void PD_Scene_Main::update(Step * _step){
 								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
 									// remove the item from the scene
 									Transform * toDelete = item->firstParent();
+
+									currentRoom->removeComponent(item);
+
 									toDelete->firstParent()->removeChild(toDelete);
 									toDelete->removeChild(item);
 									delete toDelete;
@@ -465,8 +615,24 @@ void PD_Scene_Main::update(Step * _step){
 							// clear out the bubble UI and add the relevant options
 							uiBubble->clear();
 							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-								uiDialogue->startEvent(PD_ResourceManager::scenario->getConversation(person->state->conversation)->conversation);
-								player->disable();
+								std::string c = person->state->conversation;
+								if(c == "NO_CONVO"){
+									// incidental conversation
+									Json::Value dialogue;
+									dialogue["text"].append(incidentalPhraseGenerator.getLine());
+									dialogue["speaker"] = person->definition->id;
+									Json::Value root;
+									root["dialogue"] = Json::Value();
+									root["dialogue"].append(dialogue);
+
+									Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+									uiDialogue->startEvent(tempConvo, true);
+									player->disable();
+								}else{
+									// start a proper conversation
+									uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+									player->disable();
+								}
 							});
 							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
 								uiYellingContest->startNewFight();
@@ -491,7 +657,6 @@ void PD_Scene_Main::update(Step * _step){
 			if(ui != nullptr){
 				ui->setUpdateState(true);
 			}*/
-		
 
 			currentHoverTarget = me;
 		}else{
@@ -521,6 +686,8 @@ void PD_Scene_Main::update(Step * _step){
 						item->translatePhysical(targetPos, false);
 						// rotate the item to face the camera
 						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+
+						currentRoom->addComponent(item);
 					}
 
 					// replace the crosshair item texture with the actual crosshair texture
@@ -545,6 +712,17 @@ void PD_Scene_Main::update(Step * _step){
 			uiInventory->open();
 			uiLayer.addMouseIndicator();
 			player->disable();
+		}
+	}
+	
+	// map toggle
+	if(keyboard->keyJustDown(GLFW_KEY_M)){
+		if(uiMap->isEnabled()){
+			uiMap->disable();
+			//player->enable();
+		}else{
+			uiMap->enable();
+			//player->disable();
 		}
 	}
 

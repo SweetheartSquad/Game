@@ -32,7 +32,7 @@ PD_Game::PD_Game() :
 
 	scenes["game"] = new PD_Scene_Main(this);
 
-	playBGM();
+	//playBGM();
 }
 
 PD_Game::~PD_Game(){

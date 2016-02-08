@@ -29,19 +29,27 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 
 	Log::THROW_ON_ERROR = true;
 
-	sweet::NumberUtils::seed(time(nullptr));
-
-	sweet::initialize("Party, Darling? -Alpha "
+	// initialize S-Tengine2
+	sweet::initialize("Party, Darling? -Beta "
 #ifdef _DEBUG
 		"Debug"
 #else
 		"Release"
 #endif
 		" Build");
+
+	//sweet::NumberUtils::seed(time(nullptr));
+	//OpenAL_Sound::masterGain = 0;
+
+	// initialize resources
 	PD_ResourceManager::init();
 	PD_ResourceManager::load();
+
+	// create game
 	PD_Game * game = new PD_Game();
 	game->init();
+
+	// main game loop
 	while (game->isRunning){
 		game->performGameLoop();
 	}

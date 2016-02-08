@@ -6,6 +6,8 @@
 #include <BulletWorld.h>
 #include <vector>
 
+#define ROOM_SIZE_MAX 12
+
 enum Room_t{
 	BEDROOM,
 	LIVINGROOM,
@@ -24,20 +26,33 @@ class Sprite;
 
 class RoomObject;
 class PD_TilemapGenerator;
+class AssetRoom;
 
 class Room: public BulletMeshEntity {
 public:
+	AssetRoom * const definition;
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
+	
+	BulletMeshEntity * floor;
+	BulletMeshEntity * ceiling;
+	RoomObject * door;
 
-	Room(BulletWorld * _world, Shader * _shader);
+	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);
 
-	void addComponent(RoomObject *);
+	void addComponent(RoomObject * _obj);
+	void removeComponent(RoomObject * _obj);
 	virtual void setShader(Shader * _shader, bool _default) override;
 
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
 
 	glm::vec3 getCenter() const;
+
+
+	// removes all of the rigid bodies associated with the room from the world
+	void removePhysics();
+	// adds all of the rigid bodies associatedw with the room to the world
+	void addPhysics();
 };

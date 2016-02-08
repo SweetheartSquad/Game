@@ -8,6 +8,15 @@
 #include <PD_FurnitureParser.h>
 #include <map>
 #include <PD_CharacterAnimationStep.h>
+#include "PD_Assets.h"
+#include <NumberUtils.h>
+#include <string>
+#include "PD_Listing.h"
+
+struct EmoteDef {
+	SpriteSheet * spriteSheet;
+	glm::vec2 offset;
+};
 
 class PD_ResourceManager : public ResourceManager{
 public:
@@ -19,6 +28,10 @@ public:
 	static PD_FurnitureComponentContainer * furnitureComponents;
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
+	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
+	static std::map<std::string, EmoteDef> emotes;
+	static sweet::ShuffleVector<std::string> characterNames;
+	static PD_Listing * globalScenarioListing;
 
 	static void init();
 

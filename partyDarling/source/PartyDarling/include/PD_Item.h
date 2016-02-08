@@ -10,6 +10,7 @@ class BulletWorld;
 class AssetItem;
 
 #define ITEM_POS_Y 2
+#define ITEM_SCALE (CHARACTER_SCALE)*4
 
 class PD_Item : public RoomObject{
 public:

@@ -13,6 +13,7 @@
 #include <PD_UI_Bubble.h>
 #include <PD_UI_Dialogue.h>
 #include <PD_UI_YellingContest.h>
+#include <PD_UI_Map.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -20,6 +21,7 @@
 
 
 #include <PD_Character.h>
+#include <PD_PhraseGenerator_Incidental.h>
 
 class PointLight;
 class RampTexture;
@@ -46,8 +48,11 @@ public:
 	PD_UI_Bubble * uiBubble;
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;
+	PD_UI_Map * uiMap;
 	ComponentShaderBase * characterShader;
-
+	ComponentShaderBase * emoteShader;
+	
+	PD_PhraseGenerator_Incidental incidentalPhraseGenerator;
 
 	NodeUI * crosshairIndicator;
 
@@ -70,4 +75,27 @@ public:
 
 	PD_Scene_Main(PD_Game * _game);
 	~PD_Scene_Main();
+
+
+	// the room which the player is currently in
+	Room * currentRoom;
+	
+	// Moves to a new room
+	// if _relative is true, currentHousePosition += _movement
+	// if _relative is false, currentHousePosition = _movement
+	void navigate(glm::ivec2 _movement, bool _relative = true);
+
+	// the player's current position within the house grid
+	glm::ivec2 currentHousePosition;
+	// a map which stores all of the currently available rooms using their positions as the keys
+	std::map<std::pair<int, int>, Room *> houseGrid;
+
+	std::vector<Scenario *> activeScenarios;
+
+	// randomly pick one main plot scenario and a few side plot scenarios
+	void pickScenarios();
+	// try to combine definitions in the scenarios
+	void bundleScenarios();
+	// convert the bundled scenarios into actual rooms and stuff
+	void buildHouse();
 };

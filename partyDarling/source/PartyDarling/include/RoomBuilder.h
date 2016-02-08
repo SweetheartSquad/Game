@@ -8,6 +8,7 @@
 
 #define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
+// world space units per pixel inthe tilemap
 #define ROOM_TILE 5
 
 enum RoomLayout_t{
@@ -57,6 +58,7 @@ class RoomBuilder{
 private:
 	Shader * baseShader;
 	Shader * characterShader;
+	Shader * emoteShader;
 
 	// the definition for this room
 	AssetRoom * const definition;
@@ -84,7 +86,7 @@ public:
 
 	std::vector<Edge *> edges;
 
-	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader);
+	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader);
 	~RoomBuilder();
 
 	Room * getRoom();

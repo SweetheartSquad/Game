@@ -17,13 +17,13 @@
 
 #define CHARACTER_SCALE 0.001f
 
+class Scenario;
 class PD_CharacterAnimationStep;
 class Conversation;
 class PersonRenderer;
 class AssetCharacter;
 class CharacterComponentDefinition;
 class PD_Palette;
-
 
 class PersonComponent : public Sprite{
 public:
@@ -54,6 +54,7 @@ public:
 	// reference to the conversation which will launch
 	// if the character is spoken to while in this state
 	std::string conversation;
+	std::string animation;
 	PersonState(Json::Value _json);
 };
 
@@ -106,11 +107,14 @@ public:
 	bool animate;
 
 	PD_CharacterAnimationSet * currentAnimation;
+	Sprite * emote;
 
 	virtual void setAnimation(std::string _name);
 	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
+	virtual void setEmote(std::string _id);
+	virtual void setEmoteNone();
 
-	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader);
+	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder);
 	~PersonRenderer();
 
 	void setShader(Shader * _shader, bool _default) const;
@@ -132,11 +136,13 @@ public:
 	
 	AssetCharacter * const definition;
 
-	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
+	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 
 	virtual void setShader(Shader * _shader, bool _default) override;
 	
 	PersonRenderer * pr;
+
+	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
 };

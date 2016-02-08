@@ -119,27 +119,27 @@ bool RoomBuilder::staticInit(){
 }
 bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
 
-RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader):
+RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader):
 	world(_world),
 	baseShader(_baseShader),
 	characterShader(_characterShader),
-	definition(_definition)
+	definition(_definition),
+	emoteShader(_emoteShader)
 {
-	
 }
 
 RoomBuilder::~RoomBuilder(){
 }
 
 Room * RoomBuilder::getRoom(){
-	room = new Room(world, baseShader);
+	room = new Room(world, baseShader, definition);
 	
 	// convert size enum to actual numbers
 	unsigned long int l, w;
 	switch (definition->size){
-		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(4, 6); w = sweet::NumberUtils::randomInt(4, 6); break;
-		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(4, 8); w = sweet::NumberUtils::randomInt(4, 8); break;
-		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(6, 12); w = sweet::NumberUtils::randomInt(6, 12); break;
+		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); break;
+		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
+		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); break;
 		break;
 	}
 
@@ -154,39 +154,39 @@ Room * RoomBuilder::getRoom(){
 	room->tilemap->saveImageData("tilemap.tga");
 
 	// create floor/ceiling as static bullet planes
-	BulletMeshEntity * bulletFloor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletFloor->setColliderAsStaticPlane(0, 1, 0, 0);
-	bulletFloor->createRigidBody(0);
-	bulletFloor->body->setFriction(1);
-	room->childTransform->addChild(bulletFloor);
-	bulletFloor->meshTransform->scale(-fullL, fullW, 1.f);
-	bulletFloor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletFloor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletFloor->translatePhysical(room->getCenter(), false);
-	bulletFloor->mesh->setScaleMode(GL_NEAREST);
-	bulletFloor->mesh->pushTexture2D(getFloorTex());
+	room->floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	room->floor->setColliderAsStaticPlane(0, 1, 0, 0);
+	room->floor->createRigidBody(0);
+	room->floor->body->setFriction(1);
+	room->childTransform->addChild(room->floor);
+	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
+	room->floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	room->floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	room->floor->translatePhysical(room->getCenter(), false);
+	room->floor->mesh->setScaleMode(GL_NEAREST);
+	room->floor->mesh->pushTexture2D(getFloorTex());
 #ifndef RG_DEBUG
 	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : bulletFloor->mesh->vertices){
+	for(Vertex & v : room->floor->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
 #endif
 
-	BulletMeshEntity * bulletCeil = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	bulletCeil->setColliderAsStaticPlane(0, -1, 0, 0);
-	bulletCeil->createRigidBody(0);
-	bulletCeil->body->setFriction(1);
-	room->childTransform->addChild(bulletCeil);
-	bulletCeil->meshTransform->scale(-fullL, fullW, -1.f);
-	bulletCeil->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	bulletCeil->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	bulletCeil->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
-	bulletCeil->mesh->setScaleMode(GL_NEAREST);
-	bulletCeil->mesh->pushTexture2D(getCeilTex());
+	room->ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
+	room->ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
+	room->ceiling->createRigidBody(0);
+	room->ceiling->body->setFriction(1);
+	room->childTransform->addChild(room->ceiling);
+	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
+	room->ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	room->ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
+	room->ceiling->mesh->setScaleMode(GL_NEAREST);
+	room->ceiling->mesh->pushTexture2D(getCeilTex());
 #ifndef RG_DEBUG
 	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : bulletCeil->mesh->vertices){
+	for(Vertex & v : room->ceiling->mesh->vertices){
 		v.u *= l;
 		v.v *= w;
 	}
@@ -271,19 +271,15 @@ bool RoomBuilder::search(RoomObject * child){
 			if (std::find(child->parentTypes.begin(), child->parentTypes.end(), parent->type) == child->parentTypes.end()){
 				continue;
 			}
-
-			Log::info("Checking parent.");
 			typedef std::map<PD_Side, std::vector<Slot *>>::iterator it_type;
 			for(it_type iterator = parent->emptySlots.begin(); iterator != parent->emptySlots.end(); iterator++) {
-
 				// go through available slots of side
 				for(unsigned int j = 0; j < iterator->second.size(); ++j){
 					PD_Side side = iterator->first;
 					Slot * slot = iterator->second.at(j);
-					sweet::Box childBox = child->mesh->calcBoundingBox();
 					
 					// check length of slot
-					if(childBox.width > slot->length){
+					if(child->boundingBox.width > slot->length){
 						Log::warn("Not enough SPACE along side.");
 						continue;
 					}
@@ -468,7 +464,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.01f)){
 			std::stringstream s;
-			s << "Can't place due to COLLISION with: " << o->boundingBox.height;
+			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
 			Log::warn(s.str());
 			_obj->translatePhysical(-_pos);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
@@ -481,21 +477,14 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 }
 
 std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB){
+	glm::mat4 m = glm::inverse(_mmB) * _mmA;
 
-	glm::mat4 immB = glm::inverse(_mmB);
-	glm::mat4 m = immB * _mmA;
-
-	std::vector<glm::vec4> transformed; 
+	std::vector<glm::vec3> transformed; 
 	for(auto v : _verts){
-		transformed.push_back(m * glm::vec4(v, 1));
+		transformed.push_back(glm::vec3(m * glm::vec4(v, 1)));
 	}
 
-	std::vector<glm::vec3> vertices; 
-	for(auto t : transformed){
-		vertices.push_back(glm::vec3(t.x, t.y, t.z));
-	}
-
-	return vertices;
+	return transformed;
 }
 
 void RoomBuilder::addObjectToLists(RoomObject * _obj){
@@ -654,11 +643,11 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
-	PD_Listing * listing = new PD_Listing(this->definition->scenario);
-
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
 	std::vector<PD_Item *> items = getItems();
+
+	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
 	for(auto c : characters){
 		listing->addCharacter(c);
@@ -680,8 +669,10 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 	std::vector<Person*> characters;
 	
 	for(auto def : characterDefinitions){
-		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader));
+		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader));
 	}
+
+	characters.push_back(Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader));
 
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
@@ -717,7 +708,9 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	// add a door manually
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
-	items.push_back(new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL));
+	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
+	room->door = door;
+	items.push_back(door);
 
 	for(auto def : itemDefinitions){
 		items.push_back(new PD_Item(def, world, baseShader));

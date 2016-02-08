@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="include\PD_CharacterAnimationSet.h" />
     <ClInclude Include="include\PD_CharacterAnimationStep.h" />
+    <ClInclude Include="include\PD_PhraseGenerator_Incidental.h" />
     <ClInclude Include="include\PD_Scene_Animation.h" />
     <ClInclude Include="include\PD_Character.h" />
     <ClInclude Include="include\DialogueDisplay.h" />
@@ -29,7 +30,7 @@
     <ClInclude Include="include\PD_House.h" />
     <ClInclude Include="include\PD_HouseGenerator.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
-    <ClInclude Include="include\PD_InsultGenerator.h" />
+    <ClInclude Include="include\PD_PhraseGenerator_Insults.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Palette.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
+    <ClInclude Include="include\PD_UI_Map.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_YellingContest.h" />
@@ -54,6 +56,7 @@
   <ItemGroup>
     <ClCompile Include="src\PD_CharacterAnimationSet.cpp" />
     <ClCompile Include="src\PD_CharacterAnimationStep.cpp" />
+    <ClCompile Include="src\PD_PhraseGenerator_Incidental.cpp" />
     <ClCompile Include="src\PD_Scene_Animation.cpp" />
     <ClCompile Include="src\PD_Character.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
@@ -71,7 +74,7 @@
     <ClCompile Include="src\PD_House.cpp" />
     <ClCompile Include="src\PD_HouseGenerator.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
-    <ClCompile Include="src\PD_InsultGenerator.cpp" />
+    <ClCompile Include="src\PD_PhraseGenerator_Insults.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />
@@ -84,6 +87,7 @@
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
+    <ClCompile Include="src\PD_UI_Map.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_YellingContest.cpp" />
@@ -94,9 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Party Darling - 2012.aps" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Party Darling - 2012.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
@@ -158,6 +159,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
