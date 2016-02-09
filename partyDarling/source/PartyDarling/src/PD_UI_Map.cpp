@@ -35,12 +35,13 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 {
 	background->setVisible(false);
 
-	roomName = new TextLabel(world, _font, _textShader, 1.f);
+	roomName = new TextLabel(world, _font, _textShader);
+	addChild(roomName);
 	roomName->horizontalAlignment = kCENTER;
+	roomName->setRationalWidth(1.f, this);
 	roomName->setMarginBottom(0.05f);
 	roomName->setVisible(false);
 
-	addChild(roomName);
 }
 
 void PD_UI_Map::disable(){

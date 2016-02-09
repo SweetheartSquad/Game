@@ -4,8 +4,8 @@
 
 #include <shader/Shader.h>
 
-PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderText* _textShader, float width, float height) :
-	TextArea(_bulletWorld, _font, _textShader, width, height),
+PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderText* _textShader) :
+	TextArea(_bulletWorld, _font, _textShader),
 	textColour(0, 0, 0),
 	downColour(0, 0, 0),
 	overColour(0, 0, 0),

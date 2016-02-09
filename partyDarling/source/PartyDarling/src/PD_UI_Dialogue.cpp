@@ -7,7 +7,7 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	NodeUI(_world),
 	uiBubble(_uiBubble),
 	textBubble(new NodeUI_NineSliced(world, uiBubble->bubbleTex)),
-	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader, 1.f))
+	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader))
 {
 	setRenderMode(kTEXTURE);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);

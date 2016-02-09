@@ -19,19 +19,18 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	background->setVisible(true);
 	background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("BACKPACK")->texture);
 	background->mesh->setScaleMode(GL_NEAREST);
-	setRationalHeight(1.f);
-	setRationalWidth(1.f);
 	horizontalAlignment = kCENTER;
 	verticalAlignment = kMIDDLE;
 
 	// layout for grid rows
 	gridLayout = new VerticalLinearLayout(world);
+	addChild(gridLayout);
 	gridLayout->setBackgroundColour(1,1,1,1);
 	gridLayout->background->setVisible(true);
 	gridLayout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GRID")->texture);
 	gridLayout->background->mesh->setScaleMode(GL_NEAREST);
-	gridLayout->setRationalHeight(0.75f);
-	gridLayout->setRationalWidth(0.5f);
+	gridLayout->setRationalHeight(0.75f, this);
+	gridLayout->setRationalWidth(0.5f, this);
 	gridLayout->setPadding(0.01f, 0.01f);
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
@@ -40,25 +39,24 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		slider->setValue(gridOffset + _event->getFloatData("delta"));
 	});
 
-	addChild(gridLayout);
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
 		// individual grid row, layout for grid cells
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
-		hl->setRationalWidth(1.f);
-		hl->setRationalHeight(1.f/UI_INVENTORY_GRID_SIZE_Y);
-		hl->setMargin(0, 0.01f);
 		gridLayout->addChild(hl);
+		hl->setRationalWidth(1.f, gridLayout);
+		hl->setRationalHeight(1.f/UI_INVENTORY_GRID_SIZE_Y, gridLayout);
+		hl->setMargin(0, 0.01f);
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
 			// individual grid cell
 			NodeUI * cell = new NodeUI(world);
-			cell->setRationalWidth(1.f/UI_INVENTORY_GRID_SIZE_X);
-			cell->setRationalHeight(1.f);
+			hl->addChild(cell);
+			cell->setRationalWidth(1.f/UI_INVENTORY_GRID_SIZE_X, hl);
+			cell->setRationalHeight(1.f, hl);
 			cell->setMargin(0.01f, 0);
 			cell->background->mesh->setScaleMode(GL_NEAREST);
 			cell->boxSizing = kBORDER_BOX;
 			cell->setMouseEnabled(true);
 			cell->setVisible(false);
-			hl->addChild(cell);
 
 			// event listeners
 			cell->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
@@ -82,49 +80,48 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 	// scrollbar
 	slider = new SliderController(world, &gridOffset, 0, 0, 0, false, true);
-	slider->setRationalHeight(0.75f);
+	addChild(slider);
+	slider->setRationalHeight(0.75f, this);
 	slider->setWidth(10);
 	slider->setStepped(1.f);
 	slider->eventManager.addEventListener("change", [this](sweet::Event * _event){
 		gridDirty = true;
 	});
-	addChild(slider);
 
 	{
 		infoLayout = new VerticalLinearLayout(world);
+		addChild(infoLayout);
 		infoLayout->background->setVisible(true);
 		infoLayout->setBackgroundColour(1,1,1,1);
 		
 		infoLayout->horizontalAlignment = kCENTER;
 		infoLayout->verticalAlignment = kTOP;
 
-		infoLayout->setHeight(0.75f);
+		infoLayout->setRationalHeight(0.75f, this);
 		infoLayout->setWidth(300);
-
-		addChild(infoLayout);
+;
 
 		ComponentShaderText * textShader = new ComponentShaderText(true);
 		textShader->load();
 
-		itemName = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader, 1.f);
+		itemName = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		infoLayout->addChild(itemName);
 		itemName->setText("test");
-		itemName->setRationalWidth(1.f);
+		itemName->setRationalWidth(1.f, infoLayout);
 
 		itemImage = new NodeUI(world);
-		itemImage->setRationalWidth(1.f);
+		infoLayout->addChild(itemImage);
 		itemImage->setHeight(300);
-		itemImage->setRationalWidth(1.f);
+		itemImage->setRationalWidth(1.f, infoLayout);
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
-		itemDescription = new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader, 1.f);
+		itemDescription = new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		infoLayout->addChild(itemDescription);
 		itemDescription->setText("test");
-		itemDescription->setRationalWidth(1.f);
+		itemDescription->setRationalWidth(1.f, infoLayout);
 		itemDescription->verticalAlignment = kTOP;
 		
-		infoLayout->addChild(itemName);
-		infoLayout->addChild(itemImage);
-		infoLayout->addChild(itemDescription);
 	}
 	
 	// disable and hide by default

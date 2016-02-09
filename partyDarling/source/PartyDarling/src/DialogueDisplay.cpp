@@ -26,22 +26,22 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _t
 	vlayout->verticalAlignment = kTOP;
 	vlayout->setPadding(10);
 	
-	dialogue = new TextArea(_world, _font, _textShader, -1);
+	dialogue = new TextArea(_world, _font, _textShader);
 	dialogue->setRationalWidth(1.f, vlayout);
 	dialogue->setMarginLeft(0.1f);
 
-	speaker = new TextArea(_world, _font, _textShader, -1);
+	speaker = new TextArea(_world, _font, _textShader);
 	speaker->setRationalWidth(1.f, vlayout);
 	speaker->setMarginLeft(0.1f);
 
-	conversationId = new TextArea(_world, _font, _textShader, -1);
+	conversationId = new TextArea(_world, _font, _textShader);
 	conversationId->setRationalWidth(1.f, vlayout);
 	conversationId->setMarginLeft(0.1f);
 
 	progressButton = new NodeUI(world, kENTITIES, 1.f);
 	//progressButton->setText(L"Next");
-	progressButton->setRationalWidth(1.f);
-	progressButton->setRationalHeight(1.f);
+	progressButton->setRationalWidth(1.f, this);
+	progressButton->setRationalHeight(1.f, this);
 	progressButton->setMarginTop(0.9f);
 	progressButton->setMarginRight(0.9f);
 	progressButton->eventManager.addEventListener("mousedown", [this](sweet::Event * _event) {
@@ -51,8 +51,8 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _t
 	//progressButton->setVisible(false);
 
 	optionslayout = new HorizontalLinearLayout(_world);
-	optionslayout->setRationalWidth(1.f);
-	optionslayout->setRationalHeight(1.f);
+	optionslayout->setRationalWidth(1.f, vlayout);
+	optionslayout->setRationalHeight(1.f, vlayout);
 	optionslayout->verticalAlignment = kMIDDLE;
 	optionslayout->horizontalAlignment = kCENTER;
 	

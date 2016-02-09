@@ -35,11 +35,11 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	textShader->setColor(0,0,0);
 	++textShader->referenceCount;
 	addChild(vl);
-	setRationalHeight(0.25f);
-	setRationalWidth(1.f);
+	//setRationalHeight(0.25f);
+	//setRationalWidth(1.f);
 	
-	vl->setRationalHeight(1.f);
-	vl->setRationalWidth(1.f);
+	vl->setRationalHeight(1.f, this);
+	vl->setRationalWidth(1.f, this);
 
 	vl->horizontalAlignment = kCENTER;
 	vl->verticalAlignment = kMIDDLE;

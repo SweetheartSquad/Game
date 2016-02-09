@@ -44,16 +44,17 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	mainContainer->setVisible(true);
 	mainContainer->setBackgroundColour(1, 1, 1, 1);
 
-	VerticalLinearLayout * textContaner = new VerticalLinearLayout(uiLayer.world);
-	textContaner->horizontalAlignment = kCENTER;
-	textContaner->verticalAlignment = kMIDDLE;
-	textContaner->setVisible(true);
-	textContaner->setMarginTop(0.25f);
+	VerticalLinearLayout * textContainer = new VerticalLinearLayout(uiLayer.world);
+	mainContainer->addChild(textContainer);
+	textContainer->horizontalAlignment = kCENTER;
+	textContainer->verticalAlignment = kMIDDLE;
+	textContainer->setVisible(true);
+	textContainer->setMarginTop(0.25f);
 
-	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world,
-		menuFont,
-		textShader,
-		400, 60);
+	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	textContainer->addChild(joinPartyText);
+	joinPartyText->setWidth(400);
+	joinPartyText->setHeight(60);
 
 	joinPartyText->horizontalAlignment = kCENTER;
 	joinPartyText->setText("Join the party");
@@ -63,6 +64,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	joinPartyText->onClick = [this](sweet::Event * _event){
+		dynamic_cast<PD_Game *>(game)->showLoading("Loading...", 0);
 		auto it = game->scenes.find("game");
 		if(it == game->scenes.end() || it->second == nullptr){
 			game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(game));
@@ -71,10 +73,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		
 	};
 
-	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world,
-		menuFont,
-		textShader,
-		400, 60);
+	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	textContainer->addChild(optionsText);
+	optionsText->setWidth(400);
+	optionsText->setHeight(60);
 
 	optionsText->horizontalAlignment = kCENTER;
 	optionsText->setText("Options");
@@ -83,10 +85,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	optionsText->setMarginTop(0.05f);
 
-	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world,
-		menuFont,
-		textShader,
-		400, 60);
+	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	textContainer->addChild(callNightText);
+	callNightText->setWidth(400);
+	callNightText->setHeight(60);
 	
 	callNightText->onClick = [this](sweet::Event * _event){
 		game->exit();		
@@ -102,16 +104,12 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 	callNightText->setMarginTop(0.05f);
 
-	textContaner->addChild(joinPartyText);
-	textContaner->addChild(optionsText);
-	textContaner->addChild(callNightText);
 	
-	mainContainer->addChild(textContaner);
 	
 	uiLayer.addChild(mainContainer);
 	mainContainer->invalidateLayout();
 
-	textContaner->firstParent()->rotate(10, 0, 0, 1, kOBJECT);
+	textContainer->firstParent()->rotate(10, 0, 0, 1, kOBJECT);
 }
 
 PD_Scene_MainMenu::~PD_Scene_MainMenu() {

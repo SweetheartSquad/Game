@@ -95,8 +95,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
-	l->setRationalHeight(1.f);
-	l->setRationalWidth(1.f);
+	l->setRationalHeight(1.f, &uiLayer);
+	l->setRationalWidth(1.f, &uiLayer);
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
@@ -128,10 +128,14 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
+	uiBubble->setRationalWidth(1.f, &uiLayer);
+	uiBubble->setRationalHeight(0.25f, &uiLayer);
 	uiLayer.addChild(uiBubble);
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
+	uiInventory->setRationalHeight(1.f, &uiLayer);
+	uiInventory->setRationalWidth(1.f, &uiLayer);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->close();
 		uiLayer.removeMouseIndicator();
@@ -411,6 +415,8 @@ void PD_Scene_Main::bundleScenarios(){
 }
 
 void PD_Scene_Main::buildHouse(){
+	PD_Game * g = dynamic_cast<PD_Game *>(game);
+
 	glm::ivec2 startPos(0);
 
 	// build all of the rooms contained in the selected scenarios
@@ -422,6 +428,7 @@ void PD_Scene_Main::buildHouse(){
 		// build the rooms in this scenario
 		for(auto rd : s->assets.at("room")){
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
+			g->showLoading(room->definition->name, 0);
 			
 			// setup the first parents, but don't actually add anything to the scene yet
 			Transform * t = new Transform();
@@ -430,7 +437,6 @@ void PD_Scene_Main::buildHouse(){
 				t = new Transform();
 				t->addChild(room->components.at(i), false);
 			}
-
 			// run the physics simulation for a few seconds to let things settle
 			Log::info("Letting the bodies hit the floor...");
 			Step s;
