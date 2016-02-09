@@ -15,6 +15,54 @@
 		{
 			"name":"DANCE_2",
 			"src":"dance2.json"
+		},
+		{
+			"name":"Cross_Arms",
+			"src":"crossArms.json"
+		},
+		{
+			"name":"SICK_1",
+			"src":"sick1.json"
+		},
+		{
+			"name":"IDLE_TALK_1",
+			"src":"idleTalk1.json"
+		},
+		{
+			"name":"IDLE_TALK_2",
+			"src":"idleTalk2.json"
+		},
+		{
+			"name":"IDLE_TALK_3",
+			"src":"idleTalk3.json"
+		},
+		{
+			"name":"WALK_1",
+			"src":"walk1.json"
+		},
+		{
+			"name":"WALK_2",
+			"src":"walk2.json"
+		},
+		{
+			"name":"DRUNK_WALK_1",
+			"src":"drunkWalk.json"
+		},
+		{
+			"name":"DRUNK_Wave_1",
+			"src":"drunkWave.json"
+		},
+		{
+			"name":"FLAILING",
+			"src":"flailing.json"
+		},
+		{
+			"name":"SWAY",
+			"src":"sway.json"
+		},
+		{
+			"name":"JUMPING_JACKS",
+			"src":"jumpingJacks.json"
 		}
 	]	
 }

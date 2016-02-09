@@ -15,6 +15,7 @@ class AssetItem;
 class PD_Item : public RoomObject{
 public:
 	const AssetItem * const definition;
+	
 	PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shader * _shader, Anchor_t _anchor = GROUND);
 
 	// if pixel perfect interaction is enabled, returns the result
