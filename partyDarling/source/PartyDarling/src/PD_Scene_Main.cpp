@@ -44,6 +44,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonShader(new ComponentShaderBase(false)),
 	uiLayer(0,0,0,0),
 	characterShader(new ComponentShaderBase(false)),
+	emoteShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
@@ -73,6 +74,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
 	characterShader->compileShader();
+
+	emoteShader->addComponent(new ShaderComponentMVP(emoteShader));
+	emoteShader->addComponent(new ShaderComponentTexture(emoteShader));
+	emoteShader->addComponent(new ShaderComponentDepthOffset(emoteShader));
+	emoteShader->compileShader();
 
 	screenSurfaceShader->referenceCount++;
 	screenFBO->referenceCount++;
@@ -312,6 +318,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+	PD_ResourceManager::scenario->eventManager.addEventListener("emote", [](sweet::Event * _event){
+		std::string charId = _event->getStringData("character");
+		std::string emote = _event->getStringData("emote");
+		float duration = _event->getFloatData("duration");
+		std::string scenario = _event->getStringData("scenario");
+		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
+	});
 
 	// build house
 	pickScenarios();
@@ -364,7 +377,7 @@ void PD_Scene_Main::buildHouse(){
 
 		// build the rooms in this scenario
 		for(auto rd : s->assets.at("room")){
-			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader).getRoom();
+			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			
 			// setup the first parents, but don't actually add anything to the scene yet
 			Transform * t = new Transform();

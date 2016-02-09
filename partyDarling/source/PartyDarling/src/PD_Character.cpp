@@ -11,13 +11,15 @@
 #include <NumberUtils.h>
 #include <PD_Palette.h>
 #include <PD_CharacterAnimationSet.h>
+#include <SpriteSheet.h>
+#include <SpriteSheetAnimation.h>
 
 #include <sweet/Input.h>
 #include <PD_Listing.h>
 
-Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
+Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
-	pr(new PersonRenderer(_world, _definition, _shader)),
+	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
 	state(&_definition->states.at(_definition->defaultState)),
 	definition(_definition)
 {
@@ -43,7 +45,7 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 	pr->setShader(_shader, _configureDefault);
 }
 
-Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader) {
+Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 
 	Json::Value pelvis;
 	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
@@ -80,7 +82,7 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
 	
-	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader);
+	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
 	return p;
 }
@@ -146,12 +148,14 @@ PersonState::PersonState(Json::Value _json) :
 {
 }
 
-PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader) :
+PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
 	paletteTex(new PD_Palette(false)),
 	timer(0),
 	randomAnimations(false),
 	animate(true),
-	currentAnimation(nullptr)
+	currentAnimation(nullptr),
+	emote(nullptr),
+	emoteTimeout(nullptr)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -289,6 +293,11 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	talk->tweens.push_back(new Tween<float>(0.1, -head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
 	talk->loopType = Animation<float>::LoopType::kLOOP;
 	talk->hasStart = true;
+
+	emote = new Sprite(_emoticonShder);
+	emote->setVisible(false);
+	head->childTransform->addChild(emote);
+	emote->firstParent()->scale(1/CHARACTER_SCALE);
 }
 
 PersonRenderer::~PersonRenderer(){
@@ -331,6 +340,35 @@ void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps)
 		solverLegR->target = glm::vec2();
 		solverBod->target  = glm::vec2();
 	}
+}
+
+void PersonRenderer::setEmote(std::string _id, float _duration) {
+	delete emoteTimeout;
+	emoteTimeout = nullptr;
+
+	if(_id == "NONE") {
+		emote->setVisible(false);
+		return;
+	}
+
+	auto eDef = PD_ResourceManager::emotes[_id];
+	emote->setVisible(true);
+	emote->setSpriteSheet(eDef.spriteSheet, "main");
+	auto b = head->mesh->calcBoundingBox();
+	float height = b.height/CHARACTER_SCALE;
+	float width  = b.width/CHARACTER_SCALE;
+	emote->firstParent()->translate(width * eDef.offset.x, height * eDef.offset.y, 0.f, false);
+	
+	if(_duration > 0.f){
+		emoteTimeout = new Timeout(_duration, [this](sweet::Event * _event){
+			setEmoteNone();
+		});
+		emoteTimeout->start();
+	}
+}
+
+void PersonRenderer::setEmoteNone() {
+	setEmote("NONE", -1.f);
 }
 
 void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
@@ -380,6 +418,10 @@ void PersonRenderer::update(Step * _step){
 	}
 
 	timer += _step->deltaTime;
+
+	if(emoteTimeout != nullptr) {
+		emoteTimeout->update(_step);
+	}
 
 	if(animate){
 		if(randomAnimations && timer > 1){

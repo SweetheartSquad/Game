@@ -23,8 +23,6 @@ enum RoomObject_t{
 	ITEM
 };
 
-enum Side_t;
-
 class BulletWorld;
 class MeshInterface;
 
@@ -60,6 +58,7 @@ class RoomBuilder{
 private:
 	Shader * baseShader;
 	Shader * characterShader;
+	Shader * emoteShader;
 
 	// the definition for this room
 	AssetRoom * const definition;
@@ -87,14 +86,14 @@ public:
 
 	std::vector<Edge *> edges;
 
-	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader);
+	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader);
 	~RoomBuilder();
 
 	Room * getRoom();
 
 	// Furniture placement
 	bool search(RoomObject * child);
-	bool arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot);
+	bool arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot);
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
 	void addObjectToLists(RoomObject * _obj);
 	bool canBeParent(RoomObject * _obj);

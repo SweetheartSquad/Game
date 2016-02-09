@@ -89,8 +89,8 @@ void AssetCharacter::unload(){
 	Asset::unload();
 }
 
-PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader){
-	PersonRenderer * res = new PersonRenderer(_world, this, _shader);
+PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader, Shader * _emoticonShader){
+	PersonRenderer * res = new PersonRenderer(_world, this, _shader, _emoticonShader);
 	res->setShader(_shader, true);
 	return res;
 }

@@ -13,6 +13,11 @@
 #include <string>
 #include "PD_Listing.h"
 
+struct EmoteDef {
+	SpriteSheet * spriteSheet;
+	glm::vec2 offset;
+};
+
 class PD_ResourceManager : public ResourceManager{
 public:
 	static Scenario * scenario;
@@ -24,6 +29,7 @@ public:
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
 	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
+	static std::map<std::string, EmoteDef> emotes;
 	static sweet::ShuffleVector<std::string> characterNames;
 	static PD_Listing * globalScenarioListing;
 

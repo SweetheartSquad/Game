@@ -8,6 +8,7 @@
 #include <PD_FurnitureComponentDefinition.h>
 #include <PD_ResourceManager.h>
 #include <NumberUtils.h>
+#include <Easing.h>
 
 #define FURNITURE_MASS_SCALE 0.05
 
@@ -31,6 +32,51 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// copy the furniture mesh into this entity's mesh
 	mesh->insertVertices(buildResult.mesh);
 	
+	//Deformers
+	sweet::Box deformerBoundingBox = mesh->calcBoundingBox();
+	
+	
+	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
+	float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
+	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
+
+	for(auto & v : mesh->vertices){
+		//normalize vertex position by the bounding box of the mesh
+		float vertX = (v.x) / deformerBoundingBox.width;
+		float vertY = (v.y - deformerBoundingBox.y - lowerBoundVal) / deformerBoundingBox.height;
+		float vertZ = (v.z) / deformerBoundingBox.depth;
+
+		//create a vec4 of vertex position
+		glm::vec4 vertVector4 = glm::vec4( vertX, vertY, vertZ, 1.0f);
+		//flare deformation matrix
+		glm::mat4 flareMatrix =  glm::mat4 (Easing::easeInOutCubic(vertY,0.5f+lowerFlareVal,0.5f+upperFlareVal,1.f),0.f,0.f,0.f,
+											0.f,1.f,0.f,0.f,
+											0.f,0.f,Easing::easeInOutCubic(vertY,0.5f+lowerFlareVal,0.5f+upperFlareVal,1.f),0.f,
+											0.f,0.f,0.f,1.f);
+
+		//bend deformer matrix
+		glm::mat4 bendMatrix = glm::mat4 (glm::cos(0.25f*vertY),glm::sin(0.25f*vertY),0.f,0.f,
+											Easing::easeInOutCubic(vertY,0.5f,0.1f,1.f),Easing::easeInOutCubic(vertY,0.5f,0.1f,1.f),0.f,0.f,
+											0.f,0.f,1.f,0.f,
+											0.f,0.f,0.f,1.f);
+
+		//twist deformer matrix
+		glm::mat4 twistMatrix = glm::mat4 (glm::cos(0.25f*vertY),0.f,glm::sin(0.25f*vertY),0.f,
+											0.f,1.f,0.f,0.f,
+											-1.0f*(glm::sin(0.25f*vertY)),0.f,glm::cos(0.25f*vertY),0.f,
+											0.f,0.f,0.f,1.f);
+
+		//multiply matrix by normalize vertex position vector
+		glm::vec4 newVertVector4 = flareMatrix /*bendMatrix*/ * twistMatrix * vertVector4;
+
+		//change vertex positions, scale them up by bounding box dimensions
+		v.x = newVertVector4.x  * deformerBoundingBox.width;
+		v.y = newVertVector4.y * deformerBoundingBox.height + deformerBoundingBox.y + lowerBoundVal;
+		v.z = newVertVector4.z * deformerBoundingBox.depth;
+
+
+	}
+
 	// delete the temporary mesh
 	delete buildResult.mesh;
 	/**** Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below???? *****
@@ -51,6 +97,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
 
+
 	// create the bullet stuff
 	if(_def->detailedCollider){
 		shape = buildResult.collider;
@@ -58,7 +105,30 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		delete buildResult.collider;
 		setColliderAsBoundingBox();
 	}
-	createRigidBody(_def->mass * FURNITURE_MASS_SCALE);
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
-	translatePhysical(glm::vec3(0, mesh->calcBoundingBox().height * 0.5f, 0.f), false);
+	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
+
+	// Get type
+	type = _def->type;
+
+	// Get parent types
+	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
+
+	// Get the sides information
+	if(_def->sides.front != PD_Side::kNONE){
+		emptySlots[PD_Side::kFRONT] = std::vector<Slot *>(1, new Slot(_def->sides.front, 0.f, boundingBox.width));
+	}
+	if(_def->sides.back != PD_Side::kNONE){
+		emptySlots[PD_Side::kBACK] = std::vector<Slot *>(1, new Slot(_def->sides.back, 0.f, boundingBox.width));
+	}
+	if(_def->sides.right != PD_Side::kNONE){
+		emptySlots[PD_Side::kRIGHT] = std::vector<Slot *>(1, new Slot(_def->sides.right, 0.f, boundingBox.depth));
+	}
+	if(_def->sides.left != PD_Side::kNONE){
+		emptySlots[PD_Side::kLEFT] = std::vector<Slot *>(1, new Slot(_def->sides.left, 0.f, boundingBox.depth));
+	}
+	if(_def->sides.top != PD_Side::kNONE){
+		emptySlots[PD_Side::kTOP] = std::vector<Slot *>(1, new Slot(_def->sides.top, 0.f, boundingBox.width));
+	}
 }
