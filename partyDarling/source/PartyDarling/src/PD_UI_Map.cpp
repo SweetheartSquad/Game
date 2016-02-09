@@ -2,13 +2,45 @@
 
 #include <PD_UI_Map.h>
 #include <PD_TilemapGenerator.h>
+#include <PD_Assets.h>
 
-PD_UI_Map::PD_UI_Map(BulletWorld * _world) :
+MapCell::MapCell(BulletWorld * _world, Room * _room) :
+	NodeUI(_world),
+	visited(false),
+	room(_room)
+{
+	background->mesh->setScaleMode(GL_NEAREST);
+	setVisible(false);
+	boxSizing = kCONTENT_BOX;
+}
+
+bool MapCell::isVisited(){
+	return visited;
+}
+
+void MapCell::setVisited(bool _visited){
+	visited = _visited;
+	if(visited){
+		setVisible(true);
+	}else{
+		setVisible(false);
+	}
+}
+
+PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
 	NodeUI(_world),
 	enabled(true),
+	detailed(false),
 	layout(nullptr)
 {
 	background->setVisible(false);
+
+	roomName = new TextLabel(world, _font, _textShader, 1.f);
+	roomName->horizontalAlignment = kCENTER;
+	roomName->setMarginBottom(0.05f);
+	roomName->setVisible(false);
+
+	addChild(roomName);
 }
 
 void PD_UI_Map::disable(){
@@ -27,6 +59,32 @@ bool PD_UI_Map::isEnabled(){
 	return enabled;
 }
 
+bool PD_UI_Map::isDetailed(){
+	return detailed;
+}
+
+void PD_UI_Map::setDetailed(bool _detailed){
+	detailed = _detailed;
+	if(detailed){
+		layout->setRationalHeight(1.f, this);
+		layout->setRationalWidth(1.f, this);
+
+		for(auto & cell : grid){
+			cell.second->setMouseEnabled(true);
+		}
+		roomName->setVisible(true);
+	}else{
+		layout->setRationalHeight(0.1f, this);
+		layout->setRationalWidth(0.1f, this);
+
+		for(auto & cell : grid){
+			cell.second->setMouseEnabled(false);
+		}
+		roomName->setVisible(false);
+	}
+	layout->invalidateLayout();
+}
+
 void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// clear out the old map
 	if(layout != nullptr){
@@ -35,8 +93,6 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	}
 
 	layout = new VerticalLinearLayout(world);
-	layout->setRationalWidth(1.f);
-	layout->setRationalHeight(1.f);
 	layout->horizontalAlignment = kRIGHT;
 	layout->verticalAlignment = kTOP;
 	addChild(layout);
@@ -54,35 +110,34 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// make sure we have a full grid for what we need
 	for(unsigned long int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
-		hl->setRationalWidth(1.f);
+		hl->setRationalWidth(1.f, layout);
+		hl->setRationalHeight(1.f/height, layout);
 		hl->horizontalAlignment = layout->horizontalAlignment;
 		hl->verticalAlignment = kMIDDLE;
-		hl->setHeight(ROOM_SIZE_MAX*MAP_SIZE);
 		layout->addChild(hl);
 
 		for(unsigned long int x = x1; x <= x2; ++x){
-			NodeUI * cell = new NodeUI(world);
-			cell->setWidth(ROOM_SIZE_MAX*MAP_SIZE);
-			cell->setHeight(ROOM_SIZE_MAX*MAP_SIZE);
-			cell->background->mesh->setScaleMode(GL_NEAREST);
-			cell->setVisible(false);
-			cell->boxSizing = kCONTENT_BOX;
+			MapCell * cell = new MapCell(world, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
+			cell->setRationalWidth(1.f/width, hl);
+			cell->setRationalHeight(1.f, hl);
+			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
+				if(cell->room != nullptr && cell->isVisited()){
+					roomName->setText(cell->room->definition->name);
+				}else{
+					roomName->setText("");
+				}
+			});
 		}
 	}
 
-	// setup the textures
+	// associate cells with rooms
 	for(auto & room : _houseGrid){
-		NodeUI * cell = grid[room.first];
-		cell->background->mesh->replaceTextures(room.second->tilemap);
-		cell->setWidth(room.second->tilemap->width*MAP_SIZE);
-		cell->setHeight(room.second->tilemap->height*MAP_SIZE);
-		cell->setMargin(((ROOM_SIZE_MAX - room.second->tilemap->width)*0.5f)*MAP_SIZE, ((ROOM_SIZE_MAX - room.second->tilemap->height)*0.5f)*MAP_SIZE);
-		cell->setVisible(true);
+		grid[room.first]->room = room.second;
 	}
 
-	invalidateLayout();
+	setDetailed(isDetailed());
 }
 
 void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
@@ -90,6 +145,7 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 	for(auto & cell : grid){
 		if(cell.first == k){
 			cell.second->setBackgroundColour(1,1,1, 1);
+			cell.second->setVisited(true);
 		}else{
 			cell.second->setBackgroundColour(1,1,1, 0.5f);
 		}

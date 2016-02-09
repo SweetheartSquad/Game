@@ -173,7 +173,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-	uiMap = new PD_UI_Map(uiLayer.world);
+	uiMap = new PD_UI_Map(uiLayer.world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
 	uiLayer.addChild(uiMap);
 	uiMap->setRationalHeight(1.f, &uiLayer);
 	uiMap->setRationalWidth(1.f, &uiLayer);
@@ -714,11 +714,18 @@ void PD_Scene_Main::update(Step * _step){
 	// map toggle
 	if(keyboard->keyJustDown(GLFW_KEY_M)){
 		if(uiMap->isEnabled()){
-			uiMap->disable();
-			//player->enable();
+			if(uiMap->isDetailed()){
+				uiMap->setDetailed(false);
+				uiMap->disable();
+				player->enable();
+				uiLayer.removeMouseIndicator();
+			}else{
+				uiMap->setDetailed(true);
+				player->disable();
+				uiLayer.addMouseIndicator();
+			}
 		}else{
 			uiMap->enable();
-			//player->disable();
 		}
 	}
 
