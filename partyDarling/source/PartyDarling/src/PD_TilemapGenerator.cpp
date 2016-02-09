@@ -6,17 +6,13 @@
 #include <TextureUtils.h>
 
 PD_TilemapGenerator::PD_TilemapGenerator(unsigned long int _width, unsigned long int _height, bool _autorelease) :
-	Texture("", true, _autorelease),
+	ProgrammaticTexture(nullptr, _autorelease),
 	NodeResource(_autorelease)
 {
-	channels = 4;
-	width = _width;
-	height = _height;
+	allocate(_width, _height, 4);
 
-	numPixels = width * height;
-	numBytes = numPixels * channels;
-
-	configure();
+	configure(128,255);
+	generateTilemap();
 }
 
 
@@ -24,14 +20,14 @@ void PD_TilemapGenerator::configure(unsigned long int _max, unsigned long int _p
 	max = _max;
 	pixelIncrement = _pixelIncrement;
 }
-void PD_TilemapGenerator::loadImageData(){
+void PD_TilemapGenerator::generateTilemap(){
 	// allocate and initialize texture data
-	data = (unsigned char *)calloc(numBytes, sizeof(unsigned char));
 	for(unsigned long int y = 0; y < height; ++y){
 		for(unsigned long int x = 0; x < width; ++x){
-			sweet::TextureUtils::getPixel(this, x, y, 1) = 255;
-			sweet::TextureUtils::getPixel(this, x, y, 2) = 255;
-			sweet::TextureUtils::getPixel(this, x, y, 3) = 255;
+			sweet::TextureUtils::getPixel(this, x, y, 0) = 0;
+			sweet::TextureUtils::getPixel(this, x, y, 1) = 0;
+			sweet::TextureUtils::getPixel(this, x, y, 2) = 0;
+			sweet::TextureUtils::getPixel(this, x, y, 3) = 0;
 		}
 	}
 	
@@ -39,8 +35,9 @@ void PD_TilemapGenerator::loadImageData(){
 	std::vector<glm::ivec2> points;
 	points.push_back(glm::ivec2(width/2, height/2));
 	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 0) = 255;
-	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 1) = 0;
-	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 2) = 0;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 1) = 255;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 2) = 255;
+	sweet::TextureUtils::getPixel(this, points.front().x, points.front().y, 3) = 255;
 	
 	bool done = false;
 	float prob = 1;
@@ -91,8 +88,9 @@ void PD_TilemapGenerator::loadImageData(){
 		}
 		
 		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 0) += pixelIncrement;
-		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) -= pixelIncrement;
-		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) -= pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 1) += pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 2) += pixelIncrement;
+		sweet::TextureUtils::getPixel(this, newPos.x, newPos.y, 3) += pixelIncrement;
 
 		if(prob < 0){
 			done = true;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Texture.h>
+#include <ProgrammaticTexture.h>
 #include <MeshInterface.h>
 
-class PD_TilemapGenerator : public Texture{
+class PD_TilemapGenerator : public ProgrammaticTexture{
 public:
 
 	unsigned long int max, pixelIncrement;
@@ -12,7 +12,7 @@ public:
 
 	PD_TilemapGenerator(unsigned long int _width, unsigned long int _height, bool _autorelease);
 
-	virtual void loadImageData() override;
+	void generateTilemap();
 
 	MeshInterface * march(unsigned long int _thresh, bool _smooth);
 private:

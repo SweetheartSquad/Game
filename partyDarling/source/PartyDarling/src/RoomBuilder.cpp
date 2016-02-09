@@ -195,10 +195,11 @@ Room * RoomBuilder::getRoom(){
 	thresh = 5;
 	createWalls();
 	sweet::Box boundingBox = room->mesh->calcBoundingBox();
-	roomUpperBound = boundingBox.getMaxCoordinate();
-	roomLowerBound = boundingBox.getMinCoordinate();
+	roomUpperBound = boundingBox.getMaxCoordinate() * (1.f/ROOM_TILE);
+	roomLowerBound = boundingBox.getMinCoordinate() * (1.f/ROOM_TILE);
 	
 	std::vector<RoomObject *> objects = getRoomObjects();
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
 
 	// Add boundaries into shuffle vectors
 	sweet::ShuffleVector<RoomObject *> shuffleBoundaries;
@@ -259,20 +260,22 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING && (child->anchor == Anchor_t::WALL || sweet::NumberUtils::randomBool())){
+	if(child->anchor != Anchor_t::CIELING && (child->parentTypes.size() > 0 || child->anchor == Anchor_t::WALL)){
 		for(unsigned int i = 0; i < availableParents.size(); ++i){
-			if(availableParents.at(i)->anchor == Anchor_t::CIELING){
+			RoomObject  * parent = availableParents.at(i);
+
+			if(parent->anchor == Anchor_t::CIELING){
 				continue;
 			}
-			//std::stringstream s;
-			//s << "parent: " << availableParents.at(i);
-			//Log::warn(s.str());
-			//Log::info("Checking parent.");
-			typedef std::map<Side_t, std::vector<Slot *>>::iterator it_type;
-			for(it_type iterator = availableParents.at(i)->emptySlots.begin(); iterator != availableParents.at(i)->emptySlots.end(); iterator++) {
+			// check if valid parent
+			if (std::find(child->parentTypes.begin(), child->parentTypes.end(), parent->type) == child->parentTypes.end()){
+				continue;
+			}
+			typedef std::map<PD_Side, std::vector<Slot *>>::iterator it_type;
+			for(it_type iterator = parent->emptySlots.begin(); iterator != parent->emptySlots.end(); iterator++) {
 				// go through available slots of side
 				for(unsigned int j = 0; j < iterator->second.size(); ++j){
-					Side_t side = iterator->first;
+					PD_Side side = iterator->first;
 					Slot * slot = iterator->second.at(j);
 					
 					// check length of slot
@@ -282,16 +285,11 @@ bool RoomBuilder::search(RoomObject * child){
 					}
 					Log::info("Side found.");
 					// if the object can be placed without collision
-					if(arrange(child, availableParents.at(i), side, slot)){
-						addObjectToLists(child);
-						if(child->boundingBox.width < slot->length){
-							// adjust remaining slot space
-							slot->loc += child->boundingBox.width;
-							slot->length -= child->boundingBox.width;
-						}else{
-							// remove slot
+					if(arrange(child, parent, side, slot)){
+						if(slot->length <= 0){
 							iterator->second.erase(iterator->second.begin() + j);
 						}
+						addObjectToLists(child);
 						Log::info("Parenting and placing object.");
 						return true;
 					}
@@ -306,14 +304,17 @@ bool RoomBuilder::search(RoomObject * child){
 		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < 20; ++i){
-			Log::info("Randomly finding a position.");
+			
 			// Find random point within bounding box of room (x, z)
-			glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z));
-		
+			glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x) * float(ROOM_TILE), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z) * float(ROOM_TILE));
+			std::stringstream s;
+			s << "Random position: " << pos.x << ", " << pos.y << ", " << pos.z;
+			Log::info(s.str());
+
 			btQuaternion bOrient = child->body->getWorldTransform().getRotation();
 			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
-			// TODO: Check that the transformed origin will be inside the room
+			// Check that the transformed origin will be inside the room
 			// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
 			Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
 			unsigned int intersections = 0;
@@ -339,33 +340,86 @@ bool RoomBuilder::search(RoomObject * child){
 	return false;
 }
 
-bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, Slot * slot){
-	
+bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot){
+	std::stringstream s;
+	s << "side: " << int(side);
+	Log::info(s.str());
+
 	glm::vec3 pos = parent->childTransform->getTranslationVector();
 	pos.y = 0;
 	glm::quat orient = parent->childTransform->getOrientationQuat();
 
+	float angle = 0;
+	glm::vec3 childDimensions = glm::vec3(child->boundingBox.width, child->boundingBox.height, child->boundingBox.depth);
+	
+	// Rotate child according to childSide
+	if(slot->childSide != PD_Side::kBACK && slot->childSide != PD_Side::kTOP && side != PD_Side::kBOTTOM){
+		float childAngle = 0.f;
+		// orient child side pos
+		switch(slot->childSide){
+			case PD_Side::kRIGHT:
+				childAngle  = 90.f;
+				break;
+			case PD_Side::kFRONT:
+				childAngle  = 180.f;
+				break;
+			case PD_Side::kLEFT:
+				childAngle  = 270.f;
+				break;
+		}
+		angle += childAngle;
+	}
+	childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
+	/*
+	std::stringstream tex;
+	tex << "assets/textures/room/debug/" << int(side)+1 << ".png";
+	Texture * res = new Texture(tex.str(), false, true, true);
+	res->load();
+	child->mesh->replaceTextures(res);
+	*/
+	// Orient child to side
+	if(side != PD_Side::kFRONT && side != PD_Side::kTOP && side != PD_Side::kBOTTOM){
+		float sideAngle = 0.f;
+		// orient child side pos
+		switch(side){
+			case PD_Side::kRIGHT:
+				sideAngle  = 90.f;
+				break;
+			case PD_Side::kBACK:
+				sideAngle  = 180.f;
+				break;
+			case PD_Side::kLEFT:
+				sideAngle  = 270.f;
+				break;
+		}
+		angle += sideAngle;
+	}
+
+	child->rotatePhysical(angle, 0, 1.f, 0);
+	child->realign();
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
+	// parent side transformations
 	switch(side){
-		case FRONT:
+		case PD_Side::kFRONT:
 			sidePos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
 			sidePos.x += -parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f + slot->loc;
 			break;
-		case BACK:
+		case PD_Side::kBACK:
 			sidePos.z += -parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f;
 			sidePos.x += parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f - slot->loc;
 			break;
-		case LEFT:
+		case PD_Side::kLEFT:
 			sidePos.x += -parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f;
 			sidePos.z += -parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f + slot->loc;
 			break;
-		case RIGHT:
+		case PD_Side::kRIGHT:
 			sidePos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
 			sidePos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
 			break;						
 	}
+
 	// rotate side space translation vector
 	sidePos = glm::rotate(orient, sidePos);
 	// add side space translation vector to final pos
@@ -373,8 +427,15 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, Side_t side, 
 
 	// check for collision/inside room
 	if(!canPlaceObject(child, pos, orient)){
+		Log::warn("Collided");
+		child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
+
+	// adjust remaining slot space
+	slot->loc += abs(childDimensions.x);
+	slot->length -= abs(childDimensions.x);
+
 	room->addComponent(child);
 
 	return true;
@@ -391,7 +452,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	float angle = glm::angle(_orientation);
 	glm::vec3 axis = glm::axis(_orientation);
 	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
-	_obj->translatePhysical(_pos, true);
+	_obj->translatePhysical(_pos);
 	_obj->realign();
 
 	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
@@ -401,11 +462,11 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		glm::mat4 oMM = o->meshTransform->getCumulativeModelMatrix();
 		 
 		// Check if object intersects o
-		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM))){
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.01f)){
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
 			Log::warn(s.str());
-			_obj->translatePhysical(-_pos, true);
+			_obj->translatePhysical(-_pos);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
 			_obj->realign();
 			return false;
@@ -560,7 +621,8 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
-	wall->emptySlots[FRONT] = std::vector<Slot *>(1, new Slot(0.f, width * ROOM_TILE));
+	wall->type = "wall";
+	wall->emptySlots[PD_Side::kFRONT] = std::vector<Slot *>(1, new Slot(PD_Side::kBACK, 0.f, width * ROOM_TILE));
 	boundaries.push_back(wall);
 
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
@@ -647,8 +709,10 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
 	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
+	door->parentTypes.push_back("wall");
 	room->door = door;
 	items.push_back(door);
+	
 
 	for(auto def : itemDefinitions){
 		items.push_back(new PD_Item(def, world, baseShader));

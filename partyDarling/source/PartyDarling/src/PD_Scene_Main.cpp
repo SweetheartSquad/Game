@@ -179,10 +179,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-	uiMap = new PD_UI_Map(uiLayer.world);
+	uiMap = new PD_UI_Map(uiLayer.world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
 	uiLayer.addChild(uiMap);
-	uiMap->setRationalHeight(0.1f, &uiLayer);
-	uiMap->setRationalWidth(0.1f, &uiLayer);
+	uiMap->setRationalHeight(1.f, &uiLayer);
+	uiMap->setRationalWidth(1.f, &uiLayer);
 	uiMap->disable();
 
 	// add the player to the scene
@@ -454,7 +454,7 @@ void PD_Scene_Main::buildHouse(){
 	}
 
 	// update the map
-	uiMap->updateMap(houseGrid);
+	uiMap->buildMap(houseGrid);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
@@ -491,6 +491,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}else{
 		currentHousePosition = _movement;
 	}
+	uiMap->updateMap(currentHousePosition);
 
 	// get the room for the new position
 	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
@@ -520,6 +521,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	player->translatePhysical(p2, false);
 
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -769,11 +771,18 @@ void PD_Scene_Main::update(Step * _step){
 	// map toggle
 	if(keyboard->keyJustDown(GLFW_KEY_M)){
 		if(uiMap->isEnabled()){
-			uiMap->disable();
-			//player->enable();
+			if(uiMap->isDetailed()){
+				uiMap->setDetailed(false);
+				uiMap->disable();
+				player->enable();
+				uiLayer.removeMouseIndicator();
+			}else{
+				uiMap->setDetailed(true);
+				player->disable();
+				uiLayer.addMouseIndicator();
+			}
 		}else{
 			uiMap->enable();
-			//player->disable();
 		}
 	}
 

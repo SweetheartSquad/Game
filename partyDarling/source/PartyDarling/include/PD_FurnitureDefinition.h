@@ -5,15 +5,7 @@
 
 class PD_FurnitureComponentDefinition;
 
-enum class PD_Side {
-	kFRONT,
-	kBACK,
-	kBOTTOM,
-	kTOP,
-	kLEFT,
-	kRIGHT,
-	kNONE
-}; 
+enum class PD_Side; 
 
 
 class PD_FurnitureSides{

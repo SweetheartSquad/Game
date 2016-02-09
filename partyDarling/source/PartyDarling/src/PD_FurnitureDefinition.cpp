@@ -2,6 +2,7 @@
 
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureComponentDefinition.h>
+#include <RoomObject.h>
 
 PD_FurnitureSides::PD_FurnitureSides(Json::Value _jsonDef) {
 	left = fromString(_jsonDef.get("LEFT", "NONE").asString());
