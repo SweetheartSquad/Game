@@ -38,6 +38,8 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	translatePhysical(glm::vec3(0, (boundingBox.height+boundingBox.width) * 0.5f, 0.f), false);
 
 	pr->setAnimation(state->animation);
+
+	items = definition->items;
 }
 
 void Person::setShader(Shader * _shader, bool _configureDefault){

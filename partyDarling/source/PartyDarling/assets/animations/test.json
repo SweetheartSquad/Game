@@ -2,46 +2,28 @@
 {
 	"interpolation" : "LINEAR",
 	"time" : 0,
-	"leftArm" : [0.811136, -0.391083],
-	"rightArm" : [-0.80584, -0.443582],
-	"leftLeg" : [-0.245415, -1.13576],
-	"rightLeg" : [0.13455, -1.16801],
-	"body" : [0.0517426, 3.55915]
+	"leftArm" : [1.24567, 2.16544],
+	"rightArm" : [-1.44903, 2.34359],
+	"leftLeg" : [-0.810439, -0.0342439],
+	"rightLeg" : [0.904635, 0.0229021],
+	"body" : [0.20697, 3.53328]
 },
 {
 	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [0.0832863, 0.166573],
-	"rightArm" : [-0.0443582, 0.0443582],
-	"leftLeg" : [-0.216878, 0.667756],
+	"time" : 0.1,
+	"leftArm" : [-0.0688017, -1.56433],
+	"rightArm" : [0, 0],
+	"leftLeg" : [0, 0],
 	"rightLeg" : [0, 0],
 	"body" : [0, 0]
 },
 {
 	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [-0.050696, -0.101392],
-	"rightArm" : [0.151557, -0.133075],
-	"leftLeg" : [0.174073, -0.582147],
+	"time" : 0.2,
+	"leftArm" : [0.00724228, 1.39052],
+	"rightArm" : [0, 0],
+	"leftLeg" : [0, 0],
 	"rightLeg" : [0, 0],
-	"body" : [0, 0]
-},
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [0.0869074, 0.181057],
-	"rightArm" : [-0.0887164, 0.251363],
-	"leftLeg" : [0, 0],
-	"rightLeg" : [0.337807, 0.578279],
-	"body" : [0, 0]
-},
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [-0.0688017, -0.0869074],
-	"rightArm" : [0.107199, -0.118288],
-	"leftLeg" : [0, 0],
-	"rightLeg" : [-0.383611, -0.549651],
 	"body" : [0, 0]
 }
 ]

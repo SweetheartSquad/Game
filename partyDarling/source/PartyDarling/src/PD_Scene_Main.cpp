@@ -302,27 +302,71 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("changerOwnership", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager.addEventListener("changeOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
 		// CHARACTER newOwner
 		// ITEM item
 		// CHARACTER prevOwner
-	
 		std::string ownerCharId = _event->getStringData("newOwner");
-		std::string itemId = _event->getStringData("newOwner");
+		std::string itemId = _event->getStringData("item");
 		std::string prevOwnerCharId = _event->getStringData("prevOwner");
+		std::string scenarioId = _event->getStringData("scenario");
 
 		if(ownerCharId == "" || itemId == "" || prevOwnerCharId == "") {
 			ST_LOG_ERROR_V("Missing field in trigger changerOwnership")
+		}
+		auto listing = PD_Listing::listingsById[scenarioId];
+		PD_Item * item = listing->items[itemId];
+		
+		if(ownerCharId == prevOwnerCharId) {
+			ST_LOG_ERROR_V("Invalid arguments is trigger changeOwnership - owner == prevOwner");
+		}
+
+		bool prevOwnerHasItem = false;
+		for(auto it : listing->characters[prevOwnerCharId]->items) {
+			if(it == item->definition->id) {
+				prevOwnerHasItem = true;
+			}
+		}
+
+		if(prevOwnerHasItem){
+			if(ownerCharId == "0") {
+				uiInventory->items.push_back(item);	
+			}else if (prevOwnerCharId == "0") {
+				for(unsigned long int i = 0; i < uiInventory->items.size(); ++i) {
+					if(uiInventory->items[i]->definition->id == item->definition->id) {
+						uiInventory->items.erase(uiInventory->items.begin() + i);
+						break;
+					}
+				}
+			}
+			if(ownerCharId != "0") {
+				listing->characters[ownerCharId]->items.push_back(item->definition->id);
+			}
+			if(prevOwnerCharId != "0") {
+				for(unsigned long int i = 0; i < listing->characters[prevOwnerCharId]->items.size(); ++i) {
+					if(listing->characters[prevOwnerCharId]->items[i] == item->definition->id) {
+						listing->characters[prevOwnerCharId]->items.erase(listing->characters[prevOwnerCharId]->items.begin() + i);
+						break;
+					}
+				}
+			}
+		}else {
+			ST_LOG_WARN_V("Nothing occured in trigger changeOwnership - prevOwner did not have item");
 		}
 	});
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("emote", [](sweet::Event * _event){
 		std::string charId = _event->getStringData("character");
 		std::string emote = _event->getStringData("emote");
-		float duration = _event->getFloatData("duration");
+		float duration = _event->getFloatData("duration", 9999);
 		std::string scenario = _event->getStringData("scenario");
+		
+		if(charId == "" || emote == "" || abs(duration - 9999) <= FLT_EPSILON) {
+			ST_LOG_ERROR_V("Missing field in trigger emote");
+		}
+
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 

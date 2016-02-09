@@ -111,7 +111,7 @@
           "convo": 10
         }
       ],
-      "items": [],
+      "items": [1],
       "type": "character",
       "defaultState": 1,
       "components": [
@@ -193,7 +193,8 @@
         }
       ],
       "items": [
-        4
+        4,
+        1
       ],
       "type": "character",
       "defaultState": 1,
@@ -471,7 +472,25 @@
           "text": [
             "Uh, hi."
           ],
-          "triggers": [],
+          "triggers": [ {
+              "type": "changeOwnership",
+              "args": {
+                "item": {
+                  "value": "1",
+                  "type": "CHARACTER_STATE",
+                  "dependsOn": "Character"
+                },
+                "newOwner": {
+                  "value": "0",
+                  "type": "CHARACTER",
+                  "dependsOn": "NONE"
+                },
+                "prevOwner":{
+                	"value":"3"
+                }
+              },
+              "id": 1
+            }],
           "conditions": [],
           "speaker": 2,
           "name": "Dialogue 0"
@@ -502,7 +521,25 @@
             "Oh, you seem like you're not doing much, can you do me a favour?",
             "Could you help me count the number of chairs around the house?"
           ],
-          "triggers": [],
+          "triggers": [ {
+              "type": "changeOwnership",
+              "args": {
+                "item": {
+                  "value": "1",
+                  "type": "CHARACTER_STATE",
+                  "dependsOn": "Character"
+                },
+                "newOwner": {
+                  "value": "0",
+                  "type": "CHARACTER",
+                  "dependsOn": "NONE"
+                },
+                "prevOwner":{
+                	"value":"3"
+                }
+              },
+              "id": 1
+            }],
           "conditions": [],
           "speaker": 3,
           "name": "Dialogue 0"

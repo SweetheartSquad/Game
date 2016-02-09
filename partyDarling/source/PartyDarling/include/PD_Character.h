@@ -139,6 +139,8 @@ public:
 	
 	AssetCharacter * const definition;
 
+	std::vector<std::string> items;
+
 	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
