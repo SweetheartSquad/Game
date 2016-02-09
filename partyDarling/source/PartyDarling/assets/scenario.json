@@ -21,14 +21,6 @@
       "category": "music"
     },
 
-    {
-      "id":"main-menu-font",
-      "type":"font",
-      "src":"DobkinPlain.ttf",
-      "size":30,
-      "antiAliased": false
-    },
-
 
 
     // fonts
@@ -43,6 +35,13 @@
       "type": "font",
       "src": "fight-font.ttf",
       "size": 12,
+      "antiAliased": false
+    },
+    {
+      "id":"main-menu-font",
+      "type":"font",
+      "src":"DobkinPlain.ttf",
+      "size":30,
       "antiAliased": false
     },
     

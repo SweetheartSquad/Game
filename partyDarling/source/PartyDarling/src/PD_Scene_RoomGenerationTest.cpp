@@ -72,8 +72,8 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
-	l->setRationalHeight(1.f);
-	l->setRationalWidth(1.f);
+	l->setRationalHeight(1.f, &uiLayer);
+	l->setRationalWidth(1.f, &uiLayer);
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
