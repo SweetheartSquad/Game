@@ -607,111 +607,100 @@ void PD_Scene_Main::update(Step * _step){
 
 	// mouse interaction with world objects
 	if(player->isEnabled()){
-		float range = 4;
-		glm::vec3 pos = activeCamera->childTransform->getWorldPos();
-		btVector3 start(pos.x, pos.y, pos.z);
-		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
-		btVector3 end = start + dir*range;
-		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
-		bulletWorld->world->rayTest(start, end, RayCallback);
-		
-		
 		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		if(RayCallback.hasHit()){
-			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
-			
-			if(me != nullptr){
-				PD_Item * item = dynamic_cast<PD_Item *>(me);
-				if(item != nullptr){
-					if(item->actuallyHovered(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
-						// hover over item
-						if(item != currentHoverTarget){
-							// if we aren't already looking at the item,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							if(item->definition->collectable){
-								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
-									// remove the item from the scene
-									Transform * toDelete = item->firstParent();
+		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
+		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
+		
+		if(me != nullptr){
+			PD_Item * item = dynamic_cast<PD_Item *>(me);
+			if(item != nullptr){
+				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
+					// hover over item
+					if(item != currentHoverTarget){
+						// if we aren't already looking at the item,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						if(item->definition->collectable){
+							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
+								// remove the item from the scene
+								Transform * toDelete = item->firstParent();
 
-									currentRoom->removeComponent(item);
+								currentRoom->removeComponent(item);
 
-									toDelete->firstParent()->removeChild(toDelete);
-									toDelete->removeChild(item);
-									delete toDelete;
-									delete item->shape;
-									item->shape = nullptr;
-									bulletWorld->world->removeRigidBody(item->body);
-									item->body = nullptr;
+								toDelete->firstParent()->removeChild(toDelete);
+								toDelete->removeChild(item);
+								delete toDelete;
+								delete item->shape;
+								item->shape = nullptr;
+								bulletWorld->world->removeRigidBody(item->body);
+								item->body = nullptr;
 
-									// pickup the item
-									uiInventory->pickupItem(item);
+								// pickup the item
+								uiInventory->pickupItem(item);
 
-									// run item pickup triggers
-									item->triggerPickup();
+								// run item pickup triggers
+								item->triggerPickup();
 
-									uiBubble->clear();
-								});
-							}else{
-								uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
-									std::cout << "hey gj you interacted" << std::endl;
+								uiBubble->clear();
+							});
+						}else{
+							uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
+								std::cout << "hey gj you interacted" << std::endl;
 
-									// run item interact triggers
-									item->triggerInteract();
-								});
-							}
+								// run item interact triggers
+								item->triggerInteract();
+							});
 						}
-					}else{
-						// we hovered over an item, but it wasn't pixel-perfect
-						me = item = nullptr;
 					}
 				}else{
-					Person * person = dynamic_cast<Person*>(me);
-					if(person != nullptr){
-						// hover over person
-						if(person != currentHoverTarget){
-							// if we aren't already looking at the person,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-								std::string c = person->state->conversation;
-								if(c == "NO_CONVO"){
-									// incidental conversation
-									Json::Value dialogue;
-									dialogue["text"].append(incidentalPhraseGenerator.getLine());
-									dialogue["speaker"] = person->definition->id;
-									Json::Value root;
-									root["dialogue"] = Json::Value();
-									root["dialogue"].append(dialogue);
+					// we hovered over an item, but it wasn't pixel-perfect
+					me = item = nullptr;
+				}
+			}else{
+				Person * person = dynamic_cast<Person*>(me);
+				if(person != nullptr){
+					// hover over person
+					if(person != currentHoverTarget){
+						// if we aren't already looking at the person,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
+							std::string c = person->state->conversation;
+							if(c == "NO_CONVO"){
+								// incidental conversation
+								Json::Value dialogue;
+								dialogue["text"].append(incidentalPhraseGenerator.getLine());
+								dialogue["speaker"] = person->definition->id;
+								Json::Value root;
+								root["dialogue"] = Json::Value();
+								root["dialogue"].append(dialogue);
 
-									Conversation * tempConvo = new Conversation(root, person->definition->scenario);
-									uiDialogue->startEvent(tempConvo, true);
-									player->disable();
-								}else{
-									// start a proper conversation
-									uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
-									player->disable();
-								}
-							});
-							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
-								uiYellingContest->startNewFight();
+								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+								uiDialogue->startEvent(tempConvo, true);
+								player->disable();
+							}else{
+								// start a proper conversation
+								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+								player->disable();
+							}
+						});
+						uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
+							uiYellingContest->startNewFight();
+							uiBubble->clear();
+							player->disable();
+							// TODO: pass in the character that's fighting here
+						});
+						// if we have an item, also add the "use on" option
+						if(uiInventory->getSelected() != nullptr){
+							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
 								uiBubble->clear();
 								player->disable();
-								// TODO: pass in the character that's fighting here
+								// TODO: pass in the character that's interacting with the item here
 							});
-							// if we have an item, also add the "use on" option
-							if(uiInventory->getSelected() != nullptr){
-								uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
-									uiBubble->clear();
-									player->disable();
-									// TODO: pass in the character that's interacting with the item here
-								});
-							}
 						}
 					}
 				}
 			}
-
 			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
 			if(ui != nullptr){
 				ui->setUpdateState(true);
