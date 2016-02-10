@@ -169,10 +169,10 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 		* jawDef			= &torsoDef->components.at(0),
 		* headDef			= &jawDef->components.at(0),
 		* noseDef			= &headDef->components.at(0),
-		* eyebrowLDef		= &headDef->components.at(1),
-		* eyebrowRDef		= &headDef->components.at(2),
-		* eyeLDef			= &headDef->components.at(3),
-		* eyeRDef			= &headDef->components.at(4),
+		* eyeLDef			= &headDef->components.at(1),
+		* eyeRDef			= &headDef->components.at(2),
+		* eyebrowLDef		= &headDef->components.at(3),
+		* eyebrowRDef		= &headDef->components.at(4),
 		* pupilLDef			= &eyeLDef->components.at(0),
 		* pupilRDef			= &eyeRDef->components.at(0),
 
@@ -258,12 +258,13 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 
 	// no point in putting the nose/eyes into the skeletal structure
 	connect(head, nose);
+	connect(head, eyebrowL);
+	connect(head, eyebrowR);
 	connect(head, eyeL);
 	connect(head, eyeR);
 	connect(eyeL, pupilL);
 	connect(eyeR, pupilR);
-	connect(head, eyebrowL);
-	connect(head, eyebrowR);
+
 	
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);

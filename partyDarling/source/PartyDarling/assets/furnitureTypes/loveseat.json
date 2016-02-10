@@ -37,6 +37,6 @@
                     "RIGHT":"LEFT",
                     "FRONT":"BACK"
                 },
-            "parents":["wall"],
+            "parents":{"wall":["BACK"]},
             "padding":1
         }
