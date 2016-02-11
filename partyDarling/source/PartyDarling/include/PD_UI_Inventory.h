@@ -5,6 +5,7 @@
 
 #define UI_INVENTORY_GRID_SIZE_X 5
 #define UI_INVENTORY_GRID_SIZE_Y 5
+#define UI_INVENTORY_GRID_PADDING 0.01f
 
 class PD_UI_Inventory : public HorizontalLinearLayout{
 private:
@@ -20,6 +21,9 @@ private:
 	// i.e. displays its texture, name, and description
 	// if _item == nullptr, clears the panel instead
 	void setInfoPanel(PD_Item * _item);
+	
+	// scrollbar for grid
+	SliderController * scrollbar;
 public:
 	// all of the currently held inventory items
 	std::vector<PD_Item *> items;
@@ -27,9 +31,6 @@ public:
 	// the grid of UI elements used to display inventory items
 	// array access is [y][x]
 	NodeUI * grid[UI_INVENTORY_GRID_SIZE_Y][UI_INVENTORY_GRID_SIZE_X];
-	
-	// scrollbar for grid
-	SliderController * slider;
 
 
 	NodeUI * itemImage;
