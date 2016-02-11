@@ -14,23 +14,31 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	selectedItem(nullptr),
 	itemHovered(false)
 {
-	// this is the root element which has the backpack texture
-	setBackgroundColour(1,1,1,1);
-	background->setVisible(true);
-	background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("BACKPACK")->texture);
-	background->mesh->setScaleMode(GL_NEAREST);
 	horizontalAlignment = kCENTER;
 	verticalAlignment = kMIDDLE;
 
+	// this is the root element which has the backpack texture
+	HorizontalLinearLayout * layout = new HorizontalLinearLayout(world);
+	layout->background->setVisible(true);
+	layout->setBackgroundColour(1,1,1, 1);
+	layout->horizontalAlignment = kCENTER;
+	layout->verticalAlignment = kMIDDLE;
+	addChild(layout);
+	layout->setRationalHeight(1.f, this);
+	layout->setSquareWidth(1.f, this);
+	layout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("BACKPACK")->texture);
+	layout->background->mesh->setScaleMode(GL_NEAREST);
+	
+
 	// layout for grid rows
 	gridLayout = new VerticalLinearLayout(world);
-	addChild(gridLayout);
+	layout->addChild(gridLayout);
 	gridLayout->setBackgroundColour(1,1,1,1);
 	gridLayout->background->setVisible(true);
 	gridLayout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GRID")->texture);
 	gridLayout->background->mesh->setScaleMode(GL_NEAREST);
-	gridLayout->setRationalHeight(0.75f, this);
-	gridLayout->setRationalWidth(0.5f, this);
+	gridLayout->setRationalHeight(0.6f, layout);
+	gridLayout->setSquareWidth(1.f, layout);
 	gridLayout->setPadding(0.01f, 0.01f);
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
@@ -80,9 +88,9 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 	// scrollbar
 	slider = new SliderController(world, &gridOffset, 0, 0, 0, false, true);
-	addChild(slider);
-	slider->setRationalHeight(0.75f, this);
-	slider->setWidth(10);
+	layout->addChild(slider);
+	slider->setRationalHeight(0.6f, layout);
+	slider->setPixelWidth(10);
 	slider->setStepped(1.f);
 	slider->eventManager.addEventListener("change", [this](sweet::Event * _event){
 		gridDirty = true;
@@ -90,15 +98,15 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 	{
 		infoLayout = new VerticalLinearLayout(world);
-		addChild(infoLayout);
+		layout->addChild(infoLayout);
 		infoLayout->background->setVisible(true);
 		infoLayout->setBackgroundColour(1,1,1,1);
 		
 		infoLayout->horizontalAlignment = kCENTER;
 		infoLayout->verticalAlignment = kTOP;
 
-		infoLayout->setRationalHeight(0.75f, this);
-		infoLayout->setWidth(300);
+		infoLayout->setRationalHeight(0.6f, layout);
+		infoLayout->setPixelWidth(300);
 ;
 
 		ComponentShaderText * textShader = new ComponentShaderText(true);
@@ -111,8 +119,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 		itemImage = new NodeUI(world);
 		infoLayout->addChild(itemImage);
-		itemImage->setHeight(300);
 		itemImage->setRationalWidth(1.f, infoLayout);
+		itemImage->setSquareHeight(1.f, infoLayout);
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
