@@ -39,12 +39,12 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	gridLayout->background->mesh->setScaleMode(GL_NEAREST);
 	gridLayout->setRationalHeight(0.6f, layout);
 	gridLayout->setSquareWidth(1.f, layout);
-	gridLayout->setPadding(0.01f, 0.01f);
+	gridLayout->setPadding(UI_INVENTORY_GRID_PADDING);
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
 	gridLayout->setMouseEnabled(true);
 	gridLayout->eventManager.addEventListener("mousewheel", [this](sweet::Event * _event){
-		slider->setValue(gridOffset + _event->getFloatData("delta"));
+		scrollbar->setValue(gridOffset + _event->getFloatData("delta"));
 	});
 
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
@@ -53,30 +53,37 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		gridLayout->addChild(hl);
 		hl->setRationalWidth(1.f, gridLayout);
 		hl->setRationalHeight(1.f/UI_INVENTORY_GRID_SIZE_Y, gridLayout);
-		hl->setMargin(0, 0.01f);
+		hl->setMargin(0, UI_INVENTORY_GRID_PADDING);
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
 			// individual grid cell
+			HorizontalLinearLayout * cellLayout = new HorizontalLinearLayout(world);
+			hl->addChild(cellLayout);
+			cellLayout->horizontalAlignment = kCENTER;
+			cellLayout->verticalAlignment = kMIDDLE;
+			cellLayout->setRationalHeight(1.f, hl);
+			cellLayout->setSquareWidth(1.f, hl);
+			cellLayout->setMargin(UI_INVENTORY_GRID_PADDING, 0);
+			cellLayout->boxSizing = kCONTENT_BOX;
+			cellLayout->setMouseEnabled(true);
+
 			NodeUI * cell = new NodeUI(world);
-			hl->addChild(cell);
-			cell->setRationalWidth(1.f/UI_INVENTORY_GRID_SIZE_X, hl);
-			cell->setRationalHeight(1.f, hl);
-			cell->setMargin(0.01f, 0);
+			cellLayout->addChild(cell);
+			cell->setRationalHeight(1.f, cellLayout);
+			cell->setRationalWidth(1.f, cellLayout);
 			cell->background->mesh->setScaleMode(GL_NEAREST);
-			cell->boxSizing = kBORDER_BOX;
-			cell->setMouseEnabled(true);
 			cell->setVisible(false);
 
 			// event listeners
-			cell->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
+			cellLayout->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 0.5f);
 				setInfoPanel(getItem(x, y));
 				infoLayout->invalidateLayout();
 			});
-			cell->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
+			cellLayout->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 1.f);
 				setInfoPanel(nullptr);
 			});
-			cell->eventManager.addEventListener("click", [this, cell, y, x](sweet::Event * _event){
+			cellLayout->eventManager.addEventListener("click", [this, cell, y, x](sweet::Event * _event){
 				selectItem(getItem(x, y));
 				cell->eventManager.triggerEvent("mouseout");
 			});
@@ -87,12 +94,12 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	}
 
 	// scrollbar
-	slider = new SliderController(world, &gridOffset, 0, 0, 0, false, true);
-	layout->addChild(slider);
-	slider->setRationalHeight(0.6f, layout);
-	slider->setPixelWidth(10);
-	slider->setStepped(1.f);
-	slider->eventManager.addEventListener("change", [this](sweet::Event * _event){
+	scrollbar = new SliderController(world, &gridOffset, 0, 0, 0, false, true);
+	layout->addChild(scrollbar);
+	scrollbar->setRationalHeight(0.6f, layout);
+	scrollbar->setPixelWidth(10);
+	scrollbar->setStepped(1.f);
+	scrollbar->eventManager.addEventListener("change", [this](sweet::Event * _event){
 		gridDirty = true;
 	});
 
@@ -157,8 +164,8 @@ void PD_UI_Inventory::pickupItem(PD_Item * _item){
 	items.push_back(_item);
 
 	// update the slider maximum based on the new item size
-	slider->setValueMax(std::max(0.f, (float)(items.size()/UI_INVENTORY_GRID_SIZE_X) - UI_INVENTORY_GRID_SIZE_Y/2));
-	slider->setValue(slider->getValue());
+	scrollbar->setValueMax(std::max(0.f, (float)(items.size()/UI_INVENTORY_GRID_SIZE_X) - UI_INVENTORY_GRID_SIZE_Y/2));
+	scrollbar->setValue(scrollbar->getValue());
 
 	// set flag to let us know we need to refresh the grid
 	gridDirty = true;
@@ -240,14 +247,27 @@ void PD_UI_Inventory::refreshGrid(){
 			if(itemIdx < items.size()){
 				PD_Item * item = items.at(itemIdx);
 
-				cell->background->mesh->pushTexture2D(item->mesh->textures.at(0));
+				Texture * itemTex = item->mesh->textures.at(0);
+
+				cell->background->mesh->replaceTextures(itemTex);
 				cell->setVisible(true);
+
+				if(itemTex->width > itemTex->height){
+					cell->setRationalWidth(1.f, cell->nodeUIParent);
+					cell->setSquareHeight((float)itemTex->height/itemTex->width, cell->nodeUIParent);
+				}else{
+					cell->setRationalHeight(1.f, cell->nodeUIParent);
+					cell->setSquareWidth((float)itemTex->width/itemTex->height, cell->nodeUIParent);
+				}
+
 				++itemIdx;
 			}else{
 				cell->setVisible(false);
 			}
 		}
 	}
+
+	invalidateLayout();
 
 	// clear the flag
 	gridDirty = false;
@@ -257,18 +277,20 @@ void PD_UI_Inventory::open(){
 	setVisible(true);
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
-			grid[y][x]->setMouseEnabled(true);
+			grid[y][x]->nodeUIParent->setMouseEnabled(true);
 		}
 	}
 	gridLayout->setMouseEnabled(true);
+	scrollbar->setMouseEnabled(true);
 }
 
 void PD_UI_Inventory::close(){
 	setVisible(false);
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
-			grid[y][x]->setMouseEnabled(false);
+			grid[y][x]->nodeUIParent->setMouseEnabled(false);
 		}
 	}
 	gridLayout->setMouseEnabled(false);
+	scrollbar->setMouseEnabled(false);
 }
