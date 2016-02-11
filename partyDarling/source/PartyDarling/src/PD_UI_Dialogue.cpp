@@ -7,7 +7,8 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	NodeUI(_world),
 	uiBubble(_uiBubble),
 	textBubble(new NodeUI_NineSliced(world, uiBubble->bubbleTex)),
-	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader))
+	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader)),
+	currentSpeaker(nullptr)
 {
 	setRenderMode(kTEXTURE);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
@@ -48,26 +49,32 @@ invalidateLayout();
 	
 	uiBubble->clear();
 	
+	if(currentSpeaker != nullptr) {
+		currentSpeaker->pr->talking = false;
+	}
 	if (ConversationIterator::sayNext()){
+		currentSpeaker = PD_Listing::listings[currentConversation->scenario]->characters[currentConversation->getCurrentDialogue()->speaker];
 		if(Dialogue * dialogue = currentConversation->getCurrentDialogue()){
 			text->setText(dialogue->getCurrentText());
 		}else{
 			text->setText("");
 		}
-
 		if (waitingForInput){
+			currentSpeaker->pr->talking = false;
 			for(unsigned long int i = 0; i < currentConversation->options.size(); ++i){
 				uiBubble->addOption(currentConversation->options.at(i)->text, [this, i](sweet::Event * _event){
 					select(i);
 				});
 			}
 		}else{
+			currentSpeaker->pr->talking = true;
 			uiBubble->addOption("...", [this](sweet::Event * _event){
 				sayNext();
 			});
 		}
 		return true;
 	}
+	currentSpeaker = nullptr;
 	setVisible(false);
 	return false;
 }
