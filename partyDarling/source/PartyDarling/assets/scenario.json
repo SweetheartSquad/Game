@@ -21,7 +21,13 @@
       "category": "music"
     },
 
-
+    //Voices
+    {
+    	"id":"voice1",
+    	"type":"audio",
+    	"src":"voices/voice1.wav",
+    	"category":"sfx"
+    },
 
     // fonts
     {

@@ -505,7 +505,9 @@ void PersonRenderer::update(Step * _step){
 		glm::vec3 v = head->parents.at(0)->getTranslationVector();
 		head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
 	}else {
-		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, talkHeight, head->parents.at(0)->getTranslationVector().z, false);
+		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, 
+			head->mesh->textures.at(1)->height * 0.25f, 
+			head->parents.at(0)->getTranslationVector().z, false);
 	}
 
 	Entity::update(_step);

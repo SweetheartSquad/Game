@@ -47,9 +47,16 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	speechTimeout = new Timeout(0.2, [this](sweet::Event * _event){
 		if(speechBuffer.size() > 0) {
 			std::wstring word = speechBuffer.front();
+			char fc = tolower(word[0]);
 			speechBuffer.pop();
-			PD_ResourceManager::scenario->getAudio("DEFAULT")->sound->play();
+			auto sound = PD_ResourceManager::scenario->getAudio("voice1")->sound;
+			sound->setPitch(fc/178.f+0.75f);
+			sound->play();
 			speechTimeout->restart();
+		}else {
+			if(currentSpeaker != nullptr) {
+				currentSpeaker->pr->talking = false;
+			}
 		}
 	});
 }
@@ -87,11 +94,9 @@ invalidateLayout();
 		for(std::wstring s : sweet::StringUtils::split(text->getText(), L' ')) {
 			speechBuffer.push(s);
 		}
-		if(!speechTimeout->active) {
-			speechTimeout->start();
-		}
 		if (waitingForInput){
 			currentSpeaker->pr->talking = false;
+			clearSpeechBuffer();
 			for(unsigned long int i = 0; i < currentConversation->options.size(); ++i){
 				uiBubble->addOption(currentConversation->options.at(i)->text, [this, i](sweet::Event * _event){
 					select(i);
@@ -102,6 +107,9 @@ invalidateLayout();
 			uiBubble->addOption("...", [this](sweet::Event * _event){
 				sayNext();
 			});
+		}
+		if(!speechTimeout->active) {
+			speechTimeout->start();
 		}
 		return true;
 	}
