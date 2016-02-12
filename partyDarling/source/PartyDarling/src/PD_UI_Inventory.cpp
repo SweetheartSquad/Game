@@ -12,7 +12,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	gridDirty(false),
 	gridOffset(0),
 	selectedItem(nullptr),
-	itemHovered(false)
+	itemHovered(false),
+	enabled(true)
 {
 	horizontalAlignment = kCENTER;
 	verticalAlignment = kMIDDLE;
@@ -146,7 +147,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	}
 	
 	// disable and hide by default
-	close();
+	disable();
 }
 
 void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
@@ -292,7 +293,8 @@ void PD_UI_Inventory::refreshGrid(){
 	gridDirty = false;
 }
 
-void PD_UI_Inventory::open(){
+void PD_UI_Inventory::enable(){
+	enabled = true;
 	setVisible(true);
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
@@ -303,7 +305,8 @@ void PD_UI_Inventory::open(){
 	scrollbar->setMouseEnabled(true);
 }
 
-void PD_UI_Inventory::close(){
+void PD_UI_Inventory::disable(){
+	enabled = false;
 	setVisible(false);
 	for(unsigned long int y = 0; y < UI_INVENTORY_GRID_SIZE_Y; ++y){
 		for(unsigned long int x = 0; x < UI_INVENTORY_GRID_SIZE_X; ++x){
@@ -312,4 +315,8 @@ void PD_UI_Inventory::close(){
 	}
 	gridLayout->setMouseEnabled(false);
 	scrollbar->setMouseEnabled(false);
+}
+
+bool PD_UI_Inventory::isEnabled(){
+	return enabled;
 }

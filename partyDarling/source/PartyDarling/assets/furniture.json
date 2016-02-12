@@ -219,6 +219,30 @@
         {
             "id": 47, 
             "src": "furnitureJson/couch_leg_4.json"
+        }, 
+        {
+            "id": 48, 
+            "src": "furnitureJson/sideTabletop_1.json"
+        }, 
+        {
+            "id": 49, 
+            "src": "furnitureJson/sideTabletop_2.json"
+        }, 
+        {
+            "id": 50, 
+            "src": "furnitureJson/sideTabletop_3.json"
+        }, 
+        {
+            "id": 51, 
+            "src": "furnitureJson/sideTabletop_4.json"
+        }, 
+        {
+            "id": 52, 
+            "src": "furnitureJson/sideTableShelf_1.json"
+        }, 
+        {
+            "id": 53, 
+            "src": "furnitureJson/sideTableShelf_2.json"
         }
     ], 
     "furniture": [

@@ -33,7 +33,9 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
+
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
+
 	//scenes["game"] = new PD_Scene_Main(this);
 
 	//playBGM();

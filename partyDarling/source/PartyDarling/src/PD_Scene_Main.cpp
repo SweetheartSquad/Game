@@ -137,7 +137,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiInventory->setRationalHeight(1.f, &uiLayer);
 	uiInventory->setRationalWidth(1.f, &uiLayer);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
-		uiInventory->close();
+		uiInventory->disable();
+		uiBubble->enable();
 		uiLayer.removeMouseIndicator();
 		player->enable();
 
@@ -239,10 +240,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	// Called when going through a door
 	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
-		
+		player->disable();
+		uiBubble->disable();
+
 		PD_ResourceManager::scenario->getAudio("doorOpen")->sound->play();
 		
-		player->disable();
 		transition = 0.f;
 		transitionTarget = 1.f;
 
@@ -258,6 +260,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			navigate(glm::ivec2(1,0)); // TODO: replace this with actual navigation vector
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
+			uiBubble->enable();
 		});
 		t->start();
 		childTransform->addChild(t, false);
@@ -752,32 +755,40 @@ void PD_Scene_Main::update(Step * _step){
 	
 	// inventory toggle
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
-		if(uiInventory->isVisible()){
-			uiInventory->close();
-			uiLayer.removeMouseIndicator();
-			player->enable();
-		}else{
-			uiInventory->open();
-			uiLayer.addMouseIndicator();
-			player->disable();
+		if(!uiMap->isEnabled()){
+			if(uiInventory->isVisible()){
+				uiBubble->enable();
+				uiInventory->disable();
+				uiLayer.removeMouseIndicator();
+				player->enable();
+			}else{
+				uiBubble->disable();
+				uiInventory->enable();
+				uiLayer.addMouseIndicator();
+				player->disable();
+			}
 		}
 	}
 	
 	// map toggle
 	if(keyboard->keyJustDown(GLFW_KEY_M)){
-		if(uiMap->isEnabled()){
-			if(uiMap->isDetailed()){
-				uiMap->setDetailed(false);
-				uiMap->disable();
-				player->enable();
-				uiLayer.removeMouseIndicator();
+		if(!uiInventory->isEnabled()){
+			if(uiMap->isEnabled()){
+				if(uiMap->isDetailed()){
+					uiMap->setDetailed(false);
+					uiMap->disable();
+					player->enable();
+					uiLayer.removeMouseIndicator();
+					uiBubble->enable();
+				}else{
+					uiMap->setDetailed(true);
+					player->disable();
+					uiBubble->disable();
+					uiLayer.addMouseIndicator();
+				}
 			}else{
-				uiMap->setDetailed(true);
-				player->disable();
-				uiLayer.addMouseIndicator();
+				uiMap->enable();
 			}
-		}else{
-			uiMap->enable();
 		}
 	}
 

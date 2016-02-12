@@ -16,6 +16,7 @@ class PD_UI_Bubble : public NodeUI{
 private:
 	float displayOffset;
 	bool childrenUpdated;
+	bool enabled;
 public:
 	Texture_NineSliced * bubbleTex;
 	ComponentShaderText * textShader;
@@ -55,4 +56,7 @@ public:
 	// clear out all existing options
 	// specifically, it removes the "selected" event listeners, removes them from the layout, and puts them in the unused list
 	void clear();
+
+	void enable();
+	void disable();
 };
