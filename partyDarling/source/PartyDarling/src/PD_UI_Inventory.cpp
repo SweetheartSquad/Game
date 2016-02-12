@@ -77,7 +77,6 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cellLayout->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 0.5f);
 				setInfoPanel(getItem(x, y));
-				infoLayout->invalidateLayout();
 			});
 			cellLayout->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 1.f);
@@ -124,10 +123,17 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		itemName->setText("test");
 		itemName->setRationalWidth(1.f, infoLayout);
 
+		HorizontalLinearLayout * itemImageLayout = new HorizontalLinearLayout(world);
+		infoLayout->addChild(itemImageLayout);
+		itemImageLayout->setRationalWidth(1.f, infoLayout);
+		itemImageLayout->setSquareHeight(1.f, infoLayout);
+		itemImageLayout->horizontalAlignment = kCENTER;
+		itemImageLayout->verticalAlignment = kTOP;
+
 		itemImage = new NodeUI(world);
-		infoLayout->addChild(itemImage);
-		itemImage->setRationalWidth(1.f, infoLayout);
-		itemImage->setSquareHeight(1.f, infoLayout);
+		itemImageLayout->addChild(itemImage);
+		itemImage->setRationalWidth(1.f, itemImageLayout);
+		itemImage->setRationalHeight(1.f, itemImageLayout);
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
@@ -145,10 +151,22 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
 	if(_item != nullptr){
+		// get the item texture
+		Texture * itemTex = _item->mesh->textures.at(0);
+
 		// update to match the item's the image, name, and description
-		itemImage->background->mesh->replaceTextures(_item->mesh->textures.at(0));
+		itemImage->background->mesh->replaceTextures(itemTex);
 		itemName->setText(_item->definition->name);
 		itemDescription->setText(_item->definition->description);
+
+		// make sure the item is displayed at the correct size
+		if(itemTex->width > itemTex->height){
+			itemImage->setRationalWidth(1.f, itemImage->nodeUIParent);
+			itemImage->setSquareHeight((float)itemTex->height/itemTex->width, itemImage->nodeUIParent);
+		}else{
+			itemImage->setRationalHeight(1.f, itemImage->nodeUIParent);
+			itemImage->setSquareWidth((float)itemTex->width/itemTex->height, itemImage->nodeUIParent);
+		}
 
 		// flag that we have set an item for this frame so that we don't accidentally clear it out later
 		itemHovered = true;
@@ -158,6 +176,7 @@ void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
 		itemName->setText("");
 		itemDescription->setText("");
 	}
+	infoLayout->invalidateLayout();
 }
 
 void PD_UI_Inventory::pickupItem(PD_Item * _item){
