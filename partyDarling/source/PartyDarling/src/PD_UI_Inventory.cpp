@@ -25,7 +25,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	layout->verticalAlignment = kMIDDLE;
 	addChild(layout);
 	layout->setRationalHeight(1.f, this);
-	layout->setSquareWidth(1.f, this);
+	layout->setSquareWidth(1.f);
 	layout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("BACKPACK")->texture);
 	layout->background->mesh->setScaleMode(GL_NEAREST);
 	
@@ -38,7 +38,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	gridLayout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("GRID")->texture);
 	gridLayout->background->mesh->setScaleMode(GL_NEAREST);
 	gridLayout->setRationalHeight(0.6f, layout);
-	gridLayout->setSquareWidth(1.f, layout);
+	gridLayout->setSquareWidth(1.f);
 	gridLayout->setPadding(UI_INVENTORY_GRID_PADDING);
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
@@ -61,7 +61,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cellLayout->horizontalAlignment = kCENTER;
 			cellLayout->verticalAlignment = kMIDDLE;
 			cellLayout->setRationalHeight(1.f, hl);
-			cellLayout->setSquareWidth(1.f, hl);
+			cellLayout->setSquareWidth(1.f);
 			cellLayout->setMargin(UI_INVENTORY_GRID_PADDING, 0);
 			cellLayout->boxSizing = kCONTENT_BOX;
 			cellLayout->setMouseEnabled(true);
@@ -126,7 +126,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		HorizontalLinearLayout * itemImageLayout = new HorizontalLinearLayout(world);
 		infoLayout->addChild(itemImageLayout);
 		itemImageLayout->setRationalWidth(1.f, infoLayout);
-		itemImageLayout->setSquareHeight(1.f, infoLayout);
+		itemImageLayout->setSquareHeight(1.f);
 		itemImageLayout->horizontalAlignment = kCENTER;
 		itemImageLayout->verticalAlignment = kTOP;
 
@@ -162,10 +162,10 @@ void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
 		// make sure the item is displayed at the correct size
 		if(itemTex->width > itemTex->height){
 			itemImage->setRationalWidth(1.f, itemImage->nodeUIParent);
-			itemImage->setSquareHeight((float)itemTex->height/itemTex->width, itemImage->nodeUIParent);
+			itemImage->setSquareHeight((float)itemTex->height/itemTex->width);
 		}else{
 			itemImage->setRationalHeight(1.f, itemImage->nodeUIParent);
-			itemImage->setSquareWidth((float)itemTex->width/itemTex->height, itemImage->nodeUIParent);
+			itemImage->setSquareWidth((float)itemTex->width/itemTex->height);
 		}
 
 		// flag that we have set an item for this frame so that we don't accidentally clear it out later
@@ -273,10 +273,10 @@ void PD_UI_Inventory::refreshGrid(){
 
 				if(itemTex->width > itemTex->height){
 					cell->setRationalWidth(1.f, cell->nodeUIParent);
-					cell->setSquareHeight((float)itemTex->height/itemTex->width, cell->nodeUIParent);
+					cell->setSquareHeight((float)itemTex->height/itemTex->width);
 				}else{
 					cell->setRationalHeight(1.f, cell->nodeUIParent);
-					cell->setSquareWidth((float)itemTex->width/itemTex->height, cell->nodeUIParent);
+					cell->setSquareWidth((float)itemTex->width/itemTex->height);
 				}
 
 				++itemIdx;
