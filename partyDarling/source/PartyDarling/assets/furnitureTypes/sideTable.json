@@ -1,0 +1,39 @@
+{
+            "components": [
+                {
+                    "componentTypes": ["sideTabletop"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["leg"], 
+                            "multiplier": 4, 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["sideTableShelf"], 
+                            "multiplier": 1, 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "sideTable",
+			"mass": 40,
+            "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+            "parents":{
+                "loveseat":[
+                    "LEFT",
+                    "RIGHT"
+                ],
+				"bed":[
+					"LEFT",
+                    "RIGHT"
+				]
+            },
+            "parents":[],
+            "padding":0
+        }

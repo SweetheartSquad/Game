@@ -27,13 +27,16 @@ void PD_Game::addSplashes(){
 }
 
 PD_Game::PD_Game() :
-	Game("menu", new PD_Scene_MainMenu(this), true),
+	Game("menu", new PD_Scene_Animation(this), true),
 	bgmTrack(nullptr),
 	fightTrack(nullptr)
 {
 	printFPS = false;
 
+<<<<<<< HEAD
+=======
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
+>>>>>>> origin/master
 	//scenes["game"] = new PD_Scene_Main(this);
 
 	//playBGM();
