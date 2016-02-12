@@ -302,8 +302,36 @@
       "type": "texture",
       "src": "UI/yelling contest/interject.png"
     },
-
-
+    {
+      "id": "YELLING-CONTEST-COMPLIMENT1",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment1.png"
+    },
+    {
+      "id": "YELLING-CONTEST-COMPLIMENT2",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment2.png"
+    },
+  	{
+      "id": "YELLING-CONTEST-COMPLIMENT3",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment3.png"
+    },
+     {
+      "id": "YELLING-CONTEST-COMPLIMENT4",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment4.png"
+    },
+    {
+      "id": "YELLING-CONTEST-COMPLIMENT5",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment5.png"
+    },
+    {
+      "id": "YELLING-CONTEST-COMPLIMENT6",
+      "type": "texture",
+      "src": "UI/yelling contest/compliment6.png"
+    },
 
 
     // INVENTORY
