@@ -19,6 +19,7 @@ public:
 class PD_UI_Map : public NodeUI{
 private:
 	VerticalLinearLayout * layout;
+	VerticalLinearLayout * innerLayout;
 	TextLabel * roomName;
 	std::map<std::pair<int, int>, MapCell *> grid;
 
