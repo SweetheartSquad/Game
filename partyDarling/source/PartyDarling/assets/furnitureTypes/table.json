@@ -24,6 +24,6 @@
                     "LEFT":"FRONT",
                     "RIGHT":"FRONT"
                 },
-            "parents":[],
+            "parents":{},
             "padding":0
         }

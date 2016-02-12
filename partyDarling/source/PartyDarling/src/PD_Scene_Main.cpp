@@ -95,8 +95,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
-	l->setRationalHeight(1.f);
-	l->setRationalWidth(1.f);
+	l->setRationalHeight(1.f, &uiLayer);
+	l->setRationalWidth(1.f, &uiLayer);
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
@@ -128,10 +128,14 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer.world);
+	uiBubble->setRationalWidth(1.f, &uiLayer);
+	uiBubble->setRationalHeight(0.25f, &uiLayer);
 	uiLayer.addChild(uiBubble);
 
 	uiInventory = new PD_UI_Inventory(uiLayer.world);
 	uiLayer.addChild(uiInventory);
+	uiInventory->setRationalHeight(1.f, &uiLayer);
+	uiInventory->setRationalWidth(1.f, &uiLayer);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->close();
 		uiLayer.removeMouseIndicator();
@@ -302,27 +306,71 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("changerOwnership", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager.addEventListener("changeOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
 		// CHARACTER newOwner
 		// ITEM item
 		// CHARACTER prevOwner
-	
 		std::string ownerCharId = _event->getStringData("newOwner");
-		std::string itemId = _event->getStringData("newOwner");
+		std::string itemId = _event->getStringData("item");
 		std::string prevOwnerCharId = _event->getStringData("prevOwner");
+		std::string scenarioId = _event->getStringData("scenario");
 
 		if(ownerCharId == "" || itemId == "" || prevOwnerCharId == "") {
 			ST_LOG_ERROR_V("Missing field in trigger changerOwnership")
+		}
+		auto listing = PD_Listing::listingsById[scenarioId];
+		PD_Item * item = listing->items[itemId];
+		
+		if(ownerCharId == prevOwnerCharId) {
+			ST_LOG_ERROR_V("Invalid arguments is trigger changeOwnership - owner == prevOwner");
+		}
+
+		bool prevOwnerHasItem = false;
+		for(auto it : listing->characters[prevOwnerCharId]->items) {
+			if(it == item->definition->id) {
+				prevOwnerHasItem = true;
+			}
+		}
+
+		if(prevOwnerHasItem){
+			if(ownerCharId == "0") {
+				uiInventory->items.push_back(item);	
+			}else if (prevOwnerCharId == "0") {
+				for(unsigned long int i = 0; i < uiInventory->items.size(); ++i) {
+					if(uiInventory->items[i]->definition->id == item->definition->id) {
+						uiInventory->items.erase(uiInventory->items.begin() + i);
+						break;
+					}
+				}
+			}
+			if(ownerCharId != "0") {
+				listing->characters[ownerCharId]->items.push_back(item->definition->id);
+			}
+			if(prevOwnerCharId != "0") {
+				for(unsigned long int i = 0; i < listing->characters[prevOwnerCharId]->items.size(); ++i) {
+					if(listing->characters[prevOwnerCharId]->items[i] == item->definition->id) {
+						listing->characters[prevOwnerCharId]->items.erase(listing->characters[prevOwnerCharId]->items.begin() + i);
+						break;
+					}
+				}
+			}
+		}else {
+			ST_LOG_WARN_V("Nothing occured in trigger changeOwnership - prevOwner did not have item");
 		}
 	});
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("emote", [](sweet::Event * _event){
 		std::string charId = _event->getStringData("character");
 		std::string emote = _event->getStringData("emote");
-		float duration = _event->getFloatData("duration");
+		float duration = _event->getFloatData("duration", 9999);
 		std::string scenario = _event->getStringData("scenario");
+		
+		if(charId == "" || emote == "" || abs(duration - 9999) <= FLT_EPSILON) {
+			ST_LOG_ERROR_V("Missing field in trigger emote");
+		}
+
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 
@@ -367,6 +415,8 @@ void PD_Scene_Main::bundleScenarios(){
 }
 
 void PD_Scene_Main::buildHouse(){
+	PD_Game * g = dynamic_cast<PD_Game *>(game);
+
 	glm::ivec2 startPos(0);
 
 	// build all of the rooms contained in the selected scenarios
@@ -378,6 +428,7 @@ void PD_Scene_Main::buildHouse(){
 		// build the rooms in this scenario
 		for(auto rd : s->assets.at("room")){
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
+			g->showLoading(room->definition->name, 0);
 			
 			// setup the first parents, but don't actually add anything to the scene yet
 			Transform * t = new Transform();
@@ -386,7 +437,6 @@ void PD_Scene_Main::buildHouse(){
 				t = new Transform();
 				t->addChild(room->components.at(i), false);
 			}
-
 			// run the physics simulation for a few seconds to let things settle
 			Log::info("Letting the bodies hit the floor...");
 			Step s;
@@ -557,111 +607,100 @@ void PD_Scene_Main::update(Step * _step){
 
 	// mouse interaction with world objects
 	if(player->isEnabled()){
-		float range = 4;
-		glm::vec3 pos = activeCamera->childTransform->getWorldPos();
-		btVector3 start(pos.x, pos.y, pos.z);
-		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
-		btVector3 end = start + dir*range;
-		btCollisionWorld::ClosestRayResultCallback RayCallback(start, end);
-		bulletWorld->world->rayTest(start, end, RayCallback);
-		
-		
 		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		if(RayCallback.hasHit()){
-			NodeBulletBody * me = static_cast<NodeBulletBody *>(RayCallback.m_collisionObject->getUserPointer());
-			
-			if(me != nullptr){
-				PD_Item * item = dynamic_cast<PD_Item *>(me);
-				if(item != nullptr){
-					if(item->actuallyHovered(glm::vec3(RayCallback.m_hitPointWorld.getX(), RayCallback.m_hitPointWorld.getY(), RayCallback.m_hitPointWorld.getZ()))){
-						// hover over item
-						if(item != currentHoverTarget){
-							// if we aren't already looking at the item,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							if(item->definition->collectable){
-								uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
-									// remove the item from the scene
-									Transform * toDelete = item->firstParent();
+		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
+		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
+		
+		if(me != nullptr){
+			PD_Item * item = dynamic_cast<PD_Item *>(me);
+			if(item != nullptr){
+				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
+					// hover over item
+					if(item != currentHoverTarget){
+						// if we aren't already looking at the item,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						if(item->definition->collectable){
+							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
+								// remove the item from the scene
+								Transform * toDelete = item->firstParent();
 
-									currentRoom->removeComponent(item);
+								currentRoom->removeComponent(item);
 
-									toDelete->firstParent()->removeChild(toDelete);
-									toDelete->removeChild(item);
-									delete toDelete;
-									delete item->shape;
-									item->shape = nullptr;
-									bulletWorld->world->removeRigidBody(item->body);
-									item->body = nullptr;
+								toDelete->firstParent()->removeChild(toDelete);
+								toDelete->removeChild(item);
+								delete toDelete;
+								delete item->shape;
+								item->shape = nullptr;
+								bulletWorld->world->removeRigidBody(item->body);
+								item->body = nullptr;
 
-									// pickup the item
-									uiInventory->pickupItem(item);
+								// pickup the item
+								uiInventory->pickupItem(item);
 
-									// run item pickup triggers
-									item->triggerPickup();
+								// run item pickup triggers
+								item->triggerPickup();
 
-									uiBubble->clear();
-								});
-							}else{
-								uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
-									std::cout << "hey gj you interacted" << std::endl;
+								uiBubble->clear();
+							});
+						}else{
+							uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
+								std::cout << "hey gj you interacted" << std::endl;
 
-									// run item interact triggers
-									item->triggerInteract();
-								});
-							}
+								// run item interact triggers
+								item->triggerInteract();
+							});
 						}
-					}else{
-						// we hovered over an item, but it wasn't pixel-perfect
-						me = item = nullptr;
 					}
 				}else{
-					Person * person = dynamic_cast<Person*>(me);
-					if(person != nullptr){
-						// hover over person
-						if(person != currentHoverTarget){
-							// if we aren't already looking at the person,
-							// clear out the bubble UI and add the relevant options
-							uiBubble->clear();
-							uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-								std::string c = person->state->conversation;
-								if(c == "NO_CONVO"){
-									// incidental conversation
-									Json::Value dialogue;
-									dialogue["text"].append(incidentalPhraseGenerator.getLine());
-									dialogue["speaker"] = person->definition->id;
-									Json::Value root;
-									root["dialogue"] = Json::Value();
-									root["dialogue"].append(dialogue);
+					// we hovered over an item, but it wasn't pixel-perfect
+					me = item = nullptr;
+				}
+			}else{
+				Person * person = dynamic_cast<Person*>(me);
+				if(person != nullptr){
+					// hover over person
+					if(person != currentHoverTarget){
+						// if we aren't already looking at the person,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
+							std::string c = person->state->conversation;
+							if(c == "NO_CONVO"){
+								// incidental conversation
+								Json::Value dialogue;
+								dialogue["text"].append(incidentalPhraseGenerator.getLine());
+								dialogue["speaker"] = person->definition->id;
+								Json::Value root;
+								root["dialogue"] = Json::Value();
+								root["dialogue"].append(dialogue);
 
-									Conversation * tempConvo = new Conversation(root, person->definition->scenario);
-									uiDialogue->startEvent(tempConvo, true);
-									player->disable();
-								}else{
-									// start a proper conversation
-									uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
-									player->disable();
-								}
-							});
-							uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
-								uiYellingContest->startNewFight();
+								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+								uiDialogue->startEvent(tempConvo, true);
+								player->disable();
+							}else{
+								// start a proper conversation
+								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+								player->disable();
+							}
+						});
+						uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
+							uiYellingContest->startNewFight();
+							uiBubble->clear();
+							player->disable();
+							// TODO: pass in the character that's fighting here
+						});
+						// if we have an item, also add the "use on" option
+						if(uiInventory->getSelected() != nullptr){
+							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
 								uiBubble->clear();
 								player->disable();
-								// TODO: pass in the character that's fighting here
+								// TODO: pass in the character that's interacting with the item here
 							});
-							// if we have an item, also add the "use on" option
-							if(uiInventory->getSelected() != nullptr){
-								uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
-									uiBubble->clear();
-									player->disable();
-									// TODO: pass in the character that's interacting with the item here
-								});
-							}
 						}
 					}
 				}
 			}
-
 			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
 			if(ui != nullptr){
 				ui->setUpdateState(true);

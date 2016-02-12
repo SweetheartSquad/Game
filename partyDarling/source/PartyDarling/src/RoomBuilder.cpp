@@ -268,9 +268,17 @@ bool RoomBuilder::search(RoomObject * child){
 				continue;
 			}
 			// check if valid parent
-			if (std::find(child->parentTypes.begin(), child->parentTypes.end(), parent->type) == child->parentTypes.end()){
+			bool valid = false;
+			for(auto parentType : child->parentTypes) {
+				if(parentType.parent == parent->type) {
+					valid = true;
+					break;
+				}
+			}
+			if(!valid) {
 				continue;
 			}
+
 			typedef std::map<PD_Side, std::vector<Slot *>>::iterator it_type;
 			for(it_type iterator = parent->emptySlots.begin(); iterator != parent->emptySlots.end(); iterator++) {
 				// go through available slots of side
@@ -709,7 +717,10 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
 	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
-	door->parentTypes.push_back("wall");
+	PD_ParentDef wallDef;
+	wallDef.parent = "wall";
+	wallDef.sides.push_back(PD_Side::kFRONT);
+	door->parentTypes.push_back(wallDef);
 	room->door = door;
 	items.push_back(door);
 	

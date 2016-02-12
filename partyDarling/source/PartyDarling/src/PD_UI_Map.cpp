@@ -3,6 +3,7 @@
 #include <PD_UI_Map.h>
 #include <PD_TilemapGenerator.h>
 #include <PD_Assets.h>
+#include <PD_ResourceManager.h>
 
 MapCell::MapCell(BulletWorld * _world, Room * _room) :
 	NodeUI(_world),
@@ -10,6 +11,7 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 	room(_room)
 {
 	background->mesh->setScaleMode(GL_NEAREST);
+	background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
 	setVisible(false);
 	boxSizing = kCONTENT_BOX;
 }
@@ -35,12 +37,13 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 {
 	background->setVisible(false);
 
-	roomName = new TextLabel(world, _font, _textShader, 1.f);
+	roomName = new TextLabel(world, _font, _textShader);
+	addChild(roomName);
 	roomName->horizontalAlignment = kCENTER;
+	roomName->setRationalWidth(1.f, this);
 	roomName->setMarginBottom(0.05f);
 	roomName->setVisible(false);
 
-	addChild(roomName);
 }
 
 void PD_UI_Map::disable(){
@@ -66,23 +69,23 @@ bool PD_UI_Map::isDetailed(){
 void PD_UI_Map::setDetailed(bool _detailed){
 	detailed = _detailed;
 	if(detailed){
-		layout->setRationalHeight(1.f, this);
-		layout->setRationalWidth(1.f, this);
+		innerLayout->setRationalHeight(1.f, this);
+		innerLayout->setSquareWidth(1.f);
 
 		for(auto & cell : grid){
 			cell.second->setMouseEnabled(true);
 		}
 		roomName->setVisible(true);
 	}else{
-		layout->setRationalHeight(0.1f, this);
-		layout->setRationalWidth(0.1f, this);
+		innerLayout->setRationalHeight(0.1f, this);
+		innerLayout->setSquareWidth(1.f);
 
 		for(auto & cell : grid){
 			cell.second->setMouseEnabled(false);
 		}
 		roomName->setVisible(false);
 	}
-	layout->invalidateLayout();
+	invalidateLayout();
 }
 
 void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
@@ -91,13 +94,21 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 		removeChild(layout);
 		delete layout;
 	}
+	grid.clear();
 
 	layout = new VerticalLinearLayout(world);
+	addChild(layout);
 	layout->horizontalAlignment = kRIGHT;
 	layout->verticalAlignment = kTOP;
-	addChild(layout);
-	grid.clear();
+	layout->setRationalHeight(1.f, this);
+	layout->setRationalWidth(1.f, this);
 	
+	innerLayout = new VerticalLinearLayout(world);
+	layout->addChild(innerLayout);
+	innerLayout->horizontalAlignment = kRIGHT;
+	innerLayout->verticalAlignment = kTOP;
+	innerLayout->setRationalHeight(1.f, this);
+	innerLayout->setSquareWidth(1.f);
 	// find the bounds
 	int x1=INT_MAX,x2=INT_MIN,y1=INT_MAX,y2=INT_MIN;
 	for(auto & room : _houseGrid){
@@ -110,18 +121,20 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// make sure we have a full grid for what we need
 	for(unsigned long int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
-		hl->setRationalWidth(1.f, layout);
-		hl->setRationalHeight(1.f/height, layout);
-		hl->horizontalAlignment = layout->horizontalAlignment;
-		hl->verticalAlignment = kMIDDLE;
-		layout->addChild(hl);
+		innerLayout->addChild(hl);
+		hl->setRationalWidth(1.f, innerLayout);
+		hl->setRationalHeight(1.f/height, innerLayout);
+		hl->horizontalAlignment = innerLayout->horizontalAlignment;
+		hl->verticalAlignment = innerLayout->verticalAlignment;
+		hl->horizontalAlignment = innerLayout->horizontalAlignment;
 
 		for(unsigned long int x = x1; x <= x2; ++x){
 			MapCell * cell = new MapCell(world, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
 			cell->setRationalWidth(1.f/width, hl);
-			cell->setRationalHeight(1.f, hl);
+			cell->setSquareHeight(1.f);
+			cell->boxSizing = kCONTENT_BOX;
 			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
 				if(cell->room != nullptr && cell->isVisited()){
 					roomName->setText(cell->room->definition->name);

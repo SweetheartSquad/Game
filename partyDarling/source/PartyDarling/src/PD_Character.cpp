@@ -38,6 +38,8 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	translatePhysical(glm::vec3(0, (boundingBox.height+boundingBox.width) * 0.5f, 0.f), false);
 
 	pr->setAnimation(state->animation);
+
+	items = definition->items;
 }
 
 void Person::setShader(Shader * _shader, bool _configureDefault){
@@ -83,6 +85,8 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
 	
 	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
+
+	PD_Listing::listings[_scenario]->characters[id] = p;
 
 	return p;
 }
@@ -155,7 +159,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	animate(true),
 	currentAnimation(nullptr),
 	emote(nullptr),
-	emoteTimeout(nullptr)
+	emoteTimeout(nullptr),
+	talking(false)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -167,10 +172,10 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 		* jawDef			= &torsoDef->components.at(0),
 		* headDef			= &jawDef->components.at(0),
 		* noseDef			= &headDef->components.at(0),
-		* eyebrowLDef		= &headDef->components.at(1),
-		* eyebrowRDef		= &headDef->components.at(2),
-		* eyeLDef			= &headDef->components.at(3),
-		* eyeRDef			= &headDef->components.at(4),
+		* eyeLDef			= &headDef->components.at(1),
+		* eyeRDef			= &headDef->components.at(2),
+		* eyebrowLDef		= &headDef->components.at(3),
+		* eyebrowRDef		= &headDef->components.at(4),
 		* pupilLDef			= &eyeLDef->components.at(0),
 		* pupilRDef			= &eyeRDef->components.at(0),
 
@@ -256,12 +261,13 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 
 	// no point in putting the nose/eyes into the skeletal structure
 	connect(head, nose);
+	connect(head, eyebrowL);
+	connect(head, eyebrowR);
 	connect(head, eyeL);
 	connect(head, eyeR);
 	connect(eyeL, pupilL);
 	connect(eyeR, pupilR);
-	connect(head, eyebrowL);
-	connect(head, eyebrowR);
+
 	
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
@@ -492,11 +498,15 @@ void PersonRenderer::update(Step * _step){
 			}
 		}
 	}
-	
-	// talking
-	talk->update(_step);
-	glm::vec3 v = head->parents.at(0)->getTranslationVector();
-	head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
+
+	if(talking){
+		// talking
+		talk->update(_step);
+		glm::vec3 v = head->parents.at(0)->getTranslationVector();
+		head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
+	}else {
+		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, talkHeight, head->parents.at(0)->getTranslationVector().z, false);
+	}
 
 	Entity::update(_step);
 }

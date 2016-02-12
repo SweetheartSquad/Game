@@ -5,11 +5,14 @@
 #include <PD_Scene_RoomGenerationTest.h>
 #include <PD_ResourceManager.h>
 
+#include <PD_Scene_MainMenu.h>
+#include <PD_Scene_LoadingScreen.h>
+#include <PD_Scene_Animation.h>
+
 #include <NumberUtils.h>
 #include <OpenAlSound.h>
 #include <AutoMusic.h>
-#include <PD_Scene_MainMenu.h>
-#include <PD_Scene_Animation.h>
+#include <RenderOptions.h>
 
 sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
 bool PD_Game::staticInit(){
@@ -30,6 +33,10 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
+<<<<<<< HEAD
+=======
+	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
+>>>>>>> origin/master
 	//scenes["game"] = new PD_Scene_Main(this);
 
 	//playBGM();
@@ -73,4 +80,12 @@ void PD_Game::playFight(){
 	fightTrack = new AutoDrums(PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound);
 	fightTrack->bpm = 128;
 	fightTrack->generate();
+}
+
+void PD_Game::showLoading(std::string _message, float _percentage){
+	PD_Scene_LoadingScreen * s = dynamic_cast<PD_Scene_LoadingScreen *>(scenes["loadingScreen"]);
+	s->loadingMessage->setText(_message);
+	s->uiLayer.invalidateLayout();
+	s->update(nullptr);
+	draw(s);
 }

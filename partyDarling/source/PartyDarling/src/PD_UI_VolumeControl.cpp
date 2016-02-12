@@ -8,8 +8,6 @@ PD_UI_VolumeControl::PD_UI_VolumeControl(BulletWorld * _world, Shader * _textSha
 	VerticalLinearLayout(_world),
 	textShader(_textShader)
 {
-	setRationalWidth(1.f);
-	setRationalHeight(1.f);
 	verticalAlignment = kMIDDLE;
 
 	addSlider("master", &OpenAL_Sound::masterGain);

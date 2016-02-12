@@ -146,13 +146,8 @@ void PD_ResourceManager::init(){
 	db = new DatabaseConnection("data/test.db");
 
 	resources.push_back(scenario);
-	/*
-	globalScenarioListing = new PD_Listing(scenario);
 	
-	for(unsigned long int i = 0; i < 100; i++) {
-		
-	}
-	*/
+	globalScenarioListing = new PD_Listing(scenario);
 }
 
 int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){

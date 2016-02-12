@@ -25,7 +25,7 @@ void Room::addComponent(RoomObject * _obj){
 }
 
 void Room::removeComponent(RoomObject * _obj){
-	for(signed long int i = components.size()-1; i > 0; --i){
+	for(signed long int i = components.size()-1; i >= 0; --i){
 		if(components.at(i) == _obj){
 			components.erase(components.begin() + i);
 			break;

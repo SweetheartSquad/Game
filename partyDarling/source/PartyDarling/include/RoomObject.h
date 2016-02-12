@@ -10,14 +10,29 @@ enum Anchor_t{
 };
 
 enum class PD_Side {
-	kFRONT,
-	kBACK,
-	kBOTTOM,
-	kTOP,
-	kLEFT,
-	kRIGHT,
-	kNONE
+	kFRONT	= 0,
+	kBACK	= 1,
+	kRIGHT  = 2,
+	kTOP	= 3,
+	kLEFT	= 4,
+	kBOTTOM	= 5,
+	kNONE	= 6
 }; 
+
+struct PD_ParentDef{
+	std::string parent;
+	std::vector<PD_Side> sides;
+
+	friend bool operator==(const PD_ParentDef& lhs, const PD_ParentDef& rhs) {
+		return lhs.parent == rhs.parent
+			&& lhs.sides == rhs.sides;
+	}
+
+	friend bool operator!=(const PD_ParentDef& lhs, const PD_ParentDef& rhs) {
+		return !(lhs == rhs);
+	}
+};
+
 
 class Slot{
 public:
@@ -31,7 +46,7 @@ public:
 class RoomObject: public BulletMeshEntity {
 public:
 	std::string type;
-	std::vector<std::string> parentTypes;
+	std::vector<PD_ParentDef> parentTypes;
 
 	Anchor_t anchor;
 	sweet::Box boundingBox;
