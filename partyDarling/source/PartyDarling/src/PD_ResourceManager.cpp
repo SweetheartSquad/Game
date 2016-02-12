@@ -18,6 +18,7 @@ std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::cha
 std::map<std::string, EmoteDef> PD_ResourceManager::emotes;
 sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
 PD_Listing * PD_ResourceManager::globalScenarioListing;
+std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -64,6 +65,20 @@ void PD_ResourceManager::init(){
 		}
 	}
 	furnitureComponents = new PD_FurnitureComponentContainer("assets/furniture.json");
+
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/props.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+		}else{
+			for(auto propDef : root["props"]) {
+				propDefinitions.push_back(new PD_PropDefinition(propDef));
+			}
+		}
+	}
 
 	// Parse Animations
 	{

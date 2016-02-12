@@ -30,6 +30,7 @@ public:
 	PD_FurnitureSides sides;
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
+	bool deformable;
 
 	explicit PD_FurnitureDefinition(Json::Value _jsonDef);
 };

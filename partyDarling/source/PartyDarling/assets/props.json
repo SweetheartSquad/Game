@@ -1,0 +1,17 @@
+{
+    "props": [
+        {
+            "id": 1, 
+            "src": "fishbowl", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        }
+    ]
+}
