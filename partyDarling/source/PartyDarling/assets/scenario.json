@@ -159,7 +159,7 @@
     {
       "id":"main-menu-background-1",
       "type":"texture",
-      "src":"menu/main-menu-01.png"
+      "src":"UI/menu/main-menu-01.png"
     },
 
 
@@ -186,7 +186,7 @@
     {
       "id": "CROSSHAIR",
       "type": "texture",
-      "src": "crosshair.png"
+      "src": "UI/crosshair.png"
     },
     {
       "id": "CURSOR",
@@ -217,82 +217,82 @@
 	{
       "id": "YELLING-CONTEST-OFFENSE-BUBBLE",
       "type": "texture",
-      "src": "yelling contest/blueBubble.png",
+      "src": "UI/yelling contest/blueBubble.png",
 	  "nineSliced": true
     },
 	
 	{
       "id": "YELLING-CONTEST-OFFENSE-BUBBLE-TAIL",
       "type": "texture",
-      "src": "yelling contest/blueBubble-tail.png"
+      "src": "UI/yelling contest/blueBubble-tail.png"
     },
 
 	{
       "id": "YELLING-CONTEST-OFFENSE-CHOICE",
       "type": "texture",
-      "src": "yelling contest/blueBubble-text.png",
+      "src": "UI/yelling contest/blueBubble-text.png",
 	  "nineSliced": true
     },
 
 	{
       "id": "YELLING-CONTEST-OFFENSE-ARROWS",
       "type": "texture",
-      "src": "yelling contest/blueBubble-arrows.png"
+      "src": "UI/yelling contest/blueBubble-arrows.png"
     },
 
 	{
       "id": "YELLING-CONTEST-DEFENSE-BUBBLE",
       "type": "texture",
-      "src": "yelling contest/purpleBubble.png",
+      "src": "UI/yelling contest/purpleBubble.png",
 	  "nineSliced": true
     },
 	
 	{
       "id": "YELLING-CONTEST-DEFENSE-BUBBLE-TAIL",
       "type": "texture",
-      "src": "yelling contest/purpleBubble-tail.png"
+      "src": "UI/yelling contest/purpleBubble-tail.png"
     },
 
 	{
       "id": "YELLING-CONTEST-CURSOR",
       "type": "texture",
-      "src": "yelling contest/cursor.png"
+      "src": "UI/yelling contest/cursor.png"
     },
 
 	{
       "id": "YELLING-CONTEST-HIGHLIGHT",
       "type": "texture",
-      "src": "yelling contest/highlight.png"
+      "src": "UI/yelling contest/highlight.png"
     },
 
 	{
       "id": "YELLING-CONTEST-FRIENDSHIP",
       "type": "texture",
-      "src": "yelling contest/friendshipToken.png"
+      "src": "UI/yelling contest/friendshipToken.png"
     },
 
 	{
       "id": "YELLING-CONTEST-LOSTFRIENDSHIP",
       "type": "texture",
-      "src": "yelling contest/lostFriendshipToken.png"
+      "src": "UI/yelling contest/lostFriendshipToken.png"
     },
 
 	{
       "id": "YELLING-CONTEST-WIN",
       "type": "texture",
-      "src": "yelling contest/win.png"
+      "src": "UI/yelling contest/win.png"
     },
 
 	{
       "id": "YELLING-CONTEST-LOSE",
       "type": "texture",
-      "src": "yelling contest/lose.png"
+      "src": "UI/yelling contest/lose.png"
     },
 
 	{
       "id": "YELLING-CONTEST-INTERJECT",
       "type": "texture",
-      "src": "yelling contest/interject.png"
+      "src": "UI/yelling contest/interject.png"
     },
 
 
@@ -302,17 +302,17 @@
     {
       "id": "BACKPACK",
       "type": "texture",
-      "src": "backpack.png"
+      "src": "UI/backpack.png"
     },
     {
       "id": "GRID",
       "type": "texture",
-      "src": "GRID.png"
+      "src": "UI/GRID.png"
     },
     {
       "id": "NINESLICED",
       "type": "texture",
-      "src": "nineslicing.png",
+      "src": "UI/nineslicing.png",
       "nineSliced": true
     },
 
