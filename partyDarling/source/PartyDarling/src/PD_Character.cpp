@@ -86,6 +86,8 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	
 	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
+	PD_Listing::listings[_scenario]->characters[id] = p;
+
 	return p;
 }
 
@@ -157,7 +159,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	animate(true),
 	currentAnimation(nullptr),
 	emote(nullptr),
-	emoteTimeout(nullptr)
+	emoteTimeout(nullptr),
+	talking(false)
 {
 	paletteTex->generateRandomTable();
 	paletteTex->load();
@@ -495,11 +498,15 @@ void PersonRenderer::update(Step * _step){
 			}
 		}
 	}
-	
-	// talking
-	talk->update(_step);
-	glm::vec3 v = head->parents.at(0)->getTranslationVector();
-	head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
+
+	if(talking){
+		// talking
+		talk->update(_step);
+		glm::vec3 v = head->parents.at(0)->getTranslationVector();
+		head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
+	}else {
+		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, talkHeight, head->parents.at(0)->getTranslationVector().z, false);
+	}
 
 	Entity::update(_step);
 }

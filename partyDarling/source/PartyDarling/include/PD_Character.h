@@ -63,6 +63,8 @@ class PersonRenderer : public Entity{
 public:
 	float timer;
 
+	bool talking;
+
 	PersonLimbSolver * solverArmR;
 	PersonLimbSolver * solverArmL;
 	PersonLimbSolver * solverLegR;
