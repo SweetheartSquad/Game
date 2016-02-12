@@ -255,6 +255,9 @@
         {
             "src": "furnitureTypes/table.json"
         }, 
+		{
+            "src": "furnitureTypes/sideTable.json"
+        },
         {
             "src": "furnitureTypes/loveseat.json"
         }
