@@ -16,10 +16,19 @@ public:
 	bool temporaryConvo;
 
 	PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble);
+	~PD_UI_Dialogue();
+
+	virtual void update(Step * _step);
 
 	virtual bool sayNext() override;
 
 	void startEvent(Conversation * _conversation, bool _temporaryConvo);
 
 	virtual void end() override;
+
+private : 
+	std::queue<std::wstring> speechBuffer;
+	Timeout * speechTimeout;
+
+	void clearSpeechBuffer();
 };
