@@ -1,36 +1,40 @@
 #pragma once
 
-#include <PD_Furniture.h>
-#include <PD_FurnitureParser.h>
-#include <PD_FurnitureComponent.h>
-#include <PD_FurnitureComponentDefinition.h>
-#include <PD_ResourceManager.h>
+#include <PD_Prop.h>
+#include <PD_PropDefinition.h>
 
-#include <shader/Shader.h>
-#include <NumberUtils.h>
+#include <Resource.h>
 #include <Easing.h>
+#include <Texture.h>
+#include <NumberUtils.h>
 
-PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
+#include <PD_Furniture.h>
+
+PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
-	// make sure that there's only one root
-	assert(_def->components.size() == 1);
-
-	// build the furniture
-	PD_BuildResult buildResult = _def->components.at(0)->build();
+	
+	// copy the furniture mesh into this entity's mesh
+	{
+		std::stringstream ss;
+		ss << "assets/meshes/props/" << _def->src << ".obj";
+		MeshInterface * m = Resource::loadMeshFromObj(ss.str(), false).at(0);
+		mesh->setScaleMode(GL_NEAREST);
+		mesh->insertVertices(m);
+		delete m;
+	}
 	
 	// get a texture for the furniture type
-	std::stringstream ss;
-	ss << "assets/textures/furniture/" << _def->type << "_" << sweet::NumberUtils::randomInt(1, 2) << ".png";
-	Texture * tex = new Texture(ss.str(), false, true, true);
-	tex->load();
-	mesh->pushTexture2D(tex);
-	mesh->setScaleMode(GL_NEAREST);
+	{
+		std::stringstream ss;
+		ss << "assets/textures/props/" << _def->src << ".png";
+		Texture * tex = new Texture(ss.str(), false, true, true);
+		tex->load();
+		mesh->pushTexture2D(tex);	
+	}
 
-	// copy the furniture mesh into this entity's mesh
-	mesh->insertVertices(buildResult.mesh);
-	// delete the temporary mesh
-	delete buildResult.mesh;
+
+	
 	
 	//Deformers
 	if(_def->deformable){
@@ -74,18 +78,8 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 			v.x = newVertVector4.x  * deformerBoundingBox.width;
 			v.y = newVertVector4.y * deformerBoundingBox.height + deformerBoundingBox.y + lowerBoundVal;
 			v.z = newVertVector4.z * deformerBoundingBox.depth;
-
-
 		}
 	}
-
-	/**** Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below???? *****
-	// move all of the vertices up so that the origin is at the base of the mesh
-	float h = mesh->calcBoundingBox().height * 0.5f;
-	for(Vertex & v : mesh->vertices){
-		v.y += h;
-	}
-	*/
 
 	// Make the mesh dirty since the verts have changed
 	// May be redunant but do it as a safe guard
@@ -98,37 +92,12 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	boundingBox = mesh->calcBoundingBox();
 
 
-	// create the bullet stuff
-	if(_def->detailedCollider){
-		shape = buildResult.collider;
-	}else{
-		delete buildResult.collider;
-		setColliderAsBoundingBox();
-	}
+	
+	setColliderAsBoundingBox();
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
 
-	// Get type
-	type = _def->type;
-
 	// Get parent types
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
-
-	// Get the sides information
-	if(_def->sides.front != PD_Side::kNONE){
-		emptySlots[PD_Side::kFRONT] = std::vector<Slot *>(1, new Slot(_def->sides.front, 0.f, boundingBox.width));
-	}
-	if(_def->sides.back != PD_Side::kNONE){
-		emptySlots[PD_Side::kBACK] = std::vector<Slot *>(1, new Slot(_def->sides.back, 0.f, boundingBox.width));
-	}
-	if(_def->sides.right != PD_Side::kNONE){
-		emptySlots[PD_Side::kRIGHT] = std::vector<Slot *>(1, new Slot(_def->sides.right, 0.f, boundingBox.depth));
-	}
-	if(_def->sides.left != PD_Side::kNONE){
-		emptySlots[PD_Side::kLEFT] = std::vector<Slot *>(1, new Slot(_def->sides.left, 0.f, boundingBox.depth));
-	}
-	if(_def->sides.top != PD_Side::kNONE){
-		emptySlots[PD_Side::kTOP] = std::vector<Slot *>(1, new Slot(_def->sides.top, 0.f, boundingBox.width));
-	}
 }

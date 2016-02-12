@@ -4,6 +4,7 @@
 
 #include <scenario\Scenario.h>
 #include <DatabaseConnection.h>
+#include <PD_PropDefinition.h>
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureParser.h>
 #include <map>
@@ -32,6 +33,8 @@ public:
 	static std::map<std::string, EmoteDef> emotes;
 	static sweet::ShuffleVector<std::string> characterNames;
 	static PD_Listing * globalScenarioListing;
+
+	static std::vector<PD_PropDefinition *> propDefinitions;
 
 	static void init();
 

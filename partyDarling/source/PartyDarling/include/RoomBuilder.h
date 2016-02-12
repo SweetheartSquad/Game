@@ -29,6 +29,7 @@ class MeshInterface;
 class Room;
 class RoomObject;
 class PD_Furniture;
+class PD_Prop;
 class Person;
 class Item;
 class Shader;
@@ -111,6 +112,7 @@ public:
 	std::vector<Person *> getCharacters();
 	std::vector<PD_Furniture *> getFurniture();
 	std::vector<PD_Item *> getItems();
+	std::vector<PD_Prop *> getProps();
 
 	Texture * getFloorTex();
 	Texture * getCeilTex();

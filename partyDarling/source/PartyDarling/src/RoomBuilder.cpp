@@ -31,6 +31,8 @@
 
 #include <glm\gtc\quaternion.hpp>
 
+#include <PD_Prop.h>
+
 //#define RG_DEBUG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
@@ -654,6 +656,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	std::vector<Person *> characters = getCharacters();
 	std::vector<PD_Furniture *> furniture = getFurniture();
 	std::vector<PD_Item *> items = getItems();
+	std::vector<PD_Prop *> props = getProps();
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
@@ -668,6 +671,7 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	objects.insert(objects.begin(), characters.begin(), characters.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
+	objects.insert(objects.begin(), props.begin(), props.end());
 
 	return objects;
 }
@@ -730,6 +734,20 @@ std::vector<PD_Item *> RoomBuilder::getItems(){
 	}
 
 	return items;
+}
+
+std::vector<PD_Prop *> RoomBuilder::getProps(){
+	std::vector<PD_Prop *> props;
+	
+	// Random
+	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
+	for(unsigned int i = 0; i < n; ++i){
+		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
+		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::propDefinitions.size() - 1);
+		props.push_back(new PD_Prop(world, PD_ResourceManager::propDefinitions.at(randIdx), baseShader, GROUND));
+	}
+
+	return props;
 }
 
 Texture * RoomBuilder::getFloorTex(){

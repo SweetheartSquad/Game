@@ -27,7 +27,8 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	mass(_jsonDef.get("mass", 0.f).asFloat()),
 	padding(_jsonDef.get("padding", 0.f).asFloat()),
 	detailedCollider(_jsonDef.get("detailedCollider", true).asBool()),
-	sides(PD_FurnitureSides(_jsonDef["sides"]))
+	sides(PD_FurnitureSides(_jsonDef["sides"])),
+	deformable(_jsonDef.get("deformable", true).asBool())
 {
 	for(auto outCompJson : _jsonDef["components"]) {
 		components.push_back(new PD_FurnitureComponentDefinition(outCompJson));								
