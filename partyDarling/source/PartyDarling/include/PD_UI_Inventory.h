@@ -9,6 +9,7 @@
 
 class PD_UI_Inventory : public HorizontalLinearLayout{
 private:
+	bool enabled;
 	bool gridDirty;
 
 	// the currenty selected item
@@ -71,9 +72,11 @@ public:
 
 
 	// hides the inventory and disables interaction
-	void close();
+	void disable();
 	// opens the inventory and enabled interaction
-	void open();
+	void enable();
+
+	bool isEnabled();
 
 	virtual void update(Step * _step) override;
 };

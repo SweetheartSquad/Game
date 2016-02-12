@@ -119,12 +119,16 @@ void PD_UI_Bubble::update(Step * _step){
 		if(options.size() < 2){
 			d = 0;
 		}
-		if(d > FLT_EPSILON){
-			next();
-		}else if(d < -FLT_EPSILON){
-			prev();
-		}else if(mouse.leftJustPressed()){
-			selectCurrent();
+
+		// interaction 
+		if(enabled){
+			if(d > FLT_EPSILON){
+				next();
+			}else if(d < -FLT_EPSILON){
+				prev();
+			}else if(mouse.leftJustPressed()){
+				selectCurrent();
+			}
 		}
 
 		// re-center the transform containing the bubbles
@@ -190,4 +194,14 @@ void PD_UI_Bubble::clear(){
 	}
 	currentOption = displayOffset = 0;
 	childrenUpdated = true;
+}
+
+void PD_UI_Bubble::enable(){
+	enabled = true;
+	setVisible(true);
+}
+
+void PD_UI_Bubble::disable(){
+	enabled = false;
+	setVisible(false);
 }
