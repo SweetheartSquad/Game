@@ -44,6 +44,7 @@
     <ClCompile Include="src\PD_Scene_LoadingScreen.cpp" />
     <ClCompile Include="src\PD_Scene_Main.cpp" />
     <ClCompile Include="src\PD_Scene_MainMenu.cpp" />
+    <ClCompile Include="src\PD_Scene_MenuOptions.cpp" />
     <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_ShaderComponentSpecialToon.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
@@ -90,6 +91,7 @@
     <ClInclude Include="include\PD_Scene_LoadingScreen.h" />
     <ClInclude Include="include\PD_Scene_Main.h" />
     <ClInclude Include="include\PD_Scene_MainMenu.h" />
+    <ClInclude Include="include\PD_Scene_MenuOptions.h" />
     <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_ShaderComponentSpecialToon.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
