@@ -146,6 +146,7 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 }
 
 PersonState::PersonState(Json::Value _json) :
+	id(_json.get("id", "NO_ID").asString()),
 	name(_json.get("name", "NO_NAME").asString()),
 	conversation(_json.get("convo", "NO_CONVO").asString()),
 	animation(_json.get("animation", "RANDOM").asString())

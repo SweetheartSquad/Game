@@ -216,8 +216,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		//Check if the character is in a certain state.
 		// CHARACTER character
 		// CHARACTER_STATE state
+		std::string charId	 = _event->getStringData("character");
+		std::string state	 = _event->getStringData("state");
+		std::string scenario = _event->getStringData("scenario");
 
-		return false;
+		if(charId == "" || state == "") {
+			ST_LOG_ERROR_V("Field missing in condition checkState");
+		}
+
+		return PD_Listing::listingsById[scenario]->characters[charId]->state->id == state;
 	};
 
 	// setup event listeners
@@ -409,6 +416,7 @@ void PD_Scene_Main::pickScenarios(){
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){
 		PD_ResourceManager::scenario->eventManager.addChildManager(&s->eventManager);
+		s->conditionImplementations = PD_ResourceManager::conditionImplementations;
 	}
 }
 

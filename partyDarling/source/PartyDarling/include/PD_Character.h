@@ -50,6 +50,8 @@ public:
 
 class PersonState : public Node{
 public:
+	// id of this state
+	std::string id;
 	// name of this state
 	std::string name;
 	// reference to the conversation which will launch
