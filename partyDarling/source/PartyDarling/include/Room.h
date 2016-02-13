@@ -31,6 +31,7 @@ class AssetRoom;
 class Room: public BulletMeshEntity {
 public:
 	AssetRoom * const definition;
+	bool locked;
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;

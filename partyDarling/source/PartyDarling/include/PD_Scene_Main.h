@@ -97,9 +97,9 @@ public:
 	// try to combine definitions in the scenarios
 	void bundleScenarios();
 	// convert the bundled scenarios into actual rooms and stuff
-	sweet::ShuffleVector<Room *> buildRooms();
+	std::vector<Room *> buildRooms();
 	// place the rooms into the house grid
-	void placeRooms(sweet::ShuffleVector<Room *> _rooms);
+	void placeRooms(std::vector<Room *> _rooms);
 	// trigger a yelling contest with another character
 	void triggerYellingContest();
 };

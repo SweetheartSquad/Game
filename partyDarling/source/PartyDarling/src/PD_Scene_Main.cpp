@@ -499,13 +499,21 @@ void PD_Scene_Main::bundleScenarios(){
 
 
 
-void PD_Scene_Main::placeRooms(sweet::ShuffleVector<Room *> _rooms){
-	
-	// the starting room is always the same, so place it right away
-
+void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
+	unsigned long int numRooms = _rooms.size();
+	// separate rooms into a list of unlocked and locked
+	sweet::ShuffleVector<Room *> unlockedRooms, lockedRooms;
+	while(_rooms.size() > 0){
+		Room * room = _rooms.back();
+		_rooms.pop_back();
+		if(room->locked){
+			lockedRooms.push(room);
+		}else{
+			unlockedRooms.push(room);
+		}
+	}
 
 	// generate a random rectangle which has enough cells for each room
-	unsigned long int numRooms = _rooms.size();
 	glm::ivec2 houseSize;
 	houseSize.x = sweet::NumberUtils::randomInt(numRooms/8, numRooms/2);
 	houseSize.y = numRooms/houseSize.x;
@@ -569,16 +577,26 @@ void PD_Scene_Main::placeRooms(sweet::ShuffleVector<Room *> _rooms){
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
-	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = _rooms.pop(true); // TODO: replace this with the actual starting room
+	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = unlockedRooms.pop(true); // TODO: replace this with the actual starting room
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition));
 
-	// place the remaining rooms by picking a random open cell and a random room,
+	// place the unlocked rooms by picking a random open cell and a random room,
 	// assigning the room to the cell, and storing any open adjacent cells in the list
-	while(_rooms.size() > 0){
+	while(unlockedRooms.size() > 0){
 		glm::ivec2 cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
 		allCells[std::make_pair(cell.x, cell.y)] = false;
-		Room * room = _rooms.pop(true);
+		Room * room = unlockedRooms.pop(true);
+		houseGrid[std::make_pair(cell.x, cell.y)] = room;
+		openCells.push(getAdjacentCells(cell));
+		openCells.clearAvailable();
+	}
+
+	// repeat for locked rooms
+	while(lockedRooms.size() > 0){
+		glm::ivec2 cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		allCells[std::make_pair(cell.x, cell.y)] = false;
+		Room * room = lockedRooms.pop(true);
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
 		openCells.push(getAdjacentCells(cell));
 		openCells.clearAvailable();
@@ -589,9 +607,9 @@ void PD_Scene_Main::placeRooms(sweet::ShuffleVector<Room *> _rooms){
 	uiMap->buildMap(houseGrid);
 }
 
-sweet::ShuffleVector<Room *> PD_Scene_Main::buildRooms(){
+std::vector<Room *> PD_Scene_Main::buildRooms(){
 	PD_Game * g = dynamic_cast<PD_Game *>(game);
-	sweet::ShuffleVector<Room *> res;
+	std::vector<Room *> res;
 	// build all of the rooms contained in the selected scenarios
 	for(auto s : activeScenarios){
 		
@@ -628,7 +646,7 @@ sweet::ShuffleVector<Room *> PD_Scene_Main::buildRooms(){
 			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
 
 			// put the room into the shuffle vector
-			res.push(room);
+			res.push_back(room);
 		}
 	}
 	return res;

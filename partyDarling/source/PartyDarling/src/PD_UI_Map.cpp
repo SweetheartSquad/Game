@@ -11,7 +11,6 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 	room(_room)
 {
 	background->mesh->setScaleMode(GL_NEAREST);
-	background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
 	boxSizing = kCONTENT_BOX;
 
 	setVisited(false);
@@ -171,7 +170,10 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 			}else{
 				cell.second->setBackgroundColour(1,1,1, 0.5f);
 			}
-				cell.second->setVisited(true);
+			cell.second->setVisited(true);
+
+			cell.second->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL")->texture);
+			
 		}
 	}
 }
