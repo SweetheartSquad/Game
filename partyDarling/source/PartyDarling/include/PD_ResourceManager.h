@@ -14,6 +14,8 @@
 #include <string>
 #include "PD_Listing.h"
 
+#define PLAYER_ID "0"
+
 struct EmoteDef {
 	SpriteSheet * spriteSheet;
 	glm::vec2 offset;

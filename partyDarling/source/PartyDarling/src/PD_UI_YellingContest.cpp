@@ -20,6 +20,7 @@
 #define FAIL_INSULT	"glassBreak"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
+#define NUM_COMPLIMENTS 6
 
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
@@ -42,11 +43,16 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
 	glyphIdx(0),
 	enemyCursor(new Sprite(_shader)),
+	complimentBubble(new Sprite(_shader)),
 	interjectBubble(new Sprite(_shader)),
 	interjected(false),
 	interjectBubbleTimerBaseLength(1.f),
 	interjectBubbleTimerLength(1.f),
 	interjectBubbleTimer(0.f),
+	complimentBubbleTimerBaseLength(1.f),
+	complimentBubbleTimerLength(1.f),
+	complimentBubbleTimer(0.f),
+	complimentBubbleScale(1.f),
 	confidence(50.f),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
@@ -296,7 +302,19 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
 	// don't add the container until yelling contest is over
 
-	
+	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
+	complimentBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
+	complimentBubble->meshTransform->scale(0, 0, 0);
+	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
+	complimentBubble->setVisible(false);
+
+	// move the interject bubble's mesh up so that the origin is aligned with the bottom
+	for (unsigned long int i = 0; i < complimentBubble->mesh->vertices.size(); ++i){
+		complimentBubble->mesh->vertices.at(i).x += 0.5f;
+		complimentBubble->mesh->vertices.at(i).y += 0.5f;
+	}
+	childTransform->addChild(complimentBubble);
+
 
 	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
 	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
@@ -367,7 +385,7 @@ void PD_UI_YellingContest::update(Step * _step){
 						interjectBubble->meshTransform->scale(s, s, 1, false);
 					}
 				}
-
+			
 				// update enemy turn
 				if(!interjected){
 					// INTERJECT
@@ -449,6 +467,19 @@ void PD_UI_YellingContest::update(Step * _step){
 				}
 
 			}else{
+
+				// update compliment bubble
+				if(complimentBubble->isVisible()){
+					if(complimentBubbleTimer >= complimentBubbleTimerLength){
+						complimentBubble->setVisible(false);
+					}else{
+						complimentBubbleTimer += _step->getDeltaTime();
+						float s = 0.f;
+						s = complimentBubbleTimer / complimentBubbleTimerLength <= 0.7 ? Easing::easeOutElastic(complimentBubbleTimer, 0, complimentBubbleScale, complimentBubbleTimerLength * 0.7f) : Easing::easeInBack(complimentBubbleTimer - complimentBubbleTimerLength * 0.7f, complimentBubbleScale, -complimentBubbleScale, complimentBubbleTimerLength * 0.3f);
+						complimentBubble->meshTransform->scale(s, s, 1, false);
+					}
+				}
+
 				// INSULT
 				if(playerQuestionTimer >= playerQuestionTimerLength){
 					if(!playerResult){
@@ -794,6 +825,12 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
+	}else {
+		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
+		complimentBubble->mesh->textures.clear();
+		complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT" + std::to_string(randComp))->texture);
+		complimentBubbleTimer = 0.f;
+		complimentBubble->setVisible(true);
 	}
 
 	// Make resulting insult

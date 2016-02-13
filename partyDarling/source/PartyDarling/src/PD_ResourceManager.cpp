@@ -163,6 +163,13 @@ void PD_ResourceManager::init(){
 	resources.push_back(scenario);
 	
 	globalScenarioListing = new PD_Listing(scenario);
+
+	// Register custom argument tyes
+	sweet::Event::registerArgumentType("ITEM",			  sweet::STRING);
+	sweet::Event::registerArgumentType("ROOM",			  sweet::STRING);
+	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
+	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
+	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
 }
 
 int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){

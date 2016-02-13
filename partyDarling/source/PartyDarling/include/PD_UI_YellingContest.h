@@ -84,8 +84,14 @@ private:
 
 	SliderControlled * playerTimerSlider;
 
+	Sprite * complimentBubble;
+	float complimentBubbleTimerBaseLength;
+	float complimentBubbleTimerLength;
+	float complimentBubbleTimer;
+	float complimentBubbleScale;
+
 	Sprite * interjectBubble;
-	bool interjected; // interjected successfully
+	bool  interjected; // interjected successfully
 	float interjectBubbleTimerBaseLength;
 	float interjectBubbleTimerLength;
 	float interjectBubbleTimer;

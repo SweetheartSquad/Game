@@ -146,6 +146,7 @@ void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight)
 }
 
 PersonState::PersonState(Json::Value _json) :
+	id(_json.get("id", "NO_ID").asString()),
 	name(_json.get("name", "NO_NAME").asString()),
 	conversation(_json.get("convo", "NO_CONVO").asString()),
 	animation(_json.get("animation", "RANDOM").asString())
@@ -506,7 +507,7 @@ void PersonRenderer::update(Step * _step){
 		head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
 	}else {
 		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, 
-			head->mesh->textures.at(1)->height * 0.25f, 
+			0.2/CHARACTER_SCALE, 
 			head->parents.at(0)->getTranslationVector().z, false);
 	}
 

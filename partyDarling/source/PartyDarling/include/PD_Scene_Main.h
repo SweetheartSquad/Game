@@ -100,4 +100,6 @@ public:
 	sweet::ShuffleVector<Room *> buildRooms();
 	// place the rooms into the house grid
 	void placeRooms(sweet::ShuffleVector<Room *> _rooms);
+	// trigger a yelling contest with another character
+	void triggerYellingContest();
 };
