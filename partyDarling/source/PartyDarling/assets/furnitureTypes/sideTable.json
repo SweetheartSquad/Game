@@ -1,7 +1,7 @@
 {
             "components": [
                 {
-                    "componentTypes": ["sideTabletop"], 
+                    "componentTypes": ["sidetabletop"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
@@ -11,7 +11,7 @@
 							"scale": [1.0,1.0,1.0]
                         },
 						{
-                            "componentTypes": ["sideTableShelf"], 
+                            "componentTypes": ["sidetableshelf"], 
                             "multiplier": 1, 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -34,6 +34,6 @@
                     "RIGHT"
 				]
             },
-            "parents":[],
+            "parents":{},
             "padding":0
         }

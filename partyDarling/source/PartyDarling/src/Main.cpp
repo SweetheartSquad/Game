@@ -38,7 +38,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 #endif
 		" Build");
 
-	//sweet::NumberUtils::seed(time(nullptr));
+	sweet::NumberUtils::seed(time(nullptr));
 	//OpenAL_Sound::masterGain = 0;
 
 	// initialize resources
