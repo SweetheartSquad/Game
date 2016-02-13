@@ -1,0 +1,31 @@
+{
+            "components": [
+                {
+                    "componentTypes": ["bookshelf_4_case"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["bookshelf_shelf"], 
+                            "multiplier": 4, 
+							"outComponents": [
+								{
+								"componentTypes": ["bookshelf_contents"], 
+								"multiplier": 1, 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+								}
+							],
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [0.8,0.8,0.8]
+                }
+            ], 
+            "type": "bookshelf_4",
+			"mass": 40,
+            "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+            "parents":{},
+            "padding":0
+        }

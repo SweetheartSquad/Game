@@ -243,7 +243,32 @@
         {
             "id": 53, 
             "src": "furnitureJson/sideTableShelf_2.json"
+        }, 
+        {
+            "id": 54, 
+            "src": "furnitureJson/bookshelf_4_case_1.json"
+        }, 
+        {
+            "id": 55, 
+            "src": "furnitureJson/bookshelf_4_case_3.json"
+        }, 
+        {
+            "id": 56, 
+            "src": "furnitureJson/bookshelf_shelf_1.json"
+        }, 
+        {
+            "id": 57, 
+            "src": "furnitureJson/bookshelf_contents_1.json"
+        },
+		{
+            "id": 58, 
+            "src": "furnitureJson/bookshelf_4_case_2.json"
+        },
+		{
+            "id": 59, 
+            "src": "furnitureJson/bookshelf_4_case_4.json"
         }
+		
     ], 
     "furniture": [
         {
@@ -255,9 +280,12 @@
         {
             "src": "furnitureTypes/table.json"
         }, 
-		{
+        {
             "src": "furnitureTypes/sideTable.json"
-        },
+        }, 
+        {
+            "src": "furnitureTypes/bookshelf_4.json"
+        }, 
         {
             "src": "furnitureTypes/loveseat.json"
         }
