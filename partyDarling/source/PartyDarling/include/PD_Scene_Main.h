@@ -97,7 +97,9 @@ public:
 	// try to combine definitions in the scenarios
 	void bundleScenarios();
 	// convert the bundled scenarios into actual rooms and stuff
-	void buildHouse();
+	std::vector<Room *> buildRooms();
+	// place the rooms into the house grid
+	void placeRooms(std::vector<Room *> _rooms);
 	// trigger a yelling contest with another character
 	void triggerYellingContest();
 };

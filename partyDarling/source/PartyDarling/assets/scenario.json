@@ -348,11 +348,16 @@
 
 
 
-
+    // MAP
     {
       "id": "MAPCELL",
       "type": "texture",
       "src": "UI/mapCell.png"
+    },
+    {
+      "id": "MAPCELL-LOCKED",
+      "type": "texture",
+      "src": "UI/mapCell -locked.png"
     },
 
 

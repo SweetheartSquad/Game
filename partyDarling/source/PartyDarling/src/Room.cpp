@@ -14,8 +14,9 @@
 
 Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition) :
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
+	definition(_definition),
 	tilemapSprite(new Sprite()),
-	definition(_definition)
+	locked(definition->locked)
 {
 	mesh->setScaleMode(GL_NEAREST);
 }
