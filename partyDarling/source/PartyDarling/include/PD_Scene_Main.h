@@ -98,4 +98,6 @@ public:
 	void bundleScenarios();
 	// convert the bundled scenarios into actual rooms and stuff
 	void buildHouse();
+	// trigger a yelling contest with another character
+	void triggerYellingContest();
 };

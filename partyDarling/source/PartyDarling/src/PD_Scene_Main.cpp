@@ -210,8 +210,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	PD_ResourceManager::scenario->conditionImplementations = PD_ResourceManager::conditionImplementations;
 
 	// Setup conditions
-
-	// TODO - Actually implement this
 	(*PD_ResourceManager::conditionImplementations)["checkState"] = [this](sweet::Event * _event){
 		//Check if the character is in a certain state.
 		// CHARACTER character
@@ -225,6 +223,37 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 
 		return PD_Listing::listingsById[scenario]->characters[charId]->state->id == state;
+	};
+
+	(*PD_ResourceManager::conditionImplementations)["checkInventory"] = [this](sweet::Event * _event){
+		//Check if the character has a certain item
+		// CHARACTER character
+		// CHARACTER_STATE state
+		std::string charId	 = _event->getStringData("owner");
+		std::string item	 = _event->getStringData("item");
+		std::string scenario = _event->getStringData("scenario");
+
+		if(charId == "" || item == "") {
+			ST_LOG_ERROR_V("Field missing in condition checkState");
+		}
+
+		if(charId == PLAYER_ID) {
+			for(auto i : uiInventory->items) {
+				// Check scenario id since item ids are scoped to scenarios
+				if(i->definition->id == item && i->definition->scenario->id == scenario) {
+					return true;
+				}
+			}
+		}else {
+			for(auto c : PD_Listing::listingsById[scenario]->characters) {
+				for(auto it : c.second->items) {
+					if(it == item) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	};
 
 	// setup event listeners
@@ -384,6 +413,39 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 
+	PD_ResourceManager::scenario->eventManager.addEventListener("unlockRoom", [](sweet::Event * _event){
+		//Unlock the chosen room. If it is already unlocked, nothing will happen.
+		// ROOM room = room to unlock
+		std::string room = _event->getStringData("room");
+		std::string scenario = _event->getStringData("scenario");
+
+		if(room == "") {
+			ST_LOG_ERROR_V("Missing field on trigger unlockRoom");
+		}
+		
+		// TODO What happens here?
+		// PD_Listing::listingsById[scenario]->rooms[room]->door->locked;
+	});
+
+	PD_ResourceManager::scenario->eventManager.addEventListener("triggerYellingContest", [this](sweet::Event * _event){
+		// Launch a yelling contest with the selected character. 
+		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
+		
+		// CHARACTER oponent = character the player is fighting
+		// INT(BOOLEAN) playerInterjectInit = true = player interects first, false = player insults first
+		std::string opponent = _event->getStringData("opponent");
+		bool interjectingFirst = static_cast<bool>(_event->getIntData("playerInterjectInit"));
+		std::string scenario = _event->getStringData("scenario");
+
+		if(opponent == "") {
+			ST_LOG_ERROR_V("Missing field on trigger triggerYellingContest");
+		}
+		
+		// TODO - Configure addtional data once the yelling contest is set up for it
+		triggerYellingContest();
+	});
+
+
 	// build house
 	pickScenarios();
 	bundleScenarios();
@@ -472,6 +534,12 @@ void PD_Scene_Main::buildHouse(){
 
 	// update the map
 	uiMap->buildMap(houseGrid);
+}
+
+void PD_Scene_Main::triggerYellingContest() {
+	uiYellingContest->startNewFight();
+	uiBubble->clear();
+	player->disable();
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
@@ -696,9 +764,7 @@ void PD_Scene_Main::update(Step * _step){
 							}
 						});
 						uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
-							uiYellingContest->startNewFight();
-							uiBubble->clear();
-							player->disable();
+							triggerYellingContest();
 							// TODO: pass in the character that's fighting here
 						});
 						// if we have an item, also add the "use on" option
