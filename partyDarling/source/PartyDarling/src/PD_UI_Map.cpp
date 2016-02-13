@@ -12,8 +12,9 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 {
 	background->mesh->setScaleMode(GL_NEAREST);
 	background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
-	setVisible(false);
 	boxSizing = kCONTENT_BOX;
+
+	setVisited(false);
 }
 
 bool MapCell::isVisited(){
@@ -73,7 +74,9 @@ void PD_UI_Map::setDetailed(bool _detailed){
 		innerLayout->setSquareWidth(1.f);
 
 		for(auto & cell : grid){
-			cell.second->setMouseEnabled(true);
+			if(cell.second->room != nullptr){
+				cell.second->setMouseEnabled(true);
+			}
 		}
 		roomName->setVisible(true);
 	}else{
@@ -132,8 +135,14 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 			MapCell * cell = new MapCell(world, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
-			cell->setRationalWidth(1.f/width, hl);
-			cell->setSquareHeight(1.f);
+			if(width > height){
+				cell->setRationalWidth(1.f/width, hl);
+				cell->setSquareHeight(1.f);
+			}else{
+				cell->setRationalHeight(1.f, hl);
+				cell->setSquareWidth(1.f);
+			
+			}
 			cell->boxSizing = kCONTENT_BOX;
 			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
 				if(cell->room != nullptr && cell->isVisited()){
@@ -156,11 +165,13 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 	auto k = std::make_pair(_currentPosition.x, _currentPosition.y);
 	for(auto & cell : grid){
-		if(cell.first == k){
-			cell.second->setBackgroundColour(1,1,1, 1);
-			cell.second->setVisited(true);
-		}else{
-			cell.second->setBackgroundColour(1,1,1, 0.5f);
+		if(cell.second->room != nullptr){ // cells without rooms are always ignored
+			if(cell.first == k){
+				cell.second->setBackgroundColour(1,1,1, 1);
+			}else{
+				cell.second->setBackgroundColour(1,1,1, 0.5f);
+			}
+				cell.second->setVisited(true);
 		}
 	}
 }

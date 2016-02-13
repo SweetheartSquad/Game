@@ -97,5 +97,7 @@ public:
 	// try to combine definitions in the scenarios
 	void bundleScenarios();
 	// convert the bundled scenarios into actual rooms and stuff
-	void buildHouse();
+	sweet::ShuffleVector<Room *> buildRooms();
+	// place the rooms into the house grid
+	void placeRooms(sweet::ShuffleVector<Room *> _rooms);
 };

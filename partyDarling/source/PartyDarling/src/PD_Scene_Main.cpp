@@ -380,10 +380,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// build house
 	pickScenarios();
 	bundleScenarios();
-	buildHouse();
+	placeRooms(buildRooms());
 
 	// move the player to the entrance of the first room
-	navigate(glm::ivec2(0,0), false);
+	navigate(currentHousePosition, false);
 }
 
 
@@ -417,11 +417,101 @@ void PD_Scene_Main::bundleScenarios(){
 	// TODO: all of this
 }
 
-void PD_Scene_Main::buildHouse(){
+
+
+void PD_Scene_Main::placeRooms(sweet::ShuffleVector<Room *> _rooms){
+	
+	// the starting room is always the same, so place it right away
+
+
+	// generate a random rectangle which has enough cells for each room
+	unsigned long int numRooms = _rooms.size();
+	glm::ivec2 houseSize;
+	houseSize.x = sweet::NumberUtils::randomInt(numRooms/8, numRooms/2);
+	houseSize.y = numRooms/houseSize.x;
+	while(houseSize.x*houseSize.y < numRooms){
+		if(houseSize.x < houseSize.y){
+			++houseSize.x;
+		}else{
+			++houseSize.y;
+		}
+	}
+
+	// quadruple the size of the rectangle to allow for empty cells
+	houseSize *= 4;
+
+	// generate the starting position as a random spot along an edge
+	if(sweet::NumberUtils::randomBool()){
+		currentHousePosition.x = sweet::NumberUtils::randomInt(0,houseSize.x-1);
+		currentHousePosition.y = sweet::NumberUtils::randomInt(0,1) * (houseSize.y-1);
+	}else{
+		currentHousePosition.x = sweet::NumberUtils::randomInt(0,1) * (houseSize.x-1);
+		currentHousePosition.y = sweet::NumberUtils::randomInt(0,houseSize.y-1);
+	}
+	// PLACEMENT
+	std::map<std::pair<int,int>, bool> allCells;
+
+	// initialize all cells as empty
+	for(int x = 0; x < houseSize.x; ++x){
+		for(int y = 0; y < houseSize.y; ++y){
+			allCells[std::make_pair(x,y)] = true;
+		}
+	}
+	
+	// make a function to help us place stuff
+	// checks the cells directly above, below, and beside _pos, and returns those of which are within the house's bounds and haven't been used yet
+	std::function< std::vector<glm::ivec2> (glm::ivec2 _pos) > getAdjacentCells = [&](glm::ivec2 _pos){
+		std::vector<glm::ivec2> res;
+		
+		glm::ivec2 temp = _pos + glm::ivec2(-1,0);
+		if(temp.x >= 0 && allCells.at(std::make_pair(temp.x, temp.y))){
+			res.push_back(temp);
+		}
+
+		temp = _pos + glm::ivec2(1,0);
+		if(temp.x < houseSize.x && allCells.at(std::make_pair(temp.x, temp.y))){
+			res.push_back(temp);
+		}
+
+		temp = _pos + glm::ivec2(0,-1);
+		if(temp.y >= 0 && allCells.at(std::make_pair(temp.x, temp.y))){
+			res.push_back(temp);
+		}
+
+		temp = _pos + glm::ivec2(0,1);
+		if(temp.y < houseSize.y && allCells.at(std::make_pair(temp.x, temp.y))){
+			res.push_back(temp);
+		}
+
+		return res;
+	};
+
+	sweet::ShuffleVector<glm::ivec2> openCells;
+
+	// place the starting room in the starting position
+	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = _rooms.pop(true); // TODO: replace this with the actual starting room
+	// place the cells adjacent to the starting position into the list of open cells
+	openCells.push(getAdjacentCells(currentHousePosition));
+
+	// place the remaining rooms by picking a random open cell and a random room,
+	// assigning the room to the cell, and storing any open adjacent cells in the list
+	while(_rooms.size() > 0){
+		glm::ivec2 cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		allCells[std::make_pair(cell.x, cell.y)] = false;
+		Room * room = _rooms.pop(true);
+		houseGrid[std::make_pair(cell.x, cell.y)] = room;
+		openCells.push(getAdjacentCells(cell));
+		openCells.clearAvailable();
+	}
+	
+
+	// update the map
+	uiMap->buildMap(houseGrid);
+}
+
+sweet::ShuffleVector<Room *> PD_Scene_Main::buildRooms(){
 	PD_Game * g = dynamic_cast<PD_Game *>(game);
-
-	glm::ivec2 startPos(0);
-
+	sweet::ShuffleVector<Room *> res;
 	// build all of the rooms contained in the selected scenarios
 	for(auto s : activeScenarios){
 		
@@ -457,13 +547,11 @@ void PD_Scene_Main::buildHouse(){
 			// save the room for later access
 			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
 
-			houseGrid[std::make_pair(startPos.x, startPos.y)] = room;
-			startPos.x += 1;
+			// put the room into the shuffle vector
+			res.push(room);
 		}
 	}
-
-	// update the map
-	uiMap->buildMap(houseGrid);
+	return res;
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
