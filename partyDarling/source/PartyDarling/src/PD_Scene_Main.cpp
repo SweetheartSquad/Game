@@ -165,7 +165,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
 	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
 		uiYellingContest->disable();
-		player->enable();
+		if(!uiDialogue->hadNextDialogue){
+			player->enable();
+		}
 	});
 	uiYellingContest->eventManager.addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
@@ -442,7 +444,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 		
 		// TODO - Configure addtional data once the yelling contest is set up for it
+		uiDialogue->setVisible(false);
+		uiBubble->disable();
 		triggerYellingContest();
+		uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
+			if(uiDialogue->hadNextDialogue){
+				uiDialogue->setVisible(true);
+				uiBubble->enable();
+			}
+		});
 	});
 
 
@@ -740,6 +750,7 @@ void PD_Scene_Main::update(Step * _step){
 				if(person != nullptr){
 					// hover over person
 					if(person != currentHoverTarget){
+						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
 						// if we aren't already looking at the person,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();

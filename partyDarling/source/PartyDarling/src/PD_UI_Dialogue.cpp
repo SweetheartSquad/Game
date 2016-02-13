@@ -10,7 +10,8 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	textBubble(new NodeUI_NineSliced(world, uiBubble->bubbleTex)),
 	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader)),
 	currentSpeaker(nullptr),
-	speechTimeout(nullptr)
+	speechTimeout(nullptr),
+	hadNextDialogue(false)
 {
 	setRenderMode(kTEXTURE);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
@@ -111,12 +112,14 @@ invalidateLayout();
 		if(!speechTimeout->active) {
 			speechTimeout->start();
 		}
-		return true;
+		hadNextDialogue = true;
+		return hadNextDialogue;
 	}
 	currentSpeaker = nullptr;
 	setVisible(false);
 	speechTimeout->stop();
-	return false;
+	hadNextDialogue = false;
+	return hadNextDialogue;
 }
 
 void PD_UI_Dialogue::startEvent(Conversation * _conversation, bool _temporaryConvo){

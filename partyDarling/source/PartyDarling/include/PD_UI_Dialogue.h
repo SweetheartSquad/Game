@@ -14,6 +14,7 @@ public:
 	NodeUI_NineSliced * textBubble;
 	TextArea * text;
 	bool temporaryConvo;
+	bool hadNextDialogue;
 
 	PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble);
 	~PD_UI_Dialogue();
@@ -27,6 +28,7 @@ public:
 	virtual void end() override;
 
 private : 
+
 	std::queue<std::wstring> speechBuffer;
 	Timeout * speechTimeout;
 
