@@ -643,9 +643,12 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 		PD_Listing * listing = new PD_Listing(s);
 
 		// build the rooms in this scenario
+		unsigned long int numRooms = s->assets.at("room").size();
+		unsigned long int progress = 0;
 		for(auto rd : s->assets.at("room")){
+			progress += 1;
+			g->showLoading("Building: " + dynamic_cast<AssetRoom *>(rd.second)->name, (float)progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
-			g->showLoading(room->definition->name, 0);
 			
 			// setup the first parents, but don't actually add anything to the scene yet
 			Transform * t = new Transform();
