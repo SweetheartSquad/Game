@@ -77,6 +77,7 @@ public:
 	BulletWorld * world;
 	
 	std::vector<RoomObject *> boundaries;
+	std::vector<glm::vec3> tiles;
 
 	std::vector<RoomObject *> availableParents;
 	std::vector<RoomObject *> placedObjects;
@@ -110,6 +111,7 @@ public:
 	// Create room walls from tilemap
 	void createWalls();
 	void addWall(float width, glm::vec2 pos, float angle);
+	std::vector<glm::vec3> getTiles();
 
 	// Create random room objects, including specified objects
 	std::vector<RoomObject *> getRoomObjects();

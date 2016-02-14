@@ -200,7 +200,8 @@ Room * RoomBuilder::getRoom(){
 	sweet::Box boundingBox = room->mesh->calcBoundingBox();
 	roomUpperBound = boundingBox.getMaxCoordinate() * (1.f/ROOM_TILE);
 	roomLowerBound = boundingBox.getMinCoordinate() * (1.f/ROOM_TILE);
-	
+	tiles = getTiles();
+
 	std::vector<RoomObject *> objects = getRoomObjects();
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
 
@@ -410,36 +411,18 @@ bool RoomBuilder::search(RoomObject * child){
 	if(child->anchor != Anchor_t::WALL){
 		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
 		// Look for space in room (20 tries)
-		for(unsigned int i = 0; i < 20; ++i){
-			
-			// Find random point within bounding box of room (x, z)
-			glm::vec3 pos = glm::vec3(sweet::NumberUtils::randomFloat(roomLowerBound.x, roomUpperBound.x) * float(ROOM_TILE), 0.f, sweet::NumberUtils::randomFloat(roomLowerBound.z, roomUpperBound.z) * float(ROOM_TILE));
-			std::stringstream s;
-			s << "Random position: " << pos.x << ", " << pos.y << ", " << pos.z;
-			Log::info(s.str());
-
+		for(unsigned int i = 0; i < tiles.size(); ++i){
+			Log::info("Tile selected");
 			btQuaternion bOrient = child->body->getWorldTransform().getRotation();
 			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
-			// Check that the transformed origin will be inside the room
-			// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
-			Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
-			unsigned int intersections = 0;
-			for(auto e : edges){
-				if(e->intersects(ray, ROOM_TILE)){
-					++intersections;
-				}
-			}
-			// Random position not inside room, try again
-			if(intersections % 2 == 0){
-				continue;
-			}
-
 			Log::info("Position found.");
 			// Validate bounding box is inside room
-			if(canPlaceObject(child, pos, orient)){
+			if(canPlaceObject(child, tiles.at(i), orient)){
 				room->addComponent(child);
 				addObjectToLists(child);
+
+				tiles.erase(tiles.begin() + i);
 				return true;
 			}
 		}
@@ -527,6 +510,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			break;
 		case PD_Side::kTOP:
 			sidePos.y += _parent->boundingBox.height;
+			sidePos.x += -_parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f + _slot->loc;
 			break;	
 	}
 
@@ -754,6 +738,46 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 
 	// Append transformed verts to room mesh
 	room->mesh->insertVertices(&tempMesh);
+}
+
+std::vector<glm::vec3> RoomBuilder::getTiles(){
+	std::vector<glm::vec3> tiles;
+
+	for(int x = (int)roomLowerBound.x; x < (int)roomUpperBound.x - 1; ++x){
+		for(int z = (int)roomLowerBound.z; z < (int)roomUpperBound.z - 1; ++z){
+			glm::vec3 pos = glm::vec3((x + 0.5f) * float(ROOM_TILE), 0.f, (z + 0.5f) * float(ROOM_TILE));
+
+			// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
+			Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
+			unsigned int intersections = 0;
+			for(auto e : edges){
+				if(e->intersects(ray, ROOM_TILE)){
+					++intersections;
+				}
+			}
+			// Random position not inside room, try again
+			if(intersections % 2 == 0){
+				continue;
+			}
+
+			tiles.push_back(pos);
+		}
+	}
+	// Shuffle tiles
+	int cnt = tiles.size();
+	sweet::ShuffleVector<glm::vec3> shuffle;
+	for(auto t : tiles){
+		shuffle.push(t);
+	}
+	tiles.clear();
+	shuffle.shuffle();
+
+	for(int i = 0; i < cnt; ++i){
+		tiles.push_back(shuffle.pop());
+	}
+
+	return tiles;
+	
 }
 
 std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
