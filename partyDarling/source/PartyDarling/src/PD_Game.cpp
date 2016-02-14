@@ -13,6 +13,7 @@
 #include <OpenAlSound.h>
 #include <AutoMusic.h>
 #include <RenderOptions.h>
+#include <PD_Scene_MenuOptions.h>
 
 sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
 bool PD_Game::staticInit(){
@@ -35,6 +36,7 @@ PD_Game::PD_Game() :
 
 
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
+	scenes["options"] = new PD_Scene_MenuOptions(this);
 
 	//scenes["game"] = new PD_Scene_Main(this);
 

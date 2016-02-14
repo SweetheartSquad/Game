@@ -84,6 +84,9 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	optionsText->setMarginTop(0.05f);
+	optionsText->onClick = [this](sweet::Event * _event){
+		game->switchScene("options", false);
+	};
 
 	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
 	textContainer->addChild(callNightText);
