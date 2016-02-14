@@ -75,7 +75,7 @@ public:
 	unsigned long int thresh;
 
 	BulletWorld * world;
-
+	
 	std::vector<RoomObject *> boundaries;
 
 	std::vector<RoomObject *> availableParents;
@@ -91,6 +91,10 @@ public:
 	~RoomBuilder();
 
 	Room * getRoom();
+
+	bool placeDoors();
+	RoomObject * getWallFromEdge(Edge * _e); // because I don't save them in a map...
+	RoomObject * getDoor();
 
 	// Furniture placement
 	bool search(RoomObject * child);

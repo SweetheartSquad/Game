@@ -220,6 +220,9 @@ Room * RoomBuilder::getRoom(){
 		addObjectToLists(shuffleBoundaries.pop());
 	}
 	
+	// place doors before anything else
+	placeDoors();
+
 	for(auto obj : objects){
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 		std::stringstream s1;
@@ -258,6 +261,82 @@ Room * RoomBuilder::getRoom(){
 	edges.clear();
 
 	return room;
+}
+
+bool RoomBuilder::placeDoors(){
+	// North,South, East, West
+	glm::vec3 center = room->getCenter();
+	
+	Edge * vRay = new Edge(glm::vec2(center.x, -1), glm::vec2(center.x, center.z * 2 + 1), glm::vec2(1, 0));
+	Edge * hRay = new Edge(glm::vec2(-1, center.z), glm::vec2(center.x * 2 + 1, center.z), glm::vec2(0, 1));
+
+	std::vector<Edge *> vEdges;
+	std::vector<Edge *> hEdges;
+	
+	// Vertical
+	for(auto e : edges){
+		if(e->intersects(vRay, ROOM_TILE)){
+			vEdges.push_back(e);
+		}
+	}
+	std::sort(vEdges.begin(), vEdges.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.y + i->p2.y) / 2 < (j->p1.y + j->p2.y) / 2);});
+
+	// Horizontal
+	for(auto e : edges){
+		if(e->intersects(hRay, ROOM_TILE)){
+			hEdges.push_back(e);
+		}
+	}
+	std::sort(hEdges.begin(), hEdges.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.x + i->p2.x) / 2 < (j->p1.x + j->p2.x) / 2);});
+	
+	// Find Walls
+	RoomObject * wallNorth = getWallFromEdge(vEdges.back());
+	RoomObject * wallSouth = getWallFromEdge(vEdges.front());
+	RoomObject * wallEast = getWallFromEdge(hEdges.back());
+	RoomObject * wallWest = getWallFromEdge(hEdges.front());
+
+	RoomObject * doorNorth = getDoor();
+	RoomObject * doorSouth = getDoor();
+	RoomObject * doorEast = getDoor();
+	RoomObject * doorWest = getDoor();
+
+	// Place new door
+	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT).front())){
+		addObjectToLists(doorNorth);
+	}else{
+		Log::error("North door not placed!!!");
+	}
+	if(arrange(doorSouth, wallSouth, PD_Side::kFRONT, wallSouth->emptySlots.at(PD_Side::kFRONT).front())){
+		addObjectToLists(doorSouth);
+	}else{
+		Log::error("South door not placed!!!");
+	}
+	if(arrange(doorEast, wallEast, PD_Side::kFRONT, wallEast->emptySlots.at(PD_Side::kFRONT).front())){
+		addObjectToLists(doorEast);
+	}else{
+		Log::error("East door not placed!!!");
+	}
+	if(arrange(doorWest, wallWest, PD_Side::kFRONT, wallWest->emptySlots.at(PD_Side::kFRONT).front())){
+		addObjectToLists(doorWest);
+	}else{
+		Log::error("West door not placed!!!");
+	}
+
+	room->doors[Door_t::kNORTH] = doorNorth;
+	room->doors[Door_t::kSOUTH] = doorSouth;
+	room->doors[Door_t::kEAST] = doorEast;
+	room->doors[Door_t::kWEST] = doorWest;
+
+	return true;
+}
+
+RoomObject * RoomBuilder::getWallFromEdge(Edge * _e){
+	for(int i = 0; i < boundaries.size(); ++i){
+		if(edges.at(i) == _e){
+			return boundaries.at(i);
+		}
+	}
+	return nullptr;
 }
 
 bool RoomBuilder::search(RoomObject * child){
@@ -705,7 +784,6 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
 	for(unsigned int i = 0; i < n; ++i){
-		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
 		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND));
 	}
@@ -713,10 +791,21 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	return furniture;
 }
 
+RoomObject * RoomBuilder::getDoor(){
+	std::stringstream ss;
+	ss << doorTexIdx.pop();
+	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
+	PD_ParentDef wallDef;
+	wallDef.parent = "wall";
+	wallDef.sides.push_back(PD_Side::kFRONT);
+	door->parentTypes.push_back(wallDef);
+	return door;
+}
+
 std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::vector<AssetItem *> itemDefinitions = definition->getItems();
 	std::vector<PD_Item *> items;
-	
+
 	// add a door manually
 	std::stringstream ss;
 	ss << doorTexIdx.pop();

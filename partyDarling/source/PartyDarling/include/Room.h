@@ -17,6 +17,13 @@ enum Room_t{
 	OTHER
 };
 
+enum Door_t{
+	kNORTH,
+	kSOUTH,
+	kEAST,
+	kWEST
+};
+
 enum RoomLayout_t;
 
 class BulletMeshEntity;
@@ -46,6 +53,7 @@ public:
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
 	RoomObject * door;
+	std::map<Door_t, RoomObject *> doors;
 
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);
