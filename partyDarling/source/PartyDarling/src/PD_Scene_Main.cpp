@@ -499,7 +499,7 @@ void PD_Scene_Main::bundleScenarios(){
 
 
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
-	unsigned long int numRooms = _rooms.size();
+	int numRooms = _rooms.size();
 	// separate rooms into a list of unlocked and locked
 	sweet::ShuffleVector<Room *> unlockedRooms, lockedRooms;
 	while(_rooms.size() > 0){
@@ -514,8 +514,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// generate a random rectangle which has enough cells for each room
 	glm::ivec2 houseSize;
-	houseSize.x = sweet::NumberUtils::randomInt(numRooms/8, numRooms/2);
-	houseSize.y = numRooms/houseSize.x;
+	houseSize.x = glm::min(2, sweet::NumberUtils::randomInt(numRooms/8, numRooms/2));
+	houseSize.y = glm::min(2, numRooms/houseSize.x);
 	while(houseSize.x*houseSize.y < numRooms){
 		if(houseSize.x < houseSize.y){
 			++houseSize.x;
@@ -548,16 +548,16 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	// since we aren't attaching rooms to them, these cells will just be ignored during placement and end up as holes
 	// make sure to leave the edge cells open so that we don't block off the entrance and provide a path to anywhere in the grid
 	// also make sure to save a list of these cells so that we can force through them if needed
-	sweet::ShuffleVector<glm::ivec2> allCellPositions;
+	sweet::ShuffleVector<glm::ivec2> possibleBlockedCellPositions;
 	sweet::ShuffleVector<glm::ivec2> blockedPositions;
-	for(int x = 1; x < houseSize.x-1; ++x){
-		for(int y = 1; y < houseSize.y-1; ++y){
-			allCellPositions.push(glm::ivec2(x,y));
+	for(int x = 1; x < houseSize.x-1; x += 2){
+		for(int y = 1; y < houseSize.y-1; y += 2){
+			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
 
-	for(unsigned long int i = 0; i < numRooms; ++i){
-		glm::ivec2 pos = allCellPositions.pop();
+	for(unsigned long int i = 0; i < possibleBlockedCellPositions.size()/2; ++i){
+		glm::ivec2 pos = possibleBlockedCellPositions.pop();
 		blockedPositions.push(pos);
 		allCells[std::make_pair(pos.x, pos.y)] = false;
 	}
