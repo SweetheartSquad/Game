@@ -94,7 +94,7 @@ public:
 
 	bool placeDoors();
 	RoomObject * getWallFromEdge(Edge * _e); // because I don't save them in a map...
-	RoomObject * getDoor();
+	RoomObject * getDoor(glm::ivec2 _navigation);
 
 	// Furniture placement
 	bool search(RoomObject * child);

@@ -8,8 +8,8 @@ PD_PropDefinition::PD_PropDefinition(Json::Value _jsonDef) :
 	src(_jsonDef.get("src", "NO_SRC").asString()),
 	mass(_jsonDef.get("mass", 0.f).asFloat()),
 	padding(_jsonDef.get("padding", 0.f).asFloat()),
-	twist(_jsonDef.get("deformable", true).asBool()),
-	flare(_jsonDef.get("deformable", true).asBool())
+	twist(_jsonDef.get("twist", false).asBool()),
+	flare(_jsonDef.get("flare", false).asBool())
 {
 	for(auto parent : _jsonDef["parents"].getMemberNames()) {
 		PD_ParentDef def;

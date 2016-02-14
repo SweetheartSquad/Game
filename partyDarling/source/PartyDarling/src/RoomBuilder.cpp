@@ -32,6 +32,7 @@
 #include <glm\gtc\quaternion.hpp>
 
 #include <PD_Prop.h>
+#include <PD_Door.h>
 
 //#define RG_DEBUG
 
@@ -290,15 +291,15 @@ bool RoomBuilder::placeDoors(){
 	std::sort(hEdges.begin(), hEdges.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.x + i->p2.x) / 2 < (j->p1.x + j->p2.x) / 2);});
 	
 	// Find Walls
-	RoomObject * wallNorth = getWallFromEdge(vEdges.back());
-	RoomObject * wallSouth = getWallFromEdge(vEdges.front());
+	RoomObject * wallSouth = getWallFromEdge(vEdges.back());
+	RoomObject * wallNorth = getWallFromEdge(vEdges.front());
 	RoomObject * wallEast = getWallFromEdge(hEdges.back());
 	RoomObject * wallWest = getWallFromEdge(hEdges.front());
 
-	RoomObject * doorNorth = getDoor();
-	RoomObject * doorSouth = getDoor();
-	RoomObject * doorEast = getDoor();
-	RoomObject * doorWest = getDoor();
+	RoomObject * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, doorTexIdx.pop());
+	RoomObject * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, doorTexIdx.pop());
+	RoomObject * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, doorTexIdx.pop());
+	RoomObject * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
 
 	// Place new door
 	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT).front())){
@@ -322,10 +323,10 @@ bool RoomBuilder::placeDoors(){
 		Log::error("West door not placed!!!");
 	}
 
-	room->doors[Door_t::kNORTH] = doorNorth;
-	room->doors[Door_t::kSOUTH] = doorSouth;
-	room->doors[Door_t::kEAST] = doorEast;
-	room->doors[Door_t::kWEST] = doorWest;
+	room->doors.insert(std::make_pair(PD_Door::kNORTH, doorNorth));
+	room->doors.insert(std::make_pair(PD_Door::kSOUTH, doorSouth));
+	room->doors.insert(std::make_pair(PD_Door::kEAST, doorEast));
+	room->doors.insert(std::make_pair(PD_Door::kWEST, doorWest));
 
 	return true;
 }
@@ -815,7 +816,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	return furniture;
 }
 
-RoomObject * RoomBuilder::getDoor(){
+RoomObject * RoomBuilder::getDoor(glm::ivec2 _navigation){
 	std::stringstream ss;
 	ss << doorTexIdx.pop();
 	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
@@ -829,18 +830,6 @@ RoomObject * RoomBuilder::getDoor(){
 std::vector<PD_Item *> RoomBuilder::getItems(){
 	std::vector<AssetItem *> itemDefinitions = definition->getItems();
 	std::vector<PD_Item *> items;
-
-	// add a door manually
-	std::stringstream ss;
-	ss << doorTexIdx.pop();
-	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
-	PD_ParentDef wallDef;
-	wallDef.parent = "wall";
-	wallDef.sides.push_back(PD_Side::kFRONT);
-	door->parentTypes.push_back(wallDef);
-	room->door = door;
-	items.push_back(door);
-	
 
 	for(auto def : itemDefinitions){
 		items.push_back(new PD_Item(def, world, baseShader));

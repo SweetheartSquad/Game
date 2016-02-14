@@ -36,6 +36,7 @@
 #include <Room.h>
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
+#include <PD_Door.h>
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
@@ -204,9 +205,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
 	lights.push_back(playerLight);
-
-
-	std::map<std::string, std::function<bool(sweet::Event *)>> * ff;
 	
 	// Set the scenario condition implentations pointer
 	PD_ResourceManager::scenario->conditionImplementations = PD_ResourceManager::conditionImplementations;
@@ -277,7 +275,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 	// Called when going through a door
-	PD_ResourceManager::scenario->eventManager.addEventListener("reset", [_game, this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager.addEventListener("navigate", [_game, this](sweet::Event * _event){
+		glm::ivec2 navigation(_event->getIntData("x"), _event->getIntData("y"));
+
 		player->disable();
 		uiBubble->disable();
 
@@ -289,13 +289,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
-		Timeout * t = new Timeout(1.f, [this, _game](sweet::Event * _event){
+		Timeout * t = new Timeout(1.f, [this, _game, navigation](sweet::Event * _event){
 			std::stringstream ss;
 			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
 			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
 			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
 
-			navigate(glm::ivec2(1,0)); // TODO: replace this with actual navigation vector
+			navigate(navigation); // TODO: replace this with actual navigation vector
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 			uiBubble->enable();
@@ -483,6 +483,7 @@ void PD_Scene_Main::pickScenarios(){
 	
 	activeScenarios.push_back(new Scenario("assets/scenario-external-1.json"));
 	activeScenarios.push_back(new Scenario("assets/scenario-external-2.json"));
+	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
 
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){
@@ -628,6 +629,36 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		openCells.clearAvailable();
 	}
 	
+	// loop through all of the rooms and remove doors which don't lead anywhere
+	for(auto c : houseGrid){
+		int x = c.first.first;
+		int y = c.first.second;
+
+		PD_Door::Door_t side;
+		Room * room = c.second;
+
+		if(houseGrid.count(std::make_pair(x-1,y)) == 0){
+			side = PD_Door::kEAST;
+			room->removeComponent(room->doors[side]);
+			delete room->doors[side];
+			room->doors.erase(side);
+		}if(houseGrid.count(std::make_pair(x+1,y)) == 0){
+			side = PD_Door::kWEST;
+			room->removeComponent(c.second->doors[side]);
+			delete room->doors[side];
+			room->doors.erase(side);
+		}if(houseGrid.count(std::make_pair(x,y+1)) == 0){
+			side = PD_Door::kNORTH;
+			room->removeComponent(room->doors[side]);
+			delete room->doors[side];
+			room->doors.erase(side);
+		}if(houseGrid.count(std::make_pair(x,y-1)) == 0){
+			side = PD_Door::kSOUTH;
+			room->removeComponent(room->doors[side]);
+			delete room->doors[side];
+			room->doors.erase(side);
+		}
+	}
 
 	// update the map
 	uiMap->buildMap(houseGrid);
@@ -738,12 +769,31 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}
 
 
-	
+	PD_Door::Door_t doorToEnter;
+	if(_relative){
+		if(glm::abs(_movement.x) > glm::abs(_movement.y)){
+			// horizontal
+			if(_movement.x < 0){
+				doorToEnter = PD_Door::kWEST;
+			}else{
+				doorToEnter = PD_Door::kEAST;
+			}
+		}else{
+			// vertical
+			if(_movement.y < 0){
+				doorToEnter = PD_Door::kNORTH;
+			}else{	
+				doorToEnter = PD_Door::kSOUTH;
+			}
+		}
+	}else{
+		doorToEnter = currentRoom->doors.begin()->first;
+	}
 
 	// make sure the door is up-to-date, and then place the player in front of it
-	currentRoom->door->realign();
-	glm::quat o = currentRoom->door->childTransform->getOrientationQuat();
-	btVector3 p = currentRoom->door->body->getWorldTransform().getOrigin();
+	currentRoom->doors.at(doorToEnter)->realign();
+	glm::quat o = currentRoom->doors.at(doorToEnter)->childTransform->getOrientationQuat();
+	btVector3 p = currentRoom->doors.at(doorToEnter)->body->getWorldTransform().getOrigin();
 	glm::vec3 p2(0,0,3);
 	p2 = o * p2;
 	p2 += glm::vec3(p.x(), p.y(), p.z());

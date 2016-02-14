@@ -6,6 +6,8 @@
 #include <BulletWorld.h>
 #include <vector>
 
+#include <PD_Door.h>
+
 #define ROOM_SIZE_MAX 12
 
 enum Room_t{
@@ -16,14 +18,6 @@ enum Room_t{
 	OFFICE,
 	OTHER
 };
-
-enum Door_t{
-	kNORTH,
-	kSOUTH,
-	kEAST,
-	kWEST
-};
-
 enum RoomLayout_t;
 
 class BulletMeshEntity;
@@ -52,8 +46,7 @@ public:
 	
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
-	RoomObject * door;
-	std::map<Door_t, RoomObject *> doors;
+	std::map<PD_Door::Door_t, RoomObject *> doors;
 
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);

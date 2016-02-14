@@ -20,6 +20,7 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 	visibility(kHIDDEN)
 {
 	mesh->setScaleMode(GL_NEAREST);
+	doors.clear();
 }
 
 void Room::addComponent(RoomObject * _obj){
