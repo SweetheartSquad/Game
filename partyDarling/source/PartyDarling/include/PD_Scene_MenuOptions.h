@@ -19,4 +19,7 @@ class PD_Scene_MenuOptions : public Scene {
 
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+
+	virtual void load() override;
+	virtual void unload() override;
 };

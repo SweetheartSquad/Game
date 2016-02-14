@@ -424,9 +424,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		if(room == "") {
 			ST_LOG_ERROR_V("Missing field on trigger unlockRoom");
 		}
-		
-		// TODO What happens here?
-		// PD_Listing::listingsById[scenario]->rooms[room]->door->locked;
+
+		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
 	});
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("triggerYellingContest", [this](sweet::Event * _event){
