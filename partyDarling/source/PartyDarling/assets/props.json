@@ -107,6 +107,32 @@
             "mass": 20,
             "padding":0,
             "deformable": false  
+        },
+		{
+            "id": 9, 
+            "src": "saltShaker", 
+            "roomTypes" : ["KITCHEN"],
+            "parents":{
+			"table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding":0,
+            "deformable": false  
+        },
+		{
+            "id": 10, 
+            "src": "pepperShaker", 
+            "roomTypes" : ["KITCHEN"],
+            "parents":{
+			"table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding":0,
+            "deformable": false  
         }
     ]
 }
