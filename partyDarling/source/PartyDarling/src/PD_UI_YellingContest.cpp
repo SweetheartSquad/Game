@@ -433,9 +433,11 @@ void PD_UI_YellingContest::update(Step * _step){
 								selectedGlyphText->setText(s.str());
 								*/
 								// play sound
-								OpenAL_Sound * s = PD_ResourceManager::scenario->getAudio("DEFAULT")->sound;
-								s->setPitch(sweet::NumberUtils::randomInt(5,15)/10.f);
-								s->play();
+								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
+									auto sound = PD_ResourceManager::scenario->getAudio("voice1")->sound;
+									sound->setPitch(glyphs.at(glyphIdx)->character/178.f+0.75f);
+									sound->play();
+								}
 							}else{
 								// Enemy's insult effective!
 								incrementConfidence(-damage);
