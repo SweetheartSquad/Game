@@ -349,14 +349,18 @@ bool RoomBuilder::search(RoomObject * child){
 				continue;
 			}
 			// check if valid parent
-			bool valid = false;
+			bool validParent = false;
+
+			PD_ParentDef parentDef;
 			for(auto parentType : child->parentTypes) {
 				if(parentType.parent == parent->type) {
-					valid = true;
+					parentDef = parentType;
+					validParent = true;
 					break;
 				}
 			}
-			if(!valid) {
+
+			if(!validParent) {
 				continue;
 			}
 
@@ -366,7 +370,20 @@ bool RoomBuilder::search(RoomObject * child){
 				for(unsigned int j = 0; j < iterator->second.size(); ++j){
 					PD_Side side = iterator->first;
 					Slot * slot = iterator->second.at(j);
-					
+
+					bool validSide = false;
+					// check if valid side
+					for(auto parentSide : parentDef.sides) {
+						if(parentSide == side) {
+							validSide = true;
+							break;
+						}
+					}
+					if(!validSide) {
+						Log::warn("Not valid side.");
+						continue;
+					}
+
 					// check length of slot
 					if(child->boundingBox.width > slot->length){
 						Log::warn("Not enough SPACE along side.");
@@ -429,23 +446,23 @@ bool RoomBuilder::search(RoomObject * child){
 	return false;
 }
 
-bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot){
+bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _side, Slot * _slot){
 	std::stringstream s;
-	s << "side: " << int(side);
+	s << "side: " << int(_side);
 	Log::info(s.str());
 
-	glm::vec3 pos = parent->childTransform->getTranslationVector();
+	glm::vec3 pos = _parent->childTransform->getTranslationVector();
 	pos.y = 0;
-	glm::quat orient = parent->childTransform->getOrientationQuat();
+	glm::quat orient = _parent->childTransform->getOrientationQuat();
 
 	float angle = 0;
-	glm::vec3 childDimensions = glm::vec3(child->boundingBox.width, child->boundingBox.height, child->boundingBox.depth);
+	glm::vec3 childDimensions = glm::vec3(_child->boundingBox.width, _child->boundingBox.height, _child->boundingBox.depth);
 	
 	// Rotate child according to childSide
-	if(slot->childSide != PD_Side::kBACK && slot->childSide != PD_Side::kTOP && side != PD_Side::kBOTTOM){
+	if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float childAngle = 0.f;
 		// orient child side pos
-		switch(slot->childSide){
+		switch(_slot->childSide){
 			case PD_Side::kRIGHT:
 				childAngle  = 90.f;
 				break;
@@ -467,10 +484,10 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 	child->mesh->replaceTextures(res);
 	*/
 	// Orient child to side
-	if(side != PD_Side::kFRONT && side != PD_Side::kTOP && side != PD_Side::kBOTTOM){
+	if(_side != PD_Side::kFRONT && _side != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float sideAngle = 0.f;
 		// orient child side pos
-		switch(side){
+		switch(_side){
 			case PD_Side::kRIGHT:
 				sideAngle  = 90.f;
 				break;
@@ -484,29 +501,32 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 		angle += sideAngle;
 	}
 
-	child->rotatePhysical(angle, 0, 1.f, 0);
-	child->realign();
+	_child->rotatePhysical(angle, 0, 1.f, 0);
+	_child->realign();
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
 	// parent side transformations
-	switch(side){
+	switch(_side){
 		case PD_Side::kFRONT:
-			sidePos.z += parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f;
-			sidePos.x += -parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f + slot->loc;
+			sidePos.z += _parent->boundingBox.depth / 2.f + _child->boundingBox.depth / 2.f;
+			sidePos.x += -_parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f + _slot->loc;
 			break;
 		case PD_Side::kBACK:
-			sidePos.z += -parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f;
-			sidePos.x += parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f - slot->loc;
+			sidePos.z += -_parent->boundingBox.depth / 2.f - _child->boundingBox.depth / 2.f;
+			sidePos.x += _parent->boundingBox.width / 2.f - _child->boundingBox.width / 2.f - _slot->loc;
 			break;
 		case PD_Side::kLEFT:
-			sidePos.x += -parent->boundingBox.width / 2.f - child->boundingBox.width / 2.f;
-			sidePos.z += -parent->boundingBox.depth / 2.f + child->boundingBox.depth / 2.f + slot->loc;
+			sidePos.x += -_parent->boundingBox.width / 2.f - _child->boundingBox.width / 2.f;
+			sidePos.z += -_parent->boundingBox.depth / 2.f + _child->boundingBox.depth / 2.f + _slot->loc;
 			break;
 		case PD_Side::kRIGHT:
-			sidePos.x += parent->boundingBox.width / 2.f + child->boundingBox.width / 2.f;
-			sidePos.z += parent->boundingBox.depth / 2.f - child->boundingBox.depth / 2.f - slot->loc;
-			break;						
+			sidePos.x += _parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f;
+			sidePos.z += _parent->boundingBox.depth / 2.f - _child->boundingBox.depth / 2.f - _slot->loc;
+			break;
+		case PD_Side::kTOP:
+			sidePos.y += _parent->boundingBox.height;
+			break;	
 	}
 
 	// rotate side space translation vector
@@ -515,22 +535,22 @@ bool RoomBuilder::arrange(RoomObject * child, RoomObject * parent, PD_Side side,
 	pos += sidePos;
 
 	// check for collision/inside room
-	if(!canPlaceObject(child, pos, orient)){
+	if(!canPlaceObject(_child, pos, orient, _parent)){
 		Log::warn("Collided");
-		child->rotatePhysical(-angle, 0, 1.f, 0);
+		_child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
 
 	// adjust remaining slot space
-	slot->loc += abs(childDimensions.x);
-	slot->length -= abs(childDimensions.x);
+	_slot->loc += abs(childDimensions.x);
+	_slot->length -= abs(childDimensions.x);
 
-	room->addComponent(child);
+	room->addComponent(_child);
 
 	return true;
 }
 
-bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation){
+bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent){
 
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
@@ -548,6 +568,10 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 
 	// Check for collision with other objects in room
 	for(auto o : placedObjects){
+		if(_parent != nullptr && o == _parent){
+			continue;
+		}
+
 		glm::mat4 oMM = o->meshTransform->getCumulativeModelMatrix();
 		 
 		// Check if object intersects o

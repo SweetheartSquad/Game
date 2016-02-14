@@ -99,7 +99,7 @@ public:
 	// Furniture placement
 	bool search(RoomObject * child);
 	bool arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot);
-	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
+	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent = nullptr);
 	void addObjectToLists(RoomObject * _obj);
 	bool canBeParent(RoomObject * _obj);
 

@@ -110,6 +110,9 @@
             "src": "vase", 
             "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
             "parents":{
+				"table":[
+                    "TOP"
+                ]
             },
             "mass": 20,
             "padding":0,
@@ -121,7 +124,7 @@
             "src": "saltShaker", 
             "roomTypes" : ["KITCHEN"],
             "parents":{
-			"table":[
+				"table":[
                     "TOP"
                 ]
             },
@@ -135,7 +138,7 @@
             "src": "pepperShaker", 
             "roomTypes" : ["KITCHEN"],
             "parents":{
-			"table":[
+				"table":[
                     "TOP"
                 ]
             },

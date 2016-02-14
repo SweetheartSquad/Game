@@ -22,7 +22,8 @@
                     "FRONT":"FRONT",
                     "BACK":"FRONT",
                     "LEFT":"FRONT",
-                    "RIGHT":"FRONT"
+                    "RIGHT":"FRONT",
+					"TOP":"BOTTOM"
                 },
             "parents":{},
             "padding":0
