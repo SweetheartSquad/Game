@@ -12,6 +12,101 @@
             "mass": 20,
             "padding":0,
             "deformable": false  
+        },
+		{
+            "id": 2, 
+            "src": "bowl", 
+            "roomTypes" : ["KITCHEN"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        },
+		{
+            "id": 3, 
+            "src": "cup", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        },
+		{
+            "id": 4, 
+            "src": "houseplant_1", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+            },
+            "mass": 30,
+            "padding":0,
+            "deformable": false 
+        },
+		{
+            "id": 5, 
+            "src": "mug", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        }
+		,
+		{
+            "id": 6, 
+            "src": "pitcher", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        },
+		{
+            "id": 7, 
+            "src": "plate", 
+            "roomTypes" : ["KITCHEN"],
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
+        },
+		{
+            "id": 8, 
+            "src": "vase", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parents":{
+            },
+            "mass": 20,
+            "padding":0,
+            "deformable": false  
         }
     ]
 }
