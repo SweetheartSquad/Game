@@ -550,13 +550,13 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	// also make sure to save a list of these cells so that we can force through them if needed
 	sweet::ShuffleVector<glm::ivec2> possibleBlockedCellPositions;
 	sweet::ShuffleVector<glm::ivec2> blockedPositions;
-	for(int x = 1; x < houseSize.x-1; x += 2){
-		for(int y = 1; y < houseSize.y-1; y += 2){
+	for(int x = 0; x < houseSize.x-1; x += 2){
+		for(int y = 0; y < houseSize.y-1; y += 2){
 			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
 
-	for(unsigned long int i = 0; i < possibleBlockedCellPositions.size()/2; ++i){
+	for(unsigned long int i = 0; i < possibleBlockedCellPositions.size()/3*2; ++i){
 		glm::ivec2 pos = possibleBlockedCellPositions.pop();
 		blockedPositions.push(pos);
 		allCells[std::make_pair(pos.x, pos.y)] = false;

@@ -134,14 +134,8 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 			MapCell * cell = new MapCell(world, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
-			if(width > height){
-				cell->setRationalWidth(1.f/width, hl);
-				cell->setSquareHeight(1.f);
-			}else{
-				cell->setRationalHeight(1.f, hl);
-				cell->setSquareWidth(1.f);
-			
-			}
+			cell->setRationalHeight(1.f, hl);
+			cell->setSquareWidth(1.f);
 			cell->boxSizing = kCONTENT_BOX;
 			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
 				if(cell->room != nullptr && cell->isVisited()){
