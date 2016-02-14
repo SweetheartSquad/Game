@@ -19,10 +19,12 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	{
 		std::stringstream ss;
 		ss << "assets/meshes/props/" << _def->src << ".obj";
-		MeshInterface * m = Resource::loadMeshFromObj(ss.str(), false).at(0);
+		std::vector<TriMesh *> meshes = Resource::loadMeshFromObj(ss.str(), false);
+		for(TriMesh * m : meshes){
+			mesh->insertVertices(m);
+			delete m;
+		}
 		mesh->setScaleMode(GL_NEAREST);
-		mesh->insertVertices(m);
-		delete m;
 	}
 	
 	// get a texture for the furniture type
@@ -31,20 +33,22 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 		ss << "assets/textures/props/" << _def->src << ".png";
 		Texture * tex = new Texture(ss.str(), false, true, true);
 		tex->load();
-		mesh->pushTexture2D(tex);	
+		mesh->pushTexture2D(tex);
 	}
 
 
 	
 	
 	//Deformers
-	if(_def->deformable){
-		float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
-		float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
-		float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
+	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
+	float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
+	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
 		
+	if(_def->twist){
 		MeshDeformation::twist(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
+	}
 		//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
+	if(_def->flare){
 		MeshDeformation::flare(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
 	}
 

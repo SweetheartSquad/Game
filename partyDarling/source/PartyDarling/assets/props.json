@@ -11,7 +11,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 2, 
@@ -24,7 +25,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 3, 
@@ -40,7 +42,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 4, 
@@ -50,7 +53,8 @@
             },
             "mass": 30,
             "padding":0,
-            "deformable": false 
+            "twist": false,
+            "flare": false 
         },
 		{
             "id": 5, 
@@ -66,7 +70,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         }
 		,
 		{
@@ -83,7 +88,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 7, 
@@ -96,7 +102,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 8, 
@@ -106,7 +113,8 @@
             },
             "mass": 20,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 9, 
@@ -119,7 +127,8 @@
             },
             "mass": 5,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 10, 
@@ -132,7 +141,8 @@
             },
             "mass": 5,
             "padding":0,
-            "deformable": false  
+            "twist": false,
+            "flare": false  
         },
 		{
             "id": 11, 
@@ -142,7 +152,8 @@
             },
             "mass": 50,
             "padding":0,
-            "deformable": true  
+            "twist": true,
+            "flare": true  
         }
     ]
 }

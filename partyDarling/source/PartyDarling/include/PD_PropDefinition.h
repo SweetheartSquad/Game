@@ -8,7 +8,8 @@ public:
 	std::string src;
 	float mass;
 	float padding;
-	bool deformable;
+	bool twist;
+	bool flare;
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
 
