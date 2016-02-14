@@ -319,6 +319,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+	
+	PD_ResourceManager::scenario->eventManager.addEventListener("locked", [_game, this](sweet::Event * _event){
+		Log::info("The door is locked.");
+	});
+
 
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeDISSStat", [this](sweet::Event * _event){
 		// Trigger
@@ -636,27 +641,45 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 		PD_Door::Door_t side;
 		Room * room = c.second;
-
-		if(houseGrid.count(std::make_pair(x-1,y)) == 0){
-			side = PD_Door::kEAST;
-			room->removeComponent(room->doors[side]);
-			delete room->doors[side];
+		
+		side = PD_Door::kEAST;
+		auto it = houseGrid.find(std::make_pair(x-1,y));
+		if(it == houseGrid.end()){
+			room->removeComponent(room->doors.at(side));
+			delete room->doors.at(side);
 			room->doors.erase(side);
-		}if(houseGrid.count(std::make_pair(x+1,y)) == 0){
-			side = PD_Door::kWEST;
-			room->removeComponent(c.second->doors[side]);
-			delete room->doors[side];
+		}else{
+			room->doors.at(side)->room = it->second;
+		}
+		
+		side = PD_Door::kWEST;
+		it = houseGrid.find(std::make_pair(x+1,y));
+		if(it == houseGrid.end()){
+			room->removeComponent(c.second->doors.at(side));
+			delete room->doors.at(side);
 			room->doors.erase(side);
-		}if(houseGrid.count(std::make_pair(x,y+1)) == 0){
-			side = PD_Door::kNORTH;
-			room->removeComponent(room->doors[side]);
-			delete room->doors[side];
+		}else{
+			room->doors.at(side)->room = it->second;
+		}
+		
+		side = PD_Door::kNORTH;
+		it = houseGrid.find(std::make_pair(x,y+1));
+		if(it == houseGrid.end()){
+			room->removeComponent(room->doors.at(side));
+			delete room->doors.at(side);
 			room->doors.erase(side);
-		}if(houseGrid.count(std::make_pair(x,y-1)) == 0){
-			side = PD_Door::kSOUTH;
-			room->removeComponent(room->doors[side]);
-			delete room->doors[side];
+		}else{
+			room->doors.at(side)->room = it->second;
+		}
+		
+		side = PD_Door::kSOUTH;
+		it = houseGrid.find(std::make_pair(x,y-1));
+		if(it == houseGrid.end()){
+			room->removeComponent(room->doors.at(side));
+			delete room->doors.at(side);
 			room->doors.erase(side);
+		}else{
+			room->doors.at(side)->room = it->second;
 		}
 	}
 

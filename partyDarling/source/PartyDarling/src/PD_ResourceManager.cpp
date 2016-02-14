@@ -40,7 +40,7 @@ void PD_ResourceManager::init(){
 		Json::Reader reader;
 		reader.parse("{\"id\": \"DOOR_" + ss.str() + "\",\"src\": \"items/door_" + ss.str() + ".png\",\"type\": \"texture\"}", root);
 		itemTextures->assets["texture"]["DOOR_" + ss.str()] = Asset::getAsset(root, itemTextures);
-		reader.parse("{\"name\":\"Door\",\"id\":\"DOOR_" + ss.str() + "\",\"collectable\":false,\"pixelPerfect\":true,\"description\":\"Who knows where it leads?\",\"texture\":\"DOOR_" + ss.str() + "\",\"effects\":[{\"type\":\"reset\",\"args\":{}}],\"type\":\"item\"}", root);
+		reader.parse("{\"name\":\"Door\",\"id\":\"DOOR_" + ss.str() + "\",\"collectable\":false,\"pixelPerfect\":true,\"description\":\"Who knows where it leads?\",\"texture\":\"DOOR_" + ss.str() + "\",\"effects\":[],\"type\":\"item\"}", root);
 		scenario->assets["item"]["DOOR_" + ss.str()] = Asset::getAsset(root, scenario);
 	}
 	// parse furniture

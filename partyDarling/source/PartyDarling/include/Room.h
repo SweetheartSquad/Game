@@ -46,7 +46,7 @@ public:
 	
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
-	std::map<PD_Door::Door_t, RoomObject *> doors;
+	std::map<PD_Door::Door_t, PD_Door *> doors;
 
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);

@@ -296,10 +296,10 @@ bool RoomBuilder::placeDoors(){
 	RoomObject * wallEast = getWallFromEdge(hEdges.back());
 	RoomObject * wallWest = getWallFromEdge(hEdges.front());
 
-	RoomObject * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, doorTexIdx.pop());
-	RoomObject * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, doorTexIdx.pop());
-	RoomObject * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, doorTexIdx.pop());
-	RoomObject * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
+	PD_Door * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, doorTexIdx.pop());
+	PD_Door * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, doorTexIdx.pop());
+	PD_Door * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, doorTexIdx.pop());
+	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
 
 	// Place new door
 	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT).front())){
