@@ -514,8 +514,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// generate a random rectangle which has enough cells for each room
 	glm::ivec2 houseSize;
-	houseSize.x = glm::min(2, sweet::NumberUtils::randomInt(numRooms/8, numRooms/2));
-	houseSize.y = glm::min(2, numRooms/houseSize.x);
+	houseSize.x = glm::max(2, sweet::NumberUtils::randomInt(numRooms/8, numRooms/2));
+	houseSize.y = glm::max(2, numRooms/houseSize.x);
 	while(houseSize.x*houseSize.y < numRooms){
 		if(houseSize.x < houseSize.y){
 			++houseSize.x;
