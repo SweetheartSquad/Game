@@ -24,9 +24,11 @@
                 }
             ], 
             "type": "bookshelf_4",
-			"mass": 40,
+			"mass": 80,
             "roomTypes" : ["LIVING_ROOM","BEDROOM"],
             "detailedCollider": false,
-            "parents":{},
-            "padding":0
+            "parents":{"wall":["kFRONT"]},
+            "padding":0,
+            "twist": false,
+            "flare": true
         }
