@@ -526,7 +526,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	}
 
 	// quadruple the size of the rectangle to allow for empty cells
-	houseSize *= 4;
+	houseSize *= 2;
 
 	// generate the starting position as a random spot along an edge
 	if(sweet::NumberUtils::randomBool()){
@@ -544,6 +544,23 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		for(int y = 0; y < houseSize.y; ++y){
 			allCells[std::make_pair(x,y)] = true;
 		}
+	}
+	// flag a bunch of cells as used immediately (the grid is big enough for at least numRooms*4) 
+	// since we aren't attaching rooms to them, these cells will just be ignored during placement and end up as holes
+	// make sure to leave the edge cells open so that we don't block off the entrance and provide a path to anywhere in the grid
+	// also make sure to save a list of these cells so that we can force through them if needed
+	sweet::ShuffleVector<glm::ivec2> allCellPositions;
+	sweet::ShuffleVector<glm::ivec2> blockedPositions;
+	for(int x = 1; x < houseSize.x-1; ++x){
+		for(int y = 1; y < houseSize.y-1; ++y){
+			allCellPositions.push(glm::ivec2(x,y));
+		}
+	}
+
+	for(unsigned long int i = 0; i < numRooms; ++i){
+		glm::ivec2 pos = allCellPositions.pop();
+		blockedPositions.push(pos);
+		allCells[std::make_pair(pos.x, pos.y)] = false;
 	}
 	
 	// make a function to help us place stuff
@@ -584,7 +601,12 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	// place the unlocked rooms by picking a random open cell and a random room,
 	// assigning the room to the cell, and storing any open adjacent cells in the list
 	while(unlockedRooms.size() > 0){
-		glm::ivec2 cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		glm::ivec2 cell;
+		if(openCells.size() > 0){
+			cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		}else{
+			cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = unlockedRooms.pop(true);
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
@@ -594,7 +616,12 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// repeat for locked rooms
 	while(lockedRooms.size() > 0){
-		glm::ivec2 cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		glm::ivec2 cell;
+		if(openCells.size() > 0){
+			cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+		}else{
+			cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = lockedRooms.pop(true);
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
