@@ -20,12 +20,13 @@
                         }
                     ], 
                     "required": true,
-					"scale": [0.8,0.8,0.8]
+					"scale": [0.65,0.65,0.65]
                 }
             ], 
             "type": "bookshelf_4",
 			"mass": 40,
             "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+            "detailedCollider": false,
             "parents":{},
             "padding":0
         }
