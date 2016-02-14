@@ -7,26 +7,10 @@
 
 MapCell::MapCell(BulletWorld * _world, Room * _room) :
 	NodeUI(_world),
-	visited(false),
 	room(_room)
 {
 	background->mesh->setScaleMode(GL_NEAREST);
 	boxSizing = kCONTENT_BOX;
-
-	setVisited(false);
-}
-
-bool MapCell::isVisited(){
-	return visited;
-}
-
-void MapCell::setVisited(bool _visited){
-	visited = _visited;
-	if(visited){
-		setVisible(true);
-	}else{
-		setVisible(false);
-	}
 }
 
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
@@ -121,7 +105,7 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	}
 	int width = x2-x1+1, height = y2-y1+1;
 	// make sure we have a full grid for what we need
-	for(unsigned long int y = y1; y <= y2; ++y){
+	for(int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
 		innerLayout->addChild(hl);
 		hl->setRationalWidth(1.f, innerLayout);
@@ -130,7 +114,7 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 		hl->verticalAlignment = innerLayout->verticalAlignment;
 		hl->horizontalAlignment = innerLayout->horizontalAlignment;
 
-		for(unsigned long int x = x1; x <= x2; ++x){
+		for(int x = x1; x <= x2; ++x){
 			MapCell * cell = new MapCell(world, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
@@ -138,10 +122,10 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 			cell->setSquareWidth(1.f);
 			cell->boxSizing = kCONTENT_BOX;
 			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
-				if(cell->room != nullptr && cell->isVisited()){
+				if(cell->room != nullptr && cell->room->visibility == Room::kENTERED){
 					roomName->setText(cell->room->definition->name);
 				}else{
-					roomName->setText("");
+					roomName->setText("???");
 				}
 			});
 		}
@@ -158,16 +142,56 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 	auto k = std::make_pair(_currentPosition.x, _currentPosition.y);
 	for(auto & cell : grid){
-		if(cell.second->room != nullptr){ // cells without rooms are always ignored
+		if(cell.second->room == nullptr){
+			// cells without rooms are always ignored
+			cell.second->setVisible(false);
+		}else{
+
+			// hidden cells which are adjacent to the current cell become seen
+			if(
+				(
+				(glm::abs(cell.first.first - _currentPosition.x) == 1)
+				&&
+				(glm::abs(cell.first.second - _currentPosition.y) == 0)
+				)
+				||
+				(
+				(glm::abs(cell.first.first - _currentPosition.x) == 0)
+				&&
+				(glm::abs(cell.first.second - _currentPosition.y) == 1)
+				)
+			){
+				if(cell.second->room->visibility == Room::kHIDDEN){
+					cell.second->room->visibility = Room::kSEEN;
+				}
+			}
+
 			if(cell.first == k){
+				// the current cell becomes entered
+				// and opaque
 				cell.second->setBackgroundColour(1,1,1, 1);
+				cell.second->room->visibility = Room::kENTERED;
 			}else{
+				// all other cells become transparent
 				cell.second->setBackgroundColour(1,1,1, 0.5f);
 			}
-			cell.second->setVisited(true);
 
-			cell.second->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL")->texture);
-			
+			// hidden cells aren't drawn
+			// seen cells are drawn with icons
+			// entered cells are drawn without icons
+			switch(cell.second->room->visibility){
+			case Room::kHIDDEN:
+				cell.second->setVisible(false);
+				break;
+			case Room::kSEEN:
+				cell.second->setVisible(true);
+				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL")->texture);
+				break;
+			case Room::kENTERED:
+				cell.second->setVisible(true);
+				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
+				break;
+			}
 		}
 	}
 }

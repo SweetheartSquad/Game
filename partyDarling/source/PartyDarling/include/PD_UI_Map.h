@@ -6,14 +6,9 @@
 #define MAP_SIZE 2
 
 class MapCell : public NodeUI{
-private:
-	bool visited;
 public:
 	Room * room;
 	MapCell(BulletWorld * _world, Room * _room);
-
-	bool isVisited();
-	void setVisited(bool _visited);
 };
 
 class PD_UI_Map : public NodeUI{

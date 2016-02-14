@@ -32,6 +32,13 @@ class Room: public BulletMeshEntity {
 public:
 	AssetRoom * const definition;
 	bool locked;
+	
+	enum Visibility{
+		kHIDDEN, // the player doesn't know this room exists
+		kSEEN, // the player has seen a door to this room, but hasn't been inside
+		kENTERED // the player has been in this room
+	} visibility;
+
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
