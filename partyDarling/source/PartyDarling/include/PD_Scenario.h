@@ -5,9 +5,8 @@
 
 enum ScenarioType {
 	kSIDE		= 0,
-	kBEGINNING  = 1,
+	kOMAR		= 1,
 	kPLOT		= 2,
-	kEND		= 3
 }; 
 
 class PD_Scenario : public Scenario {
