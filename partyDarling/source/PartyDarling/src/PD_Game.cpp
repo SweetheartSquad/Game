@@ -85,6 +85,7 @@ void PD_Game::playFight(){
 
 void PD_Game::showLoading(std::string _message, float _percentage){
 	PD_Scene_LoadingScreen * s = dynamic_cast<PD_Scene_LoadingScreen *>(scenes["loadingScreen"]);
+	s->loadingPercent = _percentage;
 	s->loadingMessage->setText(_message);
 	s->uiLayer.invalidateLayout();
 	s->update(nullptr);

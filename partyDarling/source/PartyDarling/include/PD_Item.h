@@ -33,7 +33,7 @@ public:
 
 
 	// trigger all of this item's pickup effects on its scenario
-	void triggerPickup();
+	virtual void triggerPickup();
 	// trigger all of this item's effects on its scenario
-	void triggerInteract();
+	virtual void triggerInteract();
 };

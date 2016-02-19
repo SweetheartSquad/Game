@@ -18,6 +18,8 @@ public:
 	ComponentShaderText * textShader;
 
 	TextLabel * loadingMessage;
+	float loadingPercent;
+	Slider * loadingSlider;
 
 	UILayer uiLayer;
 	Font * menuFont;

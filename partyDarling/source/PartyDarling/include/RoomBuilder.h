@@ -75,8 +75,9 @@ public:
 	unsigned long int thresh;
 
 	BulletWorld * world;
-
+	
 	std::vector<RoomObject *> boundaries;
+	std::vector<glm::vec3> tiles;
 
 	std::vector<RoomObject *> availableParents;
 	std::vector<RoomObject *> placedObjects;
@@ -92,10 +93,14 @@ public:
 
 	Room * getRoom();
 
+	bool placeDoors();
+	RoomObject * getWallFromEdge(Edge * _e); // because I don't save them in a map...
+	RoomObject * getDoor(glm::ivec2 _navigation);
+
 	// Furniture placement
 	bool search(RoomObject * child);
 	bool arrange(RoomObject * child, RoomObject * parent, PD_Side side, Slot * slot);
-	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation);
+	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent = nullptr);
 	void addObjectToLists(RoomObject * _obj);
 	bool canBeParent(RoomObject * _obj);
 
@@ -106,6 +111,7 @@ public:
 	// Create room walls from tilemap
 	void createWalls();
 	void addWall(float width, glm::vec2 pos, float angle);
+	std::vector<glm::vec3> getTiles();
 
 	// Create random room objects, including specified objects
 	std::vector<RoomObject *> getRoomObjects();

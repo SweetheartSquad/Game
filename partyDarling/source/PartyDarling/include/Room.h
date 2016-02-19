@@ -6,6 +6,8 @@
 #include <BulletWorld.h>
 #include <vector>
 
+#include <PD_Door.h>
+
 #define ROOM_SIZE_MAX 12
 
 enum Room_t{
@@ -16,7 +18,6 @@ enum Room_t{
 	OFFICE,
 	OTHER
 };
-
 enum RoomLayout_t;
 
 class BulletMeshEntity;
@@ -32,13 +33,20 @@ class Room: public BulletMeshEntity {
 public:
 	AssetRoom * const definition;
 	bool locked;
+	
+	enum Visibility{
+		kHIDDEN, // the player doesn't know this room exists
+		kSEEN, // the player has seen a door to this room, but hasn't been inside
+		kENTERED // the player has been in this room
+	} visibility;
+
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
 	Sprite * tilemapSprite;
 	
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
-	RoomObject * door;
+	std::map<PD_Door::Door_t, PD_Door *> doors;
 
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);

@@ -14,6 +14,8 @@
 #include <PD_UI_Text.h>
 #include <PD_Scene_Main.h>
 
+#include <MeshFactory.h>
+
 class PD_UI_Text;
 
 PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
@@ -32,17 +34,23 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0,sd.x,0,sd.y);
 
-	uiLayer.addMouseIndicator();
-
 	VerticalLinearLayout * layout = new VerticalLinearLayout(uiLayer.world);
+	uiLayer.addChild(layout);
 	layout->horizontalAlignment = kCENTER;
 	layout->verticalAlignment = kMIDDLE;
 	layout->setRationalWidth(1.f, &uiLayer);
 	layout->setRationalHeight(1.f, &uiLayer);
 
 	loadingMessage = new TextLabel(uiLayer.world, menuFont, textShader);
-
 	layout->addChild(loadingMessage);
+	loadingPercent = 0;
+	loadingSlider = new SliderControlled(uiLayer.world, &loadingPercent, 0, 1);
+	layout->addChild(loadingSlider);
+	loadingSlider->setRationalWidth(0.5f, layout);
+	loadingSlider->setPixelHeight(50);
+
+
+	uiLayer.invalidateLayout();
 }
 
 PD_Scene_LoadingScreen::~PD_Scene_LoadingScreen() {

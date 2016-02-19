@@ -34,13 +34,15 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	delete buildResult.mesh;
 	
 	//Deformers
-	if(_def->deformable){
-		float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
-		float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
-		float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
+	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
+	float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
+	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
 		
+	if(_def->twist){
 		MeshDeformation::twist(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
+	}
 		//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
+	if(_def->flare){
 		MeshDeformation::flare(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kEASE_IN_OUT_CUBIC);
 	}
 

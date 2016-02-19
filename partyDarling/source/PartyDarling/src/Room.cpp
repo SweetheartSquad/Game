@@ -16,9 +16,11 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
 	definition(_definition),
 	tilemapSprite(new Sprite()),
-	locked(definition->locked)
+	locked(definition->locked),
+	visibility(kHIDDEN)
 {
 	mesh->setScaleMode(GL_NEAREST);
+	doors.clear();
 }
 
 void Room::addComponent(RoomObject * _obj){
