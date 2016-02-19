@@ -33,15 +33,7 @@ struct PD_ParentDef{
 	}
 };
 
-
-class Slot{
-public:
-	float loc;
-	float length;
-	PD_Side childSide; // The side the child can be aligned with this side
-
-	Slot(PD_Side _childSide, float loc, float length);
-};
+class PD_Slot;
 
 class RoomObject: public BulletMeshEntity {
 public:
@@ -51,7 +43,7 @@ public:
 	Anchor_t anchor;
 	sweet::Box boundingBox;
 	// map of vectors of available slots per side of an object (i guess this is here in case we split a side? e.g. place a small thing in the center of a side, you get two new slots on either side of it)
-	std::map<PD_Side, std::vector<Slot *>> emptySlots;
+	std::map<PD_Side, PD_Slot *> emptySlots;
 
 	RoomObject * parent;
 

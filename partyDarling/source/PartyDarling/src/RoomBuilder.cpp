@@ -3,6 +3,8 @@
 #include <RoomBuilder.h>
 
 #include <Room.h>
+#include <RoomObject.h>
+#include <PD_Slot.h>
 #include <MeshFactory.h>
 #include <scenario\Asset.h>
 
@@ -303,22 +305,22 @@ bool RoomBuilder::placeDoors(){
 	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
 
 	// Place new door
-	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT).front())){
+	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT))){
 		addObjectToLists(doorNorth);
 	}else{
 		Log::error("North door not placed!!!");
 	}
-	if(arrange(doorSouth, wallSouth, PD_Side::kFRONT, wallSouth->emptySlots.at(PD_Side::kFRONT).front())){
+	if(arrange(doorSouth, wallSouth, PD_Side::kFRONT, wallSouth->emptySlots.at(PD_Side::kFRONT))){
 		addObjectToLists(doorSouth);
 	}else{
 		Log::error("South door not placed!!!");
 	}
-	if(arrange(doorEast, wallEast, PD_Side::kFRONT, wallEast->emptySlots.at(PD_Side::kFRONT).front())){
+	if(arrange(doorEast, wallEast, PD_Side::kFRONT, wallEast->emptySlots.at(PD_Side::kFRONT))){
 		addObjectToLists(doorEast);
 	}else{
 		Log::error("East door not placed!!!");
 	}
-	if(arrange(doorWest, wallWest, PD_Side::kFRONT, wallWest->emptySlots.at(PD_Side::kFRONT).front())){
+	if(arrange(doorWest, wallWest, PD_Side::kFRONT, wallWest->emptySlots.at(PD_Side::kFRONT))){
 		addObjectToLists(doorWest);
 	}else{
 		Log::error("West door not placed!!!");
@@ -366,41 +368,39 @@ bool RoomBuilder::search(RoomObject * child){
 				continue;
 			}
 
-			typedef std::map<PD_Side, std::vector<Slot *>>::iterator it_type;
+			typedef std::map<PD_Side, PD_Slot *>::iterator it_type;
 			for(it_type iterator = parent->emptySlots.begin(); iterator != parent->emptySlots.end(); iterator++) {
-				// go through available slots of side
-				for(unsigned int j = 0; j < iterator->second.size(); ++j){
-					PD_Side side = iterator->first;
-					Slot * slot = iterator->second.at(j);
+				// Look at the side
+				PD_Side side = iterator->first;
+				PD_Slot * slot = iterator->second;
 
-					bool validSide = false;
-					// check if valid side
-					for(auto parentSide : parentDef.sides) {
-						if(parentSide == side) {
-							validSide = true;
-							break;
-						}
+				bool validSide = false;
+				// check if valid side
+				for(auto parentSide : parentDef.sides) {
+					if(parentSide == side) {
+						validSide = true;
+						break;
 					}
-					if(!validSide) {
-						Log::warn("Not valid side.");
-						continue;
-					}
+				}
+				if(!validSide) {
+					Log::warn("Not valid side.");
+					continue;
+				}
 
-					// check length of slot
-					if(child->boundingBox.width > slot->length){
-						Log::warn("Not enough SPACE along side.");
-						continue;
+				// check length of slot
+				if(child->boundingBox.width > slot->length){
+					Log::warn("Not enough SPACE along side.");
+					continue;
+				}
+				Log::info("Side found.");
+				// if the object can be placed without collision
+				if(arrange(child, parent, side, slot)){
+					if(slot->length <= 0){
+						// TODO: maybe nothing?
 					}
-					Log::info("Side found.");
-					// if the object can be placed without collision
-					if(arrange(child, parent, side, slot)){
-						if(slot->length <= 0){
-							iterator->second.erase(iterator->second.begin() + j);
-						}
-						addObjectToLists(child);
-						Log::info("Parenting and placing object.");
-						return true;
-					}
+					addObjectToLists(child);
+					Log::info("Parenting and placing object.");
+					return true;
 				}
 			}
 			Log::warn("No sides availalble.");
@@ -430,7 +430,7 @@ bool RoomBuilder::search(RoomObject * child){
 	return false;
 }
 
-bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _side, Slot * _slot){
+bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _side, PD_Slot * _slot){
 	std::stringstream s;
 	s << "side: " << int(_side);
 	Log::info(s.str());
@@ -525,6 +525,8 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		_child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
+
+	_slot->children.push_back(_child);
 
 	// adjust remaining slot space
 	_slot->loc += abs(childDimensions.x);
@@ -720,7 +722,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
 	wall->type = "wall";
-	wall->emptySlots[PD_Side::kFRONT] = std::vector<Slot *>(1, new Slot(PD_Side::kBACK, 0.f, width * ROOM_TILE));
+	wall->emptySlots[PD_Side::kFRONT] = new PD_Slot(PD_Side::kBACK, 0.f, width * ROOM_TILE);
 	boundaries.push_back(wall);
 
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)

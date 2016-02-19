@@ -50,6 +50,7 @@
     <ClCompile Include="src\PD_Scene_MenuOptions.cpp" />
     <ClCompile Include="src\PD_Scene_RoomGenerationTest.cpp" />
     <ClCompile Include="src\PD_ShaderComponentSpecialToon.cpp" />
+    <ClCompile Include="src\PD_Slot.cpp" />
     <ClCompile Include="src\PD_TilemapGenerator.cpp" />
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="include\PD_Scene_MenuOptions.h" />
     <ClInclude Include="include\PD_Scene_RoomGenerationTest.h" />
     <ClInclude Include="include\PD_ShaderComponentSpecialToon.h" />
+    <ClInclude Include="include\PD_Slot.h" />
     <ClInclude Include="include\PD_TilemapGenerator.h" />
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />

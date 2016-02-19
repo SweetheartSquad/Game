@@ -1,13 +1,7 @@
 #include <RoomObject.h>
 #include <MeshInterface.h>
 #include <Box.h>
-
-Slot::Slot(PD_Side _childSide, float _loc, float _length) :
-	childSide(_childSide),
-	loc(_loc),
-	length(_length)
-{
-}
+#include <PD_Slot.h>
 
 RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor):
 	BulletMeshEntity(_world, _mesh, _shader),
