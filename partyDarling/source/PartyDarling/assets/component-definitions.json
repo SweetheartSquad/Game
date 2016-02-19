@@ -99,10 +99,6 @@
         {
             "src": "components/definitions/2f25a0b5-d469-4810-8e81-941f948834a4.json",
             "type": "PELVIS"
-        },
-        {
-            "src": "components/definitions/d823f73a-c4b7-4adb-a034-a7b439c48b67.json",
-            "type": "TORSO"
         }
     ]
 }
