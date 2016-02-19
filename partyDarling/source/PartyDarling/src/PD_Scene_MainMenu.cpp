@@ -106,8 +106,6 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	callNightText->setMarginTop(0.05f);
-
-	
 	
 	uiLayer.addChild(mainContainer);
 	mainContainer->invalidateLayout();

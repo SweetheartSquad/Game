@@ -13,6 +13,7 @@
 #include <NumberUtils.h>
 #include <string>
 #include "PD_Listing.h"
+#include "PD_Scenario.h"
 
 #define PLAYER_ID "0"
 
@@ -23,9 +24,9 @@ struct EmoteDef {
 
 class PD_ResourceManager : public ResourceManager{
 public:
-	static Scenario * scenario;
-	static Scenario * itemTextures;
-	static Scenario * componentTextures;
+	static PD_Scenario * scenario;
+	static PD_Scenario * itemTextures;
+	static PD_Scenario * componentTextures;
 	static DatabaseConnection * db;
 	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;

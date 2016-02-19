@@ -41,6 +41,7 @@
     <ClCompile Include="src\PD_Prop.cpp" />
     <ClCompile Include="src\PD_PropDefinition.cpp" />
     <ClCompile Include="src\PD_ResourceManager.cpp" />
+    <ClCompile Include="src\PD_Scenario.cpp" />
     <ClCompile Include="src\PD_Scene_Animation.cpp" />
     <ClCompile Include="src\PD_Scene_LoadingScreen.cpp" />
     <ClCompile Include="src\PD_Scene_Main.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="include\PD_Prop.h" />
     <ClInclude Include="include\PD_PropDefinition.h" />
     <ClInclude Include="include\PD_ResourceManager.h" />
+    <ClInclude Include="include\PD_Scenario.h" />
     <ClInclude Include="include\PD_Scene_Animation.h" />
     <ClInclude Include="include\PD_Scene_LoadingScreen.h" />
     <ClInclude Include="include\PD_Scene_Main.h" />

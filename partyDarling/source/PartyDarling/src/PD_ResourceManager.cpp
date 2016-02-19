@@ -5,10 +5,11 @@
 #include <PD_Assets.h>
 #include <PD_Listing.h>
 #include <SpriteSheet.h>
+#include <PD_Scenario.h>
 
-Scenario * PD_ResourceManager::scenario = nullptr;
-Scenario * PD_ResourceManager::itemTextures = nullptr;
-Scenario * PD_ResourceManager::componentTextures = nullptr;
+PD_Scenario * PD_ResourceManager::scenario = nullptr;
+PD_Scenario * PD_ResourceManager::itemTextures = nullptr;
+PD_Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
 std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
@@ -27,10 +28,9 @@ void PD_ResourceManager::init(){
 	Asset::registerType("room", &AssetRoom::create);
 
 	// initialize assets
-	scenario = new Scenario("assets/scenario.json");
-	itemTextures = new Scenario("assets/item-textures.json");
-	componentTextures = new Scenario("assets/component-textures.json");
-
+	scenario		  = new PD_Scenario("assets/scenario.json");
+	itemTextures	  = new PD_Scenario("assets/item-textures.json");
+	componentTextures = new PD_Scenario("assets/component-textures.json");
 
 	// add door asset manually
 	for(unsigned long int i = 1; i <= 5; ++i){
