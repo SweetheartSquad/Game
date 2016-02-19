@@ -1,7 +1,7 @@
 [
 {
 	"interpolation" : "LINEAR",
-	"time" : 0,
+	"time" : 0.0,
 	"leftArm" : [0.811136, -0.391083],
 	"rightArm" : [-0.80584, -0.443582],
 	"leftLeg" : [-0.245415, -1.13576],
