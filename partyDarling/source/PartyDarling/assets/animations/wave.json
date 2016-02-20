@@ -1,38 +1,122 @@
 [
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.0,
-	"leftArm" : [0.41281, 1.24567],
-	"rightArm" : [-0.643194, -0.458368],
-	"leftLeg" : [-0.345293, -1.0102],
-	"rightLeg" : [0.166041, -1.0306],
-	"body" : [-0.0887015, 4.45725]
-},
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [-0.554035, -0.0434537],
-	"rightArm" : [0, 0],
-	"leftLeg" : [0, 0],
-	"rightLeg" : [0, 0],
-	"body" : [0, -0.646782]
-},
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.5,
-	"leftArm" : [1.06099, -0.311418],
-	"rightArm" : [0, 0],
-	"leftLeg" : [0, 0],
-	"rightLeg" : [0, 0],
-	"body" : [0, -0.554385]
-},
-{
-	"interpolation" : "LINEAR",
-	"time" : 0.25,
-	"leftArm" : [-0.420053, 0.427295],
-	"rightArm" : [0, 0],
-	"leftLeg" : [0, 0],
-	"rightLeg" : [0, 0],
-	"body" : [0, -0.461987]
-}
+    {
+        "body": [
+            -0.0887015, 
+            4.45725
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            0.41281, 
+            1.24567
+        ], 
+        "leftLeg": [
+            -0.345293, 
+            -1.0102
+        ], 
+        "rightArm": [
+            -0.643194, 
+            -0.458368
+        ], 
+        "rightLeg": [
+            0.166041, 
+            -1.0306
+        ], 
+        "time": 0.0
+    }, 
+    {
+        "body": [
+            0, 
+            -0.646782
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            -0.554035, 
+            -0.0434537
+        ], 
+        "leftLeg": [
+            0, 
+            0
+        ], 
+        "rightArm": [
+            0, 
+            0
+        ], 
+        "rightLeg": [
+            0, 
+            0
+        ], 
+        "time": 0.25
+    }, 
+    {
+        "body": [
+            0, 
+            -0.554385
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            1.06099, 
+            -0.311418
+        ], 
+        "leftLeg": [
+            0, 
+            0
+        ], 
+        "rightArm": [
+            0, 
+            0
+        ], 
+        "rightLeg": [
+            0, 
+            0
+        ], 
+        "time": 0.5
+    }, 
+    {
+        "body": [
+            0, 
+            -0.461987
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            -0.420053, 
+            0.427295
+        ], 
+        "leftLeg": [
+            0, 
+            0
+        ], 
+        "rightArm": [
+            0, 
+            0
+        ], 
+        "rightLeg": [
+            0, 
+            0
+        ], 
+        "time": 0.25
+    }, 
+    {
+        "body": [
+            0, 
+            1.6631539999999998
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            -0.08690200000000003, 
+            -0.07242330000000002
+        ], 
+        "leftLeg": [
+            0, 
+            0
+        ], 
+        "rightArm": [
+            0, 
+            0
+        ], 
+        "rightLeg": [
+            0, 
+            0
+        ], 
+        "time": 0.3
+    }
 ]
