@@ -471,9 +471,42 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
+	
+	// TEMP PLOT POSITION VARIABLE
+	ScenarioOrder currentPlotPos = kBEGINNING;
+
+	PD_Scenario * plotScenario = nullptr;
+
+	sweet::ShuffleVector<Json::Value> allSideDefs;
+	sweet::ShuffleVector<Json::Value> allOmarDefs;
+
+	Json::Value root;
+	Json::Reader reader;
+	std::string jsonLoaded = sweet::FileUtils::readFile("assets/scenarios.json");
+	reader.parse(jsonLoaded, root);
+
+	for(auto scenarioDef : root) {
+		ScenarioType type = static_cast<ScenarioType>(scenarioDef.get("type", 0).asInt());
+		switch(type) {
+			case kSIDE: 
+				allSideDefs.push(scenarioDef);
+				break;
+			case kOMAR: 
+				allOmarDefs.push(scenarioDef);
+				break;
+			case kPLOT: 
+				if(static_cast<ScenarioOrder>(scenarioDef["order"].asInt()) == currentPlotPos) {
+					plotScenario = new PD_Scenario("assets/" + scenarioDef["src"].asString());
+				}
+				break;
+			default: 
+				ST_LOG_ERROR("Invalid Scenario Type");
+				break;
+		}
+	}
+
 	// grab the current main plot scenario
 	// these go in order
-
 
 	// pick an omar scenario
 	// first is always the tutorial/intro
@@ -484,8 +517,8 @@ void PD_Scene_Main::pickScenarios(){
 	// pick side scenarios
 	// random from static shuffle vector
 
+
 	// TODO: all of this
-	
 	activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
 	activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
 	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
