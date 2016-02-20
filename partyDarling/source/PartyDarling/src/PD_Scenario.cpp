@@ -13,6 +13,7 @@ PD_Scenario::PD_Scenario(std::string _jsonSrc) : Scenario(_jsonSrc),
 	name		 = root.get("name", "NO_NAME").asString();
 	description  = root.get("description", "NO_DESCRIPTION").asString();
 	scenarioType = static_cast<ScenarioType>(root.get("type", 0).asInt());
+	order		 = static_cast<ScenarioType>(root.get("order", 0).asInt());
 }
 
 
