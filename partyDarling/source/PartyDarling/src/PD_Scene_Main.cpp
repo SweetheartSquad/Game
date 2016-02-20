@@ -157,7 +157,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDialogue->setRationalHeight(1.f, &uiLayer);
 	uiDialogue->setRationalWidth(1.f, &uiLayer);
 	uiDialogue->eventManager.addEventListener("end", [this](sweet::Event * _event){
-		player->enable();
+		// Handle case where a yelling contest is the last trigger in a dialogue
+		if(!uiYellingContest->enabled()){
+			player->enable();
+		}
 	});
 
 	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer.shader);

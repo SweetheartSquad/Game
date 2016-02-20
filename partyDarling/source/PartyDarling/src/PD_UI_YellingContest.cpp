@@ -696,6 +696,10 @@ void PD_UI_YellingContest::enable(){
 	invalidateLayout();
 }
 
+bool PD_UI_YellingContest::enabled() {
+	return isEnabled;
+}
+
 void PD_UI_YellingContest::interject(){
 	// Determine Success
 	bool isPunctuation = false;

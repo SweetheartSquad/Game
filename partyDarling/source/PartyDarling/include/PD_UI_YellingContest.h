@@ -163,6 +163,8 @@ public:
 	void complete();
 	void disable();
 	void enable();
+	
+	bool enabled();
 
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);
@@ -172,4 +174,5 @@ public:
 	void countButtonPresses(bool _isCorrect, bool _isOffensive);
 	void countInterjectAccuracy(float _pressTime);
 	void countInsultAccuracy(float _insultHitTime);
+
 };
