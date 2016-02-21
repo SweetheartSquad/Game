@@ -52,13 +52,13 @@ glm::vec3 Player::calculateInputs(Step * _step){
 
 	// walking
 	glm::vec3 res(0);
-	if (keyboard->keyDown(GLFW_KEY_W)){
+	if (keyboard.keyDown(GLFW_KEY_W)){
 		res += forward;
-	}if (keyboard->keyDown(GLFW_KEY_S)){
+	}if (keyboard.keyDown(GLFW_KEY_S)){
 		res -= forward;
-	}if (keyboard->keyDown(GLFW_KEY_A)){
+	}if (keyboard.keyDown(GLFW_KEY_A)){
 		res -= right;
-	}if (keyboard->keyDown(GLFW_KEY_D)){
+	}if (keyboard.keyDown(GLFW_KEY_D)){
 		res += right;
 	}
 	/*if(joystick != nullptr){
@@ -70,13 +70,17 @@ glm::vec3 Player::calculateInputs(Step * _step){
 		float y2 = -joystick->getAxis(joystick->axisRightY)*100;
 		mouse->translate(glm::vec2(x2, y2));
 	}*/
+
+	// clamp the results in case we're using multiple inputs
+	res.x = glm::max(-1.f, glm::min(1.f, res.x));
+	res.z = glm::max(-1.f, glm::min(1.f, res.z));
 	
 	//sprinting
-	isSprinting = keyboard->keyDown(GLFW_KEY_LEFT_SHIFT);
+	isSprinting = keyboard.keyDown(GLFW_KEY_LEFT_SHIFT);
 
 	// jumping
 	if(isGrounded){
-		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+		if (keyboard.keyJustDown(GLFW_KEY_SPACE)){
 			res.y = 1.f;
 		}
 	}
