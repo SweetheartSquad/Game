@@ -29,6 +29,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	mainLayout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("main-menu-background-1")->texture);
 	mainLayout->setVisible(true);
 	mainLayout->setBackgroundColour(1, 1, 1, 1);
+	mainLayout->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * subLayout = new VerticalLinearLayout(uiLayer.world);
 	subLayout->setRationalWidth(1.0f, mainLayout);
