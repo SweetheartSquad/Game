@@ -3,6 +3,7 @@
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureComponentDefinition.h>
 #include <RoomObject.h>
+#include <Texture.h>
 
 PD_FurnitureSides::PD_FurnitureSides(Json::Value _jsonDef) {
 	left	= fromString(_jsonDef.get("LEFT", "NONE").asString());
@@ -50,5 +51,20 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	}
 	for(auto type : _jsonDef["roomTypes"]) {
 		roomTypes.push_back(type.asString());
+	}
+
+	// get a texture for the furniture type
+	for(unsigned long int i = 1; i <= 2; ++i){
+		std::stringstream ss;
+		ss << "assets/textures/furniture/" << type << "_" << i << ".png";
+		Texture * tex = new Texture(ss.str(), false, false, true);
+		textures.push(tex);
+	}
+	
+}
+
+PD_FurnitureDefinition::~PD_FurnitureDefinition(){
+	while(textures.size() > 0){
+		textures.pop(true);
 	}
 }

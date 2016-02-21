@@ -4,6 +4,8 @@
 #include <json/json.h>
 #include <RoomObject.h>
 
+#include <NumberUtils.h>
+
 class PD_FurnitureComponentDefinition;
 
 class PD_FurnitureSides{
@@ -30,9 +32,12 @@ public:
 	PD_FurnitureSides sides;
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
+
+	sweet::ShuffleVector<Texture *> textures;
 	
 	bool twist;
 	bool flare;
 
 	explicit PD_FurnitureDefinition(Json::Value _jsonDef);
+	~PD_FurnitureDefinition();
 };

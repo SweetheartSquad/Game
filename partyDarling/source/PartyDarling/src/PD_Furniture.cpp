@@ -21,9 +21,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	PD_BuildResult buildResult = _def->components.at(0)->build();
 	
 	// get a texture for the furniture type
-	std::stringstream ss;
-	ss << "assets/textures/furniture/" << _def->type << "_" << sweet::NumberUtils::randomInt(1, 2) << ".png";
-	Texture * tex = new Texture(ss.str(), false, true, true);
+	Texture * tex = _def->textures.pop();
 	tex->load();
 	mesh->pushTexture2D(tex);
 	mesh->setScaleMode(GL_NEAREST);
