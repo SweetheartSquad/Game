@@ -725,7 +725,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
 	QuadMesh tempMesh(false);
-	tempMesh.insertVertices(wallMesh);
+	tempMesh.insertVertices(*wallMesh);
 	// transform verts
 	Transform t;
 	t.translate(posX, 0, posZ);
@@ -737,7 +737,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	tempMesh.setNormal(3, n.x, n.y, n.z);
 
 	// Append transformed verts to room mesh
-	room->mesh->insertVertices(&tempMesh);
+	room->mesh->insertVertices(tempMesh);
 }
 
 std::vector<glm::vec3> RoomBuilder::getTiles(){

@@ -4,8 +4,7 @@
 
 class PD_PropDefinition {
 public:
-
-	std::string src;
+	MeshInterface * mesh;
 	float mass;
 	float padding;
 	bool twist;
@@ -14,4 +13,5 @@ public:
 	std::vector<std::string> roomTypes;
 
 	explicit PD_PropDefinition(Json::Value _jsonDef);
+	~PD_PropDefinition();
 };

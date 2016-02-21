@@ -29,7 +29,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	mesh->setScaleMode(GL_NEAREST);
 
 	// copy the furniture mesh into this entity's mesh
-	mesh->insertVertices(buildResult.mesh);
+	mesh->insertVertices(*buildResult.mesh);
 	// delete the temporary mesh
 	delete buildResult.mesh;
 	

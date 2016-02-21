@@ -15,26 +15,10 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
 	
-	// copy the furniture mesh into this entity's mesh
-	{
-		std::stringstream ss;
-		ss << "assets/meshes/props/" << _def->src << ".obj";
-		std::vector<TriMesh *> meshes = Resource::loadMeshFromObj(ss.str(), false);
-		for(TriMesh * m : meshes){
-			mesh->insertVertices(m);
-			delete m;
-		}
-		mesh->setScaleMode(GL_NEAREST);
-	}
-	
-	// get a texture for the furniture type
-	{
-		std::stringstream ss;
-		ss << "assets/textures/props/" << _def->src << ".png";
-		Texture * tex = new Texture(ss.str(), false, true, true);
-		tex->load();
-		mesh->pushTexture2D(tex);
-	}
+	// copy the furniture mesh and texture into the prop
+	mesh->insertVertices(*_def->mesh);
+	mesh->pushTexture2D(_def->mesh->textures.at(0));
+	mesh->textures.at(0)->load();
 
 
 	

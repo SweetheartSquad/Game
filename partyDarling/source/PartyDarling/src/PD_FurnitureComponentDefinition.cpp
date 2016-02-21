@@ -34,7 +34,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	// copy the component mesh (we don't want to directly edit it since it's re-used for other furniture)
 	res.mesh = new TriMesh(true);
 	if(component->mesh != nullptr){
-		res.mesh->insertVertices(component->mesh);
+		res.mesh->insertVertices(*component->mesh);
 	}
 
 	res.collider = new btCompoundShape();
@@ -75,7 +75,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 
 				TriMesh * duplicateTempMesh = new TriMesh(false);
 				// copy the mesh verts from the build result into a temp
-				duplicateTempMesh->insertVertices(componentBuildResult.mesh);
+				duplicateTempMesh->insertVertices(*componentBuildResult.mesh);
 
 				// copy the collider from the build result into a temp
 				btCompoundShape * s = new btCompoundShape(*componentBuildResult.collider);
@@ -105,7 +105,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 				duplicateTempMesh->applyTransformation(&t);
 
 				// transfer the temporary mesh verts
-				res.mesh->insertVertices(duplicateTempMesh);
+				res.mesh->insertVertices(*duplicateTempMesh);
 				
 
 				// get rid of the individual temporary mesh
