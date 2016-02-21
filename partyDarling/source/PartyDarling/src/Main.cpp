@@ -40,6 +40,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 
 	sweet::NumberUtils::seed(time(nullptr));
 	//OpenAL_Sound::masterGain = 0;
+	//Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
 
 	// initialize resources
 	PD_ResourceManager::init();
