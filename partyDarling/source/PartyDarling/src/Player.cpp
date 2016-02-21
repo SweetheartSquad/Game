@@ -7,6 +7,9 @@
 #include <NumberUtils.h>
 #include <Timeout.h>
 
+#include <Mouse.h>
+#include <Keyboard.h>
+
 Player::Player(BulletWorld * _bulletWorld) : 
 	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
 	NodeBulletBody(_bulletWorld),
@@ -36,3 +39,46 @@ Player::Player(BulletWorld * _bulletWorld) :
 	});
 	childTransform->addChild(shakeTimeout);
 };
+
+
+glm::vec3 Player::calculateInputs(Step * _step){
+	// get direction vectors
+	glm::vec3 forward = playerCamera->forwardVectorRotated;
+	glm::vec3 right = playerCamera->rightVectorRotated;
+	
+	// remove y portion of direction vectors to avoid flying
+	forward.y = 0;
+	right.y = 0;
+
+	// walking
+	glm::vec3 res(0);
+	if (keyboard->keyDown(GLFW_KEY_W)){
+		res += forward;
+	}if (keyboard->keyDown(GLFW_KEY_S)){
+		res -= forward;
+	}if (keyboard->keyDown(GLFW_KEY_A)){
+		res -= right;
+	}if (keyboard->keyDown(GLFW_KEY_D)){
+		res += right;
+	}
+	/*if(joystick != nullptr){
+		movement += forward * -joystick->getAxis(joystick->axisLeftY);
+		movement += right * joystick->getAxis(joystick->axisLeftX);
+			
+		// move camera by directly moving mouse
+		float x2 = joystick->getAxis(joystick->axisRightX)*100;
+		float y2 = -joystick->getAxis(joystick->axisRightY)*100;
+		mouse->translate(glm::vec2(x2, y2));
+	}*/
+	
+	//sprinting
+	isSprinting = keyboard->keyDown(GLFW_KEY_LEFT_SHIFT);
+
+	// jumping
+	if(isGrounded){
+		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+			res.y = 1.f;
+		}
+	}
+	return res;
+}

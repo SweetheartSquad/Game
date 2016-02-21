@@ -24,4 +24,6 @@ public:
 	int sass;
 
 	Player(BulletWorld * bulletWorld);
+
+	glm::vec3 calculateInputs(Step * _step) override;
 };
