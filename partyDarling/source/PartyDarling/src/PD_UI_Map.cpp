@@ -88,13 +88,29 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	layout->verticalAlignment = kTOP;
 	layout->setRationalHeight(1.f, this);
 	layout->setRationalWidth(1.f, this);
+
 	
 	innerLayout = new VerticalLinearLayout(world);
 	layout->addChild(innerLayout);
-	innerLayout->horizontalAlignment = kRIGHT;
-	innerLayout->verticalAlignment = kTOP;
-	innerLayout->setRationalHeight(1.f, this);
+	innerLayout->horizontalAlignment = kCENTER;
+	innerLayout->verticalAlignment = kMIDDLE;
+	innerLayout->setRationalHeight(0.9f, layout);
 	innerLayout->setSquareWidth(1.f);
+
+	innerLayout->background->setVisible(true);
+	innerLayout->setBackgroundColour(0,0,0,0.5);
+
+	
+	VerticalLinearLayout * innerLayout2 = new VerticalLinearLayout(world);
+	innerLayout->addChild(innerLayout2);
+	innerLayout2->horizontalAlignment = kRIGHT;
+	innerLayout2->verticalAlignment = kTOP;
+	innerLayout2->setRationalHeight(0.9f, innerLayout);
+	innerLayout2->setSquareWidth(1.f);
+
+	innerLayout2->background->setVisible(true);
+	innerLayout2->setBackgroundColour(0.5,0.5,0.5,0.5);
+
 	// find the bounds
 	int x1=INT_MAX,x2=INT_MIN,y1=INT_MAX,y2=INT_MIN;
 	for(auto & room : _houseGrid){
@@ -107,12 +123,12 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// make sure we have a full grid for what we need
 	for(int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
-		innerLayout->addChild(hl);
-		hl->setRationalWidth(1.f, innerLayout);
-		hl->setRationalHeight(1.f/height, innerLayout);
-		hl->horizontalAlignment = innerLayout->horizontalAlignment;
-		hl->verticalAlignment = innerLayout->verticalAlignment;
-		hl->horizontalAlignment = innerLayout->horizontalAlignment;
+		innerLayout2->addChild(hl);
+		hl->setRationalWidth(1.f, innerLayout2);
+		hl->setRationalHeight(1.f/height, innerLayout2);
+		hl->horizontalAlignment = innerLayout2->horizontalAlignment;
+		hl->verticalAlignment = innerLayout2->verticalAlignment;
+		hl->horizontalAlignment = innerLayout2->horizontalAlignment;
 
 		for(int x = x1; x <= x2; ++x){
 			MapCell * cell = new MapCell(world, nullptr);
