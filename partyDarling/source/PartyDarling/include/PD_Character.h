@@ -154,6 +154,7 @@ public:
 	//virtual void update(Step * _step) override;
 
 	virtual void setShader(Shader * _shader, bool _default) override;
+	virtual void update(Step * _step) override;
 
 	void disable();
 	void enable();
