@@ -13,6 +13,7 @@ public:
 	std::map<std::string, Person *> characters;
 	std::map<std::string, PD_Item *> items;
 	std::map<std::string, Room *> rooms;
+	Scenario * scenario;
 	//std::map<std::string, PD_Furniture *> furniture;
 	
 	static std::map<Scenario *, PD_Listing *> listings;

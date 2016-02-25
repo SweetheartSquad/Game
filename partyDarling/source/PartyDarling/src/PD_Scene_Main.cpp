@@ -208,7 +208,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
 	lights.push_back(playerLight);
-	
+
 	// Set the scenario condition implentations pointer
 	PD_ResourceManager::scenario->conditionImplementations = PD_ResourceManager::conditionImplementations;
 
@@ -259,6 +259,40 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		return false;
 	};
 
+	(*PD_ResourceManager::conditionImplementations)["checkInt"] = [this](sweet::Event * _event){
+		// check an integer variable that has been set
+		// STRING name
+		// INT desiredValue
+		
+		std::string name = _event->getStringData("name");
+		int desiredValue = _event->getIntData("desiredValue", INT_MAX);
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || desiredValue == INT_MAX) {
+			ST_LOG_ERROR("Missing argument in condition checkInt");
+		}
+
+		int curVal = scenario->variables->getIntData(name, INT_MAX);
+		
+		return curVal == desiredValue;
+	};
+
+	(*PD_ResourceManager::conditionImplementations)["checkString"] = [this](sweet::Event * _event){
+		// check an integer variable that has been set
+		// STRING name
+		// STRING desiredValue
+		
+		std::string name = _event->getStringData("name");
+		std::string desiredValue = _event->getStringData("desiredValue", "NO_VALUE");
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || desiredValue == "NO_VALUE") {
+			ST_LOG_ERROR("Missing argument in condition checkString");
+		}
+		std::string curVal = scenario->variables->getStringData(name, "NO_VALUE_");
+		return curVal == desiredValue;
+	};
+
 	// setup event listeners
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
 		std::stringstream characterName;
@@ -275,6 +309,34 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			character->state = &character->definition->states.at(stateName.str());
 			character->pr->setAnimation(character->state->animation);
 		}
+	});
+
+	PD_ResourceManager::scenario->eventManager.addEventListener("setInt", [](sweet::Event * _event){
+		// change/create a local int variable for a specific scenario
+		// STRING name 
+		// INT value
+		std::string name = _event->getStringData("name");
+		int value = _event->getIntData("value", INT_MAX);
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || value == INT_MAX) {
+			ST_LOG_ERROR("Missing argument in trigger setInt");
+		}
+		scenario->variables->setIntData(name, value);
+	});
+
+	PD_ResourceManager::scenario->eventManager.addEventListener("setString", [](sweet::Event * _event){
+		// change/create a local string variable for a specific scenario
+		// STRING name 
+		// STRING value
+		std::string name = _event->getStringData("name");
+		std::string value = _event->getStringData("value", "NO_VALUE");
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || value == "NO_VALUE") {
+			ST_LOG_ERROR("Missing argument in trigger setString");
+		}
+		scenario->variables->setStringData(name, value);
 	});
 
 	// Called when going through a door
@@ -462,6 +524,24 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		});
 	});
 
+	PD_ResourceManager::scenario->eventManager.addEventListener("hideCharacter", [](sweet::Event * _event){
+		// hide a character in a room until they need to appear
+		// CHARACTER name
+		// (BOOL)INT visibility
+
+		std::string character = _event->getStringData("name");
+		int visible = _event->getIntData("visibility", -1);
+		std::string scenario = _event->getStringData("scenario");
+
+		if(character == "" || visible == -1) {
+			ST_LOG_ERROR_V("Missing field on trigger hideCharacter");
+		}
+
+		Person * person = PD_Listing::listingsById[scenario]->characters[character];
+		
+		// TODO What happens with the bullet body
+		person->pr->setVisible(static_cast<bool>(visible));
+	});
 
 	// build house
 	pickScenarios();
