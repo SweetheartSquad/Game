@@ -21,7 +21,9 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	RoomObject(_world, _mesh, _shader, _anchor),
 	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
 	state(&_definition->states.at(_definition->defaultState)),
-	definition(_definition)
+	definition(_definition),
+	room(nullptr),
+	enabled(true)
 {
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
 	
@@ -90,6 +92,25 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 
 	return p;
 }
+
+void Person::disable(){
+	body->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	body->setActivationState(DISABLE_SIMULATION);
+	pr->setVisible(false);
+	enabled = false;
+}
+
+void Person::enable(){
+	body->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
+	body->activate();
+	pr->setVisible(true);
+	enabled = true;
+}
+
+bool Person::isEnabled(){
+	return enabled;
+}
+
 
 PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
 	Sprite(_shader),

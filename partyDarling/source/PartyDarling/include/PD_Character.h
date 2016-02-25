@@ -15,6 +15,7 @@
 #include <NodeBulletBody.h>
 #include "PD_CharacterAnimationSet.h"
 #include <Timeout.h>
+#include "Room.h"
 
 #define CHARACTER_SCALE 0.001f
 
@@ -141,6 +142,9 @@ public:
 	// the character's current state
 	const PersonState * state;
 	
+	// The room the character is in
+	Room * room;
+
 	AssetCharacter * const definition;
 
 	std::vector<std::string> items;
@@ -150,8 +154,16 @@ public:
 	//virtual void update(Step * _step) override;
 
 	virtual void setShader(Shader * _shader, bool _default) override;
+
+	void disable();
+	void enable();
+	bool isEnabled();
+
 	
 	PersonRenderer * pr;
 
 	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
+
+private:
+	bool enabled;
 };

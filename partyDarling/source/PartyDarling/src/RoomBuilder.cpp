@@ -809,11 +809,15 @@ std::vector<Person *> RoomBuilder::getCharacters(){
 	std::vector<Person*> characters;
 	
 	for(auto def : characterDefinitions){
-		characters.push_back(new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader));
+		auto p = new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader);
+		p->room = room;
+		characters.push_back(p);
 	}
 
-	characters.push_back(Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader));
-
+	auto randPerson = Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader);
+	randPerson->room = room;
+	characters.push_back(randPerson);
+	
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
 	/*for(unsigned int i = 0; i < 1; ++i){

@@ -539,8 +539,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		Person * person = PD_Listing::listingsById[scenario]->characters[character];
 		
-		// TODO What happens with the bullet body
-		person->pr->setVisible(static_cast<bool>(visible));
+		if(static_cast<bool>(visible)) {
+			person->enable();
+		}else {
+			person->disable();
+		}
 	});
 
 	// build house
@@ -1082,7 +1085,7 @@ void PD_Scene_Main::update(Step * _step){
 				}
 			}else{
 				Person * person = dynamic_cast<Person*>(me);
-				if(person != nullptr){
+				if(person != nullptr && person->isEnabled()){
 					// hover over person
 					if(person != currentHoverTarget){
 						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
