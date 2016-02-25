@@ -163,6 +163,7 @@ public:
 	PersonRenderer * pr;
 
 	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
+	static Json::Value genRandomComponents();
 
 private:
 	bool enabled;

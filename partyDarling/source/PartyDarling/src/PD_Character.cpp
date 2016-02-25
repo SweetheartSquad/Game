@@ -50,7 +50,32 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 }
 
 Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
+	Json::Value charDef= genRandomComponents();
+	
+	std::string id = std::to_string(sweet::NumberUtils::randomFloat(100000, 999999));
+	id += std::to_string(sweet::step.time);
 
+	charDef["name"]         = PD_ResourceManager::characterNames.pop();
+	charDef["id"]			= id;
+	charDef["defaultState"] = id;
+
+	Json::Value stateDef;
+	stateDef["id"] = id;
+	stateDef["name"] = "defaultState";
+
+	charDef["states"].append(stateDef);
+
+	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
+	
+	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
+
+	PD_Listing::listings[_scenario]->characters[id] = p;
+
+	return p;
+}
+
+Json::Value Person::genRandomComponents(){
+	Json::Value root;
 	Json::Value pelvis;
 	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
 	Json::Value arm;
@@ -68,29 +93,9 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	pelvis["components"].append(torso);
 	pelvis["components"].append(leg);
 	pelvis["components"].append(leg);
+	root  ["components"].append(pelvis);
 
-	std::string id = std::to_string(sweet::NumberUtils::randomFloat(100000, 999999));
-	id += std::to_string(sweet::step.time);
-
-	Json::Value charDef;
-	charDef["name"]         = PD_ResourceManager::characterNames.pop();
-	charDef["id"]			= id;
-	charDef["defaultState"] = id;
-	charDef["components"].append(pelvis);
-
-	Json::Value stateDef;
-	stateDef["id"] = id;
-	stateDef["name"] = "defaultState";
-
-	charDef["states"].append(stateDef);
-
-	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
-	
-	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
-
-	PD_Listing::listings[_scenario]->characters[id] = p;
-
-	return p;
+	return root;
 }
 
 void Person::disable(){

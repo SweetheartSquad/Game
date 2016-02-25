@@ -15,7 +15,10 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 { 
 	Json::Value componentJson, childComponentsJson;
 	// parse external component file
-	if(_json.isMember("src")){
+	if(_json.isMember("src")){	
+		if(_json["src"] == ""){
+			_json = Person::genRandomComponents()["components"][0];
+		}
 		Json::Reader reader;
 		bool parsingSuccesful = reader.parse(sweet::FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
 		if(!parsingSuccesful){
@@ -33,6 +36,7 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 		}else{
 			childComponentsJson = _json["components"];
 		}
+		
 	}else{
 		componentJson = _json;
 		childComponentsJson = componentJson["components"];
