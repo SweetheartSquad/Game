@@ -16,6 +16,7 @@ private:
 	VerticalLinearLayout * layout;
 	VerticalLinearLayout * innerLayout;
 	TextLabel * roomName;
+	NodeUI * compass;
 	std::map<std::pair<int, int>, MapCell *> grid;
 
 	bool enabled;
@@ -28,6 +29,7 @@ public:
 	void buildMap(std::map<std::pair<int, int>, Room *> _houseGrid);
 	// updates the grid with the current position
 	void updateMap(glm::ivec2 _currentPosition);
+	void updateCompass(float _angle);
 
 	void disable();
 	void enable();

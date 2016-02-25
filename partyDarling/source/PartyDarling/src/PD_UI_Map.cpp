@@ -27,7 +27,6 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 	roomName->setRationalWidth(1.f, this);
 	roomName->setMarginBottom(0.05f);
 	roomName->setVisible(false);
-
 }
 
 void PD_UI_Map::disable(){
@@ -99,6 +98,19 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 
 	innerLayout->background->setVisible(true);
 	innerLayout->setBackgroundColour(0,0,0,0.5);
+
+	compass = new NodeUI(world);
+	innerLayout->childTransform->addChild(compass);
+	compass->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("COMPASS")->texture);
+	compass->background->mesh->setScaleMode(GL_NEAREST);
+	compass->setPixelHeight(32);
+	compass->setPixelWidth(32);
+	compass->boxSizing = kCONTENT_BOX;
+	for(auto & v : compass->background->mesh->vertices){
+		v.x -= 0.5f;
+		v.y -= 0.5f;
+	}
+	compass->background->mesh->dirty = true;
 
 	
 	VerticalLinearLayout * innerLayout2 = new VerticalLinearLayout(world);
@@ -210,4 +222,8 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 			}
 		}
 	}
+}
+
+void PD_UI_Map::updateCompass(float _angle){
+	compass->childTransform->setOrientation(glm::angleAxis(_angle, glm::vec3(0,0,1)));
 }

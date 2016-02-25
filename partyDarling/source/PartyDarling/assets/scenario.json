@@ -359,6 +359,11 @@
       "type": "texture",
       "src": "UI/mapCell -locked.png"
     },
+    {
+      "id": "COMPASS",
+      "type": "texture",
+      "src": "UI/compass.png"
+    },
 
 
     // BUBBLES

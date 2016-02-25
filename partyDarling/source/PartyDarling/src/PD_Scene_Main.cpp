@@ -1228,6 +1228,10 @@ void PD_Scene_Main::update(Step * _step){
 		}
 	}
 
+
+	// map compass update
+	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
+
 	// bubble testing controls
 	if(keyboard->keyJustDown(GLFW_KEY_V)){
 		uiBubble->next();
