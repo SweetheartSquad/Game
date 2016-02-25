@@ -75,13 +75,13 @@ bool PD_UI_Dialogue::sayNext(){
 	
 invalidateLayout();
 	
-	uiBubble->clear();
 	
 	if(currentSpeaker != nullptr) {
 		currentSpeaker->pr->talking = false;
 	}
 
 	if (ConversationIterator::sayNext()){
+		uiBubble->clear();
 		if(speechTimeout->active) {
 			speechTimeout->stop();
 		}
@@ -115,6 +115,9 @@ invalidateLayout();
 		hadNextDialogue = true;
 		return hadNextDialogue;
 	}
+
+	uiBubble->clear();
+
 	currentSpeaker = nullptr;
 	setVisible(false);
 	speechTimeout->stop();
