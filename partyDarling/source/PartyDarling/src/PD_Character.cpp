@@ -49,6 +49,25 @@ void Person::setShader(Shader * _shader, bool _configureDefault){
 	pr->setShader(_shader, _configureDefault);
 }
 
+void Person::update(Step * _step){
+	if(enabled) {
+		int flags = body->getCollisionFlags();
+		flags |= btCollisionObject::CF_STATIC_OBJECT;
+		flags &= ~btCollisionObject::CF_NO_CONTACT_RESPONSE;
+		body->setCollisionFlags(flags);
+		body->activate();
+		pr->setVisible(true);
+	}else {
+		int flags = body->getCollisionFlags();
+		flags &= ~btCollisionObject::CF_STATIC_OBJECT;
+		flags |= btCollisionObject::CF_NO_CONTACT_RESPONSE;
+		body->setCollisionFlags(flags);
+		body->setActivationState(DISABLE_SIMULATION);
+		pr->setVisible(false);
+	}
+	RoomObject::update(_step);
+}
+
 Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 	Json::Value charDef= genRandomComponents();
 	
@@ -99,16 +118,10 @@ Json::Value Person::genRandomComponents(){
 }
 
 void Person::disable(){
-	body->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	body->setActivationState(DISABLE_SIMULATION);
-	pr->setVisible(false);
 	enabled = false;
 }
 
 void Person::enable(){
-	body->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
-	body->activate();
-	pr->setVisible(true);
 	enabled = true;
 }
 
@@ -445,6 +458,8 @@ void PersonRenderer::setShader(Shader * _shader, bool _default) const {
 }
 
 void PersonRenderer::update(Step * _step){
+	
+	
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
 		paletteTex->bufferData();
