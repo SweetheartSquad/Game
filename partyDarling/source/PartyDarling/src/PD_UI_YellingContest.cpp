@@ -108,6 +108,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	// Enemy Cursor
 	enemyCursor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-CURSOR")->texture);
+	enemyCursor->mesh->setScaleMode(GL_NEAREST);
 	enemyCursor->childTransform->scale(20.f);
 	childTransform->addChild(enemyCursor);
 
@@ -118,6 +119,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	// Punctuation Highlight
 	punctuationHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
+	punctuationHighlight->mesh->setScaleMode(GL_NEAREST);
 	// move the highlight's mesh up so that the origin is aligned with the bottom
 	for (unsigned long int i = 0; i < punctuationHighlight->mesh->vertices.size(); ++i){
 		punctuationHighlight->mesh->vertices.at(i).x += 0.5f;
@@ -303,6 +305,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	// don't add the container until yelling contest is over
 
 	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
+	complimentBubble->mesh->setScaleMode(GL_NEAREST);
 	complimentBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
 	complimentBubble->meshTransform->scale(0, 0, 0);
 	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
@@ -316,6 +319,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	childTransform->addChild(complimentBubble);
 
 	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
+	interjectBubble->mesh->setScaleMode(GL_NEAREST);
 	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
 	interjectBubble->meshTransform->scale(0, 0, 0);
 	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
@@ -554,6 +558,7 @@ void PD_UI_YellingContest::startNewFight(){
 		NodeUI * l = new NodeUI(world);
 		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
 		l->background->mesh->pushTexture2D(tex);
+		l->background->mesh->setScaleMode(GL_NEAREST);
 		l->setWidth(livesContainer->getHeight());
 		l->setHeight(livesContainer->getHeight());
 		lives.push_back(l);
@@ -832,8 +837,7 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
 	}else {
 		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
-		complimentBubble->mesh->textures.clear();
-		complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT" + std::to_string(randComp))->texture);
+		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT" + std::to_string(randComp))->texture);
 		complimentBubbleTimer = 0.f;
 		complimentBubble->setVisible(true);
 	}
