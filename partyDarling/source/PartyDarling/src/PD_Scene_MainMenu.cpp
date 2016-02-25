@@ -13,6 +13,7 @@
 #include <Game.h>
 #include <PD_UI_Text.h>
 #include <PD_Scene_Main.h>
+#include <PD_Scene_IntroSlideShow.h>
 
 class PD_UI_Text;
 
@@ -64,12 +65,13 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	joinPartyText->onClick = [this](sweet::Event * _event){
-		dynamic_cast<PD_Game *>(game)->showLoading("Loading...", 0);
 		auto it = game->scenes.find("game");
-		if(it == game->scenes.end() || it->second == nullptr){
-			game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(game));
+		if(it == game->scenes.end()){
+			game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
+			game->switchScene("intro", false);
+		}else{
+			game->switchScene("game", false);
 		}
-		game->switchScene("game", false);
 		
 	};
 
