@@ -1289,12 +1289,12 @@ void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
 	
 	FrameBufferInterface::popFbo();
 
 
 	screenSurface->render(screenFBO->getTextureId());
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_Main::load(){
