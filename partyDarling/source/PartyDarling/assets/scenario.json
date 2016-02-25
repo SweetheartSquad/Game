@@ -361,11 +361,17 @@
     },
 
 
-
+    // BUBBLES
     {
-      "id": "NINESLICED",
+      "id": "PLAYER-BUBBLE",
       "type": "texture",
-      "src": "UI/nineslicing.png",
+      "src": "UI/player_bubble.png",
+      "nineSliced": true
+    },
+    {
+      "id": "NPC-BUBBLE",
+      "type": "texture",
+      "src": "UI/npc_bubble.png",
       "nineSliced": true
     },
 

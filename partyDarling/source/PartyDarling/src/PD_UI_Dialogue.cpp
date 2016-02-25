@@ -7,7 +7,7 @@
 PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	NodeUI(_world),
 	uiBubble(_uiBubble),
-	textBubble(new NodeUI_NineSliced(world, uiBubble->bubbleTex)),
+	textBubble(new NodeUI_NineSliced(world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("NPC-BUBBLE")->texture))),
 	text(new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader)),
 	currentSpeaker(nullptr),
 	speechTimeout(nullptr),

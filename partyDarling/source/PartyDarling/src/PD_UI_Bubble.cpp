@@ -32,7 +32,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	childrenUpdated(false)
 {
 	textShader = new ComponentShaderText(true);
-	textShader->setColor(0,0,0);
+	textShader->setColor(1,1,1);
 	++textShader->referenceCount;
 	addChild(vl);
 	//setRationalHeight(0.25f);
@@ -49,7 +49,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	test = new Transform();
 	childTransform->addChild(test, false);
 
-	bubbleTex = PD_ResourceManager::scenario->getNineSlicedTexture("NINESLICED");
+	bubbleTex = PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUBBLE");
 }
 
 PD_UI_Bubble::~PD_UI_Bubble(){
@@ -102,8 +102,11 @@ void PD_UI_Bubble::placeOptions(){
 		options.at(i)->firstParent()->translate(-w/2.f, glm::sin(offset)*verticalSpacing, 0, false);
 		options.at(i)->setWidth(w);
 		//options.at(i)->setBorder(std::max(2.f,w/30.f));
-		options.at(i)->setBackgroundColour(1,1,1, i == currentOption ? 1.f : 0.5f);
-		options.at(i)->invalidateLayout();
+		if(i == currentOption){
+			options.at(i)->setBackgroundColour(1,1,1, 1);
+		}else{
+			options.at(i)->setBackgroundColour(1.25,1.25,1.25, 1);
+		}options.at(i)->invalidateLayout();
 	}
 }
 

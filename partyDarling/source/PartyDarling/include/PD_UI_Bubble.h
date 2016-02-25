@@ -50,7 +50,7 @@ public:
 
 	// updates the positions of the visible options
 	void placeOptions();
-
+	
 	virtual void update(Step * _step) override;
 
 	// clear out all existing options
