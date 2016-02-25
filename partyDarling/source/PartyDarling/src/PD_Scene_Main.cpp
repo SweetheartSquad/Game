@@ -1023,14 +1023,16 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	// navigation testing
-	if(keyboard->keyJustDown(GLFW_KEY_UP)){
-		navigate(glm::ivec2(0,-1));
-	}if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
-		navigate(glm::ivec2(0,1));
-	}if(keyboard->keyJustDown(GLFW_KEY_LEFT)){
-		navigate(glm::ivec2(-1,0));
-	}if(keyboard->keyJustDown(GLFW_KEY_RIGHT)){
-		navigate(glm::ivec2(1,0));
+	if(keyboard->shift){
+		if(keyboard->keyJustDown(GLFW_KEY_UP)){
+			navigate(glm::ivec2(0,-1));
+		}if(keyboard->keyJustDown(GLFW_KEY_DOWN)){
+			navigate(glm::ivec2(0,1));
+		}if(keyboard->keyJustDown(GLFW_KEY_LEFT)){
+			navigate(glm::ivec2(-1,0));
+		}if(keyboard->keyJustDown(GLFW_KEY_RIGHT)){
+			navigate(glm::ivec2(1,0));
+		}
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_X)){
