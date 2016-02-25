@@ -108,7 +108,7 @@ AssetItem::AssetItem(Json::Value _json, Scenario * const _scenario) :
 	for(Json::ArrayIndex i = 0; i < effectsJson.size(); ++i){
 		effects.push_back(sweet::Event(effectsJson[i]));
 	}
-	effectsJson = _json["pixelEffects"];
+	effectsJson = _json["pickupEffects"];
 	for(Json::ArrayIndex i = 0; i < effectsJson.size(); ++i){
 		pickupEffects.push_back(sweet::Event(effectsJson[i]));
 	}
@@ -158,6 +158,12 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	}
 	for(auto i : _json["items"]){
 		items.push_back(i.asString());
+	}
+	for(auto t : _json["triggersOnce"]) {
+		triggersOnce.push_back(sweet::Event(t));	
+	}
+	for(auto t : _json["triggersMulti"]) {
+		triggersMulti.push_back(sweet::Event(t));	
 	}
 }
 AssetRoom * AssetRoom::create(Json::Value _json, Scenario * const _scenario){

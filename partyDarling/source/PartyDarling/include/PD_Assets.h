@@ -131,6 +131,10 @@ public:
 	std::vector<std::string> characters;
 	// the ids of the items that belong in this room
 	std::vector<std::string> items;
+	// Triggers that occur the first time the player enters the room
+	std::vector<sweet::Event> triggersOnce;
+	// Triggers that occur every time the player enters the room
+	std::vector<sweet::Event> triggersMulti;
 
 	// the rooms size category
 	enum Size_t{

@@ -942,6 +942,16 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 	player->translatePhysical(p2, false);
 
+	// Trigger room entry events
+	for(auto trigger : currentRoom->definition->triggersOnce) {
+		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+	}
+	currentRoom->definition->triggersOnce.clear();
+
+	for(auto trigger : currentRoom->definition->triggersMulti) {
+		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+	}
+
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 
 }
