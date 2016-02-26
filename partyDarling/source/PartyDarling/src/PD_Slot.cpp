@@ -3,9 +3,9 @@
 #include <PD_Slot.h>
 #include <RoomObject.h>
 
-PD_Slot::PD_Slot(PD_Side _childSide, float _loc, float _length) :
+PD_Slot::PD_Slot(PD_Side _childSide, float _length) :
 	childSide(_childSide),
-	loc(_loc),
+	spaceFilled(0),
 	length(_length)
 {
 }

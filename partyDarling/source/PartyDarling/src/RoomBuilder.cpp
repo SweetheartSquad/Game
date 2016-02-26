@@ -370,7 +370,6 @@ bool RoomBuilder::search(RoomObject * child){
 
 			typedef std::map<PD_Side, PD_Slot *>::iterator it_type;
 			for(it_type iterator = parent->emptySlots.begin(); iterator != parent->emptySlots.end(); iterator++) {
-				// Look at the side
 				PD_Side side = iterator->first;
 				PD_Slot * slot = iterator->second;
 
@@ -386,18 +385,10 @@ bool RoomBuilder::search(RoomObject * child){
 					Log::warn("Not valid side.");
 					continue;
 				}
-
-				// check length of slot
-				if(child->boundingBox.width > slot->length){
-					Log::warn("Not enough SPACE along side.");
-					continue;
-				}
+				
 				Log::info("Side found.");
 				// if the object can be placed without collision
 				if(arrange(child, parent, side, slot)){
-					if(slot->length <= 0){
-						// TODO: maybe nothing?
-					}
 					addObjectToLists(child);
 					Log::info("Parenting and placing object.");
 					return true;
@@ -460,13 +451,18 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		angle += childAngle;
 	}
 	childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
-	/*
-	std::stringstream tex;
-	tex << "assets/textures/room/debug/" << int(side)+1 << ".png";
-	Texture * res = new Texture(tex.str(), false, true, true);
-	res->load();
-	child->mesh->replaceTextures(res);
-	*/
+	childDimensions.x = abs(childDimensions.x);
+	childDimensions.y = abs(childDimensions.y);
+	childDimensions.z = abs(childDimensions.z);
+
+	// check length of side
+	if(childDimensions.x > _slot->length - _slot->spaceFilled){
+		Log::warn("Not enough SPACE along side.");
+		return false;
+	}
+	
+	
+	
 	// Orient child to side
 	if(_side != PD_Side::kFRONT && _side != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float sideAngle = 0.f;
@@ -490,28 +486,70 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
+	glm::vec3 moveChildren;
 	// parent side transformations
-	switch(_side){
-		case PD_Side::kFRONT:
-			sidePos.z += _parent->boundingBox.depth / 2.f + _child->boundingBox.depth / 2.f;
-			sidePos.x += -_parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f + _slot->loc;
-			break;
-		case PD_Side::kBACK:
-			sidePos.z += -_parent->boundingBox.depth / 2.f - _child->boundingBox.depth / 2.f;
-			sidePos.x += _parent->boundingBox.width / 2.f - _child->boundingBox.width / 2.f - _slot->loc;
-			break;
-		case PD_Side::kLEFT:
-			sidePos.x += -_parent->boundingBox.width / 2.f - _child->boundingBox.width / 2.f;
-			sidePos.z += -_parent->boundingBox.depth / 2.f + _child->boundingBox.depth / 2.f + _slot->loc;
-			break;
-		case PD_Side::kRIGHT:
-			sidePos.x += _parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f;
-			sidePos.z += _parent->boundingBox.depth / 2.f - _child->boundingBox.depth / 2.f - _slot->loc;
-			break;
-		case PD_Side::kTOP:
-			sidePos.y += _parent->boundingBox.height;
-			sidePos.x += -_parent->boundingBox.width / 2.f + _child->boundingBox.width / 2.f + _slot->loc;
-			break;	
+	bool centered = false;
+	if(!centered){
+		switch(_side){
+			case PD_Side::kFRONT:
+				sidePos.x += -_parent->boundingBox.width / 2.f + childDimensions.x / 2.f + _slot->spaceFilled;
+				sidePos.z += _parent->boundingBox.depth / 2.f + childDimensions.z / 2.f;
+				break;
+			case PD_Side::kBACK:
+				sidePos.x += _parent->boundingBox.width / 2.f - childDimensions.x / 2.f - _slot->spaceFilled;
+				sidePos.z += -_parent->boundingBox.depth / 2.f - childDimensions.z / 2.f;
+				break;
+			case PD_Side::kLEFT:
+				sidePos.x += -_parent->boundingBox.width / 2.f - childDimensions.z / 2.f;
+				sidePos.z += -_parent->boundingBox.depth / 2.f + childDimensions.x / 2.f + _slot->spaceFilled;
+				break;
+			case PD_Side::kRIGHT:
+				sidePos.x += _parent->boundingBox.width / 2.f + childDimensions.z / 2.f;
+				sidePos.z += _parent->boundingBox.depth / 2.f - childDimensions.x / 2.f - _slot->spaceFilled;
+				break;
+			case PD_Side::kTOP:
+				sidePos.x += -_parent->boundingBox.width / 2.f + childDimensions.x / 2.f + _slot->spaceFilled;
+				sidePos.y += _parent->boundingBox.height;
+				break;	
+		}
+	}else{
+		// Centering
+		float centerPos = 0.5 * (_slot->spaceFilled + childDimensions.x) - childDimensions.x * 0.5;
+
+		switch(_side){
+			case PD_Side::kFRONT:
+				sidePos.z += _parent->boundingBox.depth / 2.f + childDimensions.z / 2.f;
+				sidePos.x += centerPos;
+				moveChildren.x = -1;
+				break;
+			case PD_Side::kBACK:
+				sidePos.z += -_parent->boundingBox.depth / 2.f - childDimensions.z / 2.f;
+				sidePos.x += centerPos;
+				moveChildren.x = 1;
+				break;
+			case PD_Side::kLEFT:
+				sidePos.x += -_parent->boundingBox.width / 2.f - childDimensions.z / 2.f;
+				sidePos.z += centerPos;
+				moveChildren.z = -1;
+				break;
+			case PD_Side::kRIGHT:
+				sidePos.x += _parent->boundingBox.width / 2.f + childDimensions.z / 2.f;
+				sidePos.z += centerPos;
+				moveChildren.z = 1;
+				break;
+			case PD_Side::kTOP:
+				sidePos.y += _parent->boundingBox.height;
+				sidePos.x += centerPos;
+				moveChildren.x = -1;
+				break;	
+		}
+		moveChildren *= childDimensions.x * 0.5f;
+		moveChildren = glm::rotate(orient, moveChildren);
+
+		for(auto c : _slot->children){
+			c->translatePhysical(moveChildren);
+			c->realign();
+		}
 	}
 
 	// rotate side space translation vector
@@ -520,17 +558,29 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	pos += sidePos;
 
 	// check for collision/inside room
+	
 	if(!canPlaceObject(_child, pos, orient, _parent)){
 		Log::warn("Collided");
+		if(centered){
+			for(auto c : _slot->children){
+				c->translatePhysical(-moveChildren);
+				c->realign();
+			}
+		}
 		_child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
-
+	/*
+	std::stringstream tex;
+	tex << "assets/textures/room/debug/" << int(_slot->children.size())+1 << ".png";
+	Texture * res = new Texture(tex.str(), false, true, true);
+	res->load();
+	_child->mesh->replaceTextures(res);
+	*/
 	_slot->children.push_back(_child);
 
 	// adjust remaining slot space
-	_slot->loc += abs(childDimensions.x);
-	_slot->length -= abs(childDimensions.x);
+	_slot->spaceFilled += abs(childDimensions.x);
 
 	room->addComponent(_child);
 
@@ -552,7 +602,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	_obj->realign();
 
 	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
-
+	
 	// Check for collision with other objects in room
 	for(auto o : placedObjects){
 		if(_parent != nullptr && o == _parent){
@@ -566,10 +616,12 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
 			Log::warn(s.str());
+			
 			_obj->translatePhysical(-_pos);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
 			_obj->realign();
 			return false;
+			
 		}
 	}
 
@@ -722,7 +774,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
 	wall->type = "wall";
-	wall->emptySlots[PD_Side::kFRONT] = new PD_Slot(PD_Side::kBACK, 0.f, width * ROOM_TILE);
+	wall->emptySlots[PD_Side::kFRONT] = new PD_Slot(PD_Side::kBACK, width * ROOM_TILE);
 	boundaries.push_back(wall);
 
 	// copy verts into temp mesh (the other mesh is used for the RoomObject, so we can't modify it directly)
