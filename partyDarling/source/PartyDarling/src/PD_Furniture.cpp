@@ -83,18 +83,18 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// Get the sides information
 	if(_def->sides.front != PD_Side::kNONE){
-		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, 0.f, boundingBox.width);
+		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width);
 	}
 	if(_def->sides.back != PD_Side::kNONE){
-		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, 0.f, boundingBox.width);
+		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, boundingBox.width);
 	}
 	if(_def->sides.right != PD_Side::kNONE){
-		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, 0.f, boundingBox.depth);
+		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, boundingBox.depth);
 	}
 	if(_def->sides.left != PD_Side::kNONE){
-		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, 0.f, boundingBox.depth);
+		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, boundingBox.depth);
 	}
 	if(_def->sides.top != PD_Side::kNONE){
-		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, 0.f, boundingBox.width);
+		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, boundingBox.width);
 	}
 }

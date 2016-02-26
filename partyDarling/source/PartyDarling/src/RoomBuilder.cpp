@@ -268,36 +268,6 @@ Room * RoomBuilder::getRoom(){
 }
 
 bool RoomBuilder::placeDoors(){
-	// North,South, East, West
-	glm::vec3 center = room->getCenter();
-	
-	Edge * vRay = new Edge(glm::vec2(center.x, -1), glm::vec2(center.x, center.z * 2 + 1), glm::vec2(1, 0));
-	Edge * hRay = new Edge(glm::vec2(-1, center.z), glm::vec2(center.x * 2 + 1, center.z), glm::vec2(0, 1));
-
-	std::vector<Edge *> vEdges;
-	std::vector<Edge *> hEdges;
-	
-	// Vertical
-	for(auto e : edges){
-		if(e->intersects(vRay, ROOM_TILE)){
-			vEdges.push_back(e);
-		}
-	}
-	std::sort(vEdges.begin(), vEdges.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.y + i->p2.y) / 2 < (j->p1.y + j->p2.y) / 2);});
-
-	// Horizontal
-	for(auto e : edges){
-		if(e->intersects(hRay, ROOM_TILE)){
-			hEdges.push_back(e);
-		}
-	}
-	std::sort(hEdges.begin(), hEdges.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.x + i->p2.x) / 2 < (j->p1.x + j->p2.x) / 2);});
-	
-	// Find Walls
-	RoomObject * wallSouth = getWallFromEdge(vEdges.back());
-	RoomObject * wallNorth = getWallFromEdge(vEdges.front());
-	RoomObject * wallEast = getWallFromEdge(hEdges.back());
-	RoomObject * wallWest = getWallFromEdge(hEdges.front());
 
 	PD_Door * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, doorTexIdx.pop());
 	PD_Door * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, doorTexIdx.pop());
@@ -305,24 +275,16 @@ bool RoomBuilder::placeDoors(){
 	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
 
 	// Place new door
-	if(arrange(doorNorth, wallNorth, PD_Side::kFRONT, wallNorth->emptySlots.at(PD_Side::kFRONT))){
-		addObjectToLists(doorNorth);
-	}else{
+	if(!placeDoor(doorNorth)){
 		Log::error("North door not placed!!!");
 	}
-	if(arrange(doorSouth, wallSouth, PD_Side::kFRONT, wallSouth->emptySlots.at(PD_Side::kFRONT))){
-		addObjectToLists(doorSouth);
-	}else{
+	if(!placeDoor(doorSouth)){
 		Log::error("South door not placed!!!");
 	}
-	if(arrange(doorEast, wallEast, PD_Side::kFRONT, wallEast->emptySlots.at(PD_Side::kFRONT))){
-		addObjectToLists(doorEast);
-	}else{
+	if(!placeDoor(doorEast)){
 		Log::error("East door not placed!!!");
 	}
-	if(arrange(doorWest, wallWest, PD_Side::kFRONT, wallWest->emptySlots.at(PD_Side::kFRONT))){
-		addObjectToLists(doorWest);
-	}else{
+	if(!placeDoor(doorWest)){
 		Log::error("West door not placed!!!");
 	}
 
@@ -332,6 +294,68 @@ bool RoomBuilder::placeDoors(){
 	room->doors.insert(std::make_pair(PD_Door::kWEST, doorWest));
 
 	return true;
+}
+
+bool RoomBuilder::placeDoor(PD_Door * _door){
+	float offset = 0;
+	glm::vec3 center = room->getCenter();
+	RoomObject * wall = nullptr;
+
+	PD_Door::Door_t _side = _door->side;
+	int max = _side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH ? int(center.z / 2) : int(center.x / 2);
+
+	while(offset < max){
+		std::vector<Edge *> intersected;
+
+		// Find edges that intersect raycast
+		if(_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH){
+			float o = offset * (_side == PD_Door::Door_t::kSOUTH ? -1 : 1);
+			// Vertical
+			Edge * vRay = new Edge(glm::vec2(center.x + o, -1), glm::vec2(center.x + o, center.z * 2 + 1), glm::vec2(1, 0));
+		
+			for(auto e : edges){
+				if(e->intersects(vRay, ROOM_TILE)){
+					intersected.push_back(e);
+				}
+			}
+			std::sort(intersected.begin(), intersected.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.y + i->p2.y) / 2 < (j->p1.y + j->p2.y) / 2);});
+		}else{
+			float o = offset * (_side == PD_Door::Door_t::kWEST ? -1 : 1);
+			// Horizontal
+			Edge * hRay = new Edge(glm::vec2(-1, center.z + o), glm::vec2(center.x * 2 + 1, center.z + o), glm::vec2(0, 1));
+		
+			for(auto e : edges){
+				if(e->intersects(hRay, ROOM_TILE)){
+					intersected.push_back(e);
+				}
+			}
+			std::sort(intersected.begin(), intersected.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.x + i->p2.x) / 2 < (j->p1.x + j->p2.x) / 2);});
+		}
+
+		// Get most outer wall
+		if(_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kWEST){
+			wall = getWallFromEdge(intersected.front());
+		}else{
+			wall = getWallFromEdge(intersected.back());
+		}
+
+		// Try to arrange
+		if(wall != nullptr){
+			if(arrange(_door, wall, PD_Side::kFRONT, wall->emptySlots.at(PD_Side::kFRONT))){
+				addObjectToLists(_door);
+				return true;
+			}
+		}
+
+		// increase offset
+		if(offset < 0.5){
+			offset += 0.5;
+		}else{
+			offset += 1.f;
+		}
+	}
+
+	return false;	
 }
 
 RoomObject * RoomBuilder::getWallFromEdge(Edge * _e){
@@ -850,10 +874,10 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 
 	std::vector<RoomObject *> objects;
 	
-	objects.insert(objects.begin(), characters.begin(), characters.end());
+	objects.insert(objects.begin(), props.begin(), props.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
-	objects.insert(objects.begin(), props.begin(), props.end());
+	objects.insert(objects.begin(), characters.begin(), characters.end());
 
 	return objects;
 }

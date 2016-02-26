@@ -94,6 +94,7 @@ public:
 	Room * getRoom();
 
 	bool placeDoors();
+	bool placeDoor(PD_Door * _door);
 	RoomObject * getWallFromEdge(Edge * _e); // because I don't save them in a map...
 	RoomObject * getDoor(glm::ivec2 _navigation);
 
