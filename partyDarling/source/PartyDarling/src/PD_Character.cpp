@@ -31,6 +31,10 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE;
 	boundingBox.depth = boundingBox.width;
 
+	boundingBox.x = -boundingBox.width/2.f;
+	boundingBox.y = -boundingBox.height/2.f;
+	boundingBox.z = -boundingBox.depth/2.f;
+
 	createRigidBody(5);
 	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
 	meshTransform->setVisible(false);
