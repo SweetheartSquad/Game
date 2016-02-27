@@ -130,13 +130,13 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 		y1 = glm::min(y1, room.first.second);
 		y2 = glm::max(y2, room.first.second);
 	}
-	int width = x2-x1+1, height = y2-y1+1;
+	int size = glm::max(x2-x1+1, y2-y1+1);
 	// make sure we have a full grid for what we need
 	for(int y = y1; y <= y2; ++y){
 		HorizontalLinearLayout * hl = new HorizontalLinearLayout(world);
 		innerLayout2->addChild(hl);
 		hl->setRationalWidth(1.f, innerLayout2);
-		hl->setRationalHeight(1.f/height, innerLayout2);
+		hl->setRationalHeight(1.f/size, innerLayout2);
 		hl->horizontalAlignment = innerLayout2->horizontalAlignment;
 		hl->verticalAlignment = innerLayout2->verticalAlignment;
 		hl->horizontalAlignment = innerLayout2->horizontalAlignment;

@@ -639,15 +639,11 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	}
 
 	// generate a random rectangle which has enough cells for each room
-	glm::ivec2 houseSize;
-	houseSize.x = glm::max(2, sweet::NumberUtils::randomInt(numRooms/8, numRooms/2));
-	houseSize.y = glm::max(2, numRooms/houseSize.x);
-	while(houseSize.x*houseSize.y < numRooms){
-		if(houseSize.x < houseSize.y){
-			++houseSize.x;
-		}else{
-			++houseSize.y;
-		}
+	unsigned long int houseSize;
+	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms));
+	//houseSize.y = glm::max(2, numRooms/houseSize.x);
+	while(pow(houseSize,2) < numRooms){
+		++houseSize;
 	}
 
 	// quadruple the size of the rectangle to allow for empty cells
@@ -655,18 +651,18 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// generate the starting position as a random spot along an edge
 	if(sweet::NumberUtils::randomBool()){
-		currentHousePosition.x = sweet::NumberUtils::randomInt(0,houseSize.x-1);
-		currentHousePosition.y = sweet::NumberUtils::randomInt(0,1) * (houseSize.y-1);
+		currentHousePosition.x = sweet::NumberUtils::randomInt(0,houseSize-1);
+		currentHousePosition.y = sweet::NumberUtils::randomInt(0,1) * (houseSize-1);
 	}else{
-		currentHousePosition.x = sweet::NumberUtils::randomInt(0,1) * (houseSize.x-1);
-		currentHousePosition.y = sweet::NumberUtils::randomInt(0,houseSize.y-1);
+		currentHousePosition.x = sweet::NumberUtils::randomInt(0,1) * (houseSize-1);
+		currentHousePosition.y = sweet::NumberUtils::randomInt(0,houseSize-1);
 	}
 	// PLACEMENT
 	std::map<std::pair<int,int>, bool> allCells;
 
 	// initialize all cells as empty
-	for(int x = 0; x < houseSize.x; ++x){
-		for(int y = 0; y < houseSize.y; ++y){
+	for(int x = 0; x < houseSize; ++x){
+		for(int y = 0; y < houseSize; ++y){
 			allCells[std::make_pair(x,y)] = true;
 		}
 	}
@@ -676,8 +672,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	// also make sure to save a list of these cells so that we can force through them if needed
 	sweet::ShuffleVector<glm::ivec2> possibleBlockedCellPositions;
 	sweet::ShuffleVector<glm::ivec2> blockedPositions;
-	for(int x = 0; x < houseSize.x-1; x += 2){
-		for(int y = 0; y < houseSize.y-1; y += 2){
+	for(int x = 1; x < houseSize-1; x += 2){
+		for(int y = 1; y < houseSize-1; y += 2){
 			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
@@ -699,7 +695,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 
 		temp = _pos + glm::ivec2(1,0);
-		if(temp.x < houseSize.x && allCells.at(std::make_pair(temp.x, temp.y))){
+		if(temp.x < houseSize && allCells.at(std::make_pair(temp.x, temp.y))){
 			res.push_back(temp);
 		}
 
@@ -709,7 +705,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 
 		temp = _pos + glm::ivec2(0,1);
-		if(temp.y < houseSize.y && allCells.at(std::make_pair(temp.x, temp.y))){
+		if(temp.y < houseSize && allCells.at(std::make_pair(temp.x, temp.y))){
 			res.push_back(temp);
 		}
 
@@ -744,8 +740,10 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		glm::ivec2 cell;
 		if(openCells.size() > 0){
 			cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
-		}else{
+		}else if(blockedPositions.size() > 0){
 			cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+		}else{
+			Log::error("Room can't be placed!");
 		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = lockedRooms.pop(true);
