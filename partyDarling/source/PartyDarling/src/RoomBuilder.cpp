@@ -279,6 +279,7 @@ Room * RoomBuilder::getRoom(){
 				if(o != nullptr){
 					o->resetObject();
 					o->realign();
+					o->meshTransform->makeCumulativeModelMatrixDirty();
 					room->removeComponent(o);
 				}
 			}
@@ -377,16 +378,16 @@ bool RoomBuilder::placeDoors(){
 
 	// Place new door
 	if(!placeDoor(doorNorth)){
-		Log::error("North door not placed!!!");
+		Log::warn("North door not placed!!!");
 	}
 	if(!placeDoor(doorSouth)){
-		Log::error("South door not placed!!!");
+		Log::warn("South door not placed!!!");
 	}
 	if(!placeDoor(doorEast)){
-		Log::error("East door not placed!!!");
+		Log::warn("East door not placed!!!");
 	}
 	if(!placeDoor(doorWest)){
-		Log::error("West door not placed!!!");
+		Log::warn("West door not placed!!!");
 	}
 
 	room->doors.insert(std::make_pair(PD_Door::kNORTH, doorNorth));
@@ -610,6 +611,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	_child->rotatePhysical(angle, 0, 1.f, 0);
 	_child->realign();
+	_child->meshTransform->makeCumulativeModelMatrixDirty();
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -676,6 +678,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		for(auto c : _slot->children){
 			c->translatePhysical(moveChildren);
 			c->realign();
+			c->meshTransform->makeCumulativeModelMatrixDirty();
 		}
 	}
 
@@ -692,6 +695,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
 				c->realign();
+				c->meshTransform->makeCumulativeModelMatrixDirty();
 			}
 		}
 		_child->rotatePhysical(-angle, 0, 1.f, 0);
@@ -715,7 +719,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent){
-
+	glm::mat4 mmPrev = _obj->meshTransform->getCumulativeModelMatrix();
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
@@ -727,7 +731,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	_obj->translatePhysical(_pos);
 	_obj->realign();
-
+	_obj->meshTransform->makeCumulativeModelMatrixDirty();
 	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
 	
 	// Check for collision with other objects in room
@@ -747,6 +751,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 			_obj->translatePhysical(-_pos);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
 			_obj->realign();
+			_obj->meshTransform->makeCumulativeModelMatrixDirty();
 			return false;
 			
 		}
@@ -900,6 +905,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	wall->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();
+	wall->meshTransform->makeCumulativeModelMatrixDirty();
 	wall->type = "wall";
 	wall->emptySlots[PD_Side::kFRONT] = new PD_Slot(PD_Side::kBACK, width * ROOM_TILE);
 	boundaries.push_back(wall);
