@@ -37,6 +37,11 @@ class PD_Slot;
 
 class RoomObject: public BulletMeshEntity {
 public:
+	// angle for billboarding
+	float angle;
+	bool billboarded;
+	void billboard(glm::vec3 _playerPos);
+
 	std::string type;
 	std::vector<PD_ParentDef> parentTypes;
 

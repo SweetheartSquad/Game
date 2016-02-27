@@ -386,7 +386,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	
 	PD_ResourceManager::scenario->eventManager.addEventListener("locked", [_game, this](sweet::Event * _event){
-		Log::info("The door is locked.");
+		// Triggered when the player tries to open a locked door
+		uiBubble->options.front()->label->setText("This door is locked.");
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 
@@ -963,6 +965,37 @@ PD_Scene_Main::~PD_Scene_Main(){
 }
 
 void PD_Scene_Main::update(Step * _step){
+	// billboarding
+	glm::vec3 camPos = player->playerCamera->childTransform->getWorldPos();
+	for(auto & c : currentRoom->characters){
+		c->billboard(camPos);
+	}
+	for(auto & c : currentRoom->items){
+		c->billboard(camPos);
+	}
+
+
+	// look up at current speaker's face during conversations
+	if(uiDialogue->isVisible()){
+		if(uiDialogue->currentSpeaker != nullptr){
+			glm::vec3 headPos = uiDialogue->currentSpeaker->pr->head->childTransform->getWorldPos();
+			glm::vec3 d = glm::normalize(headPos - camPos);
+		
+			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+			float pDif = pitch - player->playerCamera->pitch;
+
+			while(pDif > 180){
+				pDif -= 360;
+			}while(pDif < -180){
+				pDif += 360;
+			}
+			if(glm::abs(pDif) > FLT_EPSILON){
+				player->playerCamera->pitch += pDif*0.05f;
+			}
+		}
+	}
+
+
 	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;

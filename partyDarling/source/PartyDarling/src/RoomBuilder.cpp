@@ -338,23 +338,23 @@ Room * RoomBuilder::getRoom(){
 #endif
 	}
 	
-	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
+	room->floor->meshTransform->scale(-fullL-1, fullW+1, 1.f);
 	room->floor->translatePhysical(room->getCenter(), false);
 	#ifndef RG_DEBUG
 		// adjust UVs so that the texture tiles in squares
 		for(Vertex & v : room->floor->mesh->vertices){
-			v.u *= l;
-			v.v *= w;
+			v.u *= l+1;
+			v.v *= w+1;
 		}
 	#endif
 
-	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
+	room->ceiling->meshTransform->scale(-fullL-1, fullW+1, -1.f);
 	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	#ifndef RG_DEBUG
 		// adjust UVs so that the texture tiles in squares
 		for(Vertex & v : room->ceiling->mesh->vertices){
-			v.u *= l;
-			v.v *= w;
+			v.u *= l+1;
+			v.v *= w+1;
 		}
 	#endif
 
@@ -528,7 +528,9 @@ bool RoomBuilder::search(RoomObject * child){
 	Log::warn("NO PARENT found.");
 	
 	if(child->anchor != Anchor_t::WALL){
-		child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
+		if(!child->billboarded){
+			child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
+		}
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < tiles.size(); ++i){
 			Log::info("Tile selected");
@@ -968,14 +970,14 @@ std::vector<glm::vec3> RoomBuilder::getTiles(){
 }
 
 std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
-	std::vector<Person *> characters = getCharacters();
-	std::vector<PD_Item *> items = getItems();
+	room->characters = getCharacters();
+	room->items = getItems();
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
-	for(auto c : characters){
+	for(auto c : room->characters){
 		listing->addCharacter(c);
-	}for(auto i : items){
+	}for(auto i : room->items){
 		listing->addItem(i);
 	}
 
@@ -983,8 +985,8 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 	
 	//objects.insert(objects.begin(), props.begin(), props.end());
 	//objects.insert(objects.begin(), furniture.begin(), furniture.end());
-	objects.insert(objects.begin(), items.begin(), items.end());
-	objects.insert(objects.begin(), characters.begin(), characters.end());
+	objects.insert(objects.begin(), room->items.begin(), room->items.end());
+	objects.insert(objects.begin(), room->characters.begin(), room->characters.end());
 
 	return objects;
 }
@@ -1009,6 +1011,10 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
 	objects.insert(objects.begin(), characters.begin(), characters.end());
+
+	
+	room->characters.insert(room->characters.begin(), characters.begin(), characters.end());
+	room->items.insert(room->items.begin(), items.begin(), items.end());
 
 	return objects;
 }

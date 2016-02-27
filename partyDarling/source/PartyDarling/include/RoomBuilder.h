@@ -10,7 +10,7 @@
 #define DEFAULT_ROOM_LENGTH 15
 // world space units per pixel inthe tilemap
 #define ROOM_TILE 5
-#define MAX_ROOMBUILDER_ATTEMPTS 10
+#define MAX_ROOMBUILDER_ATTEMPTS 50
 
 enum RoomLayout_t{
 	kRECT,

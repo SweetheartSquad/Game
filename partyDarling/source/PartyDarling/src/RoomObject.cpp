@@ -8,7 +8,9 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	anchor(_anchor),
 	boundingBox(mesh->calcBoundingBox()),
 	parent(nullptr),
-	type("")
+	type(""),
+	angle(0),
+	billboarded(false)
 {
 	 
 }
@@ -31,4 +33,23 @@ void RoomObject::resetObject(){
 		slot->children.clear();
 	}
 	parent = nullptr;
+}
+
+void RoomObject::billboard(glm::vec3 _playerPos){
+	glm::vec3 cPos = getPhysicsBodyCenter();
+	glm::vec3 d = glm::normalize(_playerPos - cPos);
+		
+	float a = glm::atan(d.x, d.z);
+	a = glm::degrees(a);
+		
+	float angleDif = (a - angle);
+	while(angleDif > 180){
+		angleDif -= 360;
+	}while(angleDif < -180){
+		angleDif += 360;
+	}
+	if(glm::abs(angleDif) > FLT_EPSILON){
+		angle += angleDif*0.05f;
+		childTransform->setOrientation(glm::angleAxis(angle, glm::vec3(0,1,0)));
+	}
 }

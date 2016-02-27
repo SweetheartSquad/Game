@@ -64,7 +64,12 @@
       "src":"doorClose.ogg",
       "category":"sfx"
     },
-
+    {
+      "id":"doorLocked",
+      "type":"audio",
+      "src":"doorLocked.ogg",
+      "category":"sfx"
+    },
 
     //Yelling Contest SFX
     {
