@@ -546,16 +546,14 @@ void PersonRenderer::update(Step * _step){
 			}
 		}
 	}
-
+	
+	glm::vec3 v = head->firstParent()->getTranslationVector();
 	if(talking){
 		// talking
 		talk->update(_step);
-		glm::vec3 v = head->parents.at(0)->getTranslationVector();
-		head->parents.at(0)->translate(v.x, talkHeight, v.z, false);
-	}else {
-		head->parents.at(0)->translate(head->parents.at(0)->getTranslationVector().x, 
-			0.2/CHARACTER_SCALE, 
-			head->parents.at(0)->getTranslationVector().z, false);
+		head->firstParent()->translate(v.x, talkHeight, v.z, false);
+	}else{
+		head->firstParent()->translate(v.x, jaw->getOut(0).y, v.z, false);
 	}
 
 	Entity::update(_step);
