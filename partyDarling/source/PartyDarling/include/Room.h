@@ -29,6 +29,9 @@ class RoomObject;
 class PD_TilemapGenerator;
 class AssetRoom;
 
+class Person;
+class PD_Item;
+
 class Room: public BulletMeshEntity {
 public:
 	AssetRoom * const definition;
@@ -47,6 +50,9 @@ public:
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
 	std::map<PD_Door::Door_t, PD_Door *> doors;
+
+	std::vector<Person *> characters;
+	std::vector<PD_Item *> items;
 
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);

@@ -948,14 +948,14 @@ std::vector<glm::vec3> RoomBuilder::getTiles(){
 }
 
 std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
-	std::vector<Person *> characters = getCharacters();
-	std::vector<PD_Item *> items = getItems();
+	room->characters = getCharacters();
+	room->items = getItems();
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
-	for(auto c : characters){
+	for(auto c : room->characters){
 		listing->addCharacter(c);
-	}for(auto i : items){
+	}for(auto i : room->items){
 		listing->addItem(i);
 	}
 
@@ -963,8 +963,8 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 	
 	//objects.insert(objects.begin(), props.begin(), props.end());
 	//objects.insert(objects.begin(), furniture.begin(), furniture.end());
-	objects.insert(objects.begin(), items.begin(), items.end());
-	objects.insert(objects.begin(), characters.begin(), characters.end());
+	objects.insert(objects.begin(), room->items.begin(), room->items.end());
+	objects.insert(objects.begin(), room->characters.begin(), room->characters.end());
 
 	return objects;
 }
@@ -989,6 +989,10 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
 	objects.insert(objects.begin(), characters.begin(), characters.end());
+
+	
+	room->characters.insert(room->characters.begin(), characters.begin(), characters.end());
+	room->items.insert(room->items.begin(), items.begin(), items.end());
 
 	return objects;
 }
