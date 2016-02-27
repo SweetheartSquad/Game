@@ -743,7 +743,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		glm::mat4 oMM = o->meshTransform->getCumulativeModelMatrix();
 		 
 		// Check if object intersects o
-		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.01f)){
+		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.0001f)){
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
 			Log::warn(s.str());
