@@ -200,6 +200,8 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				cell.second->childTransform->addChild(compass, false);
 				compass->childTransform->translate(glm::vec3(cell.second->getWidth()*0.5f, cell.second->getHeight()*0.5f, 0), false);
 				compass->nodeUIParent = cell.second;
+				compass->setRationalHeight(1.f, cell.second);
+				compass->setSquareWidth(1.f);
 				// the current cell becomes entered
 				// and opaque
 				cell.second->setBackgroundColour(1,1,1, 1);
