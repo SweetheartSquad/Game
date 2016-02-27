@@ -386,7 +386,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	
 	PD_ResourceManager::scenario->eventManager.addEventListener("locked", [_game, this](sweet::Event * _event){
-		Log::info("The door is locked.");
+		// Triggered when the player tries to open a locked door
+		uiBubble->options.front()->label->setText("This door is locked.");
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 
