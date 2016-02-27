@@ -8,7 +8,8 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	anchor(_anchor),
 	boundingBox(mesh->calcBoundingBox()),
 	parent(nullptr),
-	type("")
+	type(""),
+	angle(0)
 {
 	 
 }

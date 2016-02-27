@@ -963,6 +963,46 @@ PD_Scene_Main::~PD_Scene_Main(){
 }
 
 void PD_Scene_Main::update(Step * _step){
+	// billboarding
+	glm::vec3 camPos = player->playerCamera->childTransform->getWorldPos();
+	for(auto c : currentRoom->characters){
+		glm::vec3 cPos = c->getPhysicsBodyCenter();
+		glm::vec3 d = glm::normalize(camPos - cPos);
+		
+		float angle = glm::atan(d.x, d.z);
+		angle = glm::degrees(angle);
+		
+		float angleDif = (angle - c->angle);
+		/*while(d > 180){
+			d -= 360;
+		}while(d < -180){
+			d += 360;
+		}*/
+		if(glm::abs(angleDif) > FLT_EPSILON){
+			c->angle += angleDif;//*0.25f;
+			c->pr->firstParent()->setOrientation(glm::angleAxis(c->angle, glm::vec3(0,1,0)));
+		}
+	}
+	for(auto c : currentRoom->items){
+		glm::vec3 cPos = c->getPhysicsBodyCenter();
+		glm::vec3 d = glm::normalize(camPos - cPos);
+
+		float angle = glm::atan(d.x, d.z);
+		angle = glm::degrees(angle);
+		
+		float angleDif = (angle - c->angle);
+		/*while(d > 180){
+			d -= 360;
+		}while(d < -180){
+			d += 360;
+		}*/
+		if(glm::abs(angleDif) > FLT_EPSILON){
+			c->angle += angleDif;//*0.25f;
+			c->firstParent()->setOrientation(glm::angleAxis(c->angle, glm::vec3(0,1,0)));
+		}
+	}
+
+
 	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;

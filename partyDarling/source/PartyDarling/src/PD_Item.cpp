@@ -65,9 +65,9 @@ bool PD_Item::actuallyHovered(glm::vec3 _position){
 }
 
 void PD_Item::addToWorld(){	
-	
 	setColliderAsBoundingBox();
 	createRigidBody(0);
+	body->setAngularFactor(btVector3(1,1,1)); // prevent from rotating the physics body at all
 }
 
 void PD_Item::triggerPickup(){

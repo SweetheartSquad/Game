@@ -32,7 +32,7 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	boundingBox.depth = boundingBox.width;
 
 	createRigidBody(5);
-	body->setAngularFactor(btVector3(0,1,0)); // prevent from falling over
+	body->setAngularFactor(btVector3(1,1,1)); // prevent from rotating the physics body at all
 	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
