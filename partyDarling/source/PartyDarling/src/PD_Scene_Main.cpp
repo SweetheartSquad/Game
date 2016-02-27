@@ -975,6 +975,27 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 
+	// look up at current speaker's face during conversations
+	if(uiDialogue->isVisible()){
+		if(uiDialogue->currentSpeaker != nullptr){
+			glm::vec3 headPos = uiDialogue->currentSpeaker->pr->head->childTransform->getWorldPos();
+			glm::vec3 d = glm::normalize(headPos - camPos);
+		
+			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+			float pDif = pitch - player->playerCamera->pitch;
+
+			while(pDif > 180){
+				pDif -= 360;
+			}while(pDif < -180){
+				pDif += 360;
+			}
+			if(glm::abs(pDif) > FLT_EPSILON){
+				player->playerCamera->pitch += pDif*0.05f;
+			}
+		}
+	}
+
+
 	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;
