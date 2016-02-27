@@ -58,7 +58,16 @@ Room::~Room(void){
 }
 
 glm::vec3 Room::getCenter() const{
-	return glm::vec3((tilemap->width/2.f) * ROOM_TILE, 0.f, (tilemap->height/2.f) * ROOM_TILE);
+	glm::vec3 center;
+	for(Vertex &v : mesh->vertices){
+		center.x += v.x;
+		//center.y += v.y;
+		center.z += v.z;
+	}
+	center /= mesh->vertices.size();
+	center *= meshTransform->getScaleVector() * childTransform->getScaleVector();
+
+	return center; //glm::vec3((tilemap->width/2.f) * ROOM_TILE, 0.f, (tilemap->height/2.f) * ROOM_TILE);
 }
 
 void Room::removePhysics(){

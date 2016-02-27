@@ -167,7 +167,6 @@ Room * RoomBuilder::getRoom(){
 	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
 	room->floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	room->floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	room->floor->translatePhysical(room->getCenter(), false);
 	room->floor->mesh->setScaleMode(GL_NEAREST);
 	room->floor->mesh->pushTexture2D(getFloorTex());
 #ifndef RG_DEBUG
@@ -186,7 +185,6 @@ Room * RoomBuilder::getRoom(){
 	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
 	room->ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	room->ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	room->ceiling->mesh->setScaleMode(GL_NEAREST);
 	room->ceiling->mesh->pushTexture2D(getCeilTex());
 #ifndef RG_DEBUG
@@ -257,8 +255,11 @@ Room * RoomBuilder::getRoom(){
 #endif
 	}
 
+	room->floor->translatePhysical(room->getCenter(), false);
+	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	// Center room at origin
 	room->translatePhysical(-room->getCenter(), true);
+	
 
 	availableParents.clear();
 	placedObjects.clear();
@@ -302,7 +303,7 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 	RoomObject * wall = nullptr;
 
 	PD_Door::Door_t _side = _door->side;
-	int max = _side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH ? int(center.z / 2) : int(center.x / 2);
+	float max = (_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH ? center.z : center.x) / ROOM_TILE;
 
 	while(offset < max){
 		std::vector<Edge *> intersected;
