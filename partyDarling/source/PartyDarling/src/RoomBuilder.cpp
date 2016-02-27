@@ -544,7 +544,7 @@ bool RoomBuilder::search(RoomObject * child){
 	}
 	Log::warn("NO PARENT found.");
 	
-	if(child->anchor != Anchor_t::WALL){
+	if(child->anchor != Anchor_t::WALL && !child->parentDependent){
 		if(!child->billboarded){
 			child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
 		}

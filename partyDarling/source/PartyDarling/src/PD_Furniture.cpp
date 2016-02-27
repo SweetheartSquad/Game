@@ -78,6 +78,8 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// Get type
 	type = _def->type;
 
+	parentDependent = _def->parentDependent;
+
 	// Get parent types
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
 

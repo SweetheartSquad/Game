@@ -29,6 +29,7 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	padding(_jsonDef.get("padding", 0.f).asFloat()),
 	detailedCollider(_jsonDef.get("detailedCollider", true).asBool()),
 	sides(PD_FurnitureSides(_jsonDef["sides"])),
+	parentDependent(_jsonDef.get("parentDependent", false).asBool()),
 	twist(_jsonDef.get("twist", true).asBool()),
 	flare(_jsonDef.get("flare", true).asBool())
 {

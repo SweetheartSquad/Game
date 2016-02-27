@@ -30,6 +30,7 @@ public:
 	bool detailedCollider;
 	std::vector<PD_FurnitureComponentDefinition *> components;
 	PD_FurnitureSides sides;
+	bool parentDependent;
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
 

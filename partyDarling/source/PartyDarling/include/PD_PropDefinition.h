@@ -9,6 +9,7 @@ public:
 	float padding;
 	bool twist;
 	bool flare;
+	bool parentDependent;
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
 

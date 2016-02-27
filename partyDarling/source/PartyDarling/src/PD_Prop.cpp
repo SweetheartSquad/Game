@@ -53,6 +53,7 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
 
+	parentDependent = _def->parentDependent;
 	// Get parent types
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
 }

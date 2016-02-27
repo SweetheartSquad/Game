@@ -43,6 +43,7 @@ public:
 	void billboard(glm::vec3 _playerPos);
 
 	std::string type;
+	bool parentDependent;
 	std::vector<PD_ParentDef> parentTypes;
 
 	Anchor_t anchor;
