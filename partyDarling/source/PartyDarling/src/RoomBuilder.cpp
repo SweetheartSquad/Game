@@ -179,7 +179,14 @@ Room * RoomBuilder::getRoom(){
 	std::vector<RoomObject *> objects = getSpecifiedObjects();
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
 
+	int numAttempts = 0;
+
 	do{
+		++numAttempts;
+		std::stringstream s;
+		s << "ATTEMPT " << numAttempts; 
+		Log::info(s.str());
+
 		success = true;
 		// convert size enum to actual numbers
 
@@ -217,31 +224,37 @@ Room * RoomBuilder::getRoom(){
 		}
 	
 		// place doors before anything else
-		placeDoors();
-		
-		for(auto obj : objects){
-			std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
-			std::stringstream s1;
-			s1 << "\nAttempting to place OBJECT: " << name;
-			Log::info(s1.str());
-			std::stringstream s;
-			s << "Total Placed Objects: " << placedObjects.size();
-			Log::info(s.str());
-			if(!search(obj)){
-				Log::warn("Search FAILED; room object not placed.");
-				success = false;
-				break;
-			}else{
-				Log::info("Search SUCCEEDED.");
-	#ifdef RG_DEBUG
-				if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
-					obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
+		if(placeDoors()){
+			for(auto obj : objects){
+				std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
+				std::stringstream s1;
+				s1 << "\nAttempting to place OBJECT: " << name;
+				Log::info(s1.str());
+				std::stringstream s;
+				s << "Total Placed Objects: " << placedObjects.size();
+				Log::info(s.str());
+				if(!search(obj)){
+					Log::warn("Search FAILED; room object not placed.");
+					success = false;
+					break;
+				}else{
+					Log::info("Search SUCCEEDED.");
+		#ifdef RG_DEBUG
+					if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
+						obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
+					}
+		#endif
 				}
-	#endif
 			}
+		}else{
+			success = false;
 		}
 
 		if(!success){
+			if(numAttempts > MAX_ROOMBUILDER_ATTEMPTS){
+				Log::error("Max attempts reached, failed to build room");
+			}
+
 			Log::warn("INCREASING ROOM SIZE.");
 			// unload walls, increase size
 			if(room->world != nullptr && room->body != nullptr) {
@@ -265,6 +278,7 @@ Room * RoomBuilder::getRoom(){
 			for(auto o : placedObjects){
 				if(o != nullptr){
 					o->resetObject();
+					o->realign();
 					room->removeComponent(o);
 				}
 			}
