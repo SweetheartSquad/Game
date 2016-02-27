@@ -323,23 +323,23 @@ Room * RoomBuilder::getRoom(){
 #endif
 	}
 	
-	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
+	room->floor->meshTransform->scale(-fullL-1, fullW+1, 1.f);
 	room->floor->translatePhysical(room->getCenter(), false);
 	#ifndef RG_DEBUG
 		// adjust UVs so that the texture tiles in squares
 		for(Vertex & v : room->floor->mesh->vertices){
-			v.u *= l;
-			v.v *= w;
+			v.u *= l+1;
+			v.v *= w+1;
 		}
 	#endif
 
-	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
+	room->ceiling->meshTransform->scale(-fullL-1, fullW+1, -1.f);
 	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	#ifndef RG_DEBUG
 		// adjust UVs so that the texture tiles in squares
 		for(Vertex & v : room->ceiling->mesh->vertices){
-			v.u *= l;
-			v.v *= w;
+			v.u *= l+1;
+			v.v *= w+1;
 		}
 	#endif
 
