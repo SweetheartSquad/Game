@@ -318,6 +318,23 @@ Room * RoomBuilder::getRoom(){
 		Log::info(s.str());
 		if(!search(obj)){
 			Log::warn("Search FAILED; room object not placed.");
+			
+			// make sure we remove the object from the item or character list if it's there
+			if(dynamic_cast<Person *>(obj) != nullptr){
+				for(signed long int i = room->characters.size()-1; i >= 0; --i){
+					if(room->characters.at(i) == obj){
+						room->characters.erase(room->characters.begin() + i);
+						break;
+					}
+				}
+			}else if(dynamic_cast<PD_Item *>(obj) != nullptr){
+				for(signed long int i = room->items.size()-1; i >= 0; --i){
+					if(room->items.at(i) == obj){
+						room->items.erase(room->items.begin() + i);
+						break;
+					}
+				}
+			}
 			delete obj;
 		}else{
 			Log::info("Search SUCCEEDED.");
