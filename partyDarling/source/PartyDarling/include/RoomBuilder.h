@@ -115,10 +115,11 @@ public:
 	std::vector<glm::vec3> getTiles();
 
 	// Create random room objects, including specified objects
-	std::vector<RoomObject *> getRoomObjects();
-	std::vector<Person *> getCharacters();
+	std::vector<RoomObject *> getSpecifiedObjects();
+	std::vector<RoomObject *> getRandomObjects();
+	std::vector<Person *> getCharacters(bool _random = false);
 	std::vector<PD_Furniture *> getFurniture();
-	std::vector<PD_Item *> getItems();
+	std::vector<PD_Item *> getItems(bool _random = false);
 	std::vector<PD_Prop *> getProps();
 
 	Texture * getFloorTex();
