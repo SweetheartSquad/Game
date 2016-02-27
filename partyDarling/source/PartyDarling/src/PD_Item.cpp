@@ -12,6 +12,8 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	RoomObject(_world, MeshFactory::getPlaneMesh(), _shader, _anchor),
 	definition(_definition)
 {
+	billboarded = true;
+
 	AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(definition->texture);
 	tex->load();
 	mesh->pushTexture2D(tex->texture);

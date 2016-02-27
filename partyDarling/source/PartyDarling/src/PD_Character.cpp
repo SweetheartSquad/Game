@@ -25,6 +25,8 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	room(nullptr),
 	enabled(true)
 {
+	billboarded = true;
+
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
 	
 	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
