@@ -139,24 +139,7 @@ RoomBuilder::~RoomBuilder(){
 Room * RoomBuilder::getRoom(){
 	room = new Room(world, baseShader, definition);
 	
-	// convert size enum to actual numbers
-	unsigned long int l, w;
-	switch (definition->size){
-		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); break;
-		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
-		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); break;
-		break;
-	}
-
-	float fullL = l * ROOM_TILE, fullW = ROOM_TILE * w;
-
 	
-	// Generate tilemap image
-	room->tilemap = new PD_TilemapGenerator(l, w, true);
-	unsigned long int pixelIncrement = 158;
-	room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
-	room->tilemap->load();
-	room->tilemap->saveImageData("tilemap.tga");
 
 	// create floor/ceiling as static bullet planes
 	room->floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
@@ -164,67 +147,152 @@ Room * RoomBuilder::getRoom(){
 	room->floor->createRigidBody(0);
 	room->floor->body->setFriction(1);
 	room->childTransform->addChild(room->floor);
-	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
 	room->floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	room->floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
 	room->floor->mesh->setScaleMode(GL_NEAREST);
 	room->floor->mesh->pushTexture2D(getFloorTex());
-#ifndef RG_DEBUG
-	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : room->floor->mesh->vertices){
-		v.u *= l;
-		v.v *= w;
-	}
-#endif
 
 	room->ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
 	room->ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
 	room->ceiling->createRigidBody(0);
 	room->ceiling->body->setFriction(1);
 	room->childTransform->addChild(room->ceiling);
-	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
 	room->ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
 	room->ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
 	room->ceiling->mesh->setScaleMode(GL_NEAREST);
 	room->ceiling->mesh->pushTexture2D(getCeilTex());
-#ifndef RG_DEBUG
-	// adjust UVs so that the texture tiles in squares
-	for(Vertex & v : room->ceiling->mesh->vertices){
-		v.u *= l;
-		v.v *= w;
-	}
-#endif
 
 	thresh = 5;
-	createWalls();
-	sweet::Box boundingBox = room->mesh->calcBoundingBox();
-	roomUpperBound = boundingBox.getMaxCoordinate() * (1.f/ROOM_TILE);
-	roomLowerBound = boundingBox.getMinCoordinate() * (1.f/ROOM_TILE);
-	tiles = getTiles();
+	bool success;
 
-	std::vector<RoomObject *> objects = getRoomObjects();
+	unsigned long int l, w;
+	float fullL, fullW;
+
+	switch (definition->size){
+		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); break;
+		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
+		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); break;
+		break;
+	}
+
+	// get mandatory objects
+	std::vector<RoomObject *> objects = getSpecifiedObjects();
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
 
-	// Add boundaries into shuffle vectors
-	sweet::ShuffleVector<RoomObject *> shuffleBoundaries;
-	for(auto boundary : boundaries){
-		// only walls in boundaries should have child slots (not floor, cieling)
-		if(boundary->emptySlots.size() > 0){
-			shuffleBoundaries.push(boundary);
-#ifdef RG_DEBUG
-			boundary->mesh->pushTexture2D(getDebugTex());
-#endif
-		}
-	}
+	do{
+		success = true;
+		// convert size enum to actual numbers
 
-	// Shuffle, and load into available parents
-	while(shuffleBoundaries.shuffleCount() < 2){
-		addObjectToLists(shuffleBoundaries.pop());
-	}
+		fullL = l * ROOM_TILE;
+		fullW = ROOM_TILE * w;
 	
-	// place doors before anything else
-	placeDoors();
+		// Generate tilemap image
+		room->tilemap = new PD_TilemapGenerator(l, w, true);
+		unsigned long int pixelIncrement = 158;
+		room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
+		room->tilemap->load();
+		room->tilemap->saveImageData("tilemap.tga");
 
+		createWalls();
+		sweet::Box boundingBox = room->mesh->calcBoundingBox();
+		roomUpperBound = boundingBox.getMaxCoordinate() * (1.f/ROOM_TILE);
+		roomLowerBound = boundingBox.getMinCoordinate() * (1.f/ROOM_TILE);
+		tiles = getTiles();
+	
+		// Add boundaries into shuffle vectors
+		sweet::ShuffleVector<RoomObject *> shuffleBoundaries;
+		for(auto boundary : boundaries){
+			// only walls in boundaries should have child slots (not floor, cieling)
+			if(boundary->emptySlots.size() > 0){
+				shuffleBoundaries.push(boundary);
+	#ifdef RG_DEBUG
+				boundary->mesh->pushTexture2D(getDebugTex());
+	#endif
+			}
+		}
+
+		// Shuffle, and load into available parents
+		while(shuffleBoundaries.shuffleCount() < 2){
+			addObjectToLists(shuffleBoundaries.pop());
+		}
+	
+		// place doors before anything else
+		placeDoors();
+		
+		for(auto obj : objects){
+			std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
+			std::stringstream s1;
+			s1 << "\nAttempting to place OBJECT: " << name;
+			Log::info(s1.str());
+			std::stringstream s;
+			s << "Total Placed Objects: " << placedObjects.size();
+			Log::info(s.str());
+			if(!search(obj)){
+				Log::warn("Search FAILED; room object not placed.");
+				success = false;
+				break;
+			}else{
+				Log::info("Search SUCCEEDED.");
+	#ifdef RG_DEBUG
+				if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
+					obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
+				}
+	#endif
+			}
+		}
+
+		if(!success){
+			Log::warn("INCREASING ROOM SIZE.");
+			// unload walls, increase size
+			if(room->world != nullptr && room->body != nullptr) {
+				room->world->world->removeRigidBody(room->body);
+				delete room->body;
+				delete room->shape;
+				room->body = nullptr;
+				room->shape = nullptr;
+			}
+			room->mesh->vertices.clear();
+
+			delete room->tilemap;
+
+			for(auto e : edges){
+				delete e;
+			}
+			edges.clear();
+
+			availableParents.clear();
+
+			for(auto o : placedObjects){
+				if(o != nullptr){
+					o->resetObject();
+					room->removeComponent(o);
+				}
+			}
+			placedObjects.clear();
+
+			for(auto b : boundaries){
+				delete b;
+			}
+			boundaries.clear();
+			
+			tiles.clear();
+
+			typedef std::map<PD_Door::Door_t, PD_Door *>::iterator it_type;
+			for(it_type it = room->doors.begin(); it != room->doors.end(); it++) {
+				delete it->second;
+			}
+			room->doors.clear();
+
+			l += 1;
+			w +=1;
+		}
+	} while (!success);
+	
+	// Random room stuff
+	objects.clear();
+	objects = getRandomObjects();
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
+	
 	for(auto obj : objects){
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 		std::stringstream s1;
@@ -245,7 +313,7 @@ Room * RoomBuilder::getRoom(){
 #endif
 		}
 	}
-	
+
 	// Get rid of temporary boundary room objects
 	for(auto boundary : boundaries){
 #ifdef RG_DEBUG
@@ -254,9 +322,27 @@ Room * RoomBuilder::getRoom(){
 			delete boundary;
 #endif
 	}
-
+	
+	room->floor->meshTransform->scale(-fullL, fullW, 1.f);
 	room->floor->translatePhysical(room->getCenter(), false);
+	#ifndef RG_DEBUG
+		// adjust UVs so that the texture tiles in squares
+		for(Vertex & v : room->floor->mesh->vertices){
+			v.u *= l;
+			v.v *= w;
+		}
+	#endif
+
+	room->ceiling->meshTransform->scale(-fullL, fullW, -1.f);
 	room->ceiling->translatePhysical(room->getCenter() + glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
+	#ifndef RG_DEBUG
+		// adjust UVs so that the texture tiles in squares
+		for(Vertex & v : room->ceiling->mesh->vertices){
+			v.u *= l;
+			v.v *= w;
+		}
+	#endif
+
 	// Center room at origin
 	room->translatePhysical(-room->getCenter(), true);
 	
@@ -861,11 +947,9 @@ std::vector<glm::vec3> RoomBuilder::getTiles(){
 	
 }
 
-std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
+std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 	std::vector<Person *> characters = getCharacters();
-	std::vector<PD_Furniture *> furniture = getFurniture();
 	std::vector<PD_Item *> items = getItems();
-	std::vector<PD_Prop *> props = getProps();
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
@@ -877,6 +961,30 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 
 	std::vector<RoomObject *> objects;
 	
+	//objects.insert(objects.begin(), props.begin(), props.end());
+	//objects.insert(objects.begin(), furniture.begin(), furniture.end());
+	objects.insert(objects.begin(), items.begin(), items.end());
+	objects.insert(objects.begin(), characters.begin(), characters.end());
+
+	return objects;
+}
+
+std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
+	std::vector<Person *> characters = getCharacters(true);
+	std::vector<PD_Item *> items = getItems(true);
+	std::vector<PD_Furniture *> furniture = getFurniture();
+	std::vector<PD_Prop *> props = getProps();
+	
+	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
+
+	for(auto c : characters){
+		listing->addCharacter(c);
+	}for(auto i : items){
+		listing->addItem(i);
+	}
+
+	std::vector<RoomObject *> objects;
+
 	objects.insert(objects.begin(), props.begin(), props.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
@@ -885,20 +993,22 @@ std::vector<RoomObject *> RoomBuilder::getRoomObjects(){
 	return objects;
 }
 
-std::vector<Person *> RoomBuilder::getCharacters(){
-	std::vector<AssetCharacter *> characterDefinitions = definition->getCharacters();
+std::vector<Person *> RoomBuilder::getCharacters(bool _random){
 	std::vector<Person*> characters;
-	
-	for(auto def : characterDefinitions){
-		auto p = new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader);
-		p->room = room;
-		characters.push_back(p);
-	}
 
-	auto randPerson = Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader);
-	randPerson->room = room;
-	characters.push_back(randPerson);
+	if(!_random){
+		std::vector<AssetCharacter *> characterDefinitions = definition->getCharacters();
 	
+		for(auto def : characterDefinitions){
+			auto p = new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader);
+			p->room = room;
+			characters.push_back(p);
+		}
+	}else{
+		auto randPerson = Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader);
+		randPerson->room = room;
+		characters.push_back(randPerson);
+	}
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
 	/*for(unsigned int i = 0; i < 1; ++i){
@@ -936,12 +1046,16 @@ RoomObject * RoomBuilder::getDoor(glm::ivec2 _navigation){
 	return door;
 }
 
-std::vector<PD_Item *> RoomBuilder::getItems(){
-	std::vector<AssetItem *> itemDefinitions = definition->getItems();
+std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 	std::vector<PD_Item *> items;
+	if(!_random){
+		std::vector<AssetItem *> itemDefinitions = definition->getItems();
 
-	for(auto def : itemDefinitions){
-		items.push_back(new PD_Item(def, world, baseShader));
+		for(auto def : itemDefinitions){
+			items.push_back(new PD_Item(def, world, baseShader));
+		}
+	}else{
+
 	}
 
 	return items;
