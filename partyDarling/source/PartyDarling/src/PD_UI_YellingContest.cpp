@@ -532,8 +532,8 @@ void PD_UI_YellingContest::update(Step * _step){
 				complete();
 			}else{
 				float size = 0.5f + (gameOverDuration / (2 * gameOverLength));
-				gameOverImage->setRationalWidth(size, gameOverContainer);
 				gameOverImage->setRationalHeight(size, gameOverContainer);
+				gameOverImage->setSquareWidth(1.f);
 				gameOverContainer->invalidateLayout();
 			}
 
