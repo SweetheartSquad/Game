@@ -353,7 +353,7 @@ Room * RoomBuilder::getRoom(){
 	std::vector<PD_Prop *> props = getProps();
 	objects.insert(objects.begin(), props.begin(), props.end());
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
-	
+	int cntBlah = objects.size();
 	for(auto obj : objects){
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 		std::stringstream s1;
@@ -365,6 +365,7 @@ Room * RoomBuilder::getRoom(){
 		if(!search(obj)){
 			Log::warn("Search FAILED; room object not placed.");
 			delete obj;
+			--cntBlah;
 		}else{
 			Log::info("Search SUCCEEDED.");
 #ifdef RG_DEBUG
@@ -374,7 +375,10 @@ Room * RoomBuilder::getRoom(){
 #endif
 		}
 	}
-	
+	std::stringstream sBlah;
+	sBlah << "TOTAL PROPS: " << objects.size() << " PLACED: " << cntBlah;
+	Log::info(sBlah.str());
+
 	// copy lights from any placed objects into the rooms lights
 	for(auto obj : placedObjects) {
 		if(obj->lights.size() > 0){
@@ -458,6 +462,7 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 	PD_Door::Door_t _side = _door->side;
 	float max = (_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH ? center.z : center.x) / ROOM_TILE;
 
+	float cornerCollsionOffset = ROOM_TILE * 0.1; // avoid intersection failures on diagonal corners
 	while(offset < max){
 		std::vector<Edge *> intersected;
 
@@ -465,8 +470,8 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 		if(_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kSOUTH){
 			float o = offset * (_side == PD_Door::Door_t::kSOUTH ? -1 : 1);
 			// Vertical
-			Edge * vRay = new Edge(glm::vec2(center.x + o, -1), glm::vec2(center.x + o, center.z * 2 + 1), glm::vec2(1, 0));
-		
+			Edge * vRay = new Edge(glm::vec2(center.x + o - cornerCollsionOffset, -1), glm::vec2(center.x + o - cornerCollsionOffset, center.z * 2 + 1), glm::vec2(1, 0));
+			
 			for(auto e : edges){
 				if(e->intersects(vRay, ROOM_TILE)){
 					intersected.push_back(e);
@@ -476,7 +481,7 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 		}else{
 			float o = offset * (_side == PD_Door::Door_t::kWEST ? -1 : 1);
 			// Horizontal
-			Edge * hRay = new Edge(glm::vec2(-1, center.z + o), glm::vec2(center.x * 2 + 1, center.z + o), glm::vec2(0, 1));
+			Edge * hRay = new Edge(glm::vec2(-1, center.z + o - cornerCollsionOffset), glm::vec2(center.x * 2 + 1, center.z + o - cornerCollsionOffset), glm::vec2(0, 1));
 		
 			for(auto e : edges){
 				if(e->intersects(hRay, ROOM_TILE)){
@@ -643,8 +648,6 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		return false;
 	}
 	
-	
-	
 	// Orient child to side
 	if(_side != PD_Side::kFRONT && _side != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float sideAngle = 0.f;
@@ -693,6 +696,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			case PD_Side::kTOP:
 				sidePos.x += (-_parent->boundingBox.width + childDimensions.x) / 2.f + _slot->spaceFilled;
 				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
+				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth + childDimensions.z, _parent->boundingBox.depth - childDimensions.z) / 2.f;
 				break;	
 		}
 	}else{
@@ -723,6 +727,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			case PD_Side::kTOP:
 				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
 				sidePos.x += centerPos;
+				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth + childDimensions.z, _parent->boundingBox.depth - childDimensions.z) / 2.f;
 				moveChildren.x = -1;
 				break;	
 		}
@@ -1164,9 +1169,8 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 			// Per number of this type, select a prop def!
 			// Assume we are only putting props on TOP side
 			for(auto f : furniture){
-				float spaceFilled = 0;
-
 				if(f->emptySlots.find(PD_Side::kTOP) != f->emptySlots.end()){
+					float spaceFilled = 0;
 					PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
 
 					while(spaceFilled <  slot->length){
