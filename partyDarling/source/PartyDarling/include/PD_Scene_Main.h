@@ -14,6 +14,7 @@
 #include <PD_UI_Dialogue.h>
 #include <PD_UI_YellingContest.h>
 #include <PD_UI_Map.h>
+#include <PD_UI_Fade.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -49,6 +50,7 @@ public:
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_YellingContest * uiYellingContest;
 	PD_UI_Map * uiMap;
+	PD_UI_Fade * uiFade;
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * emoteShader;
 	

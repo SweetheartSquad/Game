@@ -196,6 +196,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiMap->setRationalWidth(1.f, &uiLayer);
 	uiMap->disable();
 
+
+	uiFade = new PD_UI_Fade(uiLayer.world);
+	uiLayer.addChild(uiFade);
+	uiFade->setRationalHeight(1.f, &uiLayer);
+	uiFade->setRationalWidth(1.f, &uiLayer);
+
 	// add the player to the scene
 	player = new Player(bulletWorld);
 	childTransform->addChild(player);
@@ -991,6 +997,20 @@ void PD_Scene_Main::update(Step * _step){
 		tex->load();
 		tex->saveImageData("tokenTest.tga");
 		uiYellingContest->addLife(tex);
+	}
+	
+	if(keyboard->keyJustDown(GLFW_KEY_3)){
+		uiFade->fadeIn(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_4)){
+		uiFade->fadeIn();
+	}
+	
+	if(keyboard->keyJustDown(GLFW_KEY_5)){
+		uiFade->fadeOut(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_6)){
+		uiFade->fadeOut();
 	}
 
 
