@@ -54,6 +54,8 @@ public:
 	std::vector<Person *> characters;
 	std::vector<PD_Item *> items;
 
+	std::vector<Light *> lights;
+
 	Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition);
 	~Room(void);
 

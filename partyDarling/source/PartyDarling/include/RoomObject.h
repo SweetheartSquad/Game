@@ -2,6 +2,7 @@
 
 #include <BulletMeshEntity.h>
 #include <map>
+#include <Light.h>
 
 enum Anchor_t{
 	GROUND,
@@ -52,6 +53,8 @@ public:
 	std::map<PD_Side, PD_Slot *> emptySlots;
 
 	RoomObject * parent;
+
+	std::vector<Light *> lights;
 
 	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
 	~RoomObject(void);

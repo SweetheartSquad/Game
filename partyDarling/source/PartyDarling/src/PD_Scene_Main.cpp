@@ -953,8 +953,14 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
 	}
 
-	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+	lights.clear();
+	lights.push_back(playerLight);
+	
+	for(unsigned long int i = 0; i < currentRoom->lights.size(); ++i) {
+		lights.push_back(currentRoom->lights[i]);
+	}
 
+	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
