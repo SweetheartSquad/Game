@@ -98,6 +98,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	healthContainer->setRationalWidth(1.f, this);
 	healthContainer->setRationalHeight(0.15f, this);
 	healthContainer->horizontalAlignment = kCENTER;
+	healthContainer->verticalAlignment = kMIDDLE;
 	//healthContainer->setBackgroundColour(0, 1.f, 0.541f);
 
 	gameContainer = new VerticalLinearLayout(_bulletWorld);
@@ -144,11 +145,13 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	livesContainer = new HorizontalLinearLayout(_bulletWorld);
 	healthContainer->addChild(livesContainer);
-	livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
-	livesContainer->setRationalWidth(0.5f, healthContainer);
+	//livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
+	livesContainer->setRationalWidth(1.f, healthContainer);
 	livesContainer->setRationalHeight(0.6f, healthContainer);
 	livesContainer->setMarginTop(0.1f);
 	livesContainer->setMarginBottom(0.1f);
+	livesContainer->horizontalAlignment = kLEFT;
+	livesContainer->verticalAlignment = kMIDDLE;
 
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	healthContainer->addChild(confidenceSlider);
@@ -558,9 +561,11 @@ void PD_UI_YellingContest::startNewFight(){
 	// clear existing friendship
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));
+		delete lives.at(i);
 	}
 	for(unsigned int i = 0; i < lostLives.size(); ++i){
 		livesContainer->removeChild(lostLives.at(i));
+		delete lostLives.at(i);
 	}
 	lives.clear();
 	lostLives.clear();
@@ -568,13 +573,16 @@ void PD_UI_YellingContest::startNewFight(){
 	// loop through friends and add tokens
 	for(unsigned int i = 0; i < lifeTokens.size(); ++i){
 		NodeUI * l = new NodeUI(world);
+		livesContainer->addChild(l);
 		Texture * tex = lifeTokens.at(i);
 		l->background->mesh->pushTexture2D(tex);
 		l->background->mesh->setScaleMode(GL_NEAREST);
-		l->setWidth(livesContainer->getHeight());
-		l->setHeight(livesContainer->getHeight());
+		l->setRationalHeight(1.f, livesContainer);
+		l->setSquareWidth(1.f);
+		l->boxSizing = kCONTENT_BOX;
+		l->setMarginLeft(5);
+		l->setMarginRight(5);
 		lives.push_back(l);
-		livesContainer->addChild(l);
 	}
 
 	confidence = 50.f;
