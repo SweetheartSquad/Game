@@ -298,7 +298,10 @@
             "src": "furnitureTypes/chair.json"
         }, 
         {
-            "src": "furnitureTypes/lamp.json"
+            "src": "furnitureTypes/floorLamp.json"
+        }, 
+		{
+            "src": "furnitureTypes/deskLamp.json"
         }, 
         {
             "src": "furnitureTypes/table.json"
