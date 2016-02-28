@@ -490,7 +490,9 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 			}
 			std::sort(intersected.begin(), intersected.end(), [](Edge * i, Edge * j) -> bool{ return ((i->p1.x + i->p2.x) / 2 < (j->p1.x + j->p2.x) / 2);});
 		}
-
+		if(intersected.size() % 2 != 0){
+			Log::error("Raycast through room failed");
+		}
 		if(intersected.size() > 0){
 			// Get most outer wall
 			if(_side == PD_Door::Door_t::kNORTH || _side == PD_Door::Door_t::kWEST){

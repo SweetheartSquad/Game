@@ -58,14 +58,14 @@ Room::~Room(void){
 }
 
 glm::vec3 Room::getCenter() const{
-	glm::vec3 center;
-	for(Vertex &v : mesh->vertices){
-		center.x += v.x;
-		//center.y += v.y;
-		center.z += v.z;
-	}
-	center /= mesh->vertices.size();
-	center *= meshTransform->getScaleVector() * childTransform->getScaleVector();
+	sweet::Box boundingBox = mesh->calcBoundingBox();
+
+	glm::vec3 center = glm::vec3(boundingBox.x + boundingBox.width * 0.5, 0, boundingBox.z + boundingBox.depth * 0.5);
+	center += meshTransform->getTranslationVector();
+	center *= meshTransform->getScaleVector();
+
+	center += childTransform->getTranslationVector();
+	center *= childTransform->getScaleVector();
 
 	return center; //glm::vec3((tilemap->width/2.f) * ROOM_TILE, 0.f, (tilemap->height/2.f) * ROOM_TILE);
 }
