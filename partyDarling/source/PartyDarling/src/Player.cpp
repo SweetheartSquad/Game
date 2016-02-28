@@ -37,9 +37,16 @@ Player::Player(BulletWorld * _bulletWorld) :
 	shakeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		camOffset = sweet::NumberUtils::randomVec3(glm::vec3(-shakeIntensity), glm::vec3(shakeIntensity)) * Easing::easeOutCirc(_event->getFloatData("progress"), 1.f, -1.f, 1.f);
 	});
-	childTransform->addChild(shakeTimeout);
 };
 
+Player::~Player(){
+	delete shakeTimeout;
+}
+
+void Player::update(Step * _step){
+	shakeTimeout->update(_step);
+	BulletFirstPersonController::update(_step);
+}
 
 glm::vec3 Player::calculateInputs(Step * _step){
 	// get direction vectors
