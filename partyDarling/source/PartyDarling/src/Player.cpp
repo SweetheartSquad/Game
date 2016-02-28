@@ -35,7 +35,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 		camOffset = glm::vec3(0);
 	});
 	shakeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		camOffset = sweet::NumberUtils::randomVec3(glm::vec3(-shakeIntensity), glm::vec3(shakeIntensity)) * Easing::easeOutCirc(_event->getFloatData("progress"), 1.f, -1.f, 1.f);
+		float p = _event->getFloatData("progress");
+		camOffset = glm::vec3(cos((1.f-p)*glm::pi<float>()*2)*shakeIntensity, shakeIntensity, 0) * sin(Easing::easeOutElastic(p, 1.f, -1.f, 1.f)*25);
 	});
 };
 
