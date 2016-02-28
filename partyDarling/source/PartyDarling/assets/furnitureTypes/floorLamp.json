@@ -1,0 +1,33 @@
+{
+            "components": [
+                {
+                    "componentTypes": ["lampbase"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["floorlampshaft"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                {
+                                    "componentTypes": ["lampshade"], 
+                                    "multiplier": 1,
+                                    "required": true,
+									"scale": [1.0,1.0,1.0]
+                                }
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [2.0,2.0,2.0]
+                }
+            ], 
+            "type": "lamp",
+			"mass": 10,
+            "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
+            "sides" : {
+                },
+            "parents":{"wall":["BACK"]},    
+            "padding":0
+        }
