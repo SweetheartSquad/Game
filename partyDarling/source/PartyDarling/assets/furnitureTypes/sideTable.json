@@ -34,6 +34,9 @@
                     "RIGHT"
 				]
             },
+            "sides" : {
+                    "TOP":"BOTTOM"
+                },
             "parents":{},
             "padding":0
         }

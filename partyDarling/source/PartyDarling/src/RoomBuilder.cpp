@@ -345,6 +345,13 @@ Room * RoomBuilder::getRoom(){
 #endif
 		}
 	}
+	
+	// copy lights from any placed objects into the rooms lights
+	for(auto obj : placedObjects) {
+		if(obj->lights.size() > 0){
+			room->lights.insert(room->lights.end(), obj->lights.begin(), obj->lights.end());
+		}
+	}
 
 	// Get rid of temporary boundary room objects
 	for(auto boundary : boundaries){
@@ -377,12 +384,6 @@ Room * RoomBuilder::getRoom(){
 
 	// Center room at origin
 	room->translatePhysical(-room->getCenter(), true);
-	
-	for(auto obj : placedObjects) {
-		if(obj->lights.size() > 0){
-			room->lights.insert(room->lights.end(), obj->lights.begin(), obj->lights.end());
-		}
-	}
 
 	availableParents.clear();
 	placedObjects.clear();
