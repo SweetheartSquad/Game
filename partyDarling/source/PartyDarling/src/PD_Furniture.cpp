@@ -32,6 +32,32 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// delete the temporary mesh
 	delete buildResult.mesh;
 	
+	// Get type
+	type = _def->type;
+
+	parentDependent = _def->parentDependent;
+
+	// Get parent types
+	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
+
+	sweet::Box originalBoundingBox = mesh->calcBoundingBox();
+	// Get the sides information
+	if(_def->sides.front != PD_Side::kNONE){
+		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, originalBoundingBox.width);
+	}
+	if(_def->sides.back != PD_Side::kNONE){
+		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, originalBoundingBox.width);
+	}
+	if(_def->sides.right != PD_Side::kNONE){
+		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, originalBoundingBox.depth);
+	}
+	if(_def->sides.left != PD_Side::kNONE){
+		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, originalBoundingBox.depth);
+	}
+	if(_def->sides.top != PD_Side::kNONE){
+		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, originalBoundingBox.width);
+	}
+
 	//Deformers
 	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
 	float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
@@ -74,29 +100,4 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
-
-	// Get type
-	type = _def->type;
-
-	parentDependent = _def->parentDependent;
-
-	// Get parent types
-	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
-
-	// Get the sides information
-	if(_def->sides.front != PD_Side::kNONE){
-		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width);
-	}
-	if(_def->sides.back != PD_Side::kNONE){
-		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, boundingBox.width);
-	}
-	if(_def->sides.right != PD_Side::kNONE){
-		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, boundingBox.depth);
-	}
-	if(_def->sides.left != PD_Side::kNONE){
-		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, boundingBox.depth);
-	}
-	if(_def->sides.top != PD_Side::kNONE){
-		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, boundingBox.width);
-	}
 }

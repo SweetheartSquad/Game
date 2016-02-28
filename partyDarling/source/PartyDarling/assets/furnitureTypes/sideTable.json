@@ -24,6 +24,9 @@
             "type": "sideTable",
 			"mass": 40,
             "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+			"sides" : {
+				"TOP":"BOTTOM"
+            },
             "parents":{
                 "loveseat":[
                     "LEFT",

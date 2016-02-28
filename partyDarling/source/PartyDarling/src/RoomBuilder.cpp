@@ -1106,15 +1106,57 @@ std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 
 std::vector<PD_Prop *> RoomBuilder::getProps(){
 	std::vector<PD_Prop *> props;
+	/*
+	// Look at furniture that is already placed
+	std::map<std::string, std::vector<PD_Furniture *>> furnitureTypes;
+	for(auto o : placedObjects){
+		PD_Furniture * f = dynamic_cast<PD_Furniture *>(o);
+		if(f != nullptr){
+			furnitureTypes[o->type].push_back(f);
+		}
+	}
 	
+	typedef std::map<std::string, std::vector<PD_Furniture *>>::iterator it_type;
+	for(it_type it = furnitureTypes.begin(); it != furnitureTypes.end(); it++) {
+		std::string type = it->first;
+		std::vector<PD_Furniture *> furniture = it->second;
+
+		// get every prop def of the furinture type into shuffle vector
+		sweet::ShuffleVector<PD_PropDefinition *> propDefs;
+		for(auto def : PD_ResourceManager::propDefinitions){
+			bool found = false;
+			for(auto p : def->parents){
+				if(p.parent == type){
+					propDefs.push(def);
+					break;
+				}
+			}
+		}
+		if(propDefs.size() > 0){
+			// Per number of this type, select a prop def!
+			// Assume we are only putting props on TOP side
+			for(auto f : furniture){
+				int cnt = 0;
+				float spaceFilled = 0;
+
+				if(f->emptySlots.find(PD_Side::kTOP) != f->emptySlots.end()){
+					PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
+					while(spaceFilled <  slot->length && cnt < slot->maxItems){
+						props.push_back(new PD_Prop(world, propDefs.pop(), baseShader, GROUND));
+					}
+				}
+			}
+		}
+		
+	}
+	*/
 	// Random
 	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
 	for(unsigned int i = 0; i < n; ++i){
-		//Anchor_t anchor = static_cast<Anchor_t>((int) rand() % 1);
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::propDefinitions.size() - 1);
 		props.push_back(new PD_Prop(world, PD_ResourceManager::propDefinitions.at(randIdx), baseShader, GROUND));
 	}
-
+	
 	return props;
 }
 
