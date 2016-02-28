@@ -346,6 +346,29 @@
     },
 
 
+    {
+      "id": "YELLING-CONTEST-SLIDER-THUMB-HAPPY",
+      "type": "texture",
+      "src": "UI/yelling contest/thumb-happy.png",
+      "generateMipmaps": false
+    },{
+      "id": "YELLING-CONTEST-SLIDER-THUMB-SAD",
+      "type": "texture",
+      "src": "UI/yelling contest/thumb-sad.png",
+      "generateMipmaps": false
+    },{
+      "id": "YELLING-CONTEST-SLIDER-FILL",
+      "type": "texture",
+      "src": "UI/yelling contest/fill.png",
+      "generateMipmaps": false
+    },{
+      "id": "YELLING-CONTEST-SLIDER-TRACK",
+      "type": "texture",
+      "src": "UI/yelling contest/track.png",
+      "generateMipmaps": false
+    },
+
+
     // INVENTORY
     {
       "id": "BACKPACK",
@@ -392,6 +415,8 @@
       "nineSliced": true
     },
 
+
+    // GENERIC SLIDER
     {
       "id": "SLIDER-THUMB",
       "type": "texture",

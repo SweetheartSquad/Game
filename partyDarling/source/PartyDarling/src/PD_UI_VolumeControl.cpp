@@ -30,10 +30,13 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	slider->thumb->background->meshTransform->scale(2);
 	slider->thumb->setBackgroundColour(1,1,1,1);
 	slider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-THUMB")->texture);
+	slider->thumb->background->mesh->setScaleMode(GL_NEAREST);
 	
 	slider->setBackgroundColour(1,1,1,1);
 	slider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
+	slider->background->mesh->setScaleMode(GL_NEAREST);
 	
 	slider->fill->setBackgroundColour(1,1,1,1);
 	slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
+	slider->fill->background->mesh->setScaleMode(GL_NEAREST);
 }

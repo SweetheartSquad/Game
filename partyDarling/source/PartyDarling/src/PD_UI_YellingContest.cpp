@@ -153,14 +153,29 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	livesContainer->horizontalAlignment = kLEFT;
 	livesContainer->verticalAlignment = kMIDDLE;
 
+
+	// healthbar
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	healthContainer->addChild(confidenceSlider);
 	confidenceSlider->boxSizing = kCONTENT_BOX;
-	confidenceSlider->setBackgroundColour(1.f, 0, 0);
-	confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
+	//confidenceSlider->setBackgroundColour(1.f, 0, 0);
+	//confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
 	confidenceSlider->setRationalWidth(0.7f, healthContainer);
 	confidenceSlider->setRationalHeight(0.4f, healthContainer);
 	confidenceSlider->setMarginBottom(0.1f);
+	
+	//confidenceSlider->thumb->background->meshTransform->scale(2);
+	confidenceSlider->thumb->setBackgroundColour(1,1,1,1);
+	confidenceSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-THUMB-HAPPY")->texture);
+	confidenceSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
+	
+	confidenceSlider->setBackgroundColour(1,1,1,1);
+	confidenceSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-TRACK")->texture);
+	confidenceSlider->background->mesh->setScaleMode(GL_NEAREST);
+	
+	confidenceSlider->fill->setBackgroundColour(1,1,1,1);
+	confidenceSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
+	confidenceSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
 	
 
 	/*selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 0.9);
@@ -806,6 +821,8 @@ void PD_UI_YellingContest::interject(){
 }
 
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
+	confidenceSlider->thumb->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(std::string("YELLING-CONTEST-SLIDER-THUMB-") + (_isOffensive ? "HAPPY" : "SAD"))->texture);
+
 	modeOffensive = _isOffensive;
 	enemyBubble->setVisible(!_isOffensive);
 	enemyCursor->setVisible(!_isOffensive);

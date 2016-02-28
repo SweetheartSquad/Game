@@ -67,12 +67,15 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	loadingSlider->thumb->background->meshTransform->scale(2);
 	loadingSlider->thumb->setBackgroundColour(1,1,1,1);
 	loadingSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-THUMB")->texture);
+	loadingSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
 	
 	loadingSlider->setBackgroundColour(1,1,1,1);
 	loadingSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
+	loadingSlider->background->mesh->setScaleMode(GL_NEAREST);
 	
 	loadingSlider->fill->setBackgroundColour(1,1,1,1);
 	loadingSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
+	loadingSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
 
 	// bg
 	layout->background->setVisible(true);
