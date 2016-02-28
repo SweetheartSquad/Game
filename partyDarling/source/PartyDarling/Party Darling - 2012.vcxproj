@@ -23,7 +23,6 @@
     <ClCompile Include="src\PD_Character.cpp" />
     <ClCompile Include="src\PD_CharacterAnimationSet.cpp" />
     <ClCompile Include="src\PD_CharacterAnimationStep.cpp" />
-    <ClCompile Include="src\PD_FirstPersonController.cpp" />
     <ClCompile Include="src\PD_Furniture.cpp" />
     <ClCompile Include="src\PD_FurnitureComponent.cpp" />
     <ClCompile Include="src\PD_FurnitureComponentDefinition.cpp" />
@@ -74,7 +73,6 @@
     <ClInclude Include="include\PD_CharacterAnimationSet.h" />
     <ClInclude Include="include\PD_CharacterAnimationStep.h" />
     <ClInclude Include="include\PD_Door.h" />
-    <ClInclude Include="include\PD_FirstPersonController.h" />
     <ClInclude Include="include\PD_Furniture.h" />
     <ClInclude Include="include\PD_FurnitureComponent.h" />
     <ClInclude Include="include\PD_FurnitureComponentDefinition.h" />
