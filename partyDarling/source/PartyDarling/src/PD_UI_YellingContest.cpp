@@ -14,6 +14,8 @@
 #include <shader/ComponentShaderText.h>
 #include <DateUtils.h>
 #include <regex>
+#include <ProgrammaticTexture.h>
+#include <TextureUtils.h>
 
 #define BORDER_SIZE 60.f
 
@@ -75,7 +77,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	gameOverDuration(0.f),
 	win(false),
 	isComplete(false),
-	isEnabled(true),
+	enabled(true),
 	offensiveCorrect(0),
 	offensiveWrong(0),
 	defensiveCorrect(0),
@@ -346,8 +348,18 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	}
 }
 
+PD_UI_YellingContest::~PD_UI_YellingContest(){
+	while(lifeTokens.size() > 0){
+		lifeTokens.back()->decrementAndDelete();
+		lifeTokens.pop_back();
+	}while(lifeTokensCrossed.size() > 0){
+		lifeTokensCrossed.back()->decrementAndDelete();
+		lifeTokensCrossed.pop_back();
+	}
+}
+
 void PD_UI_YellingContest::update(Step * _step){
-	if(isEnabled){
+	if(isEnabled()){
 		if(!isGameOver){
 			VerticalLinearLayout::update(_step);
 
@@ -554,9 +566,9 @@ void PD_UI_YellingContest::startNewFight(){
 	lostLives.clear();
 
 	// loop through friends and add tokens
-	for(unsigned int i = 0; i < 0; ++i){
+	for(unsigned int i = 0; i < lifeTokens.size(); ++i){
 		NodeUI * l = new NodeUI(world);
-		Texture * tex = PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-FRIENDSHIP")->texture;
+		Texture * tex = lifeTokens.at(i);
 		l->background->mesh->pushTexture2D(tex);
 		l->background->mesh->setScaleMode(GL_NEAREST);
 		l->setWidth(livesContainer->getHeight());
@@ -689,20 +701,50 @@ void PD_UI_YellingContest::complete(){
 	}
 }
 
+void PD_UI_YellingContest::addLife(Texture * _tokenTexture){
+	
+	// create a duplicate token with a cross through it
+	ProgrammaticTexture * tex = new ProgrammaticTexture();
+	tex->allocate(_tokenTexture->width, _tokenTexture->height, _tokenTexture->channels);
+	
+	for(signed long int y = 0; y < tex->height; ++y){
+		for(signed long int x = 0; x < tex->width; ++x){
+			if(glm::abs(x-y) < tex->width/10 || glm::abs(tex->width - x-y) < tex->width/10){
+				sweet::TextureUtils::setPixel(tex, x, y, glm::uvec4(255,0,0,255));
+			}else{
+				unsigned char * p1 = sweet::TextureUtils::getPixelPointer(tex, x, y);
+				unsigned char * p2 = sweet::TextureUtils::getPixelPointer(_tokenTexture, x, y);
+				*(p1+0) = *(p2+0);
+				*(p1+1) = *(p2+1);
+				*(p1+2) = *(p2+2);
+				*(p1+3) = *(p2+3) * 0.5f; // reduce the alpha a bit
+			}
+		}
+	}
+	tex->load();
+
+	// save both tokens
+	lifeTokens.push_back(_tokenTexture);
+	lifeTokensCrossed.push_back(tex);
+
+	++tex->referenceCount;
+	++_tokenTexture->referenceCount;
+}
+
 void PD_UI_YellingContest::disable(){
 	setVisible(false);
-	isEnabled = false;
+	enabled = false;
 	invalidateLayout();
 }
 
 void PD_UI_YellingContest::enable(){
 	setVisible(true);
-	isEnabled = true;
+	enabled = true;
 	invalidateLayout();
 }
 
-bool PD_UI_YellingContest::enabled() {
-	return isEnabled;
+bool PD_UI_YellingContest::isEnabled() {
+	return enabled;
 }
 
 void PD_UI_YellingContest::interject(){
@@ -876,8 +918,8 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 			gameOver(false);
 		}else{
 			lostLives.push_back(lives.back());
-			lives.back()->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSTFRIENDSHIP")->texture);
 			lives.pop_back();
+			lostLives.back()->background->mesh->replaceTextures(lifeTokensCrossed.at(lives.size()));
 			confidence = 50.f;
 		}
 	}

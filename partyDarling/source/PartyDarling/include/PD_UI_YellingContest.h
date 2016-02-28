@@ -39,14 +39,21 @@ private:
 
 	PD_PhraseGenerator_Insults insultGenerator;
 
-	bool isEnabled;
+	bool enabled;
 
 	VerticalLinearLayout * healthContainer;
 	VerticalLinearLayout * gameContainer;
 
 	HorizontalLinearLayout * livesContainer;
+	// lives in the current fight
 	std::vector<NodeUI *> lives;
+	// lost lives in the current fight
 	std::vector<NodeUI *> lostLives;
+	// the life tokens accumulated so far
+	// this size of the list also indicates how many lives the player gets at the start of a fight
+	std::vector<Texture *> lifeTokens;
+	// duplicates of lifeTokens, modified to have a red cross through them to show lost lives
+	std::vector<Texture *> lifeTokensCrossed;
 
 	SliderControlled * confidenceSlider;
 
@@ -147,6 +154,7 @@ public:
 	bool modeOffensive;
 
 	PD_UI_YellingContest(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader);
+	~PD_UI_YellingContest();
 	void setEnemyText();
 	void setPlayerText();
 
@@ -161,10 +169,12 @@ public:
 	void startNewFight();
 	void gameOver(bool _win);
 	void complete();
+	
+	void addLife(Texture * _tokenTexture);
+
 	void disable();
 	void enable();
-	
-	bool enabled();
+	bool isEnabled();
 
 	UIGlyph * findFirstPunctuation(int startIdx = 0);
 	void highlightNextWord(int startIdx = 0);

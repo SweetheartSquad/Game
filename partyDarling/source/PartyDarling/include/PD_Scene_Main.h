@@ -102,4 +102,8 @@ public:
 	void placeRooms(std::vector<Room *> _rooms);
 	// trigger a yelling contest with another character
 	void triggerYellingContest();
+
+
+	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border
+	Texture * getToken();
 };

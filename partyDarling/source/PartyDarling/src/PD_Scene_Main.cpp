@@ -158,7 +158,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDialogue->setRationalWidth(1.f, &uiLayer);
 	uiDialogue->eventManager.addEventListener("end", [this](sweet::Event * _event){
 		// Handle case where a yelling contest is the last trigger in a dialogue
-		if(!uiYellingContest->enabled()){
+		if(!uiYellingContest->isEnabled()){
 			player->enable();
 		}
 	});
@@ -974,6 +974,13 @@ void PD_Scene_Main::update(Step * _step){
 		c->billboard(camPos);
 	}
 
+	if(keyboard->keyJustDown(GLFW_KEY_1)){
+		Texture * tex = getToken();
+		tex->load();
+		tex->saveImageData("tokenTest.tga");
+		uiYellingContest->addLife(tex);
+	}
+
 
 	// look up at current speaker's face during conversations
 	if(uiDialogue->isVisible()){
@@ -1348,4 +1355,46 @@ void PD_Scene_Main::unload(){
 	screenSurfaceShader->unload();
 	screenFBO->unload();
 	Scene::unload();	
+}
+
+Texture * PD_Scene_Main::getToken(){
+	// get texture size
+	glm::uvec2 sd = sweet::getWindowDimensions();
+	sd.x = sd.y = glm::min(sd.x, sd.y);
+	sd /= 4;
+	glm::vec2 half = glm::vec2(sd)*0.5f;
+
+	// hide the UI
+	uiLayer.setVisible(false);
+	// flip the scene upside down
+	activeCamera->upVectorRotated.y *= -1;
+
+	//re-draw the current frame (swap the buffers a second time to avoid this render actually being visible)
+	game->draw(this);
+	glfwSwapBuffers(sweet::currentContext);
+		
+	// allocate enough space for our token and read the center of the newly drawn screen into it
+	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
+	res->allocate(sd.x, sd.y, 4);
+	glReadPixels(game->viewPortWidth/2 - half.x, game->viewPortHeight/2 - half.y, sd.x, sd.y, GL_RGBA, GL_UNSIGNED_BYTE, res->data);
+
+	// carve out a circle and add a border
+	for(signed long int y = 0; y < sd.y; ++y){
+	for(signed long int x = 0; x < sd.x; ++x){
+		glm::vec2 pos(x,y);
+		float d = glm::distance(pos, half);
+		if(d >= half.x || d >= half.y){
+			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(0,0,0,0));
+		}else if(d >= half.x * 0.9f || d >= half.y * 0.9f){
+			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(237,22,106,255));
+		}
+	}
+	}
+	
+	// flip the scene right-side up
+	activeCamera->upVectorRotated.y *= -1;
+	// unhide the UI
+	uiLayer.setVisible(true);
+
+	return res;
 }
