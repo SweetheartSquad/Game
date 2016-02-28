@@ -5,7 +5,7 @@
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentTypes": ["desklampshaft"], 
+                            "componentTypes": ["lampshaft"], 
                             "multiplier": 1, 
                             "outComponents": [
                                 {

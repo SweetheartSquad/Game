@@ -2,7 +2,7 @@
     "connectors": [
         {
             "componentTypes": [
-                "bookshelf_shelf"
+                "bookshelf_contents"
             ], 
             "out": [
                 {
