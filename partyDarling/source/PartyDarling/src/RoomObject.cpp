@@ -11,7 +11,8 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	type(""),
 	angle(0),
 	billboarded(false),
-	parentDependent(false)
+	parentDependent(false),
+	padding(0)
 {
 	 
 }

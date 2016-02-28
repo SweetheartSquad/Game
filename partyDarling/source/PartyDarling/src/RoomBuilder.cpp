@@ -120,6 +120,7 @@ bool RoomBuilder::staticInit(){
 	for(unsigned long int i = 1; i <= 12; ++i){
 		debugTexIdx.push(i);
 	}
+
 	return true;
 }
 bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
@@ -335,6 +336,34 @@ Room * RoomBuilder::getRoom(){
 					}
 				}
 			}
+			delete obj;
+		}else{
+			Log::info("Search SUCCEEDED.");
+#ifdef RG_DEBUG
+			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
+				obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
+			}
+#endif
+		}
+	}
+
+	// Props
+	objects.clear();
+
+	std::vector<PD_Prop *> props = getProps();
+	objects.insert(objects.begin(), props.begin(), props.end());
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
+	
+	for(auto obj : objects){
+		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
+		std::stringstream s1;
+		s1 << "\nAttempting to place OBJECT: " << name;
+		Log::info(s1.str());
+		std::stringstream s;
+		s << "Total Placed Objects: " << placedObjects.size();
+		Log::info(s.str());
+		if(!search(obj)){
+			Log::warn("Search FAILED; room object not placed.");
 			delete obj;
 		}else{
 			Log::info("Search SUCCEEDED.");
@@ -1021,7 +1050,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	std::vector<Person *> characters = getCharacters(true);
 	std::vector<PD_Item *> items = getItems(true);
 	std::vector<PD_Furniture *> furniture = getFurniture();
-	std::vector<PD_Prop *> props = getProps();
+	//std::vector<PD_Prop *> props = getProps();
 	
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
@@ -1033,7 +1062,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	std::vector<RoomObject *> objects;
 
-	objects.insert(objects.begin(), props.begin(), props.end());
+	//objects.insert(objects.begin(), props.begin(), props.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
 	objects.insert(objects.begin(), characters.begin(), characters.end());
@@ -1116,7 +1145,7 @@ std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 
 std::vector<PD_Prop *> RoomBuilder::getProps(){
 	std::vector<PD_Prop *> props;
-	/*
+	
 	// Look at furniture that is already placed
 	std::map<std::string, std::vector<PD_Furniture *>> furnitureTypes;
 	for(auto o : placedObjects){
@@ -1130,41 +1159,31 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 	for(it_type it = furnitureTypes.begin(); it != furnitureTypes.end(); it++) {
 		std::string type = it->first;
 		std::vector<PD_Furniture *> furniture = it->second;
-
-		// get every prop def of the furinture type into shuffle vector
-		sweet::ShuffleVector<PD_PropDefinition *> propDefs;
-		for(auto def : PD_ResourceManager::propDefinitions){
-			bool found = false;
-			for(auto p : def->parents){
-				if(p.parent == type){
-					propDefs.push(def);
-					break;
-				}
-			}
-		}
-		if(propDefs.size() > 0){
+		
+		if(PD_ResourceManager::furniturePropDefinitions.at(type).size() > 0){
 			// Per number of this type, select a prop def!
 			// Assume we are only putting props on TOP side
 			for(auto f : furniture){
-				int cnt = 0;
 				float spaceFilled = 0;
 
 				if(f->emptySlots.find(PD_Side::kTOP) != f->emptySlots.end()){
 					PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
-					while(spaceFilled <  slot->length && cnt < slot->maxItems){
-						props.push_back(new PD_Prop(world, propDefs.pop(), baseShader, GROUND));
+
+					while(spaceFilled <  slot->length){
+						props.push_back(new PD_Prop(world, PD_ResourceManager::furniturePropDefinitions.at(type).pop(), baseShader, GROUND));
+						spaceFilled += props.back()->boundingBox.width;
 					}
 				}
 			}
 		}
-		
 	}
-	*/
+
 	// Random
-	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
-	for(unsigned int i = 0; i < n; ++i){
-		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::propDefinitions.size() - 1);
-		props.push_back(new PD_Prop(world, PD_ResourceManager::propDefinitions.at(randIdx), baseShader, GROUND));
+	if(PD_ResourceManager::independentPropDefinitions.size() > 0){
+		unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.01f);
+		for(unsigned int i = 0; i < n; ++i){
+			props.push_back(new PD_Prop(world, PD_ResourceManager::independentPropDefinitions.pop(), baseShader, GROUND));
+		}
 	}
 	
 	return props;

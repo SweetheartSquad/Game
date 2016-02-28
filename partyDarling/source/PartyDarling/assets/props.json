@@ -11,7 +11,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 0.6,
             "twist": false,
             "flare": false  
         },
@@ -26,7 +26,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 0.6,
             "twist": false,
             "flare": false  
         },
@@ -44,7 +44,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 1,
             "twist": false,
             "flare": false  
         },
@@ -59,7 +59,7 @@
                 ]
             },
             "mass": 30,
-            "padding":0,
+            "padding": 0.6,
             "twist": false,
             "flare": false 
         },
@@ -77,7 +77,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 1.5,
             "twist": false,
             "flare": false  
         }
@@ -96,7 +96,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 0.6,
             "twist": false,
             "flare": false  
         },
@@ -111,7 +111,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 0.6,
             "twist": false,
             "flare": false  
         },
@@ -129,7 +129,7 @@
                 ]
             },
             "mass": 20,
-            "padding":0,
+            "padding": 1,
             "twist": false,
             "flare": false  
         },
@@ -144,7 +144,7 @@
                 ]
             },
             "mass": 5,
-            "padding":0,
+            "padding": 1.5,
             "twist": false,
             "flare": false  
         },
@@ -159,7 +159,7 @@
                 ]
             },
             "mass": 5,
-            "padding":0,
+            "padding": 1.5,
             "twist": false,
             "flare": false  
         },

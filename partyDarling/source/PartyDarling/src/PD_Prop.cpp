@@ -56,4 +56,13 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	parentDependent = _def->parentDependent;
 	// Get parent types
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
+
+	// padding
+	padding = _def->padding;
+
+	boundingBox.width *= 1.f + padding * 2.f;
+	boundingBox.depth *= 1.f + padding * 2.f;
+
+	boundingBox.x = -boundingBox.width * 0.5f;
+	boundingBox.z -= -boundingBox.depth * 0.5f;
 }

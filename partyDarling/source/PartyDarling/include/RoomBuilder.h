@@ -72,9 +72,6 @@ private:
 	static sweet::ShuffleVector<unsigned long int> floorTexIdx;
 	static sweet::ShuffleVector<unsigned long int> doorTexIdx;
 
-	static sweet::ShuffleVector<PD_PropDefinition *> dependentProps;
-	static sweet::ShuffleVector<PD_PropDefinition *> independentProps;
-
 	static bool staticInit();
 	static bool staticInitialized;
 public:

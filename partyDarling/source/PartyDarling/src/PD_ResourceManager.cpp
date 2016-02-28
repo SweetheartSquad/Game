@@ -20,6 +20,8 @@ std::map<std::string, EmoteDef> PD_ResourceManager::emotes;
 sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
 PD_Listing * PD_ResourceManager::globalScenarioListing;
 std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
+std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
+sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
 
 void PD_ResourceManager::init(){
 	// register custom asset types
@@ -78,6 +80,27 @@ void PD_ResourceManager::init(){
 				propDefinitions.push_back(new PD_PropDefinition(propDef));
 			}
 		}
+	}
+
+	for(auto d : propDefinitions){
+		if(!d->parentDependent){
+			independentPropDefinitions.push(d);
+		}
+	}
+
+	for(auto fDef : furnitureDefinitions){
+		sweet::ShuffleVector<PD_PropDefinition *> propDefs;
+
+		for(auto pDef : PD_ResourceManager::propDefinitions){
+			bool found = false;
+			for(auto p :pDef->parents){
+				if(p.parent == fDef->type){
+					propDefs.push(pDef);
+					break;
+				}
+			}
+		}
+		furniturePropDefinitions.insert(std::make_pair(fDef->type, propDefs));
 	}
 
 	// Parse Animations
