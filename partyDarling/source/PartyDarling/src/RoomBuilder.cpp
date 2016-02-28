@@ -636,7 +636,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	glm::vec3 moveChildren;
 	// parent side transformations
-	bool centered = false;
+	bool centered = true;
 	if(!centered){
 		switch(_side){
 			case PD_Side::kFRONT:

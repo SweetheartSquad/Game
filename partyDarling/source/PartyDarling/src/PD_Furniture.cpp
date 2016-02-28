@@ -12,6 +12,8 @@
 #include <MeshDeformation.h>
 #include <PD_Slot.h>
 
+#define FURNITURE_SCALE 0.15
+
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
@@ -32,6 +34,9 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// delete the temporary mesh
 	delete buildResult.mesh;
 	
+	meshTransform->scale(FURNITURE_SCALE, FURNITURE_SCALE, FURNITURE_SCALE);
+	freezeTransformation();
+
 	// Get type
 	type = _def->type;
 
@@ -83,12 +88,10 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// May be redunant but do it as a safe guard
 	mesh->dirty = true;
 	
-	meshTransform->scale(0.15f, 0.15f, 0.15f);
-	freezeTransformation();
+	
 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
-
 
 	// create the bullet stuff
 	if(_def->detailedCollider){
