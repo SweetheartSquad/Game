@@ -955,9 +955,12 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 std::vector<glm::vec3> RoomBuilder::getTiles(){
 	std::vector<glm::vec3> tiles;
 
+	float offset = ROOM_TILE * 0.1; // avoid intersection failures on diagonal corners
 	for(int x = (int)roomLowerBound.x; x < (int)roomUpperBound.x - 1; ++x){
 		for(int z = (int)roomLowerBound.z; z < (int)roomUpperBound.z - 1; ++z){
-			glm::vec3 pos = glm::vec3((x + 0.5f) * float(ROOM_TILE), 0.f, (z + 0.5f) * float(ROOM_TILE));
+			glm::vec3 pos = glm::vec3((x + 0.5f) * float(ROOM_TILE), 0.f, (z + 0.5f) * float(ROOM_TILE)); 
+			pos.x -= offset;
+			pos.z -= offset;
 
 			// Cast a ray/line from outside (-1, 0, 0) of polygon to position, and check for odd number of intersections with room sides
 			Edge * ray = new Edge(glm::vec2(-1, pos.z), glm::vec2(pos.x, pos.z), glm::vec2(0, 1.f));
