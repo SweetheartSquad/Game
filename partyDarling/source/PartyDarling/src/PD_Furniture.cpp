@@ -20,6 +20,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	// build the furniture
 	PD_BuildResult buildResult = _def->components.at(0)->build();
+	lights = buildResult.lights;
 	
 	// get a texture for the furniture type
 	Texture * tex = _def->textures.pop();
@@ -63,6 +64,9 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
 
+	for(unsigned long int i = 0; i < lights.size(); ++i) {
+		meshTransform->addChild(lights.at(i))->translate(0.f, boundingBox.height - 0.1f, 0.f);
+	}
 
 	// create the bullet stuff
 	if(_def->detailedCollider){

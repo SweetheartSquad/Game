@@ -10,6 +10,7 @@ class MeshEntity;
 struct PD_BuildResult{
 	TriMesh * mesh;
 	btCompoundShape * collider;
+	std::vector<Light *> lights;
 };
 
 class PD_FurnitureComponentDefinition {

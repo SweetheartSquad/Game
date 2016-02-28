@@ -4,6 +4,7 @@
 #include <PD_ResourceManager.h>
 #include <MeshEntity.h>
 #include <NumberUtils.h>
+#include <PointLight.h>
 
 PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _jsonDef) :
 	required(_jsonDef.get("required", true).asBool()),
@@ -48,6 +49,10 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	local.setOrigin(btVector3(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f) * btVector3(_scale.x, _scale.y, _scale.z));
 	res.collider->addChildShape(local, box);
 
+	if(type == "lampshade") {
+		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
+		res.lights.push_back(light);
+	}
 	
 	/*btConvexHullShape * shape = new btConvexHullShape();
 	for (unsigned long int i = 0; i < res.mesh->vertices.size(); i++){
@@ -61,13 +66,14 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 
 
 	for(auto outComponent : outComponents){
+	
 		// we always build the child components which are required
 		// but randomize whether we build non-required components
 		if(outComponent->required || sweet::NumberUtils::randomBool()){
 			_scale *= outComponent->scale;
 			// retrieve a temporary mesh which is the combination of the outComponent and all of its child components
 			PD_BuildResult componentBuildResult = outComponent->build(_scale);
-
+			res.lights.insert(res.lights.end(), componentBuildResult.lights.begin(), componentBuildResult.lights.end());
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
 
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
