@@ -291,10 +291,23 @@
 		
     ], 
     "furniture": [
-    
+        {
+            "src": "furnitureTypes/chair.json"
+        }, 
         {
             "src": "furnitureTypes/lamp.json"
+        }, 
+        {
+            "src": "furnitureTypes/table.json"
+        }, 
+        {
+            "src": "furnitureTypes/sideTable.json"
+        }, 
+        {
+            "src": "furnitureTypes/bookshelf_4.json"
+        }, 
+        {
+            "src": "furnitureTypes/loveseat.json"
         }
-       
     ]
 }
