@@ -259,15 +259,15 @@
         {
             "id": 57, 
             "src": "furnitureJson/bookshelf_contents_1.json"
-        },
-		{
+        }, 
+        {
             "id": 58, 
             "src": "furnitureJson/bookshelf_4_case_2.json"
-        },
-		{
+        }, 
+        {
             "id": 59, 
             "src": "furnitureJson/bookshelf_4_case_4.json"
-        },
+        }, 
         {
             "id": 60, 
             "src": "furnitureJson/sideTableShelf_3.json"
@@ -287,8 +287,11 @@
         {
             "id": 64, 
             "src": "furnitureJson/sideTableShelf_7.json"
+        }, 
+        {
+            "id": 65, 
+            "src": "furnitureJson/table_tableTop_4.json"
         }
-		
     ], 
     "furniture": [
         {
