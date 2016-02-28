@@ -141,7 +141,7 @@ void PD_UI_Bubble::update(Step * _step){
 
 		// re-center the transform containing the bubbles
 		// TODO: only do this when the size has actually changed
-		test->translate(/*getWidth(true, true)*0.5f*/0, getHeight(true, true)*0.5f, 0, false);
+		test->translate(0, getHeight(true, true)*0.5f, 0, false);
 		
 		// interpolate the rotation of the options
 		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + (options.size() == 2 ? 0.2f : 0.05f)) : 0;

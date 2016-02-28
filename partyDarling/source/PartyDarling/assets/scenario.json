@@ -170,7 +170,14 @@
     {
       "id":"main-menu-background-1",
       "type":"texture",
-      "src":"UI/menu/main-menu-01.png"
+      "src":"UI/menu/main-menu-01.png",
+      "generateMipmaps": false
+    },
+    {
+      "id":"loading-background",
+      "type":"texture",
+      "src":"UI/menu/loading.png",
+      "generateMipmaps": false
     },
 
 

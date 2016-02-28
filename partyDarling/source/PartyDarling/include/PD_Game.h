@@ -30,5 +30,5 @@ public:
 	virtual void update(Step * _step) override;
 
 
-	void showLoading(std::string _message, float _percentage);
+	void showLoading(float _percentage);
 };
