@@ -379,7 +379,9 @@ Room * RoomBuilder::getRoom(){
 	room->translatePhysical(-room->getCenter(), true);
 	
 	for(auto obj : placedObjects) {
-		room->lights.insert(room->lights.end(), obj->lights.begin(), obj->lights.end());
+		if(obj->lights.size() > 0){
+			room->lights.insert(room->lights.end(), obj->lights.begin(), obj->lights.end());
+		}
 	}
 
 	availableParents.clear();

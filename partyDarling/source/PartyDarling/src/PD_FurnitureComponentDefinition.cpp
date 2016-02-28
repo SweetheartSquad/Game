@@ -73,7 +73,10 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 			_scale *= outComponent->scale;
 			// retrieve a temporary mesh which is the combination of the outComponent and all of its child components
 			PD_BuildResult componentBuildResult = outComponent->build(_scale);
-			res.lights.insert(res.lights.end(), componentBuildResult.lights.begin(), componentBuildResult.lights.end());
+			if(componentBuildResult.lights.size() > 0){
+				res.lights.insert(res.lights.end(), componentBuildResult.lights.begin(), componentBuildResult.lights.end());
+			}
+			
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
 
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
