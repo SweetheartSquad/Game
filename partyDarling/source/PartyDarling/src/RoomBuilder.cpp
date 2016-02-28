@@ -345,6 +345,13 @@ Room * RoomBuilder::getRoom(){
 #endif
 		}
 	}
+	
+	// copy lights from any placed objects into the rooms lights
+	for(auto obj : placedObjects) {
+		if(obj->lights.size() > 0){
+			room->lights.insert(room->lights.end(), obj->lights.begin(), obj->lights.end());
+		}
+	}
 
 	// Get rid of temporary boundary room objects
 	for(auto boundary : boundaries){
@@ -377,7 +384,6 @@ Room * RoomBuilder::getRoom(){
 
 	// Center room at origin
 	room->translatePhysical(-room->getCenter(), true);
-	
 
 	availableParents.clear();
 	placedObjects.clear();
@@ -1072,7 +1078,8 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
 	for(unsigned int i = 0; i < n; ++i){
 		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
-		furniture.push_back(new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND));
+		auto furn = new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND);
+		furniture.push_back(furn);
 	}
 
 	return furniture;

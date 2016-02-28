@@ -9,10 +9,11 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 {
 	label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
-	setBorder(15.f);
-	setWidth(1000);
-	setHeight(75);
+	setBorder(label->font->getLineHeight());
+	setHeight(label->font->getLineHeight()*2.5f);
 	invalidateLayout();
+
+	setScaleMode(GL_NEAREST);
 
 	addChild(vl);
 	vl->addChild(label);
@@ -22,6 +23,8 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 	vl->verticalAlignment = kMIDDLE;
 	label->horizontalAlignment = kCENTER;
 	label->setRationalWidth(1.f, vl);
+
+	setBackgroundColour(1.25,1.25,1.25, 1);
 }
 
 PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
@@ -35,8 +38,6 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	textShader->setColor(1,1,1);
 	++textShader->referenceCount;
 	addChild(vl);
-	//setRationalHeight(0.25f);
-	//setRationalWidth(1.f);
 	
 	vl->setRationalHeight(1.f, this);
 	vl->setRationalWidth(1.f, this);
@@ -69,6 +70,7 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 		unusedOptions.pop();
 	}else{
 		optionBubble = new Bubble(world, bubbleTex, textShader);
+		optionBubble->setRationalWidth(1.f, this);
 		Transform * t = new Transform();
 		t->addChild(optionBubble, false);
 	}
@@ -91,22 +93,25 @@ void PD_UI_Bubble::selectCurrent(){
 }
 
 void PD_UI_Bubble::placeOptions(){
-	float verticalSpacing = 50.f;
+	float verticalSpacing = options.back()->label->font->getLineHeight()*2.f;
 	float bubbleWidth = 500;
 	for(unsigned long int i = 0; i < options.size(); ++i){
-		float offset = (float)i / options.size();
+		float offset = (float)(i) / options.size();
 		offset -= displayOffset;
 		offset *= glm::pi<float>()*2.f;
-		float w = ((glm::cos(offset) + 1)*0.5f + 1.f)*bubbleWidth;
+		float w = (glm::sin(offset)+1)*0.5f;
 
-		options.at(i)->firstParent()->translate(-w/2.f, glm::sin(offset)*verticalSpacing, 0, false);
-		options.at(i)->setWidth(w);
-		//options.at(i)->setBorder(std::max(2.f,w/30.f));
+		options.at(i)->firstParent()->translate(0, glm::sin(offset)*verticalSpacing, 0, false);
+		options.at(i)->marginLeft.setRationalSize(w*0.25f+0.1f, &this->width);
+		options.at(i)->marginRight.setRationalSize(w*0.25f+0.1f, &this->width);
+		options.at(i)->setMeasuredWidths();
+		options.at(i)->invalidateLayout();
+
 		if(i == currentOption){
 			options.at(i)->setBackgroundColour(1,1,1, 1);
 		}else{
 			options.at(i)->setBackgroundColour(1.25,1.25,1.25, 1);
-		}options.at(i)->invalidateLayout();
+		}
 	}
 }
 
@@ -136,10 +141,10 @@ void PD_UI_Bubble::update(Step * _step){
 
 		// re-center the transform containing the bubbles
 		// TODO: only do this when the size has actually changed
-		test->translate(getWidth(true, true)*0.5f, getHeight(true, true)*0.5f, 0, false);
+		test->translate(0, getHeight(true, true)*0.5f, 0, false);
 		
 		// interpolate the rotation of the options
-		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + 0.1f) : 0;
+		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + (options.size() == 2 ? 0.2f : 0.05f)) : 0;
 		float delta = targetDispayOffset - displayOffset;
 		if(std::abs(delta) > FLT_EPSILON){
 			displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
@@ -150,7 +155,6 @@ void PD_UI_Bubble::update(Step * _step){
 		if(childrenUpdated){
 			reorderChildren();
 		}
-		childrenUpdated = false;
 	}
 	NodeUI::update(_step);
 }
@@ -172,11 +176,11 @@ void PD_UI_Bubble::prev(){
 }
 
 void PD_UI_Bubble::reorderChildren(){
-	unsigned long int currentOptionActual = currentOption;
-	std::vector<NodeUI_NineSliced *>optionsOrdered;
+	signed long int currentOptionActual = currentOption;
+	std::vector<NodeUI_NineSliced *> optionsOrdered;
 	while(optionsOrdered.size() < options.size()){
-		if(++currentOptionActual >= options.size()){
-			currentOptionActual = 0;
+		if(--currentOptionActual < 0){
+			currentOptionActual = options.size()-1;
 		}
 		optionsOrdered.push_back(options.at(currentOptionActual));
 		test->removeChild(options.at(currentOptionActual)->firstParent());
@@ -185,6 +189,7 @@ void PD_UI_Bubble::reorderChildren(){
 	for(auto o : optionsOrdered){
 		test->addChild(o->firstParent(), false);
 	}
+	childrenUpdated = false;
 }
 
 void PD_UI_Bubble::clear(){

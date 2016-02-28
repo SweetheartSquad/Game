@@ -5,11 +5,24 @@
 #include <UILayer.h>
 #include <Font.h>
 #include <sweet/UI.h>
+#include <PhraseGenerator.h>
 
 class ComponentShaderText;
 
+#define LOADING_PHASES 4
+#define TIME_PER_MESSAGE 1.0
+
+class PD_PhraseGenerator_Loading : public PhraseGenerator{
+public:
+	PD_PhraseGenerator_Loading();
+	std::string getMessage(unsigned long int _phase);
+};
+
 class PD_Scene_LoadingScreen: public Scene {
-public:		
+public:
+	double lastMessageTime;
+	unsigned long int lastMessagePhase;
+	PD_PhraseGenerator_Loading loadingMessages;
 
 	Shader * screenSurfaceShader;
 	RenderSurface* screenSurface;
@@ -31,4 +44,6 @@ public:
 
 	virtual void load() override;
 	virtual void unload() override;
+
+	void updateProgress(float _progress);
 };

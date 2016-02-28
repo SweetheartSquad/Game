@@ -810,18 +810,24 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 std::vector<Room *> PD_Scene_Main::buildRooms(){
 	PD_Game * g = dynamic_cast<PD_Game *>(game);
 	std::vector<Room *> res;
+
+	// count the total number of rooms so that we can show progress
+	unsigned long int numRooms = 0;
+	for(auto s : activeScenarios){
+		numRooms += s->assets.at("room").size();
+	}
+
+
 	// build all of the rooms contained in the selected scenarios
+	unsigned long int progress = 0;
 	for(auto s : activeScenarios){
 		
 		// create a listing for this scenario
 		PD_Listing * listing = new PD_Listing(s);
 
 		// build the rooms in this scenario
-		unsigned long int numRooms = s->assets.at("room").size();
-		unsigned long int progress = 0;
 		for(auto rd : s->assets.at("room")){
-			progress += 1;
-			g->showLoading("Building: " + dynamic_cast<AssetRoom *>(rd.second)->name, (float)progress/numRooms);
+			g->showLoading((float)++progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			
 			// setup the first parents, but don't actually add anything to the scene yet
@@ -953,8 +959,14 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
 	}
 
-	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+	lights.clear();
+	lights.push_back(playerLight);
+	
+	for(unsigned long int i = 0; i < currentRoom->lights.size(); ++i) {
+		lights.push_back(currentRoom->lights[i]);
+	}
 
+	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -1010,7 +1022,7 @@ void PD_Scene_Main::update(Step * _step){
 	if(newa < a){
 		lightStart = glm::vec3(sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f));
 		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f));
-		lightIntensity = sweet::NumberUtils::randomFloat(1.f, 1.25f);
+		lightIntensity = sweet::NumberUtils::randomFloat(1.f, 1.25f) * currentRoom->lights.size() > 0 ? 0.05f : 0.5f;
 	}
 	toonRamp->setRamp(
 		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
