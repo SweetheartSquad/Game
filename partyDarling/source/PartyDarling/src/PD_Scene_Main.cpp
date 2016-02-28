@@ -1022,7 +1022,7 @@ void PD_Scene_Main::update(Step * _step){
 	if(newa < a){
 		lightStart = glm::vec3(sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f),sweet::NumberUtils::randomFloat(0.3f, 0.5f));
 		lightEnd = glm::vec3(sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f),sweet::NumberUtils::randomFloat(0.9f, 1.5f));
-		lightIntensity = sweet::NumberUtils::randomFloat(1.f, 1.25f);
+		lightIntensity = sweet::NumberUtils::randomFloat(1.f, 1.25f) * currentRoom->lights.size() > 0 ? 0.05f : 0.5f;
 	}
 	toonRamp->setRamp(
 		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
