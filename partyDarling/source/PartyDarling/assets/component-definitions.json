@@ -1,7 +1,7 @@
 {
     "components": [
         {
-            "src": "components/definitions/fbc172de-a0d0-469b-93c3-d2c28d260793.json",
+            "src": "components/definitions/Bexley_HEAD.json",
             "type": "HEAD"
         },
         {
@@ -21,7 +21,7 @@
             "type": "PELVIS"
         },
         {
-            "src": "components/definitions/9baa167e-4e60-4d0f-88ae-e95c2201a67a.json",
+            "src": "components/definitions/Halcyon_HEAD.json",
             "type": "HEAD"
         },
         {
@@ -41,7 +41,7 @@
             "type": "PELVIS"
         },
         {
-            "src": "components/definitions/d7992589-9329-4950-b258-c69e6eabc041.json",
+            "src": "components/definitions/Evelyn_HEAD.json",
             "type": "HEAD"
         },
         {
@@ -53,16 +53,12 @@
             "type": "LEG"
         },
         {
-            "src": "components/definitions/f3412ca9-9b01-420c-a131-fb282710f2f7.json",
+            "src": "components/definitions/Evelyn_ARM.json",
             "type": "ARM"
         },
         {
             "src": "components/definitions/def56b91-6950-4f76-bced-c0b71020fc0b.json",
             "type": "PELVIS"
-        },
-        {
-            "src": "components/definitions/68c940ab-70e7-45e0-aa71-b04543f9d12b.json",
-            "type": "LEG"
         },
         {
             "src": "components/definitions/b52063aa-ee33-47b5-af6c-822d4d5ca5f4.json",
@@ -73,11 +69,11 @@
             "type": "TORSO"
         },
         {
-            "src": "components/definitions/0c70d90a-bd20-4003-aa1d-c4b3b99b8dcc.json",
+            "src": "components/definitions/Leila_HEAD.json",
             "type": "HEAD"
         },
         {
-            "src": "components/definitions/8ff1c538-f1ae-40bc-90b0-7959ec535a55.json",
+            "src": "components/definitions/Thessle_HEAD.json",
             "type": "HEAD"
         },
         {
@@ -99,6 +95,274 @@
         {
             "src": "components/definitions/2f25a0b5-d469-4810-8e81-941f948834a4.json",
             "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Daz_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Bastien_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Daz_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Daz_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Bastien_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Bastien_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Daz_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Crash_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Crash_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Bastien_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Crash_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Crash_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Bastien_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Blythe_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Blythe_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Jasper_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Blythe_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Blythe_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Jasper_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Blythe_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Bella_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Jasper_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Bella_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Bella_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Jasper_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Bella_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Bella_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Jasper_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Arnold_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/LilTomward_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Arnold_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Arnold_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Arnold_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/LilTomward_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Arnold_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/LilTomward_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/LilTomward_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Goodsee_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Goodsee_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Goodsee_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Dmitri_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Eloise_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Dmitri_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Eloise_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Dmitri_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Eloise_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Dmitri_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Eloise_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Dmitri_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Locke_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Locke_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/South_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/South_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Locke_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Locke_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/South_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/South_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Felix_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/Felix_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Felix_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "src": "components/definitions/Felix_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "src": "components/definitions/Leila_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "src": "components/definitions/Goodsee_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "src": "components/definitions/goodsee_leftarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/goodsee_rightarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Eloise_leftarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "src": "components/definitions/Eloise_rightarm_ARM.json",
+            "type": "ARM"
         }
     ]
 }
