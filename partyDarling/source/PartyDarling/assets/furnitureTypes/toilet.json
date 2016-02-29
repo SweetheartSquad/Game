@@ -68,6 +68,10 @@
             },
             "padding":0,
 			"twist": false,
-            "flare": false
+            "flare": false,
+			"paddingFront": 0.5,
+			"paddingLeft": 0.6,
+			"paddingRight": 0.6,
+			"paddingBack": 0.5
 
         }
