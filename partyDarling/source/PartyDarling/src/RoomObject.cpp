@@ -14,6 +14,7 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	parentDependent(false),
 	padding(0)
 {
+#ifdef _DEBUG
 	 QuadMesh * m = new QuadMesh(true, GL_LINE_STRIP);
 	 float _halfSize = 0.5f;
 	//Top
@@ -102,6 +103,7 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 
 	boundingBoxMesh = new MeshEntity(m, _shader);
 	childTransform->addChild(boundingBoxMesh);
+#endif
 }
 
 RoomObject::~RoomObject(void){
