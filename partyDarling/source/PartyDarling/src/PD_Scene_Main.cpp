@@ -37,6 +37,7 @@
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
 #include <PD_Door.h>
+#include <PD_Prop.h>
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
@@ -1206,6 +1207,13 @@ void PD_Scene_Main::update(Step * _step){
 								player->disable();
 								// TODO: pass in the character that's interacting with the item here
 							});
+						}
+					}
+				}else{
+					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
+					if(prop != nullptr){
+						if(mouse->leftDown()){
+							prop->applyForceToCenter(-player->playerCamera->forwardVectorRotated*5.f);
 						}
 					}
 				}
