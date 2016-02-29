@@ -5,7 +5,7 @@
             "type": "HEAD"
         },
         {
-            "src": "components/definitions/b144738a-1bce-4fe3-82ff-df4fc5f5b34c.json",
+            "src": "components/definitions/Bexley_ARM.json",
             "type": "ARM"
         },
         {
@@ -77,7 +77,7 @@
             "type": "HEAD"
         },
         {
-            "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json",
+            "src": "components/definitions/Thessle_LEG.json",
             "type": "LEG"
         },
         {
