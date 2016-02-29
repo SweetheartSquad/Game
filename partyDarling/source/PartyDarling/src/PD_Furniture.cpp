@@ -108,4 +108,15 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
+
+	// padding
+	boundingBox.width *= 1.f + _def->paddingLeft + _def->paddingRight;
+	boundingBox.depth *= 1.f + _def->paddingFront + _def->paddingBack;
+
+	boundingBox.x = -boundingBox.width * 0.5f - _def->paddingLeft;
+	boundingBox.z = -boundingBox.depth * 0.5f - _def->paddingBack;
+
+	boundingBoxMesh->meshTransform->scale(boundingBox.width, boundingBox.height, boundingBox.depth, kOBJECT);
+	boundingBoxMesh->freezeTransformation();
+	boundingBoxMesh->meshTransform->translate(-_def->paddingLeft, 0, -_def->paddingBack);
 }

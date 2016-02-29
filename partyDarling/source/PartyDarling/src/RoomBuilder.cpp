@@ -648,7 +648,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	childDimensions.z = abs(childDimensions.z);
 
 	// check length of side
-	if(childDimensions.x *  0.5 > _slot->length - _slot->spaceFilled){
+	if(childDimensions.x > _slot->length - _slot->spaceFilled){
 		Log::warn("Not enough SPACE along side.");
 		return false;
 	}

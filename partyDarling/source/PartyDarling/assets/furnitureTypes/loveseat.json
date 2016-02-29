@@ -39,13 +39,16 @@
                 },
             "parentDependent": true,
             "parents":{
-				"wall":["FRONT"],
 				"coffeeTable": [
 					"FRONT", 
 					"BACK", 
 					"LEFT", 
 					"RIGHT"],
-				"tv": ["FRONT"]
+				"tv": ["FRONT"],
+				"wall":["FRONT"]
 			},   
-            "padding":1
+			"paddingFront": 0,
+			"paddingBack": 0.2,
+			"paddingLeft": 0.1,
+			"paddingRight": 0.1
         }

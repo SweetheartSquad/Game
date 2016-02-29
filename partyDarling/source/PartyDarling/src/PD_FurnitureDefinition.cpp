@@ -26,7 +26,10 @@ PD_Side PD_FurnitureSides::fromString(std::string _side) {
 PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	type(_jsonDef.get("type", "UNDEFINED").asString()),
 	mass(_jsonDef.get("mass", 0.f).asFloat()),
-	padding(_jsonDef.get("padding", 0.f).asFloat()),
+	paddingFront(_jsonDef.get("paddingFront", 0.f).asFloat()),
+	paddingBack(_jsonDef.get("paddingBack", 0.f).asFloat()),
+	paddingLeft(_jsonDef.get("paddingLeft", 0.f).asFloat()),
+	paddingRight(_jsonDef.get("paddingRight", 0.f).asFloat()),
 	detailedCollider(_jsonDef.get("detailedCollider", true).asBool()),
 	sides(PD_FurnitureSides(_jsonDef["sides"])),
 	parentDependent(_jsonDef.get("parentDependent", false).asBool()),
