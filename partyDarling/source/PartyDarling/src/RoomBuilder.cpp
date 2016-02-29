@@ -97,7 +97,10 @@ bool Edge::isInside(glm::vec2 _point, float _scale){
 	float maxY = p1.y > p2.y ? p1.y : p2.y;
 	float minY = p1.y < p2.y ? p1.y : p2.y;
 
-	if ((_point.x >= minX * _scale && _point.x <= maxX * _scale) && (_point.y >= minY * _scale && _point.y <= maxY * _scale))
+	bool equalX = abs(_point.x - minX * _scale) <= FLT_EPSILON * 10;
+	bool equalY = abs(_point.y - minY * _scale) <= FLT_EPSILON * 10;
+
+	if (( (_point.x > minX * _scale || equalX) && (_point.x < maxX * _scale || equalX) ) && ( (_point.y > minY * _scale || equalY) && (_point.y < maxY * _scale || equalY) ))
 	{
 		return true;
 	}
