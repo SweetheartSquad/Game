@@ -411,6 +411,14 @@
         {
             "id": 95, 
             "src": "furnitureJson/window_base_2.json"
+        },
+        {
+            "id": 96, 
+            "src": "furnitureJson/painting_base_1.json"
+        },
+        {
+            "id": 97, 
+            "src": "furnitureJson/painting_frame_1.json"
         }
     ], 
     "furniture": [
@@ -441,8 +449,11 @@
         {
             "src": "furnitureTypes/loveseat.json"
         },
-		{
+        {
             "src": "furnitureTypes/window.json"
+        },
+        {
+            "src": "furnitureTypes/painting.json"
         }
     ]
 }

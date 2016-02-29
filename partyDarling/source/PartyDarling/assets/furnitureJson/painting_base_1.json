@@ -1,0 +1,23 @@
+{
+    "id": 96,
+    "connectors": [
+        {
+            "componentTypes": ["painting_frame"], 
+            "out":[
+                {
+                    "position":[
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ],
+                    "rotation":[0,0,0],
+                    "scale":[1.0,1.0,1.0]
+
+
+                }
+            ]
+        }
+    ], 
+    "src": "painting_base_1.obj", 
+    "type": "painting_base"
+}
