@@ -24,5 +24,6 @@
     "paddingLeft": 0.5,
 	"paddingRight": 0.5,
     "twist": false,
-    "flare": false
+    "flare": false,
+    "numTextures": 3
 }

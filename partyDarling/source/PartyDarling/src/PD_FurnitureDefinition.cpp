@@ -58,7 +58,8 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	}
 
 	// get a texture for the furniture type
-	for(unsigned long int i = 1; i <= 2; ++i){
+	unsigned long int numTextures = _jsonDef.get("numTextures", 2).asUInt();
+	for(unsigned long int i = 1; i <= numTextures; ++i){
 		std::stringstream ss;
 		ss << "assets/textures/furniture/" << type << "_" << i << ".png";
 		Texture * tex = new Texture(ss.str(), false, false, true);
