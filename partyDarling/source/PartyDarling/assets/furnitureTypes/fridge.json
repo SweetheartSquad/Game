@@ -1,0 +1,26 @@
+{
+            "components": [
+                {
+                    "componentTypes": ["fridge_base"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+						{
+                            "componentTypes": ["fridge_top"], 
+								"multiplier": 1, 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [0.75,0.75,0.75]
+                }
+            ], 
+            "type": "fridge",
+			"mass": 80,
+            "roomTypes" : ["LIVING_ROOM","BEDROOM","KITCHEN"],
+            "detailedCollider": false,
+            "parents":{"wall":["FRONT"]},
+            "padding":0,
+            "twist": false,
+            "flare": true
+        }
