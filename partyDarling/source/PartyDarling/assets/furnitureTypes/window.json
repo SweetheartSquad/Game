@@ -1,0 +1,20 @@
+{
+    "components": [
+        {
+            "componentTypes": ["window_base"], 
+            "multiplier": 1, 
+            "required": true,
+			"scale": [1, 1, 1]
+        }
+    ], 
+    "type": "window",
+	"mass": 0,
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM"],
+    "detailedCollider": false,
+	"parentDependent": true,
+    "parents":{"wall":["FRONT"]},
+    "paddingLeft": 0.5,
+	"paddingRight": 0.5,
+    "twist": false,
+    "flare": true
+}
