@@ -978,6 +978,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	lights.push_back(playerLight);
 	
 	for(unsigned long int i = 0; i < currentRoom->lights.size(); ++i) {
+		currentRoom->lights[i]->lastPos = glm::vec3(99999);
 		lights.push_back(currentRoom->lights[i]);
 	}
 
