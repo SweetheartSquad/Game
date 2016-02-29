@@ -404,9 +404,13 @@
             "id": 93, 
             "src": "furnitureJson/tv_antenna_3.json"
         },
-		{
+        {
             "id": 94, 
             "src": "furnitureJson/window_base_1.json"
+        },
+        {
+            "id": 95, 
+            "src": "furnitureJson/window_base_2.json"
         }
     ], 
     "furniture": [
