@@ -40,6 +40,7 @@ private:
 	PD_PhraseGenerator_Insults insultGenerator;
 
 	bool enabled;
+	bool canInterject;
 
 	VerticalLinearLayout * healthContainer;
 	VerticalLinearLayout * gameContainer;

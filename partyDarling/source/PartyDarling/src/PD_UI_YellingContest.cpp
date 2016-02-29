@@ -84,7 +84,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	defensiveWrong(0),
 	interjectTimer(0),
 	punctuationCnt(-1),
-	iteration(0)
+	iteration(0),
+	canInterject(true)
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -389,7 +390,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->textDisplayed);
 				}
 			}else{
-				if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
 					interject();
 				}
 			}
@@ -569,6 +570,8 @@ void PD_UI_YellingContest::update(Step * _step){
 
 			VerticalLinearLayout::update(_step);
 		}
+
+		canInterject = !interjectBubble->isVisible() && !modeOffensive;
 	}
 }
 
@@ -817,7 +820,7 @@ void PD_UI_YellingContest::interject(){
 
 	// Set flag if interjectionn was successful
 	interjected = isPunctuation;
-
+	canInterject = false;
 }
 
 void PD_UI_YellingContest::setUIMode(bool _isOffensive){
