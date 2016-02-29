@@ -1,0 +1,44 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["tv_table"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["tv_main"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                {
+                                    "componentTypes": ["tv_antenna"], 
+                                    "multiplier": 1,
+                                    "required": false
+                                }
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["couch_leg"], 
+                            "multiplier": 4, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "TV",
+			"mass": 100,
+            "roomTypes" : ["LIVING_ROOM"],
+            "sides" : {
+                },
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+            "padding":0    
+
+        }

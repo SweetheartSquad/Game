@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "tv_antenna"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        11.095280984073735, 
+                        2.861464722234766
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 88, 
+    "src": "tv_main_1.obj", 
+    "type": "tv_main"
+}

@@ -61,7 +61,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
-	panSpeed(10.f),
+	panSpeed(20.f),
 	panLeft(false),
 	panRight(false),
 	trackSpeed(0.1f),
