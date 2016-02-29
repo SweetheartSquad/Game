@@ -5,8 +5,26 @@
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentTypes": ["bookshelf_contents"], 
-								"multiplier": 4, 
+                            "componentTypes": ["bookshelf_contents_1"], 
+								"multiplier": 1, 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["bookshelf_contents_2"], 
+								"multiplier": 1, 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["bookshelf_contents_3"], 
+								"multiplier": 1, 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["bookshelf_contents_4"], 
+								"multiplier": 1, 
 								"required": true,
 								"scale": [1.0,1.0,1.0]
                         }
