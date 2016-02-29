@@ -37,6 +37,7 @@
 #include <RoomBuilder.h>
 #include <RenderSurface.h>
 #include <PD_Door.h>
+#include <PD_Prop.h>
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
@@ -195,6 +196,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiMap->setRationalHeight(1.f, &uiLayer);
 	uiMap->setRationalWidth(1.f, &uiLayer);
 	uiMap->disable();
+
+
+	uiFade = new PD_UI_Fade(uiLayer.world);
+	uiLayer.addChild(uiFade);
+	uiFade->setRationalHeight(1.f, &uiLayer);
+	uiFade->setRationalWidth(1.f, &uiLayer);
 
 	// add the player to the scene
 	player = new Player(bulletWorld);
@@ -992,6 +999,20 @@ void PD_Scene_Main::update(Step * _step){
 		tex->saveImageData("tokenTest.tga");
 		uiYellingContest->addLife(tex);
 	}
+	
+	if(keyboard->keyJustDown(GLFW_KEY_3)){
+		uiFade->fadeIn(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_4)){
+		uiFade->fadeIn();
+	}
+	
+	if(keyboard->keyJustDown(GLFW_KEY_5)){
+		uiFade->fadeOut(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_6)){
+		uiFade->fadeOut();
+	}
 
 
 	// look up at current speaker's face during conversations
@@ -1186,6 +1207,13 @@ void PD_Scene_Main::update(Step * _step){
 								player->disable();
 								// TODO: pass in the character that's interacting with the item here
 							});
+						}
+					}
+				}else{
+					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
+					if(prop != nullptr){
+						if(mouse->leftDown()){
+							prop->applyForceToCenter(-player->playerCamera->forwardVectorRotated*5.f);
 						}
 					}
 				}

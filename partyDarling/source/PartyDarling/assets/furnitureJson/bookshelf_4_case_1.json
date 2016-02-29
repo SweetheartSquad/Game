@@ -2,7 +2,7 @@
     "connectors": [
         {
             "componentTypes": [
-                "bookshelf_contents"
+                "bookshelf_contents_1"
             ], 
             "out": [
                 {
@@ -21,7 +21,14 @@
                         1.0, 
                         1.0
                     ]
-                }, 
+                }
+            ]
+        },
+		{
+            "componentTypes": [
+                "bookshelf_contents_2"
+            ], 
+            "out": [
                 {
                     "position": [
                         0.0, 
@@ -38,7 +45,14 @@
                         1.0, 
                         1.0
                     ]
-                }, 
+                }
+            ]
+        },
+		{
+            "componentTypes": [
+                "bookshelf_contents_3"
+            ], 
+            "out": [
                 {
                     "position": [
                         0.0, 
@@ -55,7 +69,14 @@
                         1.0, 
                         1.0
                     ]
-                }, 
+                }
+            ]
+        },
+		{
+            "componentTypes": [
+                "bookshelf_contents_4"
+            ], 
+            "out": [
                 {
                     "position": [
                         0.0, 

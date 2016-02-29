@@ -291,6 +291,66 @@
         {
             "id": 65, 
             "src": "furnitureJson/table_tableTop_4.json"
+        }, 
+        {
+            "id": 66, 
+            "src": "furnitureJson/bookshelf_contents_2.json"
+        }, 
+        {
+            "id": 67, 
+            "src": "furnitureJson/bookshelf_contents_3.json"
+        }, 
+        {
+            "id": 68, 
+            "src": "furnitureJson/bookshelf_contents_4.json"
+        }, 
+        {
+            "id": 69, 
+            "src": "furnitureJson/bookshelf_contents_1_2.json"
+        }, 
+        {
+            "id": 70, 
+            "src": "furnitureJson/bookshelf_contents_2_2.json"
+        }, 
+        {
+            "id": 71, 
+            "src": "furnitureJson/bookshelf_contents_3_2.json"
+        }, 
+        {
+            "id": 72, 
+            "src": "furnitureJson/bookshelf_contents_4_2.json"
+        }, 
+        {
+            "id": 73, 
+            "src": "furnitureJson/bookshelf_contents_1_3.json"
+        }, 
+        {
+            "id": 74, 
+            "src": "furnitureJson/bookshelf_contents_2_3.json"
+        }, 
+        {
+            "id": 75, 
+            "src": "furnitureJson/bookshelf_contents_3_3.json"
+        }, 
+        {
+            "id": 76, 
+            "src": "furnitureJson/bookshelf_contents_4_3.json"
+        }, 
+        {
+            "id": 77, 
+            "src": "furnitureJson/bookshelf_contents_1_4.json"
+        }, 
+        {
+            "id": 78, 
+            "src": "furnitureJson/bookshelf_contents_2_4.json"
+        }, 
+        {
+            "id": 79, 
+            "src": "furnitureJson/bookshelf_contents_3_4.json"
+        }, 
+        {
+            "id": 80, 
+            "src": "furnitureJson/bookshelf_contents_4_4.json"
         }
     ], 
     "furniture": [
@@ -298,9 +358,6 @@
             "src": "furnitureTypes/chair.json"
         }, 
         {
-            "src": "furnitureTypes/floorLamp.json"
-        }, 
-		{
             "src": "furnitureTypes/deskLamp.json"
         }, 
         {
