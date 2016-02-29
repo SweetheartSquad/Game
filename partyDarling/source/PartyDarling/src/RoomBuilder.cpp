@@ -1161,17 +1161,16 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
 	sweet::ShuffleVector<PD_FurnitureDefinition *> definitions;
-
-	PD_FurnitureDefinition * d = PD_ResourceManager::furnitureDefinitions.at(9);
+	
 	if(definition->roomType == "NO_TYPE"){
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
-			definitions.push(d);
+			definitions.push(def);
 		}
 	}else{
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
 			for(std::string type : def->roomTypes){
 				if(type == room->definition->roomType){
-					definitions.push(d);
+					definitions.push(def);
 				}
 			}
 		}
