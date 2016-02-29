@@ -66,7 +66,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	panRight(false),
 	trackSpeed(0.1f),
 	trackLeft(false),
-	trackRight(false)
+	trackRight(false),
+	carriedProp(nullptr),
+	carriedPropDistance(0)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -1326,10 +1328,14 @@ void PD_Scene_Main::update(Step * _step){
 						}
 					}
 				}else{
+					// prop carrying selection
 					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
 					if(prop != nullptr){
-						if(mouse->leftDown()){
-							prop->applyForceToCenter(-player->playerCamera->forwardVectorRotated*5.f);
+						if(mouse->leftJustPressed()){
+							carriedProp = prop;
+							carriedPropDistance = glm::distance(camPos, carriedProp->meshTransform->getWorldPos());
+							carriedProp->body->setDamping(0.8f,0.5f);
+							carriedProp->body->setGravity(btVector3(0,0,0));
 						}
 					}
 				}
@@ -1380,6 +1386,27 @@ void PD_Scene_Main::update(Step * _step){
 
 				});
 			}
+		}
+	}
+
+
+	// prop carrying release and carry
+	if(mouse->leftJustReleased()){
+		if(carriedProp != nullptr){
+			carriedProp->body->setDamping(0,0);
+			carriedProp->body->setGravity(bulletWorld->world->getGravity());
+		}
+		carriedProp = nullptr;
+		carriedPropDistance = 0;
+	}else if(mouse->leftDown()){
+		if(carriedProp != nullptr){
+			glm::vec3 targetPos = camPos + player->playerCamera->forwardVectorRotated * carriedPropDistance;
+			glm::vec3 d = (targetPos - carriedProp->meshTransform->getWorldPos()) * 0.5f;
+			float dl = glm::length(d);
+			if(dl > 0.1f){
+				d = glm::normalize(d) * 0.1f;
+			}
+			carriedProp->applyLinearImpulseToCenter(d);
 		}
 	}
 	

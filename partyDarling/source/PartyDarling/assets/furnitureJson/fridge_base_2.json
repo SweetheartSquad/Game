@@ -1,0 +1,29 @@
+{
+    "connectors": [{
+            "componentTypes": [
+                "fridge_top"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        1.679143975010497, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0,  
+                        1.0
+                    ]
+                }
+            ]
+        }], 
+    "id": 87, 
+    "src": "fridge_base_2.obj", 
+    "type": "fridge_base"
+}
