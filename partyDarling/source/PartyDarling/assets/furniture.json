@@ -419,6 +419,18 @@
         {
             "id": 97, 
             "src": "furnitureJson/painting_frame_1.json"
+        },
+        {
+            "id": 98, 
+            "src": "furnitureJson/painting_frame_2.json"
+        },
+        {
+            "id": 99, 
+            "src": "furnitureJson/painting_frame_3.json"
+        },
+        {
+            "id": 100, 
+            "src": "furnitureJson/painting_frame_4.json"
         }
     ], 
     "furniture": [
