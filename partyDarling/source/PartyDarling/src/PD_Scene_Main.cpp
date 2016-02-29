@@ -622,7 +622,7 @@ void PD_Scene_Main::pickScenarios(){
 
 
 	// TODO: all of this
-	activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
+	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
 	activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
 	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
