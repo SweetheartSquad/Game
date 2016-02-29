@@ -35,6 +35,7 @@
             "sides" : {
 				 "FRONT":"FRONT"
              },
+			"parentDependent": true, 
             "parents":{
                 "wall":[
                     "FRONT"

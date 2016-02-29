@@ -68,7 +68,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		auto it = game->scenes.find("game");
 		if(it == game->scenes.end()){
 			game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
-			game->switchScene("intro", false);
+			game->switchScene("intro", true);
 		}else{
 			game->switchScene("game", false);
 		}

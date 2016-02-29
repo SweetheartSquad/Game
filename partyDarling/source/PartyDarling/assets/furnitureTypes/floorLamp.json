@@ -28,6 +28,9 @@
             "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
             "sides" : {
                 },
+			"parentDependent": true,
             "parents":{"wall":["FRONT"]},    
-            "padding":0
+            "paddingBack": 0.5,
+			"paddnigLeft": 1,
+			"paddingRight": 1
         }

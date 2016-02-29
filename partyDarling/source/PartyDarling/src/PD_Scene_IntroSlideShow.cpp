@@ -22,6 +22,23 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 		_game->switchScene("game", true);
 	});
 
+	ComponentShaderText * textShader = new ComponentShaderText(true);
+	textShader->setColor(1.f, 1.f, 1.f);
+	TextLabel * skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("main-menu-font")->font, textShader);
+	uiLayer->addChild(skip);
+	skip->setMouseEnabled(true);
+	skip->setBackgroundColour(0.5f, 0, 0);
+	skip->setRationalHeight(0.1f, uiLayer);
+	skip->setRationalWidth(0.2f, uiLayer);
+	skip->verticalAlignment = kMIDDLE;
+	skip->horizontalAlignment = kCENTER;
+	skip->setMarginLeft(0.8f);
+	skip->setText("Skip");
+	skip->eventManager.addEventListener("click", [this](sweet::Event * _event){
+		eventManager->triggerEvent("overflow");
+	});
+	uiLayer->invalidateLayout();
+
 	// advance to the first slide
 	changeSlide(true);
 }
