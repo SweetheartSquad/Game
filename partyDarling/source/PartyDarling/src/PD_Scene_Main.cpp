@@ -61,6 +61,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
+	panSpeed(10.f),
+	panLeft(false),
+	panRight(false),
+	trackSpeed(0.1f),
+	trackLeft(false),
+	trackRight(false),
 	carriedProp(nullptr),
 	carriedPropDistance(0)
 {
@@ -986,6 +992,22 @@ PD_Scene_Main::~PD_Scene_Main(){
 }
 
 void PD_Scene_Main::update(Step * _step){
+	// panning
+	if(panLeft){
+		player->playerCamera->yaw += panSpeed * _step->getDeltaTime();
+	}
+	if(panRight){
+		player->playerCamera->yaw -= panSpeed * _step->getDeltaTime();
+	}
+
+	// tracking
+	if(trackLeft){
+		player->translatePhysical((player->playerCamera->rightVectorRotated) * -trackSpeed);
+	}
+	if(trackRight){
+		player->translatePhysical((player->playerCamera->rightVectorRotated) * trackSpeed);
+	}
+
 	// billboarding
 	glm::vec3 camPos = player->playerCamera->childTransform->getWorldPos();
 	for(auto & c : currentRoom->characters){
@@ -1105,6 +1127,100 @@ void PD_Scene_Main::update(Step * _step){
 			navigate(glm::ivec2(-1,0));
 		}if(keyboard->keyJustDown(GLFW_KEY_RIGHT)){
 			navigate(glm::ivec2(1,0));
+		}
+	}
+
+	// panning
+	if(keyboard->keyDown(GLFW_KEY_P)){
+		if(keyboard->keyJustDown(GLFW_KEY_LEFT)){
+			if(!panLeft){
+				panLeft = true;
+				if(panRight){
+					// switch direction
+					panRight = false;
+				}else{
+					if(!trackLeft && !trackRight){
+						// disable player
+						uiLayer.setVisible(false);
+						player->disable();
+					}
+				}
+			}else{
+				panLeft = false;
+				if(!trackLeft && !trackRight){
+					// enable player
+					uiLayer.setVisible(true);
+					player->enable();
+				}
+			}
+		}if(keyboard->keyJustDown(GLFW_KEY_RIGHT)){
+			if(!panRight){
+				panRight = true;
+				if(panLeft){
+					// switch direction
+					panLeft = false;
+				}else{
+					if(!trackLeft && !trackRight){
+						// disable player
+						uiLayer.setVisible(false);
+						player->disable();
+					}
+				}
+			}else{
+				panRight = false;
+				if(!trackLeft && !trackRight){
+					// enable player
+					uiLayer.setVisible(true);
+					player->enable();
+				}
+			}
+		}
+	}
+	
+	// tracking
+	if(keyboard->keyDown(GLFW_KEY_T)){
+		if(keyboard->keyJustDown(GLFW_KEY_LEFT)){
+			if(!trackLeft){
+				trackLeft = true;
+				if(trackRight){
+					// switch direction
+					trackRight = false;
+				}else{
+					if(!panLeft && !panRight){
+						// disable player
+						uiLayer.setVisible(false);
+						player->disable();
+					}
+				}
+			}else{
+				trackLeft = false;
+				if(!panLeft && !panRight){
+					// enable player
+					uiLayer.setVisible(true);
+					player->enable();
+				}
+			}
+		}if(keyboard->keyJustDown(GLFW_KEY_RIGHT)){
+			if(!trackRight){
+				trackRight = true;
+				if(trackLeft){
+					// switch direction
+					trackLeft = false;
+				}else{
+					if(!panLeft && !panRight){
+						// disable player
+						uiLayer.setVisible(false);
+						player->disable();
+					}
+				}
+			}else{
+				trackRight = false;
+				// enable player
+				if(!panLeft && !panRight){
+					uiLayer.setVisible(true);
+					player->enable();
+				}
+			}
 		}
 	}
 

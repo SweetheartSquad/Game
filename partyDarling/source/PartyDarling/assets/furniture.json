@@ -351,10 +351,42 @@
         {
             "id": 80, 
             "src": "furnitureJson/bookshelf_contents_4_4.json"
+        }, 
+        {
+            "id": 81, 
+            "src": "furnitureJson/fridge_base_1.json"
+        }, 
+        {
+            "id": 82, 
+            "src": "furnitureJson/fridge_top_1.json"
+        }, 
+        {
+            "id": 83, 
+            "src": "furnitureJson/fridge_top_2.json"
+        }, 
+        {
+            "id": 84, 
+            "src": "furnitureJson/fridge_top_3.json"
+        }, 
+        {
+            "id": 85, 
+            "src": "furnitureJson/fridge_top_5.json"
+        }, 
+        {
+            "id": 86, 
+            "src": "furnitureJson/fridge_top_6.json"
+        }, 
+        {
+            "id": 87, 
+            "src": "furnitureJson/fridge_base_2.json"
         }
     ], 
     "furniture": [
+       
         {
+            "src": "furnitureTypes/fridge.json"
+        }, 
+		 {
             "src": "furnitureTypes/chair.json"
         }, 
         {
