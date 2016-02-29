@@ -379,9 +379,8 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 
 void PD_UI_YellingContest::update(Step * _step){
 	if(isEnabled()){
+		VerticalLinearLayout::update(_step);
 		if(!isGameOver){
-			VerticalLinearLayout::update(_step);
-
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
 					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->textDisplayed);
@@ -567,8 +566,6 @@ void PD_UI_YellingContest::update(Step * _step){
 				gameOverImage->setSquareWidth(1.f);
 				gameOverContainer->invalidateLayout();
 			}
-
-			VerticalLinearLayout::update(_step);
 		}
 
 		canInterject = !interjectBubble->isVisible() && !modeOffensive;
@@ -647,7 +644,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	}
 
 	addChild(gameOverContainer);
-
+	//invalidateLayout();
 	// USER TESTING INFORMATION
 	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
 	{

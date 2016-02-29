@@ -181,7 +181,20 @@ Room * RoomBuilder::getRoom(){
 
 	// get mandatory objects
 	std::vector<RoomObject *> objects = getSpecifiedObjects();
-	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
+			return i->parentTypes.size() < j->parentTypes.size();
+		}
+
+		bool isParent = false;
+		for(auto &parent: j->parentTypes){
+			if(parent.parent == i->type){
+				isParent = true;
+				break;
+			}
+		}
+		return (isParent);
+	});
 
 	int numAttempts = 0;
 
@@ -310,7 +323,20 @@ Room * RoomBuilder::getRoom(){
 	// Random room stuff
 	objects.clear();
 	objects = getRandomObjects();
-	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
+			return i->parentTypes.size() < j->parentTypes.size();
+		}
+
+		bool isParent = false;
+		for(auto &parent: j->parentTypes){
+			if(parent.parent == i->type){
+				isParent = true;
+				break;
+			}
+		}
+		return (isParent);
+	});
 	
 	for(auto obj : objects){
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
@@ -669,55 +695,66 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	float angle = 0;
 	glm::vec3 childDimensions = glm::vec3(_child->boundingBox.width, _child->boundingBox.height, _child->boundingBox.depth);
 	
-	// Rotate child according to childSide
-	if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
-		float childAngle = 0.f;
-		// orient child side pos
-		switch(_slot->childSide){
-			case PD_Side::kRIGHT:
-				childAngle  = 90.f;
-				break;
-			case PD_Side::kFRONT:
-				childAngle  = 180.f;
-				break;
-			case PD_Side::kLEFT:
-				childAngle  = 270.f;
-				break;
+	if(oppositeSides(_side, _slot->childSide)){
+		if(_side == PD_Side::kLEFT || _side == PD_Side::kRIGHT){
+			childDimensions = glm::rotate(childDimensions, 90.f, glm::vec3(0, 1.f, 0));
+			childDimensions.x = abs(childDimensions.x);
+			childDimensions.y = abs(childDimensions.y);
+			childDimensions.z = abs(childDimensions.z);
 		}
-		angle += childAngle;
-	}
-	childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
-	childDimensions.x = abs(childDimensions.x);
-	childDimensions.y = abs(childDimensions.y);
-	childDimensions.z = abs(childDimensions.z);
+		
+	}else{
+		// Rotate child according to childSide
+		if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
+			float childAngle = 0.f;
+			// orient child side pos
+			switch(_slot->childSide){
+				case PD_Side::kRIGHT:
+					childAngle  = 90.f;
+					break;
+				case PD_Side::kFRONT:
+					childAngle  = 180.f;
+					break;
+				case PD_Side::kLEFT:
+					childAngle  = 270.f;
+					break;
+			}
+			angle += childAngle;
+		}
+		childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
+		childDimensions.x = abs(childDimensions.x);
+		childDimensions.y = abs(childDimensions.y);
+		childDimensions.z = abs(childDimensions.z);
 
+		// Orient child to side
+		if(!oppositeSides(_side, _slot->childSide)){
+			float sideAngle = 0.f;
+			// orient child side pos
+			switch(_side){
+				case PD_Side::kRIGHT:
+					sideAngle  = 90.f;
+					break;
+				case PD_Side::kBACK:
+					sideAngle  = 180.f;
+					break;
+				case PD_Side::kLEFT:
+					sideAngle  = 270.f;
+					break;
+			}
+			angle += sideAngle;
+		}
+
+		_child->rotatePhysical(angle, 0, 1.f, 0);
+		_child->realign();
+		_child->meshTransform->makeCumulativeModelMatrixDirty();
+	}
+	
 	// check length of side
 	if(childDimensions.x > _slot->length - _slot->spaceFilled){
 		Log::warn("Not enough SPACE along side.");
 		return false;
 	}
 	
-	// Orient child to side
-	if(_side != PD_Side::kFRONT && _side != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
-		float sideAngle = 0.f;
-		// orient child side pos
-		switch(_side){
-			case PD_Side::kRIGHT:
-				sideAngle  = 90.f;
-				break;
-			case PD_Side::kBACK:
-				sideAngle  = 180.f;
-				break;
-			case PD_Side::kLEFT:
-				sideAngle  = 270.f;
-				break;
-		}
-		angle += sideAngle;
-	}
-
-	_child->rotatePhysical(angle, 0, 1.f, 0);
-	_child->realign();
-	_child->meshTransform->makeCumulativeModelMatrixDirty();
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -824,6 +861,25 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	room->addComponent(_child);
 
 	return true;
+}
+
+bool RoomBuilder::oppositeSides(PD_Side _side1, PD_Side _side2){
+	switch(_side1){
+		case PD_Side::kFRONT:
+			return _side2 == PD_Side::kBACK;
+		case PD_Side::kBACK:
+			return _side2 == PD_Side::kFRONT;
+		case PD_Side::kLEFT:
+			return _side2 == PD_Side::kRIGHT;
+		case PD_Side::kRIGHT:
+			return _side2 == PD_Side::kLEFT;
+		case PD_Side::kTOP:
+			return _side2 == PD_Side::kBOTTOM;
+		case PD_Side::kBOTTOM:
+			return _side2 == PD_Side::kTOP;
+	}
+
+	return false;
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent){
@@ -1161,7 +1217,9 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
 	sweet::ShuffleVector<PD_FurnitureDefinition *> definitions;
-	
+	definitions.push(PD_ResourceManager::furnitureDefinitions.at(4));
+	definitions.push(PD_ResourceManager::furnitureDefinitions.at(8));
+	/*
 	if(definition->roomType == "NO_TYPE"){
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
 			definitions.push(def);
@@ -1174,7 +1232,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 				}
 			}
 		}
-	}
+	}*/
 
 	// Random
 	if(definitions.size() > 0){

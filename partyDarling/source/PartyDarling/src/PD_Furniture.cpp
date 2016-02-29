@@ -47,22 +47,6 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
 
 	sweet::Box originalBoundingBox = mesh->calcBoundingBox();
-	// Get the sides information
-	if(_def->sides.front != PD_Side::kNONE){
-		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, originalBoundingBox.width);
-	}
-	if(_def->sides.back != PD_Side::kNONE){
-		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, originalBoundingBox.width);
-	}
-	if(_def->sides.right != PD_Side::kNONE){
-		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, originalBoundingBox.depth);
-	}
-	if(_def->sides.left != PD_Side::kNONE){
-		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, originalBoundingBox.depth);
-	}
-	if(_def->sides.top != PD_Side::kNONE){
-		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, originalBoundingBox.width);
-	}
 
 	//Deformers
 	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
@@ -119,4 +103,21 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	boundingBoxMesh->meshTransform->scale(boundingBox.width, boundingBox.height, boundingBox.depth, kOBJECT);
 	boundingBoxMesh->freezeTransformation();
 	boundingBoxMesh->meshTransform->translate(-_def->paddingLeft, 0, -_def->paddingBack);
+
+	// Get the sides information
+	if(_def->sides.front != PD_Side::kNONE){
+		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width);
+	}
+	if(_def->sides.back != PD_Side::kNONE){
+		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, boundingBox.width);
+	}
+	if(_def->sides.right != PD_Side::kNONE){
+		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, boundingBox.depth);
+	}
+	if(_def->sides.left != PD_Side::kNONE){
+		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, boundingBox.depth);
+	}
+	if(_def->sides.top != PD_Side::kNONE){
+		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, originalBoundingBox.width);
+	}
 }
