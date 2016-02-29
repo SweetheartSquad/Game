@@ -1,0 +1,103 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "toilet_base"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "toilet_seat"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        3.3425099849700928, 
+                        -3.6258299350738525
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "toilet_lid"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        3.3425099849700928, 
+                        -3.6258299350738525
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "toilet_tank"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        3.3425099849700928, 
+                        -3.6258299350738525
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 101, 
+    "src": "toilet_bowl_1.obj", 
+    "type": "toilet_bowl"
+}

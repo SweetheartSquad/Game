@@ -1,0 +1,55 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "toilet_tank_top"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        -6.604230657051462e-16, 
+                        5.875018119812012, 
+                        -2.974281072616577
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "toilet_handle"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        -3.5034010495452397, 
+                        4.880493416465242, 
+                        -2.0804844872205854
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 105, 
+    "src": "toilet_tank_1.obj", 
+    "type": "toilet_tank"
+}

@@ -403,34 +403,90 @@
         {
             "id": 93, 
             "src": "furnitureJson/tv_antenna_3.json"
-        },
+        }, 
         {
             "id": 94, 
             "src": "furnitureJson/window_base_1.json"
-        },
+        }, 
         {
             "id": 95, 
             "src": "furnitureJson/window_base_2.json"
-        },
+        }, 
         {
             "id": 96, 
             "src": "furnitureJson/painting_base_1.json"
-        },
+        }, 
         {
             "id": 97, 
             "src": "furnitureJson/painting_frame_1.json"
-        },
+        }, 
         {
             "id": 98, 
             "src": "furnitureJson/painting_frame_2.json"
-        },
+        }, 
         {
             "id": 99, 
             "src": "furnitureJson/painting_frame_3.json"
-        },
+        }, 
         {
             "id": 100, 
             "src": "furnitureJson/painting_frame_4.json"
+        }, 
+        {
+            "id": 101, 
+            "src": "furnitureJson/toilet_bowl_1.json"
+        }, 
+        {
+            "id": 102, 
+            "src": "furnitureJson/toilet_base_1.json"
+        }, 
+        {
+            "id": 103, 
+            "src": "furnitureJson/toilet_seat.json"
+        }, 
+        {
+            "id": 104, 
+            "src": "furnitureJson/toilet_lid.json"
+        }, 
+        {
+            "id": 105, 
+            "src": "furnitureJson/toilet_tank_1.json"
+        }, 
+        {
+            "id": 106, 
+            "src": "furnitureJson/toilet_tank_top_1.json"
+        }, 
+        {
+            "id": 107, 
+            "src": "furnitureJson/toilet_handle_1.json"
+        }, 
+        {
+            "id": 108, 
+            "src": "furnitureJson/toilet_bowl_2.json"
+        }, 
+        {
+            "id": 109, 
+            "src": "furnitureJson/toilet_base_2.json"
+        }, 
+        {
+            "id": 110, 
+            "src": "furnitureJson/toilet_seat_2.json"
+        }, 
+        {
+            "id": 111, 
+            "src": "furnitureJson/toilet_lid_2.json"
+        }, 
+        {
+            "id": 112, 
+            "src": "furnitureJson/toilet_tank_2.json"
+        }, 
+        {
+            "id": 113, 
+            "src": "furnitureJson/toilet_tank_top_2.json"
+        }, 
+        {
+            "id": 114, 
+            "src": "furnitureJson/toilet_handle_2.json"
         }
     ], 
     "furniture": [
@@ -460,10 +516,13 @@
         }, 
         {
             "src": "furnitureTypes/loveseat.json"
-        },
+        }, 
+		{
+            "src": "furnitureTypes/toilet.json"
+        }, 
         {
             "src": "furnitureTypes/window.json"
-        },
+        }, 
         {
             "src": "furnitureTypes/painting.json"
         }

@@ -1,0 +1,73 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["toilet_bowl"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["toilet_base"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["toilet_seat"], 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["toilet_lid"], 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": false,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["toilet_tank"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+								{
+								"componentTypes": ["toilet_tank_top"], 
+								"multiplier": 1, 
+								"outComponents": [], 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+								},
+								{
+								"componentTypes": ["toilet_handle"], 
+								"multiplier": 1, 
+								"outComponents": [], 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+								}
+							
+							], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [0.8,0.8,0.8]
+                }
+            ], 
+            "type": "toilet",
+			"mass": 50,
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+            "padding":0,
+			"twist": false,
+            "flare": false
+
+        }
