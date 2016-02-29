@@ -26,6 +26,7 @@
 
 class PointLight;
 class RampTexture;
+class PD_Prop;
 
 class PD_Scene_Main : public Scene{
 public:
@@ -108,4 +109,11 @@ public:
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border
 	Texture * getToken();
+
+
+
+	// carrying stuff
+
+	PD_Prop * carriedProp;
+	float carriedPropDistance;
 };
