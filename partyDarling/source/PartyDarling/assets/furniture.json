@@ -391,6 +391,18 @@
         {
             "id": 90, 
             "src": "furnitureJson/tv_table_1.json"
+        }, 
+        {
+            "id": 91, 
+            "src": "furnitureJson/tv_antenna_2.json"
+        }, 
+        {
+            "id": 92, 
+            "src": "furnitureJson/tv_main_3.json"
+        }, 
+        {
+            "id": 93, 
+            "src": "furnitureJson/tv_antenna_3.json"
         }
     ], 
     "furniture": [
