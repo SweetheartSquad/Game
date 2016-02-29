@@ -8,14 +8,14 @@
                     "componentTypes": ["leg"], 
                     "multiplier": 4, 
                     "required": true,
-					"scale": [1.0,0.5,1.0]
+					"scale": [1.0,0.75,1.0]
                 }
             ], 
             "required": true,
 			"scale": [1.0,1.0,1.0]
         }
     ], 
-    "type": "table",
+    "type": "coffeeTable",
 	"mass": 40,
     "roomTypes" : ["LIVING_ROOM"],
     "sides" : {
