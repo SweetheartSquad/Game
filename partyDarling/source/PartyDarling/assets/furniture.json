@@ -367,6 +367,9 @@
             "src": "furnitureTypes/sideTable.json"
         }, 
         {
+            "src": "furnitureTypes/coffeeTable.json"
+        }, 
+        {
             "src": "furnitureTypes/bookshelf_4.json"
         }, 
         {

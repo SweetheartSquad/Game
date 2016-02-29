@@ -1,0 +1,30 @@
+{
+    "components": [
+        {
+            "componentTypes": ["tabletop"], 
+            "multiplier": 1, 
+            "outComponents": [
+                {
+                    "componentTypes": ["leg"], 
+                    "multiplier": 4, 
+                    "required": true,
+					"scale": [1.0,0.5,1.0]
+                }
+            ], 
+            "required": true,
+			"scale": [1.0,1.0,1.0]
+        }
+    ], 
+    "type": "table",
+	"mass": 40,
+    "roomTypes" : ["LIVING_ROOM"],
+    "sides" : {
+            "FRONT":"FRONT",
+            "BACK":"FRONT",
+            "LEFT":"FRONT",
+            "RIGHT":"FRONT",
+			"TOP":"BOTTOM"
+        },
+    "parents":{},
+    "padding":0
+}
