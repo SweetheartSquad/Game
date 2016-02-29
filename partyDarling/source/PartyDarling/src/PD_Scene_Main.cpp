@@ -61,7 +61,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
-	panSpeed(10.f),
+	panSpeed(20.f),
 	panLeft(false),
 	panRight(false),
 	trackSpeed(0.1f),
@@ -978,6 +978,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	lights.push_back(playerLight);
 	
 	for(unsigned long int i = 0; i < currentRoom->lights.size(); ++i) {
+		currentRoom->lights[i]->lastPos = glm::vec3(99999);
 		lights.push_back(currentRoom->lights[i]);
 	}
 

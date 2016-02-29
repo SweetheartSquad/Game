@@ -379,14 +379,25 @@
         {
             "id": 87, 
             "src": "furnitureJson/fridge_base_2.json"
+        }, 
+        {
+            "id": 88, 
+            "src": "furnitureJson/tv_main_1.json"
+        }, 
+        {
+            "id": 89, 
+            "src": "furnitureJson/tv_antenna_1.json"
+        }, 
+        {
+            "id": 90, 
+            "src": "furnitureJson/tv_table_1.json"
         }
     ], 
     "furniture": [
-       
         {
             "src": "furnitureTypes/fridge.json"
         }, 
-		 {
+        {
             "src": "furnitureTypes/chair.json"
         }, 
         {
@@ -403,6 +414,9 @@
         }, 
         {
             "src": "furnitureTypes/bookshelf_4.json"
+        }, 
+        {
+            "src": "furnitureTypes/TV.json"
         }, 
         {
             "src": "furnitureTypes/loveseat.json"
