@@ -29,6 +29,14 @@ class RampTexture;
 
 class PD_Scene_Main : public Scene{
 public:
+	float panSpeed;
+	bool panLeft;
+	bool panRight;
+
+	float trackSpeed;
+	bool trackLeft;
+	bool trackRight;
+
 	ComponentShaderBase * toonShader;
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
