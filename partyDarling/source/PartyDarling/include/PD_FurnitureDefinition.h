@@ -26,7 +26,12 @@ public:
 
 	std::string type;
 	float mass;
-	float padding;
+	
+	float paddingFront;
+	float paddingBack;
+	float paddingLeft;
+	float paddingRight;
+
 	bool detailedCollider;
 	std::vector<PD_FurnitureComponentDefinition *> components;
 	PD_FurnitureSides sides;

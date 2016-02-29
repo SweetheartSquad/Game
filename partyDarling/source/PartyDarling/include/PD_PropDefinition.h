@@ -6,7 +6,9 @@ class PD_PropDefinition {
 public:
 	MeshInterface * mesh;
 	float mass;
+
 	float padding;
+
 	bool twist;
 	bool flare;
 	bool parentDependent;

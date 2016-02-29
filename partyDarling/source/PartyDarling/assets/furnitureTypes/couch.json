@@ -77,5 +77,8 @@
 					"RIGHT"],
 				"tv": ["FRONT"]
 			},   
-            "padding":1   
+            "paddingFront": 0,
+			"paddingBack": 0.2,
+			"paddingLeft": 0.1,
+			"paddingRight": 0.1
         }

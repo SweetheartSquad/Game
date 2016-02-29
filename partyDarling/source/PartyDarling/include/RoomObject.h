@@ -38,6 +38,8 @@ class PD_Slot;
 
 class RoomObject: public BulletMeshEntity {
 public:
+	MeshEntity * boundingBoxMesh;
+
 	// angle for billboarding
 	float angle;
 	bool billboarded;
