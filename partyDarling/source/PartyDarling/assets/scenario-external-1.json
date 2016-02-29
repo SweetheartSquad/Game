@@ -1512,6 +1512,7 @@
       "name": "Kitchen",
       "id": 1,
       "description": "food items",
+	  "roomType": "KITCHEN",
       "furnitureTypes": "",
       "characters": [
         5
@@ -1533,6 +1534,7 @@
       "name": "Room2",
       "id": 2,
       "description": "general room",
+	  "roomType": "LIVING_ROOM",
       "furnitureTypes": [],
       "characters": [
         6,
@@ -1552,6 +1554,7 @@
       "name": "Armoury",
       "id": 3,
       "description": "secret room",
+	  "roomType": "LIVING_ROOM",
       "furnitureTypes": [],
       "characters": [],
       "tags": {
@@ -1570,6 +1573,7 @@
       "name": "Room4",
       "id": 4,
       "description": "another room",
+	  "roomType": "BEDROOM",
       "furnitureTypes": [],
       "characters": [
         4,

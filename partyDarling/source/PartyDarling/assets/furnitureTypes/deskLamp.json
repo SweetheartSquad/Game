@@ -28,6 +28,6 @@
             "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
             "sides" : {
                 },
-            "parents":{"wall":["FRONT"], "sideTable":["TOP"]},    
+            "parents":{"sideTable":["TOP"]},    
             "padding":0
         }

@@ -17,6 +17,8 @@
     ], 
     "type": "coffeeTable",
 	"mass": 40,
+	"twist": false,
+	"flare": false,
     "roomTypes" : ["LIVING_ROOM"],
     "sides" : {
             "FRONT":"FRONT",

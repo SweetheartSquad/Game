@@ -144,6 +144,7 @@ PD_Item * AssetItem::getItem(BulletWorld * _world, Shader * _shader){
 // room
 AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
+	roomType(_json.get("roomType", "NO_TYPE").asString()),
 	name(_json.get("name", "NO_NAME").asString()),
 	description(_json.get("description", "NO_DESCRIPTION").asString()),
 	locked(_json.get("locked", false).asBool())

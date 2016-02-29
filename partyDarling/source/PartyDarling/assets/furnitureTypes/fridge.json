@@ -17,7 +17,7 @@
             ], 
             "type": "fridge",
 			"mass": 80,
-            "roomTypes" : ["LIVING_ROOM","BEDROOM","KITCHEN"],
+            "roomTypes" : ["KITCHEN"],
             "detailedCollider": false,
             "parents":{"wall":["FRONT"]},
             "padding":0,

@@ -101,6 +101,7 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	m->setUV(23, 1.0, 0.0);
 
 	boundingBoxMesh = new MeshEntity(m, _shader);
+	childTransform->addChild(boundingBoxMesh);
 }
 
 RoomObject::~RoomObject(void){

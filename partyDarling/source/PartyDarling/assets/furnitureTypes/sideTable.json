@@ -27,6 +27,7 @@
 			"sides" : {
 				"TOP":"BOTTOM"
             },
+			"parentDependent": true,
             "parents":{
                 "loveseat":[
                     "LEFT",
@@ -35,11 +36,13 @@
 				"bed":[
 					"LEFT",
                     "RIGHT"
+				],
+				"wall":[
+					"FRONT"
 				]
             },
             "sides" : {
                     "TOP":"BOTTOM"
                 },
-            "parents":{},
             "padding":0
         }

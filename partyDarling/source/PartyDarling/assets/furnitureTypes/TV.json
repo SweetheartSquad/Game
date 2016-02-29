@@ -26,19 +26,21 @@
                         }
                     ], 
                     "required": true,
-					"scale": [1.0,1.0,1.0]
+					"scale": [1.0,1.0,0.5]
                 }
             ], 
             "type": "TV",
 			"mass": 100,
             "roomTypes" : ["LIVING_ROOM"],
             "sides" : {
-                },
+				 "FRONT":"FRONT"
+             },
             "parents":{
                 "wall":[
                     "FRONT"
                 ]
             },
-            "padding":0    
-
+            "paddingFront": 0.5,
+			"paddingLeft": 0.6,
+			"paddingRight": 0.6
         }

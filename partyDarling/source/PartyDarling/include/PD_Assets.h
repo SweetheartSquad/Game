@@ -123,6 +123,8 @@ private:
 	// constructor is private; use create instead if you need to instantiate directly
 	AssetRoom(Json::Value _json, Scenario * const _scenario);
 public:
+	// this room's type
+	std::string roomType;
 	// this room's in-game name (probably not visible)
 	std::string name;
 	// this room's in-game description (probably not visible)

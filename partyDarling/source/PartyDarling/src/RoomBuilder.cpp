@@ -536,8 +536,52 @@ RoomObject * RoomBuilder::getWallFromEdge(Edge * _e){
 bool RoomBuilder::search(RoomObject * child){
 	// Look for parent
 	if(child->anchor != Anchor_t::CIELING && (child->parentTypes.size() > 0 || child->anchor == Anchor_t::WALL)){
-		for(unsigned int i = 0; i < availableParents.size(); ++i){
-			RoomObject  * parent = availableParents.at(i);
+		// create parent list
+		sweet::ShuffleVector<RoomObject *> validParentsShuffle;
+		std::vector<RoomObject *> validParents;
+		std::vector<std::string> parentTypes;
+		for(auto &d : child->parentTypes){
+			parentTypes.push_back(d.parent);
+		}
+
+		for(auto o : availableParents){
+			// check if valid parent
+			bool validParent = false;
+			for(auto &type : parentTypes) {
+				if(type == o->type) {
+					validParent = true;
+					break;
+				}
+			}
+			if(validParent){
+				validParentsShuffle.push(o);
+			}
+		}
+
+		validParents = validParentsShuffle.getShuffledItems();
+
+		// prioritize
+		std::sort(validParents.begin(), validParents.end(), [parentTypes](RoomObject * _i, RoomObject * _j) -> bool{
+			int iPriority = parentTypes.size();
+			int jPriority = parentTypes.size();
+
+			for(int i = 0; i < parentTypes.size(); ++i){
+				if(parentTypes.at(i) == _i->type){
+					iPriority = i;
+					break;
+				}
+			}
+			for(int i = 0; i < parentTypes.size(); ++i){
+				if(parentTypes.at(i) == _j->type){
+					jPriority = i;
+					break;
+				}
+			}
+
+			return (iPriority < jPriority);
+		});
+
+		for(auto parent: validParents){
 
 			if(parent->anchor == Anchor_t::CIELING){
 				continue;
@@ -701,7 +745,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			case PD_Side::kTOP:
 				sidePos.x += (-_parent->boundingBox.width + childDimensions.x) / 2.f + _slot->spaceFilled;
 				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
-				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth + childDimensions.z, _parent->boundingBox.depth - childDimensions.z) / 2.f;
+				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth / 2.f + childDimensions.z, _parent->boundingBox.depth / 2.f - childDimensions.z) / 2.f;
 				break;	
 		}
 	}else{
@@ -732,7 +776,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			case PD_Side::kTOP:
 				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
 				sidePos.x += centerPos;
-				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth + childDimensions.z, _parent->boundingBox.depth - childDimensions.z) / 2.f;
+				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth / 2.f + childDimensions.z, _parent->boundingBox.depth / 2.f - childDimensions.z) / 2.f;
 				moveChildren.x = -1;
 				break;	
 		}
@@ -1116,12 +1160,32 @@ std::vector<Person *> RoomBuilder::getCharacters(bool _random){
 std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
+	sweet::ShuffleVector<PD_FurnitureDefinition *> definitions;
+
+	if(definition->roomType == "NO_TYPE"){
+		for(auto def : PD_ResourceManager::furnitureDefinitions){
+			definitions.push(def);
+		}
+	}else{
+		for(auto def : PD_ResourceManager::furnitureDefinitions){
+			for(std::string type : def->roomTypes){
+				if(type == room->definition->roomType){
+					definitions.push(def);
+				}
+			}
+		}
+	}
+
 	// Random
-	unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.5f);
-	for(unsigned int i = 0; i < n; ++i){
-		int randIdx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::furnitureDefinitions.size() - 1);
-		auto furn = new PD_Furniture(world, PD_ResourceManager::furnitureDefinitions.at(randIdx), baseShader, GROUND);
-		furniture.push_back(furn);
+	if(definitions.size() > 0){
+		float area = room->tilemap->width * room->tilemap->height;
+		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.1f, area * 0.3f);
+		for(unsigned int i = 0; i < n; ++i){
+			auto furn = new PD_Furniture(world, definitions.pop(), baseShader, GROUND);
+			furniture.push_back(furn);
+		}
+	}else{
+		int blah = 0;
 	}
 
 	return furniture;

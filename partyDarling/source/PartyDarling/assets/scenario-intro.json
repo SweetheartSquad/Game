@@ -2257,6 +2257,7 @@
       "name": "Ante Room",
       "id": 1,
       "description": "The first room",
+	  "roomType": "LIVING_ROOM",
       "furnitureTypes": "",
       "characters": [
         6
@@ -2277,6 +2278,7 @@
       "name": "First Room",
       "id": 2,
       "description": "The room where Omar dies",
+	  "roomType": "LIVING_ROOM",
       "furnitureTypes": [],
       "characters": [
         7,
@@ -2301,6 +2303,7 @@
       "name": "Laboratory",
       "id": 4,
       "description": "Where the suspect is. will need the furniture tag for the DIMENSION MACHINE",
+	  "roomType": "LABORATORY",
       "furnitureTypes": [],
       "characters": [
         12

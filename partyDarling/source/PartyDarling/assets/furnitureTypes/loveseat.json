@@ -44,7 +44,7 @@
 					"BACK", 
 					"LEFT", 
 					"RIGHT"],
-				"tv": ["FRONT"],
+				"TV": ["FRONT"],
 				"wall":["FRONT"]
 			},   
 			"paddingFront": 0,
