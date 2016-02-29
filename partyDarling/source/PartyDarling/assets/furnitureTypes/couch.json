@@ -67,6 +67,15 @@
                     "LEFT":"RIGHT",
                     "RIGHT":"LEFT"
                 },
-            "parents":["wall"],    
+            "parentDependent": true,
+            "parents":{
+				"wall":["FRONT"],
+				"coffeeTable": [
+					"FRONT", 
+					"BACK", 
+					"LEFT", 
+					"RIGHT"],
+				"tv": ["FRONT"]
+			},   
             "padding":1   
         }

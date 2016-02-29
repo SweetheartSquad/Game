@@ -37,6 +37,7 @@
 			"mass": 80,
             "roomTypes" : ["LIVING_ROOM","BEDROOM"],
             "detailedCollider": false,
+			"parentDependent": true,
             "parents":{"wall":["FRONT"]},
             "padding":0,
             "twist": false,
