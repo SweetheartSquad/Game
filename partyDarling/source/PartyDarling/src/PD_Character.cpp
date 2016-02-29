@@ -249,9 +249,9 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 
 	nose = new PersonComponent(noseDef, _shader, paletteTex, false);
 	eyebrowL = new PersonComponent(eyebrowLDef, _shader, paletteTex, false);
-	eyebrowR = new PersonComponent(eyebrowRDef, _shader, paletteTex, false);
+	eyebrowR = new PersonComponent(eyebrowRDef, _shader, paletteTex, true);
 	eyeL = new PersonComponent(eyeLDef, _shader, paletteTex, false);
-	eyeR = new PersonComponent(eyeRDef, _shader, paletteTex, false);
+	eyeR = new PersonComponent(eyeRDef, _shader, paletteTex, true);
 	pupilL = new PersonComponent(pupilLDef, _shader, paletteTex, false);
 	pupilR = new PersonComponent(pupilRDef, _shader, paletteTex, false);
 
@@ -307,12 +307,12 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 
 	// no point in putting the nose/eyes into the skeletal structure
 	connect(head, nose);
-	connect(head, eyebrowL);
-	connect(head, eyebrowR);
 	connect(head, eyeL);
 	connect(head, eyeR);
 	connect(eyeL, pupilL);
 	connect(eyeR, pupilR);
+	connect(head, eyebrowL);
+	connect(head, eyebrowR);
 
 	
 	// attach the arms/legs to the spine
