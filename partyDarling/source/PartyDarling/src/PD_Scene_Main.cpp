@@ -400,6 +400,25 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 	
+	// fades
+	PD_ResourceManager::scenario->eventManager.addEventListener("fadeIn", [_game, this](sweet::Event * _event){
+		uiFade->fadeIn(glm::uvec3(
+			_event->getFloatData("r"),
+			_event->getFloatData("g"),
+			_event->getFloatData("b")
+		),
+		_event->getFloatData("length") / 1000.f);
+	});
+	PD_ResourceManager::scenario->eventManager.addEventListener("fadeOut", [_game, this](sweet::Event * _event){
+		uiFade->fadeOut(glm::uvec3(
+			_event->getFloatData("r"),
+			_event->getFloatData("g"),
+			_event->getFloatData("b")
+		),
+		_event->getFloatData("length") / 1000.f);
+	});
+
+	
 	PD_ResourceManager::scenario->eventManager.addEventListener("locked", [_game, this](sweet::Event * _event){
 		// Triggered when the player tries to open a locked door
 		uiBubble->options.front()->label->setText("This door is locked.");
