@@ -43,7 +43,7 @@ private:
 	bool canInterject;
 
 	VerticalLinearLayout * healthContainer;
-	VerticalLinearLayout * gameContainer;
+	NodeUI * gameContainer;
 
 	HorizontalLinearLayout * livesContainer;
 	// lives in the current fight

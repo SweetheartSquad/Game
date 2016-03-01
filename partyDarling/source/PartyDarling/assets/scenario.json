@@ -259,7 +259,12 @@
       "type": "texture",
       "src": "UI/yelling contest/blueBubble-arrows.png"
     },
-
+	{
+      "id": "PLAYER-BUTTON",
+      "type": "texture",
+      "src": "UI/yelling contest/blueButton.png",
+      "nineSliced": true
+    },
 	{
       "id": "YELLING-CONTEST-DEFENSE-BUBBLE",
       "type": "texture",
