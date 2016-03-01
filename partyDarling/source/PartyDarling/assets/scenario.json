@@ -72,6 +72,12 @@
     },
 
     //Yelling Contest SFX
+	{
+      "id":"timer",
+      "type":"audio",
+      "src":"kitchen-timer.ogg",
+      "category":"sfx"
+    },
     {
       "id":"recordScratch",
       "type":"audio",

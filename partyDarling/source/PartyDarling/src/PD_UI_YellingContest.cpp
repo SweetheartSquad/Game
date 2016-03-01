@@ -23,7 +23,7 @@
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
-
+#define TIMER "timer"
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
@@ -406,6 +406,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	for(unsigned long int i = 1; i < 11; ++i) {
 		missInterjectSounds.push(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
 	}
+
+	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
 }
 
 PD_UI_YellingContest::~PD_UI_YellingContest(){
@@ -564,6 +566,7 @@ void PD_UI_YellingContest::update(Step * _step){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
+							PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();	
 							setUIMode(false);
 						}else{
@@ -593,6 +596,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					if(playerQuestionTimer >= playerQuestionTimerLength){
 						playerBubbleOptions->setVisible(true);
 						playerTimerSlider->setVisible(true);
+						PD_ResourceManager::scenario->getAudio(TIMER)->sound->play(true);
 					}
 				}
 			}
@@ -939,7 +943,7 @@ void PD_UI_YellingContest::setPlayerText(){
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
-
+	PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
 	}else {
