@@ -985,12 +985,14 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 	// Trigger room entry events
 	for(auto trigger : currentRoom->definition->triggersOnce) {
-		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+		sweet::Event * e = new sweet::Event(trigger);
+		PD_ResourceManager::scenario->eventManager.triggerEvent(e);
 	}
 	currentRoom->definition->triggersOnce.clear();
 
 	for(auto trigger : currentRoom->definition->triggersMulti) {
-		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+		sweet::Event * e = new sweet::Event(trigger);
+		PD_ResourceManager::scenario->eventManager.triggerEvent(e);
 	}
 
 	lights.clear();
