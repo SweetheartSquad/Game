@@ -370,7 +370,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	complimentBubble->mesh->setScaleMode(GL_NEAREST);
 	complimentBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
 	complimentBubble->meshTransform->scale(0, 0, 0);
-	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.75, 0, 0);
+	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.2, 0, 0);
 	complimentBubble->setVisible(false);
 
 	// move the interject bubble's mesh up so that the origin is aligned with the bottom
@@ -382,9 +382,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
 	interjectBubble->mesh->setScaleMode(GL_NEAREST);
-	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
+	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.6, sweet::getWindowHeight() * 0.6, 0);
 	interjectBubble->meshTransform->scale(0, 0, 0);
-	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
+	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.6, 0, 0);
 	interjectBubble->setVisible(false);
 
 	// move the interject bubble's mesh up so that the origin is aligned with the bottom
