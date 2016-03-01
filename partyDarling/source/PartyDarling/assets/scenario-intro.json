@@ -1,2324 +1,3093 @@
-{
-  "name": "INTRO",
-  "description": "INTRO",
-  "type": 2,
-  "order": 1,
-  "assets": [
-    {
-      "id": 0,
-      "name": "Player",
-      "states": [],
-      "items": [],
-      "type": "character",
-      "defaultState": -1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+{  
+    "name":"INTRO",
+    "description":"INTRO",
+    "type":2,
+    "order":1,
+    "assets":[  
+        {  
+            "id":0,
+            "name":"Player",
+            "states":[  
+
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":-1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
                 }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            ]
+        },
+        {  
+            "id":6,
+            "name":"Butler",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":1,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":2,
+                    "name":"TalkedOnce",
+                    "convo":5,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":7,
+            "name":"Omar Clean",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":6,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":8,
+            "name":"Goodsee Beauregard",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":8,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":2,
+                    "name":"TalkedOnce",
+                    "convo":14,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":3,
+                    "name":"TalkedTwice",
+                    "convo":40,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"components/definitions/Goodsee_PELVIS.json",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/Goodsee_TORSO.json",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Goodsee_HEAD.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/goodsee_leftarm_ARM.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/goodsee_rightarm_ARM.json"
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/Goodsee_LEG.json"
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/Goodsee_LEG.json"
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":9,
+            "name":"Macey",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":18,
+                    "animation":"DANCE_1"
+                },
+                {  
+                    "id":2,
+                    "name":"State2",
+                    "convo":23,
+                    "animation":"DANCE_1"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":10,
+            "name":"Jer",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":24,
+                    "animation":"SWAY"
+                },
+                {  
+                    "id":2,
+                    "name":"State2",
+                    "convo":25,
+                    "animation":"SWAY"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":11,
+            "name":"Tina",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":30,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":2,
+                    "name":"State2",
+                    "convo":31,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":12,
+            "name":"Suspect",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":36,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":13,
+            "name":"Belfast",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":37,
+                    "animation":"WAVE"
+                },
+                {  
+                    "id":2,
+                    "name":"State2",
+                    "convo":39,
+                    "animation":"WAVE"
+                }
+            ],
+            "items":[  
+                1
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":1,
+            "name":"Butler1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Good evening.",
+                        "I hope it was not too much trouble getting here.",
+                        "May I take your coat?"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":8,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":9,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":11,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":10,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":6,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":2,
+                    "label":"Yes"
+                },
+                {  
+                    "convoId":3,
+                    "label":"No"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":0
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "name": "Butler",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 1,
-          "animation": "RANDOM"
         },
-        {
-          "id": 2,
-          "name": "TalkedOnce",
-          "convo": 5,
-          "animation": "RANDOM"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+        {  
+            "id":2,
+            "name":"ButlerYes",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Very good.",
+                        "When you are ready to leave I will fetch it for you."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":6,
+                    "name":"Dialogue 0"
                 }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":1
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "name": "Omar Clean",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 6,
-          "animation": "RANDOM"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+        },
+        {  
+            "id":3,
+            "name":"ButlerNo",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "If you so desire.",
+                        "If you change your mind, you can find me here again later."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":6,
+                    "name":"Dialogue 0"
                 }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":2
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "name": "Goodsee Beauregard",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 8,
-          "animation": "RANDOM"
         },
-        {
-          "id": 2,
-          "name": "TalkedOnce",
-          "convo": 14,
-          "animation": "RANDOM"
-        },
-        {
-          "id": 3,
-          "name": "TalkedTwice",
-          "convo": 17,
-          "animation": "RANDOM"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+        {  
+            "id":4,
+            "name":"Butler2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "There are hors-d'oeuvres on the table to my left, if you would like one.",
+                        "The door to my right will take you into the mansion proper.",
+                        "Please do not hesitate to find me if you need anything.",
+                        "I hope you have a very rewarding evening"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":6,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":6,
+                    "name":"Dialogue 0"
                 }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":3
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "name": "Macey",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 18,
-          "animation": "DANCE_1"
         },
-        {
-          "id": 2,
-          "name": "State2",
-          "convo": 23,
-          "animation": "DANCE_1"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+        {  
+            "id":5,
+            "name":"ButlerTalkedOnce",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Enter the door to my right when you are ready to join the party.",
+                        "If you need anything, you can find me here again."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":6,
+                    "name":"Dialogue 0"
                 }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":4
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "name": "Jer",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 24,
-          "animation": "SWAY"
         },
-        {
-          "id": 2,
-          "name": "State2",
-          "convo": 25,
-          "animation": "SWAY"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+        {  
+            "id":6,
+            "name":"Omar1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Another guest! Good evening.",
+                        "Welcome to Omar Clean's Recluse Redemption Extravaganza!",
+                        "If you think of any synonyms for \"extravaganza\" that start with the letter \"R\", please, let me know.",
+                        "I'm not maximizing my alliteration quotient otherwise. Although I supposed my name doesn't start with any R's, either...",
+                        "Er... never mind all that. Welcome! I'm Omar. Mi casa, su casa, all that.",
+                        "Don't worry about mucking the place up. I know it all looks very... pristine.",
+                        "I don't even use half the stuff in this house. Sort of pointless, don't you think?",
+                        "Yes, so, er... I'm glad you came. Sorry if the invitation was weird.",
+                        "I just sort of sent invitations to everyone I could find in a 200-mile radius.",
+                        "I'm a little surprised how many people will go to a complete stranger's house for a party, to be honest!",
+                        "Er... perhaps that sounded suspicious. Never mind.",
+                        "Is there anything I can get you? Drinks? Food? Some sort of... drink-food hybrid?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":7,
+                    "name":"Dialogue 0"
                 }
-              ]
+            ],
+            "options":[  
+                {  
+                    "convoId":7,
+                    "label":"Drinks"
+                },
+                {  
+                    "convoId":7,
+                    "label":"Food"
+                },
+                {  
+                    "convoId":7,
+                    "label":"Some sort of drink-food hybrid"
+                },
+                {  
+                    "convoId":7,
+                    "label":"Nothing, thanks"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":5
+            }
+        },
+        {  
+            "id":7,
+            "name":"OmarDies",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "AUGH!"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"fadeOut",
+                            "args":{  
+                                "length":{  
+                                    "value":20,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "r":{  
+                                    "value":0,
+                                    "type":"INT"
+                                },
+                                "g":{  
+                                    "value":0,
+                                    "type":"INT"
+                                },
+                                "b":{  
+                                    "value":0,
+                                    "type":"INT"
+                                }
+                            },
+                            "id":15
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":7,
+                    "name":"Dialogue 0"
+                },
+                {  
+                    "text":[  
+                        "."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":7,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":9,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":1,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":10,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":1,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":11,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":1,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":14
+                        },
+                        {  
+                            "type":"hideCharacter",
+                            "args":{  
+                                "name":{  
+                                    "value":8,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "visibility":{  
+                                    "value":1,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":-1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":7,
+                    "name":"Dialogue 1"
+                },
+                {  
+                    "text":[  
+                        "."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"fadeIn",
+                            "args":{  
+                                "length":{  
+                                    "value":20,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "r":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "g":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "b":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":16
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":7,
+                    "name":"Dialogue 2"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":6
+            }
+        },
+        {  
+            "id":8,
+            "name":"Goodsee1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "You're awake. Good.",
+                        "Did you see what happened here?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":9,
+                    "label":"Yes"
+                },
+                {  
+                    "convoId":10,
+                    "label":"No"
+                },
+                {  
+                    "convoId":11,
+                    "label":"Who are you?"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":7
+            }
+        },
+        {  
+            "id":13,
+            "name":"Goodsee2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Alright, new plan.",
+                        "You seem somewhat social. Go around to the guests and see if anyone else saw anything.",
+                        "I will stay here and examine the body."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":8,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":8
+            }
+        },
+        {  
+            "id":9,
+            "name":"GoodseeYes",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Good.",
+                        "Who murdered this man?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":12,
+                    "label":"Not sure"
+                },
+                {  
+                    "convoId":12,
+                    "label":"I don't know"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":9
+            }
+        },
+        {  
+            "id":10,
+            "name":"GoodseeNo",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "That's not very helpful."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":13,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":10
+            }
+        },
+        {  
+            "id":11,
+            "name":"GoodseeWho",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "That's not important right now."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":13,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":11
+            }
+        },
+        {  
+            "id":12,
+            "name":"GoodseeIdk",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "This is... unfortunate."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":13,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":12
+            }
+        },
+        {  
+            "id":14,
+            "name":"GoodseeTalkedOnce",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Please only report back to me if you have new information."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                },
+                {  
+                    "text":[  
+                        "Someone said there was a man in a trenchcoat?",
+                        "If he was the person who knocked you out, he's the prime murder suspect."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"checkString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue1",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "desiredValue":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":13
+                        }
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 1"
+                },
+                {  
+                    "text":[  
+                        "He had some sort of chemistry apparatus... this man may be a scientist.",
+                        "Alternately, Omar may be a scientist."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"checkString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue2",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "desiredValue":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":13
+                        }
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 2"
+                },
+                {  
+                    "text":[  
+                        "I didn't find much interesting about the body.",
+                        "Now then.",
+                        "You proved to be capable enough at following instructions.",
+                        "We'll split up now.",
+                        "Look for this trenchcoat man."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"checkString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue1",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "desiredValue":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":13
+                        }
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 3"
+                },
+                {  
+                    "text":[  
+                        "Additionally, if you see anything about a laboratory, take note."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"checkString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue2",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "desiredValue":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":13
+                        }
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 4"
+                },
+                {  
+                    "text":[  
+                        "See if you can find any more information.",
+                        "Meet me back here in one hour."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":3,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":8,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"checkString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue1",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "desiredValue":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":13
+                        }
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 5"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":13
+            }
+        },
+        {  
+            "id":18,
+            "name":"Macey1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Dude, you good?",
+                        "That guy totally scorched you."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":19,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":20,
+                    "label":"Where did he go?"
+                },
+                {  
+                    "convoId":21,
+                    "label":"Scorched?"
+                },
+                {  
+                    "convoId":22,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":16
+            }
+        },
+        {  
+            "id":23,
+            "name":"Macey2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "What's on your mind, dude?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":19,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":20,
+                    "label":"Where did he go?"
+                },
+                {  
+                    "convoId":21,
+                    "label":"Scorched?"
+                },
+                {  
+                    "convoId":22,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":17
+            }
+        },
+        {  
+            "id":19,
+            "name":"MaceyWho",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "I dunno, dude.",
+                        "Just some guy in a trenchcoat.",
+                        "Which is way unfashionable. Very cyberpunk wannabe."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"setString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue1",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "value":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":7
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":23,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":18
+            }
+        },
+        {  
+            "id":20,
+            "name":"MaceyWhere",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "I dunno. I saw you go down like a... bag of tomatoes? Or whatever? So I just ran.",
+                        "No disrespect to you, dude. I'm just a total coward...",
+                        "Anyway, I came back in here and he was gone.",
+                        "You and buddy over there were just lying there, all passed out.",
+                        "...Buddy's gonna wake up soon, right?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":23,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":19
+            }
+        },
+        {  
+            "id":21,
+            "name":"MaceyScorch",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Yeah dude...",
+                        "Trashed, decimated, up-ended, brutalized, ossified...",
+                        "Scorched, y'know?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":23,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":20
+            }
+        },
+        {  
+            "id":22,
+            "name":"MaceyNevermind",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Later, dude. Have a good night."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":9,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":21
+            }
+        },
+        {  
+            "id":24,
+            "name":"Jer1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Hey, cool party, right?",
+                        "I know a party's gonna be good if I show up and everyone's already passed out."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":26,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":27,
+                    "label":"Did you see what happened?"
+                },
+                {  
+                    "convoId":28,
+                    "label":"Who are you?"
+                },
+                {  
+                    "convoId":29,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":22
+            }
+        },
+        {  
+            "id":25,
+            "name":"Jer2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "What's up?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":26,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":27,
+                    "label":"Did you see what happened?"
+                },
+                {  
+                    "convoId":28,
+                    "label":"Who are you?"
+                },
+                {  
+                    "convoId":29,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":23
+            }
+        },
+        {  
+            "id":26,
+            "name":"JerWho",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "What guy?",
+                        "That guy over there?",
+                        "I dunno. I just got here."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":25,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":24
+            }
+        },
+        {  
+            "id":27,
+            "name":"JerWhat",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Nah, but I bet it was cool. This party's sweet."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":25,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":25
+            }
+        },
+        {  
+            "id":28,
+            "name":"JerMeet",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "I'm Jer, dude, nice to meet you.",
+                        "Mail carrier by day, kinda cool guy by night.",
+                        "Mostly I just like to have a good time."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":25,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":26
+            }
+        },
+        {  
+            "id":29,
+            "name":"JerNevermind",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Aight. Catch you later, dude."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":10,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":27
+            }
+        },
+        {  
+            "id":30,
+            "name":"Tina1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Hey, you okay?",
+                        "That guy really did a number on you..."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":11,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":32,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":33,
+                    "label":"Did you see what happened?"
+                },
+                {  
+                    "convoId":34,
+                    "label":"Who are you?"
+                },
+                {  
+                    "convoId":35,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":28
+            }
+        },
+        {  
+            "id":31,
+            "name":"Tina2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "So, what's up?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":32,
+                    "label":"Who was that guy?"
+                },
+                {  
+                    "convoId":33,
+                    "label":"Did you see what happened?"
+                },
+                {  
+                    "convoId":34,
+                    "label":"Who are you?"
+                },
+                {  
+                    "convoId":35,
+                    "label":"Never mind."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":29
+            }
+        },
+        {  
+            "id":32,
+            "name":"TinaWho",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Sorry, I don't know.",
+                        "I didn't really get a good look at him."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":31,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":30
+            }
+        },
+        {  
+            "id":33,
+            "name":"TinaWhat",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Yeah, he whacked you over the head with some kind of metal thing.",
+                        "Kind of looked like something you'd find in a laboratory.",
+                        "Like a beaker stand, or something."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"setString",
+                            "args":{  
+                                "name":{  
+                                    "value":"clue2",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "value":{  
+                                    "value":"true",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":7
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":31,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":31
+            }
+        },
+        {  
+            "id":34,
+            "name":"TinaMeet",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "My name is Tina.",
+                        "Nice to meet you!",
+                        "Hope your head is feeling better..."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":31,
+                    "label":""
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":32
+            }
+        },
+        {  
+            "id":35,
+            "name":"TinaNevermind",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Okay, bye! Feel better!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":11,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":33
+            }
+        },
+        {  
+            "id":36,
+            "name":"Suspect1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Alas, you're alive.",
+                        "I'm terribly sorry you got wrapped up in all this.",
+                        "I'm sure, in another life, we could have been great friends.",
+                        "But in this life, I'm afraid you're very much in my way.",
+                        "I have a lot of terrible, horrible things to do.",
+                        "I can't have you trying to stop me.",
+                        "Don't try and find me again."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":12,
+                    "name":"Dialogue 0"
+                },
+                {  
+                    "text":[  
+                        "Goodbye."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"fadeOut",
+                            "args":{  
+                                "length":{  
+                                    "value":30,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "r":{  
+                                    "value":255,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "g":{  
+                                    "value":255,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                },
+                                "b":{  
+                                    "value":255,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":15
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":12,
+                    "name":"Dialogue 1"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":34
+            }
+        },
+        {  
+            "id":37,
+            "name":"Belfast1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Hey! You're the private investigator, right?"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":13,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":38,
+                    "label":"Yes, that's me."
+                },
+                {  
+                    "convoId":38,
+                    "label":"Well, I'm just helping the investigator."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":35
+            }
+        },
+        {  
+            "id":38,
+            "name":"BelfastOh",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Great! I have a clue here that might be useful.",
+                        "It appears to be some sort of key....",
+                        "I sleuthed it out when I was crawling around looking for my wallet.",
+                        "I do a little amateur detecting on my own, you see.",
+                        "I like to keep tabs on things.",
+                        "Well, I hope it helps!",
+                        "If you need any more sleuthing done... I'm your girl."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":13,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        },
+                        {  
+                            "type":"unlockRoom",
+                            "args":{  
+                                "room":{  
+                                    "value":4,
+                                    "type":"ROOM",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":10
+                        },
+                        {  
+                            "type":"changerOwnership",
+                            "args":{  
+                                "newOwner":{  
+                                    "value":0,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "item":{  
+                                    "value":1,
+                                    "type":"ITEM",
+                                    "dependsOn":"NONE"
+                                },
+                                "prevOwner":{  
+                                    "value":13,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":4
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":13,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":36
+            }
+        },
+        {  
+            "id":39,
+            "name":"Belfast2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Hope the sleuthing's going well.",
+                        "Let me know if you need me to help find any clues.",
+                        "Or interrogate suspects.",
+                        "I'm really good at both of those things!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":13,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":37
+            }
+        },
+        {  
+            "id":40,
+            "name":"GoodseeTalkedTwice",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Head out and look for clues. We'll talk later."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":8,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":38
+            }
+        },
+        {  
+            "name":"Key",
+            "id":1,
+            "collectable":true,
+            "pixelPerfect":true,
+            "description":"a key",
+            "texture":-1,
+            "effects":[  
+
+            ],
+            "pickupEffects":[  
+                {  
+                    "type":"unlockRoom",
+                    "args":{  
+                        "room":{  
+                            "value":4,
+                            "type":"ROOM",
+                            "dependsOn":"NONE"
+                        }
+                    },
+                    "id":10
+                }
+            ],
+            "type":"item"
+        },
+        {  
+            "name":"Ante Room",
+            "id":1,
+            "description":"The first room",
+            "furnitureTypes":"",
+            "characters":[  
+                6
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
             },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
+            "size":"SMALL",
+            "type":"room",
+            "locked":false,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+
+            ],
+            "triggersMulti":[  
+
+            ]
+        },
+        {  
+            "name":"First Room",
+            "id":2,
+            "description":"The room where Omar dies",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[  
+                7,
+                8,
+                9,
+                10,
+                11
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
             },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "name": "Tina",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 30,
-          "animation": "RANDOM"
-        },
-        {
-          "id": 2,
-          "name": "State2",
-          "convo": 31,
-          "animation": "RANDOM"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+            "size":"MEDIUM",
+            "type":"room",
+            "locked":false,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+                {  
+                    "type":"hideCharacter",
+                    "args":{  
+                        "name":{  
+                            "value":9,
+                            "type":"CHARACTER",
+                            "dependsOn":"NONE"
+                        },
+                        "visibility":{  
+                            "value":0,
+                            "type":"INT",
+                            "dependsOn":"NONE"
+                        }
+                    },
+                    "id":-1
                 },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+                {  
+                    "type":"hideCharacter",
+                    "args":{  
+                        "name":{  
+                            "value":10,
+                            "type":"CHARACTER",
+                            "dependsOn":"NONE"
+                        },
+                        "visibility":{  
+                            "value":0,
+                            "type":"INT",
+                            "dependsOn":"NONE"
+                        }
+                    },
+                    "id":-1
                 },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
+                {  
+                    "type":"hideCharacter",
+                    "args":{  
+                        "name":{  
+                            "value":11,
+                            "type":"CHARACTER",
+                            "dependsOn":"NONE"
+                        },
+                        "visibility":{  
+                            "value":0,
+                            "type":"INT",
+                            "dependsOn":"NONE"
+                        }
+                    },
+                    "id":-1
+                },
+                {  
+                    "type":"hideCharacter",
+                    "args":{  
+                        "name":{  
+                            "value":8,
+                            "type":"CHARACTER",
+                            "dependsOn":"NONE"
+                        },
+                        "visibility":{  
+                            "value":0,
+                            "type":"INT",
+                            "dependsOn":"NONE"
+                        }
+                    },
+                    "id":-1
                 }
-              ]
+            ],
+            "triggersMulti":[  
+
+            ]
+        },
+        {  
+            "name":"Laboratory",
+            "id":4,
+            "description":"Where the suspect is. will need the furniture tag for the DIMENSION MACHINE",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[  
+                12
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
             },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "name": "Suspect",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 36,
-          "animation": "RANDOM"
-        }
-      ],
-      "items": [],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "name": "Belfast",
-      "states": [
-        {
-          "id": 1,
-          "name": "DefaultState",
-          "convo": 37,
-          "animation": "WAVE"
-        },
-        {
-          "id": 2,
-          "name": "State2",
-          "convo": 39,
-          "animation": "WAVE"
-        }
-      ],
-      "items": [
-        1
-      ],
-      "type": "character",
-      "defaultState": 1,
-      "components": [
-        {
-          "tags": {
-            "not": [],
-            "required": [],
-            "preferred": []
-          },
-          "src": "",
-          "components": [
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": "",
-              "components": [
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                },
-                {
-                  "tags": {
-                    "not": [],
-                    "required": [],
-                    "preferred": []
-                  },
-                  "src": ""
-                }
-              ]
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            },
-            {
-              "tags": {
-                "not": [],
-                "required": [],
-                "preferred": []
-              },
-              "src": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 1,
-      "name": "Butler1",
-      "dialogue": [
-        {
-          "text": [
-            "Good evening.",
-            "I hope it was not too much trouble getting here.",
-            "May I take your coat?"
-          ],
-          "triggers": [
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 8,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 0,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 9,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 0,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 11,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 0,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 10,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 0,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "conditions": [],
-          "speaker": 6,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 2,
-          "label": "Yes"
-        },
-        {
-          "convoId": 3,
-          "label": "No"
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 0
-      }
-    },
-    {
-      "id": 2,
-      "name": "ButlerYes",
-      "dialogue": [
-        {
-          "text": [
-            "Very good.",
-            "When you are ready to leave I will fetch it for you."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 6,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 1
-      }
-    },
-    {
-      "id": 3,
-      "name": "ButlerNo",
-      "dialogue": [
-        {
-          "text": [
-            "If you so desire.",
-            "If you change your mind, you can find me here again later."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 6,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 2
-      }
-    },
-    {
-      "id": 4,
-      "name": "Butler2",
-      "dialogue": [
-        {
-          "text": [
-            "There are hors-d’oeuvres on the table to my left, if you would like one.",
-            "The door to my right will take you into the mansion proper.",
-            "Please do not hesitate to find me if you need anything.",
-            "I hope you have a very rewarding evening"
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "SetState",
-              "args": {
-                "State": {
-                  "value": "TalkedOnce",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "Character": {
-                  "value": 6,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 6,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 3
-      }
-    },
-    {
-      "id": 5,
-      "name": "ButlerTalkedOnce",
-      "dialogue": [
-        {
-          "text": [
-            "Enter the door to my right when you are ready to join the party.",
-            "If you need anything, you can find me here again."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 6,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 4
-      }
-    },
-    {
-      "id": 6,
-      "name": "Omar1",
-      "dialogue": [
-        {
-          "text": [
-            "Another guest! Good evening.",
-            "Welcome to Omar Clean’s Recluse Redemption Extravaganza!",
-            "If you think of any synonyms for \"extravaganza\" that start with the letter \"R\", please, let me know.",
-            "I’m not maximizing my alliteration quotient otherwise. Although I supposed my name doesn’t start with any R’s, either…",
-            "Er… never mind all that. Welcome! I’m Omar. Mi casa, su casa, all that.",
-            "Don’t worry about mucking the place up. I know it all looks very… pristine.",
-            "I don’t even use half the stuff in this house. Sort of pointless, don’t you think?",
-            "Yes, so, er… I’m glad you came. Sorry if the invitation was weird.",
-            "I just sort of sent invitations to everyone I could find in a 200-mile radius.",
-            "I’m a little surprised how many people will go to a complete stranger’s house for a party, to be honest!",
-            "Er… perhaps that sounded suspicious. Never mind.",
-            "Is there anything I can get you? Drinks? Food? Some sort of… drink-food hybrid?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 7,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 7,
-          "label": "Drinks"
-        },
-        {
-          "convoId": 7,
-          "label": "Food"
-        },
-        {
-          "convoId": 7,
-          "label": "Some sort of drink-food hybrid"
-        },
-        {
-          "convoId": 7,
-          "label": "Nothing, thanks"
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 5
-      }
-    },
-    {
-      "id": 7,
-      "name": "OmarDies",
-      "dialogue": [
-        {
-          "text": [
-            "AUGH!"
-          ],
-          "triggers": [
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 7,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 0,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 14
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 8,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 1,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 14
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 9,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 1,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 14
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 10,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 1,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 14
-            },
-            {
-              "type": "hideCharacter",
-              "args": {
-                "name": {
-                  "value": 11,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "visibility": {
-                  "value": 1,
-                  "type": "INT",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 14
-            }
-          ],
-          "conditions": [],
-          "speaker": 7,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 6
-      }
-    },
-    {
-      "id": 8,
-      "name": "Goodsee1",
-      "dialogue": [
-        {
-          "text": [
-            "You’re awake. Good.",
-            "Did you see what happened here?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 9,
-          "label": "Yes"
-        },
-        {
-          "convoId": 10,
-          "label": "No"
-        },
-        {
-          "convoId": 11,
-          "label": "Who are you?"
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 7
-      }
-    },
-    {
-      "id": 13,
-      "name": "Goodsee2",
-      "dialogue": [
-        {
-          "text": [
-            "Alright, new plan.",
-            "You seem somewhat social. Go around to the guests and see if anyone else saw anything.",
-            "I will stay here and examine the body."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "SetState",
-              "args": {
-                "State": {
-                  "value": "TalkedOnce",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "Character": {
-                  "value": 8,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 8
-      }
-    },
-    {
-      "id": 9,
-      "name": "GoodseeYes",
-      "dialogue": [
-        {
-          "text": [
-            "Good.",
-            "Who murdered this man?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 12,
-          "label": "Not sure"
-        },
-        {
-          "convoId": 12,
-          "label": "I don't know"
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 9
-      }
-    },
-    {
-      "id": 10,
-      "name": "GoodseeNo",
-      "dialogue": [
-        {
-          "text": [
-            "That’s not very helpful."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 13,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 10
-      }
-    },
-    {
-      "id": 11,
-      "name": "GoodseeWho",
-      "dialogue": [
-        {
-          "text": [
-            "That’s not important right now."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 13,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 11
-      }
-    },
-    {
-      "id": 12,
-      "name": "GoodseeIdk",
-      "dialogue": [
-        {
-          "text": [
-            "This is… unfortunate."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 13,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 12
-      }
-    },
-    {
-      "id": 14,
-      "name": "GoodseeTalkedOnce",
-      "dialogue": [
-        {
-          "text": [
-            "Please only report back to me if you have new information."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        },
-        {
-          "text": [
-            "Someone said there was a man in a trenchcoat?",
-            "If he was the person who knocked you out, he’s the prime murder suspect."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "checkString",
-              "args": {
-                "name": {
-                  "value": "clue1",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "desiredValue": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 1"
-        },
-        {
-          "text": [
-            "He had some sort of chemistry apparatus… this man may be a scientist.",
-            "Alternately, Omar may be a scientist."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "checkString",
-              "args": {
-                "name": {
-                  "value": "clue2",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "desiredValue": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 2"
-        },
-        {
-          "text": [
-            "I didn’t find much interesting about the body.",
-            "Now then.",
-            "You proved to be capable enough at following instructions.",
-            "We’ll split up now.",
-            "Look for this trenchcoat man."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "checkString",
-              "args": {
-                "name": {
-                  "value": "clue1",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "desiredValue": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 3"
-        },
-        {
-          "text": [
-            "Additionally, if you see anything about a laboratory, take note."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "checkString",
-              "args": {
-                "name": {
-                  "value": "clue2",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "desiredValue": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 4"
-        },
-        {
-          "text": [
-            "See if you can find any more information.",
-            "Meet me back here in one hour."
-          ],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "checkString",
-              "args": {
-                "name": {
-                  "value": "clue1",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "desiredValue": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 5"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 13
-      }
-    },
-    {
-      "id": 15,
-      "name": "GoodseeOkay",
-      "dialogue": [
-        {
-          "text": [],
-          "triggers": [],
-          "conditions": [
-            {
-              "type": "SetState",
-              "args": {
-                "State": {
-                  "value": "TalkedTwice",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "Character": {
-                  "value": 8,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": -1
-            }
-          ],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 14
-      }
-    },
-    {
-      "id": 16,
-      "name": "GoodseeWho2",
-      "dialogue": [
-        {
-          "text": [
-            "You are impeding this investigation by asking questions. Please desist.",
-            "There will be time to talk later."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 8,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 15
-      }
-    },
-    {
-      "id": 18,
-      "name": "Macey1",
-      "dialogue": [
-        {
-          "text": [
-            "Dude, you good?",
-            "That guy totally scorched you."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 19,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 20,
-          "label": "Where did he go?"
-        },
-        {
-          "convoId": 21,
-          "label": "Scorched?"
-        },
-        {
-          "convoId": 22,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 16
-      }
-    },
-    {
-      "id": 23,
-      "name": "Macey2",
-      "dialogue": [
-        {
-          "text": [
-            "Hey dude."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 19,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 20,
-          "label": "Where did he go?"
-        },
-        {
-          "convoId": 21,
-          "label": "Scorched?"
-        },
-        {
-          "convoId": 22,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 17
-      }
-    },
-    {
-      "id": 19,
-      "name": "MaceyWho",
-      "dialogue": [
-        {
-          "text": [
-            "I dunno, dude.",
-            "Just some guy in a trenchcoat.",
-            "Which is way unfashionable. Very cyberpunk wannabe."
-          ],
-          "triggers": [
-            {
-              "type": "setString",
-              "args": {
-                "name": {
-                  "value": "clue1",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "value": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 7
-            }
-          ],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 23,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 18
-      }
-    },
-    {
-      "id": 20,
-      "name": "MaceyWhere",
-      "dialogue": [
-        {
-          "text": [
-            "I dunno. I saw you go down like a… bag of tomatoes? Or whatever? So I just ran.",
-            "No disrespect to you, dude. I’m just a total coward...",
-            "Anyway, I came back in here and he was gone.",
-            "You and buddy over there were just lying there, all passed out.",
-            "...Buddy’s gonna wake up soon, right?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 23,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 19
-      }
-    },
-    {
-      "id": 21,
-      "name": "MaceyScorch",
-      "dialogue": [
-        {
-          "text": [
-            "Yeah dude…",
-            "Trashed, decimated, up-ended, brutalized, ossified…",
-            "Scorched, y'know?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 23,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 20
-      }
-    },
-    {
-      "id": 22,
-      "name": "MaceyNevermind",
-      "dialogue": [
-        {
-          "text": [
-            "Later, dude. Have a good night."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 9,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 21
-      }
-    },
-    {
-      "id": 24,
-      "name": "Jer1",
-      "dialogue": [
-        {
-          "text": [
-            "Hey, cool party, right?",
-            "I know a party’s gonna be good if I show up and everyone’s already passed out."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 26,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 27,
-          "label": "Did you see what happened?"
-        },
-        {
-          "convoId": 28,
-          "label": "Who are you?"
-        },
-        {
-          "convoId": 29,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 22
-      }
-    },
-    {
-      "id": 25,
-      "name": "Jer2",
-      "dialogue": [
-        {
-          "text": [
-            "What's up?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 26,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 27,
-          "label": "Did you see what happened?"
-        },
-        {
-          "convoId": 28,
-          "label": "Who are you?"
-        },
-        {
-          "convoId": 29,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 23
-      }
-    },
-    {
-      "id": 26,
-      "name": "JerWho",
-      "dialogue": [
-        {
-          "text": [
-            "What guy?",
-            "That guy over there?",
-            "I dunno. I just got here."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 25,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 24
-      }
-    },
-    {
-      "id": 27,
-      "name": "JerWhat",
-      "dialogue": [
-        {
-          "text": [
-            "Nah, but I bet it was cool. This party’s sweet."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 25,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 25
-      }
-    },
-    {
-      "id": 28,
-      "name": "JerMeet",
-      "dialogue": [
-        {
-          "text": [
-            "I’m Jer, dude, nice to meet you.",
-            "Mail carrier by day, kinda cool guy by night.",
-            "Mostly I just like to have a good time."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 25,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 26
-      }
-    },
-    {
-      "id": 29,
-      "name": "JerNevermind",
-      "dialogue": [
-        {
-          "text": [
-            "Aight. Catch you later, dude."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 10,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 27
-      }
-    },
-    {
-      "id": 30,
-      "name": "Tina1",
-      "dialogue": [
-        {
-          "text": [
-            "Hey, you okay?",
-            "That guy really did a number on you..."
-          ],
-          "triggers": [
-            {
-              "type": "changeState",
-              "args": {
-                "State": {
-                  "value": 2,
-                  "type": "CHARACTER_STATE",
-                  "dependsOn": "Character"
-                },
-                "Character": {
-                  "value": 11,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 1
-            }
-          ],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 32,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 33,
-          "label": "Did you see what happened?"
-        },
-        {
-          "convoId": 34,
-          "label": "Who are you?"
-        },
-        {
-          "convoId": 35,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 28
-      }
-    },
-    {
-      "id": 31,
-      "name": "Tina2",
-      "dialogue": [
-        {
-          "text": [
-            "Hey there."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 32,
-          "label": "Who was that guy?"
-        },
-        {
-          "convoId": 33,
-          "label": "Did you see what happened?"
-        },
-        {
-          "convoId": 34,
-          "label": "Who are you?"
-        },
-        {
-          "convoId": 35,
-          "label": "Never mind."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 29
-      }
-    },
-    {
-      "id": 32,
-      "name": "TinaWho",
-      "dialogue": [
-        {
-          "text": [
-            "Sorry, I don't know.",
-            "I didn't really get a good look at him."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 31,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 30
-      }
-    },
-    {
-      "id": 33,
-      "name": "TinaWhat",
-      "dialogue": [
-        {
-          "text": [
-            "Yeah, he whacked you over the head with some kind of metal thing.",
-            "Kind of looked like something you’d find in a laboratory.",
-            "Like a beaker stand, or something."
-          ],
-          "triggers": [
-            {
-              "type": "setString",
-              "args": {
-                "name": {
-                  "value": "clue2",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                },
-                "value": {
-                  "value": "true",
-                  "type": "STRING",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 7
-            }
-          ],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 31,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 31
-      }
-    },
-    {
-      "id": 34,
-      "name": "TinaMeet",
-      "dialogue": [
-        {
-          "text": [
-            "My name is Tina.",
-            "Nice to meet you!",
-            "Hope your head is feeling better..."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 31,
-          "label": ""
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 32
-      }
-    },
-    {
-      "id": 35,
-      "name": "TinaNevermind",
-      "dialogue": [
-        {
-          "text": [
-            "Okay, bye! Feel better!"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 11,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 33
-      }
-    },
-    {
-      "id": 36,
-      "name": "Suspect1",
-      "dialogue": [
-        {
-          "text": [
-            "Alas, you’re alive.",
-            "I’m terribly sorry you got wrapped up in all this.",
-            "I’m sure, in another life, we could have been great friends.",
-            "But in this life, I’m afraid you’re very much in my way.",
-            "I have a lot of terrible, horrible things to do.",
-            "I can’t have you trying to stop me.",
-            "Don’t try and find me again."
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 12,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 34
-      }
-    },
-    {
-      "id": 37,
-      "name": "Belfast1",
-      "dialogue": [
-        {
-          "text": [
-            "Hey! You're the private investigator, right?"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 13,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [
-        {
-          "convoId": 38,
-          "label": "Yes, that's me."
-        },
-        {
-          "convoId": 38,
-          "label": "Well, I'm just helping the investigator."
-        }
-      ],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 35
-      }
-    },
-    {
-      "id": 38,
-      "name": "BelfastOh",
-      "dialogue": [
-        {
-          "text": [
-            "Great! I have a clue here that might be useful.",
-            "It appears to be some sort of key....",
-            "I sleuthed it out when I was crawling around looking for my wallet.",
-            "I do a little amateur detecting on my own, you see.",
-            "I like to keep tabs on things.",
-            "Well, I hope it helps!",
-            "If you need any more sleuthing done... I'm your girl."
-          ],
-          "triggers": [
-            {
-              "type": "changeState",
-              "args": {
-                "State": {
-                  "value": 2,
-                  "type": "CHARACTER_STATE",
-                  "dependsOn": "Character"
-                },
-                "Character": {
-                  "value": 13,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 1
-            },
-            {
-              "type": "unlockRoom",
-              "args": {
-                "room": {
-                  "value": 4,
-                  "type": "ROOM",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 10
-            },
-            {
-              "type": "changerOwnership",
-              "args": {
-                "newOwner": {
-                  "value": 0,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                },
-                "item": {
-                  "value": 1,
-                  "type": "ITEM",
-                  "dependsOn": "NONE"
-                },
-                "prevOwner": {
-                  "value": 13,
-                  "type": "CHARACTER",
-                  "dependsOn": "NONE"
-                }
-              },
-              "id": 4
-            }
-          ],
-          "conditions": [],
-          "speaker": 13,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 36
-      }
-    },
-    {
-      "id": 39,
-      "name": "Belfast2",
-      "dialogue": [
-        {
-          "text": [
-            "Hope the sleuthing's going well.",
-            "Let me know if you need me to help find any clues.",
-            "Or interrogate suspects.",
-            "I'm really good at both of those things!"
-          ],
-          "triggers": [],
-          "conditions": [],
-          "speaker": 13,
-          "name": "Dialogue 0"
-        }
-      ],
-      "options": [],
-      "type": "conversation",
-      "settings": {
-        "indentation": 0,
-        "order": 37
-      }
-    },
-    {
-      "name": "Key",
-      "id": 1,
-      "collectable": true,
-      "pixelPerfect": true,
-      "description": "a key",
-      "texture": -1,
-      "effects": [],
-      "pickupEffects": [],
-      "type": "item"
-    },
-    {
-      "name": "Ante Room",
-      "id": 1,
-      "description": "The first room",
-	  "roomType": "LIVING_ROOM",
-      "furnitureTypes": "",
-      "characters": [
-        6
-      ],
-      "tags": {
-        "not": [],
-        "required": [],
-        "preferred": []
-      },
-      "size": "SMALL",
-      "type": "room",
-      "locked": false,
-      "items": [],
-      "triggersOnce": [],
-      "triggersMulti": []
-    },
-    {
-      "name": "First Room",
-      "id": 2,
-      "description": "The room where Omar dies",
-	  "roomType": "LIVING_ROOM",
-      "furnitureTypes": [],
-      "characters": [
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
-      "tags": {
-        "not": [],
-        "required": [],
-        "preferred": []
-      },
-      "size": "MEDIUM",
-      "type": "room",
-      "locked": false,
-      "items": [],
-      "triggersOnce": [],
-      "triggersMulti": []
-    },
-    {
-      "name": "Laboratory",
-      "id": 4,
-      "description": "Where the suspect is. will need the furniture tag for the DIMENSION MACHINE",
-	  "roomType": "LABORATORY",
-      "furnitureTypes": [],
-      "characters": [
-        12
-      ],
-      "tags": {
-        "not": [],
-        "required": [],
-        "preferred": []
-      },
-      "size": "SMALL",
-      "type": "room",
-      "locked": true,
-      "items": [],
-      "triggersOnce": [],
-      "triggersMulti": []
-    }
-  ]
+            "size":"SMALL",
+            "type":"room",
+            "locked":true,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+
+            ],
+            "triggersMulti":[  
+
+            ]
+        }
+    ]
 }
