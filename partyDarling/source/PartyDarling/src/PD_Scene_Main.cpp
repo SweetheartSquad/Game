@@ -203,7 +203,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer.addChild(uiMap);
 	uiMap->setRationalHeight(1.f, &uiLayer);
 	uiMap->setRationalWidth(1.f, &uiLayer);
-	uiMap->disable();
+	uiMap->enable();
 
 
 	uiFade = new PD_UI_Fade(uiLayer.world);
@@ -1435,40 +1435,25 @@ void PD_Scene_Main::update(Step * _step){
 	
 	// inventory toggle
 	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
-		if(!uiMap->isEnabled()){
-			if(uiInventory->isVisible()){
-				uiBubble->enable();
-				uiInventory->disable();
-				uiLayer.removeMouseIndicator();
-				player->enable();
-			}else{
-				uiBubble->disable();
-				uiInventory->enable();
-				uiLayer.addMouseIndicator();
-				player->disable();
-			}
+		if(uiInventory->isVisible()){
+			uiBubble->enable();
+			uiInventory->disable();
+			uiLayer.removeMouseIndicator();
+			player->enable();
+		}else{
+			uiBubble->disable();
+			uiInventory->enable();
+			uiLayer.addMouseIndicator();
+			player->disable();
 		}
 	}
 	
 	// map toggle
 	if(keyboard->keyJustDown(GLFW_KEY_M)){
-		if(!uiInventory->isEnabled()){
-			if(uiMap->isEnabled()){
-				if(uiMap->isDetailed()){
-					uiMap->setDetailed(false);
-					uiMap->disable();
-					player->enable();
-					uiLayer.removeMouseIndicator();
-					uiBubble->enable();
-				}else{
-					uiMap->setDetailed(true);
-					player->disable();
-					uiBubble->disable();
-					uiLayer.addMouseIndicator();
-				}
-			}else{
-				uiMap->enable();
-			}
+		if(uiMap->isEnabled()){
+			uiMap->disable();
+		}else{
+			uiMap->enable();
 		}
 	}
 

@@ -20,7 +20,6 @@ private:
 	std::map<std::pair<int, int>, MapCell *> grid;
 
 	bool enabled;
-	bool detailed;
 public:
 	PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 
@@ -34,7 +33,4 @@ public:
 	void disable();
 	void enable();
 	bool isEnabled();
-
-	bool isDetailed();
-	void setDetailed(bool _detailed);
 };
