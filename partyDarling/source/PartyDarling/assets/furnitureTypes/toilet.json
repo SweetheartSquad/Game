@@ -57,7 +57,7 @@
             ], 
             "type": "toilet",
 			"mass": 50,
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["BATHROOM","LABORATORY"],
             "sides" : {
                 },
 			"parentDependent": true,
