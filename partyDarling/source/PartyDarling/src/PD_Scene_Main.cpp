@@ -933,7 +933,6 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}else{
 		currentHousePosition = _movement;
 	}
-	uiMap->updateMap(currentHousePosition);
 
 	// get the room for the new position
 	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
@@ -981,10 +980,12 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 	player->translatePhysical(p2, false);
 
-	// Trigger room entry events
-	for(auto trigger : currentRoom->definition->triggersOnce) {
-		sweet::Event * e = new sweet::Event(trigger);
-		PD_ResourceManager::scenario->eventManager.triggerEvent(e);
+	// Trigger room entry events (important to do this before map is updated, otherwise we won't get the once-only triggers)
+	if(currentRoom->visibility != Room::kENTERED){
+		for(auto trigger : currentRoom->definition->triggersOnce) {
+			sweet::Event * e = new sweet::Event(trigger);
+			PD_ResourceManager::scenario->eventManager.triggerEvent(e);
+		}
 	}
 	currentRoom->definition->triggersOnce.clear();
 
@@ -1000,7 +1001,9 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 		currentRoom->lights[i]->lastPos = glm::vec3(99999);
 		lights.push_back(currentRoom->lights[i]);
 	}
-
+	
+	// update map with new position
+	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 
