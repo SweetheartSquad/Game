@@ -61,6 +61,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->addChild(joinPartyText);
 	joinPartyText->setRationalWidth(1.f, textContainer);
 	joinPartyText->setRationalHeight(0.3f, textContainer);
+	joinPartyText->setMarginTop(0.05f);
+	joinPartyText->setMarginBottom(0.05f);
 
 	joinPartyText->horizontalAlignment = kCENTER;
 	joinPartyText->setText("Join the party");
@@ -84,6 +86,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->addChild(optionsText);
 	optionsText->setRationalWidth(1.f, textContainer);
 	optionsText->setRationalHeight(0.3f, textContainer);
+	optionsText->setMarginTop(0.05f);
+	optionsText->setMarginBottom(0.05f);
 
 	optionsText->horizontalAlignment = kCENTER;
 	optionsText->setText("Options");
@@ -99,7 +103,9 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->addChild(callNightText);
 	callNightText->setRationalWidth(1.f, textContainer);
 	callNightText->setRationalHeight(0.3f, textContainer);
-	
+	callNightText->setMarginTop(0.05f);
+	callNightText->setMarginBottom(0.05f);
+
 	callNightText->onClick = [this](sweet::Event * _event){
 		game->exit();		
 	}; 
