@@ -137,7 +137,9 @@ void PD_ResourceManager::init(){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
 		}else{
 			for(auto comp : root["components"]) {
-				characterDefinitions[comp["type"].asString()].push(comp["src"].asString());
+				if(comp.get("random", true).asBool()){
+					characterDefinitions[comp["type"].asString()].push(comp["src"].asString());
+				}
 			}
 		}
 	}
