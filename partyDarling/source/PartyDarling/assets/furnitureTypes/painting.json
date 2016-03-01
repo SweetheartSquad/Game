@@ -17,7 +17,7 @@
     ], 
     "type": "painting",
 	"mass": 0,
-    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM"],
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY"],
     "detailedCollider": false,
 	"parentDependent": true,
     "parents":{"wall":["FRONT"]},

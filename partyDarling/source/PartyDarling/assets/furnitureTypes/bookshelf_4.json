@@ -35,7 +35,7 @@
             ], 
             "type": "bookshelf_4",
 			"mass": 80,
-            "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+            "roomTypes" : ["LIVING_ROOM","BEDROOM","LABORATORY"],
             "detailedCollider": false,
 			"parentDependent": true,
             "parents":{"wall":["FRONT"]},

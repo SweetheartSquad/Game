@@ -36,26 +36,33 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	uiLayer.addMouseIndicator();
 
 	VerticalLinearLayout * mainContainer = new VerticalLinearLayout(uiLayer.world);
+	uiLayer.addChild(mainContainer);
 	mainContainer->horizontalAlignment = kCENTER;
-	mainContainer->verticalAlignment = kMIDDLE;
+	mainContainer->verticalAlignment = kTOP;
 	mainContainer->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("main-menu-background-1")->texture);
 	mainContainer->background->mesh->setScaleMode(GL_NEAREST);
 	mainContainer->setRationalWidth(1.f, &uiLayer);
 	mainContainer->setRationalHeight(1.f, &uiLayer);
 	mainContainer->setVisible(true);
+	mainContainer->setPaddingTop(0.48f);
 	mainContainer->setBackgroundColour(1, 1, 1, 1);
 
 	VerticalLinearLayout * textContainer = new VerticalLinearLayout(uiLayer.world);
+	textContainer->boxSizing = kCONTENT_BOX;
 	mainContainer->addChild(textContainer);
 	textContainer->horizontalAlignment = kCENTER;
 	textContainer->verticalAlignment = kMIDDLE;
+	textContainer->setRationalWidth(1.f, mainContainer);
+	textContainer->setRationalHeight(1.f, mainContainer);
 	textContainer->setVisible(true);
-	textContainer->setMarginTop(0.25f);
+	textContainer->setMarginTop(0.05f);
 
 	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
-	joinPartyText->setWidth(400);
-	joinPartyText->setHeight(60);
+	joinPartyText->setRationalWidth(1.f, textContainer);
+	joinPartyText->setRationalHeight(0.3f, textContainer);
+	joinPartyText->setMarginTop(0.05f);
+	joinPartyText->setMarginBottom(0.05f);
 
 	joinPartyText->horizontalAlignment = kCENTER;
 	joinPartyText->setText("Join the party");
@@ -77,24 +84,28 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
 	textContainer->addChild(optionsText);
-	optionsText->setWidth(400);
-	optionsText->setHeight(60);
+	optionsText->setRationalWidth(1.f, textContainer);
+	optionsText->setRationalHeight(0.3f, textContainer);
+	optionsText->setMarginTop(0.05f);
+	optionsText->setMarginBottom(0.05f);
 
 	optionsText->horizontalAlignment = kCENTER;
 	optionsText->setText("Options");
 	optionsText->setMouseEnabled(true);
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-	optionsText->setMarginTop(0.05f);
+	//optionsText->setMarginTop(0.05f);
 	optionsText->onClick = [this](sweet::Event * _event){
 		game->switchScene("options", false);
 	};
 
 	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
 	textContainer->addChild(callNightText);
-	callNightText->setWidth(400);
-	callNightText->setHeight(60);
-	
+	callNightText->setRationalWidth(1.f, textContainer);
+	callNightText->setRationalHeight(0.3f, textContainer);
+	callNightText->setMarginTop(0.05f);
+	callNightText->setMarginBottom(0.05f);
+
 	callNightText->onClick = [this](sweet::Event * _event){
 		game->exit();		
 	}; 
@@ -107,9 +118,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	callNightText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
-	callNightText->setMarginTop(0.05f);
+	//callNightText->setMarginTop(0.05f);
 	
-	uiLayer.addChild(mainContainer);
 	mainContainer->invalidateLayout();
 
 	textContainer->firstParent()->rotate(10, 0, 0, 1, kOBJECT);

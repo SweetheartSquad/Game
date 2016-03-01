@@ -56,7 +56,7 @@
                 }
             ], 
             "type": "toilet",
-			"mass": 50,
+			"mass": 0,
             "roomTypes" : ["BATHROOM","LABORATORY"],
             "sides" : {
                 },
@@ -66,12 +66,11 @@
                     "FRONT"
                 ]
             },
-            "padding":0,
 			"twist": false,
             "flare": false,
-			"paddingFront": 0.5,
-			"paddingLeft": 0.6,
-			"paddingRight": 0.6,
-			"paddingBack": 0.5
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0.2
 
         }

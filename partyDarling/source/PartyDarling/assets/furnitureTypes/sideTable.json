@@ -23,7 +23,7 @@
             ], 
             "type": "sideTable",
 			"mass": 40,
-            "roomTypes" : ["LIVING_ROOM","BEDROOM"],
+            "roomTypes" : ["LIVING_ROOM","BEDROOM","LABORATORY"],
 			"sides" : {
 				"TOP":"BOTTOM"
             },

@@ -39,7 +39,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	VerticalLinearLayout(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	modeOffensive(true),
-	baseCursorDelayLength(0.2f),
+	baseCursorDelayLength(0.15f),
 	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
@@ -92,7 +92,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	background->setVisible(false);
 	//setMarginTop(0.1f);
 
-	float borderSize = sweet::getWindowHeight() * 0.125 / 2;
+	float borderSize = sweet::getWindowHeight() * 0.1f / 2.f;
 
 	healthContainer = new VerticalLinearLayout(_bulletWorld);
 	addChild(healthContainer);
@@ -102,12 +102,17 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	healthContainer->verticalAlignment = kMIDDLE;
 	//healthContainer->setBackgroundColour(0, 1.f, 0.541f);
 
-	gameContainer = new VerticalLinearLayout(_bulletWorld);
-	addChild(gameContainer);
-	gameContainer->setRationalWidth(1.f, this);
-	gameContainer->setRationalHeight(0.85f, this);
-	gameContainer->horizontalAlignment = kCENTER;
-	gameContainer->verticalAlignment = kTOP;
+	displayContainer = new NodeUI(_bulletWorld);
+	addChild(displayContainer);
+	displayContainer ->setRationalWidth(1.f, this);
+	displayContainer ->setRationalHeight(0.85f, this);
+	displayContainer ->background->setVisible(false);
+
+	gameContainer = new NodeUI(_bulletWorld);
+	displayContainer->addChild(gameContainer);
+	gameContainer->setRationalWidth(1.f, displayContainer);
+	gameContainer->setRationalHeight(1.f, displayContainer);
+	gameContainer->background->setVisible(false);
 	//gameContainer->setBackgroundColour(0, 0.714f, 0.929f);
 
 	// Enemy Cursor
@@ -137,9 +142,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 		wordHighlight->mesh->vertices.at(i).x += 0.5f;
 		wordHighlight->mesh->vertices.at(i).y += 0.5f;
 
-		wordHighlight->mesh->vertices.at(i).red = 0.820;
-		wordHighlight->mesh->vertices.at(i).green = 0.722;
-		wordHighlight->mesh->vertices.at(i).blue = 0.851;
+		wordHighlight->mesh->vertices.at(i).red = 0.820f;
+		wordHighlight->mesh->vertices.at(i).green = 0.722f;
+		wordHighlight->mesh->vertices.at(i).blue = 0.851f;
 
 	}
 	wordHighlight->setVisible(false);
@@ -188,31 +193,45 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	enemyBubble = new NodeUI(_bulletWorld);
 	gameContainer->addChild(enemyBubble);
-	enemyBubble->setRationalWidth(0.5f, gameContainer);
-	enemyBubble->setRationalHeight(0.4f, gameContainer);
+	enemyBubble->setRationalWidth(1.f, gameContainer);
+	enemyBubble->setRationalHeight(1.f, gameContainer);
+	enemyBubble->setMarginTop(0.4f);
+	enemyBubble->setMarginBottom(0.3f);
 	enemyBubble->background->setVisible(false);
-	enemyBubble->setBackgroundColour(0, 0, 1, 0.5f);
-	enemyBubble->setMargin(0.05f);
+	enemyBubble->setBackgroundColour(0.5, 0.5, 0.5, 1.f);
+	enemyBubble->setMarginRight(0.05f);
+	enemyBubble->setMarginLeft(0.55f);
 
-	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-DEFENSE-BUBBLE"));
+	NodeUI_NineSliced * enemyBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("NPC-BUBBLE"));
 	enemyBubble->addChild(enemyBubbleBubble);
 	enemyBubbleBubble->setBorder(borderSize);
 	enemyBubbleBubble->setRationalWidth(1.f, enemyBubble);
 	enemyBubbleBubble->setRationalHeight(1.f, enemyBubble);
 	enemyBubbleBubble->setMarginLeft(0.15f);
+	enemyBubbleBubble->setPadding(0.05f);
 	enemyBubbleBubble->setScaleMode(GL_NEAREST);
+	//enemyBubbleBubble->setBackgroundColour(0.f, 1.f, 0.f, 0.5f);
 	
-	enemyBubbleBubble->uiElements->addChild(wordHighlight);
-	enemyBubbleBubble->uiElements->addChild(punctuationHighlight);
+	NodeUI * enemyBubbleTextContainer = new NodeUI(_bulletWorld);
+	enemyBubbleBubble->addChild(enemyBubbleTextContainer);
+	enemyBubbleTextContainer->setRationalWidth(1.f, enemyBubbleBubble);
+	enemyBubbleTextContainer->setRationalHeight(1.f, enemyBubbleBubble);
+	enemyBubbleTextContainer->setBackgroundColour(1.f,0, 0, 0.5);
+	enemyBubbleTextContainer->background->setVisible(false);
+	enemyBubbleTextContainer->setPadding(0.05f);
+
+	enemyBubbleTextContainer->uiElements->addChild(wordHighlight);
+	enemyBubbleTextContainer->uiElements->addChild(punctuationHighlight);
 
 	enemyBubbleText = new TextArea(world, _font, _textShader);
-	enemyBubbleBubble->addChild(enemyBubbleText);
+	enemyBubbleTextContainer->addChild(enemyBubbleText);
 	enemyBubbleText->setWrapMode(kWORD);
-	enemyBubbleText->setRationalWidth(0.95f, enemyBubble);
-	enemyBubbleText->setRationalHeight(0.95f, enemyBubble);
+	enemyBubbleText->setRationalWidth(1.f, enemyBubbleTextContainer);
+	enemyBubbleText->setRationalHeight(1.f, enemyBubbleTextContainer);
 	enemyBubbleText->horizontalAlignment = kCENTER;
 	enemyBubbleText->verticalAlignment = kMIDDLE;
-	enemyBubbleText->background->setVisible(true);
+	enemyBubbleText->background->setVisible(false);
+	enemyBubbleText->setBackgroundColour(1, 1, 1, 0.5);
 	
 	
 	NodeUI * enemyBubbleTail = new NodeUI(_bulletWorld);
@@ -220,29 +239,46 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-DEFENSE-BUBBLE-TAIL")->texture);
 	enemyBubbleTail->setRationalWidth(1.f, enemyBubble);
 	enemyBubbleTail->setRationalHeight(1.f, enemyBubble);
-	enemyBubbleTail->setMarginRight(0.84f);
+	enemyBubbleTail->setMarginRight(0.78f);
 	enemyBubbleTail->setMarginTop(0.3f);
 	enemyBubbleTail->setMarginBottom(0.3f);
+	//enemyBubbleTail->setBackgroundColour(1.f, 0, 0, 0.5f);
 	enemyBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 
 
 	playerBubble = new NodeUI(_bulletWorld);
 	gameContainer->addChild(playerBubble);
-	playerBubble->setRationalWidth(0.6f, gameContainer);
-	playerBubble->setRationalHeight(0.5f, gameContainer);
+	playerBubble->setRationalWidth(1.f, gameContainer);
+	playerBubble->setRationalHeight(1.f, gameContainer);
+	playerBubble->setMarginTop(0.5f);
 	playerBubble->setMarginBottom(0.05f);
 	playerBubble->background->setVisible(false);
 	playerBubble->setBackgroundColour(1, 0, 0, 0.5f);
-	playerBubble->setMargin(0.05f);
+	playerBubble->setMarginRight(0.05f);
+	playerBubble->setMarginLeft(0.4f);
+	
+	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
+	playerBubble->addChild(playerTimerSlider);
+	playerTimerSlider->boxSizing = kCONTENT_BOX;
+	playerTimerSlider->setRationalWidth(0.7f, playerBubble);
+	playerTimerSlider->setRationalHeight(0.1f, playerBubble);
+	playerTimerSlider->background->setVisible(false);
+	playerTimerSlider->fill->setBackgroundColour(1,1,1,1);
+	playerTimerSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
+	playerTimerSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
+	playerTimerSlider->thumb->setVisible(false);
+	playerTimerSlider->setMarginLeft(0.3f);
+	playerTimerSlider->setMarginBottom(1.f);
 
 	// The fancy nine sliced bubble
-	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("YELLING-CONTEST-OFFENSE-BUBBLE"));
+	NodeUI_NineSliced * playerBubbleBubble = new NodeUI_NineSliced(_bulletWorld, PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUBBLE"));
 	playerBubble->addChild(playerBubbleBubble);
 	playerBubbleBubble->setBorder(borderSize);
 	playerBubbleBubble->setRationalWidth(1.f, playerBubble);
 	playerBubbleBubble->setRationalHeight(1.f, playerBubble);
-	playerBubbleBubble->setMarginLeft(0.15f);
-	playerBubbleBubble->setMarginBottom(0.2f);
+	playerBubbleBubble->setMarginLeft(0.3f);
+	playerBubbleBubble->setMarginBottom(0.3f);
+	//playerBubbleBubble->setBackgroundColour(0, 0.1f, 0, 0.5f);
 	playerBubbleBubble->setScaleMode(GL_NEAREST);
 
 	// The side by side text and button layout
@@ -250,46 +286,58 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleBubble->addChild(playerBubbleLayout);
 	playerBubbleLayout->verticalAlignment = kMIDDLE;
 	playerBubbleLayout->horizontalAlignment = kCENTER;
-	playerBubbleLayout->setRationalWidth(0.95f, playerBubbleBubble);
-	playerBubbleLayout->setRationalHeight(0.95f, playerBubbleBubble);
+	playerBubbleLayout->setRationalWidth(1.f, playerBubbleBubble);
+	playerBubbleLayout->setRationalHeight(1.f, playerBubbleBubble);
+	playerBubbleLayout->setPadding(0.05f);
+	playerBubbleLayout->background->setVisible(false);
+	playerBubbleLayout->setBackgroundColour(1, 1, 1, 0.5f);
 
 	playerBubbleText = new TextArea(world, _font, _textShader);
+	playerBubbleText->setWrapMode(kWORD);
 	playerBubbleLayout->addChild(playerBubbleText);
 	playerBubbleText->setRationalWidth(0.6f, playerBubbleLayout);
 	playerBubbleText->setRationalHeight(1.0f, playerBubbleLayout);
 	playerBubbleText->horizontalAlignment = kCENTER;
 	playerBubbleText->verticalAlignment = kMIDDLE;
+	playerBubbleText->background->setVisible(false);
+	playerBubbleText->setBackgroundColour(1.f, 0, 0, 0.5f);
 
 	playerBubbleOptions = new HorizontalLinearLayout(_bulletWorld);
 	playerBubbleLayout->addChild(playerBubbleOptions);
+	
 	playerBubbleOptions->setRationalWidth(0.4f, playerBubbleLayout);
 	playerBubbleOptions->setRationalHeight(1.f, playerBubbleLayout);
+
+	playerBubbleOptions->setBackgroundColour(0, 1.f, 0, 0.5f);
+	playerBubbleOptions->background->setVisible(false);
 	playerBubbleOptions->horizontalAlignment = kCENTER;
 	playerBubbleOptions->verticalAlignment = kMIDDLE;
 
 	NodeUI * playerArrows = new NodeUI(_bulletWorld);
 	playerBubbleOptions->addChild(playerArrows);
 	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-ARROWS")->texture);
-	playerArrows->setRationalWidth(0.25f, playerBubbleOptions);
 	playerArrows->setRationalHeight(0.4f, playerBubbleOptions);
+	playerArrows->setSquareWidth(0.8f);
 	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
 	playerBubbleOptions->addChild(buttonLayout);
-	buttonLayout->setRationalWidth(0.75f, playerBubbleOptions);
-	buttonLayout->setRationalHeight(0.4f, playerBubbleOptions);
+	buttonLayout->setRationalWidth(0.8f, playerBubbleOptions);
+	buttonLayout->setRationalHeight(0.5f, playerBubbleOptions);
 	buttonLayout->verticalAlignment = kMIDDLE;
 
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn1);
-	pBubbleBtn1->setRationalWidth(1.0f, buttonLayout);
+	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn1->setRationalHeight(0.5f, buttonLayout);
+	pBubbleBtn1->setPadding(0.05f);
 	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn2);
-	pBubbleBtn2->setRationalWidth(1.0f, buttonLayout);
+	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn2->setRationalHeight(0.5f, buttonLayout);
+	pBubbleBtn2->setPadding(0.05f);
 	pBubbleBtn2->setMouseEnabled(false);
 
 
@@ -299,31 +347,24 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-BUBBLE-TAIL")->texture);
 	playerBubbleTail->setRationalWidth(1.f, playerBubble);
 	playerBubbleTail->setRationalHeight(1.f, playerBubble);
-	playerBubbleTail->setMarginRight(0.84f);
-	playerBubbleTail->setMarginTop(0.33f);
+	playerBubbleTail->setMarginRight(0.69f);
+	playerBubbleTail->setMarginTop(0.3f);
 	playerBubbleTail->setMarginBottom(0.03f);
 	playerBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 
-	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
-	gameContainer->addChild(playerTimerSlider);
-	playerTimerSlider->setRationalWidth(0.25f, gameContainer);
-	playerTimerSlider->setRationalHeight(0.05f, gameContainer);
-	playerTimerSlider->setBackgroundColour(0, 1.f, 0);
-	playerTimerSlider->fill->setBackgroundColour(0, 0, 1.f);
-	playerTimerSlider->thumb->setVisible(false);
-
 	gameOverContainer = new VerticalLinearLayout(_bulletWorld);
+	displayContainer->addChild(gameOverContainer);
 	gameOverContainer->horizontalAlignment = kCENTER;
 	gameOverContainer->verticalAlignment = kMIDDLE;
-	gameOverContainer->setRationalWidth(0.8f, this);
-	gameOverContainer->setRationalHeight(0.85f, this);
+	gameOverContainer->setRationalHeight(1.f, displayContainer);
+	gameOverContainer->setRationalWidth(1.f, displayContainer);
+	gameOverContainer->setVisible(false);
 
 	gameOverImage = new NodeUI(_bulletWorld);
 	gameOverContainer->addChild(gameOverImage);
 	gameOverImage->setRationalWidth(0.5f, gameOverContainer);
 	gameOverImage->setRationalHeight(0.5f, gameOverContainer);
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
-	// don't add the container until yelling contest is over
 
 	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
 	complimentBubble->mesh->setScaleMode(GL_NEAREST);
@@ -390,7 +431,7 @@ void PD_UI_YellingContest::update(Step * _step){
 				}
 			}else{
 				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
-					interject();
+ 					interject();
 				}
 			}
 
@@ -606,10 +647,10 @@ void PD_UI_YellingContest::startNewFight(){
 		// Reset layout
 		gameOverImage->setRationalWidth(0.5f, this);
 		gameOverImage->setRationalHeight(0.5f, this);
-		removeChild(gameOverContainer);
+		gameOverContainer->setVisible(false);
 		gameOverDuration = 0;
 
-		addChild(gameContainer);
+		gameContainer->setVisible(true);
 		childTransform->addChild(enemyCursor->firstParent(), false);
 		interjectBubble->setVisible(true);
 		
@@ -633,7 +674,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	isGameOver = true;
 	win = _win;
 
-	removeChild(gameContainer);
+	gameContainer->setVisible(false);
 	childTransform->removeChild(enemyCursor->firstParent());
 	interjectBubble->setVisible(false);
 
@@ -643,7 +684,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
 	}
 
-	addChild(gameOverContainer);
+	gameOverContainer->setVisible(true);
 	//invalidateLayout();
 	// USER TESTING INFORMATION
 	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
@@ -792,7 +833,7 @@ void PD_UI_YellingContest::interject(){
 	countInterjectAccuracy(interjectTimer);
 
 	// Get interject bubble animation ready
-	interjectBubbleTimerLength = interjectBubbleTimerBaseLength * (isPunctuation ? 1.f : 0.25);
+	interjectBubbleTimerLength = interjectBubbleTimerBaseLength * (isPunctuation ? 1.f : 0.25f);
 	interjectBubbleTimer = 0.f;
 	interjectBubbleScale = isPunctuation ? 1.f : 0.4f;
 	interjectBubble->meshTransform->scale(0, 0, 0, false);
@@ -828,7 +869,6 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyCursor->setVisible(!_isOffensive);
 
 	playerBubble->setVisible(_isOffensive);
-	playerTimerSlider->setVisible(_isOffensive);
 	
 	if (!_isOffensive){
 		setEnemyText();

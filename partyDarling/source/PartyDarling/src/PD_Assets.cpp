@@ -166,9 +166,11 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	}
 	for(auto t : _json["triggersOnce"]) {
 		triggersOnce.push_back(sweet::Event(t));	
+		triggersOnce.back().setStringData("scenario", _scenario->id);
 	}
 	for(auto t : _json["triggersMulti"]) {
 		triggersMulti.push_back(sweet::Event(t));	
+		triggersMulti.back().setStringData("scenario", _scenario->id);
 	}
 }
 AssetRoom * AssetRoom::create(Json::Value _json, Scenario * const _scenario){

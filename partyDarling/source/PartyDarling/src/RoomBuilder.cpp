@@ -694,67 +694,56 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	float angle = 0;
 	glm::vec3 childDimensions = glm::vec3(_child->boundingBox.width, _child->boundingBox.height, _child->boundingBox.depth);
-	
-	if(oppositeSides(_side, _slot->childSide)){
-		if(_side == PD_Side::kLEFT || _side == PD_Side::kRIGHT){
-			childDimensions = glm::rotate(childDimensions, 90.f, glm::vec3(0, 1.f, 0));
-			childDimensions.x = abs(childDimensions.x);
-			childDimensions.y = abs(childDimensions.y);
-			childDimensions.z = abs(childDimensions.z);
-		}
-		
-	}else{
-		// Rotate child according to childSide
-		if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
-			float childAngle = 0.f;
-			// orient child side pos
-			switch(_slot->childSide){
-				case PD_Side::kRIGHT:
-					childAngle  = 90.f;
-					break;
-				case PD_Side::kFRONT:
-					childAngle  = 180.f;
-					break;
-				case PD_Side::kLEFT:
-					childAngle  = 270.f;
-					break;
-			}
-			angle += childAngle;
-		}
-		childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
-		childDimensions.x = abs(childDimensions.x);
-		childDimensions.y = abs(childDimensions.y);
-		childDimensions.z = abs(childDimensions.z);
 
-		// Orient child to side
-		if(!oppositeSides(_side, _slot->childSide)){
-			float sideAngle = 0.f;
-			// orient child side pos
-			switch(_side){
-				case PD_Side::kRIGHT:
-					sideAngle  = 90.f;
-					break;
-				case PD_Side::kBACK:
-					sideAngle  = 180.f;
-					break;
-				case PD_Side::kLEFT:
-					sideAngle  = 270.f;
-					break;
-			}
-			angle += sideAngle;
+	// Rotate child according to childSide
+	if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
+		float childAngle = 0.f;
+		// orient child side pos
+		switch(_slot->childSide){
+			case PD_Side::kRIGHT:
+				childAngle  = 90.f;
+				break;
+			case PD_Side::kFRONT:
+				childAngle  = 180.f;
+				break;
+			case PD_Side::kLEFT:
+				childAngle  = 270.f;
+				break;
 		}
-
-		_child->rotatePhysical(angle, 0, 1.f, 0);
-		_child->realign();
-		_child->meshTransform->makeCumulativeModelMatrixDirty();
+		angle += childAngle;
 	}
-	
+	childDimensions = glm::rotate(childDimensions, angle, glm::vec3(0, 1.f, 0));
+	childDimensions.x = abs(childDimensions.x);
+	childDimensions.y = abs(childDimensions.y);
+	childDimensions.z = abs(childDimensions.z);
+
 	// check length of side
 	if(childDimensions.x > _slot->length - _slot->spaceFilled){
 		Log::warn("Not enough SPACE along side.");
 		return false;
 	}
 	
+	// Orient child to side
+	if(_side != PD_Side::kFRONT && _side != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
+		float sideAngle = 0.f;
+		// orient child side pos
+		switch(_side){
+			case PD_Side::kRIGHT:
+				sideAngle  = 90.f;
+				break;
+			case PD_Side::kBACK:
+				sideAngle  = 180.f;
+				break;
+			case PD_Side::kLEFT:
+				sideAngle  = 270.f;
+				break;
+		}
+		angle += sideAngle;
+	}
+
+	_child->rotatePhysical(angle, 0, 1.f, 0);
+	_child->realign();
+	_child->meshTransform->makeCumulativeModelMatrixDirty();
 	// object side position
 	glm::vec3 sidePos = glm::vec3();
 
@@ -848,7 +837,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	}
 	/*
 	std::stringstream tex;
-	tex << "assets/textures/room/debug/" << int(_slot->children.size())+1 << ".png";
+	tex << "assets/textures/room/debug/" << int(_side)+1 << ".png";
 	Texture * res = new Texture(tex.str(), false, true, true);
 	res->load();
 	_child->mesh->replaceTextures(res);
@@ -1216,36 +1205,34 @@ std::vector<Person *> RoomBuilder::getCharacters(bool _random){
 std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
-	sweet::ShuffleVector<PD_FurnitureDefinition *> definitions;
-	definitions.push(PD_ResourceManager::furnitureDefinitions.at(4));
-	definitions.push(PD_ResourceManager::furnitureDefinitions.at(8));
-	/*
+	std::vector<PD_FurnitureDefinition *> definitions;
 	if(definition->roomType == "NO_TYPE"){
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
-			definitions.push(def);
+			definitions.push_back(def);
 		}
 	}else{
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
 			for(std::string type : def->roomTypes){
 				if(type == room->definition->roomType){
-					definitions.push(def);
+					definitions.push_back(def);
 				}
 			}
 		}
-	}*/
+	}
 
 	// Random
 	if(definitions.size() > 0){
 		float area = room->tilemap->width * room->tilemap->height;
 		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.1f, area * 0.3f);
 		for(unsigned int i = 0; i < n; ++i){
-			auto furn = new PD_Furniture(world, definitions.pop(), baseShader, GROUND);
+			int randIdx = sweet::NumberUtils::randomInt(0, definitions.size()-1);
+			auto furn = new PD_Furniture(world, definitions.at(randIdx), baseShader, GROUND);
 			furniture.push_back(furn);
 		}
 	}else{
 		int blah = 0;
 	}
-
+	
 	return furniture;
 }
 

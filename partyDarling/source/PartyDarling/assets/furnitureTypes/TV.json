@@ -31,7 +31,7 @@
             ], 
             "type": "TV",
 			"mass": 100,
-            "roomTypes" : ["LIVING_ROOM"],
+            "roomTypes" : ["LIVING_ROOM","LABORATORY"],
             "sides" : {
 				 "FRONT":"FRONT"
              },

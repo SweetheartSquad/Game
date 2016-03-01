@@ -310,18 +310,16 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	// setup event listeners
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
-		std::stringstream characterName;
-		characterName << (int)glm::round(_event->getFloatData("Character"));
-		std::stringstream stateName;
-		stateName << (int)glm::round(_event->getFloatData("State"));
-		std::cout << characterName.str() << "'s state changed to " << stateName.str() << std::endl;
+		std::string characterName = _event->getStringData("Character");
+		std::string stateName = _event->getStringData("State");
+		std::cout << characterName << "'s state changed to " << stateName << std::endl;
 
 		PD_Listing * listing = PD_Listing::listingsById[_event->getStringData("scenario")];
-		Person * character = listing->characters[characterName.str()];
+		Person * character = listing->characters[characterName];
 		if(character == nullptr){
 			Log::warn("Character not found in state change event");
 		}else{
-			character->state = &character->definition->states.at(stateName.str());
+			character->state = &character->definition->states.at(stateName);
 			character->pr->setAnimation(character->state->animation);
 		}
 	});
@@ -397,6 +395,25 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			glUniform1f(test, 1);
 			checkForGlError(false);
 		}
+	});
+
+	
+	// fades
+	PD_ResourceManager::scenario->eventManager.addEventListener("fadeIn", [_game, this](sweet::Event * _event){
+		uiFade->fadeIn(glm::uvec3(
+			_event->getFloatData("r"),
+			_event->getFloatData("g"),
+			_event->getFloatData("b")
+		),
+		_event->getFloatData("length") / 1000.f);
+	});
+	PD_ResourceManager::scenario->eventManager.addEventListener("fadeOut", [_game, this](sweet::Event * _event){
+		uiFade->fadeOut(glm::uvec3(
+			_event->getFloatData("r"),
+			_event->getFloatData("g"),
+			_event->getFloatData("b")
+		),
+		_event->getFloatData("length") / 1000.f);
 	});
 
 	
@@ -916,7 +933,6 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}else{
 		currentHousePosition = _movement;
 	}
-	uiMap->updateMap(currentHousePosition);
 
 	// get the room for the new position
 	auto key = std::make_pair(currentHousePosition.x, currentHousePosition.y);
@@ -964,14 +980,18 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 	player->translatePhysical(p2, false);
 
-	// Trigger room entry events
-	for(auto trigger : currentRoom->definition->triggersOnce) {
-		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+	// Trigger room entry events (important to do this before map is updated, otherwise we won't get the once-only triggers)
+	if(currentRoom->visibility != Room::kENTERED){
+		for(auto trigger : currentRoom->definition->triggersOnce) {
+			sweet::Event * e = new sweet::Event(trigger);
+			PD_ResourceManager::scenario->eventManager.triggerEvent(e);
+		}
 	}
 	currentRoom->definition->triggersOnce.clear();
 
 	for(auto trigger : currentRoom->definition->triggersMulti) {
-		PD_ResourceManager::scenario->eventManager.triggerEvent(&trigger);
+		sweet::Event * e = new sweet::Event(trigger);
+		PD_ResourceManager::scenario->eventManager.triggerEvent(e);
 	}
 
 	lights.clear();
@@ -981,7 +1001,9 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 		currentRoom->lights[i]->lastPos = glm::vec3(99999);
 		lights.push_back(currentRoom->lights[i]);
 	}
-
+	
+	// update map with new position
+	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
 }
 

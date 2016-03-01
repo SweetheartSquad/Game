@@ -40,14 +40,14 @@
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
-      "size": 12,
+      "size": 16,
       "antiAliased": false
     },
     {
       "id":"main-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":30,
+      "size":40,
       "antiAliased": false
     },
     
@@ -259,7 +259,12 @@
       "type": "texture",
       "src": "UI/yelling contest/blueBubble-arrows.png"
     },
-
+	{
+      "id": "PLAYER-BUTTON",
+      "type": "texture",
+      "src": "UI/yelling contest/blueButton.png",
+      "nineSliced": true
+    },
 	{
       "id": "YELLING-CONTEST-DEFENSE-BUBBLE",
       "type": "texture",
