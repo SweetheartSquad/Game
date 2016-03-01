@@ -278,6 +278,51 @@
             "padding": 0.3,
             "twist": true,
             "flare": false 
+        },
+        {
+            "id": "spoon_1", 
+            "src": "spoon_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
+        },
+        {
+            "id": "fork_1", 
+            "src": "fork_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
+        },
+        {
+            "id": "fork_2", 
+            "src": "fork_2", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }
