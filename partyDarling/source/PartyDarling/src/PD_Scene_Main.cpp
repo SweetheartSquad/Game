@@ -718,40 +718,13 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		allCells[std::make_pair(pos.x, pos.y)] = false;
 	}
 	
-	// make a function to help us place stuff
-	// checks the cells directly above, below, and beside _pos, and returns those of which are within the house's bounds and haven't been used yet
-	std::function< std::vector<glm::ivec2> (glm::ivec2 _pos) > getAdjacentCells = [&](glm::ivec2 _pos){
-		std::vector<glm::ivec2> res;
-		
-		glm::ivec2 temp = _pos + glm::ivec2(-1,0);
-		if(temp.x >= 0 && allCells.at(std::make_pair(temp.x, temp.y))){
-			res.push_back(temp);
-		}
-
-		temp = _pos + glm::ivec2(1,0);
-		if(temp.x < houseSize && allCells.at(std::make_pair(temp.x, temp.y))){
-			res.push_back(temp);
-		}
-
-		temp = _pos + glm::ivec2(0,-1);
-		if(temp.y >= 0 && allCells.at(std::make_pair(temp.x, temp.y))){
-			res.push_back(temp);
-		}
-
-		temp = _pos + glm::ivec2(0,1);
-		if(temp.y < houseSize && allCells.at(std::make_pair(temp.x, temp.y))){
-			res.push_back(temp);
-		}
-
-		return res;
-	};
-
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
 	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = unlockedRooms.pop(true); // TODO: replace this with the actual starting room
 	// place the cells adjacent to the starting position into the list of open cells
-	openCells.push(getAdjacentCells(currentHousePosition));
+	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
+	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
 
 	// place the unlocked rooms by picking a random open cell and a random room,
 	// assigning the room to the cell, and storing any open adjacent cells in the list
@@ -765,7 +738,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = unlockedRooms.pop(true);
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
-		openCells.push(getAdjacentCells(cell));
+		
+		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
 
@@ -782,7 +756,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = lockedRooms.pop(true);
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
-		openCells.push(getAdjacentCells(cell));
+		
+		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
 	
@@ -837,6 +812,32 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// update the map
 	uiMap->buildMap(houseGrid);
+}
+
+std::vector<glm::ivec2> PD_Scene_Main::getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize){
+	std::vector<glm::ivec2> res;
+		
+	glm::ivec2 temp = _pos + glm::ivec2(-1,0);
+	if(temp.x >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
+		res.push_back(temp);
+	}
+
+	temp = _pos + glm::ivec2(1,0);
+	if(temp.x < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
+		res.push_back(temp);
+	}
+
+	temp = _pos + glm::ivec2(0,-1);
+	if(temp.y >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
+		res.push_back(temp);
+	}
+
+	temp = _pos + glm::ivec2(0,1);
+	if(temp.y < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
+		res.push_back(temp);
+	}
+
+	return res;
 }
 
 std::vector<Room *> PD_Scene_Main::buildRooms(){
