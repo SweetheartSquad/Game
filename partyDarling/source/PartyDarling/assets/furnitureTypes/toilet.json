@@ -56,7 +56,7 @@
                 }
             ], 
             "type": "toilet",
-			"mass": 50,
+			"mass": 0,
             "roomTypes" : ["BATHROOM","LABORATORY"],
             "sides" : {
                 },
