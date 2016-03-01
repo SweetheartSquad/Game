@@ -248,6 +248,36 @@
             "padding": 0.1,
             "twist": true,
             "flare": true 
+        },
+        {
+            "id": "pot_1", 
+            "src": "pot_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding": 0.3,
+            "twist": true,
+            "flare": false 
+        },
+        {
+            "id": "pot_2", 
+            "src": "pot_2", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding": 0.3,
+            "twist": true,
+            "flare": false 
         }
     ]
 }
