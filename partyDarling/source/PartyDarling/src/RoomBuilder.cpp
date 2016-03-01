@@ -718,7 +718,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	childDimensions.z = abs(childDimensions.z);
 
 	// check length of side
-	if(childDimensions.x > _slot->length - _slot->spaceFilled){
+	if(!_slot->overflow && childDimensions.x > _slot->length - _slot->spaceFilled){
 		Log::warn("Not enough SPACE along side.");
 		return false;
 	}
@@ -842,10 +842,16 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	res->load();
 	_child->mesh->replaceTextures(res);
 	*/
+
 	_slot->children.push_back(_child);
 
 	// adjust remaining slot space
 	_slot->spaceFilled += abs(childDimensions.x);
+
+	// so we don't have infinite things parented to an overflowed side
+	if(_slot->overflow && _slot->spaceFilled >= _slot->length){
+		_slot->overflow = false;
+	}
 
 	room->addComponent(_child);
 
@@ -1223,7 +1229,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Random
 	if(definitions.size() > 0){
 		float area = room->tilemap->width * room->tilemap->height;
-		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.1f, area * 0.3f);
+		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.2f, area * 0.4f);
 		for(unsigned int i = 0; i < n; ++i){
 			int randIdx = sweet::NumberUtils::randomInt(0, definitions.size()-1);
 			auto furn = new PD_Furniture(world, definitions.at(randIdx), baseShader, GROUND);
