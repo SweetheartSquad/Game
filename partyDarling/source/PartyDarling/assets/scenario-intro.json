@@ -1430,15 +1430,18 @@
                                 },
                                 "r":{  
                                     "value":0,
-                                    "type":"INT"
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
                                 },
                                 "g":{  
                                     "value":0,
-                                    "type":"INT"
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
                                 },
                                 "b":{  
                                     "value":0,
-                                    "type":"INT"
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
                                 }
                             },
                             "id":15
@@ -3079,6 +3082,40 @@
             "size":"SMALL",
             "type":"room",
             "locked":true,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+
+            ],
+            "triggersMulti":[  
+
+            ]
+        },
+        {  
+            "name":"Belfast Room",
+            "id":5,
+            "description":"get her out there!!! belfast!!",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[  
+                13
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+            },
+            "size":"SMALL",
+            "type":"room",
+            "locked":false,
             "items":[  
 
             ],
