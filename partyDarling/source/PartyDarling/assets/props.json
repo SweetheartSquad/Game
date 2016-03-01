@@ -48,13 +48,28 @@
             "twist": false,
             "flare": false  
         },
-		{
+        {
             "id": 4, 
             "src": "houseplant_1", 
             "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
-			"parentDependent": true,
+            "parentDependent": true,
             "parents":{
-				"sideTable":[
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": 4, 
+            "src": "houseplant_2", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
                     "TOP"
                 ]
             },
@@ -62,6 +77,36 @@
             "padding": 0.6,
             "twist": false,
             "flare": false 
+        },
+        {
+            "id": 4, 
+            "src": "houseplant_3", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": 4, 
+            "src": "houseplant_4", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
         },
 		{
             "id": 5, 
