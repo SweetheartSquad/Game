@@ -329,18 +329,18 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn1);
 	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn1->setRationalHeight(0.5f, buttonLayout);
-	pBubbleBtn1->setPadding(0.05f);
+	pBubbleBtn1->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn1->setPadding(0.1f);
+	pBubbleBtn1->label->setMarginTop(0.1f);
 	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn2);
 	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn2->setRationalHeight(0.5f, buttonLayout);
-	pBubbleBtn2->setPadding(0.05f);
+	pBubbleBtn2->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn2->setPadding(0.1f);
+	pBubbleBtn2->label->setMarginTop(0.1f);
 	pBubbleBtn2->setMouseEnabled(false);
-
-
 
 	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
 	playerBubble->addChild(playerBubbleTail);
