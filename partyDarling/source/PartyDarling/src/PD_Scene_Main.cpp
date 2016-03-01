@@ -310,18 +310,16 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	// setup event listeners
 	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
-		std::stringstream characterName;
-		characterName << (int)glm::round(_event->getFloatData("Character"));
-		std::stringstream stateName;
-		stateName << (int)glm::round(_event->getFloatData("State"));
-		std::cout << characterName.str() << "'s state changed to " << stateName.str() << std::endl;
+		std::string characterName = _event->getStringData("Character");
+		std::string stateName = _event->getStringData("State");
+		std::cout << characterName << "'s state changed to " << stateName << std::endl;
 
 		PD_Listing * listing = PD_Listing::listingsById[_event->getStringData("scenario")];
-		Person * character = listing->characters[characterName.str()];
+		Person * character = listing->characters[characterName];
 		if(character == nullptr){
 			Log::warn("Character not found in state change event");
 		}else{
-			character->state = &character->definition->states.at(stateName.str());
+			character->state = &character->definition->states.at(stateName);
 			character->pr->setAnimation(character->state->animation);
 		}
 	});
