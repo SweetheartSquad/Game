@@ -42,6 +42,8 @@ private:
 	bool enabled;
 	bool canInterject;
 
+	NodeUI * displayContainer;
+
 	VerticalLinearLayout * healthContainer;
 	NodeUI * gameContainer;
 

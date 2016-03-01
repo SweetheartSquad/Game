@@ -102,10 +102,16 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	healthContainer->verticalAlignment = kMIDDLE;
 	//healthContainer->setBackgroundColour(0, 1.f, 0.541f);
 
+	displayContainer = new NodeUI(_bulletWorld);
+	addChild(displayContainer);
+	displayContainer ->setRationalWidth(1.f, this);
+	displayContainer ->setRationalHeight(0.85f, this);
+	displayContainer ->background->setVisible(false);
+
 	gameContainer = new NodeUI(_bulletWorld);
-	addChild(gameContainer);
-	gameContainer->setRationalWidth(1.f, this);
-	gameContainer->setRationalHeight(0.85f, this);
+	displayContainer->addChild(gameContainer);
+	gameContainer->setRationalWidth(1.f, displayContainer);
+	gameContainer->setRationalHeight(1.f, displayContainer);
 	gameContainer->background->setVisible(false);
 	//gameContainer->setBackgroundColour(0, 0.714f, 0.929f);
 
@@ -347,17 +353,18 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 
 	gameOverContainer = new VerticalLinearLayout(_bulletWorld);
+	displayContainer->addChild(gameOverContainer);
 	gameOverContainer->horizontalAlignment = kCENTER;
 	gameOverContainer->verticalAlignment = kMIDDLE;
-	gameOverContainer->setRationalWidth(0.8f, this);
-	gameOverContainer->setRationalHeight(0.85f, this);
+	gameOverContainer->setRationalHeight(1.f, displayContainer);
+	gameOverContainer->setRationalWidth(1.f, displayContainer);
+	gameOverContainer->setVisible(false);
 
 	gameOverImage = new NodeUI(_bulletWorld);
 	gameOverContainer->addChild(gameOverImage);
 	gameOverImage->setRationalWidth(0.5f, gameOverContainer);
 	gameOverImage->setRationalHeight(0.5f, gameOverContainer);
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
-	// don't add the container until yelling contest is over
 
 	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
 	complimentBubble->mesh->setScaleMode(GL_NEAREST);
@@ -640,10 +647,10 @@ void PD_UI_YellingContest::startNewFight(){
 		// Reset layout
 		gameOverImage->setRationalWidth(0.5f, this);
 		gameOverImage->setRationalHeight(0.5f, this);
-		removeChild(gameOverContainer);
+		gameOverContainer->setVisible(false);
 		gameOverDuration = 0;
 
-		addChild(gameContainer);
+		gameContainer->setVisible(true);
 		childTransform->addChild(enemyCursor->firstParent(), false);
 		interjectBubble->setVisible(true);
 		
@@ -667,7 +674,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	isGameOver = true;
 	win = _win;
 
-	removeChild(gameContainer);
+	gameContainer->setVisible(false);
 	childTransform->removeChild(enemyCursor->firstParent());
 	interjectBubble->setVisible(false);
 
@@ -677,7 +684,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
 	}
 
-	addChild(gameOverContainer);
+	gameOverContainer->setVisible(true);
 	//invalidateLayout();
 	// USER TESTING INFORMATION
 	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
@@ -862,7 +869,6 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	enemyCursor->setVisible(!_isOffensive);
 
 	playerBubble->setVisible(_isOffensive);
-	playerTimerSlider->setVisible(_isOffensive);
 	
 	if (!_isOffensive){
 		setEnemyText();

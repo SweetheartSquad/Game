@@ -99,11 +99,11 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	boundingBox.x = -boundingBox.width * 0.5f - _def->paddingLeft;
 	boundingBox.z = -boundingBox.depth * 0.5f - _def->paddingBack;
-
+#ifdef _DEBUG
 	boundingBoxMesh->meshTransform->scale(boundingBox.width, boundingBox.height, boundingBox.depth, kOBJECT);
 	boundingBoxMesh->freezeTransformation();
 	boundingBoxMesh->meshTransform->translate(-_def->paddingLeft, 0, -_def->paddingBack);
-
+#endif
 	// Get the sides information
 	if(_def->sides.front != PD_Side::kNONE){
 		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width);
