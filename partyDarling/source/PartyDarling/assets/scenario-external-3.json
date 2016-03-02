@@ -1,0 +1,141 @@
+{  
+    "name":"EMPTY-ROOMS",
+    "description":"EMPTY-ROOMS",
+    "type":0,
+    "assets":[  
+        {  
+            "name":"Empty Room",
+            "id":1,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":2,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":3,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":4,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":5,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":6,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        },{  
+            "name":"Empty Room",
+            "id":7,
+            "description":"Empty Room",
+            "furnitureTypes":[  
+
+            ],
+            "characters":[],
+            "tags":{  
+                "not":[],
+                "required":[],
+                "preferred":[]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[],
+            "triggersOnce":[],
+            "triggersMulti":[]
+        }
+    ]
+}

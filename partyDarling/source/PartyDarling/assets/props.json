@@ -48,13 +48,28 @@
             "twist": false,
             "flare": false  
         },
-		{
+        {
             "id": 4, 
             "src": "houseplant_1", 
             "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
-			"parentDependent": true,
+            "parentDependent": true,
             "parents":{
-				"sideTable":[
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": "houseplant2", 
+            "src": "houseplant_2", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
                     "TOP"
                 ]
             },
@@ -62,6 +77,36 @@
             "padding": 0.6,
             "twist": false,
             "flare": false 
+        },
+        {
+            "id": "houseplant3", 
+            "src": "houseplant_3", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": "houseplant4", 
+            "src": "houseplant_4", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding": 0.6,
+            "twist": true,
+            "flare": true 
         },
 		{
             "id": 5, 
@@ -173,6 +218,111 @@
             "padding":0,
             "twist": true,
             "flare": true  
+        },
+        {
+            "id": "clock_1", 
+            "src": "clock_1", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 15,
+            "padding": 0.1,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": "clock_2", 
+            "src": "clock_2", 
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "parentDependent": true,
+            "parents":{
+                "sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 15,
+            "padding": 0.1,
+            "twist": true,
+            "flare": true 
+        },
+        {
+            "id": "pot_1", 
+            "src": "pot_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding": 0.3,
+            "twist": true,
+            "flare": false 
+        },
+        {
+            "id": "pot_2", 
+            "src": "pot_2", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 20,
+            "padding": 0.3,
+            "twist": true,
+            "flare": false 
+        },
+        {
+            "id": "spoon_1", 
+            "src": "spoon_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
+        },
+        {
+            "id": "fork_1", 
+            "src": "fork_1", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
+        },
+        {
+            "id": "fork_2", 
+            "src": "fork_2", 
+            "roomTypes" : ["KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }

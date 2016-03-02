@@ -426,10 +426,10 @@ void PD_UI_YellingContest::update(Step * _step){
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
-					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->textDisplayed);
+					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
 				}
 				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
-					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->textDisplayed);
+					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
 				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
