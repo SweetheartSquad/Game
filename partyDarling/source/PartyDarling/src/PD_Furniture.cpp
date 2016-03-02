@@ -12,8 +12,6 @@
 #include <MeshDeformation.h>
 #include <PD_Slot.h>
 
-#define FURNITURE_SCALE 0.15
-
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
@@ -93,31 +91,38 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
 
+	if(type == "TV"){
+		int wow = 0;
+	}
 	// padding
+	boundingBox.x = -boundingBox.width * (0.5f + _def->paddingLeft);
+	boundingBox.z = -boundingBox.depth * (0.5f + _def->paddingBack);
+
 	boundingBox.width *= 1.f + _def->paddingLeft + _def->paddingRight;
 	boundingBox.depth *= 1.f + _def->paddingFront + _def->paddingBack;
-
-	boundingBox.x = -boundingBox.width * 0.5f - _def->paddingLeft;
-	boundingBox.z = -boundingBox.depth * 0.5f - _def->paddingBack;
+	
 #ifdef _DEBUG
-	boundingBoxMesh->meshTransform->scale(boundingBox.width, boundingBox.height, boundingBox.depth, kOBJECT);
-	boundingBoxMesh->freezeTransformation();
-	boundingBoxMesh->meshTransform->translate(-_def->paddingLeft, 0, -_def->paddingBack);
+	for(auto &v :  boundingBoxMesh->mesh->vertices){
+		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
+		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
+	}
+	boundingBoxMesh->mesh->dirty = true;
 #endif
 	// Get the sides information
 	if(_def->sides.front != PD_Side::kNONE){
-		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width);
+		emptySlots[PD_Side::kFRONT] = new PD_Slot(_def->sides.front, boundingBox.width, _def->overflow);
 	}
 	if(_def->sides.back != PD_Side::kNONE){
-		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, boundingBox.width);
+		emptySlots[PD_Side::kBACK] = new PD_Slot(_def->sides.back, boundingBox.width, _def->overflow);
 	}
 	if(_def->sides.right != PD_Side::kNONE){
-		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, boundingBox.depth);
+		emptySlots[PD_Side::kRIGHT] = new PD_Slot(_def->sides.right, boundingBox.depth, _def->overflow);
 	}
 	if(_def->sides.left != PD_Side::kNONE){
-		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, boundingBox.depth);
+		emptySlots[PD_Side::kLEFT] = new PD_Slot(_def->sides.left, boundingBox.depth, _def->overflow);
 	}
 	if(_def->sides.top != PD_Side::kNONE){
-		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, originalBoundingBox.width);
+		emptySlots[PD_Side::kTOP] = new PD_Slot(_def->sides.top, originalBoundingBox.width); // don't let TOP overflow
 	}
 }

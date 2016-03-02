@@ -2944,7 +2944,7 @@
 
                 ]
             },
-            "size":"SMALL",
+            "size":"LARGE",
             "type":"room",
             "locked":false,
             "items":[  
@@ -3079,7 +3079,7 @@
 
                 ]
             },
-            "size":"SMALL",
+            "size":"LARGE",
             "type":"room",
             "locked":true,
             "items":[  
@@ -3113,7 +3113,7 @@
 
                 ]
             },
-            "size":"SMALL",
+            "size":"LARGE",
             "type":"room",
             "locked":false,
             "items":[  

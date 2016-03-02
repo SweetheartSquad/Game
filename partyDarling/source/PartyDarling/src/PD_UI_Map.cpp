@@ -16,7 +16,6 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
 	NodeUI(_world),
 	enabled(true),
-	detailed(false),
 	layout(nullptr)
 {
 	background->setVisible(false);
@@ -57,34 +56,6 @@ bool PD_UI_Map::isEnabled(){
 	return enabled;
 }
 
-bool PD_UI_Map::isDetailed(){
-	return detailed;
-}
-
-void PD_UI_Map::setDetailed(bool _detailed){
-	detailed = _detailed;
-	if(detailed){
-		innerLayout->setRationalHeight(1.f, this);
-		innerLayout->setSquareWidth(1.f);
-
-		for(auto & cell : grid){
-			if(cell.second->room != nullptr){
-				cell.second->setMouseEnabled(true);
-			}
-		}
-		roomName->setVisible(true);
-	}else{
-		innerLayout->setRationalHeight(0.1f, this);
-		innerLayout->setSquareWidth(1.f);
-
-		for(auto & cell : grid){
-			cell.second->setMouseEnabled(false);
-		}
-		roomName->setVisible(false);
-	}
-	invalidateLayout();
-}
-
 void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	// clear out the old map
 	if(layout != nullptr){
@@ -105,11 +76,14 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	layout->addChild(innerLayout);
 	innerLayout->horizontalAlignment = kCENTER;
 	innerLayout->verticalAlignment = kMIDDLE;
-	innerLayout->setRationalHeight(0.9f, layout);
-	innerLayout->setSquareWidth(1.f);
+	//innerLayout->setRationalHeight(0.9f, layout);
+	//innerLayout->setSquareWidth(1.f);
 
 	innerLayout->background->setVisible(true);
 	innerLayout->setBackgroundColour(0,0,0,0.5);
+	
+	innerLayout->setRationalHeight(0.2f, this);
+	innerLayout->setSquareWidth(1.f);
 
 	
 	VerticalLinearLayout * innerLayout2 = new VerticalLinearLayout(world);
@@ -162,8 +136,6 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	for(auto & room : _houseGrid){
 		grid[room.first]->room = room.second;
 	}
-
-	setDetailed(isDetailed());
 }
 
 void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){

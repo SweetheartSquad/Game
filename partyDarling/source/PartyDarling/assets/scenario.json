@@ -34,20 +34,20 @@
       "id": "FONT",
       "type": "font",
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
-      "size": 12,
+      "size": 0.175,
       "antiAliased": false
     },{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
-      "size": 16,
+      "size": 0.2,
       "antiAliased": false
     },
     {
       "id":"main-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":40,
+      "size":0.5,
       "antiAliased": false
     },
     
@@ -72,6 +72,12 @@
     },
 
     //Yelling Contest SFX
+	{
+      "id":"timer",
+      "type":"audio",
+      "src":"kitchen-timer.ogg",
+      "category":"sfx"
+    },
     {
       "id":"recordScratch",
       "type":"audio",

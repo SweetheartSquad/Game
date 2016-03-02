@@ -23,7 +23,7 @@
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
-
+#define TIMER "timer"
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
@@ -329,18 +329,18 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn1);
 	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn1->setRationalHeight(0.5f, buttonLayout);
-	pBubbleBtn1->setPadding(0.05f);
+	pBubbleBtn1->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn1->setPadding(0.1f);
+	pBubbleBtn1->label->setMarginTop(0.1f);
 	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
 	buttonLayout->addChild(pBubbleBtn2);
 	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn2->setRationalHeight(0.5f, buttonLayout);
-	pBubbleBtn2->setPadding(0.05f);
+	pBubbleBtn2->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn2->setPadding(0.1f);
+	pBubbleBtn2->label->setMarginTop(0.1f);
 	pBubbleBtn2->setMouseEnabled(false);
-
-
 
 	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
 	playerBubble->addChild(playerBubbleTail);
@@ -370,7 +370,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	complimentBubble->mesh->setScaleMode(GL_NEAREST);
 	complimentBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
 	complimentBubble->meshTransform->scale(0, 0, 0);
-	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.75, 0, 0);
+	complimentBubble->childTransform->translate(sweet::getWindowWidth() * 0.2, 0, 0);
 	complimentBubble->setVisible(false);
 
 	// move the interject bubble's mesh up so that the origin is aligned with the bottom
@@ -382,9 +382,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 
 	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
 	interjectBubble->mesh->setScaleMode(GL_NEAREST);
-	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
+	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.6, sweet::getWindowHeight() * 0.6, 0);
 	interjectBubble->meshTransform->scale(0, 0, 0);
-	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.5, 0, 0);
+	interjectBubble->childTransform->translate(sweet::getWindowWidth() * 0.6, 0, 0);
 	interjectBubble->setVisible(false);
 
 	// move the interject bubble's mesh up so that the origin is aligned with the bottom
@@ -406,6 +406,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	for(unsigned long int i = 1; i < 11; ++i) {
 		missInterjectSounds.push(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
 	}
+
+	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
 }
 
 PD_UI_YellingContest::~PD_UI_YellingContest(){
@@ -424,10 +426,10 @@ void PD_UI_YellingContest::update(Step * _step){
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
-					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->textDisplayed);
+					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
 				}
 				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
-					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->textDisplayed);
+					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
 				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
@@ -564,6 +566,7 @@ void PD_UI_YellingContest::update(Step * _step){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
+							PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();	
 							setUIMode(false);
 						}else{
@@ -593,6 +596,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					if(playerQuestionTimer >= playerQuestionTimerLength){
 						playerBubbleOptions->setVisible(true);
 						playerTimerSlider->setVisible(true);
+						PD_ResourceManager::scenario->getAudio(TIMER)->sound->play(true);
 					}
 				}
 			}
@@ -939,7 +943,7 @@ void PD_UI_YellingContest::setPlayerText(){
 }
 
 void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
-
+	PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
 	}else {
