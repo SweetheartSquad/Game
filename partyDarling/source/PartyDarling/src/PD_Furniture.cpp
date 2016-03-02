@@ -12,8 +12,6 @@
 #include <MeshDeformation.h>
 #include <PD_Slot.h>
 
-#define FURNITURE_SCALE 0.15
-
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
 {
@@ -104,9 +102,12 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	boundingBox.depth *= 1.f + _def->paddingFront + _def->paddingBack;
 	
 #ifdef _DEBUG
-	boundingBoxMesh->meshTransform->scale(boundingBox.width, boundingBox.height, boundingBox.depth, kOBJECT);
-	boundingBoxMesh->freezeTransformation();
-	boundingBoxMesh->meshTransform->translate(-_def->paddingLeft + _def->paddingRight, 0, -_def->paddingBack + _def->paddingFront);
+	for(auto &v :  boundingBoxMesh->mesh->vertices){
+		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
+		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
+	}
+	boundingBoxMesh->mesh->dirty = true;
 #endif
 	// Get the sides information
 	if(_def->sides.front != PD_Side::kNONE){

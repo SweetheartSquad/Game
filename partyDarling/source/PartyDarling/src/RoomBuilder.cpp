@@ -694,7 +694,8 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	float angle = 0;
 	glm::vec3 childDimensions = glm::vec3(_child->boundingBox.width, _child->boundingBox.height, _child->boundingBox.depth);
-
+	glm::vec3 childLowerBound = glm::vec3(_child->boundingBox.x, _child->boundingBox.y, _child->boundingBox.z);
+	
 	// Rotate child according to childSide
 	if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float childAngle = 0.f;
@@ -702,12 +703,18 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		switch(_slot->childSide){
 			case PD_Side::kRIGHT:
 				childAngle  = 90.f;
+				childLowerBound.x = -(_child->boundingBox.depth + _child->boundingBox.z);
+				childLowerBound.z = _child->boundingBox.x;
 				break;
 			case PD_Side::kFRONT:
 				childAngle  = 180.f;
+				childLowerBound.x = -(_child->boundingBox.width + _child->boundingBox.x);
+				childLowerBound.z = -(_child->boundingBox.depth + _child->boundingBox.z);
 				break;
 			case PD_Side::kLEFT:
 				childAngle  = 270.f;
+				childLowerBound.x = _child->boundingBox.z;
+				childLowerBound.z = -(_child->boundingBox.width + _child->boundingBox.x);
 				break;
 		}
 		angle += childAngle;
@@ -754,18 +761,18 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		switch(_side){
 			case PD_Side::kFRONT:
 				sidePos.x += (-_parent->boundingBox.width + childDimensions.x) / 2.f + _slot->spaceFilled;
-				sidePos.z += (_parent->boundingBox.depth + childDimensions.z) / 2.f;
+				sidePos.z += (_parent->boundingBox.depth + _parent->boundingBox.z) - childLowerBound.z;
 				break;
 			case PD_Side::kBACK:
 				sidePos.x += (_parent->boundingBox.width - childDimensions.x) / 2.f - _slot->spaceFilled;
-				sidePos.z += (-_parent->boundingBox.depth - childDimensions.z) / 2.f;
+				sidePos.z += _parent->boundingBox.z - (childDimensions.z + childLowerBound.z);
 				break;
 			case PD_Side::kLEFT:
-				sidePos.x += (-_parent->boundingBox.width - childDimensions.z) / 2.f;
+				sidePos.x += _parent->boundingBox.x - (childDimensions.z + childLowerBound.z);
 				sidePos.z += (-_parent->boundingBox.depth + childDimensions.x) / 2.f + _slot->spaceFilled;
 				break;
 			case PD_Side::kRIGHT:
-				sidePos.x += (_parent->boundingBox.width + childDimensions.z) / 2.f;
+				sidePos.x += (_parent->boundingBox.width + _parent->boundingBox.x) - childLowerBound.z;
 				sidePos.z += (_parent->boundingBox.depth - childDimensions.x) / 2.f - _slot->spaceFilled;
 				break;
 			case PD_Side::kTOP:
@@ -777,25 +784,25 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	}else{
 		// Centering
 		float centerPos = 0.5 * (_slot->spaceFilled + childDimensions.x) - childDimensions.x * 0.5;
-
+		
 		switch(_side){
 			case PD_Side::kFRONT:
-				sidePos.z += (_parent->boundingBox.depth + childDimensions.z) / 2.f;
+				sidePos.z += (_parent->boundingBox.depth + _parent->boundingBox.z) - childLowerBound.z;
 				sidePos.x += centerPos;
 				moveChildren.x = -1;
 				break;
 			case PD_Side::kBACK:
-				sidePos.z += (-_parent->boundingBox.depth - childDimensions.z) / 2.f;
+				sidePos.z += _parent->boundingBox.z - (childDimensions.z + childLowerBound.z);
 				sidePos.x += centerPos;
 				moveChildren.x = 1;
 				break;
 			case PD_Side::kLEFT:
-				sidePos.x += (-_parent->boundingBox.width - childDimensions.z) / 2.f;
+				sidePos.x += _parent->boundingBox.x - (childDimensions.z + childLowerBound.z);
 				sidePos.z += centerPos;
 				moveChildren.z = -1;
 				break;
 			case PD_Side::kRIGHT:
-				sidePos.x += (_parent->boundingBox.width + childDimensions.z) / 2.f;
+				sidePos.x += (_parent->boundingBox.width + _parent->boundingBox.x) - childLowerBound.z;
 				sidePos.z += centerPos;
 				moveChildren.z = 1;
 				break;
