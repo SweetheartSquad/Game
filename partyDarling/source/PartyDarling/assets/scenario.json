@@ -188,26 +188,6 @@
 
 
     {
-      "id": "UV-TEST",
-      "type": "texture",
-      "src": "uvs.png"
-    },
-    {
-      "id": "UV-TEST-ALT",
-      "type": "texture",
-      "src": "uvs_alt.png"
-    },
-    {
-      "id": "WALLS",
-      "type": "texture",
-      "src": "walls.png"
-    },
-    {
-      "id": "GREY",
-      "type": "texture",
-      "src": "grey.png"
-    },
-    {
       "id": "CROSSHAIR",
       "type": "texture",
       "src": "UI/crosshair.png"
@@ -216,26 +196,6 @@
       "id": "CURSOR",
       "type": "texture",
       "src": "../engine basics/cursor.png"
-    },
-    {
-    	"id":"wood",
-    	"type":"texture",
-    	"src":"wood.png"
-	},
-    {
-      "id": "INDEXED-TEST",
-      "type": "texture",
-      "src": "indexedColourTest.png"
-    },
-    {
-      "id": "INDEXED-TEST2",
-      "type": "texture",
-      "src": "indexedColourTest2.png"
-    },
-    {
-      "id": "RYAN",
-      "type": "texture",
-      "src": "ryan.png"
     },
 	
 
