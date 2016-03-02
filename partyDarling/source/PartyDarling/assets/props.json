@@ -219,6 +219,40 @@
             "twist": true,
             "flare": true  
         },
+		{
+            "id": 12, 
+            "src": "wine", 
+            "roomTypes" : ["LIVING_ROOM", "KITCHEN","BEDROOM"],
+            "parents":{
+			"table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding":0,
+            "twist": false,
+            "flare": false  
+        },
+		{
+            "id": 13, 
+            "src": "beer", 
+            "roomTypes" : ["LIVING_ROOM", "KITCHEN","BEDROOM"],
+            "parents":{
+			"table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 30,
+            "padding":0,
+            "twist": false,
+            "flare": false 
+		},
         {
             "id": "clock_1", 
             "src": "clock_1", 

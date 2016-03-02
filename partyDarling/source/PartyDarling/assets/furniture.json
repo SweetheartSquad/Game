@@ -487,6 +487,26 @@
         {
             "id": 114, 
             "src": "furnitureJson/toilet_handle_2.json"
+        }, 
+        {
+            "id": 115, 
+            "src": "furnitureJson/lamp_lampshade_6.json"
+        }, 
+        {
+            "id": 116, 
+            "src": "furnitureJson/radio_main_1.json"
+        }, 
+        {
+            "id": 117, 
+            "src": "furnitureJson/radio_screen_1.json"
+        }, 
+        {
+            "id": 118, 
+            "src": "furnitureJson/radio_knob_1.json"
+        }, 
+        {
+            "id": 119, 
+            "src": "furnitureJson/radio_antenna_1.json"
         }
     ], 
     "furniture": [
@@ -517,7 +537,7 @@
         {
             "src": "furnitureTypes/loveseat.json"
         }, 
-		{
+        {
             "src": "furnitureTypes/toilet.json"
         }, 
         {
@@ -525,6 +545,9 @@
         }, 
         {
             "src": "furnitureTypes/painting.json"
+        },
+		{
+            "src": "furnitureTypes/radio.json"
         }
     ]
 }
