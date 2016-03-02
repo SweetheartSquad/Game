@@ -1,0 +1,43 @@
+{
+    "components": [
+        {
+            "componentTypes": ["radio_main"], 
+            "multiplier": 1, 
+            "required": true,
+			"scale": [1.0, 1.0, 1.0],
+            "outComponents": [
+                {
+                    "componentTypes": ["radio_knob"], 
+                    "multiplier": 2,
+                    "required": true,
+                    "scale": [1.0,1.0,1.0]
+                },
+				{
+                    "componentTypes": ["radio_screen"], 
+                    "multiplier": 1,
+                    "required": true,
+                    "scale": [1.0,1.0,1.0]
+                },
+				{
+                    "componentTypes": ["radio_antenna"], 
+                    "multiplier": 1,
+                    "required": true,
+                    "scale": [1.0,1.0,1.0]
+                }
+            ]
+        }
+    ], 
+    "type": "radio",
+	"mass": 50,
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY"],
+    "detailedCollider": false,
+	"parentDependent": true,
+    "parents":{"table":["TOP"],
+	"sideTable":["TOP"],
+	"bookshelf_4":["TOP"],
+	"wall":["FRONT"]
+	},
+    "twist": false,
+    "flare": true,
+    "numTextures": 2
+}
