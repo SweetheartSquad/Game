@@ -519,6 +519,10 @@
         {
             "id": 122, 
             "src": "furnitureJson/radio_antenna_2.json"
+        }, 
+        {
+            "id": 123, 
+            "src": "furnitureJson/radio_main_3.json"
         }
     ], 
     "furniture": [
