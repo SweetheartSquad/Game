@@ -507,6 +507,18 @@
         {
             "id": 119, 
             "src": "furnitureJson/radio_antenna_1.json"
+        }, 
+        {
+            "id": 120, 
+            "src": "furnitureJson/radio_main_2.json"
+        }, 
+        {
+            "id": 121, 
+            "src": "furnitureJson/radio_knob_2.json"
+        }, 
+        {
+            "id": 122, 
+            "src": "furnitureJson/radio_antenna_2.json"
         }
     ], 
     "furniture": [
@@ -545,8 +557,8 @@
         }, 
         {
             "src": "furnitureTypes/painting.json"
-        },
-		{
+        }, 
+        {
             "src": "furnitureTypes/radio.json"
         }
     ]
