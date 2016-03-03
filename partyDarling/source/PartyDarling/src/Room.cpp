@@ -16,6 +16,7 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
 	definition(_definition),
 	tilemapSprite(new Sprite()),
+	tilemap(nullptr),
 	locked(definition->locked),
 	visibility(kHIDDEN)
 {
@@ -55,6 +56,7 @@ void Room::translatePhysical(glm::vec3 _v, bool _relative){
 }
 
 Room::~Room(void){
+	delete tilemap;
 }
 
 glm::vec3 Room::getCenter() const{
