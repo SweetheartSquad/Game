@@ -55,9 +55,6 @@ private:
 	std::vector<NodeUI *> lives;
 	// lost lives in the current fight
 	std::vector<NodeUI *> lostLives;
-	// the life tokens accumulated so far
-	// this size of the list also indicates how many lives the player gets at the start of a fight
-	std::vector<Texture *> lifeTokens;
 	// duplicates of lifeTokens, modified to have a red cross through them to show lost lives
 	std::vector<Texture *> lifeTokensCrossed;
 
@@ -160,6 +157,10 @@ private:
 
 public:
 	
+	// the life tokens accumulated so far
+	// this size of the list also indicates how many lives the player gets at the start of a fight
+	std::vector<Texture *> lifeTokens;
+
 	TextArea * selectedGlyphText;
 	
 	float damage;

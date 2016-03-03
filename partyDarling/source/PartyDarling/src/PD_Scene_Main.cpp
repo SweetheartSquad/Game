@@ -68,7 +68,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	trackLeft(false),
 	trackRight(false),
 	carriedProp(nullptr),
-	carriedPropDistance(0)
+	carriedPropDistance(0),
+	plotPosition(kBEGINNING)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -643,7 +644,6 @@ void PD_Scene_Main::pickScenarios(){
 		}
 
 		scenariosList.append(allOmarDefs.pop()["src"].asString());
-		
 		scenarioFile.append(scenariosList);
 	}
 
@@ -1526,6 +1526,14 @@ void PD_Scene_Main::update(Step * _step){
 	// map compass update
 	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
 
+#ifdef _DEBUG
+
+	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
+		save();
+	}
+
+#endif
+
 	// bubble testing controls
 	if(keyboard->keyJustDown(GLFW_KEY_V)){
 		uiBubble->next();
@@ -1659,4 +1667,28 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->invalidateLayout();
+}
+
+void PD_Scene_Main::save() {
+	Json::Value saveOut;
+	if(plotPosition != kEND) {
+		int pos = plotPosition;
+		saveOut["plotPosition"] = plotPosition;
+		saveOut["strength"] = player->strength;
+		saveOut["sass"] = player->sass;
+		saveOut["defense"] = player->defense;
+		saveOut["insight"] = player->insight;
+		for(unsigned long int i = 0; i < uiYellingContest->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			uiYellingContest->lifeTokens[i]->saveImageData(fileName);
+			saveOut["lifeTokens"].append(fileName);
+		}
+
+		std::ofstream saveFile;
+		saveFile.open ("data/save.json");
+		saveFile << saveOut;
+		saveFile.close();
+	}else {
+		// Delete save file
+	}
 }
