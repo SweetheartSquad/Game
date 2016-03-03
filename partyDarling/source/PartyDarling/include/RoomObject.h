@@ -48,6 +48,7 @@ public:
 	std::string type;
 	bool parentDependent;
 	std::vector<PD_ParentDef> parentTypes;
+	int parentMax; // max allowed on parent
 
 	Anchor_t anchor;
 	float padding;

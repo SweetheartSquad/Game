@@ -30,5 +30,6 @@
                 },
 			"parentDependent": true,
             "parents":{"sideTable":["TOP"]},    
-            "padding":0
+            "padding":0,
+			"parentMax": 1
         }

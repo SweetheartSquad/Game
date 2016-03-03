@@ -560,14 +560,14 @@ RoomObject * RoomBuilder::getWallFromEdge(Edge * _e){
 	return nullptr;
 }
 
-bool RoomBuilder::search(RoomObject * child){
+bool RoomBuilder::search(RoomObject * _child){
 	// Look for parent
-	if(child->anchor != Anchor_t::CIELING && (child->parentTypes.size() > 0 || child->anchor == Anchor_t::WALL)){
+	if(_child->anchor != Anchor_t::CIELING && (_child->parentTypes.size() > 0 || _child->anchor == Anchor_t::WALL)){
 		// create parent list
 		sweet::ShuffleVector<RoomObject *> validParentsShuffle;
 		std::vector<RoomObject *> validParents;
 		std::vector<std::string> parentTypes;
-		for(auto &d : child->parentTypes){
+		for(auto &d : _child->parentTypes){
 			parentTypes.push_back(d.parent);
 		}
 
@@ -576,7 +576,20 @@ bool RoomBuilder::search(RoomObject * child){
 			bool validParent = false;
 			for(auto &type : parentTypes) {
 				if(type == o->type) {
-					validParent = true;
+					// just top for now
+					if(_child->type != "" && _child->parentMax > 0 && o->emptySlots.find(PD_Side::kTOP) != o->emptySlots.end()){
+						int count = 0;
+						for(auto c : o->emptySlots.at(PD_Side::kTOP)->children){
+							if(c->type == _child->type){
+								++count;
+							}
+						}
+						if(count < _child->parentMax){
+							validParent = true;
+						}
+					}else{
+						validParent = true;
+					}
 					break;
 				}
 			}
@@ -617,7 +630,7 @@ bool RoomBuilder::search(RoomObject * child){
 			bool validParent = false;
 
 			PD_ParentDef parentDef;
-			for(auto parentType : child->parentTypes) {
+			for(auto parentType : _child->parentTypes) {
 				if(parentType.parent == parent->type) {
 					parentDef = parentType;
 					validParent = true;
@@ -649,8 +662,8 @@ bool RoomBuilder::search(RoomObject * child){
 				
 				Log::info("Side found.");
 				// if the object can be placed without collision
-				if(arrange(child, parent, side, slot)){
-					addObjectToLists(child);
+				if(arrange(_child, parent, side, slot)){
+					addObjectToLists(_child);
 					Log::info("Parenting and placing object.");
 					return true;
 				}
@@ -660,21 +673,21 @@ bool RoomBuilder::search(RoomObject * child){
 	}
 	Log::warn("NO PARENT found.");
 	
-	if(child->anchor != Anchor_t::WALL && !child->parentDependent){
-		if(!child->billboarded){
-			child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
+	if(_child->anchor != Anchor_t::WALL && !_child->parentDependent){
+		if(!_child->billboarded){
+			_child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
 		}
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < tiles.size(); ++i){
 			Log::info("Tile selected");
-			btQuaternion bOrient = child->body->getWorldTransform().getRotation();
+			btQuaternion bOrient = _child->body->getWorldTransform().getRotation();
 			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
 			Log::info("Position found.");
 			// Validate bounding box is inside room
-			if(canPlaceObject(child, tiles.at(i), orient)){
-				room->addComponent(child);
-				addObjectToLists(child);
+			if(canPlaceObject(_child, tiles.at(i), orient)){
+				room->addComponent(_child);
+				addObjectToLists(_child);
 
 				tiles.erase(tiles.begin() + i);
 				return true;

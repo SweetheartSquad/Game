@@ -32,12 +32,12 @@
     "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY"],
     "detailedCollider": false,
 	"parentDependent": true,
-    "parents":{"table":["TOP"],
-	"sideTable":["TOP"],
-	"bookshelf_4":["TOP"],
-	"wall":["FRONT"]
+    "parents":{
+		"sideTable":["TOP"],
+		"bookshelf_4":["TOP"]
 	},
     "twist": false,
     "flare": true,
-    "numTextures": 2
+    "numTextures": 2,
+	"parentMax": 1
 }

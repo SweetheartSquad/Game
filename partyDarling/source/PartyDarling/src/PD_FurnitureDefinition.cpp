@@ -34,6 +34,7 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	detailedCollider(_jsonDef.get("detailedCollider", true).asBool()),
 	sides(PD_FurnitureSides(_jsonDef["sides"])),
 	parentDependent(_jsonDef.get("parentDependent", false).asBool()),
+	parentMax(_jsonDef.get("parentMax", -1).asInt()),
 	overflow(_jsonDef.get("overflow", false).asBool()),
 	twist(_jsonDef.get("twist", true).asBool()),
 	flare(_jsonDef.get("flare", true).asBool())

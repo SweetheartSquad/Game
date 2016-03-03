@@ -19,9 +19,6 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	mesh->insertVertices(*_def->mesh);
 	mesh->pushTexture2D(_def->mesh->textures.at(0));
 	mesh->textures.at(0)->load();
-
-
-	
 	
 	//Deformers
 	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
@@ -46,17 +43,18 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
 
-
 	
 	setColliderAsBoundingBox();
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
 	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
 
+	type = _def->type;
 	parentDependent = _def->parentDependent;
+	parentMax = _def->parentMax;
 	// Get parent types
 	parentTypes.insert(parentTypes.begin(), _def->parents.begin(), _def->parents.end());
-
+	
 	// padding
 	padding = _def->padding;
 

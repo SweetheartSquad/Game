@@ -477,7 +477,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
-				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
+				if (canInterject && (keyboard->keyJustDown(GLFW_KEY_SPACE) || mouse->leftJustPressed())){
  					interject();
 				}
 			}
