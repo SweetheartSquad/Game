@@ -273,7 +273,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	playerTimerSlider->boxSizing = kCONTENT_BOX;
 	playerTimerSlider->setRationalWidth(0.7f, playerBubble);
 	playerTimerSlider->setRationalHeight(0.1f, playerBubble);
-	playerTimerSlider->background->setVisible(false);
+	playerTimerSlider->setBackgroundColour(1,1,1,1);
+	playerTimerSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
+	playerTimerSlider->background->mesh->setScaleMode(GL_NEAREST);
 	playerTimerSlider->fill->setBackgroundColour(1,1,1,1);
 	playerTimerSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
 	playerTimerSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
