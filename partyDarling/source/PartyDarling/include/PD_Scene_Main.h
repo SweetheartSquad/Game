@@ -119,7 +119,8 @@ public:
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border
 	Texture * getToken();
-
+	// Resets crosshair texture to a crosshair
+	void resetCrosshair();
 
 
 	// carrying stuff

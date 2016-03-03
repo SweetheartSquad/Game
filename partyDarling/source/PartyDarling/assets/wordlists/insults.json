@@ -3,12 +3,14 @@
 	"phrases": [
 		"You've got a *badBodies*!",
 		"You're a *badThings*!",
+		"You're such a *nouns*!",
 		"Your *familyMembers* is a *badThings*!",
 		"You've got the *abNouns* of a *animals*!",
-        "*interjections* you've got a *badBodies*!",
+        	"*interjections* you've got a *badBodies*!",
 		"*interjections* you're a *badThings*!",
 		"*interjections* your *familyMembers* is a *badThings*!",
-		"*interjections* you've got the *abNouns* of a *animals*!"
+		"*interjections* you've got the *abNouns* of a *animals*!",
+		"*interjections* you're such a *nouns*!"
 	],
 
 	"playerPhrases": [
@@ -17,17 +19,17 @@
 		"You've got a ____ *bodyParts*!"
 	],
 
-    "interjections":  [
-        "Listen,",
-        "Well,",
-        "Hey!",
-        "Listen up!",
-        "Ok, you punk.",
-        "Well, uh,",
-        "Shut up!",
-        "You think you're funny?",
-        "How about this?"
-    ],
+	 "interjections":  [
+        	"Listen,",
+        	"Well,",
+        	"Hey!",
+        	"Listen up!",
+        	"Ok, you punk.",
+        	"Well, uh,",
+        	"Shut up!",
+        	"You think you're funny?",
+        	"How about this?"
+    	],
 
 	"badBodies": [
 		"pair of *animals* *pluralBodyParts*",
@@ -36,7 +38,8 @@
 
 	"badThings": [
 		"*badAdj* *animals*",
-		"*badAdj* *nouns*"
+		"*badAdj* *nouns*",
+		"*nouns*"
 	],
 
 	"bodyParts": [
@@ -73,14 +76,14 @@
 		"grasshopper",
 		"toad",
 		"frog",
-        "skunk",
-        "badger",
-        "walrus",
-        "seal",
-        "gecko",
-        "rat",
-        "mouse",
-        "snake"
+        	"skunk",
+        	"badger",
+        	"walrus",
+        	"seal",
+        	"gecko",
+        	"rat",
+        	"mouse",
+        	"snake"
 	],
 
 	"badAdj": [
@@ -103,22 +106,22 @@
 		"useless",
 		"broken-down",
 		"beat-up",
-        "big",
-        "wrinkly",
-        "weak",
-        "trashy",
-        "goofy",
-        "childish",
-        "pock-marked",
-        "punchable",
-        "good-for-nothing",
-        "saggy",
-        "boring",
-        "crude",
-        "wart-covered",
-        "slimy",
-        "nasty",
-        "worthless"
+        	"big",
+	 	"wrinkly",
+        	"weak",
+        	"trashy",
+        	"goofy",
+        	"childish",
+        	"pock-marked",
+        	"punchable",
+        	"good-for-nothing",
+        	"saggy",
+        	"boring",
+        	"crude",
+        	"wart-covered",
+        	"slimy",
+        	"nasty",
+        	"worthless"
 	],
 
 	"goodAdj": [
@@ -131,16 +134,16 @@
 		"nice",
 		"charming",
 		"pretty",
-        "good",
-        "high-quality",
-        "lovable",
-        "qualified",
-        "talented",
-        "exceptional",
-        "sweet",
-        "kind",
-        "loving",
-        "thoughtful"
+        	"good",
+        	"high-quality",
+	        "lovable",
+        	"qualified",
+        	"talented",
+        	"exceptional",
+        	"sweet",
+        	"kind",
+        	"loving",
+        	"thoughtful"
 	],
 
 	"nouns": [
@@ -149,24 +152,24 @@
 		"toilet-head",
 		"compostor",
 		"booger",
-        "butthead",
-        "buttmunch",
-        "freakazoid",
-        "goblin",
-        "troll",
-        "skank",
-        "doofus",
-        "needlenose",
-        "baby",
-        "diaper-pants",
-        "tin can",
-        "jerk",
-        "pooplord",
-        "dingus",
-        "hothead",
-        "bum",
-        "nerd",
-        "dork"
+		"butthead",
+        	"buttmunch",
+        	"freakazoid",
+        	"goblin",
+        	"troll",
+        	"skank",
+        	"doofus",
+        	"needlenose",
+        	"baby",
+        	"diaper-pants",
+        	"tin can",
+        	"jerk",
+        	"pooplord",
+		"dingus",
+        	"hothead",
+        	"bum",
+        	"nerd",
+        	"dork"
 	],
 
 	"abNouns": [

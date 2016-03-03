@@ -24,6 +24,8 @@
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
 #define TIMER "timer"
+#define MIN_OFFENSE_SPEED_MULTIPLIER 0.3
+#define NUM_OFFENSE_SPEED_CHANGES 3
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
@@ -40,9 +42,13 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	iteration(0),
 	enabled(true),
 	canInterject(true),
-	playerQuestionTimerLength(1.f),
+	basePlayerInsultSpeedMultiplier(1.f),
+	playerInsultSpeedMultiplier(basePlayerInsultSpeedMultiplier),
+	basePlayerQuestionTimerLength(1.f),
+	playerQuestionTimerLength(basePlayerQuestionTimerLength),
 	playerQuestionTimer(0),
-	playerAnswerTimerLength(1.5f),
+	basePlayerAnswerTimerLength(1.2f),
+	playerAnswerTimerLength(basePlayerAnswerTimerLength),
 	playerAnswerTimer(0),
 	playerResult(false),
 	playerResultEffective(false),
@@ -66,7 +72,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	interjectBubbleTimerLength(1.f),
 	interjectBubbleTimer(0.f),
 	shader(_shader),
-	baseCursorDelayLength(0.15f),
+	baseCursorDelayLength(0.05f),
+	baseCusrorPunctDelayLength(0.15f),
 	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
@@ -535,7 +542,8 @@ void PD_UI_YellingContest::update(Step * _step){
 							cursorDelayDuration = 0;
 
 							if(glyphIdx < glyphs.size()){
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+								// set cursor delay for this glyph
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength);
 								/*
 								std::wstringstream s;
 								s << glyphs.at(glyphIdx)->character;
@@ -613,6 +621,10 @@ void PD_UI_YellingContest::update(Step * _step){
 								// next insult
 								incrementConfidence(damage);
 								setPlayerText();
+								playerInsultSpeedMultiplier -= (1.f - MIN_OFFENSE_SPEED_MULTIPLIER) / NUM_OFFENSE_SPEED_CHANGES;
+								playerAnswerTimerLength = basePlayerAnswerTimerLength * playerInsultSpeedMultiplier;
+								playerQuestionTimerLength = basePlayerQuestionTimerLength * playerInsultSpeedMultiplier;
+								playerTimerSlider->setValueMax(playerAnswerTimerLength);
 							}
 							else{
 								//fail
@@ -915,6 +927,10 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 		setEnemyText();
 	}
 	else{
+		playerInsultSpeedMultiplier = 1.f;
+		playerQuestionTimerLength = basePlayerQuestionTimerLength;
+		playerAnswerTimerLength = basePlayerAnswerTimerLength;
+		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
 	invalidateLayout();

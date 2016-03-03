@@ -23,12 +23,13 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	room(nullptr),
 	definition(_definition),
 	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
-	enabled(true),
-	defense(0),
-	insight(0),
-	sass(0),
-	strength(0)
+	enabled(true)
 {
+	defense  = definition->defense;
+	insight  = definition->insight;
+	sass	 = definition->sass;
+	strength = definition->strength;
+
 	billboarded = true;
 
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
