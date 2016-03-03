@@ -63,8 +63,12 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
 	name(_json.get("name", "NO_NAME").asString()),
+	defaultState(_json.get("defaultState", "NO_STATE").asString()),
 	root(_json["components"][0]),
-	defaultState(_json.get("defaultState", "NO_STATE").asString())
+	strength(_json.get("strength", 0).asInt()),
+	defense(_json.get("defense", 0).asInt()),
+	insight(_json.get("insight", 0).asInt()),
+	sass(_json.get("sass", 0).asInt())
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
@@ -99,6 +103,7 @@ AssetItem::AssetItem(Json::Value _json, Scenario * const _scenario) :
 	name(_json.get("name", "NO_NAME").asString()),
 	description(_json.get("description", "NO_DESCRIPTION").asString()),
 	collectable(_json.get("collectable", false).asBool()),
+	consumable(_json.get("consumable", true).asBool()),
 	pixelPerfectInteraction(_json.get("pixelPerfect", true).asBool()),
 	texture(_json.get("texture", "NO_TEXTURE").asString())
 {
