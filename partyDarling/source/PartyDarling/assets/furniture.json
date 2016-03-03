@@ -555,6 +555,22 @@
         {
             "id": 131, 
             "src": "furnitureJson/sink_handles_2.json"
+        }, 
+        {
+            "id": 132, 
+            "src": "furnitureJson/kitchen_stove_base_1.json"
+        }, 
+        {
+            "id": 133, 
+            "src": "furnitureJson/kitchen_stove_front_1.json"
+        }, 
+        {
+            "id": 134, 
+            "src": "furnitureJson/kitchen_stove_front_2.json"
+        }, 
+        {
+            "id": 135, 
+            "src": "furnitureJson/kitchen_stove_top_1.json"
         }
     ], 
     "furniture": [
@@ -599,6 +615,9 @@
         }, 
         {
             "src": "furnitureTypes/kitchen_sink.json"
+        }, 
+        {
+            "src": "furnitureTypes/kitchen_stove.json"
         }
     ]
 }
