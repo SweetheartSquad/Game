@@ -35,7 +35,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	childrenUpdated(false)
 {
 	textShader = new ComponentShaderText(true);
-	textShader->setColor(1,1,1);
+	textShader->setColor(1,1,1,1);
 	++textShader->referenceCount;
 	addChild(vl);
 	

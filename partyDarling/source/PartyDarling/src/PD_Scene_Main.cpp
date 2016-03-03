@@ -172,7 +172,17 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer.shader);
+	
+	// add the player to the scene
+	player = new Player(bulletWorld);
+	childTransform->addChild(player);
+	cameras.push_back(player->playerCamera);
+	activeCamera = player->playerCamera;
+	childTransform->addChild(player->playerCamera);
+	player->playerCamera->firstParent()->translate(0, 5, 0);
+
+
+	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer.shader);
 	uiLayer.addChild(uiYellingContest);
 	uiYellingContest->setRationalHeight(1.f, &uiLayer);
 	uiYellingContest->setRationalWidth(1.f, &uiLayer);
@@ -210,14 +220,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer.addChild(uiFade);
 	uiFade->setRationalHeight(1.f, &uiLayer);
 	uiFade->setRationalWidth(1.f, &uiLayer);
-
-	// add the player to the scene
-	player = new Player(bulletWorld);
-	childTransform->addChild(player);
-	cameras.push_back(player->playerCamera);
-	activeCamera = player->playerCamera;
-	childTransform->addChild(player->playerCamera);
-	player->playerCamera->firstParent()->translate(0, 5, 0);
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
@@ -439,7 +441,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		std::transform(stat.begin(), stat.end(), stat.begin(), ::tolower);
 		if(stat == "strength") {
-			player->strenth += delta;	
+			player->strength += delta;	
 		}else if(stat == "defense") {
 			player->defense += delta;		
 		}else if(stat == "insight") {
@@ -547,9 +549,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 		
 		// TODO - Configure addtional data once the yelling contest is set up for it
+		
+		Person * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
-		triggerYellingContest();
+		triggerYellingContest(enemy);
 		uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
 			if(uiDialogue->hadNextDialogue){
 				uiDialogue->setVisible(true);
@@ -894,8 +898,8 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	return res;
 }
 
-void PD_Scene_Main::triggerYellingContest() {
-	uiYellingContest->startNewFight();
+void PD_Scene_Main::triggerYellingContest(Person * _enemy) {
+	uiYellingContest->startNewFight(_enemy);
 	uiBubble->clear();
 	player->disable();
 }
@@ -1338,8 +1342,8 @@ void PD_Scene_Main::update(Step * _step){
 								player->disable();
 							}
 						});
-						uiBubble->addOption("Yell at " + person->definition->name, [this](sweet::Event * _event){
-							triggerYellingContest();
+						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
+							triggerYellingContest(person);
 							// TODO: pass in the character that's fighting here
 						});
 						// if we have an item, also add the "use on" option
