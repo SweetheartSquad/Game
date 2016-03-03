@@ -139,6 +139,11 @@ public:
 class Person : public RoomObject {
 public:
 
+	int defense;
+	int insight;
+	int strength;
+	int sass;
+
 	// the character's current state
 	const PersonState * state;
 	

@@ -60,9 +60,18 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	// padding
 	padding = _def->padding;
 
+	boundingBox.x = -boundingBox.width * (0.5f + padding);
+	boundingBox.z = -boundingBox.depth * (0.5f + padding);
+
 	boundingBox.width *= 1.f + padding * 2.f;
 	boundingBox.depth *= 1.f + padding * 2.f;
 
-	boundingBox.x = -boundingBox.width * 0.5f;
-	boundingBox.z -= -boundingBox.depth * 0.5f;
+#ifdef _DEBUG
+	for(auto &v :  boundingBoxMesh->mesh->vertices){
+		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
+		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
+	}
+	boundingBoxMesh->mesh->dirty = true;
+#endif
 }

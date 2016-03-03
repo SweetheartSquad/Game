@@ -19,11 +19,15 @@
 
 Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
-	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
 	state(&_definition->states.at(_definition->defaultState)),
-	definition(_definition),
 	room(nullptr),
-	enabled(true)
+	definition(_definition),
+	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
+	enabled(true),
+	defense(0),
+	insight(0),
+	sass(0),
+	strength(0)
 {
 	billboarded = true;
 

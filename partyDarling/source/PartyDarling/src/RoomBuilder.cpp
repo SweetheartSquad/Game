@@ -695,7 +695,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	float angle = 0;
 	glm::vec3 childDimensions = glm::vec3(_child->boundingBox.width, _child->boundingBox.height, _child->boundingBox.depth);
 	glm::vec3 childLowerBound = glm::vec3(_child->boundingBox.x, _child->boundingBox.y, _child->boundingBox.z);
-	
+
 	// Rotate child according to childSide
 	if(_slot->childSide != PD_Side::kBACK && _slot->childSide != PD_Side::kTOP && _side != PD_Side::kBOTTOM){
 		float childAngle = 0.f;
@@ -783,7 +783,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		}
 	}else{
 		// Centering
-		float centerPos = 0.5 * (_slot->spaceFilled + childDimensions.x) - childDimensions.x * 0.5;
+		float centerPos = 0.5 * (_slot->spaceFilled + childDimensions.x) + childLowerBound.x;
 		
 		switch(_side){
 			case PD_Side::kFRONT:
@@ -818,6 +818,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 		for(auto c : _slot->children){
 			c->translatePhysical(moveChildren);
+			c->moveChildren(moveChildren);
 			c->realign();
 			c->meshTransform->makeCumulativeModelMatrixDirty();
 		}
@@ -827,7 +828,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	sidePos = glm::rotate(orient, sidePos);
 	// add side space translation vector to final pos
 	pos += sidePos;
-
+	
 	// check for collision/inside room
 	
 	if(!canPlaceObject(_child, pos, orient, _parent)){
@@ -835,6 +836,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		if(centered){
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
+				c->moveChildren(-moveChildren);
 				c->realign();
 				c->meshTransform->makeCumulativeModelMatrixDirty();
 			}
@@ -844,7 +846,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	}
 	/*
 	std::stringstream tex;
-	tex << "assets/textures/room/debug/" << int(_side)+1 << ".png";
+	tex << "assets/textures/room/debug/" << _slot->children.size()+1 << ".png";
 	Texture * res = new Texture(tex.str(), false, true, true);
 	res->load();
 	_child->mesh->replaceTextures(res);
