@@ -71,6 +71,10 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 
 PD_FurnitureDefinition::~PD_FurnitureDefinition(){
 	while(textures.size() > 0){
-		textures.pop(true);
+		delete textures.pop(true);
+	}
+	while(components.size() > 0){
+		delete components.back();
+		components.pop_back();
 	}
 }
