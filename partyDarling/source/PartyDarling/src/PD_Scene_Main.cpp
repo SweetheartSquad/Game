@@ -44,7 +44,7 @@ Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
 	toonShader(new ComponentShaderBase(false)),
-	uiLayer(0,0,0,0),
+	uiLayer(new UILayer(0,0,0,0)),
 	characterShader(new ComponentShaderBase(false)),
 	emoteShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
@@ -95,7 +95,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	screenSurface->referenceCount++;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer->resize(0,sd.x,0,sd.y);
 
 
 	// remove initial camera
@@ -104,13 +104,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	cameras.pop_back();*/
 
 	// add crosshair
-	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
-	l->setRationalHeight(1.f, &uiLayer);
-	l->setRationalWidth(1.f, &uiLayer);
+	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer->world);
+	l->setRationalHeight(1.f, uiLayer);
+	l->setRationalWidth(1.f, uiLayer);
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
-	crosshairIndicator = new NodeUI(uiLayer.world);
+	crosshairIndicator = new NodeUI(uiLayer->world);
 	crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
@@ -120,7 +120,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		v.y -= 0.5f;
 	}crosshairIndicator->background->mesh->dirty = true;
 	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
-	uiLayer.addChild(l);
+	uiLayer->addChild(l);
 	l->addChild(crosshairIndicator);
 
 	/*for(unsigned long int i = 0; i < 50; ++i){
@@ -137,19 +137,19 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	}*/
 	
 
-	uiBubble = new PD_UI_Bubble(uiLayer.world);
-	uiBubble->setRationalWidth(1.f, &uiLayer);
-	uiBubble->setRationalHeight(0.25f, &uiLayer);
-	uiLayer.addChild(uiBubble);
+	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiBubble->setRationalWidth(1.f, uiLayer);
+	uiBubble->setRationalHeight(0.25f, uiLayer);
+	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer.world);
-	uiLayer.addChild(uiInventory);
-	uiInventory->setRationalHeight(1.f, &uiLayer);
-	uiInventory->setRationalWidth(1.f, &uiLayer);
+	uiInventory = new PD_UI_Inventory(uiLayer->world);
+	uiLayer->addChild(uiInventory);
+	uiInventory->setRationalHeight(1.f, uiLayer);
+	uiInventory->setRationalWidth(1.f, uiLayer);
 	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->disable();
 		uiBubble->enable();
-		uiLayer.removeMouseIndicator();
+		uiLayer->removeMouseIndicator();
 		player->enable();
 
 		// replace the crosshair texture with the item texture
@@ -161,10 +161,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// TODO: update the UI to indicate the selected item to the player
 	});
 
-	uiDialogue = new PD_UI_Dialogue(uiLayer.world, uiBubble);
-	uiLayer.addChild(uiDialogue);
-	uiDialogue->setRationalHeight(1.f, &uiLayer);
-	uiDialogue->setRationalWidth(1.f, &uiLayer);
+	uiDialogue = new PD_UI_Dialogue(uiLayer->world, uiBubble);
+	uiLayer->addChild(uiDialogue);
+	uiDialogue->setRationalHeight(1.f, uiLayer);
+	uiDialogue->setRationalWidth(1.f, uiLayer);
 	uiDialogue->eventManager.addEventListener("end", [this](sweet::Event * _event){
 		// Handle case where a yelling contest is the last trigger in a dialogue
 		if(!uiYellingContest->isEnabled()){
@@ -172,10 +172,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	uiYellingContest = new PD_UI_YellingContest(uiLayer.world, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer.shader);
-	uiLayer.addChild(uiYellingContest);
-	uiYellingContest->setRationalHeight(1.f, &uiLayer);
-	uiYellingContest->setRationalWidth(1.f, &uiLayer);
+	uiYellingContest = new PD_UI_YellingContest(uiLayer->world, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
+	uiLayer->addChild(uiYellingContest);
+	uiYellingContest->setRationalHeight(1.f, uiLayer);
+	uiYellingContest->setRationalWidth(1.f, uiLayer);
 	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
 		uiYellingContest->disable();
 		if(!uiDialogue->hadNextDialogue){
@@ -199,17 +199,17 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-	uiMap = new PD_UI_Map(uiLayer.world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
-	uiLayer.addChild(uiMap);
-	uiMap->setRationalHeight(1.f, &uiLayer);
-	uiMap->setRationalWidth(1.f, &uiLayer);
+	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
+	uiLayer->addChild(uiMap);
+	uiMap->setRationalHeight(1.f, uiLayer);
+	uiMap->setRationalWidth(1.f, uiLayer);
 	uiMap->enable();
 
 
-	uiFade = new PD_UI_Fade(uiLayer.world);
-	uiLayer.addChild(uiFade);
-	uiFade->setRationalHeight(1.f, &uiLayer);
-	uiFade->setRationalWidth(1.f, &uiLayer);
+	uiFade = new PD_UI_Fade(uiLayer->world);
+	uiLayer->addChild(uiFade);
+	uiFade->setRationalHeight(1.f, uiLayer);
+	uiFade->setRationalWidth(1.f, uiLayer);
 
 	// add the player to the scene
 	player = new Player(bulletWorld);
@@ -1010,6 +1010,8 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 PD_Scene_Main::~PD_Scene_Main(){
 	deleteChildTransform();
+	delete uiLayer;
+
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
@@ -1170,7 +1172,7 @@ void PD_Scene_Main::update(Step * _step){
 				}else{
 					if(!trackLeft && !trackRight){
 						// disable player
-						uiLayer.setVisible(false);
+						uiLayer->setVisible(false);
 						player->disable();
 					}
 				}
@@ -1178,7 +1180,7 @@ void PD_Scene_Main::update(Step * _step){
 				panLeft = false;
 				if(!trackLeft && !trackRight){
 					// enable player
-					uiLayer.setVisible(true);
+					uiLayer->setVisible(true);
 					player->enable();
 				}
 			}
@@ -1191,7 +1193,7 @@ void PD_Scene_Main::update(Step * _step){
 				}else{
 					if(!trackLeft && !trackRight){
 						// disable player
-						uiLayer.setVisible(false);
+						uiLayer->setVisible(false);
 						player->disable();
 					}
 				}
@@ -1199,7 +1201,7 @@ void PD_Scene_Main::update(Step * _step){
 				panRight = false;
 				if(!trackLeft && !trackRight){
 					// enable player
-					uiLayer.setVisible(true);
+					uiLayer->setVisible(true);
 					player->enable();
 				}
 			}
@@ -1217,7 +1219,7 @@ void PD_Scene_Main::update(Step * _step){
 				}else{
 					if(!panLeft && !panRight){
 						// disable player
-						uiLayer.setVisible(false);
+						uiLayer->setVisible(false);
 						player->disable();
 					}
 				}
@@ -1225,7 +1227,7 @@ void PD_Scene_Main::update(Step * _step){
 				trackLeft = false;
 				if(!panLeft && !panRight){
 					// enable player
-					uiLayer.setVisible(true);
+					uiLayer->setVisible(true);
 					player->enable();
 				}
 			}
@@ -1238,7 +1240,7 @@ void PD_Scene_Main::update(Step * _step){
 				}else{
 					if(!panLeft && !panRight){
 						// disable player
-						uiLayer.setVisible(false);
+						uiLayer->setVisible(false);
 						player->disable();
 					}
 				}
@@ -1246,7 +1248,7 @@ void PD_Scene_Main::update(Step * _step){
 				trackRight = false;
 				// enable player
 				if(!panLeft && !panRight){
-					uiLayer.setVisible(true);
+					uiLayer->setVisible(true);
 					player->enable();
 				}
 			}
@@ -1444,12 +1446,12 @@ void PD_Scene_Main::update(Step * _step){
 		if(uiInventory->isVisible()){
 			uiBubble->enable();
 			uiInventory->disable();
-			uiLayer.removeMouseIndicator();
+			uiLayer->removeMouseIndicator();
 			player->enable();
 		}else{
 			uiBubble->disable();
 			uiInventory->enable();
-			uiLayer.addMouseIndicator();
+			uiLayer->addMouseIndicator();
 			player->disable();
 		}
 	}
@@ -1491,13 +1493,13 @@ void PD_Scene_Main::update(Step * _step){
 			childTransform->removeChild(debugDrawer);
 			delete debugDrawer;
 			debugDrawer = nullptr;
-			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
 			childTransform->addChild(debugDrawer, false);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			bulletWorld->world->setDebugDrawer(debugDrawer);
-			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
 	}
 
@@ -1515,8 +1517,8 @@ void PD_Scene_Main::update(Step * _step){
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0,sd.x,0,sd.y);
+	uiLayer->update(_step);
 }
 
 void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -1533,19 +1535,19 @@ void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 
 
 	screenSurface->render(screenFBO->getTextureId());
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_Main::load(){
 	Scene::load();	
-	uiLayer.load();
+	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
 	screenFBO->load();
 }
 
 void PD_Scene_Main::unload(){
-	uiLayer.unload();
+	uiLayer->unload();
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
@@ -1560,7 +1562,7 @@ Texture * PD_Scene_Main::getToken(){
 	glm::vec2 half = glm::vec2(sd)*0.5f;
 
 	// hide the UI
-	uiLayer.setVisible(false);
+	uiLayer->setVisible(false);
 	// flip the scene upside down
 	activeCamera->upVectorRotated.y *= -1;
 
@@ -1589,7 +1591,7 @@ Texture * PD_Scene_Main::getToken(){
 	// flip the scene right-side up
 	activeCamera->upVectorRotated.y *= -1;
 	// unhide the UI
-	uiLayer.setVisible(true);
+	uiLayer->setVisible(true);
 
 	return res;
 }

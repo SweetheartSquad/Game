@@ -11,7 +11,7 @@ class PD_Scene_MenuOptions : public Scene {
 
 	ComponentShaderText * textShader;
 
-	UILayer uiLayer;
+	UILayer * uiLayer;
 	Font * menuFont;
 
 	explicit PD_Scene_MenuOptions(Game * _game);

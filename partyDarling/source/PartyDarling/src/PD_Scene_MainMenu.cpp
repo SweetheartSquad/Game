@@ -23,7 +23,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)), 
 	textShader(new ComponentShaderText(true)),
-	uiLayer(0,0,0,0),
+	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
 {
 	screenSurfaceShader->referenceCount++;
@@ -31,23 +31,23 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	screenSurface->referenceCount++;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer->resize(0,sd.x,0,sd.y);
 
-	uiLayer.addMouseIndicator();
+	uiLayer->addMouseIndicator();
 
-	VerticalLinearLayout * mainContainer = new VerticalLinearLayout(uiLayer.world);
-	uiLayer.addChild(mainContainer);
+	VerticalLinearLayout * mainContainer = new VerticalLinearLayout(uiLayer->world);
+	uiLayer->addChild(mainContainer);
 	mainContainer->horizontalAlignment = kCENTER;
 	mainContainer->verticalAlignment = kTOP;
 	mainContainer->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("main-menu-background-1")->texture);
 	mainContainer->background->mesh->setScaleMode(GL_NEAREST);
-	mainContainer->setRationalWidth(1.f, &uiLayer);
-	mainContainer->setRationalHeight(1.f, &uiLayer);
+	mainContainer->setRationalWidth(1.f, uiLayer);
+	mainContainer->setRationalHeight(1.f, uiLayer);
 	mainContainer->setVisible(true);
 	mainContainer->setPaddingTop(0.48f);
 	mainContainer->setBackgroundColour(1, 1, 1, 1);
 
-	VerticalLinearLayout * textContainer = new VerticalLinearLayout(uiLayer.world);
+	VerticalLinearLayout * textContainer = new VerticalLinearLayout(uiLayer->world);
 	textContainer->boxSizing = kCONTENT_BOX;
 	mainContainer->addChild(textContainer);
 	textContainer->horizontalAlignment = kCENTER;
@@ -57,7 +57,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->setVisible(true);
 	textContainer->setMarginTop(0.05f);
 
-	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
 	joinPartyText->setRationalWidth(1.f, textContainer);
 	joinPartyText->setRationalHeight(0.3f, textContainer);
@@ -82,7 +82,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		
 	};
 
-	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(optionsText);
 	optionsText->setRationalWidth(1.f, textContainer);
 	optionsText->setRationalHeight(0.3f, textContainer);
@@ -99,7 +99,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		game->switchScene("options", false);
 	};
 
-	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer.world, menuFont, textShader);
+	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(callNightText);
 	callNightText->setRationalWidth(1.f, textContainer);
 	callNightText->setRationalHeight(0.3f, textContainer);
@@ -127,6 +127,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 PD_Scene_MainMenu::~PD_Scene_MainMenu() {
 	deleteChildTransform();
+	delete uiLayer;
+
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
@@ -137,8 +139,8 @@ void PD_Scene_MainMenu::update(Step* _step) {
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0,sd.x,0,sd.y);
+	uiLayer->update(_step);
 }
 
 void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
@@ -151,7 +153,7 @@ void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* 
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 	
 	FrameBufferInterface::popFbo();
 
@@ -161,14 +163,14 @@ void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* 
 
 void PD_Scene_MainMenu::load() {
 	Scene::load();	
-	uiLayer.load();
+	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
 	screenFBO->load();
 }
 
 void PD_Scene_MainMenu::unload() {
-	uiLayer.unload();
+	uiLayer->unload();
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();

@@ -16,7 +16,7 @@ public:
 
 	ComponentShaderText * textShader;
 
-	UILayer uiLayer;
+	UILayer * uiLayer;
 	Font* menuFont;
 	explicit PD_Scene_MainMenu(Game * _game);
 	~PD_Scene_MainMenu();
