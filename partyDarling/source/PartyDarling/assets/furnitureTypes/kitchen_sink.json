@@ -1,0 +1,60 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["kitchen_sink_base"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["counter_doors"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["sink_basin"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+								{
+									"componentTypes": ["sink_faucet"], 
+									"multiplier": 1, 
+									"outComponents": [
+									], 
+									"required": true,
+									"scale": [1.0,1.0,1.0]
+								}
+								{
+									"componentTypes": ["sink_handles"], 
+									"multiplier": 1, 
+									"outComponents": [
+									], 
+									"required": true,
+									"scale": [1.0,1.0,1.0]
+								}
+							], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "kitchen_sink",
+			"mass": 0,
+            "roomTypes" : ["KITCHEN"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+            "padding":0,
+    "twist": false,
+    "flare": false,
+    "numTextures": 2    
+
+        }

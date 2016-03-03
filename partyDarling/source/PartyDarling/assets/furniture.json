@@ -523,6 +523,34 @@
         {
             "id": 123, 
             "src": "furnitureJson/radio_main_3.json"
+        }, 
+        {
+            "id": 124, 
+            "src": "furnitureJson/kitchen_sink_base_1.json"
+        }, 
+        {
+            "id": 125, 
+            "src": "furnitureJson/counter_doors_1.json"
+        }, 
+        {
+            "id": 126, 
+            "src": "furnitureJson/counter_doors_2.json"
+        }, 
+        {
+            "id": 127, 
+            "src": "furnitureJson/counter_doors_3.json"
+        }, 
+        {
+            "id": 128, 
+            "src": "furnitureJson/sink_faucet_1.json"
+        }, 
+        {
+            "id": 129, 
+            "src": "furnitureJson/sink_basin_1.json"
+        }, 
+        {
+            "id": 130, 
+            "src": "furnitureJson/sink_handles_1.json"
         }
     ], 
     "furniture": [
@@ -564,6 +592,9 @@
         }, 
         {
             "src": "furnitureTypes/radio.json"
+        }, 
+        {
+            "src": "furnitureTypes/kitchen_sink.json"
         }
     ]
 }
