@@ -431,6 +431,10 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 		lifeTokensCrossed.back()->decrementAndDelete();
 		lifeTokensCrossed.pop_back();
 	}
+
+	// put elements which may not be in the hierarcy back in so they're deleted
+	playerBubbleLayout->removeChild(playerBubbleOptions, false);
+	playerBubbleLayout->addChild(playerBubbleOptions, false);
 }
 
 void PD_UI_YellingContest::update(Step * _step){
