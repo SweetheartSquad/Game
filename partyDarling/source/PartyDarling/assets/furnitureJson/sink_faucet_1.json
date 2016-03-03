@@ -1,0 +1,6 @@
+{
+    "connectors": [], 
+    "id": 128, 
+    "src": "sink_faucet_1.obj", 
+    "type": "sink_faucet"
+}
