@@ -7,7 +7,7 @@ PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) :
 	id(_jsonDef.get("id", -1).asInt()),
 	type(_jsonDef.get("type", -1).asString()),
 	src(_jsonDef.get("src", "NO_SRC").asString()),
-	mesh(src != "NO_SRC" ? (Resource::loadMeshFromObj("assets/meshes/furniture/" + src, true).at(0)) : nullptr) // TODO: maybe don't do this until the first time it's loaded?
+	mesh(src != "NO_SRC" ? (Resource::loadMeshFromObj("assets/meshes/furniture/" + src, false).at(0)) : nullptr) // TODO: maybe don't do this until the first time it's loaded?
 {	
 	for(auto jsonObj : _jsonDef["connectors"]) {
 		// create the component types key
@@ -34,4 +34,8 @@ PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) :
 				jnt["rotation"].get(Json::Value::ArrayIndex(2), 0.f).asFloat());
 		}
 	}
+}
+
+PD_FurnitureComponent::~PD_FurnitureComponent(){
+	delete mesh;
 }

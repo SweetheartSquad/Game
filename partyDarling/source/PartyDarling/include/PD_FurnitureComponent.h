@@ -26,4 +26,5 @@ public:
 
 
 	explicit PD_FurnitureComponent(Json::Value _jsonDef);
+	~PD_FurnitureComponent();
 };

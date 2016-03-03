@@ -37,6 +37,10 @@ PD_ResourceManager::PD_ResourceManager(){
 	scenario		  = new PD_Scenario("assets/scenario.json");
 	itemTextures	  = new PD_Scenario("assets/item-textures.json");
 	componentTextures = new PD_Scenario("assets/component-textures.json");
+	
+	resources.push_back(scenario);
+	resources.push_back(itemTextures);
+	resources.push_back(componentTextures);
 
 	// add door asset manually
 	for(unsigned long int i = 1; i <= 5; ++i){
@@ -56,7 +60,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/furniture.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto furnDef : root["furniture"]) {
 				// parse the external json file
@@ -78,7 +82,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/props.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto propDef : root["props"]) {
 				propDefinitions.push_back(new PD_PropDefinition(propDef));
@@ -114,14 +118,14 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/animations.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto animation : root["animations"]) {
 				Json::Value animStep;
 				jsonLoaded = sweet::FileUtils::readFile("assets/animations/" + animation.get("src", "NO_SRC").asString());
 				parsingSuccessful = reader.parse( jsonLoaded, animStep );
 				if(!parsingSuccessful){
-					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 				}else{					
 					std::vector<PD_CharacterAnimationStep> steps;
 					for(auto step : animStep) {
@@ -138,7 +142,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/component-definitions.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto comp : root["components"]) {
 				if(comp.get("random", true).asBool()){
@@ -153,7 +157,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/characterNames.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto name : root["names"]) {
 				characterNames.push(name.asString());
@@ -166,10 +170,10 @@ PD_ResourceManager::PD_ResourceManager(){
 		std::string jsonLoaded = sweet::FileUtils::readFile("assets/emotes.json");
 		bool parsingSuccessful = reader.parse( jsonLoaded, root );
 		if(!parsingSuccessful){
-			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto emote : root) {
-				auto tex = new Texture("assets/textures/emotes/" + emote["src"].asString(), true, false);
+				auto tex = new Texture("assets/textures/emotes/" + emote["src"].asString(), true, true);
 				tex->load();
 				SpriteSheet * spriteSheet = new SpriteSheet(tex);
 				SpriteSheetAnimation * mainAnim = new SpriteSheetAnimation(emote["secondsPerFrame"].asFloat());
@@ -189,10 +193,6 @@ PD_ResourceManager::PD_ResourceManager(){
 
 	db = new DatabaseConnection("data/test.db");
 	
-	resources.push_back(scenario);
-	resources.push_back(itemTextures);
-	resources.push_back(componentTextures);
-	
 	globalScenarioListing = new PD_Listing(scenario);
 
 	// Register custom argument tyes
@@ -201,12 +201,14 @@ PD_ResourceManager::PD_ResourceManager(){
 	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
-
+	
 
 	load();
 }
 
 PD_ResourceManager::~PD_ResourceManager(){
+	unload();
+	
 	delete globalScenarioListing;
 	for(auto e : emotes){
 		delete e.second;

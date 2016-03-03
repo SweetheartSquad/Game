@@ -2,7 +2,7 @@
 
 #include <RoomObject.h>
 
-class PD_PropDefinition {
+class PD_PropDefinition : public Node{
 public:
 	MeshInterface * mesh;
 	float mass;
