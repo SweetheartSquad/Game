@@ -29,7 +29,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	UILayer uiLayer;
+	UILayer * uiLayer;
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;

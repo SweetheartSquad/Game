@@ -32,7 +32,7 @@
 
 PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	Scene(_game),
-	uiLayer(0,0,0,0),
+	uiLayer(new UILayer(0,0,0,0)),
 	shader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
 	bulletWorld(new BulletWorld()),
@@ -49,7 +49,7 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	characterShader->compileShader();
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer->resize(0,sd.x,0,sd.y);
 
 
 	// remove initial camera
@@ -68,21 +68,21 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 	debugCam->pitch = -10.0f;
 	activeCamera = debugCam;
 
-	uiLayer.addMouseIndicator();
+	uiLayer->addMouseIndicator();
 
 	// add crosshair
-	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer.world);
-	l->setRationalHeight(1.f, &uiLayer);
-	l->setRationalWidth(1.f, &uiLayer);
+	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer->world);
+	l->setRationalHeight(1.f, uiLayer);
+	l->setRationalWidth(1.f, uiLayer);
 	l->horizontalAlignment = kCENTER;
 	l->verticalAlignment = kMIDDLE;
 
-	crosshairIndicator = new NodeUI(uiLayer.world);
+	crosshairIndicator = new NodeUI(uiLayer->world);
 	crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
-	uiLayer.addChild(l);
+	uiLayer->addChild(l);
 	l->addChild(crosshairIndicator);
 	/*
 	PersonRenderer * testCharacter = new PersonRenderer(bulletWorld);
@@ -204,6 +204,7 @@ PD_Scene_RoomGenerationTest::PD_Scene_RoomGenerationTest(Game * _game) :
 
 PD_Scene_RoomGenerationTest::~PD_Scene_RoomGenerationTest(){
 	deleteChildTransform();
+	delete uiLayer;
 }
 
 void PD_Scene_RoomGenerationTest::update(Step * _step){
@@ -227,13 +228,13 @@ void PD_Scene_RoomGenerationTest::update(Step * _step){
 			childTransform->removeChild(debugDrawer);
 			delete debugDrawer;
 			debugDrawer = nullptr;
-			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 		}else{
 			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
 			childTransform->addChild(debugDrawer, false);
 			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 			bulletWorld->world->setDebugDrawer(debugDrawer);
-			uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
 	}
 	
@@ -241,8 +242,8 @@ void PD_Scene_RoomGenerationTest::update(Step * _step){
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0,sd.x,0,sd.y);
+	uiLayer->update(_step);
 }
 
 void PD_Scene_RoomGenerationTest::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -250,17 +251,17 @@ void PD_Scene_RoomGenerationTest::render(sweet::MatrixStack * _matrixStack, Rend
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 
 }
 
 void PD_Scene_RoomGenerationTest::load(){
 	Scene::load();	
-	uiLayer.load();
+	uiLayer->load();
 }
 
 void PD_Scene_RoomGenerationTest::unload(){
-	uiLayer.unload();
+	uiLayer->unload();
 	Scene::unload();	
 }
 
