@@ -366,8 +366,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 
 	gameOverImage = new NodeUI(_bulletWorld);
 	gameOverContainer->addChild(gameOverImage);
-	gameOverImage->setRationalWidth(0.5f, gameOverContainer);
 	gameOverImage->setRationalHeight(0.5f, gameOverContainer);
+	gameOverImage->setSquareWidth(1.f);
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
 
 	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
@@ -681,8 +681,8 @@ void PD_UI_YellingContest::startNewFight(Person * _enemy){
 
 	if(isGameOver){
 		// Reset layout
-		gameOverImage->setRationalWidth(0.5f, this);
-		gameOverImage->setRationalHeight(0.5f, this);
+		gameOverImage->setRationalHeight(0.5f, gameOverContainer);
+		gameOverImage->setSquareWidth(1.f);
 		gameOverContainer->setVisible(false);
 		gameOverDuration = 0;
 
