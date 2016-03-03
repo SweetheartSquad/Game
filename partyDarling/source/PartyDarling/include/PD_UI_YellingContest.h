@@ -63,12 +63,14 @@ private:
 
 	SliderControlled * confidenceSlider;
 
+	float basePlayerInsultSpeedMultiplier;
+	float playerInsultSpeedMultiplier;
+
+	float basePlayerQuestionTimerLength;
 	float playerQuestionTimerLength;
 	float playerQuestionTimer;
 
-	float minPlayerAnswerTimerLength;
-	float maxPlayerAnswerTimerLength;
-	unsigned int numAnswerTimerDecrements;
+	float basePlayerAnswerTimerLength;
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 

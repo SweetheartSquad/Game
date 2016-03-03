@@ -24,6 +24,7 @@
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
 #define TIMER "timer"
+#define MIN_OFFENSE_SPEED_MULTIPLIER 0.3
 #define NUM_OFFENSE_SPEED_CHANGES 3
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
@@ -41,11 +42,13 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	iteration(0),
 	enabled(true),
 	canInterject(true),
-	playerQuestionTimerLength(1.f),
+	basePlayerInsultSpeedMultiplier(1.f),
+	playerInsultSpeedMultiplier(basePlayerInsultSpeedMultiplier),
+	basePlayerQuestionTimerLength(1.f),
+	playerQuestionTimerLength(basePlayerQuestionTimerLength),
 	playerQuestionTimer(0),
-	maxPlayerAnswerTimerLength(1.2f),
-	minPlayerAnswerTimerLength(0.4f),
-	playerAnswerTimerLength(maxPlayerAnswerTimerLength),
+	basePlayerAnswerTimerLength(1.2f),
+	playerAnswerTimerLength(basePlayerAnswerTimerLength),
 	playerAnswerTimer(0),
 	playerResult(false),
 	playerResultEffective(false),
@@ -270,7 +273,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	playerTimerSlider->boxSizing = kCONTENT_BOX;
 	playerTimerSlider->setRationalWidth(0.7f, playerBubble);
 	playerTimerSlider->setRationalHeight(0.1f, playerBubble);
-	playerTimerSlider->background->setVisible(false);
+	playerTimerSlider->setBackgroundColour(1,1,1,1);
+	playerTimerSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
+	playerTimerSlider->background->mesh->setScaleMode(GL_NEAREST);
 	playerTimerSlider->fill->setBackgroundColour(1,1,1,1);
 	playerTimerSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
 	playerTimerSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
@@ -426,6 +431,10 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 		lifeTokensCrossed.back()->decrementAndDelete();
 		lifeTokensCrossed.pop_back();
 	}
+
+	// put elements which may not be in the hierarcy back in so they're deleted
+	playerBubbleLayout->removeChild(playerBubbleOptions, false);
+	playerBubbleLayout->addChild(playerBubbleOptions, false);
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -614,7 +623,9 @@ void PD_UI_YellingContest::update(Step * _step){
 								// next insult
 								incrementConfidence(damage);
 								setPlayerText();
-								playerAnswerTimerLength -= (maxPlayerAnswerTimerLength - minPlayerAnswerTimerLength) / NUM_OFFENSE_SPEED_CHANGES;
+								playerInsultSpeedMultiplier -= (1.f - MIN_OFFENSE_SPEED_MULTIPLIER) / NUM_OFFENSE_SPEED_CHANGES;
+								playerAnswerTimerLength = basePlayerAnswerTimerLength * playerInsultSpeedMultiplier;
+								playerQuestionTimerLength = basePlayerQuestionTimerLength * playerInsultSpeedMultiplier;
 								playerTimerSlider->setValueMax(playerAnswerTimerLength);
 							}
 							else{
@@ -918,7 +929,9 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 		setEnemyText();
 	}
 	else{
-		playerAnswerTimerLength = maxPlayerAnswerTimerLength;
+		playerInsultSpeedMultiplier = 1.f;
+		playerQuestionTimerLength = basePlayerQuestionTimerLength;
+		playerAnswerTimerLength = basePlayerAnswerTimerLength;
 		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
