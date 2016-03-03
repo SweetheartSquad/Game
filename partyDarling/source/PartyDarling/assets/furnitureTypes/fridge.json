@@ -20,7 +20,8 @@
             "roomTypes" : ["KITCHEN","LABORATORY"],
             "detailedCollider": false,
             "parents":{"wall":["FRONT"]},
-            "padding":0,
             "twist": false,
-            "flare": true
+            "flare": true,
+			"padding": 0,
+			"max": 1
         }

@@ -211,7 +211,6 @@ Room * RoomBuilder::getRoom(){
 		fullW = ROOM_TILE * w;
 	
 		// Generate tilemap image
-		delete room->tilemap;
 		room->tilemap = new PD_TilemapGenerator(l, w, true);
 		unsigned long int pixelIncrement = 158;
 		room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
@@ -1221,16 +1220,20 @@ std::vector<Person *> RoomBuilder::getCharacters(bool _random){
 std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	std::vector<PD_Furniture *> furniture;
 	
+	// Get list of furniture types compatible for this room
 	std::vector<PD_FurnitureDefinition *> definitions;
+	std::vector<int> count;
 	if(definition->roomType == "NO_TYPE"){
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
 			definitions.push_back(def);
+			count.push_back(0);
 		}
 	}else{
 		for(auto def : PD_ResourceManager::furnitureDefinitions){
 			for(std::string type : def->roomTypes){
 				if(type == room->definition->roomType){
 					definitions.push_back(def);
+					count.push_back(0);
 				}
 			}
 		}
@@ -1242,8 +1245,18 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.2f, area * 0.4f);
 		for(unsigned int i = 0; i < n; ++i){
 			int randIdx = sweet::NumberUtils::randomInt(0, definitions.size()-1);
+
 			auto furn = new PD_Furniture(world, definitions.at(randIdx), baseShader, GROUND);
 			furniture.push_back(furn);
+
+			count.at(randIdx) += 1;
+			if(definitions.at(randIdx)->max > 0 && count.at(randIdx) >= definitions.at(randIdx)->max){
+				definitions.erase(definitions.begin() + randIdx);
+				count.erase(count.begin() + randIdx);
+				if(definitions.size() == 0){
+					break;
+				}
+			}
 		}
 	}else{
 		int blah = 0;

@@ -26,6 +26,7 @@ public:
 
 	std::string type;
 	float mass;
+	int max; // not unsigned
 	
 	float paddingFront;
 	float paddingBack;
