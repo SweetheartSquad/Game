@@ -6,7 +6,10 @@
 
 class PD_FurnitureComponentContainer : public Node{
 public:
-	PD_FurnitureComponentContainer(std::string _src);
 	std::map<std::string, std::vector<PD_FurnitureComponent *>> componentsMap;
+
+	PD_FurnitureComponentContainer(std::string _src);
+	~PD_FurnitureComponentContainer();
+
 	PD_FurnitureComponent * getComponentForType(std::string _type);
 };

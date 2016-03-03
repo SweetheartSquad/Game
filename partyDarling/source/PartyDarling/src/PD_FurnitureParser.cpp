@@ -33,6 +33,16 @@ PD_FurnitureComponentContainer::PD_FurnitureComponentContainer(std::string _src)
 	}
 }
 
+PD_FurnitureComponentContainer::~PD_FurnitureComponentContainer(){
+	for(auto c : componentsMap){
+		while(c.second.size() > 0){
+			delete c.second.back();
+			c.second.pop_back();
+		}
+	}
+	componentsMap.clear();
+}
+
 PD_FurnitureComponent * PD_FurnitureComponentContainer::getComponentForType(std::string _type) {
 	if(componentsMap.find(_type) != componentsMap.end()) {
 		int idx = sweet::NumberUtils::randomInt(0, componentsMap[_type].size() - 1);

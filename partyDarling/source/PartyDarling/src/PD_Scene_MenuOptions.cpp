@@ -14,6 +14,8 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
 {
+	++textShader->referenceCount;
+
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
 
@@ -73,6 +75,8 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 PD_Scene_MenuOptions::~PD_Scene_MenuOptions() {
 	deleteChildTransform();
 	delete uiLayer;
+
+	textShader->decrementAndDelete();
 }
 
 void PD_Scene_MenuOptions::update(Step* _step) {

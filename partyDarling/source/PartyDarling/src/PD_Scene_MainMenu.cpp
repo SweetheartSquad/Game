@@ -15,8 +15,6 @@
 #include <PD_Scene_Main.h>
 #include <PD_Scene_IntroSlideShow.h>
 
-class PD_UI_Text;
-
 PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	Scene(_game),
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
@@ -26,9 +24,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
 {
-	screenSurfaceShader->referenceCount++;
-	screenFBO->referenceCount++;
-	screenSurface->referenceCount++;
+	++screenSurfaceShader->referenceCount;
+	++screenFBO->referenceCount;
+	++screenSurface->referenceCount;
+	++textShader->referenceCount;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
@@ -132,6 +131,7 @@ PD_Scene_MainMenu::~PD_Scene_MainMenu() {
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
+	textShader->decrementAndDelete();
 }
 
 void PD_Scene_MainMenu::update(Step* _step) {

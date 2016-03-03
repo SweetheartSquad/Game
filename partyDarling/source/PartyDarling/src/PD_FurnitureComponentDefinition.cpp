@@ -24,6 +24,13 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 	}
 }
 
+PD_FurnitureComponentDefinition::~PD_FurnitureComponentDefinition(){
+	while(outComponents.size() > 0){
+		delete outComponents.back();
+		outComponents.pop_back();
+	}
+}
+
 PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	_scale *= scale;
 	

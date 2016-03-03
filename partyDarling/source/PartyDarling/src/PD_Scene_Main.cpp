@@ -70,6 +70,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedProp(nullptr),
 	carriedPropDistance(0)
 {
+	screenSurfaceShader->referenceCount++;
+	screenFBO->referenceCount++;
+	screenSurface->referenceCount++;
+
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
@@ -89,10 +93,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	emoteShader->addComponent(new ShaderComponentTexture(emoteShader));
 	emoteShader->addComponent(new ShaderComponentDepthOffset(emoteShader));
 	emoteShader->compileShader();
-
-	screenSurfaceShader->referenceCount++;
-	screenFBO->referenceCount++;
-	screenSurface->referenceCount++;
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);

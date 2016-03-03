@@ -32,7 +32,7 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)), 
 	textShader(new ComponentShaderText(true)),
-	uiLayer(0,0,0,0),
+	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font),
 	loadingPercent(0),
 	lastMessagePhase(-1),
@@ -41,25 +41,26 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	screenSurfaceShader->referenceCount++;
 	screenFBO->referenceCount++;
 	screenSurface->referenceCount++;
+	textShader->referenceCount++;
 
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer->resize(0,sd.x,0,sd.y);
 
-	VerticalLinearLayout * layout = new VerticalLinearLayout(uiLayer.world);
-	uiLayer.addChild(layout);
+	VerticalLinearLayout * layout = new VerticalLinearLayout(uiLayer->world);
+	uiLayer->addChild(layout);
 	layout->horizontalAlignment = kCENTER;
 	layout->verticalAlignment = kMIDDLE;
-	layout->setRationalWidth(1.f, &uiLayer);
-	layout->setRationalHeight(1.f, &uiLayer);
+	layout->setRationalWidth(1.f, uiLayer);
+	layout->setRationalHeight(1.f, uiLayer);
 
 	textShader->setColor(1,1,1);
-	loadingMessage = new TextLabel(uiLayer.world, menuFont, textShader);
+	loadingMessage = new TextLabel(uiLayer->world, menuFont, textShader);
 	layout->addChild(loadingMessage);
 	loadingMessage->setMarginBottom(15);
 	
 	// slider
-	loadingSlider = new SliderControlled(uiLayer.world, &loadingPercent, 0, 1);
+	loadingSlider = new SliderControlled(uiLayer->world, &loadingPercent, 0, 1);
 	layout->addChild(loadingSlider);
 	loadingSlider->setRationalWidth(0.5f, layout);
 	loadingSlider->setPixelHeight(25);
@@ -83,14 +84,17 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	layout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("loading-background")->texture);
 	layout->background->mesh->setScaleMode(GL_NEAREST);
 
-	uiLayer.invalidateLayout();
+	uiLayer->invalidateLayout();
 }
 
 PD_Scene_LoadingScreen::~PD_Scene_LoadingScreen() {
 	deleteChildTransform();
+	delete uiLayer;
+
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
+	textShader->decrementAndDelete();
 }
 
 void PD_Scene_LoadingScreen::update(Step* _step) {
@@ -98,8 +102,8 @@ void PD_Scene_LoadingScreen::update(Step* _step) {
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0,sd.x,0,sd.y);
+	uiLayer->update(_step);
 }
 
 void PD_Scene_LoadingScreen::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
@@ -112,7 +116,7 @@ void PD_Scene_LoadingScreen::render(sweet::MatrixStack* _matrixStack, RenderOpti
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 	
 	FrameBufferInterface::popFbo();
 
@@ -122,14 +126,14 @@ void PD_Scene_LoadingScreen::render(sweet::MatrixStack* _matrixStack, RenderOpti
 
 void PD_Scene_LoadingScreen::load() {
 	Scene::load();	
-	uiLayer.load();
+	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
 	screenFBO->load();
 }
 
 void PD_Scene_LoadingScreen::unload() {
-	uiLayer.unload();
+	uiLayer->unload();
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
@@ -145,5 +149,5 @@ void PD_Scene_LoadingScreen::updateProgress(float _progress){
 		lastMessagePhase = phase;
 		lastMessageTime = t;
 	}
-	uiLayer.invalidateLayout();
+	uiLayer->invalidateLayout();
 }

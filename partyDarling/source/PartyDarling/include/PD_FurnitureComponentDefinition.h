@@ -23,6 +23,7 @@ public:
 	glm::vec3 scale;
 
 	explicit PD_FurnitureComponentDefinition(Json::Value _jsonDef);
+	~PD_FurnitureComponentDefinition();
 
 	// recusively builds this component and all of its children,
 	// returning the combined mesh

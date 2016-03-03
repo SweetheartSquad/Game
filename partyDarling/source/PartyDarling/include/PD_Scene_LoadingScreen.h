@@ -34,7 +34,7 @@ public:
 	float loadingPercent;
 	Slider * loadingSlider;
 
-	UILayer uiLayer;
+	UILayer * uiLayer;
 	Font * menuFont;
 	explicit PD_Scene_LoadingScreen(Game * _game);
 	~PD_Scene_LoadingScreen();
