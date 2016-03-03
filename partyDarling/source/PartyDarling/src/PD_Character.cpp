@@ -95,8 +95,9 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	charDef["states"].append(stateDef);
 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
-	
-	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
+	_scenario->assets["character"][id] = newChar;
+
+	Person * p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
 	PD_Listing::listings[_scenario]->characters[id] = p;
 
