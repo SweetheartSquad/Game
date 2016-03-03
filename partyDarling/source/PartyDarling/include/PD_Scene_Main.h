@@ -126,6 +126,7 @@ public:
 	void resetCrosshair();
 
 	void save();
+	void loadSave();
 
 	// carrying stuff
 

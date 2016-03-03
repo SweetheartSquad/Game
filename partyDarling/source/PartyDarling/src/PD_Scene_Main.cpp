@@ -43,16 +43,23 @@ Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
+	panSpeed(20.f),
+	panLeft(false),
+	panRight(false),
+	trackSpeed(0.1f),
+	trackLeft(false),
+	trackRight(false),
+	plotPosition(kBEGINNING),
 	toonShader(new ComponentShaderBase(false)),
-	uiLayer(new UILayer(0,0,0,0)),
-	characterShader(new ComponentShaderBase(false)),
-	emoteShader(new ComponentShaderBase(false)),
-	bulletWorld(new BulletWorld()),
-	debugDrawer(nullptr),
-	selectedItem(nullptr),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
+	uiLayer(new UILayer(0,0,0,0)),
+	bulletWorld(new BulletWorld()),
+	debugDrawer(nullptr),
+	selectedItem(nullptr),
+	characterShader(new ComponentShaderBase(false)),
+	emoteShader(new ComponentShaderBase(false)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
@@ -61,15 +68,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
-	panSpeed(20.f),
-	panLeft(false),
-	panRight(false),
-	trackSpeed(0.1f),
-	trackLeft(false),
-	trackRight(false),
 	carriedProp(nullptr),
-	carriedPropDistance(0),
-	plotPosition(kBEGINNING)
+	carriedPropDistance(0)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -581,6 +581,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			person->disable();
 		}
 	});
+
+	// Load the save file
+	loadSave();
 
 	// build house
 	pickScenarios();
@@ -1690,5 +1693,25 @@ void PD_Scene_Main::save() {
 		saveFile.close();
 	}else {
 		// Delete save file
+	}
+}
+
+void PD_Scene_Main::loadSave() {
+	if(sweet::FileUtils::fileExists("data/save.json")){
+		std::string saveJson = sweet::FileUtils::readFile("data/save.json");
+		Json::Reader reader;
+		Json::Value root;
+		bool parsingSuccsessful = reader.parse(saveJson, root);
+		assert(parsingSuccsessful);
+		plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
+		player->strength = root["strength"].asInt();
+		player->sass	 = root["sass"].asInt();
+		player->defense  = root["defense"].asInt();
+		player->insight  = root["insight"].asInt();
+		for(auto tex : root["lifeTokens"]) {
+			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
+			texture->load();
+			uiYellingContest->addLife(texture);
+		}
 	}
 }
