@@ -1,9 +1,10 @@
 #pragma once
 
+#include <node/Node.h>
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureComponent.h>
 
-class PD_FurnitureComponentContainer {
+class PD_FurnitureComponentContainer : public Node{
 public:
 	PD_FurnitureComponentContainer(std::string _src);
 	std::map<std::string, std::vector<PD_FurnitureComponent *>> componentsMap;

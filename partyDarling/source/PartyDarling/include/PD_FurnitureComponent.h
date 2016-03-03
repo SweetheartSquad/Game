@@ -9,13 +9,13 @@
 
 class PD_FurnitureComponentContainer;
 
-struct PD_FurnitureConnector{
+struct PD_FurnitureConnector : public Node{
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 scale;
 };
 
-class PD_FurnitureComponent {
+class PD_FurnitureComponent : public Node{
 public:
 	int id;
 	std::string type;

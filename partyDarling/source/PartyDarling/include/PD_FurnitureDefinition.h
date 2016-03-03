@@ -8,7 +8,7 @@
 
 class PD_FurnitureComponentDefinition;
 
-class PD_FurnitureSides{
+class PD_FurnitureSides : public Node{
 public:
 	PD_Side front;
 	PD_Side back;
@@ -21,7 +21,7 @@ public:
 	static PD_Side fromString(std::string _side);
 };
 
-class PD_FurnitureDefinition {
+class PD_FurnitureDefinition : public Node {
 public:
 
 	std::string type;

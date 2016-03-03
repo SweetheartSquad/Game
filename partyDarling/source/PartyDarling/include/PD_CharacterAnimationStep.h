@@ -4,9 +4,10 @@
 
 #include <json/json.h>
 
+#include <node/Node.h>
 #include <Easing.h>
 
-class PD_CharacterAnimationStep {	
+class PD_CharacterAnimationStep : public Node {	
 public:
 
 	std::string interpolation;

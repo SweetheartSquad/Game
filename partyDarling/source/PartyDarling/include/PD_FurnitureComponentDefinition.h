@@ -7,7 +7,7 @@
 
 class MeshEntity;
 
-struct PD_BuildResult{
+struct PD_BuildResult : public Node{
 	TriMesh * mesh;
 	btCompoundShape * collider;
 	std::vector<Light *> lights;
