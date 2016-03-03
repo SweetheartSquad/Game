@@ -66,6 +66,9 @@ private:
 	float playerQuestionTimerLength;
 	float playerQuestionTimer;
 
+	float minPlayerAnswerTimerLength;
+	float maxPlayerAnswerTimerLength;
+	unsigned int numAnswerTimerDecrements;
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
