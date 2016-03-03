@@ -251,6 +251,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		if(charId == "" || item == "") {
 			ST_LOG_ERROR_V("Field missing in condition checkState");
+			ST_LOG_ERROR_V("Field missing in condition checkState");
 		}
 
 		if(charId == PLAYER_ID) {
@@ -592,13 +593,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 void PD_Scene_Main::pickScenarios(){
 	
-	// TEMP PLOT POSITION VARIABLE
-	ScenarioOrder currentPlotPos = kBEGINNING;
-
-	PD_Scenario * plotScenario = nullptr;
+#if 0 /// !!!Remove once we can test this
+	Json::Value scenarioFile;
 
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
+	std::vector<Json::Value> allPlotDefs;
 
 	Json::Value root;
 	Json::Reader reader;
@@ -615,15 +615,39 @@ void PD_Scene_Main::pickScenarios(){
 				allOmarDefs.push(scenarioDef);
 				break;
 			case kPLOT: 
-				if(static_cast<ScenarioOrder>(scenarioDef["order"].asInt()) == currentPlotPos) {
-					plotScenario = new PD_Scenario("assets/" + scenarioDef["src"].asString());
-				}
+				allPlotDefs.push_back(scenarioDef);
 				break;
 			default: 
 				ST_LOG_ERROR("Invalid Scenario Type");
 				break;
 		}
 	}
+	
+	assert(allPlotDefs.size() == 5);
+	assert(allOmarDefs.size() >= 3);
+
+	for(unsigned long int i = 1; i < 6; ++i) {
+		Json::Value scenariosList;
+		for(auto s : allPlotDefs) {
+			if(s["order"].asInt() == i) {
+				scenariosList.append(s["src"].asString());
+				break;
+			}
+		}
+		
+		assert(scenariosList.size() > 0);
+		
+		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
+		for(unsigned long int i = 0; i < numSidePlots; ++i) {
+			scenariosList.append(allSideDefs.pop()["src"].asString());			
+		}
+
+		scenariosList.append(allOmarDefs.pop()["src"].asString());
+		
+		scenarioFile.append(scenariosList);
+	}
+
+#endif
 
 	// grab the current main plot scenario
 	// these go in order

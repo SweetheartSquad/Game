@@ -1,56 +1,56 @@
 {
-	"escapeChar": "*",
-	"phrases": [
-		"Sorry, I'm busy.",
-		"Sorry, I'm *emphasis* busy.",
-		"I hate *name*... I want to go home.",
-		"Did you hear what *name* did last night? *interjection*...",
-		"I'm *emphasis* tired. I might head home.",
-		"*interjection*... *name* is such a mess.",
-		"Don't tell *name*, but I think they're *adjective*.",
-		"I heard *name* say that *name* is *adjective.",
-		"*interjection*, *name* is so *adjective*.",
-		"Did you know that *fact*? *interjection*"
-	],
-	"emphasis": [
-		"very",
-		"really",
-		"extremely",
-		"truly",
-		"*emphasis*, *emphasis*"
-	],
-	"interjection": [
-		"Embarassing",
-		"Yikes",
-		"Wow",
-		"God",
-		"Yeesh",
-		"Savage",
-		"Wild",
-		"Too much"
-	],
-	"adjective": [
-		"cute",
-		"funny",
-		"weird",
-		"odd",
-		"ugly",
-		"handsome",
-		"interesting",
-		"carrying a dark secret",
-		"sad",
-		"thoughtful",
-		"charming"
-	],
-	"fact": [
-		"the mitochondrion is the powerhouse of the cell",
-		"of all the types of corn, popcorn is the only variety that pops",
-		"the Grand Canyon is 277 miles long",
-		"New Zealand was the last country in the world to be discovered and settled by humankind",
-		"violet light has the highest frequency and the smallest wavelength of all coloured light",
-		"the longest time between two twins being born is 87 days",
-		"every person has a unique tongue print",
-		"the largest snowflake on record had a diameter of 15 inches",
-		"polar bears can eat as many as 86 penguins in a single sitting"
-	],
+  "escapeChar": "*",
+  "phrases": [
+    "Sorry, I'm busy.",
+    "Sorry, I'm *emphasis* busy.",
+    "I hate *name*... I want to go home.",
+    "Did you hear what *name* did last night? *interjection*...",
+    "I'm *emphasis* tired. I might head home.",
+    "*interjection*... *name* is such a mess.",
+    "Don't tell *name*, but I think they're *adjective*.",
+    "I heard *name* say that *name* is *adjective.",
+    "*interjection*, *name* is so *adjective*.",
+    "Did you know that *fact*? *interjection*"
+  ],
+  "emphasis": [
+    "very",
+    "really",
+    "extremely",
+    "truly",
+    "*emphasis*, *emphasis*"
+  ],
+  "interjection": [
+    "Embarassing",
+    "Yikes",
+    "Wow",
+    "God",
+    "Yeesh",
+    "Savage",
+    "Wild",
+    "Too much"
+  ],
+  "adjective": [
+    "cute",
+    "funny",
+    "weird",
+    "odd",
+    "ugly",
+    "handsome",
+    "interesting",
+    "carrying a dark secret",
+    "sad",
+    "thoughtful",
+    "charming"
+  ],
+  "fact": [
+    "the mitochondrion is the powerhouse of the cell",
+    "of all the types of corn, popcorn is the only variety that pops",
+    "the Grand Canyon is 277 miles long",
+    "New Zealand was the last country in the world to be discovered and settled by humankind",
+    "violet light has the highest frequency and the smallest wavelength of all coloured light",
+    "the longest time between two twins being born is 87 days",
+    "every person has a unique tongue print",
+    "the largest snowflake on record had a diameter of 15 inches",
+    "polar bears can eat as many as 86 penguins in a single sitting"
+  ]
 }
