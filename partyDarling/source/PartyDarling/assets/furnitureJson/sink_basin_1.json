@@ -1,5 +1,54 @@
 {
-    "connectors": [], 
+    "connectors": [
+        {
+            "componentTypes": [
+                "sink_handles"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        -4.437735338102234
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "sink_faucet"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        -4.437735338102234
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
     "id": 129, 
     "src": "sink_basin_1.obj", 
     "type": "sink_basin"
