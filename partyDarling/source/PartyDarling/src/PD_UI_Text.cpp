@@ -69,7 +69,7 @@ glm::vec3 PD_UI_Text::getTextColour() const {
 
 void PD_UI_Text::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	
-	glm::vec3 curCol = static_cast<ComponentShaderText *>(textShader)->textComponent->getColor();
+	glm::vec4 curCol = static_cast<ComponentShaderText *>(textShader)->textComponent->getColor();
 
 	bool textColourDirty = abs(curCol.x - curTextColour.x) >= FLT_EPSILON ||  
 		abs(curCol.y - curTextColour.y) >= FLT_EPSILON ||

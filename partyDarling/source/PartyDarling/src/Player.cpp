@@ -21,7 +21,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	// collider
 	mass(1.f),
 	sass(0),
-	strenth(0),
+	strength(0),
 	defense(0),
 	insight(0)
 {

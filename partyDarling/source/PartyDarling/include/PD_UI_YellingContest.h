@@ -4,6 +4,9 @@
 #include <PD_PhraseGenerator_Insults.h>
 #include <OpenALSound.h>
 #include <NumberUtils.h>
+#include <shader/ComponentShaderText.h>
+#include "PD_House.h"
+#include "Player.h"
 
 class Shader;
 class PD_InsultButton;
@@ -108,6 +111,8 @@ private:
 	float interjectBubbleScale;
 
 	Shader * shader;
+	ComponentShaderText * optionOneShader;
+	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
 	float cursorDelayLength;
@@ -145,6 +150,7 @@ private:
 
 	//Sounds
 	sweet::ShuffleVector<OpenAL_Sound *> missInterjectSounds;
+	Player * player;
 
 public:
 	
@@ -153,10 +159,12 @@ public:
 	float damage;
 
 	Keyboard * keyboard;
+	
+	Person * enemy;
 
 	bool modeOffensive;
 
-	PD_UI_YellingContest(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader);
+	PD_UI_YellingContest(BulletWorld * _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader);
 	~PD_UI_YellingContest();
 	void setEnemyText();
 	void setPlayerText();
@@ -169,7 +177,7 @@ public:
 
 	void incrementConfidence(float _value);
 
-	void startNewFight();
+	void startNewFight(Person * _enemy);
 	void gameOver(bool _win);
 	void complete();
 	

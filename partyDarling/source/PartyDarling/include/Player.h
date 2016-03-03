@@ -20,7 +20,7 @@ public:
 
 	int defense;
 	int insight;
-	int strenth;
+	int strength;
 	int sass;
 
 	Player(BulletWorld * bulletWorld);

@@ -35,27 +35,11 @@ InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _
 
 }
 
-PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _font, Shader * _textShader, Shader * _shader) :
+PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
-	keyboard(&Keyboard::getInstance()),
-	modeOffensive(true),
-	baseCursorDelayLength(0.15f),
-	cursorDelayLength(0.f),
-	cursorDelayDuration(0.f),
-	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
-	glyphIdx(0),
-	enemyCursor(new Sprite(_shader)),
-	complimentBubble(new Sprite(_shader)),
-	interjectBubble(new Sprite(_shader)),
-	interjected(false),
-	interjectBubbleTimerBaseLength(1.f),
-	interjectBubbleTimerLength(1.f),
-	interjectBubbleTimer(0.f),
-	complimentBubbleTimerBaseLength(1.f),
-	complimentBubbleTimerLength(1.f),
-	complimentBubbleTimer(0.f),
-	complimentBubbleScale(1.f),
-	confidence(50.f),
+	iteration(0),
+	enabled(true),
+	canInterject(true),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
 	playerAnswerTimerLength(1.5f),
@@ -64,28 +48,48 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	playerResultEffective(false),
 	playerResultTimerLength(1.5f),
 	playerResultTimer(0.f),
-	damage(10.f),
-	shader(_shader),
-	highlightedPunctuation(nullptr),
+	enemyCursor(new Sprite(_shader)),
 	prevHighlightedPunctuation(nullptr),
+	highlightedPunctuation(nullptr),
 	punctuationHighlight(new Sprite(_shader)),
 	highlightedWordStart(nullptr),
 	highlightedWordEnd(nullptr),
 	wordHighlight(new Sprite(_shader)),
+	complimentBubble(new Sprite(_shader)),
+	complimentBubbleTimerBaseLength(1.f),
+	complimentBubbleTimerLength(1.f),
+	complimentBubbleTimer(0.f),
+	complimentBubbleScale(1.f),
+	interjectBubble(new Sprite(_shader)),
+	interjected(false),
+	interjectBubbleTimerBaseLength(1.f),
+	interjectBubbleTimerLength(1.f),
+	interjectBubbleTimer(0.f),
+	shader(_shader),
+	baseCursorDelayLength(0.15f),
+	cursorDelayLength(0.f),
+	cursorDelayDuration(0.f),
+	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
+	glyphIdx(0),
+	confidence(50.f),
 	isGameOver(false),
 	gameOverLength(1.f),
 	gameOverDuration(0.f),
 	win(false),
 	isComplete(false),
-	enabled(true),
 	offensiveCorrect(0),
 	offensiveWrong(0),
 	defensiveCorrect(0),
 	defensiveWrong(0),
-	interjectTimer(0),
 	punctuationCnt(-1),
-	iteration(0),
-	canInterject(true)
+	interjectTimer(0),
+	damage(10.f),
+	keyboard(&Keyboard::getInstance()),
+	enemy(nullptr),
+	modeOffensive(true),
+	player(_player),
+	optionOneShader(new ComponentShaderText(true)),
+	optionTwoShader(new ComponentShaderText(true))
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -326,7 +330,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	buttonLayout->setRationalHeight(0.5f, playerBubbleOptions);
 	buttonLayout->verticalAlignment = kMIDDLE;
 
-	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, _textShader);
+	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, optionOneShader);
 	buttonLayout->addChild(pBubbleBtn1);
 	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn1->setRationalHeight(0.75f, buttonLayout);
@@ -334,7 +338,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Font * _fo
 	pBubbleBtn1->label->setMarginTop(0.1f);
 	pBubbleBtn1->setMouseEnabled(false);
 
-	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, _textShader);
+	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, optionTwoShader);
 	buttonLayout->addChild(pBubbleBtn2);
 	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn2->setRationalHeight(0.75f, buttonLayout);
@@ -425,6 +429,31 @@ void PD_UI_YellingContest::update(Step * _step){
 		VerticalLinearLayout::update(_step);
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
+				float totInsightEffect = (player->insight - enemy->insight) * 0.1f;
+
+				if(totInsightEffect < -FLT_EPSILON) {
+					if(totInsightEffect <= -0.9f) {
+						totInsightEffect = 0.1f;
+					}else {
+						totInsightEffect = (totInsightEffect + 1.f);  
+					}
+					optionOneShader->setColor(0.f, 0.f, 0.f, totInsightEffect);
+					optionTwoShader->setColor(0.f, 0.f, 0.f, totInsightEffect);
+				}else {
+					if(totInsightEffect >= 0.9f) {
+						totInsightEffect = 0.1f;
+					}else {
+						totInsightEffect = -1.f * (totInsightEffect - 1.f);  
+					}
+					if(pBubbleBtn1->isEffective) {
+						optionTwoShader->setColor(1.f, 1.f, 1.f, totInsightEffect);
+						optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
+					}else {
+						optionOneShader->setColor(1.f, 1.f, 1.f, totInsightEffect);	
+						optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
+					}
+				}
+
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
 					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
 				}
@@ -562,7 +591,8 @@ void PD_UI_YellingContest::update(Step * _step){
 				if(playerQuestionTimer >= playerQuestionTimerLength){
 					if(!playerResult){
 						// Increment player answer timer
-						if(playerAnswerTimer >= playerAnswerTimerLength){
+						float modPlayerAnswerTimeLegnth = playerAnswerTimerLength + player->sass/10.f - enemy->sass/10.f;
+						if(playerAnswerTimer >= modPlayerAnswerTimeLegnth){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
@@ -617,7 +647,7 @@ void PD_UI_YellingContest::update(Step * _step){
 	}
 }
 
-void PD_UI_YellingContest::startNewFight(){
+void PD_UI_YellingContest::startNewFight(Person * _enemy){
 	// clear existing friendship
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));
@@ -629,6 +659,8 @@ void PD_UI_YellingContest::startNewFight(){
 	}
 	lives.clear();
 	lostLives.clear();
+
+	enemy = _enemy;
 
 	// loop through friends and add tokens
 	for(unsigned int i = 0; i < lifeTokens.size(); ++i){
@@ -766,6 +798,7 @@ void PD_UI_YellingContest::complete(){
 		e->setIntData("win", win);
 		eventManager.triggerEvent(e);
 		isComplete = true;
+		enemy = nullptr;
 	}
 }
 
@@ -975,6 +1008,16 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){
+	// Value > 0 means the player is attacking
+	if(_value > 0) {
+		 // Factor in enemy's defense
+		_value -= enemy->defense;
+		_value += player->strength;
+	}else {
+		_value -= enemy->strength;
+		_value += player->defense;
+	}
+	
 	sweet::Event * e = new sweet::Event("confidence");
 	e->setFloatData("value", _value);
 	eventManager.triggerEvent(e);
