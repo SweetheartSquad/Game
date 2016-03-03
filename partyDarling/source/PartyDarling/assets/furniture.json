@@ -551,6 +551,10 @@
         {
             "id": 130, 
             "src": "furnitureJson/sink_handles_1.json"
+        }, 
+        {
+            "id": 131, 
+            "src": "furnitureJson/sink_handles_2.json"
         }
     ], 
     "furniture": [
