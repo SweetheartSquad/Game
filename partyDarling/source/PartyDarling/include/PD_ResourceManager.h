@@ -20,6 +20,8 @@
 struct EmoteDef {
 	SpriteSheet * spriteSheet;
 	glm::vec2 offset;
+
+	~EmoteDef();
 };
 
 class PD_ResourceManager : public ResourceManager{
@@ -33,15 +35,16 @@ public:
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
 	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
-	static std::map<std::string, EmoteDef> emotes;
+	static std::map<std::string, EmoteDef *> emotes;
 	static sweet::ShuffleVector<std::string> characterNames;
 	static PD_Listing * globalScenarioListing;
 
 	static std::vector<PD_PropDefinition *> propDefinitions;
 	static std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> furniturePropDefinitions;
 	static sweet::ShuffleVector<PD_PropDefinition *> independentPropDefinitions;
-
-	static void init();
+	
+	PD_ResourceManager();
+	~PD_ResourceManager();
 
 	static int dbCallback(void *NotUsed, int argc, char **argv, char **azColName);
 	static void testSql(std::string _sql, bool _async);

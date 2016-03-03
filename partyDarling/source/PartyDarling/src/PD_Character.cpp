@@ -405,11 +405,11 @@ void PersonRenderer::setEmote(std::string _id, float _duration) {
 
 	auto eDef = PD_ResourceManager::emotes[_id];
 	emote->setVisible(true);
-	emote->setSpriteSheet(eDef.spriteSheet, "main");
+	emote->setSpriteSheet(eDef->spriteSheet, "main");
 	auto b = head->mesh->calcBoundingBox();
 	float height = b.height/CHARACTER_SCALE;
 	float width  = b.width/CHARACTER_SCALE;
-	emote->firstParent()->translate(width * eDef.offset.x, height * eDef.offset.y, 0.f, false);
+	emote->firstParent()->translate(width * eDef->offset.x, height * eDef->offset.y, 0.f, false);
 	
 	if(_duration > 0.f){
 		emoteTimeout = new Timeout(_duration, [this](sweet::Event * _event){

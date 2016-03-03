@@ -7,6 +7,10 @@
 #include <SpriteSheet.h>
 #include <PD_Scenario.h>
 
+EmoteDef::~EmoteDef(){
+	delete spriteSheet;
+}
+
 PD_Scenario * PD_ResourceManager::scenario = nullptr;
 PD_Scenario * PD_ResourceManager::itemTextures = nullptr;
 PD_Scenario * PD_ResourceManager::componentTextures = nullptr;
@@ -16,14 +20,14 @@ PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullp
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
 std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::characterDefinitions;
-std::map<std::string, EmoteDef> PD_ResourceManager::emotes;
+std::map<std::string, EmoteDef *> PD_ResourceManager::emotes;
 sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
 PD_Listing * PD_ResourceManager::globalScenarioListing;
 std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
 std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
 sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
 
-void PD_ResourceManager::init(){
+PD_ResourceManager::PD_ResourceManager(){
 	// register custom asset types
 	Asset::registerType("item", &AssetItem::create);
 	Asset::registerType("character", &AssetCharacter::create);
@@ -175,17 +179,19 @@ void PD_ResourceManager::init(){
 					emote["frameHeight"].asInt(),
 					tex->width, tex->height);
 				spriteSheet->addAnimation("main", mainAnim);
-				EmoteDef def;
-				def.spriteSheet = spriteSheet;
-				def.offset = glm::vec2(emote["offset"][0].asFloat(), emote["offset"][1].asFloat());
-				emotes[emote["name"].asString()] = def;
+
+				EmoteDef * def = emotes[emote["name"].asString()] = new EmoteDef();
+				def->spriteSheet = spriteSheet;
+				def->offset = glm::vec2(emote["offset"][0].asFloat(), emote["offset"][1].asFloat());
 			}
 		}
 	}
 
 	db = new DatabaseConnection("data/test.db");
-
+	
 	resources.push_back(scenario);
+	resources.push_back(itemTextures);
+	resources.push_back(componentTextures);
 	
 	globalScenarioListing = new PD_Listing(scenario);
 
@@ -195,6 +201,33 @@ void PD_ResourceManager::init(){
 	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
+
+
+	load();
+}
+
+PD_ResourceManager::~PD_ResourceManager(){
+	delete globalScenarioListing;
+	for(auto e : emotes){
+		delete e.second;
+	}
+	emotes.clear();
+
+	delete db;
+
+	while(furnitureDefinitions.size() > 0){
+		delete furnitureDefinitions.back();
+		furnitureDefinitions.pop_back();
+	}
+	delete furnitureComponents;
+	delete conditionImplementations;
+
+	while(propDefinitions.size() > 0){
+		delete propDefinitions.back();
+		propDefinitions.pop_back();
+	}
+
+	destruct();
 }
 
 int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){

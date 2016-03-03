@@ -1013,6 +1013,11 @@ PD_Scene_Main::~PD_Scene_Main(){
 	screenSurfaceShader->decrementAndDelete();
 	screenFBO->decrementAndDelete();
 	screenSurface->decrementAndDelete();
+
+	while(activeScenarios.size() > 0){
+		delete activeScenarios.back();
+		activeScenarios.pop_back();
+	}
 }
 
 void PD_Scene_Main::update(Step * _step){

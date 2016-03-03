@@ -11,6 +11,11 @@ PD_Listing::PD_Listing(Scenario * _scenario){
 	listingsById[_scenario->id] = this;
 }
 
+PD_Listing::~PD_Listing(){
+	listings.erase(listings.find(scenario));
+	listingsById.erase(listingsById.find(scenario->id));
+}
+
 void PD_Listing::addCharacter(Person * _person){
 	characters[_person->definition->id] = _person;
 }

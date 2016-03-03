@@ -43,8 +43,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	//Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
 
 	// initialize resources
-	PD_ResourceManager::init();
-	PD_ResourceManager::load();
+	PD_ResourceManager * resources = new PD_ResourceManager();
 
 	// create game
 	PD_Game * game = new PD_Game();
@@ -56,9 +55,9 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	}
 	
 	// memory deallocation
-	/*delete game;
+	delete game;
 	game = nullptr;
-	PD_ResourceManager::destruct();
+	delete resources;
 #ifdef _DEBUG
 	std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 
@@ -67,7 +66,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	}
 #endif
 
-	sweet::destruct();*/
+	sweet::destruct();
 	
 #ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);
