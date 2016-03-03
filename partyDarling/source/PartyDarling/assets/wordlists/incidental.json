@@ -10,10 +10,7 @@
 		"Don't tell *name*, but I think they're *adjective*.",
 		"I heard *name* say that *name* is *adjective.",
 		"*interjection*, *name* is so *adjective*.",
-		"Did you know that *fact*? *interjection*",
-		"",
-		"",
-		""
+		"Did you know that *fact*? *interjection*"
 	],
 	"emphasis": [
 		"very",
@@ -52,8 +49,8 @@
 		"New Zealand was the last country in the world to be discovered and settled by humankind",
 		"violet light has the highest frequency and the smallest wavelength of all coloured light",
 		"the longest time between two twins being born is 87 days",
-		"",
-		"",
-		"",
+		"every person has a unique tongue print",
+		"the largest snowflake on record had a diameter of 15 inches",
+		"polar bears can eat as many as 86 penguins in a single sitting"
 	],
 }
