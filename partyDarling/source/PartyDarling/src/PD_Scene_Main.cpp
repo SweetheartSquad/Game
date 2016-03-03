@@ -1294,7 +1294,7 @@ void PD_Scene_Main::update(Step * _step){
 		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
 		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
 		
-		if(me != nullptr){
+		if(me != nullptr && uiInventory->getSelected() == nullptr){
 			PD_Item * item = dynamic_cast<PD_Item *>(me);
 			if(item != nullptr){
 				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
@@ -1320,6 +1320,7 @@ void PD_Scene_Main::update(Step * _step){
 
 								// pickup the item
 								uiInventory->pickupItem(item);
+								currentRoom->removeItem(item);
 
 								// run item pickup triggers
 								item->triggerPickup();
@@ -1327,7 +1328,7 @@ void PD_Scene_Main::update(Step * _step){
 								uiBubble->clear();
 							});
 						}else{
-							uiBubble->addOption("Use " + item->definition->name, [item](sweet::Event * _event){
+							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
 								std::cout << "hey gj you interacted" << std::endl;
 
 								// run item interact triggers
@@ -1373,13 +1374,13 @@ void PD_Scene_Main::update(Step * _step){
 							// TODO: pass in the character that's fighting here
 						});
 						// if we have an item, also add the "use on" option
-						if(uiInventory->getSelected() != nullptr){
+						/*if(uiInventory->getSelected() != nullptr){
 							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
 								uiBubble->clear();
 								player->disable();
 								// TODO: pass in the character that's interacting with the item here
 							});
-						}
+						}*/
 					}
 				}else{
 					// prop carrying selection
@@ -1411,6 +1412,21 @@ void PD_Scene_Main::update(Step * _step){
 					//uiBubble->clear();
 					//player->disable();
 					// TODO: actually trigger item interaction
+					/*auto item = uiInventory->getSelected();
+					if(item->definition->consumable) {
+						auto i = std::find(uiInventory->items.begin(), uiInventory->items.end(), item);
+						if(i != uiInventory->items.end()) {
+							uiInventory->items.erase(i);
+						}
+					}*/
+
+					uiInventory->getSelected()->triggerInteract();
+					auto item = uiInventory->removeSelected();
+					auto items = PD_Listing::listings[item->definition->scenario]->items;
+					items.erase(items.find(item->definition->id));
+					delete item;
+					resetCrosshair();
+
 				});
 				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					//uiBubble->clear();
@@ -1431,13 +1447,7 @@ void PD_Scene_Main::update(Step * _step){
 						currentRoom->addComponent(item);
 					}
 
-					// replace the crosshair item texture with the actual crosshair texture
-					crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-					crosshairIndicator->setWidth(16);
-					crosshairIndicator->setHeight(16);
-					crosshairIndicator->invalidateLayout();
-
-
+					resetCrosshair();
 				});
 			}
 		}
@@ -1617,4 +1627,12 @@ Texture * PD_Scene_Main::getToken(){
 	uiLayer->setVisible(true);
 
 	return res;
+}
+
+void PD_Scene_Main::resetCrosshair() {
+	// replace the crosshair item texture with the actual crosshair texture
+	crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
+	crosshairIndicator->setWidth(16);
+	crosshairIndicator->setHeight(16);
+	crosshairIndicator->invalidateLayout();
 }
