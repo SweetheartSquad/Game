@@ -51,6 +51,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	childTransform->addChild(test, false);
 
 	bubbleTex = PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUBBLE");
+	++bubbleTex->referenceCount;
 }
 
 PD_UI_Bubble::~PD_UI_Bubble(){
@@ -59,7 +60,7 @@ PD_UI_Bubble::~PD_UI_Bubble(){
 		unusedOptions.pop();
 	}
 	deleteChildTransform();
-	delete bubbleTex;
+	bubbleTex->decrementAndDelete();
 	textShader->decrementAndDelete();
 }
 
