@@ -211,7 +211,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	currentAnimation(nullptr),
 	emote(nullptr),
 	emoteTimeout(nullptr),
-	talking(false)
+	talking(false),
+	talk(nullptr)
 {
 	++paletteTex->referenceCount;
 	paletteTex->generateRandomTable();
@@ -361,6 +362,8 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 PersonRenderer::~PersonRenderer(){
 	paletteTex->decrementAndDelete();
 	delete currentAnimation;
+	delete emoteTimeout;
+	delete talk;
 }
 
 void PersonRenderer::setAnimation(std::string _name) {
