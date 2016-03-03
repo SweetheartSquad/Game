@@ -68,7 +68,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	trackLeft(false),
 	trackRight(false),
 	carriedProp(nullptr),
-	carriedPropDistance(0)
+	carriedPropDistance(0),
+	plotPosition(kBEGINNING)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -131,9 +132,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			item->rotatePhysical(45,0,1,0,false);
 		}
 	}*/
+
+
+	uiFade = new PD_UI_Fade(uiLayer->world);
+	uiLayer->addChild(uiFade);
+	uiFade->setRationalHeight(1.f, uiLayer);
+	uiFade->setRationalWidth(1.f, uiLayer);
+	
+	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
+	uiLayer->addChild(uiMap);
+	uiMap->setRationalHeight(1.f, uiLayer);
+	uiMap->setRationalWidth(1.f, uiLayer);
+	uiMap->enable();
 	
 
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiBubble->setRationalWidth(1.f, uiLayer);
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
@@ -205,18 +218,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
-	uiLayer->addChild(uiMap);
-	uiMap->setRationalHeight(1.f, uiLayer);
-	uiMap->setRationalWidth(1.f, uiLayer);
-	uiMap->enable();
-
-
-	uiFade = new PD_UI_Fade(uiLayer->world);
-	uiLayer->addChild(uiFade);
-	uiFade->setRationalHeight(1.f, uiLayer);
-	uiFade->setRationalWidth(1.f, uiLayer);
-
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
@@ -250,6 +251,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		std::string scenario = _event->getStringData("scenario");
 
 		if(charId == "" || item == "") {
+			ST_LOG_ERROR_V("Field missing in condition checkState");
 			ST_LOG_ERROR_V("Field missing in condition checkState");
 		}
 
@@ -592,13 +594,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 void PD_Scene_Main::pickScenarios(){
 	
-	// TEMP PLOT POSITION VARIABLE
-	ScenarioOrder currentPlotPos = kBEGINNING;
-
-	PD_Scenario * plotScenario = nullptr;
+#if 0 /// !!!Remove once we can test this
+	Json::Value scenarioFile;
 
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
+	std::vector<Json::Value> allPlotDefs;
 
 	Json::Value root;
 	Json::Reader reader;
@@ -615,15 +616,38 @@ void PD_Scene_Main::pickScenarios(){
 				allOmarDefs.push(scenarioDef);
 				break;
 			case kPLOT: 
-				if(static_cast<ScenarioOrder>(scenarioDef["order"].asInt()) == currentPlotPos) {
-					plotScenario = new PD_Scenario("assets/" + scenarioDef["src"].asString());
-				}
+				allPlotDefs.push_back(scenarioDef);
 				break;
 			default: 
 				ST_LOG_ERROR("Invalid Scenario Type");
 				break;
 		}
 	}
+	
+	assert(allPlotDefs.size() == 5);
+	assert(allOmarDefs.size() >= 3);
+
+	for(unsigned long int i = 1; i < 6; ++i) {
+		Json::Value scenariosList;
+		for(auto s : allPlotDefs) {
+			if(s["order"].asInt() == i) {
+				scenariosList.append(s["src"].asString());
+				break;
+			}
+		}
+		
+		assert(scenariosList.size() > 0);
+		
+		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
+		for(unsigned long int i = 0; i < numSidePlots; ++i) {
+			scenariosList.append(allSideDefs.pop()["src"].asString());			
+		}
+
+		scenariosList.append(allOmarDefs.pop()["src"].asString());
+		scenarioFile.append(scenariosList);
+	}
+
+#endif
 
 	// grab the current main plot scenario
 	// these go in order
@@ -1502,6 +1526,14 @@ void PD_Scene_Main::update(Step * _step){
 	// map compass update
 	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
 
+#ifdef _DEBUG
+
+	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
+		save();
+	}
+
+#endif
+
 	// bubble testing controls
 	if(keyboard->keyJustDown(GLFW_KEY_V)){
 		uiBubble->next();
@@ -1635,4 +1667,28 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->invalidateLayout();
+}
+
+void PD_Scene_Main::save() {
+	Json::Value saveOut;
+	if(plotPosition != kEND) {
+		int pos = plotPosition;
+		saveOut["plotPosition"] = plotPosition;
+		saveOut["strength"] = player->strength;
+		saveOut["sass"] = player->sass;
+		saveOut["defense"] = player->defense;
+		saveOut["insight"] = player->insight;
+		for(unsigned long int i = 0; i < uiYellingContest->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			uiYellingContest->lifeTokens[i]->saveImageData(fileName);
+			saveOut["lifeTokens"].append(fileName);
+		}
+
+		std::ofstream saveFile;
+		saveFile.open ("data/save.json");
+		saveFile << saveOut;
+		saveFile.close();
+	}else {
+		// Delete save file
+	}
 }

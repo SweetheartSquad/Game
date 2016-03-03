@@ -3,6 +3,7 @@
 #include <PD_UI_Bubble.h>
 #include <PD_ResourceManager.h>
 #include <Mouse.h>
+#include <Keyboard.h>
 
 Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textShader) :
 	NodeUI_NineSliced(_world, _tex)
@@ -123,6 +124,7 @@ void PD_UI_Bubble::update(Step * _step){
 		// if we're scrolling, then we either call "next" or "prev" based on the direction of the scroll
 		// if we're not scrolling, we can click the current option
 		Mouse & mouse = Mouse::getInstance();
+		Keyboard & keyboard = Keyboard::getInstance();
 		float d = mouse.getMouseWheelDelta();
 		// if there's only one option, override and say we aren't scrolling
 		if(options.size() < 2){
@@ -135,7 +137,7 @@ void PD_UI_Bubble::update(Step * _step){
 				next();
 			}else if(d < -FLT_EPSILON){
 				prev();
-			}else if(mouse.leftJustPressed()){
+			}else if(keyboard.keyJustDown(GLFW_KEY_SPACE) || mouse.leftJustPressed()){
 				selectCurrent();
 			}
 		}

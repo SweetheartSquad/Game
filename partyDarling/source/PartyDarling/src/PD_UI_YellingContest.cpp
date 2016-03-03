@@ -95,8 +95,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	enemy(nullptr),
 	modeOffensive(true),
 	player(_player),
-	optionOneShader(new ComponentShaderText(true)),
-	optionTwoShader(new ComponentShaderText(true))
+	optionOneShader(new ComponentShaderText(false)),
+	optionTwoShader(new ComponentShaderText(false))
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -435,6 +435,9 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 	// put elements which may not be in the hierarcy back in so they're deleted
 	playerBubbleLayout->removeChild(playerBubbleOptions, false);
 	playerBubbleLayout->addChild(playerBubbleOptions, false);
+
+	delete optionOneShader;
+	delete optionTwoShader;
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -474,7 +477,7 @@ void PD_UI_YellingContest::update(Step * _step){
 					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
-				if (canInterject && keyboard->keyJustDown(GLFW_KEY_SPACE)){
+				if (canInterject && (keyboard->keyJustDown(GLFW_KEY_SPACE) || mouse->leftJustPressed())){
  					interject();
 				}
 			}

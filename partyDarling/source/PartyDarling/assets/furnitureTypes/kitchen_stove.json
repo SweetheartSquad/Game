@@ -1,11 +1,11 @@
 {
    "components": [
                 {
-                    "componentTypes": ["kitchen_sink_base"], 
+                    "componentTypes": ["kitchen_stove_base"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentTypes": ["counter_doors"], 
+                            "componentTypes": ["kitchen_stove_front"], 
                             "multiplier": 1, 
                             "outComponents": [
                             ], 
@@ -13,25 +13,9 @@
 							"scale": [1.0,1.0,1.0]
                         }, 
                         {
-                            "componentTypes": ["sink_basin"], 
+                            "componentTypes": ["kitchen_stove_top"], 
                             "multiplier": 1, 
                             "outComponents": [
-								{
-									"componentTypes": ["sink_faucet"], 
-									"multiplier": 1, 
-									"outComponents": [
-									], 
-									"required": true,
-									"scale": [1.0,1.0,1.0]
-								},
-								{
-									"componentTypes": ["sink_handles"], 
-									"multiplier": 1, 
-									"outComponents": [
-									], 
-									"required": true,
-									"scale": [1.0,1.0,1.0]
-								}
 							], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -41,17 +25,17 @@
 					"scale": [0.7,0.7,0.7]
                 }
             ], 
-            "type": "kitchen_sink",
+            "type": "kitchen_stove",
 			"mass": 0,
             "roomTypes" : ["KITCHEN"],
             "sides" : {
-					"LEFT":"RIGHT",
-					"RIGHT":"LEFT"
                 },
 			"parentDependent": true,
             "parents":{
-                "wall":[
-                    "FRONT"
+				"wall":["FRONT"],
+                "kitchen_sink":[
+                    "LEFT",
+					"RIGHT"
                 ]
             },
             "padding":0,
