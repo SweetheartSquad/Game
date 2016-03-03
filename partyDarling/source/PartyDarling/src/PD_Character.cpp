@@ -203,7 +203,7 @@ PersonState::PersonState(Json::Value _json) :
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
-	paletteTex(new PD_Palette(false)),
+	paletteTex(new PD_Palette(true)),
 	timer(0),
 	randomAnimations(false),
 	animate(true),
@@ -212,6 +212,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	emoteTimeout(nullptr),
 	talking(false)
 {
+	++paletteTex->referenceCount;
 	paletteTex->generateRandomTable();
 	paletteTex->load();
 	
@@ -357,8 +358,7 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 }
 
 PersonRenderer::~PersonRenderer(){
-	// TODO: Prevent memory leak here without just deleting the paletteTex here
-	//delete paletteTex;
+	paletteTex->decrementAndDelete();
 	delete currentAnimation;
 }
 
