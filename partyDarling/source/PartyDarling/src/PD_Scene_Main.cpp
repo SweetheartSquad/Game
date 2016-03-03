@@ -70,7 +70,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedProp(nullptr),
 	carriedPropDistance(0)
 {
-	toonRamp = new RampTexture(lightStart, lightEnd, 4);
+	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	//toonShader->addComponent(new ShaderComponentDiffuse(toonShader));
@@ -1037,6 +1037,12 @@ PD_Scene_Main::~PD_Scene_Main(){
 		delete activeScenarios.back();
 		activeScenarios.pop_back();
 	}
+
+	delete bulletWorld;
+	delete toonShader;
+	delete characterShader;
+
+	delete toonRamp;
 }
 
 void PD_Scene_Main::update(Step * _step){

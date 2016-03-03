@@ -58,6 +58,8 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	delete game;
 	game = nullptr;
 	delete resources;
+
+	sweet::destruct();
 #ifdef _DEBUG
 	std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 
@@ -66,7 +68,6 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	}
 #endif
 
-	sweet::destruct();
 	
 #ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);

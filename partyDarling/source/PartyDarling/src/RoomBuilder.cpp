@@ -285,6 +285,7 @@ Room * RoomBuilder::getRoom(){
 			room->mesh->vertices.clear();
 
 			delete room->tilemap;
+			room->tilemap = nullptr;
 
 			for(auto e : edges){
 				delete e;
