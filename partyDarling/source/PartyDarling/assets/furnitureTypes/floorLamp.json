@@ -32,5 +32,6 @@
             "parents":{"wall":["FRONT"]},    
             "paddingBack": 0.5,
 			"paddnigLeft": 1,
-			"paddingRight": 1
+			"paddingRight": 1,
+			"parentMax": 1
         }

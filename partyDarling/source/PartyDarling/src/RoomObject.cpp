@@ -12,6 +12,7 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	angle(0),
 	billboarded(false),
 	parentDependent(false),
+	parentMax(-1),
 	padding(0)
 {
 #ifdef _DEBUG
