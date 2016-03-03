@@ -1474,8 +1474,6 @@ void PD_Scene_Main::update(Step * _step){
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_P)){
 		dynamic_cast<PD_Game*>(game)->playBGM();
-	}if(keyboard->keyJustDown(GLFW_KEY_O)){
-		dynamic_cast<PD_Game*>(game)->playFight();
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){

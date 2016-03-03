@@ -29,8 +29,7 @@ void PD_Game::addSplashes(){
 
 PD_Game::PD_Game() :
 	Game("menu", new PD_Scene_MainMenu(this), true),
-	bgmTrack(nullptr),
-	fightTrack(nullptr)
+	bgmTrack(nullptr)
 {
 	printFPS = false;
 
@@ -44,43 +43,24 @@ PD_Game::PD_Game() :
 }
 
 PD_Game::~PD_Game(){
-	delete bgmTrack;
-	delete fightTrack;
+	bgmTrack->decrementAndDelete();
 }
 
 void PD_Game::update(Step * _step){
-	if(fightTrack != nullptr){
-		fightTrack->update(_step);
-	}
-
 	Game::update(_step);
 }
 
 void PD_Game::playBGM(){
 	if(bgmTrack != nullptr){
 		bgmTrack->stop();
-	}if(fightTrack != nullptr){
-		delete fightTrack;
-		fightTrack = nullptr;
+		bgmTrack->decrementAndDelete();
 	}
 	std::stringstream ss;
 	ss << "BGM" << bgmTrackIdx.pop();
 
 	bgmTrack = PD_ResourceManager::scenario->getAudio(ss.str())->sound;
+	++bgmTrack->referenceCount;
 	bgmTrack->play(true);
-}
-
-void PD_Game::playFight(){
-	if(bgmTrack != nullptr){
-		bgmTrack->stop();
-	}if(fightTrack != nullptr){
-		delete fightTrack;
-		fightTrack = nullptr;
-	}
-	// TODO: implement generative song here
-	fightTrack = new AutoDrums(PD_ResourceManager::scenario->getAudio("PLAYER_JUMP")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FALL")->sound, PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound);
-	fightTrack->bpm = 128;
-	fightTrack->generate();
 }
 
 void PD_Game::showLoading(float _percentage){

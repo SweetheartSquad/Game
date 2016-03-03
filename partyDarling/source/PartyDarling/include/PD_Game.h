@@ -18,13 +18,9 @@ public:
 
 
 	OpenAL_Sound * bgmTrack;
-	AutoDrums * fightTrack;
 
 	// picks a random BGM track and plays it, replacing the current track
 	void playBGM();
-
-	// generates a fight track and plays it, replacing the current track
-	void playFight();
 
 	
 	virtual void update(Step * _step) override;
