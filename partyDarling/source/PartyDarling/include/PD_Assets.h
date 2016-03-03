@@ -53,6 +53,9 @@ public:
 	// which will only succeed if the hovered pixel is not transparent
 	bool pixelPerfectInteraction;
 	
+	// In an item is consumable then it disapears after being used
+	bool consumable;
+
 	// effects are stored as Events
 	// in order to trigger the effects, they will be copied and added to an EventManager
 	std::vector<sweet::Event> effects;
@@ -101,6 +104,11 @@ public:
 	std::vector<std::string> items;
 	// 
 	CharacterComponentDefinition root;
+
+	int strength;
+	int sass;
+	int defense;
+	int insight;
 
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)

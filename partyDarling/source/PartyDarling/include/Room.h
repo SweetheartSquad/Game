@@ -71,4 +71,6 @@ public:
 	void removePhysics();
 	// adds all of the rigid bodies associatedw with the room to the world
 	void addPhysics();
+
+	bool removeItem(PD_Item * _item);
 };

@@ -63,9 +63,14 @@ private:
 
 	SliderControlled * confidenceSlider;
 
+	float basePlayerInsultSpeedMultiplier;
+	float playerInsultSpeedMultiplier;
+
+	float basePlayerQuestionTimerLength;
 	float playerQuestionTimerLength;
 	float playerQuestionTimer;
 
+	float basePlayerAnswerTimerLength;
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
@@ -115,6 +120,7 @@ private:
 	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
+	float baseCusrorPunctDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
 	float baseGlyphWidth;

@@ -88,3 +88,12 @@ void Room::addPhysics(){
 	world->world->addRigidBody(floor->body);
 	world->world->addRigidBody(ceiling->body);
 }
+
+bool Room::removeItem(PD_Item * _item) {
+	auto it = std::find(items.begin(), items.end(), _item);
+	if(it != items.end()) {
+		items.erase(it);
+		return true;
+	}
+	return false;
+}
