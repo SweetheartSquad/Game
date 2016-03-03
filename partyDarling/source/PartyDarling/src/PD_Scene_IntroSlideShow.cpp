@@ -34,7 +34,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	skip->horizontalAlignment = kCENTER;
 	skip->setMarginLeft(0.8f);
 	skip->setText("Skip");
-	skip->eventManager.addEventListener("click", [this](sweet::Event * _event){
+	skip->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		eventManager->triggerEvent("overflow");
 	});
 	uiLayer->invalidateLayout();

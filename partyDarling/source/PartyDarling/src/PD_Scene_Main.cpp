@@ -142,7 +142,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
-	uiInventory->eventManager.addEventListener("itemSelected", [this](sweet::Event * _event){
+	uiInventory->eventManager->addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->disable();
 		uiBubble->enable();
 		uiLayer->removeMouseIndicator();
@@ -161,7 +161,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(uiDialogue);
 	uiDialogue->setRationalHeight(1.f, uiLayer);
 	uiDialogue->setRationalWidth(1.f, uiLayer);
-	uiDialogue->eventManager.addEventListener("end", [this](sweet::Event * _event){
+	uiDialogue->eventManager->addEventListener("end", [this](sweet::Event * _event){
 		// Handle case where a yelling contest is the last trigger in a dialogue
 		if(!uiYellingContest->isEnabled()){
 			player->enable();
@@ -182,25 +182,25 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiYellingContest->setRationalHeight(1.f, uiLayer);
 	uiYellingContest->setRationalWidth(1.f, uiLayer);
 
-	uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
+	uiYellingContest->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiYellingContest->disable();
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 		}
 	});
-	uiYellingContest->eventManager.addEventListener("interject", [this](sweet::Event * _event){
+	uiYellingContest->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
 	});
-	uiYellingContest->eventManager.addEventListener("insult", [this](sweet::Event * _event){
+	uiYellingContest->eventManager->addEventListener("insult", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
 	});
-	uiYellingContest->eventManager.addEventListener("miss", [this](sweet::Event * _event){
+	uiYellingContest->eventManager->addEventListener("miss", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.1f;
 		player->shakeTimeout->restart();
 	});
@@ -307,7 +307,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	};
 
 	// setup event listeners
-	PD_ResourceManager::scenario->eventManager.addEventListener("changeState", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("changeState", [](sweet::Event * _event){
 		std::string characterName = _event->getStringData("Character");
 		std::string stateName = _event->getStringData("State");
 		std::cout << characterName << "'s state changed to " << stateName << std::endl;
@@ -322,7 +322,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("setInt", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("setInt", [](sweet::Event * _event){
 		// change/create a local int variable for a specific scenario
 		// STRING name 
 		// INT value
@@ -336,7 +336,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		scenario->variables->setIntData(name, value);
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("setString", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("setString", [](sweet::Event * _event){
 		// change/create a local string variable for a specific scenario
 		// STRING name 
 		// STRING value
@@ -351,7 +351,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 	// Called when going through a door
-	PD_ResourceManager::scenario->eventManager.addEventListener("navigate", [_game, this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("navigate", [_game, this](sweet::Event * _event){
 		glm::ivec2 navigation(_event->getIntData("x"), _event->getIntData("y"));
 
 		player->disable();
@@ -379,7 +379,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		t->start();
 		childTransform->addChild(t, false);
 
-		//PD_ResourceManager::scenario->eventManager.listeners.clear();
+		//PD_ResourceManager::scenario->eventManager->listeners.clear();
 
 		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
@@ -397,7 +397,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	
 	// fades
-	PD_ResourceManager::scenario->eventManager.addEventListener("fadeIn", [_game, this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("fadeIn", [_game, this](sweet::Event * _event){
 		uiFade->fadeIn(glm::uvec3(
 			_event->getFloatData("r"),
 			_event->getFloatData("g"),
@@ -405,7 +405,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		),
 		_event->getFloatData("length") / 1000.f);
 	});
-	PD_ResourceManager::scenario->eventManager.addEventListener("fadeOut", [_game, this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("fadeOut", [_game, this](sweet::Event * _event){
 		uiFade->fadeOut(glm::uvec3(
 			_event->getFloatData("r"),
 			_event->getFloatData("g"),
@@ -415,14 +415,14 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 	
-	PD_ResourceManager::scenario->eventManager.addEventListener("locked", [_game, this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("locked", [_game, this](sweet::Event * _event){
 		// Triggered when the player tries to open a locked door
 		uiBubble->options.front()->label->setText("This door is locked.");
 		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("changeDISSStat", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("changeDISSStat", [this](sweet::Event * _event){
 		// Trigger
 		// Modifies the DISS stats of the player. The stat can be chose from Defense, Insight, Strength, Sass. Delta is the amount to change the stat by, and can be positive or negative.
 		// STRING stat
@@ -449,7 +449,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("changeOwnership", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("changeOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
 		// CHARACTER newOwner
@@ -504,7 +504,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("emote", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("emote", [](sweet::Event * _event){
 		std::string charId = _event->getStringData("character");
 		std::string emote = _event->getStringData("emote");
 		float duration = _event->getFloatData("duration", 9999);
@@ -517,7 +517,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("unlockRoom", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("unlockRoom", [](sweet::Event * _event){
 		//Unlock the chosen room. If it is already unlocked, nothing will happen.
 		// ROOM room = room to unlock
 		std::string room = _event->getStringData("room");
@@ -530,7 +530,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("triggerYellingContest", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
 		// Launch a yelling contest with the selected character. 
 		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
 		
@@ -550,7 +550,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
 		triggerYellingContest(enemy);
-		uiYellingContest->eventManager.addEventListener("complete", [this](sweet::Event * _event){
+		uiYellingContest->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 			if(uiDialogue->hadNextDialogue){
 				uiDialogue->setVisible(true);
 				uiBubble->enable();
@@ -558,7 +558,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		});
 	});
 
-	PD_ResourceManager::scenario->eventManager.addEventListener("hideCharacter", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("hideCharacter", [](sweet::Event * _event){
 		// hide a character in a room until they need to appear
 		// CHARACTER name
 		// (BOOL)INT visibility
@@ -646,7 +646,7 @@ void PD_Scene_Main::pickScenarios(){
 
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){
-		PD_ResourceManager::scenario->eventManager.addChildManager(&s->eventManager);
+		PD_ResourceManager::scenario->eventManager->addChildManager(s->eventManager);
 		s->conditionImplementations = PD_ResourceManager::conditionImplementations;
 	}
 }
@@ -985,14 +985,14 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	if(currentRoom->visibility != Room::kENTERED){
 		for(auto trigger : currentRoom->definition->triggersOnce) {
 			sweet::Event * e = new sweet::Event(trigger);
-			PD_ResourceManager::scenario->eventManager.triggerEvent(e);
+			PD_ResourceManager::scenario->eventManager->triggerEvent(e);
 		}
 	}
 	currentRoom->definition->triggersOnce.clear();
 
 	for(auto trigger : currentRoom->definition->triggersMulti) {
 		sweet::Event * e = new sweet::Event(trigger);
-		PD_ResourceManager::scenario->eventManager.triggerEvent(e);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
 	}
 
 	lights.clear();
@@ -1158,7 +1158,7 @@ void PD_Scene_Main::update(Step * _step){
 
 
 
-	PD_ResourceManager::scenario->eventManager.update(_step);
+	PD_ResourceManager::scenario->eventManager->update(_step);
 
 	bulletWorld->update(_step);
 
@@ -1168,7 +1168,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_R)){
-		PD_ResourceManager::scenario->eventManager.triggerEvent("reset");
+		PD_ResourceManager::scenario->eventManager->triggerEvent("reset");
 	}
 
 	// navigation testing
@@ -1279,7 +1279,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_X)){
-		uiYellingContest->eventManager.triggerEvent("interject");
+		uiYellingContest->eventManager->triggerEvent("interject");
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_L)){

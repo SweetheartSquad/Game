@@ -29,7 +29,7 @@ void PD_Door::triggerInteract(){
 	PD_Item::triggerInteract();
 	if(room->locked){
 		sweet::Event * lockedEvent = new sweet::Event("locked");
-		PD_ResourceManager::scenario->eventManager.triggerEvent(lockedEvent);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(lockedEvent);
 	}else{
 		Log::info("Door: " + std::to_string(side));
 		sweet::Event * navigationEvent = new sweet::Event("navigate");
@@ -54,6 +54,6 @@ void PD_Door::triggerInteract(){
 		}
 		navigationEvent->setIntData("x", navigation.x);
 		navigationEvent->setIntData("y", navigation.y);
-		PD_ResourceManager::scenario->eventManager.triggerEvent(navigationEvent);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(navigationEvent);
 	}
 }

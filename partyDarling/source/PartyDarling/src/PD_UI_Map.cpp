@@ -122,7 +122,7 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 			cell->setRationalHeight(1.f, hl);
 			cell->setSquareWidth(1.f);
 			cell->boxSizing = kCONTENT_BOX;
-			cell->eventManager.addEventListener("mousein", [cell, this](sweet::Event * _event){
+			cell->eventManager->addEventListener("mousein", [cell, this](sweet::Event * _event){
 				if(cell->room != nullptr && cell->room->visibility == Room::kENTERED){
 					roomName->setText(cell->room->definition->name);
 				}else{
