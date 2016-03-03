@@ -5,6 +5,8 @@
 #include <PD_Assets.h>
 #include <Room.h>
 
+#define DOOR_PADDING 0.5
+
 PD_Door::PD_Door(BulletWorld * _world, Shader * _shader, Door_t _side, unsigned long int _doorIndex) :
 	PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + std::to_string(_doorIndex))), _world, _shader, Anchor_t::WALL),
 	side(_side),
@@ -14,6 +16,13 @@ PD_Door::PD_Door(BulletWorld * _world, Shader * _shader, Door_t _side, unsigned 
 	wallDef.parent = "wall";
 	wallDef.sides.push_back(PD_Side::kFRONT);
 	parentTypes.push_back(wallDef);
+
+	boundingBox.width *= 1.f + DOOR_PADDING * 2.f;
+	boundingBox.x = -(boundingBox.width * 0.5f);
+
+#ifdef _DEBUG
+	boundingBoxMesh->meshTransform->scale(1.f + DOOR_PADDING * 2.f, 1, 1);
+#endif
 }
 
 void PD_Door::triggerInteract(){
