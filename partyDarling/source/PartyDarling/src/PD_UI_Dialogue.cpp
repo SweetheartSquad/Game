@@ -139,7 +139,7 @@ void PD_UI_Dialogue::end(){
 		delete currentConversation;
 	}
 	ConversationIterator::end();
-	eventManager.triggerEvent("end");
+	eventManager->triggerEvent("end");
 }
 
 void PD_UI_Dialogue::clearSpeechBuffer(){

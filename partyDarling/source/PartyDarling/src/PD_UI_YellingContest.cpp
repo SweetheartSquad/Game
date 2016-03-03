@@ -24,6 +24,7 @@
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
 #define TIMER "timer"
+#define NUM_OFFENSE_SPEED_CHANGES 3
 
 InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _targetTime, float _hitTime, unsigned long int _iteration):
 	character(_character),
@@ -42,7 +43,9 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	canInterject(true),
 	playerQuestionTimerLength(1.f),
 	playerQuestionTimer(0),
-	playerAnswerTimerLength(1.5f),
+	maxPlayerAnswerTimerLength(1.2f),
+	minPlayerAnswerTimerLength(0.4f),
+	playerAnswerTimerLength(maxPlayerAnswerTimerLength),
 	playerAnswerTimer(0),
 	playerResult(false),
 	playerResultEffective(false),
@@ -66,7 +69,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	interjectBubbleTimerLength(1.f),
 	interjectBubbleTimer(0.f),
 	shader(_shader),
-	baseCursorDelayLength(0.15f),
+	baseCursorDelayLength(0.05f),
+	baseCusrorPunctDelayLength(0.15f),
 	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
@@ -401,7 +405,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	// disable and hide by default
 	disable();
 
-	eventManager.addEventListener("wordspoken", [this](sweet::Event * _event){
+	eventManager->addEventListener("wordspoken", [this](sweet::Event * _event){
 		// Stuff!!!
 		
 	});
@@ -517,7 +521,7 @@ void PD_UI_YellingContest::update(Step * _step){
 							// Find next punctuation
 							if(highlightedPunctuation != nullptr && glyphs.at(glyphIdx) == highlightedPunctuation){
 								sweet::Event * e = new sweet::Event("miss");
-								eventManager.triggerEvent(e);
+								eventManager->triggerEvent(e);
 
 								prevHighlightedPunctuation = highlightedPunctuation;
 								highlightedPunctuation = findFirstPunctuation(glyphIdx+1);
@@ -531,7 +535,8 @@ void PD_UI_YellingContest::update(Step * _step){
 							cursorDelayDuration = 0;
 
 							if(glyphIdx < glyphs.size()){
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+								// set cursor delay for this glyph
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength);
 								/*
 								std::wstringstream s;
 								s << glyphs.at(glyphIdx)->character;
@@ -609,6 +614,8 @@ void PD_UI_YellingContest::update(Step * _step){
 								// next insult
 								incrementConfidence(damage);
 								setPlayerText();
+								playerAnswerTimerLength -= (maxPlayerAnswerTimerLength - minPlayerAnswerTimerLength) / NUM_OFFENSE_SPEED_CHANGES;
+								playerTimerSlider->setValueMax(playerAnswerTimerLength);
 							}
 							else{
 								//fail
@@ -705,7 +712,7 @@ void PD_UI_YellingContest::startNewFight(Person * _enemy){
 void PD_UI_YellingContest::gameOver(bool _win){
 	sweet::Event * e = new sweet::Event("gameover");
 	e->setIntData("win", _win);
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 
 	isGameOver = true;
 	win = _win;
@@ -796,7 +803,7 @@ void PD_UI_YellingContest::complete(){
 	if(!isComplete){
 		sweet::Event * e = new sweet::Event("complete");
 		e->setIntData("win", win);
-		eventManager.triggerEvent(e);
+		eventManager->triggerEvent(e);
 		isComplete = true;
 		enemy = nullptr;
 	}
@@ -891,7 +898,7 @@ void PD_UI_YellingContest::interject(){
 		PD_ResourceManager::scenario->getAudio(INTERJECT)->sound->play();
 	}
 
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 
 	// Set flag if interjectionn was successful
 	interjected = isPunctuation;
@@ -911,13 +918,15 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 		setEnemyText();
 	}
 	else{
+		playerAnswerTimerLength = maxPlayerAnswerTimerLength;
+		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
 	invalidateLayout();
 
 	sweet::Event * e = new sweet::Event("changeturn");
 	e->setIntData("isPlayerTurn", _isOffensive);
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 }
 
 void PD_UI_YellingContest::setEnemyText(){
@@ -1004,7 +1013,7 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 
 	sweet::Event * e = new sweet::Event("insult");
 	e->setIntData("success", _isEffective);
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 }
 
 void PD_UI_YellingContest::incrementConfidence(float _value){
@@ -1020,7 +1029,7 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 	
 	sweet::Event * e = new sweet::Event("confidence");
 	e->setFloatData("value", _value);
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 
 	confidence = confidence + _value > 100.f ? 100.f : confidence + _value < 0.f ? 0.f : confidence + _value;
 
@@ -1088,7 +1097,7 @@ void PD_UI_YellingContest::highlightNextWord(int _startIdx){
 				
 				sweet::Event * e = new sweet::Event("wordspoken");
 				e->setIntData("length", length);
-				eventManager.triggerEvent(e);
+				eventManager->triggerEvent(e);
 
 				return;
 			}

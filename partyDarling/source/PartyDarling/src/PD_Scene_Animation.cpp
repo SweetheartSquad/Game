@@ -33,7 +33,7 @@ Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_wo
 	setWidth(25);
 	setHeight(25);
 
-	eventManager.addEventListener("click", [this](sweet::Event * event){
+	eventManager->addEventListener("click", [this](sweet::Event * event){
 		active = !active;
 		if(active) {
 			setBackgroundColour(1, 0, 0);
@@ -200,7 +200,7 @@ void PD_Scene_Animation::update(Step * _step) {
 			character->pr->solverBod->target.x,
 			character->pr->solverBod->target.y);
 		
-		keyframe->eventManager.addEventListener("click", [this, keyframe](sweet::Event * _event){
+		keyframe->eventManager->addEventListener("click", [this, keyframe](sweet::Event * _event){
 			if(currentKeyFrame != nullptr){
 				currentKeyFrame->setBackgroundColour(1.f, 0.f, 0.f);
 			}

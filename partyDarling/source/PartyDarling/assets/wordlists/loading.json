@@ -1,19 +1,24 @@
 {
 	"escapeChar": "*",
 	"1": [
-		"Phase 1 v1",
-		"Phase 1 v2"
+		"Building the mansion",
+		"Paying the labourers",
+		"Tipping the labourers"
 	],
 	"2": [
-		"Phase 2 v1",
-		"Phase 2 v2"
+		"Ensuring Feng Shui",
+		"Stapling the upholstery",
+		"Pre-staining the pillows"
 	],
 	"3": [
-		"Phase 3 v1",
-		"Phase 3 v2"
+		"Corralling the party-goers",
+		"Performing bizarre experiments",
+		"Googling conversation topics"
 	],
 	"4": [
-		"Phase 4 v1",
-		"Phase 4 v2"
+		"Waiting for the bus",
+		"Missing the first bus",
+		"Missing the second bus",
+		"Showing up to the party late as usual"
 	]
 }

@@ -44,7 +44,7 @@ DialogueDisplay::DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _t
 	progressButton->setRationalHeight(1.f, this);
 	progressButton->setMarginTop(0.9f);
 	progressButton->setMarginRight(0.9f);
-	progressButton->eventManager.addEventListener("mousedown", [this](sweet::Event * _event) {
+	progressButton->eventManager->addEventListener("mousedown", [this](sweet::Event * _event) {
 		this->autoProgressTimer->trigger();
 	});
 	progressButton->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DEFAULT")->texture);

@@ -66,6 +66,9 @@ private:
 	float playerQuestionTimerLength;
 	float playerQuestionTimer;
 
+	float minPlayerAnswerTimerLength;
+	float maxPlayerAnswerTimerLength;
+	unsigned int numAnswerTimerDecrements;
 	float playerAnswerTimerLength;
 	float playerAnswerTimer;
 
@@ -115,6 +118,7 @@ private:
 	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
+	float baseCusrorPunctDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
 	float baseGlyphWidth;

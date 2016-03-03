@@ -79,14 +79,14 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 	optionBubble->label->setText(_text);
 	options.push_back(optionBubble);
 	
-	optionBubble->eventManager.addEventListener("selected", _listener);
+	optionBubble->eventManager->addEventListener("selected", _listener);
 
 	test->addChild(optionBubble->firstParent(), false);
 	childrenUpdated = true;
 }
 
 void PD_UI_Bubble::select(unsigned long int _option){
-	options.at(_option)->eventManager.triggerEvent("selected");
+	options.at(_option)->eventManager->triggerEvent("selected");
 }
 
 void PD_UI_Bubble::selectCurrent(){
@@ -197,7 +197,7 @@ void PD_UI_Bubble::clear(){
 	while(options.size() > 0){
 		test->removeChild(options.back()->firstParent());
 		//delete options.back()->firstParent();
-		options.back()->eventManager.listeners["selected"].clear();
+		options.back()->eventManager->listeners["selected"].clear();
 		unusedOptions.push(options.back());
 		options.pop_back();
 	}

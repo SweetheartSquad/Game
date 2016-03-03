@@ -44,7 +44,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
 	gridLayout->setMouseEnabled(true);
-	gridLayout->eventManager.addEventListener("mousewheel", [this](sweet::Event * _event){
+	gridLayout->eventManager->addEventListener("mousewheel", [this](sweet::Event * _event){
 		scrollbar->setValue(gridOffset + _event->getFloatData("delta"));
 	});
 
@@ -75,17 +75,17 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 			cell->setVisible(false);
 
 			// event listeners
-			cellLayout->eventManager.addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
+			cellLayout->eventManager->addEventListener("mousein", [this, y, x, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 0.5f);
 				setInfoPanel(getItem(x, y));
 			});
-			cellLayout->eventManager.addEventListener("mouseout", [this, cell](sweet::Event * _event){
+			cellLayout->eventManager->addEventListener("mouseout", [this, cell](sweet::Event * _event){
 				cell->setBackgroundColour(1,1,1, 1.f);
 				setInfoPanel(nullptr);
 			});
-			cellLayout->eventManager.addEventListener("click", [this, cell, y, x](sweet::Event * _event){
+			cellLayout->eventManager->addEventListener("click", [this, cell, y, x](sweet::Event * _event){
 				selectItem(getItem(x, y));
-				cell->eventManager.triggerEvent("mouseout");
+				cell->eventManager->triggerEvent("mouseout");
 			});
 
 			// save a reference to the cell in the grid
@@ -99,7 +99,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 	scrollbar->setRationalHeight(0.6f, layout);
 	scrollbar->setPixelWidth(10);
 	scrollbar->setStepped(1.f);
-	scrollbar->eventManager.addEventListener("change", [this](sweet::Event * _event){
+	scrollbar->eventManager->addEventListener("change", [this](sweet::Event * _event){
 		gridDirty = true;
 	});
 
@@ -204,7 +204,7 @@ unsigned long int PD_UI_Inventory::getItemIdx(unsigned long int _x, unsigned lon
 void PD_UI_Inventory::selectItem(PD_Item * _item){
 	selectedItem = _item;
 	if(selectedItem != nullptr){
-		eventManager.triggerEvent("itemSelected");
+		eventManager->triggerEvent("itemSelected");
 	}
 }
 

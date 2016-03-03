@@ -84,12 +84,12 @@ void PD_Item::addToWorld(){
 void PD_Item::triggerPickup(){
 	for(auto e : definition->pickupEffects){
 		sweet::Event * e2 = new sweet::Event(e);
-		PD_ResourceManager::scenario->eventManager.triggerEvent(e2);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
 	}
 }
 void PD_Item::triggerInteract(){
 	for(auto e : definition->effects){
 		sweet::Event * e2 = new sweet::Event(e);
-		PD_ResourceManager::scenario->eventManager.triggerEvent(e2);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
 	}
 }

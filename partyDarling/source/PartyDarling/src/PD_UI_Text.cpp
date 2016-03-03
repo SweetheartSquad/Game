@@ -14,29 +14,29 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	onOver(nullptr),
 	onDown(nullptr)
 {
-	eventManager.addEventListener("mousedown", [this](sweet::Event * _event){
+	eventManager->addEventListener("mousedown", [this](sweet::Event * _event){
 		curTextColour = downColour;
 		if(onDown != nullptr){
 			onDown(_event);
 		}
 	});
 
-	eventManager.addEventListener("mouseup", [this](sweet::Event * _event){
+	eventManager->addEventListener("mouseup", [this](sweet::Event * _event){
 		curTextColour = overColour;
 	});
 	
-	eventManager.addEventListener("mousein", [this](sweet::Event * _event){
+	eventManager->addEventListener("mousein", [this](sweet::Event * _event){
 		curTextColour = overColour;
 		if(onOver != nullptr){
 			onOver( _event);
 		}
 	});
 	
-	eventManager.addEventListener("mouseout", [this](sweet::Event * _event){
+	eventManager->addEventListener("mouseout", [this](sweet::Event * _event){
 		curTextColour = textColour;
 	});
 
-	eventManager.addEventListener("click", [this](sweet::Event * _event){
+	eventManager->addEventListener("click", [this](sweet::Event * _event){
 		if(onClick != nullptr){
 			onClick(_event);
 		}
