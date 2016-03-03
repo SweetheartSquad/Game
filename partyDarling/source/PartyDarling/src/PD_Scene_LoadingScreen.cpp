@@ -58,8 +58,8 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	layout->addChild(loadingSlider);
 	loadingSlider->setRationalWidth(0.5f, layout);
 	loadingSlider->setPixelHeight(25);
-
-	loadingSlider->thumb->background->meshTransform->scale(2);
+	
+	loadingSlider->thumb->background->meshTransform->scale(4)->translate(glm::vec3(-1,0,0));
 	loadingSlider->thumb->setBackgroundColour(1,1,1,1);
 	loadingSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-THUMB")->texture);
 	loadingSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
