@@ -41,6 +41,8 @@ public:
 	std::vector<PD_ParentDef> parents;
 	std::vector<std::string> roomTypes;
 
+	int parentMax;
+
 	sweet::ShuffleVector<Texture *> textures;
 	
 	bool twist;

@@ -23,6 +23,7 @@
 
 #include <PD_Character.h>
 #include <PD_PhraseGenerator_Incidental.h>
+#include "PD_Scenario.h"
 
 class PointLight;
 class RampTexture;
@@ -37,6 +38,8 @@ public:
 	float trackSpeed;
 	bool trackLeft;
 	bool trackRight;
+
+	ScenarioOrder plotPosition;
 
 	ComponentShaderBase * toonShader;
 	Shader * screenSurfaceShader;
@@ -122,6 +125,8 @@ public:
 	// Resets crosshair texture to a crosshair
 	void resetCrosshair();
 
+	void save();
+	void loadSave();
 
 	// carrying stuff
 

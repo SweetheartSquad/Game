@@ -43,16 +43,23 @@ Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
+	panSpeed(20.f),
+	panLeft(false),
+	panRight(false),
+	trackSpeed(0.1f),
+	trackLeft(false),
+	trackRight(false),
+	plotPosition(kBEGINNING),
 	toonShader(new ComponentShaderBase(false)),
-	uiLayer(new UILayer(0,0,0,0)),
-	characterShader(new ComponentShaderBase(false)),
-	emoteShader(new ComponentShaderBase(false)),
-	bulletWorld(new BulletWorld()),
-	debugDrawer(nullptr),
-	selectedItem(nullptr),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
+	uiLayer(new UILayer(0,0,0,0)),
+	bulletWorld(new BulletWorld()),
+	debugDrawer(nullptr),
+	selectedItem(nullptr),
+	characterShader(new ComponentShaderBase(false)),
+	emoteShader(new ComponentShaderBase(false)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
@@ -61,12 +68,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
-	panSpeed(20.f),
-	panLeft(false),
-	panRight(false),
-	trackSpeed(0.1f),
-	trackLeft(false),
-	trackRight(false),
 	carriedProp(nullptr),
 	carriedPropDistance(0)
 {
@@ -131,9 +132,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			item->rotatePhysical(45,0,1,0,false);
 		}
 	}*/
+
+
+	uiFade = new PD_UI_Fade(uiLayer->world);
+	uiLayer->addChild(uiFade);
+	uiFade->setRationalHeight(1.f, uiLayer);
+	uiFade->setRationalWidth(1.f, uiLayer);
+	
+	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
+	uiLayer->addChild(uiMap);
+	uiMap->setRationalHeight(1.f, uiLayer);
+	uiMap->setRationalWidth(1.f, uiLayer);
+	uiMap->enable();
 	
 
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiBubble->setRationalWidth(1.f, uiLayer);
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
@@ -204,18 +217,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeIntensity = 0.1f;
 		player->shakeTimeout->restart();
 	});
-
-	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
-	uiLayer->addChild(uiMap);
-	uiMap->setRationalHeight(1.f, uiLayer);
-	uiMap->setRationalWidth(1.f, uiLayer);
-	uiMap->enable();
-
-
-	uiFade = new PD_UI_Fade(uiLayer->world);
-	uiLayer->addChild(uiFade);
-	uiFade->setRationalHeight(1.f, uiLayer);
-	uiFade->setRationalWidth(1.f, uiLayer);
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
@@ -581,6 +582,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
+	// Load the save file
+	loadSave();
+
 	// build house
 	pickScenarios();
 	bundleScenarios();
@@ -643,7 +647,6 @@ void PD_Scene_Main::pickScenarios(){
 		}
 
 		scenariosList.append(allOmarDefs.pop()["src"].asString());
-		
 		scenarioFile.append(scenariosList);
 	}
 
@@ -1526,6 +1529,14 @@ void PD_Scene_Main::update(Step * _step){
 	// map compass update
 	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
 
+#ifdef _DEBUG
+
+	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
+		save();
+	}
+
+#endif
+
 	// bubble testing controls
 	if(keyboard->keyJustDown(GLFW_KEY_V)){
 		uiBubble->next();
@@ -1659,4 +1670,48 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->invalidateLayout();
+}
+
+void PD_Scene_Main::save() {
+	Json::Value saveOut;
+	if(plotPosition != kEND) {
+		int pos = plotPosition;
+		saveOut["plotPosition"] = plotPosition;
+		saveOut["strength"] = player->strength;
+		saveOut["sass"] = player->sass;
+		saveOut["defense"] = player->defense;
+		saveOut["insight"] = player->insight;
+		for(unsigned long int i = 0; i < uiYellingContest->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			uiYellingContest->lifeTokens[i]->saveImageData(fileName);
+			saveOut["lifeTokens"].append(fileName);
+		}
+
+		std::ofstream saveFile;
+		saveFile.open ("data/save.json");
+		saveFile << saveOut;
+		saveFile.close();
+	}else {
+		// Delete save file
+	}
+}
+
+void PD_Scene_Main::loadSave() {
+	if(sweet::FileUtils::fileExists("data/save.json")){
+		std::string saveJson = sweet::FileUtils::readFile("data/save.json");
+		Json::Reader reader;
+		Json::Value root;
+		bool parsingSuccsessful = reader.parse(saveJson, root);
+		assert(parsingSuccsessful);
+		plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
+		player->strength = root["strength"].asInt();
+		player->sass	 = root["sass"].asInt();
+		player->defense  = root["defense"].asInt();
+		player->insight  = root["insight"].asInt();
+		for(auto tex : root["lifeTokens"]) {
+			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
+			texture->load();
+			uiYellingContest->addLife(texture);
+		}
+	}
 }

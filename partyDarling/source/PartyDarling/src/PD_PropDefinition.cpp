@@ -11,8 +11,10 @@
 PD_PropDefinition::PD_PropDefinition(Json::Value _jsonDef) :
 	mesh(nullptr),
 	mass(_jsonDef.get("mass", 0.f).asFloat()),
+	type(_jsonDef.get("type", _jsonDef.get("id","").asString()).asString()),
 	padding(_jsonDef.get("padding", 0.f).asFloat()),
 	parentDependent(_jsonDef.get("parentDependent", false).asBool()),
+	parentMax(_jsonDef.get("parentMax", -1).asInt()),
 	twist(_jsonDef.get("twist", false).asBool()),
 	flare(_jsonDef.get("flare", false).asBool())
 {
