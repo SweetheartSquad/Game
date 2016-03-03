@@ -45,7 +45,6 @@ public:
 
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
-	Sprite * tilemapSprite;
 	
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;

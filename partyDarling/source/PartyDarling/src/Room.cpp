@@ -15,7 +15,6 @@
 Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition) :
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
 	definition(_definition),
-	tilemapSprite(new Sprite()),
 	tilemap(nullptr),
 	locked(definition->locked),
 	visibility(kHIDDEN)
@@ -40,7 +39,6 @@ void Room::removeComponent(RoomObject * _obj){
 void Room::setShader(Shader * _shader, bool _default){
 	printHierarchy();
 	BulletMeshEntity::setShader(_shader, _default);
-	tilemapSprite->setShader(_shader, _default);
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->setShader(_shader, _default);
 	}
@@ -48,7 +46,6 @@ void Room::setShader(Shader * _shader, bool _default){
 
 void Room::translatePhysical(glm::vec3 _v, bool _relative){
 	BulletMeshEntity::translatePhysical(_v, _relative);
-	tilemapSprite->meshTransform->translate(_v, _relative);
 	//TODO: move room to an absolute position while moving components relatively? (maintain component spacing)
 	for(unsigned int i = 0; i < components.size(); ++i){
 		components.at(i)->translatePhysical(_v, _relative);
