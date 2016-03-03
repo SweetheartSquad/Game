@@ -11,7 +11,7 @@
 		"I heard *name* say that *name* is *adjective*.",
 		"*interjection*, *name* is so *adjective*.",
 		"Did you know that *fact*? *interjection*...",
-		"I read online somewhere that *fakeFact*."
+		"I read online somewhere that *fakeFacts*."
 	],
 	"emphasis": [
 		"very",
@@ -60,15 +60,66 @@
 		"reality is subjective",
 		"a Japanese company invented a robot that feeds you tomatoes",
 		"nutmeg is extremely poisonous if injected intravenously",
-		"there's a type of succulent called a 'golden rat tail'"
+		"there's a type of succulent called a 'golden rat tail'",
+		"human thigh bones are stronger than concrete",
+		"more people are allergic to cow's milk than any other food",
+		"there is a city called Rome on every continent",
+		"an ostrich's eye is bigger than its brain",
+		"slugs have 4 noses"
 	],
-	"fakeFact": [
-		"*fakeName* invented the *noun*"
+	"fakeFacts": [
+		"*fakeNames* invented the *nouns*",
+		"someone called *fakeNames* has the world's biggest *bodyParts*",
+		"*animals*s have *adjectives* *bodyParts*"
 	],
-	"fakeName": [
+	"fakeNames": [
 		"Boris Badman"
 	],
-	"noun": [
+	"nouns": [
 		"tomato peeler"
+	],
+	"adjectives": [
+		"poisonous",
+		"radioactive",
+		"mutated"
+	],
+	"bodyParts": [
+		"head",
+		"tongue",
+		"nose",
+		"stomach",
+		"neck",
+		"chin",
+		"legs",
+		"arms",
+		"ears",
+		"hands",
+		"fingers",
+		"wrists",
+		"ankles",
+		"knees",
+		"cheeks"
+	],
+	"animals": [
+		"elephant",
+		"rhino",
+		"dog",
+		"cat",
+		"lizard",
+		"bat",
+		"bug",
+		"ostrich",
+		"pig",
+		"grasshopper",
+		"toad",
+		"frog",
+        	"skunk",
+        	"badger",
+        	"walrus",
+        	"seal",
+        	"gecko",
+        	"rat",
+        	"mouse",
+        	"snake"
 	]
 }
