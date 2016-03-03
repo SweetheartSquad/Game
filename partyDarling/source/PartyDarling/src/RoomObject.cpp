@@ -144,3 +144,15 @@ void RoomObject::billboard(glm::vec3 _playerPos){
 		childTransform->setOrientation(glm::angleAxis(angle, glm::vec3(0,1,0)));
 	}
 }
+
+void RoomObject::moveChildren(glm::vec3 _translation, bool _relative){
+	typedef std::map<PD_Side, PD_Slot *>::iterator it_type;
+	for(it_type iterator = emptySlots.begin(); iterator != emptySlots.end(); iterator++) {
+		for(auto c : iterator->second->children){
+			c->translatePhysical(_translation, _relative);
+			c->moveChildren(_translation, _relative);
+			c->realign();
+			c->meshTransform->makeCumulativeModelMatrixDirty();
+		}
+	}
+}

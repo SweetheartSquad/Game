@@ -63,4 +63,6 @@ public:
 	~RoomObject(void);
 
 	void resetObject();
+	// used when centering furniture, so that when a room object is repositioned, its "children" follow
+	void moveChildren(glm::vec3 _translation, bool _relative = true);
 };
