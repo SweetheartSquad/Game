@@ -1009,6 +1009,23 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
+	// clear out the current room's stuff
+	if(currentRoom != nullptr){
+		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
+			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
+		}
+		childTransform->removeChild(currentRoom->firstParent());
+		currentRoom->removePhysics();
+	}
+	// put every room into scene/physics world so that they all get deleted along with the scene
+	for(auto r : houseGrid){
+		r.second->addPhysics();
+		childTransform->addChild(r.second->firstParent(), false);
+		for(unsigned int i = 0; i < r.second->components.size(); ++i){
+			childTransform->addChild(r.second->components.at(i)->firstParent(), false);
+		}
+	}
+
 	deleteChildTransform();
 	delete uiLayer;
 	
