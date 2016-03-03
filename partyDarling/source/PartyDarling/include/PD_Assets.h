@@ -90,9 +90,6 @@ private:
 	// constructor is private; use create instead if you need to instantiate directly
 	AssetCharacter(Json::Value _json, Scenario * const _scenario);
 public:
-	// returns a new instance of the character based on this asset definition
-	PersonRenderer * getCharacter(BulletWorld * _world, Shader * _shader, Shader * _emoticonShader);
-
 	// the character's in-game name
 	std::string name;
 	// states

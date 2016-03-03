@@ -93,12 +93,6 @@ void AssetCharacter::unload(){
 	Asset::unload();
 }
 
-PersonRenderer * AssetCharacter::getCharacter(BulletWorld * _world, Shader * _shader, Shader * _emoticonShader){
-	PersonRenderer * res = new PersonRenderer(_world, this, _shader, _emoticonShader);
-	res->setShader(_shader, true);
-	return res;
-}
-
 // item
 AssetItem::AssetItem(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
