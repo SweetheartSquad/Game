@@ -131,6 +131,18 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			item->rotatePhysical(45,0,1,0,false);
 		}
 	}*/
+
+
+	uiFade = new PD_UI_Fade(uiLayer->world);
+	uiLayer->addChild(uiFade);
+	uiFade->setRationalHeight(1.f, uiLayer);
+	uiFade->setRationalWidth(1.f, uiLayer);
+
+	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
+	uiLayer->addChild(uiMap);
+	uiMap->setRationalHeight(1.f, uiLayer);
+	uiMap->setRationalWidth(1.f, uiLayer);
+	uiMap->enable();
 	
 
 	uiBubble = new PD_UI_Bubble(uiLayer->world);
@@ -204,18 +216,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeIntensity = 0.1f;
 		player->shakeTimeout->restart();
 	});
-
-	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
-	uiLayer->addChild(uiMap);
-	uiMap->setRationalHeight(1.f, uiLayer);
-	uiMap->setRationalWidth(1.f, uiLayer);
-	uiMap->enable();
-
-
-	uiFade = new PD_UI_Fade(uiLayer->world);
-	uiLayer->addChild(uiFade);
-	uiFade->setRationalHeight(1.f, uiLayer);
-	uiFade->setRationalWidth(1.f, uiLayer);
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
