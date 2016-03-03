@@ -28,22 +28,16 @@ class PD_UI_Text;
 
 PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	Scene(_game),
-	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
-	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true)), 
-	textShader(new ComponentShaderText(true)),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, false)),
+	screenSurface(new RenderSurface(screenSurfaceShader, false)),
+	screenFBO(new StandardFrameBuffer(false)), 
+	textShader(new ComponentShaderText(false)),
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font),
 	loadingPercent(0),
 	lastMessagePhase(-1),
 	lastMessageTime(-TIME_PER_MESSAGE)
 {
-	screenSurfaceShader->referenceCount++;
-	screenFBO->referenceCount++;
-	screenSurface->referenceCount++;
-	textShader->referenceCount++;
-
-
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
 
@@ -90,11 +84,11 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 PD_Scene_LoadingScreen::~PD_Scene_LoadingScreen() {
 	deleteChildTransform();
 	delete uiLayer;
-
-	screenSurfaceShader->decrementAndDelete();
-	screenFBO->decrementAndDelete();
-	screenSurface->decrementAndDelete();
-	textShader->decrementAndDelete();
+	
+	delete screenSurface;
+	delete screenSurfaceShader;
+	delete screenFBO;
+	delete textShader;
 }
 
 void PD_Scene_LoadingScreen::update(Step* _step) {

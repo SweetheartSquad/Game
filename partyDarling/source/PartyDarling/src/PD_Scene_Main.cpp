@@ -50,9 +50,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
-	screenSurfaceShader(new Shader("assets/RenderSurface", false, true)),
-	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true)),
+	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
+	screenSurface(new RenderSurface(screenSurfaceShader, false)),
+	screenFBO(new StandardFrameBuffer(false)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
@@ -70,10 +70,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedProp(nullptr),
 	carriedPropDistance(0)
 {
-	screenSurfaceShader->referenceCount++;
-	screenFBO->referenceCount++;
-	screenSurface->referenceCount++;
-
 	toonRamp = new RampTexture(lightStart, lightEnd, 4);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
@@ -1015,10 +1011,10 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 PD_Scene_Main::~PD_Scene_Main(){
 	deleteChildTransform();
 	delete uiLayer;
-
-	screenSurfaceShader->decrementAndDelete();
-	screenFBO->decrementAndDelete();
-	screenSurface->decrementAndDelete();
+	
+	delete screenSurface;
+	delete screenSurfaceShader;
+	delete screenFBO;
 
 	while(activeScenarios.size() > 0){
 		delete activeScenarios.back();
