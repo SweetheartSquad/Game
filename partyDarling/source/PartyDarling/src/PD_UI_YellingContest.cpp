@@ -69,7 +69,8 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	interjectBubbleTimerLength(1.f),
 	interjectBubbleTimer(0.f),
 	shader(_shader),
-	baseCursorDelayLength(0.15f),
+	baseCursorDelayLength(0.05f),
+	baseCusrorPunctDelayLength(0.15f),
 	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
 	baseGlyphWidth(_font->getGlyphWidthHeight('m').x),
@@ -535,7 +536,7 @@ void PD_UI_YellingContest::update(Step * _step){
 
 							if(glyphIdx < glyphs.size()){
 								// set cursor delay for this glyph
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength);
 								/*
 								std::wstringstream s;
 								s << glyphs.at(glyphIdx)->character;

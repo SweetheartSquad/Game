@@ -118,6 +118,7 @@ private:
 	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
+	float baseCusrorPunctDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
 	float baseGlyphWidth;
