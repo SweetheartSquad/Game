@@ -137,7 +137,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(uiFade);
 	uiFade->setRationalHeight(1.f, uiLayer);
 	uiFade->setRationalWidth(1.f, uiLayer);
-
+	
+	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
 	uiLayer->addChild(uiMap);
 	uiMap->setRationalHeight(1.f, uiLayer);
@@ -145,7 +146,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiMap->enable();
 	
 
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiBubble->setRationalWidth(1.f, uiLayer);
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
