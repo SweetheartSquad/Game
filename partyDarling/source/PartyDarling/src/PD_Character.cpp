@@ -95,8 +95,9 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	charDef["states"].append(stateDef);
 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
-	
-	auto p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
+	_scenario->assets["character"][id] = newChar;
+
+	Person * p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
 	PD_Listing::listings[_scenario]->characters[id] = p;
 
@@ -203,15 +204,17 @@ PersonState::PersonState(Json::Value _json) :
 }
 
 PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
-	paletteTex(new PD_Palette(false)),
+	paletteTex(new PD_Palette(true)),
 	timer(0),
 	randomAnimations(false),
 	animate(true),
 	currentAnimation(nullptr),
 	emote(nullptr),
 	emoteTimeout(nullptr),
-	talking(false)
+	talking(false),
+	talk(nullptr)
 {
+	++paletteTex->referenceCount;
 	paletteTex->generateRandomTable();
 	paletteTex->load();
 	
@@ -357,9 +360,10 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 }
 
 PersonRenderer::~PersonRenderer(){
-	// TODO: Prevent memory leak here without just deleting the paletteTex here
-	//delete paletteTex;
+	paletteTex->decrementAndDelete();
 	delete currentAnimation;
+	delete emoteTimeout;
+	delete talk;
 }
 
 void PersonRenderer::setAnimation(std::string _name) {

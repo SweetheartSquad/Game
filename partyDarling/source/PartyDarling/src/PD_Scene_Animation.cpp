@@ -62,7 +62,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	Scene(_game), 
 	characterShader(new ComponentShaderBase(false)),
 	baseShader(new ComponentShaderBase(false)),
-	uiLayer(0, 0, 0, 0),
+	uiLayer(new UILayer(0, 0, 0, 0)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	currentKeyFrame(nullptr)
@@ -77,7 +77,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	baseShader->compileShader();
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
+	uiLayer->resize(0,sd.x,0,sd.y);
 
 	//Set up debug camera
 	OrthographicCamera * debugCam = new OrthographicCamera(-4, 4, -2.25, 2.25, 0.1, 1000);
@@ -89,9 +89,9 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 
-	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer.world, characterShader, baseShader);
+	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer->world, characterShader, baseShader);
 	character->pr->randomAnimations = false;
-	uiLayer.childTransform->addChild(character);
+	uiLayer->childTransform->addChild(character);
 		
 	for(auto solver : character->pr->solvers) {
 		solver->setJointsVisible(true);
@@ -102,38 +102,38 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 
 	character->firstParent()->scale(100)->translate(sd.x * 0.5f, sd.y * 0.5f - 150.f, 0.f);
 
-	leftArmEffector = new Effector(uiLayer.world, character->pr->solverArmR);
-	uiLayer.childTransform->addChild(leftArmEffector);
+	leftArmEffector = new Effector(uiLayer->world, character->pr->solverArmR);
+	uiLayer->childTransform->addChild(leftArmEffector);
 	leftArmEffector->firstParent()->translate(sd.x * 0.5f - 300, 700, 0.f, false);
 
-	rightArmEffector = new Effector(uiLayer.world, character->pr->solverArmL);
-	uiLayer.childTransform->addChild(rightArmEffector);
+	rightArmEffector = new Effector(uiLayer->world, character->pr->solverArmL);
+	uiLayer->childTransform->addChild(rightArmEffector);
 	rightArmEffector->firstParent()->translate(sd.x * 0.5f + 300, 700, 0.f, false);
 
-	rightLegEffector = new Effector(uiLayer.world, character->pr->solverLegR);
-	uiLayer.childTransform->addChild(rightLegEffector);
+	rightLegEffector = new Effector(uiLayer->world, character->pr->solverLegR);
+	uiLayer->childTransform->addChild(rightLegEffector);
 	rightLegEffector->firstParent()->translate(sd.x * 0.5f + 300, 200, 0.f, false);
 
-	leftLegEffector = new Effector(uiLayer.world, character->pr->solverLegL);
-	uiLayer.childTransform->addChild(leftLegEffector);
+	leftLegEffector = new Effector(uiLayer->world, character->pr->solverLegL);
+	uiLayer->childTransform->addChild(leftLegEffector);
 	leftLegEffector->firstParent()->translate(sd.x * 0.5f - 300, 200, 0.f, false);
 
-	bodyEffector = new Effector(uiLayer.world, character->pr->solverBod);
-	uiLayer.childTransform->addChild(bodyEffector);
+	bodyEffector = new Effector(uiLayer->world, character->pr->solverBod);
+	uiLayer->childTransform->addChild(bodyEffector);
 	bodyEffector->firstParent()->translate(sd.x * 0.5f - 12.5f, sd.y * 0.5f, 0.f, false);
 
-	keyFrameLayout = new HorizontalLinearLayout(uiLayer.world);
-	keyFrameLayout->setRationalWidth(1.0f, &uiLayer);
+	keyFrameLayout = new HorizontalLinearLayout(uiLayer->world);
+	keyFrameLayout->setRationalWidth(1.0f, uiLayer);
 	keyFrameLayout->setPixelHeight(20.0f);
 	keyFrameLayout->invalidateLayout();
 
-	uiLayer.addChild(keyFrameLayout);
+	uiLayer->addChild(keyFrameLayout);
 
-	uiLayer.addMouseIndicator();
+	uiLayer->addMouseIndicator();
 
-	uiLayer.bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+	uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 
-	uiLayer.complexHitTest = true;
+	uiLayer->complexHitTest = true;
 
 	character->pr->animate = false;
 	
@@ -141,6 +141,8 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 }
 
 PD_Scene_Animation::~PD_Scene_Animation() {
+	deleteChildTransform();
+	delete uiLayer;
 }
 
 void PD_Scene_Animation::update(Step * _step) {
@@ -175,7 +177,7 @@ void PD_Scene_Animation::update(Step * _step) {
 			currentKeyFrame->setBackgroundColour(1.f, 0.f, 0.f);
 			keyframe = currentKeyFrame;
 		}else {
-			keyframe = new Keyframe(uiLayer.world, character);
+			keyframe = new Keyframe(uiLayer->world, character);
 		}			
 
 		keyframe->step->leftArm = glm::vec2(
@@ -222,15 +224,15 @@ void PD_Scene_Animation::update(Step * _step) {
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0,sd.x,0,sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0,sd.x,0,sd.y);
+	uiLayer->update(_step);
 }
 
 void PD_Scene_Animation::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	_renderOptions->setClearColour(0,0,0,1);
 	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_Animation::load() {
@@ -247,7 +249,7 @@ void PD_Scene_Animation::updateEffectors() const {
 	
 	glm::uvec2 sd = sweet::getWindowDimensions();
 
-	glm::vec3 mPos = uiLayer.mouseIndicator->firstParent()->getTranslationVector();
+	glm::vec3 mPos = uiLayer->mouseIndicator->firstParent()->getTranslationVector();
 	glm::vec3 pos =  glm::vec3(4.f * (mPos.x - sd.x * 0.5f), 8.f * (mPos.y - sd.y * 0.5f + 150.f), 0);
 
 	leftArmEffector->setPos(mPos, pos);

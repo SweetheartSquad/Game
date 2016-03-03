@@ -37,7 +37,7 @@ public:
 
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * baseShader;
-	UILayer uiLayer;
+	UILayer * uiLayer;
 
 	HorizontalLinearLayout * keyFrameLayout;
 

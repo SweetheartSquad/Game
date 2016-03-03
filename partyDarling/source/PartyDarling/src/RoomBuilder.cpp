@@ -211,6 +211,7 @@ Room * RoomBuilder::getRoom(){
 		fullW = ROOM_TILE * w;
 	
 		// Generate tilemap image
+		delete room->tilemap;
 		room->tilemap = new PD_TilemapGenerator(l, w, true);
 		unsigned long int pixelIncrement = 158;
 		room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
