@@ -10,7 +10,8 @@
 		"Don't tell *name*, but I think they're *adjective*.",
 		"I heard *name* say that *name* is *adjective*.",
 		"*interjection*, *name* is so *adjective*.",
-		"Did you know that *fact*? *interjection*"
+		"Did you know that *fact*? *interjection*...",
+		"I read online somewhere that *fakeFact*."
 	],
 	"emphasis": [
 		"very",
@@ -57,6 +58,17 @@
 		"there are more than 14 million camels in the world",
 		"the Oklahoma rose is the state flower of Oklahoma",
 		"reality is subjective",
-		"a Japanese company invented a robot that feeds you tomatoes"
+		"a Japanese company invented a robot that feeds you tomatoes",
+		"nutmeg is extremely poisonous if injected intravenously",
+		"there's a type of succulent called a 'golden rat tail'"
+	],
+	"fakeFact": [
+		"*fakeName* invented the *noun*"
+	],
+	"fakeName": [
+		"Boris Badman"
+	],
+	"noun": [
+		"tomato peeler"
 	]
 }
