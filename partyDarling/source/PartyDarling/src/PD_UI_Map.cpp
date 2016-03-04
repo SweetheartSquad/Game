@@ -38,6 +38,8 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 		v.y -= 0.5f;
 	}
 	compass->background->mesh->dirty = true;
+	childTransform->addChild(compass, false);
+	compass->nodeUIParent = this;
 }
 
 void PD_UI_Map::disable(){
