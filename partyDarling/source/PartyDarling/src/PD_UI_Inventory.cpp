@@ -7,7 +7,7 @@
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
-PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
+PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, ComponentShaderText * _textShader) :
 	HorizontalLinearLayout(_world),
 	gridDirty(false),
 	gridOffset(0),
@@ -114,12 +114,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 
 		infoLayout->setRationalHeight(0.6f, layout);
 		infoLayout->setPixelWidth(300);
-;
 
-		ComponentShaderText * textShader = new ComponentShaderText(true);
-		textShader->load();
-
-		itemName = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		itemName = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
 		infoLayout->addChild(itemName);
 		itemName->setText("test");
 		itemName->setRationalWidth(1.f, infoLayout);
@@ -138,7 +134,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 
-		itemDescription = new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		itemDescription = new TextArea(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
 		infoLayout->addChild(itemDescription);
 		itemDescription->setText("test");
 		itemDescription->setRationalWidth(1.f, infoLayout);

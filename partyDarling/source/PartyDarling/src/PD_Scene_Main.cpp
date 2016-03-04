@@ -151,7 +151,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world);
+	uiInventory = new PD_UI_Inventory(uiLayer->world, uiBubble->textShader);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
@@ -890,13 +890,6 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			g->showLoading((float)++progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			
-			// setup the first parents, but don't actually add anything to the scene yet
-			Transform * t = new Transform();
-			t->addChild(room, false);
-			for(unsigned int i = 0; i < room->components.size(); ++i){
-				t = new Transform();
-				t->addChild(room->components.at(i), false);
-			}
 			// run the physics simulation for a few seconds to let things settle
 			Log::info("Letting the bodies hit the floor...");
 			Step s;
@@ -1068,9 +1061,16 @@ void PD_Scene_Main::removeRoom(Room * _room){
 }
 void PD_Scene_Main::addRoom(Room * _room){
 	_room->addPhysics();
-	childTransform->addChild(_room->firstParent(), false);
-	for(unsigned int i = 0; i < _room->components.size(); ++i){
-		childTransform->addChild(_room->components.at(i)->firstParent(), false);
+	if(_room->parents.size() > 0){
+		childTransform->addChild(_room->firstParent(), false);
+		for(unsigned int i = 0; i < _room->components.size(); ++i){
+			childTransform->addChild(_room->components.at(i)->firstParent(), false);
+		}
+	}else{
+		childTransform->addChild(_room);
+		for(unsigned int i = 0; i < _room->components.size(); ++i){
+			childTransform->addChild(_room->components.at(i));
+		}
 	}
 }
 

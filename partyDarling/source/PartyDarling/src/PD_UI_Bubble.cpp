@@ -35,9 +35,8 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	displayOffset(0),
 	childrenUpdated(false)
 {
-	textShader = new ComponentShaderText(true);
+	textShader = new ComponentShaderText(false);
 	textShader->setColor(1,1,1,1);
-	++textShader->referenceCount;
 	addChild(vl);
 	
 	vl->setRationalHeight(1.f, this);
@@ -62,7 +61,7 @@ PD_UI_Bubble::~PD_UI_Bubble(){
 	}
 	deleteChildTransform();
 	bubbleTex->decrementAndDelete();
-	textShader->decrementAndDelete();
+	delete textShader;
 }
 
 void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _listener){

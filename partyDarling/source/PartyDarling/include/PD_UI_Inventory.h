@@ -43,7 +43,7 @@ public:
 	// the number of rows that have been scrolled since the top of the grid
 	float gridOffset;
 
-	PD_UI_Inventory(BulletWorld * _world);
+	PD_UI_Inventory(BulletWorld * _world, ComponentShaderText * _textShader);
 
 	// add an item to the inventory
 	void pickupItem(PD_Item * _item);
