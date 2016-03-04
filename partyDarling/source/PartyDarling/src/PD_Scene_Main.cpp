@@ -1632,8 +1632,6 @@ Texture * PD_Scene_Main::getToken(){
 
 	// hide the UI
 	uiLayer->setVisible(false);
-	// flip the scene upside down
-	activeCamera->upVectorRotated.y *= -1;
 
 	//re-draw the current frame (swap the buffers a second time to avoid this render actually being visible)
 	game->draw(this);
@@ -1646,20 +1644,18 @@ Texture * PD_Scene_Main::getToken(){
 
 	// carve out a circle and add a border
 	for(signed long int y = 0; y < sd.y; ++y){
-	for(signed long int x = 0; x < sd.x; ++x){
-		glm::vec2 pos(x,y);
-		float d = glm::distance(pos, half);
-		if(d >= half.x || d >= half.y){
-			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(0,0,0,0));
-		}else if(d >= half.x * 0.9f || d >= half.y * 0.9f){
-			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(237,22,106,255));
+		for(signed long int x = 0; x < sd.x; ++x){
+			glm::vec2 pos(x,y);
+			float d = glm::distance(pos, half);
+			if(d >= half.x || d >= half.y){
+				sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(0,0,0,0));
+			}else if(d >= half.x * 0.9f || d >= half.y * 0.9f){
+				sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(237,22,106,255));
+			}
 		}
 	}
-	}
-	
-	// flip the scene right-side up
-	activeCamera->upVectorRotated.y *= -1;
-	// unhide the UI
+
+	// unhide the UIyel
 	uiLayer->setVisible(true);
 
 	return res;
