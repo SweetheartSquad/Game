@@ -1068,6 +1068,7 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete bulletWorld;
 	delete toonShader;
 	delete characterShader;
+	delete emoteShader;
 
 	delete toonRamp;
 }
