@@ -30,6 +30,11 @@ class RampTexture;
 class PD_Prop;
 
 class PD_Scene_Main : public Scene{
+private:
+	// removes _room from the scene/physics
+	void removeRoom(Room * _room);
+	// adds _room to the scene/physics
+	void addRoom(Room * _room);
 public:
 	float panSpeed;
 	bool panLeft;

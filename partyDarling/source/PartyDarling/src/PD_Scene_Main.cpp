@@ -947,11 +947,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	
 	// clear out the old room's stuff
 	if(currentRoom != nullptr){
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
-		}
-		childTransform->removeChild(currentRoom->firstParent());
-		currentRoom->removePhysics();
+		removeRoom(currentRoom);
 	}
 
 
@@ -970,11 +966,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	currentRoom = houseGrid.at(key);
 
 	// put the room into the scene/physics world
-	currentRoom->addPhysics();
-	childTransform->addChild(currentRoom->firstParent(), false);
-	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-		childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
-	}
+	addRoom(currentRoom);
 
 
 	PD_Door::Door_t doorToEnter;
@@ -1038,19 +1030,11 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 PD_Scene_Main::~PD_Scene_Main(){
 	// clear out the current room's stuff
 	if(currentRoom != nullptr){
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
-		}
-		childTransform->removeChild(currentRoom->firstParent());
-		currentRoom->removePhysics();
+		removeRoom(currentRoom);
 	}
 	// put every room into scene/physics world so that they all get deleted along with the scene
 	for(auto r : houseGrid){
-		r.second->addPhysics();
-		childTransform->addChild(r.second->firstParent(), false);
-		for(unsigned int i = 0; i < r.second->components.size(); ++i){
-			childTransform->addChild(r.second->components.at(i)->firstParent(), false);
-		}
+		addRoom(r.second);
 	}
 
 	deleteChildTransform();
@@ -1072,6 +1056,25 @@ PD_Scene_Main::~PD_Scene_Main(){
 
 	delete toonRamp;
 }
+
+
+
+void PD_Scene_Main::removeRoom(Room * _room){
+	for(unsigned int i = 0; i < _room->components.size(); ++i){
+		childTransform->removeChild(_room->components.at(i)->firstParent());
+	}
+	childTransform->removeChild(_room->firstParent());
+	_room->removePhysics();
+}
+void PD_Scene_Main::addRoom(Room * _room){
+	_room->addPhysics();
+	childTransform->addChild(_room->firstParent(), false);
+	for(unsigned int i = 0; i < _room->components.size(); ++i){
+		childTransform->addChild(_room->components.at(i)->firstParent(), false);
+	}
+}
+
+
 
 void PD_Scene_Main::update(Step * _step){
 	// panning
