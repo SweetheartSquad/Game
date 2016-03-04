@@ -178,6 +178,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// Handle case where a yelling contest is the last trigger in a dialogue
 		if(!uiYellingContest->isEnabled()){
 			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
 		}
 	});
 	
@@ -1612,7 +1614,6 @@ void PD_Scene_Main::updateSelection(){
 				if(person != nullptr && person->isEnabled()){
 					// hover over person
 					if(person != currentHoverTarget){
-						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
 						// if we aren't already looking at the person,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
