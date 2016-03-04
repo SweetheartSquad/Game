@@ -1320,169 +1320,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	// mouse interaction with world objects
-	if(player->isEnabled()){
-		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
-		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
-		
-		if(me != nullptr && uiInventory->getSelected() == nullptr){
-			PD_Item * item = dynamic_cast<PD_Item *>(me);
-			if(item != nullptr){
-				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
-					// hover over item
-					if(item != currentHoverTarget){
-						// if we aren't already looking at the item,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						if(item->definition->collectable){
-							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
-								// remove the item from the scene
-								Transform * toDelete = item->firstParent();
-
-								currentRoom->removeComponent(item);
-
-								toDelete->firstParent()->removeChild(toDelete);
-								toDelete->removeChild(item);
-								delete toDelete;
-								delete item->shape;
-								item->shape = nullptr;
-								bulletWorld->world->removeRigidBody(item->body);
-								item->body = nullptr;
-
-								// pickup the item
-								uiInventory->pickupItem(item);
-								currentRoom->removeItem(item);
-
-								// run item pickup triggers
-								item->triggerPickup();
-
-								uiBubble->clear();
-							});
-						}else{
-							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
-								std::cout << "hey gj you interacted" << std::endl;
-
-								// run item interact triggers
-								item->triggerInteract();
-							});
-						}
-					}
-				}else{
-					// we hovered over an item, but it wasn't pixel-perfect
-					me = item = nullptr;
-				}
-			}else{
-				Person * person = dynamic_cast<Person*>(me);
-				if(person != nullptr && person->isEnabled()){
-					// hover over person
-					if(person != currentHoverTarget){
-						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
-						// if we aren't already looking at the person,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-							std::string c = person->state->conversation;
-							if(c == "NO_CONVO"){
-								// incidental conversation
-								Json::Value dialogue;
-								dialogue["text"].append(incidentalPhraseGenerator.getLine());
-								dialogue["speaker"] = person->definition->id;
-								Json::Value root;
-								root["dialogue"] = Json::Value();
-								root["dialogue"].append(dialogue);
-
-								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
-								uiDialogue->startEvent(tempConvo, true);
-								player->disable();
-							}else{
-								// start a proper conversation
-								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
-								player->disable();
-							}
-						});
-						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
-							triggerYellingContest(person);
-							// TODO: pass in the character that's fighting here
-						});
-						// if we have an item, also add the "use on" option
-						/*if(uiInventory->getSelected() != nullptr){
-							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
-								uiBubble->clear();
-								player->disable();
-								// TODO: pass in the character that's interacting with the item here
-							});
-						}*/
-					}
-				}else{
-					// prop carrying selection
-					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
-					if(prop != nullptr){
-						if(mouse->leftJustPressed()){
-							carriedProp = prop;
-							carriedPropDistance = glm::distance(camPos, carriedProp->meshTransform->getWorldPos());
-							carriedProp->body->setDamping(0.8f,0.5f);
-							carriedProp->body->setGravity(btVector3(0,0,0));
-						}
-					}
-				}
-			}
-			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
-			if(ui != nullptr){
-				ui->setUpdateState(true);
-			}*/
-
-			currentHoverTarget = me;
-		}else{
-			currentHoverTarget = nullptr;
-		}
-		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
-			uiBubble->clear();
-			selectedItem = uiInventory->getSelected();
-			if(uiInventory->getSelected() != nullptr){
-				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
-					//uiBubble->clear();
-					//player->disable();
-					// TODO: actually trigger item interaction
-					/*auto item = uiInventory->getSelected();
-					if(item->definition->consumable) {
-						auto i = std::find(uiInventory->items.begin(), uiInventory->items.end(), item);
-						if(i != uiInventory->items.end()) {
-							uiInventory->items.erase(i);
-						}
-					}*/
-
-					uiInventory->getSelected()->triggerInteract();
-					auto item = uiInventory->removeSelected();
-					auto items = PD_Listing::listings[item->definition->scenario]->items;
-					items.erase(items.find(item->definition->id));
-					delete item;
-					resetCrosshair();
-
-				});
-				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
-					//uiBubble->clear();
-
-					// dropping an item
-					if(PD_Item * item = uiInventory->removeSelected()){
-						// put the item back into the scene
-						childTransform->addChild(item);
-						item->addToWorld();
-			
-						// figure out where to put the item
-						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
-						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
-						item->translatePhysical(targetPos, false);
-						// rotate the item to face the camera
-						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
-
-						currentRoom->addComponent(item);
-					}
-
-					resetCrosshair();
-				});
-			}
-		}
-	}
+	updateSelection();
 
 
 	// prop carrying release and carry
@@ -1712,6 +1550,160 @@ void PD_Scene_Main::loadSave() {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
 			uiYellingContest->addLife(texture);
+		}
+	}
+}
+
+
+void PD_Scene_Main::updateSelection(){
+	if(player->isEnabled()){
+		NodeBulletBody * lastHoverTarget = currentHoverTarget;
+		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
+		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
+		
+		if(me != nullptr && uiInventory->getSelected() == nullptr){
+			PD_Item * item = dynamic_cast<PD_Item *>(me);
+			if(item != nullptr){
+				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
+					// hover over item
+					if(item != currentHoverTarget){
+						// if we aren't already looking at the item,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						if(item->definition->collectable){
+							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
+								// remove the item from the scene
+								Transform * toDelete = item->firstParent();
+
+								currentRoom->removeComponent(item);
+
+								toDelete->firstParent()->removeChild(toDelete);
+								toDelete->removeChild(item);
+								delete toDelete;
+								delete item->shape;
+								item->shape = nullptr;
+								bulletWorld->world->removeRigidBody(item->body);
+								item->body = nullptr;
+
+								// pickup the item
+								uiInventory->pickupItem(item);
+								currentRoom->removeItem(item);
+
+								// run item pickup triggers
+								item->triggerPickup();
+
+								uiBubble->clear();
+							});
+						}else{
+							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
+								std::cout << "hey gj you interacted" << std::endl;
+
+								// run item interact triggers
+								item->triggerInteract();
+							});
+						}
+					}
+				}else{
+					// we hovered over an item, but it wasn't pixel-perfect
+					me = item = nullptr;
+				}
+			}else{
+				Person * person = dynamic_cast<Person*>(me);
+				if(person != nullptr && person->isEnabled()){
+					// hover over person
+					if(person != currentHoverTarget){
+						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
+						// if we aren't already looking at the person,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
+							std::string c = person->state->conversation;
+							if(c == "NO_CONVO"){
+								// incidental conversation
+								Json::Value dialogue;
+								dialogue["text"].append(incidentalPhraseGenerator.getLine());
+								dialogue["speaker"] = person->definition->id;
+								Json::Value root;
+								root["dialogue"] = Json::Value();
+								root["dialogue"].append(dialogue);
+
+								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+								uiDialogue->startEvent(tempConvo, true);
+								player->disable();
+							}else{
+								// start a proper conversation
+								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+								player->disable();
+							}
+						});
+						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
+							triggerYellingContest(person);
+							// TODO: pass in the character that's fighting here
+						});
+						// if we have an item, also add the "use on" option
+						/*if(uiInventory->getSelected() != nullptr){
+							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
+								uiBubble->clear();
+								player->disable();
+								// TODO: pass in the character that's interacting with the item here
+							});
+						}*/
+					}
+				}else{
+					// prop carrying selection
+					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
+					if(prop != nullptr){
+						if(mouse->leftJustPressed()){
+							carriedProp = prop;
+							carriedPropDistance = glm::distance(player->playerCamera->childTransform->getWorldPos(), carriedProp->meshTransform->getWorldPos());
+							carriedProp->body->setDamping(0.8f,0.5f);
+							carriedProp->body->setGravity(btVector3(0,0,0));
+						}
+					}
+				}
+			}
+			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
+			if(ui != nullptr){
+				ui->setUpdateState(true);
+			}*/
+
+			currentHoverTarget = me;
+		}else{
+			currentHoverTarget = nullptr;
+		}
+		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
+			uiBubble->clear();
+			selectedItem = uiInventory->getSelected();
+			if(uiInventory->getSelected() != nullptr){
+				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
+					uiInventory->getSelected()->triggerInteract();
+					auto item = uiInventory->removeSelected();
+					auto items = PD_Listing::listings[item->definition->scenario]->items;
+					items.erase(items.find(item->definition->id));
+					delete item;
+					resetCrosshair();
+
+				});
+				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
+					// dropping an item
+					if(PD_Item * item = uiInventory->removeSelected()){
+						// put the item back into the scene
+						childTransform->addChild(item);
+						item->addToWorld();
+			
+						// figure out where to put the item
+						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
+						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
+						item->translatePhysical(targetPos, false);
+						// rotate the item to face the camera
+						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+
+						currentRoom->addComponent(item);
+					}
+
+					resetCrosshair();
+				});
+			}
 		}
 	}
 }
