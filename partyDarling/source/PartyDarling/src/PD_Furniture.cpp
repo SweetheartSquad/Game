@@ -76,8 +76,12 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
 
-	for(unsigned long int i = 0; i < lights.size(); ++i) {
-		meshTransform->addChild(lights.at(i))->translate(0.f, boundingBox.height - 0.1f, 0.f);
+	for(unsigned long int i = 0; i < buildResult.lightParents.size(); ++i) {
+		glm::vec3 w = buildResult.lights.at(i)->childTransform->getWorldPos() * FURNITURE_SCALE;
+		Light * l = buildResult.lights.at(i);
+		l->firstParent()->removeChild(l);
+		delete buildResult.lightParents.at(i);
+		meshTransform->addChild(l)->translate(w);
 	}
 
 	// create the bullet stuff
