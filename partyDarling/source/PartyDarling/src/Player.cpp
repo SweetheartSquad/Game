@@ -57,6 +57,9 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	// remove y portion of direction vectors to avoid flying
 	forward.y = 0;
 	right.y = 0;
+	
+	forward = glm::normalize(forward);
+	right = glm::normalize(right);
 
 	// walking
 	glm::vec3 res(0);
