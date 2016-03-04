@@ -438,6 +438,10 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 
 	delete optionOneShader;
 	delete optionTwoShader;
+	
+	if(enemyCursor->firstParent()->parents.size() == 0){
+		childTransform->addChild(enemyCursor->firstParent(), false);
+	}
 }
 
 void PD_UI_YellingContest::update(Step * _step){
