@@ -28,7 +28,7 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	container->setRationalHeight(1.f / ((OpenAL_Sound::categoricalGain.size() + 1)), this);
 
 	TextLabel * label = new TextLabel(world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
-	SliderController * slider = new SliderController(world, _target, 1.f, 0.f, 2.f);
+	SliderController * slider = new SliderController(world, _target, *_target, 0.f, 2.f);
 	
 	container->addChild(label);
 	container->addChild(slider);
@@ -52,8 +52,8 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
 	slider->fill->background->mesh->setScaleMode(GL_NEAREST);
 
-	// make sure the background music updates when the music slider is changed
-	if(_text == "music"){
+	// make sure the background music updates when the music or master slider is changed
+	if(_text == "music" || _text == "master"){
 		slider->eventManager->addEventListener("change", [](sweet::Event * _event){
 			if(PD_Game::bgmTrack != nullptr){
 				PD_Game::bgmTrack->pause();
