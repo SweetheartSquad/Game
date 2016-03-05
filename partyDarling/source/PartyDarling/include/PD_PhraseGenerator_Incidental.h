@@ -5,5 +5,7 @@
 class PD_PhraseGenerator_Incidental : public PhraseGenerator {
 public:
 	PD_PhraseGenerator_Incidental();
-	std::string getLine();
+	std::string getLineNormal();
+	std::string getLineLost();
+	std::string getLineWon();
 };

@@ -13,6 +13,21 @@
     "Did you know that *fact*? *interjection*...",
     "I read online somewhere that *fakeFacts*."
   ],
+
+
+  "gloats":[
+    "*interjection*! That's what you get!",
+    "Ha! You're *emphasis* bad at this!"
+  ],
+
+
+  "mopes":[
+    "Aw shucks...",
+    "*interjection*..."
+  ],
+
+
+
   "emphasis": [
     "very",
     "really",
