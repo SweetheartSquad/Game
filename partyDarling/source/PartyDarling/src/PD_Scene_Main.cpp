@@ -1003,7 +1003,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 		Log::error("Room not found.");
 	}
 	currentRoom = houseGrid.at(key);
-
+	ST_LOG_INFO(currentRoom->definition->name);
 	// put the room into the scene/physics world
 	addRoom(currentRoom);
 
