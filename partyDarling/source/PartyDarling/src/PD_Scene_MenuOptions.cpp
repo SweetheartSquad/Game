@@ -19,48 +19,60 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 
 	uiLayer->addMouseIndicator();
 
-	PD_UI_VolumeControl * volumeControl = new PD_UI_VolumeControl(uiLayer->world, textShader);
-
 	VerticalLinearLayout * mainLayout = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(mainLayout);
 	mainLayout->setRationalWidth(1.f, uiLayer);
 	mainLayout->setRationalHeight(1.f, uiLayer);
 	mainLayout->horizontalAlignment = kCENTER;
-	mainLayout->verticalAlignment = kMIDDLE;
+	mainLayout->verticalAlignment = kTOP;
 	mainLayout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("main-menu-background-1")->texture);
 	mainLayout->setVisible(true);
-	mainLayout->setPaddingTop(0.48f);
+	mainLayout->setPaddingTop(0.45f);
+	mainLayout->setPaddingLeft(0.1f);
 	mainLayout->setBackgroundColour(1, 1, 1, 1);
 	mainLayout->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * subLayout = new VerticalLinearLayout(uiLayer->world);
 	mainLayout->addChild(subLayout);
-	subLayout->boxSizing = kCONTENT_BOX;
-	subLayout->setRationalWidth(1.0f, mainLayout);
-	subLayout->setRationalHeight(0.5f, mainLayout);
+	//subLayout->boxSizing = kCONTENT_BOX;
+	subLayout->setRationalWidth(0.6f, mainLayout);
+	subLayout->setRationalHeight(1.f, mainLayout);
 	subLayout->horizontalAlignment = kCENTER;
 	subLayout->verticalAlignment = kMIDDLE;
-	subLayout->setMarginTop(0.05f);
+	subLayout->setPadding(0.1f);
+	subLayout->setBackgroundColour(1.f, 0, 0, 0.5f);
 	
-	PD_UI_Text * controls = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
-	controls->setText("Controls");
-	controls->setMouseEnabled(true);
-	controls->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
-	controls->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-	controls->setRationalWidth(1.0f, subLayout);
-	controls->setRationalHeight(0.15f, subLayout);
-	controls->horizontalAlignment = kCENTER;
-	controls->verticalAlignment = kMIDDLE;
-	controls->onClick = [this](sweet::Event * _event){
-		game->switchScene("controls", false);
+	PD_UI_Text * howToPlay = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
+	howToPlay->setText("How To Play");
+	howToPlay->setMouseEnabled(true);
+	howToPlay->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
+	howToPlay->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
+	howToPlay->setRationalWidth(1.0f, subLayout);
+	howToPlay->setRationalHeight(0.15f, subLayout);
+	howToPlay->horizontalAlignment = kLEFT;
+	howToPlay->verticalAlignment = kMIDDLE;
+	howToPlay->onClick = [this](sweet::Event * _event){
+		game->switchScene("howToPlay", false);
 	};
 
+	HorizontalLinearLayout * audioContainer = new HorizontalLinearLayout(uiLayer->world);
+	audioContainer->horizontalAlignment = kCENTER;
+	audioContainer->verticalAlignment = kTOP;
+	audioContainer->setRationalWidth(1.f, subLayout);
+	audioContainer->setRationalHeight(0.65f, subLayout);
+
 	TextArea * audioLabel = new TextArea(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
+	audioContainer->addChild(audioLabel);
 	audioLabel->setText("Audio");
-	audioLabel->setRationalWidth(1.0f, subLayout);
-	audioLabel->setRationalHeight(0.15f, subLayout);
-	audioLabel->horizontalAlignment = kCENTER;
+	audioLabel->setRationalWidth(0.5f, audioContainer);
+	audioLabel->setRationalHeight(0.15f, audioContainer);
+	audioLabel->horizontalAlignment = kLEFT;
 	audioLabel->verticalAlignment = kMIDDLE;
+
+	PD_UI_VolumeControl * volumeControl = new PD_UI_VolumeControl(uiLayer->world, textShader);
+	audioContainer->addChild(volumeControl);
+	volumeControl->setRationalWidth(0.5f, audioContainer);
+	volumeControl->setRationalHeight(1.f, audioContainer);
 
 	PD_UI_Text * rsvp = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
 	rsvp->setText("RSVP");
@@ -69,18 +81,15 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	rsvp->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	rsvp->setRationalWidth(1.0f, subLayout);
 	rsvp->setRationalHeight(0.15f, subLayout);
-	rsvp->horizontalAlignment = kCENTER;
+	rsvp->horizontalAlignment = kLEFT;
 	rsvp->verticalAlignment = kMIDDLE;
 	rsvp->onClick = [this](sweet::Event * _event){
 		game->switchScene("menu", false);
 	};
 
-	subLayout->addChild(audioLabel);
-	subLayout->addChild(volumeControl);
+	subLayout->addChild(howToPlay);
+	subLayout->addChild(audioContainer);;
 	subLayout->addChild(rsvp);
-	
-	volumeControl->setRationalWidth(0.35f, mainLayout);
-	volumeControl->setRationalHeight(0.65f, mainLayout);
 	
 	subLayout->firstParent()->rotate(9, 0, 0, 1, kOBJECT);
 }

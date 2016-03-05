@@ -35,9 +35,9 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	
 	label->setText(_text);
 	label->setRationalWidth(1.f, container);
-	label->setRationalHeight(0.5f, container);
+	label->setRationalHeight(0.6f, container);
 	slider->setRationalWidth(1.f, container);
-	slider->setRationalHeight(0.5f, container);
+	slider->setRationalHeight(0.4f, container);
 
 	slider->thumb->background->meshTransform->scale(4)->translate(glm::vec3(-1,0,0));
 	slider->thumb->setBackgroundColour(1,1,1,1);

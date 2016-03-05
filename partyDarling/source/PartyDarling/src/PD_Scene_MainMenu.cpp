@@ -56,31 +56,6 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->setVisible(true);
 	textContainer->setMarginTop(0.05f);
 
-	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
-	textContainer->addChild(continueText);
-	continueText->setRationalWidth(1.f, textContainer);
-	continueText->setRationalHeight(0.2f, textContainer);
-	continueText->setMarginTop(0.05f);
-	continueText->setMarginBottom(0.05f);
-	continueText->enable();
-	continueText->horizontalAlignment = kCENTER;
-	continueText->setText("Continue");
-	if(!savedGame){
-		continueText->disable();
-	}
-
-	continueText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
-	continueText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-
-	continueText->onClick = [this](sweet::Event * _event){
-		auto it = game->scenes.find("game");
-		if(it == game->scenes.end()){
-			// load game from save file
-		}else{
-			game->switchScene("game", false);
-		}
-	};
-
 	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
 	joinPartyText->setRationalWidth(1.f, textContainer);
@@ -106,6 +81,31 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 			continueText->setTextColour(0.f, 0.f, 0.f);
 			joinPartyText->setText("Reset");
 			uiLayer->invalidateLayout();
+		}
+	};
+
+	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
+	textContainer->addChild(continueText);
+	continueText->setRationalWidth(1.f, textContainer);
+	continueText->setRationalHeight(0.2f, textContainer);
+	continueText->setMarginTop(0.05f);
+	continueText->setMarginBottom(0.05f);
+	continueText->enable();
+	continueText->horizontalAlignment = kCENTER;
+	continueText->setText("Continue");
+	if(!savedGame){
+		continueText->disable();
+	}
+
+	continueText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
+	continueText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
+
+	continueText->onClick = [this](sweet::Event * _event){
+		auto it = game->scenes.find("game");
+		if(it == game->scenes.end()){
+			// load game from save file
+		}else{
+			game->switchScene("game", false);
 		}
 	};
 
@@ -165,6 +165,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		continueText->enable();
 		continueText->setTextColour(0.f, 0.f, 0.f);
 		joinPartyText->setText("Reset");
+		hideConfirmBox();
 	};
 
 	
