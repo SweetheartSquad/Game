@@ -3,7 +3,7 @@
         "order": 0,
         "src": "scenarios/4b208fb6-919a-4d59-9390-60556541fee1.json",
         "type": 0
-    },
+    },*/
     {
         "order": 1,
         "src": "scenarios/cfbf7375-cdf5-4774-b530-67f1d95eb97b.json",
@@ -20,14 +20,14 @@
         "type": 0
     },
     {
-        "order": 0,
+        "order": 3,
         "src": "scenarios/dca3a5fa-e086-4b50-98cc-78efc56697d1.json",
-        "type": 0
+        "type": 2
     },
     {
-        "order": 0,
+        "order": 4,
         "src": "scenarios/4955b422-32d9-4f53-913b-64347ef8f1f6.json",
-        "type": 0
+        "type": 2
     },
     {
         "order": 0,
@@ -48,5 +48,30 @@
         "order": 0,
         "src": "scenarios/0513a095-4d53-41c4-9da8-a3148f5c51cf.json",
         "type": 0
-    }*/
+    },
+    {
+        "order": 0,
+        "src": "scenarios/blah.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Adventure_Omar.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Robot_Omar.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Ghost_Omar.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Mini-Scene_1.json",
+        "type": 0
+    }
 ]

@@ -605,18 +605,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
-	
+
+	Json::Value root;
+	Json::Reader reader;
+	std::string jsonLoaded = sweet::FileUtils::readFile("assets/scenarios.json");
+	bool parsingSuccessful = reader.parse(jsonLoaded, root);
+	if(!parsingSuccessful) {
+		ST_LOG_ERROR("Could not load scenarios listing");
+	}
+
 #if 0 /// !!!Remove once we can test this
 	Json::Value scenarioFile;
 
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
 	std::vector<Json::Value> allPlotDefs;
-
-	Json::Value root;
-	Json::Reader reader;
-	std::string jsonLoaded = sweet::FileUtils::readFile("assets/scenarios.json");
-	reader.parse(jsonLoaded, root);
 
 	for(auto scenarioDef : root) {
 		ScenarioType type = static_cast<ScenarioType>(scenarioDef.get("type", 0).asInt());
@@ -674,10 +677,15 @@ void PD_Scene_Main::pickScenarios(){
 	// random from static shuffle vector
 
 
+	for(auto scenarioDef : root) {
+		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef["src"].asString()));
+	}
+
+
 	// TODO: all of this
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
-	activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
+	//activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
 	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
 
 	// set event managers on selected scenarios as children of the global scenario
