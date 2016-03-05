@@ -202,6 +202,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 		}
+		player->wonLastYellingContest = _event->getIntData("win");
 	});
 	uiYellingContest->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
@@ -308,6 +309,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 		std::string curVal = scenario->variables->getStringData(name, "NO_VALUE_");
 		return curVal == desiredValue;
+	};
+
+	(*PD_ResourceManager::conditionImplementations)["wonLastYellingContest"] = [this](sweet::Event * _event){
+		//checks if the last yelling contest was won. If no yelling contests have occurred than false is returned
+		return player->wonLastYellingContest;
 	};
 
 	// setup event listeners
@@ -559,6 +565,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 				uiDialogue->setVisible(true);
 				uiBubble->enable();
 			}
+			player->wonLastYellingContest = _event->getIntData("win");
 		});
 	});
 
