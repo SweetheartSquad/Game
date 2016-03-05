@@ -399,6 +399,36 @@
       "src": "UI/npc_bubble.png",
       "nineSliced": true
     },
+    {
+      "id": "DISSCARD-BUBBLE",
+      "type": "texture",
+      "src": "UI/dissCard_bubble.png",
+      "nineSliced": true
+    },
+    {
+      "id": "DISSCARD-BG",
+      "type": "texture",
+      "src": "UI/dissCard_bg.png",
+      "generateMipmaps": false
+    },
+    {
+      "id": "DISSCARD-TRACK",
+      "type": "texture",
+      "src": "UI/dissCard_track.png",
+      "generateMipmaps": false
+    },
+    {
+      "id": "DISSCARD-FILL",
+      "type": "texture",
+      "src": "UI/dissCard_fill.png",
+      "generateMipmaps": false
+    },
+    {
+      "id": "DISSCARD-STAR",
+      "type": "texture",
+      "src": "UI/dissCard_star.png",
+      "generateMipmaps": false
+    },
 
 
     // GENERIC SLIDER
