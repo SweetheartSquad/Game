@@ -12,9 +12,9 @@ class Keyframe : public NodeUI {
 public:
 
 	PD_CharacterAnimationStep * step;
-	Person * character;
+	PD_Character * character;
 	
-	explicit Keyframe(BulletWorld * _world, Person * _character);
+	explicit Keyframe(BulletWorld * _world, PD_Character * _character);
 
 };
 
@@ -22,9 +22,9 @@ class Effector : public NodeUI {
 public:
 
 	bool active;
-	PersonLimbSolver * solver;
+	CharacterLimbSolver * solver;
 
-	explicit Effector(BulletWorld * _world, PersonLimbSolver * _solver);
+	explicit Effector(BulletWorld * _world, CharacterLimbSolver * _solver);
 	void update(Step * _step) override;
 	void setPos(glm::vec3 _mpos, glm::vec3 _pos);
 
@@ -33,7 +33,7 @@ public:
 class PD_Scene_Animation : public Scene {
 public:
 
-	Person * character;
+	PD_Character * character;
 
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * baseShader;

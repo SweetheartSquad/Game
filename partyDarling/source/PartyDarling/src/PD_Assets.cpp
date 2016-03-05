@@ -17,7 +17,7 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 	// parse external component file
 	if(_json.isMember("src")){	
 		if(_json["src"] == ""){
-			_json = Person::genRandomComponents()["components"][0];
+			_json = PD_Character::genRandomComponents()["components"][0];
 		}
 		Json::Reader reader;
 		bool parsingSuccesful = reader.parse(sweet::FileUtils::readFile("assets/textures/" + _json.get("src", "NO_SRC").asString()), componentJson);
@@ -72,7 +72,7 @@ AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
-		states.insert(std::make_pair(statesJson[i].get("id", "NO_ID").asString(), PersonState(statesJson[i])));
+		states.insert(std::make_pair(statesJson[i].get("id", "NO_ID").asString(), CharacterState(statesJson[i])));
 	}
 	Json::Value itemsJson = _json["items"];
 	for(Json::ArrayIndex i = 0; i < itemsJson.size(); ++i){

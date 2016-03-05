@@ -10,7 +10,7 @@
 // listing for an individual scenario
 class PD_Listing{
 public:
-	std::map<std::string, Person *> characters;
+	std::map<std::string, PD_Character *> characters;
 	std::map<std::string, PD_Item *> items;
 	std::map<std::string, Room *> rooms;
 	Scenario * scenario;
@@ -22,7 +22,7 @@ public:
 	PD_Listing(Scenario * _scenario);
 	~PD_Listing();
 
-	void addCharacter(Person * _person);
+	void addCharacter(PD_Character * _person);
 	void addItem(PD_Item * _item);
 	void addRoom(Room * _room);
 };

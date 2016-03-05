@@ -96,7 +96,7 @@ public:
 	// the character's in-game name
 	std::string name;
 	// states
-	std::map<std::string, PersonState> states;
+	std::map<std::string, CharacterState> states;
 	// initial state upon creation
 	std::string defaultState;
 	// items held by character on creation

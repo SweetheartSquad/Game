@@ -8,7 +8,7 @@
 class PD_UI_Dialogue : public virtual NodeUI, public virtual ConversationIterator{
 public:
 
-	Person * currentSpeaker;
+	PD_Character * currentSpeaker;
 
 	PD_UI_Bubble * uiBubble;
 	NodeUI_NineSliced * textBubble;

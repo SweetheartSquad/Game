@@ -40,7 +40,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	createRigidBody(0);
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::labScenario->getAsset("character", "Butler"));
-	Person * p = new Person(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 	addComponent(p);
 	characters.push_back(p);
 	PD_Listing * listing = new PD_Listing(PD_ResourceManager::labScenario);

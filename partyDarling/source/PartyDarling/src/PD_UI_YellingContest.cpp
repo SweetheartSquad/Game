@@ -672,7 +672,7 @@ void PD_UI_YellingContest::update(Step * _step){
 	}
 }
 
-void PD_UI_YellingContest::startNewFight(Person * _enemy){
+void PD_UI_YellingContest::startNewFight(PD_Character * _enemy){
 	// clear existing friendship
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));

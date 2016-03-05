@@ -3,7 +3,7 @@
 #include <Animation.h>
 #include <node/NodeUpdatable.h>
 
-class PersonRenderer;
+class CharacterRenderer;
 
 class PD_CharacterAnimationSet : public NodeUpdatable{
 public:	
@@ -14,7 +14,7 @@ public:
 	Animation <glm::vec2> * rightLeg;
 	Animation <glm::vec2> * body;
 
-	explicit PD_CharacterAnimationSet(PersonRenderer * _pr);
+	explicit PD_CharacterAnimationSet(CharacterRenderer * _pr);
 	~PD_CharacterAnimationSet();
 
 	virtual void update(Step * _step) override;

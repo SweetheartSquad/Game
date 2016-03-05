@@ -167,7 +167,7 @@ public:
 
 	Keyboard * keyboard;
 	
-	Person * enemy;
+	PD_Character * enemy;
 
 	bool modeOffensive;
 
@@ -184,7 +184,7 @@ public:
 
 	void incrementConfidence(float _value);
 
-	void startNewFight(Person * _enemy);
+	void startNewFight(PD_Character * _enemy);
 	void gameOver(bool _win);
 	void complete();
 	

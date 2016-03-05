@@ -326,7 +326,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		std::cout << characterName << "'s state changed to " << stateName << std::endl;
 
 		PD_Listing * listing = PD_Listing::listingsById[_event->getStringData("scenario")];
-		Person * character = listing->characters[characterName];
+		PD_Character * character = listing->characters[characterName];
 		if(character == nullptr){
 			Log::warn("Character not found in state change event");
 		}else{
@@ -559,7 +559,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		
 		// TODO - Configure addtional data once the yelling contest is set up for it
 		
-		Person * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
+		PD_Character * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
 		triggerYellingContest(enemy);
@@ -585,7 +585,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			ST_LOG_ERROR_V("Missing field on trigger hideCharacter");
 		}
 
-		Person * person = PD_Listing::listingsById[scenario]->characters[character];
+		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
 		
 		if(static_cast<bool>(visible)) {
 			person->enable();
@@ -952,7 +952,7 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	return res;
 }
 
-void PD_Scene_Main::triggerYellingContest(Person * _enemy) {
+void PD_Scene_Main::triggerYellingContest(PD_Character * _enemy) {
 	uiYellingContest->startNewFight(_enemy);
 	uiBubble->clear();
 	player->disable();
@@ -1656,7 +1656,7 @@ void PD_Scene_Main::updateSelection(){
 					me = item = nullptr;
 				}
 			}else{
-				Person * person = dynamic_cast<Person*>(me);
+				PD_Character * person = dynamic_cast<PD_Character*>(me);
 				if(person != nullptr && person->isEnabled()){
 					// hover over person
 					if(person != currentHoverTarget){

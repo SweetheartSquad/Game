@@ -332,7 +332,7 @@ Room * RoomBuilder::getRoom(){
 			Log::warn("Search FAILED; room object not placed.");
 			
 			// make sure we remove the object from the item or character list if it's there
-			if(dynamic_cast<Person *>(obj) != nullptr){
+			if(dynamic_cast<PD_Character *>(obj) != nullptr){
 				for(signed long int i = room->characters.size()-1; i >= 0; --i){
 					if(room->characters.at(i) == obj){
 						room->characters.erase(room->characters.begin() + i);
@@ -1156,7 +1156,7 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 }
 
 std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
-	std::vector<Person *> characters = getCharacters(true);
+	std::vector<PD_Character *> characters = getCharacters(true);
 	std::vector<PD_Item *> items = getItems(true);
 	std::vector<PD_Furniture *> furniture = getFurniture();
 	//std::vector<PD_Prop *> props = getProps();
@@ -1183,26 +1183,26 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	return objects;
 }
 
-std::vector<Person *> RoomBuilder::getCharacters(bool _random){
-	std::vector<Person*> characters;
+std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random){
+	std::vector<PD_Character*> characters;
 
 	if(!_random){
 		std::vector<AssetCharacter *> characterDefinitions = definition->getCharacters();
 	
 		for(auto def : characterDefinitions){
-			auto p = new Person(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader);
+			auto p = new PD_Character(world, def, MeshFactory::getPlaneMesh(3.f), characterShader, emoteShader);
 			p->room = room;
 			characters.push_back(p);
 		}
 	}else{
-		auto randPerson = Person::createRandomPerson(PD_ResourceManager::scenario, world, characterShader, emoteShader);
-		randPerson->room = room;
-		characters.push_back(randPerson);
+		auto randPD_Character = PD_Character::createRandomPD_Character(PD_ResourceManager::scenario, world, characterShader, emoteShader);
+		randPD_Character->room = room;
+		characters.push_back(randPD_Character);
 	}
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);
 	/*for(unsigned int i = 0; i < 1; ++i){
-		characters.push_back(new Person(world, MeshFactory::getPlaneMesh(3.f)));
+		characters.push_back(new PD_Character(world, MeshFactory::getPlaneMesh(3.f)));
 		
 		// stretching square planes for now
 		characters.at(i)->childTransform->scale(glm::vec3(1.f, ROOM_TILE * 1.2, 1.f));

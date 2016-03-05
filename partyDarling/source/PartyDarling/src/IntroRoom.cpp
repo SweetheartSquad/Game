@@ -40,7 +40,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	createRigidBody(0);
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::introScenario->getAsset("character", "Butler"));
-	Person * p = new Person(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 	addComponent(p);
 	characters.push_back(p);
 	PD_Listing * listing = new PD_Listing(PD_ResourceManager::introScenario);

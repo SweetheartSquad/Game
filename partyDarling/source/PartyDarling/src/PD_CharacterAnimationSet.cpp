@@ -3,7 +3,7 @@
 #include <PD_CharacterAnimationSet.h>
 #include <PD_Character.h>
 
-PD_CharacterAnimationSet::PD_CharacterAnimationSet(PersonRenderer* _pr):
+PD_CharacterAnimationSet::PD_CharacterAnimationSet(CharacterRenderer* _pr):
 	leftArm(new Animation<glm::vec2>(&_pr->solverArmL->target)), 
 	rightArm(new Animation<glm::vec2>(&_pr->solverArmR->target)), 
 	leftLeg(new Animation<glm::vec2>(&_pr->solverLegL->target)), 

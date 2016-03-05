@@ -22,34 +22,34 @@
 class Scenario;
 class PD_CharacterAnimationStep;
 class Conversation;
-class PersonRenderer;
+class CharacterRenderer;
 class AssetCharacter;
 class CharacterComponentDefinition;
 class PD_Palette;
 
-class PersonComponent : public Sprite{
+class CharacterComponent : public Sprite{
 public:
 	glm::vec2 in;
 	std::vector<glm::vec2> out;
-	std::vector<PersonComponent *> connections;
+	std::vector<CharacterComponent *> connections;
 	
 	bool flipped;
 
 	glm::vec2 getOut(unsigned long int _index);
 
-	PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped);
+	CharacterComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped);
 };
 
-class PersonLimbSolver : public IkChain_CCD{
+class CharacterLimbSolver : public IkChain_CCD{
 public:
-	std::vector<PersonComponent *> components;
+	std::vector<CharacterComponent *> components;
 
-	PersonLimbSolver(glm::vec2 _pos);
+	CharacterLimbSolver(glm::vec2 _pos);
 
-	void addComponent(PersonComponent * _component, float _weight = 1.f);
+	void addComponent(CharacterComponent * _component, float _weight = 1.f);
 };
 
-class PersonState : public Node{
+class CharacterState : public Node{
 public:
 	// id of this state
 	std::string id;
@@ -59,27 +59,27 @@ public:
 	// if the character is spoken to while in this state
 	std::string conversation;
 	std::string animation;
-	PersonState(Json::Value _json);
+	CharacterState(Json::Value _json);
 };
 
-class PersonRenderer : public Entity{
+class CharacterRenderer : public Entity{
 public:
 	float timer;
 
 	bool talking;
 
-	PersonLimbSolver * solverArmR;
-	PersonLimbSolver * solverArmL;
-	PersonLimbSolver * solverLegR;
-	PersonLimbSolver * solverLegL;
-	PersonLimbSolver * solverBod;
-	std::vector<PersonLimbSolver *> solvers;
-	PersonLimbSolver * currentSolver;
+	CharacterLimbSolver * solverArmR;
+	CharacterLimbSolver * solverArmL;
+	CharacterLimbSolver * solverLegR;
+	CharacterLimbSolver * solverLegL;
+	CharacterLimbSolver * solverBod;
+	std::vector<CharacterLimbSolver *> solvers;
+	CharacterLimbSolver * currentSolver;
 
 	float talkHeight;
 	Animation<float> * talk;
 	std::vector<Transform *> joints;
-	PersonComponent
+	CharacterComponent
 		* pelvis,
 		* torso,
 
@@ -122,8 +122,8 @@ public:
 	virtual void setEmote(std::string _id, float _duration);
 	virtual void setEmoteNone();
 
-	PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder);
-	~PersonRenderer();
+	CharacterRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder);
+	~CharacterRenderer();
 
 	void setShader(Shader * _shader, bool _default) const;
 
@@ -131,12 +131,12 @@ public:
 	// creates a parent-child relationship between two components
 	// uses one of the connection slots on _from
 	// if behind, _to moves backward; otherwise, _to moves forward
-	void connect(PersonComponent * _from, PersonComponent * _to, bool _behind = false);
+	void connect(CharacterComponent * _from, CharacterComponent * _to, bool _behind = false);
 
 	virtual void update(Step * _step) override;
 };
 
-class Person : public RoomObject {
+class PD_Character : public RoomObject {
 public:
 
 	int defense;
@@ -145,7 +145,7 @@ public:
 	int sass;
 
 	// the character's current state
-	const PersonState * state;
+	const CharacterState * state;
 	
 	// The room the character is in
 	Room * room;
@@ -154,7 +154,7 @@ public:
 
 	std::vector<std::string> items;
 
-	Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
+	PD_Character(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
 
 	//virtual void update(Step * _step) override;
 
@@ -166,9 +166,9 @@ public:
 	bool isEnabled();
 
 	
-	PersonRenderer * pr;
+	CharacterRenderer * pr;
 
-	static Person * createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
+	static PD_Character * createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);
 	static Json::Value genRandomComponents();
 
 private:

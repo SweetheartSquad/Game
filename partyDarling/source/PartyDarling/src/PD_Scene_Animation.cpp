@@ -13,7 +13,7 @@
 #include <Keyboard.h>
 
 
-Keyframe::Keyframe(BulletWorld * _bulletWorld, Person * _character) : 
+Keyframe::Keyframe(BulletWorld * _bulletWorld, PD_Character * _character) : 
 	NodeUI(_bulletWorld),
 	character(_character)
 {
@@ -25,7 +25,7 @@ Keyframe::Keyframe(BulletWorld * _bulletWorld, Person * _character) :
 	mouseEnabled = true;
 }
 
-Effector::Effector(BulletWorld* _world, PersonLimbSolver * _solver) : NodeUI(_world) {
+Effector::Effector(BulletWorld* _world, CharacterLimbSolver * _solver) : NodeUI(_world) {
 	solver = _solver;
 	mouseEnabled = true;
 	active = false;
@@ -89,7 +89,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 
-	character = Person::createRandomPerson(PD_ResourceManager::scenario, uiLayer->world, characterShader, baseShader);
+	character = PD_Character::createRandomPD_Character(PD_ResourceManager::scenario, uiLayer->world, characterShader, baseShader);
 	character->pr->randomAnimations = false;
 	uiLayer->childTransform->addChild(character);
 		

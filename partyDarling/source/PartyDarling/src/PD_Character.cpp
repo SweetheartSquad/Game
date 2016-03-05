@@ -17,12 +17,12 @@
 #include <sweet/Input.h>
 #include <PD_Listing.h>
 
-Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShader, Anchor_t _anchor):
+PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
 	state(&_definition->states.at(_definition->defaultState)),
 	room(nullptr),
 	definition(_definition),
-	pr(new PersonRenderer(_world, _definition, _shader, _emoticonShader)),
+	pr(new CharacterRenderer(_world, _definition, _shader, _emoticonShader)),
 	enabled(true)
 {
 	defense  = definition->defense;
@@ -55,12 +55,12 @@ Person::Person(BulletWorld * _world, AssetCharacter * const _definition, MeshInt
 	items = definition->items;
 }
 
-void Person::setShader(Shader * _shader, bool _configureDefault){
+void PD_Character::setShader(Shader * _shader, bool _configureDefault){
 	RoomObject::setShader(_shader, _configureDefault);
 	pr->setShader(_shader, _configureDefault);
 }
 
-void Person::update(Step * _step){
+void PD_Character::update(Step * _step){
 	if(enabled) {
 		int flags = body->getCollisionFlags();
 		flags |= btCollisionObject::CF_STATIC_OBJECT;
@@ -79,7 +79,7 @@ void Person::update(Step * _step){
 	RoomObject::update(_step);
 }
 
-Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
+PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 	Json::Value charDef= genRandomComponents();
 	
 	std::string id = std::to_string(sweet::NumberUtils::randomFloat(100000, 999999));
@@ -98,14 +98,14 @@ Person * Person::createRandomPerson(Scenario * _scenario, BulletWorld * _world, 
 	AssetCharacter * newChar = AssetCharacter::create(charDef, _scenario);
 	_scenario->assets["character"][id] = newChar;
 
-	Person * p = new Person(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
+	PD_Character * p = new PD_Character(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
 	PD_Listing::listings[_scenario]->characters[id] = p;
 
 	return p;
 }
 
-Json::Value Person::genRandomComponents(){
+Json::Value PD_Character::genRandomComponents(){
 	Json::Value root;
 	Json::Value pelvis;
 	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
@@ -129,20 +129,20 @@ Json::Value Person::genRandomComponents(){
 	return root;
 }
 
-void Person::disable(){
+void PD_Character::disable(){
 	enabled = false;
 }
 
-void Person::enable(){
+void PD_Character::enable(){
 	enabled = true;
 }
 
-bool Person::isEnabled(){
+bool PD_Character::isEnabled(){
 	return enabled;
 }
 
 
-PersonComponent::PersonComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
+CharacterComponent::CharacterComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
 	Sprite(_shader),
 	flipped(_flipped)
 {
@@ -180,23 +180,23 @@ PersonComponent::PersonComponent(CharacterComponentDefinition * const _definitio
 	mesh->setScaleMode(GL_NEAREST);
 }
 
-glm::vec2 PersonComponent::getOut(unsigned long int _index){
+glm::vec2 CharacterComponent::getOut(unsigned long int _index){
 	return (out.size() > 0 ? out.at(_index) : glm::vec2(0,0)) - in;
 }
 
-PersonLimbSolver::PersonLimbSolver(glm::vec2 _pos) :
+CharacterLimbSolver::CharacterLimbSolver(glm::vec2 _pos) :
 	IkChain_CCD(_pos)
 {
 }
 
-void PersonLimbSolver::addComponent(PersonComponent * _component, float _weight){
+void CharacterLimbSolver::addComponent(CharacterComponent * _component, float _weight){
 	AnimationJoint * j = new AnimationJoint(_component->getOut(0));
 	jointsLocal.back()->childTransform->addChild(_component);
 	addJointToChain(j);
 	components.push_back(_component);
 }
 
-PersonState::PersonState(Json::Value _json) :
+CharacterState::CharacterState(Json::Value _json) :
 	id(_json.get("id", "NO_ID").asString()),
 	name(_json.get("name", "NO_NAME").asString()),
 	conversation(_json.get("convo", "NO_CONVO").asString()),
@@ -204,7 +204,7 @@ PersonState::PersonState(Json::Value _json) :
 {
 }
 
-PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
+CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
 	paletteTex(new PD_Palette(true)),
 	timer(0),
 	randomAnimations(false),
@@ -248,42 +248,42 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 		* footRDef			= &forelegRDef->components.at(0);
 
 
-	pelvis = new PersonComponent(pelvisDef, _shader, paletteTex, false);
+	pelvis = new CharacterComponent(pelvisDef, _shader, paletteTex, false);
 
-	torso = new PersonComponent(torsoDef, _shader, paletteTex, false);
+	torso = new CharacterComponent(torsoDef, _shader, paletteTex, false);
 
-	jaw = new PersonComponent(jawDef, _shader, paletteTex, false);
-	head = new PersonComponent(headDef, _shader, paletteTex, false);
+	jaw = new CharacterComponent(jawDef, _shader, paletteTex, false);
+	head = new CharacterComponent(headDef, _shader, paletteTex, false);
 
-	nose = new PersonComponent(noseDef, _shader, paletteTex, false);
-	eyebrowL = new PersonComponent(eyebrowLDef, _shader, paletteTex, false);
-	eyebrowR = new PersonComponent(eyebrowRDef, _shader, paletteTex, true);
-	eyeL = new PersonComponent(eyeLDef, _shader, paletteTex, false);
-	eyeR = new PersonComponent(eyeRDef, _shader, paletteTex, true);
-	pupilL = new PersonComponent(pupilLDef, _shader, paletteTex, false);
-	pupilR = new PersonComponent(pupilRDef, _shader, paletteTex, false);
+	nose = new CharacterComponent(noseDef, _shader, paletteTex, false);
+	eyebrowL = new CharacterComponent(eyebrowLDef, _shader, paletteTex, false);
+	eyebrowR = new CharacterComponent(eyebrowRDef, _shader, paletteTex, true);
+	eyeL = new CharacterComponent(eyeLDef, _shader, paletteTex, false);
+	eyeR = new CharacterComponent(eyeRDef, _shader, paletteTex, true);
+	pupilL = new CharacterComponent(pupilLDef, _shader, paletteTex, false);
+	pupilR = new CharacterComponent(pupilRDef, _shader, paletteTex, false);
 
-	armR = new PersonComponent(armRDef, _shader, paletteTex, true);
-	forearmR = new PersonComponent(forearmRDef, _shader, paletteTex, true);
-	handR = new PersonComponent(handRDef, _shader, paletteTex, true);
+	armR = new CharacterComponent(armRDef, _shader, paletteTex, true);
+	forearmR = new CharacterComponent(forearmRDef, _shader, paletteTex, true);
+	handR = new CharacterComponent(handRDef, _shader, paletteTex, true);
 
-	armL = new PersonComponent(armLDef, _shader, paletteTex, false);
-	forearmL = new PersonComponent(forearmLDef, _shader, paletteTex, false);
-	handL = new PersonComponent(handLDef, _shader, paletteTex, false);
+	armL = new CharacterComponent(armLDef, _shader, paletteTex, false);
+	forearmL = new CharacterComponent(forearmLDef, _shader, paletteTex, false);
+	handL = new CharacterComponent(handLDef, _shader, paletteTex, false);
 
-	legR = new PersonComponent(legRDef, _shader, paletteTex, true);
-	forelegR = new PersonComponent(forelegRDef, _shader, paletteTex, true);
-	footR = new PersonComponent(footRDef, _shader, paletteTex, true);
+	legR = new CharacterComponent(legRDef, _shader, paletteTex, true);
+	forelegR = new CharacterComponent(forelegRDef, _shader, paletteTex, true);
+	footR = new CharacterComponent(footRDef, _shader, paletteTex, true);
 					
-	legL = new PersonComponent(legLDef, _shader, paletteTex, false);
-	forelegL = new PersonComponent(forelegLDef, _shader, paletteTex, false);
-	footL = new PersonComponent(footLDef, _shader, paletteTex, false);
+	legL = new CharacterComponent(legLDef, _shader, paletteTex, false);
+	forelegL = new CharacterComponent(forelegLDef, _shader, paletteTex, false);
+	footL = new CharacterComponent(footLDef, _shader, paletteTex, false);
 
-	solverArmR = new PersonLimbSolver(torso->getOut(1));
-	solverArmL = new PersonLimbSolver(torso->getOut(2));
-	solverLegR = new PersonLimbSolver(pelvis->getOut(1));
-	solverLegL = new PersonLimbSolver(pelvis->getOut(2));
-	solverBod = new PersonLimbSolver(glm::vec2(0));
+	solverArmR = new CharacterLimbSolver(torso->getOut(1));
+	solverArmL = new CharacterLimbSolver(torso->getOut(2));
+	solverLegR = new CharacterLimbSolver(pelvis->getOut(1));
+	solverLegL = new CharacterLimbSolver(pelvis->getOut(2));
+	solverBod = new CharacterLimbSolver(glm::vec2(0));
 
 	// implicitly create skeletal structure by adding components in the correct order
 	solverArmR->addComponent(armR);
@@ -360,14 +360,14 @@ PersonRenderer::PersonRenderer(BulletWorld * _world, AssetCharacter * const _def
 	emote->firstParent()->scale(1/CHARACTER_SCALE);
 }
 
-PersonRenderer::~PersonRenderer(){
+CharacterRenderer::~CharacterRenderer(){
 	paletteTex->decrementAndDelete();
 	delete currentAnimation;
 	delete emoteTimeout;
 	delete talk;
 }
 
-void PersonRenderer::setAnimation(std::string _name) {
+void CharacterRenderer::setAnimation(std::string _name) {
 	if(_name == "RANDOM"){
 		auto it = PD_ResourceManager::characterAnimations.begin();
 		int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
@@ -382,7 +382,7 @@ void PersonRenderer::setAnimation(std::string _name) {
 	}
 }
 
-void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
+void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
 	delete currentAnimation;
 	currentAnimation = new PD_CharacterAnimationSet(this);
 	
@@ -403,7 +403,7 @@ void PersonRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps)
 	}
 }
 
-void PersonRenderer::setEmote(std::string _id, float _duration) {
+void CharacterRenderer::setEmote(std::string _id, float _duration) {
 	delete emoteTimeout;
 	emoteTimeout = nullptr;
 
@@ -428,11 +428,11 @@ void PersonRenderer::setEmote(std::string _id, float _duration) {
 	}
 }
 
-void PersonRenderer::setEmoteNone() {
+void CharacterRenderer::setEmoteNone() {
 	setEmote("NONE", -1.f);
 }
 
-void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, bool _behind){
+void CharacterRenderer::connect(CharacterComponent * _from, CharacterComponent * _to, bool _behind){
 	joints.push_back(_from->childTransform->addChild(_to));
 	joints.back()->translate(
 		_from->out.at(_from->connections.size()).x - _from->in.x,
@@ -441,7 +441,7 @@ void PersonRenderer::connect(PersonComponent * _from, PersonComponent * _to, boo
 	_from->connections.push_back(_to);
 }
 
-void PersonRenderer::setShader(Shader * _shader, bool _default) const {
+void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 	pelvis->setShader(_shader, _default);
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);
@@ -472,7 +472,7 @@ void PersonRenderer::setShader(Shader * _shader, bool _default) const {
 	footR->setShader(_shader, _default);
 }
 
-void PersonRenderer::update(Step * _step){
+void CharacterRenderer::update(Step * _step){
 	
 	
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){

@@ -31,7 +31,7 @@ class Room;
 class RoomObject;
 class PD_Furniture;
 class PD_Prop;
-class Person;
+class PD_Character;
 class Item;
 class Shader;
 class Texture;
@@ -121,7 +121,7 @@ public:
 	// Create random room objects, including specified objects
 	std::vector<RoomObject *> getSpecifiedObjects();
 	std::vector<RoomObject *> getRandomObjects();
-	std::vector<Person *> getCharacters(bool _random = false);
+	std::vector<PD_Character *> getCharacters(bool _random = false);
 	std::vector<PD_Furniture *> getFurniture();
 	std::vector<PD_Item *> getItems(bool _random = false);
 	std::vector<PD_Prop *> getProps();

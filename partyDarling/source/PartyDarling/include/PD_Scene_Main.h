@@ -124,7 +124,7 @@ public:
 	// checks the cells directly above, below, and beside _pos, and returns those of which are within the house's bounds and haven't been used yet
 	std::vector<glm::ivec2> getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize);
 	// trigger a yelling contest with another character
-	void triggerYellingContest(Person * _enemy);
+	void triggerYellingContest(PD_Character * _enemy);
 
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border
