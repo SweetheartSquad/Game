@@ -142,28 +142,9 @@ RoomBuilder::~RoomBuilder(){
 
 Room * RoomBuilder::getRoom(){
 	room = new Room(world, baseShader, definition);
-	
-	
 
-	// create floor/ceiling as static bullet planes
-	room->floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	room->floor->setColliderAsStaticPlane(0, 1, 0, 0);
-	room->floor->createRigidBody(0);
-	room->floor->body->setFriction(1);
-	room->childTransform->addChild(room->floor);
-	room->floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	room->floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	room->floor->mesh->setScaleMode(GL_NEAREST);
+	// texture floor and ceiling planes
 	room->floor->mesh->pushTexture2D(getFloorTex());
-
-	room->ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), baseShader);
-	room->ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
-	room->ceiling->createRigidBody(0);
-	room->ceiling->body->setFriction(1);
-	room->childTransform->addChild(room->ceiling);
-	room->ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
-	room->ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
-	room->ceiling->mesh->setScaleMode(GL_NEAREST);
 	room->ceiling->mesh->pushTexture2D(getCeilTex());
 
 	thresh = 5;

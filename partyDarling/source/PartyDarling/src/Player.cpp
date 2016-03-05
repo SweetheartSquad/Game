@@ -20,10 +20,11 @@ Player::Player(BulletWorld * _bulletWorld) :
 	jumpSpeed(5.f),
 	// collider
 	mass(1.f),
-	sass(0),
-	strength(0),
 	defense(0),
-	insight(0)
+	insight(0),
+	strength(0),
+	sass(0),
+	wonLastYellingContest(false)
 {
 	// override sounds
 	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;
@@ -57,16 +58,19 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	// remove y portion of direction vectors to avoid flying
 	forward.y = 0;
 	right.y = 0;
+	
+	forward = glm::normalize(forward);
+	right = glm::normalize(right);
 
 	// walking
 	glm::vec3 res(0);
-	if (keyboard.keyDown(GLFW_KEY_W)){
+	if (keyboard.keyDown(GLFW_KEY_W) || keyboard.keyDown(GLFW_KEY_UP)){
 		res += forward;
-	}if (keyboard.keyDown(GLFW_KEY_S)){
+	}if (keyboard.keyDown(GLFW_KEY_S) || keyboard.keyDown(GLFW_KEY_DOWN)){
 		res -= forward;
-	}if (keyboard.keyDown(GLFW_KEY_A)){
+	}if (keyboard.keyDown(GLFW_KEY_A) || keyboard.keyDown(GLFW_KEY_LEFT)){
 		res -= right;
-	}if (keyboard.keyDown(GLFW_KEY_D)){
+	}if (keyboard.keyDown(GLFW_KEY_D) || keyboard.keyDown(GLFW_KEY_RIGHT)){
 		res += right;
 	}
 	/*if(joystick != nullptr){
@@ -84,7 +88,7 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	res.z = glm::max(-1.f, glm::min(1.f, res.z));
 	
 	//sprinting
-	isSprinting = keyboard.keyDown(GLFW_KEY_LEFT_SHIFT);
+	isSprinting = keyboard.keyDown(GLFW_KEY_LEFT_SHIFT) || keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT);
 
 	// jumping
 	if(isGrounded){

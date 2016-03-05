@@ -10,12 +10,10 @@
 
 PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	Scene(_game),
-	textShader(new ComponentShaderText(true)),
+	textShader(new ComponentShaderText(false)),
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("options-menu-font")->font)
 {
-	++textShader->referenceCount;
-
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
 
@@ -43,7 +41,6 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	subLayout->horizontalAlignment = kCENTER;
 	subLayout->verticalAlignment = kMIDDLE;
 	subLayout->setMarginTop(0.05f);
-	subLayout->setBackgroundColour(1.f, 0, 0, 0.5f);
 	
 	PD_UI_Text * controls = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
 	controls->setText("Controls");
@@ -84,15 +81,14 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	
 	volumeControl->setRationalWidth(0.35f, mainLayout);
 	volumeControl->setRationalHeight(0.65f, mainLayout);
-
+	
 	subLayout->firstParent()->rotate(9, 0, 0, 1, kOBJECT);
 }
 
 PD_Scene_MenuOptions::~PD_Scene_MenuOptions() {
 	deleteChildTransform();
 	delete uiLayer;
-
-	textShader->decrementAndDelete();
+	delete textShader;
 }
 
 void PD_Scene_MenuOptions::update(Step* _step) {

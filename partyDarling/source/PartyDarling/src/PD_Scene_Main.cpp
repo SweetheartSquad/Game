@@ -39,20 +39,30 @@
 #include <PD_Door.h>
 #include <PD_Prop.h>
 
+#include <IntroRoom.h>
+#include <LabRoom.h>
+
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
+	panSpeed(20.f),
+	panLeft(false),
+	panRight(false),
+	trackSpeed(0.1f),
+	trackLeft(false),
+	trackRight(false),
+	plotPosition(kBEGINNING),
 	toonShader(new ComponentShaderBase(false)),
-	uiLayer(new UILayer(0,0,0,0)),
-	characterShader(new ComponentShaderBase(false)),
-	emoteShader(new ComponentShaderBase(false)),
-	bulletWorld(new BulletWorld()),
-	debugDrawer(nullptr),
-	selectedItem(nullptr),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
+	uiLayer(new UILayer(0,0,0,0)),
+	bulletWorld(new BulletWorld()),
+	debugDrawer(nullptr),
+	selectedItem(nullptr),
+	characterShader(new ComponentShaderBase(false)),
+	emoteShader(new ComponentShaderBase(false)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
@@ -61,15 +71,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	transitionTarget(1.f),
 	currentRoom(nullptr),
 	currentHousePosition(0),
-	panSpeed(20.f),
-	panLeft(false),
-	panRight(false),
-	trackSpeed(0.1f),
-	trackLeft(false),
-	trackRight(false),
 	carriedProp(nullptr),
-	carriedPropDistance(0),
-	plotPosition(kBEGINNING)
+	carriedPropDistance(0)
 {
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -151,7 +154,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world);
+	uiInventory = new PD_UI_Inventory(uiLayer->world, uiBubble->textShader);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
@@ -178,6 +181,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// Handle case where a yelling contest is the last trigger in a dialogue
 		if(!uiYellingContest->isEnabled()){
 			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
 		}
 	});
 	
@@ -200,6 +205,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 		}
+		player->wonLastYellingContest = _event->getIntData("win");
 	});
 	uiYellingContest->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
@@ -306,6 +312,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 		std::string curVal = scenario->variables->getStringData(name, "NO_VALUE_");
 		return curVal == desiredValue;
+	};
+
+	(*PD_ResourceManager::conditionImplementations)["wonLastYellingContest"] = [this](sweet::Event * _event){
+		//checks if the last yelling contest was won. If no yelling contests have occurred than false is returned
+		return player->wonLastYellingContest;
 	};
 
 	// setup event listeners
@@ -557,6 +568,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 				uiDialogue->setVisible(true);
 				uiBubble->enable();
 			}
+			player->wonLastYellingContest = _event->getIntData("win");
 		});
 	});
 
@@ -581,6 +593,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			person->disable();
 		}
 	});
+
+	// Load the save file
+	loadSave();
 
 	// build house
 	pickScenarios();
@@ -683,6 +698,11 @@ void PD_Scene_Main::bundleScenarios(){
 
 
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
+	Room * introRoom = _rooms.back();
+	_rooms.pop_back();
+	Room * labRoom = _rooms.back();
+	_rooms.pop_back();
+
 	int numRooms = _rooms.size();
 	// separate rooms into a list of unlocked and locked
 	sweet::ShuffleVector<Room *> unlockedRooms, lockedRooms;
@@ -698,7 +718,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// generate a random rectangle which has enough cells for each room
 	unsigned long int houseSize;
-	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms));
+	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms)) + 2;
 	//houseSize.y = glm::max(2, numRooms/houseSize.x);
 	while(pow(houseSize,2) < numRooms){
 		++houseSize;
@@ -745,7 +765,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
-	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = unlockedRooms.pop(true); // TODO: replace this with the actual starting room
+	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom; // TODO: replace this with the actual starting room
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
 	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
@@ -784,6 +804,20 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
+
+	// repeat for the lab, ensuring it is the last thing placed
+	glm::ivec2 cell;
+	if(openCells.size() > 0){
+		cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+	}else if(blockedPositions.size() > 0){
+		cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+	}else{
+		Log::error("Room can't be placed!");
+	}
+	allCells[std::make_pair(cell.x, cell.y)] = false;
+	houseGrid[std::make_pair(cell.x, cell.y)] = labRoom;
+
+
 	
 	// loop through all of the rooms and remove doors which don't lead anywhere
 	for(auto c : houseGrid){
@@ -887,13 +921,6 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			g->showLoading((float)++progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			
-			// setup the first parents, but don't actually add anything to the scene yet
-			Transform * t = new Transform();
-			t->addChild(room, false);
-			for(unsigned int i = 0; i < room->components.size(); ++i){
-				t = new Transform();
-				t->addChild(room->components.at(i), false);
-			}
 			// run the physics simulation for a few seconds to let things settle
 			Log::info("Letting the bodies hit the floor...");
 			Step s;
@@ -915,6 +942,13 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			res.push_back(room);
 		}
 	}
+
+
+	// construct static rooms (into room, lab room)
+	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+
+
 	return res;
 }
 
@@ -944,11 +978,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	
 	// clear out the old room's stuff
 	if(currentRoom != nullptr){
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
-		}
-		childTransform->removeChild(currentRoom->firstParent());
-		currentRoom->removePhysics();
+		removeRoom(currentRoom);
 	}
 
 
@@ -967,11 +997,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	currentRoom = houseGrid.at(key);
 
 	// put the room into the scene/physics world
-	currentRoom->addPhysics();
-	childTransform->addChild(currentRoom->firstParent(), false);
-	for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-		childTransform->addChild(currentRoom->components.at(i)->firstParent(), false);
-	}
+	addRoom(currentRoom);
 
 
 	PD_Door::Door_t doorToEnter;
@@ -1035,19 +1061,11 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 PD_Scene_Main::~PD_Scene_Main(){
 	// clear out the current room's stuff
 	if(currentRoom != nullptr){
-		for(unsigned int i = 0; i < currentRoom->components.size(); ++i){
-			childTransform->removeChild(currentRoom->components.at(i)->firstParent());
-		}
-		childTransform->removeChild(currentRoom->firstParent());
-		currentRoom->removePhysics();
+		removeRoom(currentRoom);
 	}
 	// put every room into scene/physics world so that they all get deleted along with the scene
 	for(auto r : houseGrid){
-		r.second->addPhysics();
-		childTransform->addChild(r.second->firstParent(), false);
-		for(unsigned int i = 0; i < r.second->components.size(); ++i){
-			childTransform->addChild(r.second->components.at(i)->firstParent(), false);
-		}
+		addRoom(r.second);
 	}
 
 	deleteChildTransform();
@@ -1065,9 +1083,36 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete bulletWorld;
 	delete toonShader;
 	delete characterShader;
+	delete emoteShader;
 
 	delete toonRamp;
 }
+
+
+
+void PD_Scene_Main::removeRoom(Room * _room){
+	for(unsigned int i = 0; i < _room->components.size(); ++i){
+		childTransform->removeChild(_room->components.at(i)->firstParent());
+	}
+	childTransform->removeChild(_room->firstParent());
+	_room->removePhysics();
+}
+void PD_Scene_Main::addRoom(Room * _room){
+	_room->addPhysics();
+	if(_room->parents.size() > 0){
+		childTransform->addChild(_room->firstParent(), false);
+		for(unsigned int i = 0; i < _room->components.size(); ++i){
+			childTransform->addChild(_room->components.at(i)->firstParent(), false);
+		}
+	}else{
+		childTransform->addChild(_room);
+		for(unsigned int i = 0; i < _room->components.size(); ++i){
+			childTransform->addChild(_room->components.at(i));
+		}
+	}
+}
+
+
 
 void PD_Scene_Main::update(Step * _step){
 	// panning
@@ -1124,15 +1169,25 @@ void PD_Scene_Main::update(Step * _step){
 			glm::vec3 d = glm::normalize(headPos - camPos);
 		
 			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+			float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
 			float pDif = pitch - player->playerCamera->pitch;
-
+			float yDif = yaw - player->playerCamera->yaw;
+			
 			while(pDif > 180){
 				pDif -= 360;
 			}while(pDif < -180){
 				pDif += 360;
 			}
+			while(yDif > 180){
+				yDif -= 360;
+			}while(yDif < -180){
+				yDif += 360;
+			}
 			if(glm::abs(pDif) > FLT_EPSILON){
 				player->playerCamera->pitch += pDif*0.05f;
+			}
+			if(glm::abs(yDif) > FLT_EPSILON){
+				player->playerCamera->yaw += yDif*0.05f;
 			}
 		}
 	}
@@ -1313,169 +1368,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	// mouse interaction with world objects
-	if(player->isEnabled()){
-		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
-		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
-		
-		if(me != nullptr && uiInventory->getSelected() == nullptr){
-			PD_Item * item = dynamic_cast<PD_Item *>(me);
-			if(item != nullptr){
-				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
-					// hover over item
-					if(item != currentHoverTarget){
-						// if we aren't already looking at the item,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						if(item->definition->collectable){
-							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
-								// remove the item from the scene
-								Transform * toDelete = item->firstParent();
-
-								currentRoom->removeComponent(item);
-
-								toDelete->firstParent()->removeChild(toDelete);
-								toDelete->removeChild(item);
-								delete toDelete;
-								delete item->shape;
-								item->shape = nullptr;
-								bulletWorld->world->removeRigidBody(item->body);
-								item->body = nullptr;
-
-								// pickup the item
-								uiInventory->pickupItem(item);
-								currentRoom->removeItem(item);
-
-								// run item pickup triggers
-								item->triggerPickup();
-
-								uiBubble->clear();
-							});
-						}else{
-							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
-								std::cout << "hey gj you interacted" << std::endl;
-
-								// run item interact triggers
-								item->triggerInteract();
-							});
-						}
-					}
-				}else{
-					// we hovered over an item, but it wasn't pixel-perfect
-					me = item = nullptr;
-				}
-			}else{
-				Person * person = dynamic_cast<Person*>(me);
-				if(person != nullptr && person->isEnabled()){
-					// hover over person
-					if(person != currentHoverTarget){
-						player->playerCamera->lookAtSpot = person->pr->head->firstParent()->getWorldPos();
-						// if we aren't already looking at the person,
-						// clear out the bubble UI and add the relevant options
-						uiBubble->clear();
-						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
-							std::string c = person->state->conversation;
-							if(c == "NO_CONVO"){
-								// incidental conversation
-								Json::Value dialogue;
-								dialogue["text"].append(incidentalPhraseGenerator.getLine());
-								dialogue["speaker"] = person->definition->id;
-								Json::Value root;
-								root["dialogue"] = Json::Value();
-								root["dialogue"].append(dialogue);
-
-								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
-								uiDialogue->startEvent(tempConvo, true);
-								player->disable();
-							}else{
-								// start a proper conversation
-								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
-								player->disable();
-							}
-						});
-						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
-							triggerYellingContest(person);
-							// TODO: pass in the character that's fighting here
-						});
-						// if we have an item, also add the "use on" option
-						/*if(uiInventory->getSelected() != nullptr){
-							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
-								uiBubble->clear();
-								player->disable();
-								// TODO: pass in the character that's interacting with the item here
-							});
-						}*/
-					}
-				}else{
-					// prop carrying selection
-					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
-					if(prop != nullptr){
-						if(mouse->leftJustPressed()){
-							carriedProp = prop;
-							carriedPropDistance = glm::distance(camPos, carriedProp->meshTransform->getWorldPos());
-							carriedProp->body->setDamping(0.8f,0.5f);
-							carriedProp->body->setGravity(btVector3(0,0,0));
-						}
-					}
-				}
-			}
-			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
-			if(ui != nullptr){
-				ui->setUpdateState(true);
-			}*/
-
-			currentHoverTarget = me;
-		}else{
-			currentHoverTarget = nullptr;
-		}
-		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
-			uiBubble->clear();
-			selectedItem = uiInventory->getSelected();
-			if(uiInventory->getSelected() != nullptr){
-				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
-					//uiBubble->clear();
-					//player->disable();
-					// TODO: actually trigger item interaction
-					/*auto item = uiInventory->getSelected();
-					if(item->definition->consumable) {
-						auto i = std::find(uiInventory->items.begin(), uiInventory->items.end(), item);
-						if(i != uiInventory->items.end()) {
-							uiInventory->items.erase(i);
-						}
-					}*/
-
-					uiInventory->getSelected()->triggerInteract();
-					auto item = uiInventory->removeSelected();
-					auto items = PD_Listing::listings[item->definition->scenario]->items;
-					items.erase(items.find(item->definition->id));
-					delete item;
-					resetCrosshair();
-
-				});
-				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
-					//uiBubble->clear();
-
-					// dropping an item
-					if(PD_Item * item = uiInventory->removeSelected()){
-						// put the item back into the scene
-						childTransform->addChild(item);
-						item->addToWorld();
-			
-						// figure out where to put the item
-						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
-						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
-						item->translatePhysical(targetPos, false);
-						// rotate the item to face the camera
-						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
-
-						currentRoom->addComponent(item);
-					}
-
-					resetCrosshair();
-				});
-			}
-		}
-	}
+	updateSelection();
 
 
 	// prop carrying release and carry
@@ -1628,8 +1521,6 @@ Texture * PD_Scene_Main::getToken(){
 
 	// hide the UI
 	uiLayer->setVisible(false);
-	// flip the scene upside down
-	activeCamera->upVectorRotated.y *= -1;
 
 	//re-draw the current frame (swap the buffers a second time to avoid this render actually being visible)
 	game->draw(this);
@@ -1642,20 +1533,18 @@ Texture * PD_Scene_Main::getToken(){
 
 	// carve out a circle and add a border
 	for(signed long int y = 0; y < sd.y; ++y){
-	for(signed long int x = 0; x < sd.x; ++x){
-		glm::vec2 pos(x,y);
-		float d = glm::distance(pos, half);
-		if(d >= half.x || d >= half.y){
-			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(0,0,0,0));
-		}else if(d >= half.x * 0.9f || d >= half.y * 0.9f){
-			sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(237,22,106,255));
+		for(signed long int x = 0; x < sd.x; ++x){
+			glm::vec2 pos(x,y);
+			float d = glm::distance(pos, half);
+			if(d >= half.x || d >= half.y){
+				sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(0,0,0,0));
+			}else if(d >= half.x * 0.9f || d >= half.y * 0.9f){
+				sweet::TextureUtils::setPixel(res, x, y, glm::uvec4(237,22,106,255));
+			}
 		}
 	}
-	}
-	
-	// flip the scene right-side up
-	activeCamera->upVectorRotated.y *= -1;
-	// unhide the UI
+
+	// unhide the UIyel
 	uiLayer->setVisible(true);
 
 	return res;
@@ -1690,5 +1579,178 @@ void PD_Scene_Main::save() {
 		saveFile.close();
 	}else {
 		// Delete save file
+	}
+}
+
+void PD_Scene_Main::loadSave() {
+	if(sweet::FileUtils::fileExists("data/save.json")){
+		std::string saveJson = sweet::FileUtils::readFile("data/save.json");
+		Json::Reader reader;
+		Json::Value root;
+		bool parsingSuccsessful = reader.parse(saveJson, root);
+		assert(parsingSuccsessful);
+		plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
+		player->strength = root["strength"].asInt();
+		player->sass	 = root["sass"].asInt();
+		player->defense  = root["defense"].asInt();
+		player->insight  = root["insight"].asInt();
+		for(auto tex : root["lifeTokens"]) {
+			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
+			texture->load();
+			uiYellingContest->addLife(texture);
+		}
+	}
+}
+
+
+void PD_Scene_Main::updateSelection(){
+	if(player->isEnabled()){
+		NodeBulletBody * lastHoverTarget = currentHoverTarget;
+		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
+		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
+		
+		if(me != nullptr && uiInventory->getSelected() == nullptr){
+			PD_Item * item = dynamic_cast<PD_Item *>(me);
+			if(item != nullptr){
+				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
+					// hover over item
+					if(item != currentHoverTarget){
+						// if we aren't already looking at the item,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						if(item->definition->collectable){
+							uiBubble->addOption("Pickup " + item->definition->name, [this, item](sweet::Event * _event){
+								// remove the item from the scene
+								Transform * toDelete = item->firstParent();
+
+								currentRoom->removeComponent(item);
+
+								toDelete->firstParent()->removeChild(toDelete);
+								toDelete->removeChild(item);
+								delete toDelete;
+								delete item->shape;
+								item->shape = nullptr;
+								bulletWorld->world->removeRigidBody(item->body);
+								item->body = nullptr;
+
+								// pickup the item
+								uiInventory->pickupItem(item);
+								currentRoom->removeItem(item);
+
+								// run item pickup triggers
+								item->triggerPickup();
+
+								uiBubble->clear();
+							});
+						}else{
+							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
+								std::cout << "hey gj you interacted" << std::endl;
+
+								// run item interact triggers
+								item->triggerInteract();
+							});
+						}
+					}
+				}else{
+					// we hovered over an item, but it wasn't pixel-perfect
+					me = item = nullptr;
+				}
+			}else{
+				Person * person = dynamic_cast<Person*>(me);
+				if(person != nullptr && person->isEnabled()){
+					// hover over person
+					if(person != currentHoverTarget){
+						// if we aren't already looking at the person,
+						// clear out the bubble UI and add the relevant options
+						uiBubble->clear();
+						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
+							std::string c = person->state->conversation;
+							if(c == "NO_CONVO"){
+								// incidental conversation
+								Json::Value dialogue;
+								dialogue["text"].append(incidentalPhraseGenerator.getLine());
+								dialogue["speaker"] = person->definition->id;
+								Json::Value root;
+								root["dialogue"] = Json::Value();
+								root["dialogue"].append(dialogue);
+
+								Conversation * tempConvo = new Conversation(root, person->definition->scenario);
+								uiDialogue->startEvent(tempConvo, true);
+								player->disable();
+							}else{
+								// start a proper conversation
+								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
+								player->disable();
+							}
+						});
+						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
+							triggerYellingContest(person);
+							// TODO: pass in the character that's fighting here
+						});
+						// if we have an item, also add the "use on" option
+						/*if(uiInventory->getSelected() != nullptr){
+							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
+								uiBubble->clear();
+								player->disable();
+								// TODO: pass in the character that's interacting with the item here
+							});
+						}*/
+					}
+				}else{
+					// prop carrying selection
+					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
+					if(prop != nullptr){
+						if(mouse->leftJustPressed()){
+							carriedProp = prop;
+							carriedPropDistance = glm::distance(player->playerCamera->childTransform->getWorldPos(), carriedProp->meshTransform->getWorldPos());
+							carriedProp->body->setDamping(0.8f,0.5f);
+							carriedProp->body->setGravity(btVector3(0,0,0));
+						}
+					}
+				}
+			}
+			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
+			if(ui != nullptr){
+				ui->setUpdateState(true);
+			}*/
+
+			currentHoverTarget = me;
+		}else{
+			currentHoverTarget = nullptr;
+		}
+		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
+			uiBubble->clear();
+			selectedItem = uiInventory->getSelected();
+			if(uiInventory->getSelected() != nullptr){
+				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
+					uiInventory->getSelected()->triggerInteract();
+					auto item = uiInventory->removeSelected();
+					auto items = PD_Listing::listings[item->definition->scenario]->items;
+					items.erase(items.find(item->definition->id));
+					delete item;
+					resetCrosshair();
+
+				});
+				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
+					// dropping an item
+					if(PD_Item * item = uiInventory->removeSelected()){
+						// put the item back into the scene
+						childTransform->addChild(item);
+						item->addToWorld();
+			
+						// figure out where to put the item
+						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
+						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
+						item->translatePhysical(targetPos, false);
+						// rotate the item to face the camera
+						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
+
+						currentRoom->addComponent(item);
+					}
+
+					resetCrosshair();
+				});
+			}
+		}
 	}
 }

@@ -1,0 +1,338 @@
+{
+    "name": "First Room",
+    "description": "Scenario including everything needed for the first room.",
+    "type": 1,
+    "assets": [
+
+        {
+          "id": "INTRO-ROOM",
+          "type": "mesh",
+          "src": "introRoom.obj"
+        },
+
+        {  
+            "name":"Lab Room",
+            "id":1,
+            "description":"The last room",
+            "furnitureTypes":"",
+            "characters":[  
+                "Butler"
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+            },
+            "size":"LARGE",
+            "type":"room",
+            "locked":false,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+
+            ],
+            "triggersMulti":[  
+
+            ]
+        },
+        {  
+            "id":"Butler",
+            "name":"Butler (lab)",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"DefaultState",
+                    "convo":1,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":2,
+                    "name":"TalkedOnce",
+                    "convo":5,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"components/definitions/LilTomward_PELVIS.json",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/LilTomward_TORSO.json",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/LilTomward_HEAD.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Jasper_ARM.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Jasper_ARM.json"
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/LilTomward_LEG.json"
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/LilTomward_LEG.json"
+                        }
+                    ]
+                }
+            ]
+        },
+
+
+        {  
+            "id":1,
+            "name":"Butler1",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Good evening.",
+                        "I hope it was not too much trouble getting here.",
+                        "May I take your coat?"
+                    ],
+                    "triggers":[],
+                    "conditions":[  
+
+                    ],
+                    "speaker":"Butler",
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":2,
+                    "label":"Yes"
+                },
+                {  
+                    "convoId":3,
+                    "label":"No"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":0
+            }
+        },
+        {  
+            "id":2,
+            "name":"ButlerYes",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Very good.",
+                        "When you are ready to leave I will fetch it for you."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":"Butler",
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":1
+            }
+        },
+        {  
+            "id":3,
+            "name":"ButlerNo",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "If you so desire.",
+                        "If you change your mind, you can find me here again later."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":"Butler",
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":2
+            }
+        },
+        {  
+            "id":4,
+            "name":"Butler2",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "There are hors-d'oeuvres on the table to my left, if you would like one.",
+                        "The door to my right will take you into the mansion proper.",
+                        "Please do not hesitate to find me if you need anything.",
+                        "I hope you have a very rewarding evening"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":6,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":"Butler",
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":3
+            }
+        },
+        {  
+            "id":5,
+            "name":"ButlerTalkedOnce",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Enter the door to my right when you are ready to join the party.",
+                        "If you need anything, you can find me here again."
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":"Butler",
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":4
+            }
+        }
+    ]
+}

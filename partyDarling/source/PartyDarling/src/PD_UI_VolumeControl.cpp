@@ -18,13 +18,13 @@ PD_UI_VolumeControl::PD_UI_VolumeControl(BulletWorld * _world, Shader * _textSha
 }
 
 void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
+
 	VerticalLinearLayout * container = new VerticalLinearLayout(world);
 	addChild(container);
 	container->verticalAlignment = kMIDDLE;
 	container->horizontalAlignment = kLEFT;
 	container->setRationalWidth(1.f, this);
 	container->setRationalHeight(1.f / ((OpenAL_Sound::categoricalGain.size() + 1)), this);
-	container->setBackgroundColour(0, 0, 1.f, 0.5f);
 
 	TextLabel * label = new TextLabel(world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
 	SliderController * slider = new SliderController(world, _target, 1.f, 0.f, 2.f);

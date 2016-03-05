@@ -11,6 +11,7 @@ struct PD_BuildResult : public Node{
 	TriMesh * mesh;
 	btCompoundShape * collider;
 	std::vector<Light *> lights;
+	std::vector<Transform *> lightParents;
 };
 
 class PD_FurnitureComponentDefinition {

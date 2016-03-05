@@ -2,8 +2,8 @@
 
 #include <RoomObject.h>
 
-#define FURNITURE_MASS_SCALE 0.05
-#define FURNITURE_SCALE 0.15
+#define FURNITURE_MASS_SCALE 0.05f
+#define FURNITURE_SCALE 0.15f
 
 class Light;
 class Shader;

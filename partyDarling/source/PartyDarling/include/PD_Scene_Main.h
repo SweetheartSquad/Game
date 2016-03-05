@@ -30,6 +30,11 @@ class RampTexture;
 class PD_Prop;
 
 class PD_Scene_Main : public Scene{
+private:
+	// removes _room from the scene/physics
+	void removeRoom(Room * _room);
+	// adds _room to the scene/physics
+	void addRoom(Room * _room);
 public:
 	float panSpeed;
 	bool panLeft;
@@ -106,6 +111,8 @@ public:
 
 	std::vector<Scenario *> activeScenarios;
 
+
+	void updateSelection();
 	// randomly pick one main plot scenario and a few side plot scenarios
 	void pickScenarios();
 	// try to combine definitions in the scenarios
@@ -126,6 +133,7 @@ public:
 	void resetCrosshair();
 
 	void save();
+	void loadSave();
 
 	// carrying stuff
 

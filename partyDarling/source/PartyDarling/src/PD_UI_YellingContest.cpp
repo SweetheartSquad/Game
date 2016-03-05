@@ -438,6 +438,10 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 
 	delete optionOneShader;
 	delete optionTwoShader;
+	
+	if(enemyCursor->firstParent()->parents.size() == 0){
+		childTransform->addChild(enemyCursor->firstParent(), false);
+	}
 }
 
 void PD_UI_YellingContest::update(Step * _step){
@@ -695,6 +699,7 @@ void PD_UI_YellingContest::startNewFight(Person * _enemy){
 		l->boxSizing = kCONTENT_BOX;
 		l->setMarginLeft(5);
 		l->setMarginRight(5);
+		l->firstParent()->scale(1.f, -1.f, 1.f);
 		lives.push_back(l);
 	}
 

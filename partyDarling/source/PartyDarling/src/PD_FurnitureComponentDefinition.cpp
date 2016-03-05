@@ -57,8 +57,11 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	res.collider->addChildShape(local, box);
 
 	if(type == "lampshade") {
+		Transform * t = new Transform();
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
+		t->addChild(light, false);
 		res.lights.push_back(light);
+		res.lightParents.push_back(t);
 	}
 	
 	/*btConvexHullShape * shape = new btConvexHullShape();
@@ -82,6 +85,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 			PD_BuildResult componentBuildResult = outComponent->build(_scale);
 			if(componentBuildResult.lights.size() > 0){
 				res.lights.insert(res.lights.end(), componentBuildResult.lights.begin(), componentBuildResult.lights.end());
+				res.lightParents.insert(res.lightParents.end(), componentBuildResult.lightParents.begin(), componentBuildResult.lightParents.end());
 			}
 			
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
@@ -118,6 +122,16 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
 				t.rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
+				for(auto & l : res.lightParents){
+					Transform * lt = new Transform();
+					lt->addChild(l, false);
+					lt->translate(component->connectors[outComponent->componentTypes].at(i).position);
+					lt->scale(component->connectors[outComponent->componentTypes].at(i).scale);
+					lt->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.x, 1, 0, 0, kOBJECT);
+					lt->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.y, 0, 1, 0, kOBJECT);
+					lt->rotate(component->connectors[outComponent->componentTypes].at(i).rotation.z, 0, 0, 1, kOBJECT);
+					l = lt;
+				}
 				duplicateTempMesh->applyTransformation(&t);
 
 				// transfer the temporary mesh verts
@@ -138,6 +152,12 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	// scale the combined result by this component's scale
 	Transform t;
 	t.scale(scale);
+	for(auto & l : res.lightParents){
+		Transform * lt = new Transform();
+		lt->addChild(l, false);
+		lt->scale(scale);
+		l = lt;
+	}
 	res.mesh->applyTransformation(&t);
 	_scale /= scale;
 

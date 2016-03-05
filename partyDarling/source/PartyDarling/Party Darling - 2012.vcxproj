@@ -16,7 +16,9 @@
   <ItemGroup>
     <ClCompile Include="include\PD_Door.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
+    <ClCompile Include="src\IntroRoom.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\LabRoom.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\PD_Assets.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
@@ -67,7 +69,9 @@
   <ItemGroup>
     <ClInclude Include="include\DialogueDisplay.h" />
     <ClInclude Include="include\FurnitureComponent.h" />
+    <ClInclude Include="include\IntroRoom.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\LabRoom.h" />
     <ClInclude Include="include\PD_Assets.h" />
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_Character.h" />
