@@ -618,13 +618,14 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	dissBattleStartLayout->setRationalWidth(1.f, uiLayer);
 	dissBattleStartLayout->horizontalAlignment = kCENTER;
 	dissBattleStartLayout->verticalAlignment = kMIDDLE;
+	dissBattleStartLayout->setVisible(false);
 	
 	playerCard = new PD_UI_DissCard(uiLayer->world, player);
 	dissBattleStartLayout->addChild(playerCard);
 	playerCard->setRationalHeight(0.3f, dissBattleStartLayout);
 	playerCard->setSquareWidth(1.4f);
 
-	NodeUI * vs = new NodeUI(uiLayer->world);
+	vs = new NodeUI(uiLayer->world);
 	dissBattleStartLayout->addChild(vs);
 	vs->setRationalWidth(0.3f, dissBattleStartLayout);
 	vs->setSquareHeight(1.f);
@@ -639,6 +640,22 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
 		dissBattleStartLayout->setVisible(false);
 		uiDissBattle->startNewFight(dissEnemy);
+	});
+	dissBattleStartTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		if(p < 0.33){
+			playerCard->setVisible(true);
+			vs->setVisible(false);
+			enemyCard->setVisible(false);
+		}else if(p < 0.66){
+			playerCard->setVisible(true);
+			vs->setVisible(false);
+			enemyCard->setVisible(true);
+		}else{
+			playerCard->setVisible(true);
+			vs->setVisible(true);
+			enemyCard->setVisible(true);
+		}
 	});
 	childTransform->addChild(dissBattleStartTimeout, false);
 }
@@ -1004,6 +1021,10 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy) {
 	dissBattleStartLayout->setVisible(true);
 	dissBattleStartTimeout->restart();
 	enemyCard->setEnemy(_enemy);
+
+	playerCard->setVisible(false);
+	vs->setVisible(false);
+	enemyCard->setVisible(false);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){

@@ -148,4 +148,5 @@ public:
 	HorizontalLinearLayout * dissBattleStartLayout;
 	PD_Character * dissEnemy;
 	PD_UI_DissCard * playerCard, * enemyCard;
+	NodeUI * vs;
 };
