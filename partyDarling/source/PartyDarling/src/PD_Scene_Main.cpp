@@ -204,6 +204,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		uiYellingContest->disable();
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
 		}
 		player->wonLastYellingContest = _event->getIntData("win");
 	});
