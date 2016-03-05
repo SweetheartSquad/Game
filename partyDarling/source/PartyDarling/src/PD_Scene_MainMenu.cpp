@@ -14,6 +14,7 @@
 #include <PD_UI_Text.h>
 #include <PD_Scene_Main.h>
 #include <PD_Scene_IntroSlideShow.h>
+#include <PD_UI_ConfirmNewGame.h>
 
 PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	Scene(_game),
@@ -28,6 +29,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	uiLayer->resize(0,sd.x,0,sd.y);
 
 	uiLayer->addMouseIndicator();
+
+	// load game scene before?
+
+	savedGame = false;
 
 	VerticalLinearLayout * mainContainer = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(mainContainer);
@@ -51,35 +56,67 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->setVisible(true);
 	textContainer->setMarginTop(0.05f);
 
-	PD_UI_Text * joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
+	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
+	textContainer->addChild(continueText);
+	continueText->setRationalWidth(1.f, textContainer);
+	continueText->setRationalHeight(0.2f, textContainer);
+	continueText->setMarginTop(0.05f);
+	continueText->setMarginBottom(0.05f);
+
+	continueText->horizontalAlignment = kCENTER;
+	continueText->setText("Continue");
+	continueText->setMouseEnabled(savedGame);
+
+	if(!savedGame){
+		continueText->setTextColour(0.5, 0.5, 0.5);
+		uiLayer->invalidateLayout();
+	}
+
+	continueText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
+	continueText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
+
+	continueText->onClick = [this](sweet::Event * _event){
+		auto it = game->scenes.find("game");
+		if(it == game->scenes.end()){
+			// load game from save file
+		}else{
+			game->switchScene("game", false);
+		}
+	};
+
+	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
 	joinPartyText->setRationalWidth(1.f, textContainer);
-	joinPartyText->setRationalHeight(0.3f, textContainer);
+	joinPartyText->setRationalHeight(0.2f, textContainer);
 	joinPartyText->setMarginTop(0.05f);
 	joinPartyText->setMarginBottom(0.05f);
 
 	joinPartyText->horizontalAlignment = kCENTER;
-	joinPartyText->setText("Join the party");
+	joinPartyText->setText(!savedGame ? "Join the party!" : "Reset");
 	joinPartyText->setMouseEnabled(true);
 
 	joinPartyText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	joinPartyText->onClick = [this](sweet::Event * _event){
-		auto it = game->scenes.find("game");
-		if(it == game->scenes.end()){
+		if(savedGame){
+			// warning
+			showConfirmBox();
+		}else{
+			savedGame = true;
 			game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
 			game->switchScene("intro", false);
-		}else{
-			game->switchScene("game", false);
+			continueText->setMouseEnabled(true);
+			continueText->setTextColour(0.f, 0.f, 0.f);
+			joinPartyText->setText("Reset");
+			uiLayer->invalidateLayout();
 		}
-		
 	};
 
-	PD_UI_Text * optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
+	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(optionsText);
 	optionsText->setRationalWidth(1.f, textContainer);
-	optionsText->setRationalHeight(0.3f, textContainer);
+	optionsText->setRationalHeight(0.2f, textContainer);
 	optionsText->setMarginTop(0.05f);
 	optionsText->setMarginBottom(0.05f);
 
@@ -93,10 +130,10 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 		game->switchScene("options", false);
 	};
 
-	PD_UI_Text * callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
+	callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(callNightText);
 	callNightText->setRationalWidth(1.f, textContainer);
-	callNightText->setRationalHeight(0.3f, textContainer);
+	callNightText->setRationalHeight(0.2f, textContainer);
 	callNightText->setMarginTop(0.05f);
 	callNightText->setMarginBottom(0.05f);
 
@@ -112,7 +149,34 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	callNightText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
-	//callNightText->setMarginTop(0.05f);
+	screen = new NodeUI(uiLayer->world);
+	uiLayer->addChild(screen);
+	screen->setRationalWidth(1.f, uiLayer);
+	screen->setRationalHeight(1.f, uiLayer);
+	screen->setBackgroundColour(0, 0, 0, 0.5f);
+
+	confirmNewGame = new PD_UI_ConfirmNewGame(uiLayer->world, textShader);
+	uiLayer->addChild(confirmNewGame);
+	confirmNewGame->setRationalHeight(1.f, uiLayer);
+	confirmNewGame->setRationalWidth(1.f, uiLayer);
+	confirmNewGame->setMargin(0.25f, 0.35);
+	confirmNewGame->setPadding(0.1f);
+	confirmNewGame->setBackgroundColour(1.f, 1.f, 1.f);
+
+	confirmNewGame->btnConfirm->onClick = [this](sweet::Event * _event){
+		game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
+		game->switchScene("intro", false);
+		continueText->setMouseEnabled(true);
+		continueText->setTextColour(0.f, 0.f, 0.f);
+		joinPartyText->setText("Reset");
+	};
+
+	
+	confirmNewGame->btnCancel->onClick = [this](sweet::Event * _event){
+		hideConfirmBox();
+	};
+
+	hideConfirmBox();
 	
 	mainContainer->invalidateLayout();
 
@@ -127,6 +191,26 @@ PD_Scene_MainMenu::~PD_Scene_MainMenu() {
 	delete screenSurfaceShader;
 	delete screenFBO;
 	delete textShader;
+}
+
+void PD_Scene_MainMenu::showConfirmBox(){
+	screen->setVisible(true);
+	confirmNewGame->enable();
+
+	joinPartyText->setMouseEnabled(false);
+	continueText->setMouseEnabled(false);
+	optionsText->setMouseEnabled(false);
+	callNightText->setMouseEnabled(false);
+}
+
+void PD_Scene_MainMenu::hideConfirmBox(){
+	screen->setVisible(false);
+	confirmNewGame->disable();
+
+	joinPartyText->setMouseEnabled(true);
+	continueText->setMouseEnabled(true);
+	optionsText->setMouseEnabled(true);
+	callNightText->setMouseEnabled(true);
 }
 
 void PD_Scene_MainMenu::update(Step* _step) {

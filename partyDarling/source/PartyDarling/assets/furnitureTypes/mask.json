@@ -1,0 +1,38 @@
+{
+    "components": [
+        {
+            "componentTypes": ["mask_base"], 
+            "multiplier": 1, 
+            "required": true,
+			"scale": [1, 1, 1],
+            "outComponents": [
+                {
+                    "componentTypes": ["mask_top"], 
+                    "multiplier": 1,
+                    "required": true,
+					"outComponents": [
+						{
+							"componentTypes": ["mask_bottom"], 
+							"multiplier": 1,
+							"required": true,
+							"outComponents": [					],
+							"scale": [1.0,1.0,1.0]
+						}
+					],
+                    "scale": [1.0,1.0,1.0]
+                }
+            ]
+        }
+    ], 
+    "type": "mask",
+	"mass": 0,
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY"],
+    "detailedCollider": false,
+	"parentDependent": true,
+    "parents":{"wall":["FRONT"]},
+    "paddingLeft": 0.5,
+	"paddingRight": 0.5,
+    "twist": false,
+    "flare": false,
+    "numTextures": 2
+}

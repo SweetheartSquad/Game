@@ -1,0 +1,58 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["kitchen_counter_base"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["kitchen_counter_front"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["kitchen_counter_top"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+							{
+									"componentTypes": ["kitchen_counter_content"], 
+									"multiplier": 1, 
+									"outComponents": [
+									], 
+									"required": false,
+									"scale": [1.0,1.0,1.0]
+									}
+							], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [0.7,0.7,0.7]
+                }
+            ], 
+            "type": "kitchen_counter",
+			"mass": 0,
+            "roomTypes" : ["KITCHEN"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+				"wall":["FRONT"],
+                "kitchen_sink":[
+                    "LEFT",
+					"RIGHT"
+                ],
+				"kitchen_stove":[
+                    "LEFT",
+					"RIGHT"
+                ]
+            },
+            "padding":0,
+    "twist": false,
+    "flare": false,
+    "numTextures": 2    
+
+        }

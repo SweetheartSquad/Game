@@ -39,6 +39,9 @@
 #include <PD_Door.h>
 #include <PD_Prop.h>
 
+#include <IntroRoom.h>
+#include <LabRoom.h>
+
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
@@ -703,6 +706,11 @@ void PD_Scene_Main::bundleScenarios(){
 
 
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
+	Room * introRoom = _rooms.back();
+	_rooms.pop_back();
+	Room * labRoom = _rooms.back();
+	_rooms.pop_back();
+
 	int numRooms = _rooms.size();
 	// separate rooms into a list of unlocked and locked
 	sweet::ShuffleVector<Room *> unlockedRooms, lockedRooms;
@@ -718,7 +726,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	// generate a random rectangle which has enough cells for each room
 	unsigned long int houseSize;
-	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms));
+	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms)) + 2;
 	//houseSize.y = glm::max(2, numRooms/houseSize.x);
 	while(pow(houseSize,2) < numRooms){
 		++houseSize;
@@ -765,7 +773,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
-	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = unlockedRooms.pop(true); // TODO: replace this with the actual starting room
+	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom; // TODO: replace this with the actual starting room
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
 	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
@@ -804,6 +812,20 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
+
+	// repeat for the lab, ensuring it is the last thing placed
+	glm::ivec2 cell;
+	if(openCells.size() > 0){
+		cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
+	}else if(blockedPositions.size() > 0){
+		cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+	}else{
+		Log::error("Room can't be placed!");
+	}
+	allCells[std::make_pair(cell.x, cell.y)] = false;
+	houseGrid[std::make_pair(cell.x, cell.y)] = labRoom;
+
+
 	
 	// loop through all of the rooms and remove doors which don't lead anywhere
 	for(auto c : houseGrid){
@@ -928,6 +950,13 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			res.push_back(room);
 		}
 	}
+
+
+	// construct static rooms (into room, lab room)
+	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+
+
 	return res;
 }
 
@@ -1148,15 +1177,25 @@ void PD_Scene_Main::update(Step * _step){
 			glm::vec3 d = glm::normalize(headPos - camPos);
 		
 			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+			float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
 			float pDif = pitch - player->playerCamera->pitch;
-
+			float yDif = yaw - player->playerCamera->yaw;
+			
 			while(pDif > 180){
 				pDif -= 360;
 			}while(pDif < -180){
 				pDif += 360;
 			}
+			while(yDif > 180){
+				yDif -= 360;
+			}while(yDif < -180){
+				yDif += 360;
+			}
 			if(glm::abs(pDif) > FLT_EPSILON){
 				player->playerCamera->pitch += pDif*0.05f;
+			}
+			if(glm::abs(yDif) > FLT_EPSILON){
+				player->playerCamera->yaw += yDif*0.05f;
 			}
 		}
 	}

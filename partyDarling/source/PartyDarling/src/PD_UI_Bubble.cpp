@@ -136,7 +136,7 @@ void PD_UI_Bubble::update(Step * _step){
 				next();
 			}else if(d < -FLT_EPSILON){
 				prev();
-			}else if(keyboard.keyJustDown(GLFW_KEY_SPACE) || mouse.leftJustPressed()){
+			}else if(mouse.leftJustPressed()){
 				selectCurrent();
 			}
 		}

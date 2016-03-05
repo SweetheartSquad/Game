@@ -50,7 +50,21 @@
       "size":40,
       "antiAliased": false
     },
-    
+	{
+      "id":"options-menu-font",
+      "type":"font",
+      "src":"DobkinPlain.ttf",
+      "size":30,
+      "antiAliased": false
+    },
+    {
+      "id":"options-menu-sub-font",
+      "type":"font",
+      "src":"DobkinPlain.ttf",
+      "size":20,
+      "antiAliased": false
+    },
+
     //Enviromental SFX
     {
       "id":"doorOpen",

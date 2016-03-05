@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "kitchen_shelf_main"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        17.060120880054367, 
+                        0.2548289895057678
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 140, 
+    "src": "kitchen_shelf_base_1.obj", 
+    "type": "kitchen_shelf_base"
+}

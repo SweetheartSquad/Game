@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "mask_top"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 145, 
+    "src": "mask_base_1.obj", 
+    "type": "mask_base"
+}

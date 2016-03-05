@@ -29,6 +29,8 @@
 			"mass": 0,
             "roomTypes" : ["KITCHEN"],
             "sides" : {
+					"LEFT":"RIGHT",
+					"RIGHT":"LEFT"
                 },
 			"parentDependent": true,
             "parents":{
@@ -41,6 +43,7 @@
             "padding":0,
     "twist": false,
     "flare": false,
-    "numTextures": 2    
+    "numTextures": 2,
+	"parentMax": 1
 
         }

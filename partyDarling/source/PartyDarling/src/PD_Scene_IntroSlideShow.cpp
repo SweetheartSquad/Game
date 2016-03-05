@@ -23,7 +23,10 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	});
 
 	textShader = new ComponentShaderText(false);
+
 	textShader->setColor(1.f, 1.f, 1.f);
+	textShader->load();
+	
 	TextLabel * skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("main-menu-font")->font, textShader);
 	uiLayer->addChild(skip);
 	skip->setMouseEnabled(true);

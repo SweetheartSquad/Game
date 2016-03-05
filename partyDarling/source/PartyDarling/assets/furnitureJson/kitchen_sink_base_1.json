@@ -2,30 +2,6 @@
     "connectors": [
         {
             "componentTypes": [
-                "counter_doors"
-            ], 
-            "out": [
-                {
-                    "position": [
-                        0.0, 
-                        6.8169755935668945, 
-                        6.816976070404053
-                    ], 
-                    "rotation": [
-                        0.0, 
-                        0.0, 
-                        0.0
-                    ], 
-                    "scale": [
-                        1.0, 
-                        1.0, 
-                        1.0
-                    ]
-                }
-            ]
-        }, 
-        {
-            "componentTypes": [
                 "sink_basin"
             ], 
             "out": [
@@ -47,9 +23,33 @@
                     ]
                 }
             ]
+        }, 
+        {
+            "componentTypes": [
+                "counter_doors"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        6.8169755935668945, 
+                        6.816976070404053
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
         }
     ], 
-    "id": 124, 
+    "id": 136, 
     "src": "kitchen_sink_base_1.obj", 
     "type": "kitchen_sink_base"
 }
