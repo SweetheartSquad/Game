@@ -891,7 +891,7 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	// count the total number of rooms so that we can show progress
 	unsigned long int numRooms = 0;
 	for(auto s : activeScenarios){
-		numRooms += s->assets.at("room").size();
+		numRooms += s->assets["room"].size();
 	}
 
 

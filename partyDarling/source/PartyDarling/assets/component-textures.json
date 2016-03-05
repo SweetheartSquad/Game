@@ -1734,6 +1734,21 @@
             "id": 420,
             "src": "components/Bexley_Right_Pupil.png",
             "type": "texture"
+        },
+        {
+            "id": 421,
+            "src": "components/deadOmar_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 422,
+            "src": "components/deadOmar_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 423,
+            "src": "components/deadOmar_Foot.png",
+            "type": "texture"
         }
     ]
 }
