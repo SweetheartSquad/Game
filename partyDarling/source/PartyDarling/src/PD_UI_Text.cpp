@@ -12,7 +12,8 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	curTextColour(0, 0, 0),
 	onClick(nullptr),
 	onOver(nullptr),
-	onDown(nullptr)
+	onDown(nullptr),
+	enabled(true)
 {
 	eventManager->addEventListener("mousedown", [this](sweet::Event * _event){
 		curTextColour = downColour;
@@ -67,21 +68,37 @@ glm::vec3 PD_UI_Text::getTextColour() const {
 	return textColour;
 }
 
+void PD_UI_Text::enable(){
+	enabled = true;
+	setMouseEnabled(true);
+}
+
+void PD_UI_Text::disable(){
+	enabled = false;
+	setMouseEnabled(false);
+	curTextColour = textColour;
+}
+
+bool PD_UI_Text::isEnabled(){
+	return enabled;
+}
+
 void PD_UI_Text::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	
 	glm::vec4 curCol = static_cast<ComponentShaderText *>(textShader)->textComponent->getColor();
 
 	bool textColourDirty = abs(curCol.x - curTextColour.x) >= FLT_EPSILON ||  
 		abs(curCol.y - curTextColour.y) >= FLT_EPSILON ||
-		abs(curCol.z - curTextColour.z) >= FLT_EPSILON;
+		abs(curCol.z - curTextColour.z) >= FLT_EPSILON ||
+		abs(curCol.a - enabled ? 1.f : 0.5f >= FLT_EPSILON);
 
 	if(textColourDirty){
-		static_cast<ComponentShaderText*>(textShader)->setColor(curTextColour.r, curTextColour.g, curTextColour.b);
+		static_cast<ComponentShaderText*>(textShader)->setColor(curTextColour.r, curTextColour.g, curTextColour.b, enabled ? 1.f : 0.5f);
 	}
 	
 	TextArea::render(_matrixStack,  _renderOptions);
 
 	if(textColourDirty){
-		static_cast<ComponentShaderText*>(textShader)->setColor(curCol.r, curCol.g, curCol.b);
+		static_cast<ComponentShaderText*>(textShader)->setColor(curCol.r, curCol.g, curCol.b, enabled ? 1.f : 0.5f);
 	}
 }

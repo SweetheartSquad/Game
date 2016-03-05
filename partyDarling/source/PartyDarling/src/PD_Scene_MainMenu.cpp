@@ -62,14 +62,11 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	continueText->setRationalHeight(0.2f, textContainer);
 	continueText->setMarginTop(0.05f);
 	continueText->setMarginBottom(0.05f);
-
+	continueText->enable();
 	continueText->horizontalAlignment = kCENTER;
 	continueText->setText("Continue");
-	continueText->setMouseEnabled(savedGame);
-
 	if(!savedGame){
-		continueText->setTextColour(0.5, 0.5, 0.5);
-		uiLayer->invalidateLayout();
+		continueText->disable();
 	}
 
 	continueText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
@@ -90,10 +87,9 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->setRationalHeight(0.2f, textContainer);
 	joinPartyText->setMarginTop(0.05f);
 	joinPartyText->setMarginBottom(0.05f);
-
+	joinPartyText->enable();
 	joinPartyText->horizontalAlignment = kCENTER;
 	joinPartyText->setText(!savedGame ? "Join the party!" : "Reset");
-	joinPartyText->setMouseEnabled(true);
 
 	joinPartyText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
@@ -106,7 +102,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 			savedGame = true;
 			game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
 			game->switchScene("intro", false);
-			continueText->setMouseEnabled(true);
+			continueText->enable();
 			continueText->setTextColour(0.f, 0.f, 0.f);
 			joinPartyText->setText("Reset");
 			uiLayer->invalidateLayout();
@@ -122,7 +118,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 	optionsText->horizontalAlignment = kCENTER;
 	optionsText->setText("Options");
-	optionsText->setMouseEnabled(true);
+	optionsText->enable();
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	//optionsText->setMarginTop(0.05f);
@@ -144,7 +140,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->horizontalAlignment = kCENTER;
 
 	callNightText->setText("Call it a night");
-	callNightText->setMouseEnabled(true);
+	callNightText->enable();
 
 	callNightText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	callNightText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
@@ -159,14 +155,14 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	uiLayer->addChild(confirmNewGame);
 	confirmNewGame->setRationalHeight(1.f, uiLayer);
 	confirmNewGame->setRationalWidth(1.f, uiLayer);
-	confirmNewGame->setMargin(0.25f, 0.35);
+	confirmNewGame->setMargin(0.25f);
 	confirmNewGame->setPadding(0.1f);
 	confirmNewGame->setBackgroundColour(1.f, 1.f, 1.f);
 
 	confirmNewGame->btnConfirm->onClick = [this](sweet::Event * _event){
 		game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
 		game->switchScene("intro", false);
-		continueText->setMouseEnabled(true);
+		continueText->enable();
 		continueText->setTextColour(0.f, 0.f, 0.f);
 		joinPartyText->setText("Reset");
 	};
@@ -208,7 +204,7 @@ void PD_Scene_MainMenu::hideConfirmBox(){
 	confirmNewGame->disable();
 
 	joinPartyText->setMouseEnabled(true);
-	continueText->setMouseEnabled(true);
+	continueText->setMouseEnabled(continueText->isEnabled());
 	optionsText->setMouseEnabled(true);
 	callNightText->setMouseEnabled(true);
 }

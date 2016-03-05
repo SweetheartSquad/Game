@@ -25,9 +25,15 @@ public:
 	std::function<void(sweet::Event * _event)> onClick;
 	std::function<void(sweet::Event * _event)> onDown;
 
+	void enable();
+	void disable();
+
+	bool isEnabled();
+
 private:
 	glm::vec3 curTextColour;
 	glm::vec3 textColour;
 	glm::vec3 overColour;
 	glm::vec3 downColour;
+	bool enabled;
 };

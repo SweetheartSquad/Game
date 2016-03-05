@@ -13,6 +13,8 @@ PD_UI_ConfirmNewGame::PD_UI_ConfirmNewGame(BulletWorld * _world, ComponentShader
 	TextArea * text = new TextArea(_world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, _textShader);
 	addChild(text);
 	text->setWrapMode(kWORD);
+	text->verticalAlignment = kMIDDLE;
+	text->horizontalAlignment = kCENTER;
 	text->setRationalWidth(1.f, this);
 	text->setRationalHeight(0.5f, this);
 	text->setText("Are you sure you want to reset the game? You will lose all of your progress.");
@@ -26,8 +28,9 @@ PD_UI_ConfirmNewGame::PD_UI_ConfirmNewGame(BulletWorld * _world, ComponentShader
 	buttonsContainer->addChild(btnConfirm);
 	btnConfirm->setRationalWidth(0.5f, buttonsContainer);
 	btnConfirm->setRationalHeight(1.f, buttonsContainer);
-
+	btnConfirm->verticalAlignment = kMIDDLE;
 	btnConfirm->horizontalAlignment = kCENTER;
+
 	btnConfirm->setText("Yes");
 	btnConfirm->setMouseEnabled(true);
 	btnConfirm->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
@@ -38,8 +41,9 @@ PD_UI_ConfirmNewGame::PD_UI_ConfirmNewGame(BulletWorld * _world, ComponentShader
 	buttonsContainer->addChild(btnCancel);
 	btnCancel->setRationalWidth(0.5f, buttonsContainer);
 	btnCancel->setRationalHeight(1.f, buttonsContainer);
-
+	btnCancel->verticalAlignment = kMIDDLE;
 	btnCancel->horizontalAlignment = kCENTER;
+
 	btnCancel->setText("No");
 	btnCancel->setMouseEnabled(true);
 	btnCancel->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
