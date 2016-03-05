@@ -23,7 +23,9 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	room(nullptr),
 	definition(_definition),
 	pr(new CharacterRenderer(_world, _definition, _shader, _emoticonShader)),
-	enabled(true)
+	enabled(true),
+	yelledAt(false),
+	wonYellingContest(false)
 {
 	defense  = definition->defense;
 	insight  = definition->insight;

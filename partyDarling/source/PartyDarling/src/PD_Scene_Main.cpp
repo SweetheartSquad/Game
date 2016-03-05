@@ -1668,7 +1668,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO"){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append(incidentalPhraseGenerator.getLine());
+								dialogue["text"].append(person->yelledAt ? (person->wonYellingContest ? "woo you suck" : "aw shucks") : incidentalPhraseGenerator.getLine());
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
@@ -1683,10 +1683,12 @@ void PD_Scene_Main::updateSelection(){
 								player->disable();
 							}
 						});
-						uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
-							triggerYellingContest(person);
-							// TODO: pass in the character that's fighting here
-						});
+						if(!person->yelledAt){
+							uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
+								triggerYellingContest(person);
+								// TODO: pass in the character that's fighting here
+							});
+						}
 						// if we have an item, also add the "use on" option
 						/*if(uiInventory->getSelected() != nullptr){
 							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){

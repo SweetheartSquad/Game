@@ -143,6 +143,13 @@ public:
 	int insight;
 	int strength;
 	int sass;
+	
+	// if false, you haven't yelled at this character yet
+	// if true, you can't yell at them again
+	bool yelledAt;
+	// if true, this character won their contest against you
+	// if false, this character lost their contest against you
+	bool wonYellingContest;
 
 	// the character's current state
 	const CharacterState * state;

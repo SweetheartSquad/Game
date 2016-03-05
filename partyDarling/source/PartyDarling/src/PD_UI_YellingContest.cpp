@@ -735,6 +735,9 @@ void PD_UI_YellingContest::gameOver(bool _win){
 
 	isGameOver = true;
 	win = _win;
+	enemy->yelledAt = true;
+	enemy->wonYellingContest = !win;
+
 
 	gameContainer->setVisible(false);
 	childTransform->removeChild(enemyCursor->firstParent());
