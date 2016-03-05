@@ -64,7 +64,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	
 	volumeControl->setRationalWidth(0.35f, mainLayout);
 
-	subLayout->setMarginTop(0.45f);
+	subLayout->setMarginTop(0.7f);
 	subLayout->firstParent()->rotate(9, 0, 0, 1, kOBJECT);
 
 	uiLayer->addChild(mainLayout);
