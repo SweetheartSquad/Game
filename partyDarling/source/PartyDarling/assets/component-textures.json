@@ -1,51 +1,6 @@
 {
     "assets": [
         {
-            "id": 7,
-            "src": "components/68731149-1d20-45ca-8dea-21dea5b7a8bf.png",
-            "type": "texture"
-        },
-        {
-            "id": 8,
-            "src": "components/29ee43b6-0a8a-45d0-89c8-0053f4628d0f.png",
-            "type": "texture"
-        },
-        {
-            "id": 9,
-            "src": "components/e4fd0dcd-e2be-433b-af0b-3c18129f5b73.png",
-            "type": "texture"
-        },
-        {
-            "id": 10,
-            "src": "components/23e5f893-3d29-4570-8d72-9387ee7882c6.png",
-            "type": "texture"
-        },
-        {
-            "id": 11,
-            "src": "components/43b5780b-cbcd-4f01-9749-fe56dcbb2515.png",
-            "type": "texture"
-        },
-        {
-            "id": 12,
-            "src": "components/6b360df6-7732-4454-a15e-5ac18dc75dd6.png",
-            "type": "texture"
-        },
-        {
-            "id": 13,
-            "src": "components/533cfbb2-b6a1-4def-a7e7-0a459d46fe89.png",
-            "type": "texture"
-        },
-        {
-            "id": 14,
-            "src": "components/20a88a1e-40e3-4230-b988-62f9d7a35c74.png",
-            "type": "texture"
-        },
-        {
-            "id": 15,
-            "src": "components/8f6f43da-235a-4a05-bfcd-a99c1fff4f76.png",
-            "type": "texture"
-        },
-        {
             "id": 16,
             "src": "components/764e4974-4f84-481b-a922-f8732c10f22e.png",
             "type": "texture"
@@ -73,11 +28,6 @@
         {
             "id": 21,
             "src": "components/abf91714-b6af-451f-8e42-dc7bfb41103c.png",
-            "type": "texture"
-        },
-        {
-            "id": 22,
-            "src": "components/f8a3164b-b297-411e-9862-c59fc9e34d14.png",
             "type": "texture"
         },
         {
@@ -1366,51 +1316,6 @@
             "type": "texture"
         },
         {
-            "id": 307,
-            "src": "components/Felix_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 308,
-            "src": "components/Felix_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 309,
-            "src": "components/Felix_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 310,
-            "src": "components/Felix_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 311,
-            "src": "components/Felix_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 312,
-            "src": "components/Felix_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 313,
-            "src": "components/Felix_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 314,
-            "src": "components/Felix_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 315,
-            "src": "components/Felix_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 316,
             "src": "components/Felix_Upper_Leg.png",
             "type": "texture"
@@ -1553,6 +1458,296 @@
         {
             "id": 353,
             "src": "components/Eloise_rightarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 363,
+            "src": "components/Felix_leftarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 364,
+            "src": "components/Felix_leftarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 365,
+            "src": "components/Felix_leftarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 366,
+            "src": "components/Felix_rightarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 367,
+            "src": "components/Felix_rightarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 368,
+            "src": "components/Felix_rightarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 369,
+            "src": "components/LilTomward_leftarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 370,
+            "src": "components/LilTomward_leftarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 371,
+            "src": "components/LilTomward_leftarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 372,
+            "src": "components/LilTomward_rightarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 373,
+            "src": "components/LilTomward_rightarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 374,
+            "src": "components/LilTomward_rightarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 375,
+            "src": "components/Felix_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 376,
+            "src": "components/Felix_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 377,
+            "src": "components/Felix_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 378,
+            "src": "components/Felix_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 379,
+            "src": "components/Felix_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 380,
+            "src": "components/Felix_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 381,
+            "src": "components/Felix_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 382,
+            "src": "components/Felix_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 383,
+            "src": "components/Felix_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 384,
+            "src": "components/Gladys_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 385,
+            "src": "components/Gladys_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 386,
+            "src": "components/Gladys_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 390,
+            "src": "components/Gladys_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 391,
+            "src": "components/Gladys_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 392,
+            "src": "components/Gladys_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 393,
+            "src": "components/Gladys_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 394,
+            "src": "components/Gladys_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 395,
+            "src": "components/Gladys_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 396,
+            "src": "components/Gladys_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 397,
+            "src": "components/Gladys_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 398,
+            "src": "components/Gladys_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 399,
+            "src": "components/Gladys_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 400,
+            "src": "components/Gladys_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 401,
+            "src": "components/Gladys_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 402,
+            "src": "components/Gladys_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 403,
+            "src": "components/Gladys_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 404,
+            "src": "components/Julian_leftleg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 405,
+            "src": "components/Julian_leftleg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 406,
+            "src": "components/Julian_leftleg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 407,
+            "src": "components/Julian_rightleg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 408,
+            "src": "components/Julian_rightleg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 409,
+            "src": "components/Julian_rightleg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 410,
+            "src": "components/Julian_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 411,
+            "src": "components/Bexley_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 412,
+            "src": "components/Bexley_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 413,
+            "src": "components/Bexley_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 414,
+            "src": "components/Bexley_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 415,
+            "src": "components/Bexley_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 416,
+            "src": "components/Bexley_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 417,
+            "src": "components/Bexley_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 418,
+            "src": "components/Bexley_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 419,
+            "src": "components/Bexley_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 420,
+            "src": "components/Bexley_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 421,
+            "src": "components/deadOmar_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 422,
+            "src": "components/deadOmar_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 423,
+            "src": "components/deadOmar_Foot.png",
             "type": "texture"
         }
     ]
