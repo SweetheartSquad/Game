@@ -11,6 +11,7 @@
 #include <RoomObject.h>
 #include <RoomBuilder.h>
 #include <PD_TilemapGenerator.h>
+#include <MeshFactory.h>
 
 Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition) :
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
@@ -21,6 +22,27 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 {
 	mesh->setScaleMode(GL_NEAREST);
 	doors.clear();
+	
+	
+
+	// create floor/ceiling as static bullet planes
+	floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), _shader);
+	floor->setColliderAsStaticPlane(0, 1, 0, 0);
+	floor->createRigidBody(0);
+	floor->body->setFriction(1);
+	childTransform->addChild(floor);
+	floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	floor->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	floor->mesh->setScaleMode(GL_NEAREST);
+
+	ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), _shader);
+	ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
+	ceiling->createRigidBody(0);
+	ceiling->body->setFriction(1);
+	childTransform->addChild(ceiling);
+	ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
+	ceiling->body->getWorldTransform().setRotation(btQuaternion(btVector3(0, 1, 0), glm::radians(180.f)));
+	ceiling->mesh->setScaleMode(GL_NEAREST);
 }
 
 void Room::addComponent(RoomObject * _obj){

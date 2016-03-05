@@ -12,6 +12,8 @@ EmoteDef::~EmoteDef(){
 }
 
 PD_Scenario * PD_ResourceManager::scenario = nullptr;
+PD_Scenario * PD_ResourceManager::introScenario = nullptr;
+PD_Scenario * PD_ResourceManager::labScenario = nullptr;
 PD_Scenario * PD_ResourceManager::itemTextures = nullptr;
 PD_Scenario * PD_ResourceManager::componentTextures = nullptr;
 DatabaseConnection * PD_ResourceManager::db = nullptr;
@@ -33,12 +35,23 @@ PD_ResourceManager::PD_ResourceManager(){
 	Asset::registerType("character", &AssetCharacter::create);
 	Asset::registerType("room", &AssetRoom::create);
 
+	// Register custom argument tyes
+	sweet::Event::registerArgumentType("ITEM",			  sweet::STRING);
+	sweet::Event::registerArgumentType("ROOM",			  sweet::STRING);
+	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
+	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
+	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
+
 	// initialize assets
 	scenario		  = new PD_Scenario("assets/scenario.json");
+	introScenario     = new PD_Scenario("assets/intro-scenario.json");
+	labScenario		  = new PD_Scenario("assets/lab-scenario.json");
 	itemTextures	  = new PD_Scenario("assets/item-textures.json");
 	componentTextures = new PD_Scenario("assets/component-textures.json");
 	
 	resources.push_back(scenario);
+	resources.push_back(introScenario);
+	resources.push_back(labScenario);
 	resources.push_back(itemTextures);
 	resources.push_back(componentTextures);
 
@@ -194,13 +207,6 @@ PD_ResourceManager::PD_ResourceManager(){
 	db = new DatabaseConnection("data/test.db");
 	
 	globalScenarioListing = new PD_Listing(scenario);
-
-	// Register custom argument tyes
-	sweet::Event::registerArgumentType("ITEM",			  sweet::STRING);
-	sweet::Event::registerArgumentType("ROOM",			  sweet::STRING);
-	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
-	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
-	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
 	
 
 	load();
