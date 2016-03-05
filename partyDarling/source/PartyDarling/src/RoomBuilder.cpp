@@ -97,10 +97,12 @@ bool Edge::isInside(glm::vec2 _point, float _scale){
 	float maxY = p1.y > p2.y ? p1.y : p2.y;
 	float minY = p1.y < p2.y ? p1.y : p2.y;
 
-	bool equalX = abs(_point.x - minX * _scale) <= FLT_EPSILON * 10;
-	bool equalY = abs(_point.y - minY * _scale) <= FLT_EPSILON * 10;
+	bool equalMaxX = abs(_point.x - maxX * _scale) <= FLT_EPSILON * 10;
+	bool equalMinX = abs(_point.x - minX * _scale) <= FLT_EPSILON * 10;
+	bool equalMaxY = abs(_point.y - maxY * _scale) <= FLT_EPSILON * 10;
+	bool equalMinY = abs(_point.y - minY * _scale) <= FLT_EPSILON * 10;
 
-	if (( (_point.x > minX * _scale || equalX) && (_point.x < maxX * _scale || equalX) ) && ( (_point.y > minY * _scale || equalY) && (_point.y < maxY * _scale || equalY) ))
+	if (( (_point.x > minX * _scale || equalMinX) && (_point.x < maxX * _scale || equalMaxX) ) && ( (_point.y > minY * _scale || equalMinY) && (_point.y < maxY * _scale || equalMaxY) ))
 	{
 		return true;
 	}
@@ -655,14 +657,12 @@ bool RoomBuilder::search(RoomObject * _child){
 	Log::warn("NO PARENT found.");
 	
 	if(_child->anchor != Anchor_t::WALL && !_child->parentDependent){
-		if(!_child->billboarded){
-			_child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
-		}
+		float angle = _child->billboarded ? 0.f : sweet::NumberUtils::randomFloat(-180.f, 180.f);
+		glm::quat orient = glm::quat(glm::angleAxis(angle, glm::vec3(0.f, 1.f, 0.f)));
+		
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < tiles.size(); ++i){
 			Log::info("Tile selected");
-			btQuaternion bOrient = _child->body->getWorldTransform().getRotation();
-			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
 			Log::info("Position found.");
 			// Validate bounding box is inside room
