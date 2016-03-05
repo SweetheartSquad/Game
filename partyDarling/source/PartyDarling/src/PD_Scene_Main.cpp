@@ -1169,15 +1169,25 @@ void PD_Scene_Main::update(Step * _step){
 			glm::vec3 d = glm::normalize(headPos - camPos);
 		
 			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+			float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
 			float pDif = pitch - player->playerCamera->pitch;
-
+			float yDif = yaw - player->playerCamera->yaw;
+			
 			while(pDif > 180){
 				pDif -= 360;
 			}while(pDif < -180){
 				pDif += 360;
 			}
+			while(yDif > 180){
+				yDif -= 360;
+			}while(yDif < -180){
+				yDif += 360;
+			}
 			if(glm::abs(pDif) > FLT_EPSILON){
 				player->playerCamera->pitch += pDif*0.05f;
+			}
+			if(glm::abs(yDif) > FLT_EPSILON){
+				player->playerCamera->yaw += yDif*0.05f;
 			}
 		}
 	}
