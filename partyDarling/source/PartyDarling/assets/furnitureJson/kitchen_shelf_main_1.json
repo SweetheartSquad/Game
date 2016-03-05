@@ -1,0 +1,91 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "kitchen_shelf_content"
+            ], 
+            "out": [
+                {
+                    "position": [], 
+                    "rotation": [], 
+                    "scale": []
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "kitchen_shelf_content_1"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.498135126776916, 
+                        2.5555809933602256
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "kitchen_shelf_content_2"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        -2.357951544429966, 
+                        2.5555809933602256
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "kitchen_shelf_content_3"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        -6.790451016501207, 
+                        2.5555809933602256
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 141, 
+    "src": "kitchen_shelf_main_1.obj", 
+    "type": "kitchen_shelf_main"
+}

@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "kitchen_counter_content"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.46701717376708984, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 138, 
+    "src": "kitchen_counter_top_2.obj", 
+    "type": "kitchen_counter_top"
+}
