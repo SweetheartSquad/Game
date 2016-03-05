@@ -44,8 +44,17 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	boundingBox.y = -boundingBox.height/2.f;
 	boundingBox.z = -boundingBox.depth/2.f;
 
+#ifdef _DEBUG
+	for(auto &v :  boundingBoxMesh->mesh->vertices){
+		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
+		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
+	}
+	boundingBoxMesh->mesh->dirty = true;
+#endif
+
 	createRigidBody(5);
-	body->setAngularFactor(btVector3(1,1,1)); // prevent from rotating the physics body at all
+	body->setAngularFactor(btVector3(0,0,0)); // prevent from rotating the physics body at all
 	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);

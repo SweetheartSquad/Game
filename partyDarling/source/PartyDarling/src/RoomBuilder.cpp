@@ -655,14 +655,12 @@ bool RoomBuilder::search(RoomObject * _child){
 	Log::warn("NO PARENT found.");
 	
 	if(_child->anchor != Anchor_t::WALL && !_child->parentDependent){
-		if(!_child->billboarded){
-			_child->rotatePhysical(sweet::NumberUtils::randomFloat(-180.f, 180.f), 0, 1.f, 0);
-		}
+		float angle = _child->billboarded ? 0.f : sweet::NumberUtils::randomFloat(-180.f, 180.f);
+		glm::quat orient = glm::quat(glm::angleAxis(angle, glm::vec3(0.f, 1.f, 0.f)));
+		
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < tiles.size(); ++i){
 			Log::info("Tile selected");
-			btQuaternion bOrient = _child->body->getWorldTransform().getRotation();
-			glm::quat orient = glm::quat(bOrient.w(), bOrient.x(), bOrient.y(), bOrient.z());
 
 			Log::info("Position found.");
 			// Validate bounding box is inside room
