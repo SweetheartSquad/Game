@@ -144,12 +144,12 @@ public:
 	int strength;
 	int sass;
 	
-	// if false, you haven't yelled at this character yet
-	// if true, you can't yell at them again
-	bool yelledAt;
+	// if false, you haven't had a diss battle with this character yet
+	// if true, you can't have a diss battle them again
+	bool dissedAt;
 	// if true, this character won their contest against you
 	// if false, this character lost their contest against you
-	bool wonYellingContest;
+	bool wonDissBattle;
 
 	// the character's current state
 	const CharacterState * state;

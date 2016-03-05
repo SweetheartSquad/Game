@@ -35,7 +35,7 @@ public:
 *	gameover	data "win"			int		// occurs immediately when the player wins or loses
 *	complete:	data "win"			int		// occurs after the game over animation
 */
-class PD_UI_YellingContest : public VerticalLinearLayout{
+class PD_UI_DissBattle : public VerticalLinearLayout{
 private:
 	// number of punctuation marks passed
 	unsigned long int iteration;
@@ -171,8 +171,8 @@ public:
 
 	bool modeOffensive;
 
-	PD_UI_YellingContest(BulletWorld * _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader);
-	~PD_UI_YellingContest();
+	PD_UI_DissBattle(BulletWorld * _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader);
+	~PD_UI_DissBattle();
 	void setEnemyText();
 	void setPlayerText();
 

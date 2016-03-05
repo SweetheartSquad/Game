@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PD_UI_YellingContest.h>
+#include <PD_UI_DissBattle.h>
 #include <PD_InsultButton.h>
 
 #include <Scene.h>
@@ -37,7 +37,7 @@ InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _
 
 }
 
-PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader) :
+PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
 	iteration(0),
 	enabled(true),
@@ -127,7 +127,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	//gameContainer->setBackgroundColour(0, 0.714f, 0.929f);
 
 	// Enemy Cursor
-	enemyCursor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-CURSOR")->texture);
+	enemyCursor->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-CURSOR")->texture);
 	enemyCursor->mesh->setScaleMode(GL_NEAREST);
 	enemyCursor->childTransform->scale(20.f);
 	childTransform->addChild(enemyCursor);
@@ -138,7 +138,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	}
 
 	// Punctuation Highlight
-	punctuationHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-HIGHLIGHT")->texture);
+	punctuationHighlight->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-HIGHLIGHT")->texture);
 	punctuationHighlight->mesh->setScaleMode(GL_NEAREST);
 	// move the highlight's mesh up so that the origin is aligned with the bottom
 	for (unsigned long int i = 0; i < punctuationHighlight->mesh->vertices.size(); ++i){
@@ -183,15 +183,15 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	
 	//confidenceSlider->thumb->background->meshTransform->scale(2);
 	confidenceSlider->thumb->setBackgroundColour(1,1,1,1);
-	confidenceSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-THUMB-HAPPY")->texture);
+	confidenceSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-THUMB-HAPPY")->texture);
 	confidenceSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
 	
 	confidenceSlider->setBackgroundColour(1,1,1,1);
-	confidenceSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-TRACK")->texture);
+	confidenceSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-TRACK")->texture);
 	confidenceSlider->background->mesh->setScaleMode(GL_NEAREST);
 	
 	confidenceSlider->fill->setBackgroundColour(1,1,1,1);
-	confidenceSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
+	confidenceSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-FILL")->texture);
 	confidenceSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
 	
 
@@ -247,7 +247,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	
 	NodeUI * enemyBubbleTail = new NodeUI(_bulletWorld);
 	enemyBubble->addChild(enemyBubbleTail);
-	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-DEFENSE-BUBBLE-TAIL")->texture);
+	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-DEFENSE-BUBBLE-TAIL")->texture);
 	enemyBubbleTail->setRationalWidth(1.f, enemyBubble);
 	enemyBubbleTail->setRationalHeight(1.f, enemyBubble);
 	enemyBubbleTail->setMarginRight(0.78f);
@@ -277,7 +277,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	playerTimerSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
 	playerTimerSlider->background->mesh->setScaleMode(GL_NEAREST);
 	playerTimerSlider->fill->setBackgroundColour(1,1,1,1);
-	playerTimerSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-SLIDER-FILL")->texture);
+	playerTimerSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-FILL")->texture);
 	playerTimerSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
 	playerTimerSlider->thumb->setVisible(false);
 	playerTimerSlider->setMarginLeft(0.3f);
@@ -328,7 +328,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 
 	NodeUI * playerArrows = new NodeUI(_bulletWorld);
 	playerBubbleOptions->addChild(playerArrows);
-	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-ARROWS")->texture);
+	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-OFFENSE-ARROWS")->texture);
 	playerArrows->setRationalHeight(0.4f, playerBubbleOptions);
 	playerArrows->setSquareWidth(0.8f);
 	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
@@ -357,7 +357,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 
 	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
 	playerBubble->addChild(playerBubbleTail);
-	playerBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-OFFENSE-BUBBLE-TAIL")->texture);
+	playerBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-OFFENSE-BUBBLE-TAIL")->texture);
 	playerBubbleTail->setRationalWidth(1.f, playerBubble);
 	playerBubbleTail->setRationalHeight(1.f, playerBubble);
 	playerBubbleTail->setMarginRight(0.69f);
@@ -379,7 +379,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	gameOverImage->setSquareWidth(1.f);
 	gameOverImage->background->mesh->setScaleMode(GL_NEAREST);
 
-	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT1")->texture);
+	complimentBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-COMPLIMENT1")->texture);
 	complimentBubble->mesh->setScaleMode(GL_NEAREST);
 	complimentBubble->childTransform->scale(sweet::getWindowHeight() * 0.5, sweet::getWindowHeight() * 0.5, 0);
 	complimentBubble->meshTransform->scale(0, 0, 0);
@@ -393,7 +393,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	}
 	childTransform->addChild(complimentBubble);
 
-	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-INTERJECT")->texture);
+	interjectBubble->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-INTERJECT")->texture);
 	interjectBubble->mesh->setScaleMode(GL_NEAREST);
 	interjectBubble->childTransform->scale(sweet::getWindowHeight() * 0.6, sweet::getWindowHeight() * 0.6, 0);
 	interjectBubble->meshTransform->scale(0, 0, 0);
@@ -423,7 +423,7 @@ PD_UI_YellingContest::PD_UI_YellingContest(BulletWorld* _bulletWorld, Player * _
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
 }
 
-PD_UI_YellingContest::~PD_UI_YellingContest(){
+PD_UI_DissBattle::~PD_UI_DissBattle(){
 	while(lifeTokens.size() > 0){
 		lifeTokens.back()->decrementAndDelete();
 		lifeTokens.pop_back();
@@ -444,7 +444,7 @@ PD_UI_YellingContest::~PD_UI_YellingContest(){
 	}
 }
 
-void PD_UI_YellingContest::update(Step * _step){
+void PD_UI_DissBattle::update(Step * _step){
 	if(isEnabled()){
 		VerticalLinearLayout::update(_step);
 		if(!isGameOver){
@@ -672,7 +672,7 @@ void PD_UI_YellingContest::update(Step * _step){
 	}
 }
 
-void PD_UI_YellingContest::startNewFight(PD_Character * _enemy){
+void PD_UI_DissBattle::startNewFight(PD_Character * _enemy){
 	// clear existing friendship
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));
@@ -728,15 +728,15 @@ void PD_UI_YellingContest::startNewFight(PD_Character * _enemy){
 	enable();
 }
 
-void PD_UI_YellingContest::gameOver(bool _win){
+void PD_UI_DissBattle::gameOver(bool _win){
 	sweet::Event * e = new sweet::Event("gameover");
 	e->setIntData("win", _win);
 	eventManager->triggerEvent(e);
 
 	isGameOver = true;
 	win = _win;
-	enemy->yelledAt = true;
-	enemy->wonYellingContest = !win;
+	enemy->dissedAt = true;
+	enemy->wonDissBattle = !win;
 
 
 	gameContainer->setVisible(false);
@@ -744,21 +744,21 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	interjectBubble->setVisible(false);
 
 	if(_win){
-		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-WIN")->texture);
+		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
-		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-LOSE")->texture);
+		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LOSE")->texture);
 	}
 
 	gameOverContainer->setVisible(true);
 	//invalidateLayout();
 	// USER TESTING INFORMATION
-	sweet::FileUtils::createDirectoryIfNotExists("data/YellingContestResults");
+	sweet::FileUtils::createDirectoryIfNotExists("data/DissBattleResults");
 	{
 		std::stringstream filename;
 		std::ofstream file;
 
 		// success rate
-		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_SuccessRate.csv";
+		filename << "data/DissBattleResults/" << sweet::DateUtils::getDatetime() << "_DissBattleResult_SuccessRate.csv";
 		file.open(filename.str());
 		file << "correctInterject;incorrectInterject;correctInsult;incorrectInsult;" << std::endl;
 		file << defensiveCorrect << ";" << defensiveWrong << ";" << offensiveCorrect << ";" << offensiveWrong << std::endl;
@@ -773,7 +773,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 		float prevTargetTime = 0;
 		float targetTime = 0;
 
-		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Interject.csv";
+		filename << "data/DissBattleResults/" << sweet::DateUtils::getDatetime() << "_DissBattleResult_Interject.csv";
 		file.open(filename.str());
 		file << "iteration;character;hitPadding;hitTime;targetTime;diffToNext;diffToPrev;expectedTarget;percentageError;" << std::endl;
 		for(auto i : interjectTimes){
@@ -810,7 +810,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	{
 		std::stringstream filename;
 		std::ofstream file;
-		filename << "data/YellingContestResults/" << sweet::DateUtils::getDatetime() << "_YellingContestResult_Insult.csv";
+		filename << "data/DissBattleResults/" << sweet::DateUtils::getDatetime() << "_DissBattleResult_Insult.csv";
 		file.open(filename.str());
 
 		file << "playerAnswerTimerLength FAILED (Out of time): -1;hitTime;" << std::endl;
@@ -821,7 +821,7 @@ void PD_UI_YellingContest::gameOver(bool _win){
 	}
 }
 
-void PD_UI_YellingContest::complete(){
+void PD_UI_DissBattle::complete(){
 	if(!isComplete){
 		sweet::Event * e = new sweet::Event("complete");
 		e->setIntData("win", win);
@@ -831,7 +831,7 @@ void PD_UI_YellingContest::complete(){
 	}
 }
 
-void PD_UI_YellingContest::addLife(Texture * _tokenTexture){
+void PD_UI_DissBattle::addLife(Texture * _tokenTexture){
 	
 	// create a duplicate token with a cross through it
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
@@ -861,23 +861,23 @@ void PD_UI_YellingContest::addLife(Texture * _tokenTexture){
 	++_tokenTexture->referenceCount;
 }
 
-void PD_UI_YellingContest::disable(){
+void PD_UI_DissBattle::disable(){
 	setVisible(false);
 	enabled = false;
 	invalidateLayout();
 }
 
-void PD_UI_YellingContest::enable(){
+void PD_UI_DissBattle::enable(){
 	setVisible(true);
 	enabled = true;
 	invalidateLayout();
 }
 
-bool PD_UI_YellingContest::isEnabled() {
+bool PD_UI_DissBattle::isEnabled() {
 	return enabled;
 }
 
-void PD_UI_YellingContest::interject(){
+void PD_UI_DissBattle::interject(){
 	// Determine Success
 	bool isPunctuation = false;
 	if(glyphs.size() > 0 && glyphIdx < glyphs.size()){
@@ -927,8 +927,8 @@ void PD_UI_YellingContest::interject(){
 	canInterject = false;
 }
 
-void PD_UI_YellingContest::setUIMode(bool _isOffensive){
-	confidenceSlider->thumb->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(std::string("YELLING-CONTEST-SLIDER-THUMB-") + (_isOffensive ? "HAPPY" : "SAD"))->texture);
+void PD_UI_DissBattle::setUIMode(bool _isOffensive){
+	confidenceSlider->thumb->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(std::string("DISS-BATTLE-SLIDER-THUMB-") + (_isOffensive ? "HAPPY" : "SAD"))->texture);
 
 	modeOffensive = _isOffensive;
 	enemyBubble->setVisible(!_isOffensive);
@@ -953,7 +953,7 @@ void PD_UI_YellingContest::setUIMode(bool _isOffensive){
 	eventManager->triggerEvent(e);
 }
 
-void PD_UI_YellingContest::setEnemyText(){
+void PD_UI_DissBattle::setEnemyText(){
 	insultGenerator.makeInsults();
 
 	enemyBubbleText->setText(insultGenerator.enemyInsult);
@@ -978,7 +978,7 @@ void PD_UI_YellingContest::setEnemyText(){
 	highlightNextWord();
 }
 
-void PD_UI_YellingContest::setPlayerText(){
+void PD_UI_DissBattle::setPlayerText(){
 	if(playerResult){
 		playerBubbleLayout->addChild(playerBubbleOptions);
 		playerBubble->invalidateLayout();
@@ -1008,13 +1008,13 @@ void PD_UI_YellingContest::setPlayerText(){
 	playerTimerSlider->setVisible(false);
 }
 
-void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
+void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
 	}else {
 		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
-		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("YELLING-CONTEST-COMPLIMENT" + std::to_string(randComp))->texture);
+		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-COMPLIMENT" + std::to_string(randComp))->texture);
 		complimentBubbleTimer = 0.f;
 		complimentBubble->setVisible(true);
 	}
@@ -1040,7 +1040,7 @@ void PD_UI_YellingContest::insult(bool _isEffective, std::wstring _word){
 	eventManager->triggerEvent(e);
 }
 
-void PD_UI_YellingContest::incrementConfidence(float _value){
+void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
 		 // Factor in enemy's defense
@@ -1074,7 +1074,7 @@ void PD_UI_YellingContest::incrementConfidence(float _value){
 	}
 }
 
-UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
+UIGlyph * PD_UI_DissBattle::findFirstPunctuation(int _startIdx){
 	// No autos here, it starts at _startIdx
 	for (unsigned int i = _startIdx; i < glyphs.size(); ++i){
 		UIGlyph * glyph = glyphs.at(i);
@@ -1092,7 +1092,7 @@ UIGlyph * PD_UI_YellingContest::findFirstPunctuation(int _startIdx){
 	return nullptr;
 }
 
-void PD_UI_YellingContest::highlightNextWord(int _startIdx){
+void PD_UI_DissBattle::highlightNextWord(int _startIdx){
 	unsigned int length = 0;
 	float w = 0;
 	highlightedWordStart = nullptr;
@@ -1131,7 +1131,7 @@ void PD_UI_YellingContest::highlightNextWord(int _startIdx){
 	
 }
 
-bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
+bool PD_UI_DissBattle::isPunctuation(UIGlyph * _glyph){
 
 	switch (_glyph->character){
 		case L'.':
@@ -1144,7 +1144,7 @@ bool PD_UI_YellingContest::isPunctuation(UIGlyph * _glyph){
 	return false;
 }
 
-void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive){
+void PD_UI_DissBattle::countButtonPresses(bool _isCorrect, bool _isOffensive){
 	std::stringstream s;
 	if(_isOffensive){
 		if(_isCorrect){
@@ -1161,7 +1161,7 @@ void PD_UI_YellingContest::countButtonPresses(bool _isCorrect, bool _isOffensive
 	}
 }
 
-void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
+void PD_UI_DissBattle::countInterjectAccuracy(float _pressTime){
 	if(highlightedPunctuation != nullptr){
 		float punctuationTimeStart = 0, punctuationMeasureFromTime = 0;
 		float padding = 0;
@@ -1197,6 +1197,6 @@ void PD_UI_YellingContest::countInterjectAccuracy(float _pressTime){
 	
 }
 
-void PD_UI_YellingContest::countInsultAccuracy(float _hitTime){
+void PD_UI_DissBattle::countInsultAccuracy(float _hitTime){
 	insultTimes.push_back(_hitTime);
 }

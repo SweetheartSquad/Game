@@ -12,7 +12,7 @@
 #include <PD_UI_Inventory.h>
 #include <PD_UI_Bubble.h>
 #include <PD_UI_Dialogue.h>
-#include <PD_UI_YellingContest.h>
+#include <PD_UI_DissBattle.h>
 #include <PD_UI_Map.h>
 #include <PD_UI_Fade.h>
 #include <PD_Game.h>
@@ -65,7 +65,7 @@ public:
 	PD_Item * selectedItem;
 	PD_UI_Bubble * uiBubble;
 	PD_UI_Dialogue * uiDialogue;
-	PD_UI_YellingContest * uiYellingContest;
+	PD_UI_DissBattle * uiDissBattle;
 	PD_UI_Map * uiMap;
 	PD_UI_Fade * uiFade;
 	ComponentShaderBase * characterShader;
@@ -123,8 +123,8 @@ public:
 	void placeRooms(std::vector<Room *> _rooms);
 	// checks the cells directly above, below, and beside _pos, and returns those of which are within the house's bounds and haven't been used yet
 	std::vector<glm::ivec2> getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize);
-	// trigger a yelling contest with another character
-	void triggerYellingContest(PD_Character * _enemy);
+	// trigger a diss battle with another character
+	void triggerDissBattle(PD_Character * _enemy);
 
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border

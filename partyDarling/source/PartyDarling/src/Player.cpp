@@ -24,7 +24,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	insight(0),
 	strength(0),
 	sass(0),
-	wonLastYellingContest(false)
+	wonLastDissBattle(false)
 {
 	// override sounds
 	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;

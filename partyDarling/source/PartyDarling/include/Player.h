@@ -22,7 +22,7 @@ public:
 	int insight;
 	int strength;
 	int sass;
-	bool wonLastYellingContest;
+	bool wonLastDissBattle;
 	Player(BulletWorld * bulletWorld);
 	~Player();
 

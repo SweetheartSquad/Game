@@ -178,8 +178,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDialogue->setRationalHeight(1.f, uiLayer);
 	uiDialogue->setRationalWidth(1.f, uiLayer);
 	uiDialogue->eventManager->addEventListener("end", [this](sweet::Event * _event){
-		// Handle case where a yelling contest is the last trigger in a dialogue
-		if(!uiYellingContest->isEnabled()){
+		// Handle case where a diss battle is the last trigger in a dialogue
+		if(!uiDissBattle->isEnabled()){
 			player->enable();
 			currentHoverTarget = nullptr;
 			updateSelection();
@@ -195,33 +195,33 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
 	
-	uiYellingContest = new PD_UI_YellingContest(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
-	uiLayer->addChild(uiYellingContest);
-	uiYellingContest->setRationalHeight(1.f, uiLayer);
-	uiYellingContest->setRationalWidth(1.f, uiLayer);
+	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
+	uiLayer->addChild(uiDissBattle);
+	uiDissBattle->setRationalHeight(1.f, uiLayer);
+	uiDissBattle->setRationalWidth(1.f, uiLayer);
 
-	uiYellingContest->eventManager->addEventListener("complete", [this](sweet::Event * _event){
-		uiYellingContest->disable();
+	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
+		uiDissBattle->disable();
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
-		player->wonLastYellingContest = _event->getIntData("win");
+		player->wonLastDissBattle = _event->getIntData("win");
 	});
-	uiYellingContest->eventManager->addEventListener("interject", [this](sweet::Event * _event){
+	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
 	});
-	uiYellingContest->eventManager->addEventListener("insult", [this](sweet::Event * _event){
+	uiDissBattle->eventManager->addEventListener("insult", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
 		if(!_event->getIntData("success")){
 			player->shakeTimeout->restart();
 		}
 	});
-	uiYellingContest->eventManager->addEventListener("miss", [this](sweet::Event * _event){
+	uiDissBattle->eventManager->addEventListener("miss", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.1f;
 		player->shakeTimeout->restart();
 	});
@@ -316,9 +316,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		return curVal == desiredValue;
 	};
 
-	(*PD_ResourceManager::conditionImplementations)["wonLastYellingContest"] = [this](sweet::Event * _event){
-		//checks if the last yelling contest was won. If no yelling contests have occurred than false is returned
-		return player->wonLastYellingContest;
+	(*PD_ResourceManager::conditionImplementations)["wonLastDissBattle"] = [this](sweet::Event * _event){
+		//checks if the last diss battle was won. If no diss battles have occurred than false is returned
+		return player->wonLastDissBattle;
 	};
 
 	// setup event listeners
@@ -545,8 +545,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
-		// Launch a yelling contest with the selected character. 
+	PD_ResourceManager::scenario->eventManager->addEventListener("triggerDissBattle", [this](sweet::Event * _event){
+		// Launch a diss battle with the selected character. 
 		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
 		
 		// CHARACTER oponent = character the player is fighting
@@ -556,21 +556,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		std::string scenario = _event->getStringData("scenario");
 
 		if(opponent == "") {
-			ST_LOG_ERROR_V("Missing field on trigger triggerYellingContest");
+			ST_LOG_ERROR_V("Missing field on trigger triggerDissBattle");
 		}
 		
-		// TODO - Configure addtional data once the yelling contest is set up for it
+		// TODO - Configure addtional data once the diss battle is set up for it
 		
 		PD_Character * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
-		triggerYellingContest(enemy);
-		uiYellingContest->eventManager->addEventListener("complete", [this](sweet::Event * _event){
+		triggerDissBattle(enemy);
+		uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 			if(uiDialogue->hadNextDialogue){
 				uiDialogue->setVisible(true);
 				uiBubble->enable();
 			}
-			player->wonLastYellingContest = _event->getIntData("win");
+			player->wonLastDissBattle = _event->getIntData("win");
 		});
 	});
 
@@ -954,8 +954,8 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	return res;
 }
 
-void PD_Scene_Main::triggerYellingContest(PD_Character * _enemy) {
-	uiYellingContest->startNewFight(_enemy);
+void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy) {
+	uiDissBattle->startNewFight(_enemy);
 	uiBubble->clear();
 	player->disable();
 }
@@ -1146,7 +1146,7 @@ void PD_Scene_Main::update(Step * _step){
 		Texture * tex = getToken();
 		tex->load();
 		tex->saveImageData("tokenTest.tga");
-		uiYellingContest->addLife(tex);
+		uiDissBattle->addLife(tex);
 	}
 	
 	if(keyboard->keyJustDown(GLFW_KEY_3)){
@@ -1360,7 +1360,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_X)){
-		uiYellingContest->eventManager->triggerEvent("interject");
+		uiDissBattle->eventManager->triggerEvent("interject");
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_L)){
@@ -1569,9 +1569,9 @@ void PD_Scene_Main::save() {
 		saveOut["sass"] = player->sass;
 		saveOut["defense"] = player->defense;
 		saveOut["insight"] = player->insight;
-		for(unsigned long int i = 0; i < uiYellingContest->lifeTokens.size(); ++i) {
+		for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
 			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-			uiYellingContest->lifeTokens[i]->saveImageData(fileName);
+			uiDissBattle->lifeTokens[i]->saveImageData(fileName);
 			saveOut["lifeTokens"].append(fileName);
 		}
 
@@ -1599,7 +1599,7 @@ void PD_Scene_Main::loadSave() {
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
-			uiYellingContest->addLife(texture);
+			uiDissBattle->addLife(texture);
 		}
 	}
 }
@@ -1670,7 +1670,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO"){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append((person->yelledAt ? (person->wonYellingContest ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal()));
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal()));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
@@ -1685,9 +1685,9 @@ void PD_Scene_Main::updateSelection(){
 								player->disable();
 							}
 						});
-						if(!person->yelledAt){
-							uiBubble->addOption("Yell at " + person->definition->name, [this, person](sweet::Event * _event){
-								triggerYellingContest(person);
+						if(!person->dissedAt){
+							uiBubble->addOption("Diss " + person->definition->name, [this, person](sweet::Event * _event){
+								triggerDissBattle(person);
 								// TODO: pass in the character that's fighting here
 							});
 						}

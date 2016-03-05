@@ -60,7 +60,7 @@
     <ClCompile Include="src\PD_UI_Map.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
-    <ClCompile Include="src\PD_UI_YellingContest.cpp" />
+    <ClCompile Include="src\PD_UI_DissBattle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
@@ -113,7 +113,7 @@
     <ClInclude Include="include\PD_UI_Map.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
-    <ClInclude Include="include\PD_UI_YellingContest.h" />
+    <ClInclude Include="include\PD_UI_DissBattle.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />

@@ -213,29 +213,29 @@
     },
 	
 
-  // YELLING CONTEST
+  // DISS BATTLE
 	{
-      "id": "YELLING-CONTEST-OFFENSE-BUBBLE",
+      "id": "DISS-BATTLE-OFFENSE-BUBBLE",
       "type": "texture",
       "src": "UI/yelling contest/blueBubble.png",
 	  "nineSliced": true
     },
 	
 	{
-      "id": "YELLING-CONTEST-OFFENSE-BUBBLE-TAIL",
+      "id": "DISS-BATTLE-OFFENSE-BUBBLE-TAIL",
       "type": "texture",
       "src": "UI/yelling contest/blueBubble-tail.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-OFFENSE-CHOICE",
+      "id": "DISS-BATTLE-OFFENSE-CHOICE",
       "type": "texture",
       "src": "UI/yelling contest/blueBubble-text.png",
 	  "nineSliced": true
     },
 
 	{
-      "id": "YELLING-CONTEST-OFFENSE-ARROWS",
+      "id": "DISS-BATTLE-OFFENSE-ARROWS",
       "type": "texture",
       "src": "UI/yelling contest/blueBubble-arrows.png"
     },
@@ -246,108 +246,108 @@
       "nineSliced": true
     },
 	{
-      "id": "YELLING-CONTEST-DEFENSE-BUBBLE",
+      "id": "DISS-BATTLE-DEFENSE-BUBBLE",
       "type": "texture",
       "src": "UI/yelling contest/purpleBubble.png",
 	  "nineSliced": true
     },
 	
 	{
-      "id": "YELLING-CONTEST-DEFENSE-BUBBLE-TAIL",
+      "id": "DISS-BATTLE-DEFENSE-BUBBLE-TAIL",
       "type": "texture",
       "src": "UI/yelling contest/purpleBubble-tail.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-CURSOR",
+      "id": "DISS-BATTLE-CURSOR",
       "type": "texture",
       "src": "UI/yelling contest/cursor.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-HIGHLIGHT",
+      "id": "DISS-BATTLE-HIGHLIGHT",
       "type": "texture",
       "src": "UI/yelling contest/highlight.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-FRIENDSHIP",
+      "id": "DISS-BATTLE-FRIENDSHIP",
       "type": "texture",
       "src": "UI/yelling contest/friendshipToken.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-LOSTFRIENDSHIP",
+      "id": "DISS-BATTLE-LOSTFRIENDSHIP",
       "type": "texture",
       "src": "UI/yelling contest/lostFriendshipToken.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-WIN",
+      "id": "DISS-BATTLE-WIN",
       "type": "texture",
       "src": "UI/yelling contest/win.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-LOSE",
+      "id": "DISS-BATTLE-LOSE",
       "type": "texture",
       "src": "UI/yelling contest/lose.png"
     },
 
 	{
-      "id": "YELLING-CONTEST-INTERJECT",
+      "id": "DISS-BATTLE-INTERJECT",
       "type": "texture",
       "src": "UI/yelling contest/interject.png"
     },
     {
-      "id": "YELLING-CONTEST-COMPLIMENT1",
+      "id": "DISS-BATTLE-COMPLIMENT1",
       "type": "texture",
       "src": "UI/yelling contest/compliment1.png"
     },
     {
-      "id": "YELLING-CONTEST-COMPLIMENT2",
+      "id": "DISS-BATTLE-COMPLIMENT2",
       "type": "texture",
       "src": "UI/yelling contest/compliment2.png"
     },
   	{
-      "id": "YELLING-CONTEST-COMPLIMENT3",
+      "id": "DISS-BATTLE-COMPLIMENT3",
       "type": "texture",
       "src": "UI/yelling contest/compliment3.png"
     },
      {
-      "id": "YELLING-CONTEST-COMPLIMENT4",
+      "id": "DISS-BATTLE-COMPLIMENT4",
       "type": "texture",
       "src": "UI/yelling contest/compliment4.png"
     },
     {
-      "id": "YELLING-CONTEST-COMPLIMENT5",
+      "id": "DISS-BATTLE-COMPLIMENT5",
       "type": "texture",
       "src": "UI/yelling contest/compliment5.png"
     },
     {
-      "id": "YELLING-CONTEST-COMPLIMENT6",
+      "id": "DISS-BATTLE-COMPLIMENT6",
       "type": "texture",
       "src": "UI/yelling contest/compliment6.png"
     },
 
 
     {
-      "id": "YELLING-CONTEST-SLIDER-THUMB-HAPPY",
+      "id": "DISS-BATTLE-SLIDER-THUMB-HAPPY",
       "type": "texture",
       "src": "UI/yelling contest/thumb-happy.png",
       "generateMipmaps": false
     },{
-      "id": "YELLING-CONTEST-SLIDER-THUMB-SAD",
+      "id": "DISS-BATTLE-SLIDER-THUMB-SAD",
       "type": "texture",
       "src": "UI/yelling contest/thumb-sad.png",
       "generateMipmaps": false
     },{
-      "id": "YELLING-CONTEST-SLIDER-FILL",
+      "id": "DISS-BATTLE-SLIDER-FILL",
       "type": "texture",
       "src": "UI/yelling contest/fill.png",
       "generateMipmaps": false
     },{
-      "id": "YELLING-CONTEST-SLIDER-TRACK",
+      "id": "DISS-BATTLE-SLIDER-TRACK",
       "type": "texture",
       "src": "UI/yelling contest/track.png",
       "generateMipmaps": false
