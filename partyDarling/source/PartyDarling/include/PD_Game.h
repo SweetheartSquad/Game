@@ -17,7 +17,7 @@ public:
 	~PD_Game();
 
 
-	OpenAL_Sound * bgmTrack;
+	static OpenAL_Sound * bgmTrack;
 
 	// picks a random BGM track and plays it, replacing the current track
 	void playBGM();
