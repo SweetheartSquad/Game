@@ -571,6 +571,70 @@
         {
             "id": 135, 
             "src": "furnitureJson/kitchen_stove_top_1.json"
+        }, 
+        {
+            "id": 136, 
+            "src": "furnitureJson/kitchen_sink_base_1.json"
+        }, 
+        {
+            "id": 137, 
+            "src": "furnitureJson/kitchen_counter_top_1.json"
+        }, 
+        {
+            "id": 138, 
+            "src": "furnitureJson/kitchen_counter_top_2.json"
+        }, 
+        {
+            "id": 139, 
+            "src": "furnitureJson/kitchen_counter_contents_1.json"
+        }, 
+        {
+            "id": 140, 
+            "src": "furnitureJson/kitchen_shelf_base_1.json"
+        }, 
+        {
+            "id": 141, 
+            "src": "furnitureJson/kitchen_shelf_main_1.json"
+        }, 
+        {
+            "id": 142, 
+            "src": "furnitureJson/kitchen_shelf_content_1_1.json"
+        }, 
+        {
+            "id": 143, 
+            "src": "furnitureJson/kitchen_shelf_content_2_1.json"
+        }, 
+        {
+            "id": 144, 
+            "src": "furnitureJson/kitchen_shelf_content_3_1.json"
+        }, 
+        {
+            "id": 145, 
+            "src": "furnitureJson/mask_base_1.json"
+        }, 
+        {
+            "id": 146, 
+            "src": "furnitureJson/mask_top_1.json"
+        }, 
+        {
+            "id": 147, 
+            "src": "furnitureJson/mask_bottom_1.json"
+        }, 
+        {
+            "id": 148, 
+            "src": "furnitureJson/mask_bottom_2.json"
+        }, 
+        {
+            "id": 149, 
+            "src": "furnitureJson/mask_top_2.json"
+        }, 
+        {
+            "id": 150, 
+            "src": "furnitureJson/mask_top_3.json"
+        }, 
+        {
+            "id": 151, 
+            "src": "furnitureJson/mask_bottom_3.json"
         }
     ], 
     "furniture": [
@@ -618,6 +682,9 @@
         }, 
         {
             "src": "furnitureTypes/kitchen_stove.json"
+        }, 
+        {
+            "src": "furnitureTypes/mask.json"
         }
     ]
 }

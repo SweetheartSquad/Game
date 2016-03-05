@@ -1,11 +1,11 @@
 {
    "components": [
                 {
-                    "componentTypes": ["kitchen_stove_base"], 
+                    "componentTypes": ["kitchen_counter_base"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentTypes": ["kitchen_stove_front"], 
+                            "componentTypes": ["kitchen_counter_front"], 
                             "multiplier": 1, 
                             "outComponents": [
                             ], 
@@ -13,9 +13,17 @@
 							"scale": [1.0,1.0,1.0]
                         }, 
                         {
-                            "componentTypes": ["kitchen_stove_top"], 
+                            "componentTypes": ["kitchen_counter_top"], 
                             "multiplier": 1, 
                             "outComponents": [
+							{
+									"componentTypes": ["kitchen_counter_content"], 
+									"multiplier": 1, 
+									"outComponents": [
+									], 
+									"required": false,
+									"scale": [1.0,1.0,1.0]
+									}
 							], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -25,12 +33,10 @@
 					"scale": [0.7,0.7,0.7]
                 }
             ], 
-            "type": "kitchen_stove",
+            "type": "kitchen_counter",
 			"mass": 0,
             "roomTypes" : ["KITCHEN"],
             "sides" : {
-					"LEFT":"RIGHT",
-					"RIGHT":"LEFT"
                 },
 			"parentDependent": true,
             "parents":{
@@ -38,12 +44,15 @@
                 "kitchen_sink":[
                     "LEFT",
 					"RIGHT"
+                ],
+				"kitchen_stove":[
+                    "LEFT",
+					"RIGHT"
                 ]
             },
             "padding":0,
     "twist": false,
     "flare": false,
-    "numTextures": 2,
-	"parentMax": 1
+    "numTextures": 2    
 
         }

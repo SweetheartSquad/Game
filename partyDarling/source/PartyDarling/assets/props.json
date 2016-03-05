@@ -393,6 +393,24 @@
             "padding": 0.1,
             "twist": false,
             "flare": false 
+        },
+		{
+            "id": "shotglass", 
+            "src": "shotglass", 
+            "roomTypes" : ["LIVING_ROOM","KITCHEN"],
+            "parentDependent": true,
+            "parents":{
+                "table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }

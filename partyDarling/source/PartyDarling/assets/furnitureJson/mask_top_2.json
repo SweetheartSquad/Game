@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "mask_bottom"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        15.60578345127799, 
+                        0.1219249963760376
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 149, 
+    "src": "mask_top_2.obj", 
+    "type": "mask_top"
+}

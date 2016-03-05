@@ -2,7 +2,7 @@
     "connectors": [
         {
             "componentTypes": [
-                "sink_basin"
+                "kitchen_counter_top"
             ], 
             "out": [
                 {
@@ -26,7 +26,7 @@
         }, 
         {
             "componentTypes": [
-                "counter_doors"
+                "kitchen_counter_front"
             ], 
             "out": [
                 {
@@ -49,7 +49,7 @@
             ]
         }
     ], 
-    "id": 136, 
+    "id": 143, 
     "src": "kitchen_sink_base_1.obj", 
-    "type": "kitchen_sink_base"
+    "type": "kitchen_counter_base"
 }
