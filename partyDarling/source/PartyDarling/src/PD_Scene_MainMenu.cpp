@@ -43,7 +43,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	mainContainer->setRationalWidth(1.f, uiLayer);
 	mainContainer->setRationalHeight(1.f, uiLayer);
 	mainContainer->setVisible(true);
-	mainContainer->setPaddingTop(0.48f);
+	mainContainer->setPaddingTop(0.45f);
 	mainContainer->setBackgroundColour(1, 1, 1, 1);
 
 	VerticalLinearLayout * textContainer = new VerticalLinearLayout(uiLayer->world);
@@ -54,7 +54,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->setRationalWidth(1.f, mainContainer);
 	textContainer->setRationalHeight(1.f, mainContainer);
 	textContainer->setVisible(true);
-	textContainer->setMarginTop(0.05f);
+	textContainer->setMarginTop(0.13f);
 
 	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
@@ -177,7 +177,8 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	
 	mainContainer->invalidateLayout();
 
-	textContainer->firstParent()->rotate(10, 0, 0, 1, kOBJECT);
+	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
+	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 }
 
 PD_Scene_MainMenu::~PD_Scene_MainMenu() {
