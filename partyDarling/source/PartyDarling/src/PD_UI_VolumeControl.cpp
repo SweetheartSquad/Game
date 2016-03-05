@@ -2,6 +2,7 @@
 
 #include <PD_UI_VolumeControl.h>
 #include <PD_ResourceManager.h>
+#include <PD_Game.h>
 #include <OpenAlSound.h>
 
 PD_UI_VolumeControl::PD_UI_VolumeControl(BulletWorld * _world, Shader * _textShader) :
@@ -50,4 +51,14 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	slider->fill->setBackgroundColour(1,1,1,1);
 	slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
 	slider->fill->background->mesh->setScaleMode(GL_NEAREST);
+
+	// make sure the background music updates when the music slider is changed
+	if(_text == "music"){
+		slider->eventManager->addEventListener("change", [](sweet::Event * _event){
+			if(PD_Game::bgmTrack != nullptr){
+				PD_Game::bgmTrack->pause();
+				PD_Game::bgmTrack->play();
+			}
+		});
+	}
 }
