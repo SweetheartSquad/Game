@@ -49,6 +49,9 @@ PD_ResourceManager::PD_ResourceManager(){
 	itemTextures	  = new PD_Scenario("assets/item-textures.json");
 	componentTextures = new PD_Scenario("assets/component-textures.json");
 	
+	scenario->eventManager->addChildManager(introScenario->eventManager);
+	scenario->eventManager->addChildManager(labScenario->eventManager);
+
 	resources.push_back(scenario);
 	resources.push_back(introScenario);
 	resources.push_back(labScenario);
