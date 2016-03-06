@@ -20,6 +20,12 @@
       "src": "bgm/02_Slugs.ogg",
       "category": "music"
     },
+    {
+      "id": "BGM3",
+      "type": "audio",
+      "src": "bgm/03_Crows.ogg",
+      "category": "music"
+    },
 
     //Voices
     {
