@@ -7,6 +7,7 @@ enum ScenarioType {
 	kSIDE		= 0,
 	kOMAR		= 1,
 	kPLOT		= 2,
+	kLAB		= 3
 }; 
 
 enum ScenarioOrder {
