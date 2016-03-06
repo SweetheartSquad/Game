@@ -34,11 +34,11 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doorWest->translatePhysical(glm::vec3(-11.8,0,0));
 	
 	
-	TriMesh * mesh = PD_ResourceManager::introScenario->getMesh("INTRO-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(PD_ResourceManager::introScenario->getTexture("INTRO-ROOM")->texture);
+	TriMesh * mesh = PD_ResourceManager::labScenario->getMesh("LAB-ROOM")->meshes.at(0);
+	mesh->pushTexture2D(PD_ResourceManager::labScenario->getTexture("LAB-ROOM")->texture);
 	mesh->setScaleMode(GL_NEAREST);
 	childTransform->addChild(new MeshEntity(mesh, _toonShader));
-	setColliderAsMesh(PD_ResourceManager::introScenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0), false);
+	setColliderAsMesh(PD_ResourceManager::labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::labScenario->getAsset("character", "Butler"));
