@@ -47,7 +47,6 @@ void PD_UI_DissCard::init(){
 	layout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-BG")->texture);
 	layout->background->mesh->setScaleMode(GL_NEAREST);
 
-	NodeUI * stars[4][5];
 	for(unsigned long int y = 0; y < 4; ++y){
 		HorizontalLinearLayout * row = new HorizontalLinearLayout(world);
 		layout->addChild(row);
@@ -61,21 +60,19 @@ void PD_UI_DissCard::init(){
 			star->setSquareWidth(1.f);
 			star->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-STAR")->texture);
 			star->background->mesh->setScaleMode(GL_NEAREST);
-			star->setVisible(false);
 
 			stars[y][x] = star;
 		}
 	}
-
-	// show earned stars
-	for(unsigned long int x = 0; x < defense; ++x){
-		stars[0][x]->setVisible(true);
-	}for(unsigned long int x = 0; x < insight; ++x){
-		stars[1][x]->setVisible(true);
-	}for(unsigned long int x = 0; x < strength; ++x){
-		stars[2][x]->setVisible(true);
-	}for(unsigned long int x = 0; x < sass; ++x){
-		stars[3][x]->setVisible(true);
+	// show earned stars and hide unearned stars
+	for(unsigned long int x = 0; x < 5; ++x){
+		stars[0][x]->setVisible(x < defense);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[1][x]->setVisible(x < insight);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[2][x]->setVisible(x < strength);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[3][x]->setVisible(x < sass);
 	}
 
 	// exp slider
@@ -99,7 +96,7 @@ void PD_UI_DissCard::init(){
 	}else{
 		textShader = new ComponentShaderText(true);
 		textShader->setColor(113/255.f, 71/255.f, 16/255.f);
-		TextLabel * label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 		layout->addChild(label);
 		label->boxSizing = kCONTENT_BOX;
 		label->marginTop.setRationalSize(0.05f, &layout->height);
@@ -109,4 +106,24 @@ void PD_UI_DissCard::init(){
 	}
 
 	invalidateLayout();
+}
+
+void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
+	defense = _enemy->defense;
+	insight = _enemy->insight;
+	strength = _enemy->strength;
+	sass = _enemy->sass;
+
+	// show earned stars and hide unearned stars
+	for(unsigned long int x = 0; x < 5; ++x){
+		stars[0][x]->setVisible(x < defense);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[1][x]->setVisible(x < insight);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[2][x]->setVisible(x < strength);
+	}for(unsigned long int x = 0; x < 5; ++x){
+		stars[3][x]->setVisible(x < sass);
+	}
+
+	label->setText(_enemy->definition->name);
 }

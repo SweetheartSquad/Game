@@ -15,6 +15,7 @@
 #include <PD_UI_DissBattle.h>
 #include <PD_UI_Map.h>
 #include <PD_UI_Fade.h>
+#include <PD_UI_DissCard.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -139,4 +140,13 @@ public:
 
 	PD_Prop * carriedProp;
 	float carriedPropDistance;
+
+
+
+	// diss battle intro stuff
+	Timeout * dissBattleStartTimeout;
+	HorizontalLinearLayout * dissBattleStartLayout;
+	PD_Character * dissEnemy;
+	PD_UI_DissCard * playerCard, * enemyCard;
+	NodeUI * vs;
 };
