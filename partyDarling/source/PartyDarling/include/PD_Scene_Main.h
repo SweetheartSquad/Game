@@ -20,6 +20,7 @@
 #include <Player.h>
 
 #include <Colour.h>
+#include <LabRoom.h>
 
 
 #include <PD_Character.h>
@@ -36,6 +37,8 @@ private:
 	void removeRoom(Room * _room);
 	// adds _room to the scene/physics
 	void addRoom(Room * _room);
+
+	LabRoom * labRoom;
 public:
 	float panSpeed;
 	bool panLeft;

@@ -41,7 +41,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	setColliderAsMesh(PD_ResourceManager::labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::labScenario->getAsset("character", "Butler"));
+	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::labScenario->getAsset("character", std::to_string(1)));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 	addComponent(p);
 	characters.push_back(p);

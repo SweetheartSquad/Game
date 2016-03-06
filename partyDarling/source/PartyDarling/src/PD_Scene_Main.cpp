@@ -545,6 +545,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
 	});
 
+	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
+		labRoom->locked = false;
+	});
+
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerDissBattle", [this](sweet::Event * _event){
 		// Launch a diss battle with the selected character. 
 		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
@@ -762,7 +766,7 @@ void PD_Scene_Main::bundleScenarios(){
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	IntroRoom * introRoom = dynamic_cast<IntroRoom *>(_rooms.back());
 	_rooms.pop_back();
-	LabRoom * labRoom = dynamic_cast<LabRoom *>(_rooms.back());
+	labRoom = dynamic_cast<LabRoom *>(_rooms.back());
 	_rooms.pop_back();
 
 	int numRooms = _rooms.size();
@@ -1022,7 +1026,7 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 
 
 	// construct static rooms (into room, lab room)
-	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::labScenario->getAsset("room","1"))));
 	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
 
 
