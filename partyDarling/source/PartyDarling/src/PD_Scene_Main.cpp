@@ -632,7 +632,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	vs->background->mesh->setScaleMode(GL_NEAREST);
 	vs->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-VS")->texture);
 
-	enemyCard = new PD_UI_DissCard(uiLayer->world, PD_Listing::listings.begin()->second->characters.begin()->second);
+	enemyCard = new PD_UI_DissCard(uiLayer->world);
 	dissBattleStartLayout->addChild(enemyCard);
 	enemyCard->setRationalHeight(0.3f, dissBattleStartLayout);
 	enemyCard->setSquareWidth(1.4f);
@@ -760,9 +760,9 @@ void PD_Scene_Main::bundleScenarios(){
 
 
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
-	Room * introRoom = _rooms.back();
+	IntroRoom * introRoom = dynamic_cast<IntroRoom *>(_rooms.back());
 	_rooms.pop_back();
-	Room * labRoom = _rooms.back();
+	LabRoom * labRoom = dynamic_cast<LabRoom *>(_rooms.back());
 	_rooms.pop_back();
 
 	int numRooms = _rooms.size();
@@ -827,7 +827,22 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
-	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom; // TODO: replace this with the actual starting room
+	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom;
+	if(currentHousePosition.x == 0){
+		introRoom->setEdge(PD_Door::kWEST);
+		player->playerCamera->yaw += 90;
+	}else if(currentHousePosition.x == houseSize-1){
+		introRoom->setEdge(PD_Door::kEAST);
+		player->playerCamera->yaw -= 90;
+	}else if(currentHousePosition.y == 0){
+		introRoom->setEdge(PD_Door::kNORTH);
+		//player->playerCamera->yaw += 0;
+	}else{
+		introRoom->setEdge(PD_Door::kSOUTH);
+		player->playerCamera->yaw += 180;
+	}
+
+
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
 	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
@@ -1232,32 +1247,39 @@ void PD_Scene_Main::update(Step * _step){
 
 
 	// look up at current speaker's face during conversations
+	PD_Character * facing = nullptr;
 	if(uiDialogue->isVisible()){
 		if(uiDialogue->currentSpeaker != nullptr){
-			glm::vec3 headPos = uiDialogue->currentSpeaker->pr->head->childTransform->getWorldPos();
-			glm::vec3 d = glm::normalize(headPos - camPos);
+			facing = uiDialogue->currentSpeaker;
+		}
+	}else if(uiDissBattle->isVisible() || dissBattleStartLayout->isVisible()){
+		facing = dissEnemy;
+	}
+
+	if(facing != nullptr){
+		glm::vec3 headPos = facing->pr->head->childTransform->getWorldPos();
+		glm::vec3 d = glm::normalize(headPos - camPos);
 		
-			float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
-			float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
-			float pDif = pitch - player->playerCamera->pitch;
-			float yDif = yaw - player->playerCamera->yaw;
+		float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
+		float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
+		float pDif = pitch - player->playerCamera->pitch;
+		float yDif = yaw - player->playerCamera->yaw;
 			
-			while(pDif > 180){
-				pDif -= 360;
-			}while(pDif < -180){
-				pDif += 360;
-			}
-			while(yDif > 180){
-				yDif -= 360;
-			}while(yDif < -180){
-				yDif += 360;
-			}
-			if(glm::abs(pDif) > FLT_EPSILON){
-				player->playerCamera->pitch += pDif*0.05f;
-			}
-			if(glm::abs(yDif) > FLT_EPSILON){
-				player->playerCamera->yaw += yDif*0.05f;
-			}
+		while(pDif > 180){
+			pDif -= 360;
+		}while(pDif < -180){
+			pDif += 360;
+		}
+		while(yDif > 180){
+			yDif -= 360;
+		}while(yDif < -180){
+			yDif += 360;
+		}
+		if(glm::abs(pDif) > FLT_EPSILON){
+			player->playerCamera->pitch += pDif*0.05f;
+		}
+		if(glm::abs(yDif) > FLT_EPSILON){
+			player->playerCamera->yaw += yDif*0.05f;
 		}
 	}
 

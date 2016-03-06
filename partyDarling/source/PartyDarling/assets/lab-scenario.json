@@ -7,7 +7,7 @@
         {
           "id": "INTRO-ROOM",
           "type": "mesh",
-          "src": "introRoom.obj"
+          "src": "intro_Room.obj"
         },
 
         {  

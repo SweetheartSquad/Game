@@ -18,14 +18,14 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 {
 	init();
 }
-PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, PD_Character * _enemy) :
+PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 	NodeUI_NineSliced(_world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("DISSCARD-BUBBLE")->texture)),
-	defense(_enemy->defense),
-	insight(_enemy->insight),
-	strength(_enemy->strength),
-	sass(_enemy->sass),
+	defense(0),
+	insight(0),
+	strength(0),
+	sass(0),
 	showSlider(false),
-	name(_enemy->definition->name),
+	name(""),
 	experience(nullptr)
 {
 	init();
