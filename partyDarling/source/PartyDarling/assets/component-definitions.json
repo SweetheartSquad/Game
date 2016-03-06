@@ -57,7 +57,7 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Evelyn_HEAD.json",
+            "src": "components/definitions/Evelyn_ARM.json",
             "type": "ARM"
         },
         {
