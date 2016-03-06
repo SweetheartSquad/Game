@@ -444,7 +444,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		labRoom->locked = false;
 	});
 
-
 	PD_ResourceManager::scenario->eventManager->addEventListener("changeDISSStat", [this](sweet::Event * _event){
 		// Trigger
 		// Modifies the DISS stats of the player. The stat can be chose from Defense, Insight, Strength, Sass. Delta is the amount to change the stat by, and can be positive or negative.
@@ -1702,8 +1701,8 @@ void PD_Scene_Main::resetCrosshair() {
 void PD_Scene_Main::save() {
 	Json::Value saveOut;
 	if(plotPosition != kEND) {
-		int pos = plotPosition;
-		saveOut["plotPosition"] = plotPosition;
+		int pos = static_cast<int>(plotPosition);
+		saveOut["plotPosition"] = ++pos;
 		saveOut["strength"] = player->strength;
 		saveOut["sass"] = player->sass;
 		saveOut["defense"] = player->defense;
