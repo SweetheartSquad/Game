@@ -39,6 +39,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 		float p = _event->getFloatData("progress");
 		camOffset = glm::vec3(cos((1.f-p)*glm::pi<float>()*2)*shakeIntensity, shakeIntensity, 0) * sin(Easing::easeOutElastic(p, 1.f, -1.f, 1.f)*25);
 	});
+
+	enable();
 };
 
 Player::~Player(){

@@ -33,7 +33,8 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	currentOption(0),
 	vl(new VerticalLinearLayout(world)),
 	displayOffset(0),
-	childrenUpdated(false)
+	childrenUpdated(false),
+	enabled(true)
 {
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(1,1,1,1);
@@ -118,7 +119,7 @@ void PD_UI_Bubble::placeOptions(){
 
 void PD_UI_Bubble::update(Step * _step){
 	// don't bother with interaction and layout stuff if it's hidden or there aren't any options right now
-	if(isVisible() && options.size() > 0){
+	if(enabled && options.size() > 0){
 		// use the mouse to determine interactions
 		// if we're scrolling, then we either call "next" or "prev" based on the direction of the scroll
 		// if we're not scrolling, we can click the current option

@@ -28,7 +28,7 @@
             "description":"The lab room",
             "furnitureTypes":"",
             "characters":[  
-                "Butler"
+                1
             ],
             "tags":{  
                 "not":[  
@@ -43,7 +43,7 @@
             },
             "size":"LARGE",
             "type":"room",
-            "locked":false,
+            "locked":true,
             "items":[  
 
             ],
@@ -55,19 +55,13 @@
             ]
         },
         {  
-            "id":"Butler",
-            "name":"Butler (Lab)",
+            "id":1,
+            "name":"Suspect",
             "states":[  
                 {  
                     "id":1,
                     "name":"DefaultState",
                     "convo":1,
-                    "animation":"RANDOM"
-                },
-                {  
-                    "id":2,
-                    "name":"TalkedOnce",
-                    "convo":5,
                     "animation":"RANDOM"
                 }
             ],
@@ -76,6 +70,10 @@
             ],
             "type":"character",
             "defaultState":1,
+            "strength":0,
+            "sass":0,
+            "insight":0,
+            "defense":0,
             "components":[  
                 {  
                     "tags":{  
@@ -89,7 +87,7 @@
 
                         ]
                     },
-                    "src":"components/definitions/LilTomward_PELVIS.json",
+                    "src":"components/definitions/Jasper_PELVIS.json",
                     "components":[  
                         {  
                             "tags":{  
@@ -103,7 +101,7 @@
 
                                 ]
                             },
-                            "src":"components/definitions/LilTomward_TORSO.json",
+                            "src":"components/definitions/Jasper_TORSO.json",
                             "components":[  
                                 {  
                                     "tags":{  
@@ -117,7 +115,7 @@
 
                                         ]
                                     },
-                                    "src":"components/definitions/LilTomward_HEAD.json"
+                                    "src":"components/definitions/Jasper_HEAD.json"
                                 },
                                 {  
                                     "tags":{  
@@ -131,7 +129,7 @@
 
                                         ]
                                     },
-                                    "src":"components/definitions/LilTomward_leftarm_ARM.json"
+                                    "src":"components/definitions/Jasper_ARM.json"
                                 },
                                 {  
                                     "tags":{  
@@ -145,7 +143,7 @@
 
                                         ]
                                     },
-                                    "src":"components/definitions/LilTomward_rightarm_ARM.json"
+                                    "src":"components/definitions/Jasper_ARM.json"
                                 }
                             ]
                         },
@@ -161,7 +159,7 @@
 
                                 ]
                             },
-                            "src":"components/definitions/LilTomward_LEG.json"
+                            "src":"components/definitions/Jasper_LEG.json"
                         },
                         {  
                             "tags":{  
@@ -175,7 +173,7 @@
 
                                 ]
                             },
-                            "src":"components/definitions/LilTomward_LEG.json"
+                            "src":"components/definitions/Jasper_LEG.json"
                         }
                     ]
                 }
@@ -183,168 +181,78 @@
         },
 
 
-        {  
-            "id":1,
-            "name":"Butler1",
-            "dialogue":[  
-                {  
-                    "text":[  
-                        "Good evening.",
-                        "I hope it was not too much trouble getting here.",
-                        "May I take your coat?"
-                    ],
-                    "triggers":[],
-                    "conditions":[  
-
-                    ],
-                    "speaker":"Butler",
-                    "name":"Dialogue 0"
+        {
+          "id": 1,
+          "name": "Suspect1",
+          "dialogue": [
+            {
+              "text": [
+                "Alas, you're alive.",
+                "I'm terribly sorry you got wrapped up in all this.",
+                "I'm sure, in another life, we could have been great friends.",
+                "But in this life, I'm afraid you're very much in my way.",
+                "I have a lot of terrible, horrible things to do.",
+                "I can't have you trying to stop me.",
+                "Don't try and find me again."
+              ],
+              "triggers": [],
+              "conditions": [],
+              "speaker": 1,
+              "name": "Dialogue 0"
+            },
+            {
+              "text": [
+                "Goodbye."
+              ],
+              "triggers": [
+                {
+                  "type": "fadeOut",
+                  "args": {
+                    "length": {
+                      "value": 30,
+                      "type": "INT",
+                      "dependsOn": "NONE"
+                    },
+                    "r": {
+                      "value": 255,
+                      "type": "INT",
+                      "dependsOn": "NONE"
+                    },
+                    "g": {
+                      "value": 255,
+                      "type": "INT",
+                      "dependsOn": "NONE"
+                    },
+                    "b": {
+                      "value": 255,
+                      "type": "INT",
+                      "dependsOn": "NONE"
+                    }
+                  },
+                  "id": 15
                 }
-            ],
-            "options":[  
-                {  
-                    "convoId":2,
-                    "label":"Yes"
-                },
-                {  
-                    "convoId":3,
-                    "label":"No"
-                }
-            ],
-            "type":"conversation",
-            "settings":{  
-                "indentation":0,
-                "order":0
+              ],
+              "conditions": [],
+              "speaker": 1,
+              "name": "Dialogue 1"
+            },
+            {
+                "text":[
+                "Thanks for playing the \"Party, Darling?\" beta test!",
+                "We look forward to hearing your thoughts on the questionnaire!",
+                "The End"],
+                "speaker":1,
+                "name":"Dialogue 2",
+                "conditions":[],
+                "triggers":[]
             }
-        },
-        {  
-            "id":2,
-            "name":"ButlerYes",
-            "dialogue":[  
-                {  
-                    "text":[  
-                        "Very good.",
-                        "When you are ready to leave I will fetch it for you."
-                    ],
-                    "triggers":[  
-
-                    ],
-                    "conditions":[  
-
-                    ],
-                    "speaker":"Butler",
-                    "name":"Dialogue 0"
-                }
-            ],
-            "options":[  
-
-            ],
-            "type":"conversation",
-            "settings":{  
-                "indentation":0,
-                "order":1
-            }
-        },
-        {  
-            "id":3,
-            "name":"ButlerNo",
-            "dialogue":[  
-                {  
-                    "text":[  
-                        "If you so desire.",
-                        "If you change your mind, you can find me here again later."
-                    ],
-                    "triggers":[  
-
-                    ],
-                    "conditions":[  
-
-                    ],
-                    "speaker":"Butler",
-                    "name":"Dialogue 0"
-                }
-            ],
-            "options":[  
-
-            ],
-            "type":"conversation",
-            "settings":{  
-                "indentation":0,
-                "order":2
-            }
-        },
-        {  
-            "id":4,
-            "name":"Butler2",
-            "dialogue":[  
-                {  
-                    "text":[  
-                        "There are hors-d'oeuvres on the table to my left, if you would like one.",
-                        "The door to my right will take you into the mansion proper.",
-                        "Please do not hesitate to find me if you need anything.",
-                        "I hope you have a very rewarding evening"
-                    ],
-                    "triggers":[  
-                        {  
-                            "type":"changeState",
-                            "args":{  
-                                "State":{  
-                                    "value":2,
-                                    "type":"CHARACTER_STATE",
-                                    "dependsOn":"Character"
-                                },
-                                "Character":{  
-                                    "value":6,
-                                    "type":"CHARACTER",
-                                    "dependsOn":"NONE"
-                                }
-                            },
-                            "id":1
-                        }
-                    ],
-                    "conditions":[  
-
-                    ],
-                    "speaker":"Butler",
-                    "name":"Dialogue 0"
-                }
-            ],
-            "options":[  
-
-            ],
-            "type":"conversation",
-            "settings":{  
-                "indentation":0,
-                "order":3
-            }
-        },
-        {  
-            "id":5,
-            "name":"ButlerTalkedOnce",
-            "dialogue":[  
-                {  
-                    "text":[  
-                        "Enter the door to my right when you are ready to join the party.",
-                        "If you need anything, you can find me here again."
-                    ],
-                    "triggers":[  
-
-                    ],
-                    "conditions":[  
-
-                    ],
-                    "speaker":"Butler",
-                    "name":"Dialogue 0"
-                }
-            ],
-            "options":[  
-
-            ],
-            "type":"conversation",
-            "settings":{  
-                "indentation":0,
-                "order":4
-            }
+          ],
+          "options": [],
+          "type": "conversation",
+          "settings": {
+            "indentation": 0,
+            "order": 34
+          }
         }
     ]
 }
