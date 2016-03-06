@@ -391,6 +391,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			navigate(navigation); // TODO: replace this with actual navigation vector
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
+			player->enable();
 			uiBubble->enable();
 		});
 		t->start();
