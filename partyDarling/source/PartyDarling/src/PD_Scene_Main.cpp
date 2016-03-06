@@ -439,6 +439,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
+	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
+		// unlocks the lab room for the run
+		labRoom->locked = false;
+	});
+
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("changeDISSStat", [this](sweet::Event * _event){
 		// Trigger
