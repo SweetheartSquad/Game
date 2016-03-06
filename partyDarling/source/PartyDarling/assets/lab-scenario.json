@@ -1,19 +1,31 @@
 {
-    "name": "First Room",
-    "description": "Scenario including everything needed for the first room.",
+    "name": "Lab Room",
+    "description": "Scenario including everything needed for the lab room.",
     "type": 1,
     "assets": [
 
         {
-          "id": "INTRO-ROOM",
+          "id": "LAB-ROOM",
           "type": "mesh",
-          "src": "intro_Room.obj"
+          "src": "lab_Room.obj"
+        },
+        {
+          "id": "LAB-ROOM-COLLIDER",
+          "type": "mesh",
+          "src": "lab_Room_collider.obj"
+        },
+        {
+          "id": "LAB-ROOM",
+          "type": "texture",
+          "src": "lab_Room.png"
         },
 
+        
+
         {  
-            "name":"Lab Room",
+            "name":"Lab",
             "id":1,
-            "description":"The last room",
+            "description":"The lab room",
             "furnitureTypes":"",
             "characters":[  
                 "Butler"
@@ -44,7 +56,7 @@
         },
         {  
             "id":"Butler",
-            "name":"Butler (lab)",
+            "name":"Butler (Lab)",
             "states":[  
                 {  
                     "id":1,
@@ -119,7 +131,7 @@
 
                                         ]
                                     },
-                                    "src":"components/definitions/Jasper_ARM.json"
+                                    "src":"components/definitions/LilTomward_leftarm_ARM.json"
                                 },
                                 {  
                                     "tags":{  
@@ -133,7 +145,7 @@
 
                                         ]
                                     },
-                                    "src":"components/definitions/Jasper_ARM.json"
+                                    "src":"components/definitions/LilTomward_rightarm_ARM.json"
                                 }
                             ]
                         },

@@ -226,7 +226,7 @@ void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* 
 
 	FrameBufferInterface::pushFbo(screenFBO);
 	
-	_renderOptions->setClearColour(1,0,1,1);
+	_renderOptions->setClearColour(0,0,0,0);
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
