@@ -57,17 +57,17 @@
     {
         "order": 0,
         "src": "scenarios/Adventure_Omar.json",
-        "type": 0
+        "type": 1
     },
     {
         "order": 0,
         "src": "scenarios/Robot_Omar.json",
-        "type": 0
+        "type": 1
     },
     {
         "order": 0,
         "src": "scenarios/Ghost_Omar.json",
-        "type": 0
+        "type": 1
     },
     {
         "order": 0,
