@@ -20,7 +20,7 @@ public:
 	TextLabel * label;
 
 	PD_UI_DissCard(BulletWorld * _world, Player * _player);
-	PD_UI_DissCard(BulletWorld * _world, PD_Character * _enemy);
+	PD_UI_DissCard(BulletWorld * _world);
 	~PD_UI_DissCard();
 
 	void setEnemy(PD_Character * _enemy);
