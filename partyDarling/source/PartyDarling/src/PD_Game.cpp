@@ -20,6 +20,7 @@ OpenAL_Sound * PD_Game::bgmTrack = nullptr;
 bool PD_Game::staticInit(){
 	bgmTrackIdx.push(1);
 	bgmTrackIdx.push(2);
+	bgmTrackIdx.push(3);
 	return true;
 }
 bool PD_Game::staticInitialized = staticInit();
