@@ -42,6 +42,8 @@
 #include <IntroRoom.h>
 #include <LabRoom.h>
 
+#define MAX_SIDE_SCENARIOS 5
+
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
@@ -662,6 +664,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
+	activeScenarios.clear();
 
 	Json::Value root;
 	Json::Reader reader;
@@ -671,9 +674,8 @@ void PD_Scene_Main::pickScenarios(){
 		ST_LOG_ERROR("Could not load scenarios listing");
 	}
 
-#if 0 /// !!!Remove once we can test this
+#if 1 /// !!!Remove once we can test this
 	Json::Value scenarioFile;
-
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
 	std::vector<Json::Value> allPlotDefs;
@@ -696,11 +698,15 @@ void PD_Scene_Main::pickScenarios(){
 		}
 	}
 	
+	assert(allPlotDefs.size() > 0);
+	/* Just for now
 	assert(allPlotDefs.size() == 5);
 	assert(allOmarDefs.size() >= 3);
-
-	for(unsigned long int i = 1; i < 6; ++i) {
+	*/
+	//for(unsigned long int i = 1; i < 6; ++i) {
+	for(unsigned long int i = 1; i < allPlotDefs.size()+1; ++i) {
 		Json::Value scenariosList;
+
 		for(auto s : allPlotDefs) {
 			if(s["order"].asInt() == i) {
 				scenariosList.append(s["src"].asString());
@@ -715,29 +721,47 @@ void PD_Scene_Main::pickScenarios(){
 			scenariosList.append(allSideDefs.pop()["src"].asString());			
 		}
 
-		scenariosList.append(allOmarDefs.pop()["src"].asString());
+		if(plotPosition != kBEGINNING && plotPosition != kEND){
+			if(allOmarDefs.size() > 0){
+				scenariosList.append(allOmarDefs.pop()["src"].asString());
+			}
+		}
+
 		scenarioFile.append(scenariosList);
 	}
 
 #endif
 
-	// grab the current main plot scenario
-	// these go in order
+	// SAVE senarioFile
 
+	// ****************
+	// grab the current main plot scenario
+	
 	// pick an omar scenario
+	
 	// first is always the tutorial/intro
+
 	// middle are random from the a given set
+
 	// last is always the final
 
 
 	// pick side scenarios
 	// random from static shuffle vector
 
-
-	for(auto scenarioDef : root) {
-		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef["src"].asString()));
+	Json::Value currentScenario;
+	int i = 1;
+	for(auto scenariosList : scenarioFile) {
+		if(i == plotPosition){
+			currentScenario = scenariosList;
+			break;
+		}
+		++i;
 	}
-
+	
+	for(auto scenarioDef : currentScenario) {
+		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
+	}
 
 	// TODO: all of this
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));

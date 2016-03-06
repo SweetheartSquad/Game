@@ -17,8 +17,6 @@
 #include <ProgrammaticTexture.h>
 #include <TextureUtils.h>
 
-#define BORDER_SIZE 60.f
-
 #define FAIL_INSULT	"glassBreak"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
