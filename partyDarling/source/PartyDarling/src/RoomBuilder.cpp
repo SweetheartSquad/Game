@@ -523,11 +523,13 @@ bool RoomBuilder::placeDoor(PD_Door * _door){
 			}
 		}
 
+		intersected.clear();
+
 		// increase offset
-		if(offset < 0.5){
-			offset += 0.5;
+		if(offset < 0.5 * ROOM_TILE){
+			offset += 0.5 * ROOM_TILE;
 		}else{
-			offset += 1.f;
+			offset += 1.f * ROOM_TILE;
 		}
 	}
 

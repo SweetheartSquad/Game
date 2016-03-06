@@ -32,7 +32,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 
 	// load game scene before?
 
-	savedGame = false;
+	savedGame = sweet::FileUtils::fileExists("data/save.json");
 
 	VerticalLinearLayout * mainContainer = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(mainContainer);
