@@ -46,6 +46,10 @@ private:
 	bool canInterject;
 
 	NodeUI * displayContainer;
+	
+
+	HorizontalLinearLayout * tutorialSpacebar;
+	HorizontalLinearLayout * tutorialArrows;
 
 	VerticalLinearLayout * healthContainer;
 	NodeUI * gameContainer;

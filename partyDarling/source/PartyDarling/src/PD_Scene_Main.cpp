@@ -536,7 +536,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("unlockRoom", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("unlockRoom", [this](sweet::Event * _event){
 		//Unlock the chosen room. If it is already unlocked, nothing will happen.
 		// ROOM room = room to unlock
 		std::string room = _event->getStringData("room");
@@ -547,11 +547,17 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 
 		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
+
+		// update the map to get rid of the locked icon for the room
+		uiMap->updateMap(currentHousePosition);
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
 		// unlocks the lab room for the run
 		labRoom->locked = false;
+
+		// update the map to get rid of the locked icon for the room
+		uiMap->updateMap(currentHousePosition);
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerDissBattle", [this](sweet::Event * _event){
