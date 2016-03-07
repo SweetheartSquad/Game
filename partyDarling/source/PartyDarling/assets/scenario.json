@@ -220,14 +220,25 @@
 	
 
   // DISS BATTLE
-  {
+	{
+		"id": "DISS-TUTORIAL-SPACEBAR",
+		"type": "texture",
+		"src": "UI/yelling contest/tutorialSpacebar.png"
+	},
+	{
+		"id": "DISS-TUTORIAL-ARROWS",
+		"type": "texture",
+		"src": "UI/yelling contest/tutorialArrows.png"
+	},
+
+   {
       "id": "DISS-BATTLE-VS",
       "type": "texture",
       "src": "UI/vs.png",
     "generateMipmaps": false
     },
   
-  {
+   {
       "id": "DISS-BATTLE-OFFENSE-BUBBLE",
       "type": "texture",
       "src": "UI/yelling contest/blueBubble.png",
