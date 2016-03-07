@@ -367,6 +367,23 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	talk->loopType = Animation<float>::LoopType::kLOOP;
 	talk->hasStart = true;
 
+	// blink
+	eyeScale = glm::vec3(1);
+	eyeAnim = new Animation<glm::vec3>(&eyeScale);
+	eyeAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(1.5, 5.5), glm::vec3(0,0,0), Easing::kLINEAR));
+	eyeAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(0.05, 0.15), glm::vec3(0,-1,0), Easing::kEASE_IN_CUBIC));
+	eyeAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(0.05, 0.15), glm::vec3(0,1,0), Easing::kEASE_OUT_CUBIC));
+	eyeAnim->hasStart = true;
+
+	// breathing
+	pelvisScale = glm::vec3(1);
+	pelvisAnim = new Animation<glm::vec3>(&pelvisScale);
+	float torsoScaleDelta = sweet::NumberUtils::randomFloat(0.025, 0.1f);
+	pelvisAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(0.5, 2.15), glm::vec3(0,torsoScaleDelta,0), Easing::kEASE_IN_OUT_CUBIC));
+	pelvisAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(0.05, 0.5), glm::vec3(0,0,0), Easing::kLINEAR));
+	pelvisAnim->tweens.push_back(new Tween<glm::vec3>(sweet::NumberUtils::randomFloat(0.5, 2.15), glm::vec3(0,-torsoScaleDelta,0), Easing::kEASE_IN_OUT_CUBIC));
+	pelvisAnim->hasStart = true;
+
 	emote = new Sprite(_emoticonShder);
 	emote->setVisible(false);
 	head->childTransform->addChild(emote);
@@ -378,6 +395,8 @@ CharacterRenderer::~CharacterRenderer(){
 	delete currentAnimation;
 	delete emoteTimeout;
 	delete talk;
+	delete eyeAnim;
+	delete pelvisAnim;
 }
 
 void CharacterRenderer::setAnimation(std::string _name) {
@@ -486,7 +505,14 @@ void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 }
 
 void CharacterRenderer::update(Step * _step){
-	
+	eyeAnim->update(_step);
+	pelvisAnim->update(_step);
+	//eyeL->meshTransform->translate(eyeScale, false);
+	//eyeR->meshTransform->translate(eyeScale, false);
+	eyeL->childTransform->scale(eyeScale, false);
+	eyeR->childTransform->scale(eyeScale, false);
+
+	childTransform->scale(pelvisScale, false);
 	
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
