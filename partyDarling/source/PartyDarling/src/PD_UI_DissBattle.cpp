@@ -486,6 +486,7 @@ void PD_UI_DissBattle::update(Step * _step){
 			}
 
 			if(!modeOffensive){
+				enemy->pr->talking = true;
 				// update interject bubble
 				if(interjectBubble->isVisible()){
 					if(interjectBubbleTimer >= interjectBubbleTimerLength){
@@ -594,7 +595,7 @@ void PD_UI_DissBattle::update(Step * _step){
 				}
 
 			}else{
-
+				enemy->pr->talking = false;
 				// update compliment bubble
 				if(complimentBubble->isVisible()){
 					if(complimentBubbleTimer >= complimentBubbleTimerLength){
@@ -826,6 +827,7 @@ void PD_UI_DissBattle::complete(){
 		e->setIntData("win", win);
 		eventManager->triggerEvent(e);
 		isComplete = true;
+		enemy->pr->talking = false;
 		enemy = nullptr;
 	}
 }
