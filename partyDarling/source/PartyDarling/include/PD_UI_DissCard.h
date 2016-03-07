@@ -4,12 +4,13 @@
 
 class Player;
 class PD_Character;
+class PD_DissStats;
 
 class PD_UI_DissCard : public NodeUI_NineSliced{
 private:
 	void init();
 public:
-	int defense, insight, strength, sass;
+	PD_DissStats * dissStats;
 	bool showSlider;
 	
 	float * const experience;
@@ -23,5 +24,6 @@ public:
 	PD_UI_DissCard(BulletWorld * _world);
 	~PD_UI_DissCard();
 
+	void updateStats();
 	void setEnemy(PD_Character * _enemy);
 };

@@ -41,8 +41,10 @@
 
 #include <IntroRoom.h>
 #include <LabRoom.h>
+#include <PD_DissStats.h>
 
 #define MAX_SIDE_SCENARIOS 5
+#define LEVEL_UP_DURATION 3
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
@@ -204,11 +206,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
-		if(!uiDialogue->hadNextDialogue){
-			player->enable();
-			currentHoverTarget = nullptr;
-			updateSelection();
-		}
+		dissBattleStartLayout->setVisible(true);
+		dissBattleEndTimeout->restart();
 		player->wonLastDissBattle = _event->getIntData("win");
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
@@ -454,13 +453,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		std::transform(stat.begin(), stat.end(), stat.begin(), ::tolower);
 		if(stat == "strength") {
-			player->strength += delta;	
+			player->dissStats->incrementDefense(delta);	
 		}else if(stat == "defense") {
-			player->defense += delta;		
+			player->dissStats->incrementDefense(delta);		
 		}else if(stat == "insight") {
-			player->insight += delta;		
+			player->dissStats->incrementInsight(delta);		
 		}else if(stat == "sass") {
-			player->sass += delta;		
+			player->dissStats->incrementSass(delta);		
 		}else {
 			ST_LOG_ERROR_V("Invalid argument provided for argument 'stat' in trigger changeDISSStat");
 		}
@@ -617,33 +616,52 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	
 
 
-	
-
-	dissBattleStartLayout = new HorizontalLinearLayout(uiLayer->world);
+	dissBattleStartLayout = new NodeUI(uiLayer->world);
 	uiLayer->addChild(dissBattleStartLayout);
 	dissBattleStartLayout->setRationalHeight(1.f, uiLayer);
 	dissBattleStartLayout->setRationalWidth(1.f, uiLayer);
-	dissBattleStartLayout->setMarginLeft(0.3f);
-	dissBattleStartLayout->horizontalAlignment = kCENTER;
-	dissBattleStartLayout->verticalAlignment = kMIDDLE;
+	dissBattleStartLayout->background->setVisible(false);
 	dissBattleStartLayout->setVisible(false);
+
+	HorizontalLinearLayout * dissBattleCards = new HorizontalLinearLayout(uiLayer->world);
+	dissBattleStartLayout->addChild(dissBattleCards);
+	dissBattleCards->setRationalHeight(1.f, dissBattleStartLayout);
+	dissBattleCards->setRationalWidth(1.f, dissBattleStartLayout);
+	dissBattleCards->setMarginLeft(0.3f);
+	dissBattleCards->horizontalAlignment = kCENTER;
+	dissBattleCards->verticalAlignment = kMIDDLE;
 	
 	playerCard = new PD_UI_DissCard(uiLayer->world, player);
-	dissBattleStartLayout->addChild(playerCard);
-	playerCard->setRationalHeight(0.3f, dissBattleStartLayout);
+	dissBattleCards->addChild(playerCard);
+	playerCard->setRationalHeight(0.3f, dissBattleCards);
 	playerCard->setSquareWidth(1.4f);
 
 	vs = new NodeUI(uiLayer->world);
-	dissBattleStartLayout->addChild(vs);
-	vs->setRationalWidth(0.3f, dissBattleStartLayout);
+	dissBattleCards->addChild(vs);
+	vs->setRationalWidth(0.3f, dissBattleCards);
 	vs->setSquareHeight(1.f);
 	vs->background->mesh->setScaleMode(GL_NEAREST);
 	vs->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-VS")->texture);
 
 	enemyCard = new PD_UI_DissCard(uiLayer->world);
-	dissBattleStartLayout->addChild(enemyCard);
-	enemyCard->setRationalHeight(0.3f, dissBattleStartLayout);
+	dissBattleCards->addChild(enemyCard);
+	enemyCard->setRationalHeight(0.3f, dissBattleCards);
 	enemyCard->setSquareWidth(1.4f);
+
+	HorizontalLinearLayout * levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
+	dissBattleStartLayout->addChild(levelUpContainer);
+	levelUpContainer->setRationalWidth(1.f, dissBattleStartLayout);
+	levelUpContainer->setRationalHeight(1.f, dissBattleStartLayout);
+	levelUpContainer->horizontalAlignment = kCENTER;
+	levelUpContainer->verticalAlignment = kMIDDLE;
+
+	levelUp = new NodeUI(uiLayer->world);
+	levelUpContainer->addChild(levelUp);
+	levelUp->setRationalHeight(1.f, levelUpContainer);
+	levelUp->setSquareWidth(1.f);
+	levelUp->background->mesh->setScaleMode(GL_NEAREST);
+	levelUp->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LEVEL-UP")->texture);
+	levelUp->setVisible(false);
 
 	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
 		dissBattleStartLayout->setVisible(false);
@@ -682,6 +700,53 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 	childTransform->addChild(dissBattleStartTimeout, false);
+
+	dissBattleEndTimeout = new Timeout(2 / player->level, [this](sweet::Event * _event){
+		if(player->experience >= 100 * player->level){
+			player->dissStats->incrementDefense();
+			player->dissStats->incrementInsight();
+			player->dissStats->incrementSass();
+			player->dissStats->incrementStrength();
+			playerCard->updateStats();
+
+			levelUp->setVisible(true);
+			levelUp->firstParent()->scale(0, false);
+			dissBattleLevelUpTimeout->restart();
+		}else{
+			// end I hate this
+			dissBattleStartLayout->setVisible(false);
+			if(!uiDialogue->hadNextDialogue){
+				player->enable();
+				currentHoverTarget = nullptr;
+				updateSelection();
+			}
+		}
+	});
+	dissBattleEndTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		float blah = p * 100.f / player->level;
+		float xp = player->experience;
+		float add =  p * 100.f / player->level - player->experience;
+		float res = xp + add;
+		player->experience +=  p * 100.f / player->level - player->experience;
+	});
+	childTransform->addChild(dissBattleEndTimeout, false);
+
+	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
+		// end and this
+		levelUp->setVisible(false);
+		dissBattleStartLayout->setVisible(false);
+		if(!uiDialogue->hadNextDialogue){
+			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
+		}
+	});
+	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f), false);
+	});
+	childTransform->addChild(dissBattleLevelUpTimeout, false);
 }
 
 
@@ -1720,10 +1785,10 @@ void PD_Scene_Main::save() {
 	if(plotPosition != kEND) {
 		int pos = static_cast<int>(plotPosition);
 		saveOut["plotPosition"] = ++pos;
-		saveOut["strength"] = player->strength;
-		saveOut["sass"] = player->sass;
-		saveOut["defense"] = player->defense;
-		saveOut["insight"] = player->insight;
+		saveOut["strength"] = player->dissStats->getStrength();
+		saveOut["sass"] = player->dissStats->getSass();
+		saveOut["defense"] = player->dissStats->getDefense();
+		saveOut["insight"] = player->dissStats->getInsight();
 		for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
 			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
 			uiDissBattle->lifeTokens[i]->saveImageData(fileName);
@@ -1747,10 +1812,10 @@ void PD_Scene_Main::loadSave() {
 		bool parsingSuccsessful = reader.parse(saveJson, root);
 		assert(parsingSuccsessful);
 		plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
-		player->strength = root["strength"].asInt();
-		player->sass	 = root["sass"].asInt();
-		player->defense  = root["defense"].asInt();
-		player->insight  = root["insight"].asInt();
+		player->dissStats->incrementStrength(root["strength"].asInt());
+		player->dissStats->incrementSass(root["sass"].asInt());
+		player->dissStats->incrementDefense(root["defense"].asInt());
+		player->dissStats->incrementInsight(root["insight"].asInt());
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();

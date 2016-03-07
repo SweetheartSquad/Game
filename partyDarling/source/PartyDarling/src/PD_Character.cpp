@@ -16,6 +16,7 @@
 
 #include <sweet/Input.h>
 #include <PD_Listing.h>
+#include <PD_DissStats.h>
 
 unsigned long int PD_Character::numRandomCharacters = 0;
 
@@ -27,12 +28,13 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	pr(new CharacterRenderer(_world, _definition, _shader, _emoticonShader)),
 	enabled(true),
 	dissedAt(false),
-	wonDissBattle(false)
+	wonDissBattle(false),
+	dissStats(new PD_DissStats())
 {
-	defense  = definition->defense;
-	insight  = definition->insight;
-	sass	 = definition->sass;
-	strength = definition->strength;
+	dissStats->incrementDefense(definition->defense);
+	dissStats->incrementInsight(definition->insight);
+	dissStats->incrementSass(definition->sass);
+	dissStats->incrementStrength(definition->strength);
 
 	billboarded = true;
 

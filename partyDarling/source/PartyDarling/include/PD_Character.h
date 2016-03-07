@@ -26,6 +26,7 @@ class CharacterRenderer;
 class AssetCharacter;
 class CharacterComponentDefinition;
 class PD_Palette;
+class PD_DissStats;
 
 class CharacterComponent : public Sprite{
 public:
@@ -141,10 +142,7 @@ private:
 	static unsigned long int numRandomCharacters;
 public:
 
-	int defense;
-	int insight;
-	int strength;
-	int sass;
+	PD_DissStats * dissStats;
 	
 	// if false, you haven't had a diss battle with this character yet
 	// if true, you can't have a diss battle them again

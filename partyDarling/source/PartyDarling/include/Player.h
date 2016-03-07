@@ -3,6 +3,7 @@
 #include <BulletFirstPersonController.h>
 class Room;
 class Timeout;
+class PD_DissStats;
 
 class Player : public virtual BulletFirstPersonController{
 public:
@@ -18,10 +19,10 @@ public:
 	float mass;
 	float maxSpeed;
 
-	int defense;
-	int insight;
-	int strength;
-	int sass;
+	float experience;
+	int level;
+
+	PD_DissStats * dissStats;
 	bool wonLastDissBattle;
 	Player(BulletWorld * bulletWorld);
 	~Player();

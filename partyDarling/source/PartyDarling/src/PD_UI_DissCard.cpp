@@ -5,25 +5,20 @@
 
 #include <Player.h>
 #include <PD_Character.h>
+#include <PD_DissStats.h>
 
 PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 	NodeUI_NineSliced(_world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("DISSCARD-BUBBLE")->texture)),
-	defense(_player->defense),
-	insight(_player->insight),
-	strength(_player->strength),
-	sass(_player->sass),
+	dissStats(_player->dissStats),
 	showSlider(true),
 	name("Player"),
-	experience(new float(0.5f)) // TODO: tie this to player experience
+	experience(&_player->experience) // TODO: tie this to player experience
 {
 	init();
 }
 PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 	NodeUI_NineSliced(_world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("DISSCARD-BUBBLE")->texture)),
-	defense(0),
-	insight(0),
-	strength(0),
-	sass(0),
+	dissStats(nullptr),
 	showSlider(false),
 	name(""),
 	experience(nullptr)
@@ -65,19 +60,11 @@ void PD_UI_DissCard::init(){
 		}
 	}
 	// show earned stars and hide unearned stars
-	for(unsigned long int x = 0; x < 5; ++x){
-		stars[0][x]->setVisible(x < defense);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[1][x]->setVisible(x < insight);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[2][x]->setVisible(x < strength);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[3][x]->setVisible(x < sass);
-	}
+	updateStats();
 
 	// exp slider
 	if(showSlider){
-		SliderController * slider = new SliderController(world, experience, 0.5f, 0.f, 1.f);
+		SliderControlled * slider = new SliderControlled(world, experience, 0.f, 100.f);
 		slider->boxSizing = kCONTENT_BOX;
 		slider->marginTop.setRationalSize(0.05f, &layout->height);
 		layout->addChild(slider);
@@ -108,22 +95,35 @@ void PD_UI_DissCard::init(){
 	invalidateLayout();
 }
 
-void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
-	defense = _enemy->defense;
-	insight = _enemy->insight;
-	strength = _enemy->strength;
-	sass = _enemy->sass;
-
-	// show earned stars and hide unearned stars
-	for(unsigned long int x = 0; x < 5; ++x){
-		stars[0][x]->setVisible(x < defense);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[1][x]->setVisible(x < insight);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[2][x]->setVisible(x < strength);
-	}for(unsigned long int x = 0; x < 5; ++x){
-		stars[3][x]->setVisible(x < sass);
+void PD_UI_DissCard::updateStats(){
+	if(dissStats != nullptr){
+		// show earned stars and hide unearned stars
+		for(unsigned long int x = 0; x < 5; ++x){
+			stars[0][x]->setVisible(x < dissStats->getDefense());
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[1][x]->setVisible(x < dissStats->getInsight());
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[2][x]->setVisible(x < dissStats->getStrength());
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[3][x]->setVisible(x < dissStats->getSass());
+		}
+	}else{
+		for(unsigned long int x = 0; x < 5; ++x){
+			stars[0][x]->setVisible(false);
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[1][x]->setVisible(false);
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[2][x]->setVisible(false);
+		}for(unsigned long int x = 0; x < 5; ++x){
+			stars[3][x]->setVisible(false);
+		}
 	}
+}
+
+void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
+	dissStats = _enemy->dissStats;
+
+	updateStats();
 
 	label->setText(_enemy->definition->name);
 }
