@@ -47,7 +47,7 @@
             "sides" : {
 					"LEFT":"RIGHT",
 					"RIGHT":"LEFT",
-					"BACK":"FRONT"
+					"TOP":"BOTTOM"
                 },
 			"parentDependent": true,
             "parents":{

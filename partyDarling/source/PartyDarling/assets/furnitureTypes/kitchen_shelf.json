@@ -1,10 +1,7 @@
 {
    "components": [
                 {
-                    "componentTypes": ["kitchen_shelf_base"], 
-                    "multiplier": 1, 
-                    "outComponents": [
-                        {
+                    
                             "componentTypes": ["kitchen_shelf_main"], 
                             "multiplier": 1, 
                             "outComponents": [
@@ -35,37 +32,30 @@
 								}
                             ], 
                             "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }
-                    ], 
-                    "required": true,
-					"scale": [0.7,0.7,0.7]
+							"scale": [0.8,0.8,0.8]
+                        
                 }
             ], 
-            "type": "kitchen_shelf",
-			"mass": 0,
-            "roomTypes" : ["KITCHEN"],
-            "sides" : {
-					"LEFT":"RIGHT",
-					"RIGHT":"LEFT",
-					"TOP":"BOTTOM"
-                },
-			"parentDependent": true,
-            "parents":{
-                "wall":[
-                    "FRONT"
-                ],
-				"kitchen_sink":[
-					"BACK"
-				],
-				"kitchen_counter":[
-					"BACK"
-				],
-            },
-            "padding":0,
+	"type": "kitchen_shelf",
+	"mass": 0,
+	"roomTypes" : ["KITCHEN"],
+	"sides" : {
+			"LEFT":"RIGHT",
+			"RIGHT":"LEFT",
+			"TOP":"BOTTOM"
+		},
+	"parentDependent": true,
+	"parents":{
+		"kitchen_sink":[
+			"TOP"
+		],
+		"kitchen_counter":[
+			"TOP"
+		]
+	},
+	"padding":0,
     "twist": false,
     "flare": true,
-    "numTextures": 1,
-	"parentMax": 1	
+    "numTextures": 1
 
         }

@@ -37,6 +37,9 @@
 			"mass": 0,
             "roomTypes" : ["KITCHEN"],
             "sides" : {
+			"LEFT":"RIGHT",
+					"RIGHT":"LEFT",
+					"TOP":"BOTTOM"
                 },
 			"parentDependent": true,
             "parents":{

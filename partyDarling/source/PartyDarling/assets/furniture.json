@@ -635,7 +635,27 @@
         {
             "id": 151, 
             "src": "furnitureJson/mask_bottom_3.json"
-        }
+        }, 
+        {
+            "id": 152, 
+            "src": "furnitureJson/kitchen_counter_base_1.json"
+        }, 
+        {
+            "id": 153, 
+            "src": "furnitureJson/kitchen_counter_doors_1.json"
+        }, 
+        {
+            "id": 154, 
+            "src": "furnitureJson/kitchen_counter_doors_2.json"
+        }, 
+        {
+            "id": 155, 
+            "src": "furnitureJson/kitchen_counter_doors_3.json"
+        },
+		{
+			"id":156,
+			"src":"furnitureJson/kitchen_counter_contents_1.json"
+		}
     ], 
     "furniture": [
         {
@@ -683,8 +703,14 @@
         {
             "src": "furnitureTypes/kitchen_stove.json"
         }, 
+		{
+            "src": "furnitureTypes/kitchen_counter.json"
+        }, 
         {
             "src": "furnitureTypes/mask.json"
+        }, 
+        {
+            "src": "furnitureTypes/kitchen_shelf.json"
         }
     ]
 }
