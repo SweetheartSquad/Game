@@ -69,7 +69,8 @@ AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	strength(_json.get("strength", 0).asInt()),
 	defense(_json.get("defense", 0).asInt()),
 	insight(_json.get("insight", 0).asInt()),
-	sass(_json.get("sass", 0).asInt())
+	sass(_json.get("sass", 0).asInt()),
+	visible(_json.get("visible", true).asBool())
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){

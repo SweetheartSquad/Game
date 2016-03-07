@@ -109,7 +109,7 @@ public:
 	int sass;
 	int defense;
 	int insight;
-
+	bool visible;
 	// substitute for public constructor (we can't take the address of the constructor,
 	// so we have a static function which simply returns a new instance of the class instead)
 	static AssetCharacter * create(Json::Value _json, Scenario * const);
