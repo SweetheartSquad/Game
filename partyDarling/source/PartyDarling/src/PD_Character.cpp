@@ -112,7 +112,9 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 
 	PD_Character * p = new PD_Character(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
-	PD_Listing::listings[_scenario]->characters[id] = p;
+	if(PD_Listing::listings.find(_scenario) != PD_Listing::listings.end()){
+		PD_Listing::listings[_scenario]->characters[id] = p;
+	}
 
 	return p;
 }
@@ -356,7 +358,6 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
 	solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
 	solverBod->target = glm::vec2(0, solverBod->getChainLength());
-	
 	
 	// talking thing
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
