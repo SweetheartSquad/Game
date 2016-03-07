@@ -156,7 +156,9 @@ private:
 	Player * player;
 
 public:
-	
+	float prevXP;
+	float wonXP;
+
 	// the life tokens accumulated so far
 	// this size of the list also indicates how many lives the player gets at the start of a fight
 	std::vector<Texture *> lifeTokens;

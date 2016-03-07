@@ -20,6 +20,9 @@ public:
 	NodeUI * stars[4][5];
 	TextLabel * label;
 
+	SliderControlled * slider;
+	TextLabel * level;
+
 	PD_UI_DissCard(BulletWorld * _world, Player * _player);
 	PD_UI_DissCard(BulletWorld * _world);
 	~PD_UI_DissCard();

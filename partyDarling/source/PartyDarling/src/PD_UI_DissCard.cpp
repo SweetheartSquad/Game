@@ -64,7 +64,7 @@ void PD_UI_DissCard::init(){
 
 	// exp slider
 	if(showSlider){
-		SliderControlled * slider = new SliderControlled(world, experience, 0.f, 100.f);
+		slider = new SliderControlled(world, experience, 0.f, 100.f);
 		slider->boxSizing = kCONTENT_BOX;
 		slider->marginTop.setRationalSize(0.05f, &layout->height);
 		layout->addChild(slider);
@@ -80,6 +80,9 @@ void PD_UI_DissCard::init(){
 		slider->fill->setBackgroundColour(1,1,1,1);
 		slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-FILL")->texture);
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
+
+		level = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+
 	}else{
 		textShader = new ComponentShaderText(true);
 		textShader->setColor(113/255.f, 71/255.f, 16/255.f);
