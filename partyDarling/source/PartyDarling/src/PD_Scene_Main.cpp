@@ -9,6 +9,7 @@
 #include <shader/ShaderComponentDiffuse.h>
 #include <shader/ShaderComponentIndexedTexture.h>
 #include <shader/ShaderComponentDepthOffset.h>
+#include <shader/ShaderComponentHsv.h>
 #include <shader/ComponentShaderText.h>
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
@@ -91,6 +92,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
+	characterShader->addComponent(new ShaderComponentHsv(characterShader, 0, 1, 1.5f));
 	characterShader->compileShader();
 
 	emoteShader->addComponent(new ShaderComponentMVP(emoteShader));
