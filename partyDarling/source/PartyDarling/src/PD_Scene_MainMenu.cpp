@@ -92,7 +92,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	continueText->setMarginBottom(0.05f);
 	continueText->enable();
 	continueText->horizontalAlignment = kCENTER;
-	continueText->setText("Continue");
+	continueText->setText("Back to the party");
 	if(!savedGame){
 		continueText->disable();
 	}
