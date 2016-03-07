@@ -27,6 +27,7 @@ sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
 std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
 std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
 sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
+std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::roomTypes;
 
 PD_ResourceManager::PD_ResourceManager(){
 	// register custom asset types
@@ -40,6 +41,24 @@ PD_ResourceManager::PD_ResourceManager(){
 	sweet::Event::registerArgumentType("CONVERSATION",	  sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER_STATE", sweet::STRING);
 	sweet::Event::registerArgumentType("CHARACTER",		  sweet::STRING);
+
+	{
+		Json::Value root;
+		Json::Reader reader;
+		std::string jsonLoaded = sweet::FileUtils::readFile("assets/room-types.json");
+		bool parsingSuccessful = reader.parse( jsonLoaded, root );
+		if(!parsingSuccessful){
+			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+		}else{
+			for(auto m : root.getMemberNames()) {
+				sweet::ShuffleVector<std::string> types;
+				for(auto t : root[m]) {
+					types.push(t.asString());
+				}
+				roomTypes[m] = types;
+			}
+		}
+	}
 
 	// initialize assets
 	scenario		  = new PD_Scenario("assets/scenario.json");
