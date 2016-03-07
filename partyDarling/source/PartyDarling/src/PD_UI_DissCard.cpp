@@ -15,13 +15,16 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 	experience(&_player->experience) // TODO: tie this to player experience
 {
 	init();
+	setLevel(_player->level);
 }
 PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 	NodeUI_NineSliced(_world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("DISSCARD-BUBBLE")->texture)),
 	dissStats(nullptr),
 	showSlider(false),
 	name(""),
-	experience(nullptr)
+	experience(nullptr),
+	slider(nullptr),
+	level(nullptr)
 {
 	init();
 }
@@ -30,6 +33,8 @@ PD_UI_DissCard::~PD_UI_DissCard(){
 }
 
 void PD_UI_DissCard::init(){
+	textShader = new ComponentShaderText(true);
+	textShader->setColor(113/255.f, 71/255.f, 16/255.f);
 
 	setBorder(25);
 	setScaleMode(GL_NEAREST);
@@ -64,12 +69,19 @@ void PD_UI_DissCard::init(){
 
 	// exp slider
 	if(showSlider){
+		HorizontalLinearLayout * xpContainer = new HorizontalLinearLayout(world);
+		layout->addChild(xpContainer);
+		xpContainer->setRationalWidth(1.f, layout);
+		xpContainer->setRationalHeight(0.1f, layout);
+		xpContainer->horizontalAlignment = kCENTER;
+		xpContainer->verticalAlignment = kMIDDLE;
+
 		slider = new SliderControlled(world, experience, 0.f, 100.f);
-		slider->boxSizing = kCONTENT_BOX;
-		slider->marginTop.setRationalSize(0.05f, &layout->height);
-		layout->addChild(slider);
-		slider->setRationalWidth(0.75f, layout);
-		slider->setSquareHeight(1.f/10.f);
+		//slider->boxSizing = kCONTENT_BOX;
+		//slider->marginTop.setRationalSize(0.05f, &layout->height);
+		xpContainer->addChild(slider);
+		slider->setRationalWidth(0.75f, xpContainer);
+		slider->setRationalHeight(0.5f, xpContainer);
 
 		slider->thumb->setVisible(false);
 	
@@ -82,10 +94,12 @@ void PD_UI_DissCard::init(){
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
 
 		level = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		xpContainer->addChild(level);
+		level->setRationalWidth(0.25, xpContainer);
+		level->setRationalHeight(1.f, xpContainer);
+		level->horizontalAlignment = kCENTER;
 
 	}else{
-		textShader = new ComponentShaderText(true);
-		textShader->setColor(113/255.f, 71/255.f, 16/255.f);
 		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 		layout->addChild(label);
 		label->boxSizing = kCONTENT_BOX;
@@ -120,6 +134,14 @@ void PD_UI_DissCard::updateStats(){
 		}for(unsigned long int x = 0; x < 5; ++x){
 			stars[3][x]->setVisible(false);
 		}
+	}
+}
+
+void PD_UI_DissCard::setLevel(int _level){
+	if(level != nullptr){
+		std::stringstream s;
+		s << "Lvl. " << _level;
+		level->setText(s.str());
 	}
 }
 

@@ -12,10 +12,10 @@
 IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, AssetRoom * const _definition) :
 	Room(_world, _toonShader, _definition)
 {
-	PD_Door * doorNorth = new PD_Door(world, _toonShader, PD_Door::kNORTH, 1);
-	PD_Door * doorSouth = new PD_Door(world, _toonShader, PD_Door::kSOUTH, 1);
-	PD_Door * doorEast = new PD_Door(world, _toonShader, PD_Door::kEAST, 1);
-	PD_Door * doorWest = new PD_Door(world, _toonShader, PD_Door::kWEST, 1);
+	PD_Door * doorNorth = new PD_Door(world, _toonShader, PD_Door::kNORTH, 5);
+	PD_Door * doorSouth = new PD_Door(world, _toonShader, PD_Door::kSOUTH, 5);
+	PD_Door * doorEast = new PD_Door(world, _toonShader, PD_Door::kEAST, 5);
+	PD_Door * doorWest = new PD_Door(world, _toonShader, PD_Door::kWEST, 5);
 
 	doors.insert(std::make_pair(PD_Door::kNORTH, doorNorth));
 	doors.insert(std::make_pair(PD_Door::kSOUTH, doorSouth));
@@ -46,8 +46,8 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	
-	ceiling->meshTransform->scale(glm::vec3(24, 24, 1), false);
-	floor->meshTransform->scale(glm::vec3(24, 24, 1), false);
+	ceiling->setVisible(false);
+	floor->setVisible(false);
 
 	// lights
 	{
