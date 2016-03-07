@@ -9,13 +9,15 @@ PD_PhraseGenerator_Incidental::PD_PhraseGenerator_Incidental()
 	makeDatabases("assets/wordlists/incidental.json");
 }
 
-std::string PD_PhraseGenerator_Incidental::getLineNormal(){
+std::string PD_PhraseGenerator_Incidental::getLineNormal(PD_Character * _character){
 	sweet::ShuffleVector<std::string> names;
 	for(auto l : PD_Listing::listingsById) {
 		for(auto c : l.second->characters) {
 			if(c.second != nullptr){
-				std::string n = c.second->definition->name;
-				names.push(n);
+				if(c.second != _character){
+					std::string n = c.second->definition->name;
+					names.push(n);
+				}
 			}
 		}
 	}

@@ -1825,7 +1825,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO"){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal()));
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
