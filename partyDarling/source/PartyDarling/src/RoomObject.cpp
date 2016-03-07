@@ -142,7 +142,7 @@ void RoomObject::billboard(glm::vec3 _playerPos){
 	}
 	if(glm::abs(angleDif) > FLT_EPSILON){
 		angle += angleDif*0.05f;
-		childTransform->setOrientation(glm::angleAxis(angle, glm::vec3(0,1,0)));
+		rotatePhysical(angle, 0, 1, 0, false);
 	}
 }
 

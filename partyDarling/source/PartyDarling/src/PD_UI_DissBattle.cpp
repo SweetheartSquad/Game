@@ -743,9 +743,12 @@ void PD_UI_DissBattle::gameOver(bool _win){
 	childTransform->removeChild(enemyCursor->firstParent());
 	interjectBubble->setVisible(false);
 
+	prevXP = player->experience;
 	if(_win){
+		wonXP = 100.f / player->level;
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
+		wonXP = 0.f;
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LOSE")->texture);
 	}
 
