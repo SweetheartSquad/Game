@@ -158,6 +158,7 @@ public:
 	PD_UI_DissCard * playerCard, * enemyCard;
 	NodeUI * vs;
 
-	Timeout * dissBattleEndTimeout;
+	Timeout * dissBattleXPGainTimeout;
+	Timeout * dissBattleXPPause;
 	Timeout * dissBattleLevelUpTimeout;
 };

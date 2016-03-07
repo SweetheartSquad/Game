@@ -45,6 +45,7 @@
 
 #define MAX_SIDE_SCENARIOS 5
 #define LEVEL_UP_DURATION 3
+#define XP_GAIN_PAUSE 1
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
 
@@ -207,7 +208,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
 		dissBattleStartLayout->setVisible(true);
-		dissBattleEndTimeout->restart();
+		dissBattleXPGainTimeout->restart();
 		player->wonLastDissBattle = _event->getIntData("win");
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
@@ -732,40 +733,49 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	childTransform->addChild(dissBattleStartTimeout, false);
 
-	dissBattleEndTimeout = new Timeout(2 / player->level, [this](sweet::Event * _event){
+	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		if(player->experience >= 100 * player->level){
+			// LEVEL UP
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
 			player->dissStats->incrementSass();
 			player->dissStats->incrementStrength();
 			playerCard->updateStats();
+			++player->level;
 
 			levelUp->setVisible(true);
 			levelUp->firstParent()->scale(0, false);
+			
 			dissBattleLevelUpTimeout->restart();
 		}else{
-			// end I hate this
-			dissBattleStartLayout->setVisible(false);
-			if(!uiDialogue->hadNextDialogue){
-				player->enable();
-				currentHoverTarget = nullptr;
-				updateSelection();
-			}
+			// NORMAL
+			dissBattleXPPause->restart();
+		}
+		
+	});
+
+	dissBattleXPGainTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		
+		player->experience = uiDissBattle->prevXP + p * uiDissBattle->wonXP;
+	});
+	childTransform->addChild(dissBattleXPGainTimeout, false);
+
+	dissBattleXPPause = new Timeout(1.f, [this](sweet::Event * _event){
+		// end I hate this
+		dissBattleStartLayout->setVisible(false);
+		if(!uiDialogue->hadNextDialogue){
+			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
 		}
 	});
-	dissBattleEndTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		float p = _event->getFloatData("progress");
-		float blah = p * 100.f / player->level;
-		float xp = player->experience;
-		float add =  p * 100.f / player->level - player->experience;
-		float res = xp + add;
-		player->experience +=  p * 100.f / player->level - player->experience;
-	});
-	childTransform->addChild(dissBattleEndTimeout, false);
+	childTransform->addChild(dissBattleXPPause, false);
 
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
 		levelUp->setVisible(false);
+		player->experience = 0.f; // just in case
 		dissBattleStartLayout->setVisible(false);
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
@@ -775,6 +785,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
+		if(p <= 0.2f){
+			player->experience = 100 * (1-p/0.2f);
+		}
+
 		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f), false);
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
