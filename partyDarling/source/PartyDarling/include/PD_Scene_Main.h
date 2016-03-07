@@ -108,6 +108,8 @@ public:
 	// if _relative is false, currentHousePosition = _movement
 	void navigate(glm::ivec2 _movement, bool _relative = true);
 
+	// the house is a square grid layout with houseSize*houseSize cells
+	unsigned long int houseSize;
 	// the player's current position within the house grid
 	glm::ivec2 currentHousePosition;
 	// a map which stores all of the currently available rooms using their positions as the keys
