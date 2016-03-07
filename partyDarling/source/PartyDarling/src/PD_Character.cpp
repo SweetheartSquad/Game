@@ -405,6 +405,7 @@ void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _ste
 		currentAnimation->leftLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg * solverLegL->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->rightLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg * solverLegR->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->body->tweens.push_back(new Tween<glm::vec2>(step.time, step.body * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
+		currentAnimation->translation->tweens.push_back(new Tween<glm::vec3>(step.time, step.translation  * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
 	}	
 
 	if(_steps.size() > 0) {
@@ -537,6 +538,7 @@ void CharacterRenderer::update(Step * _step){
 
 		}else if(currentAnimation != nullptr) {
 			currentAnimation->update(_step);
+			childTransform->translate(currentAnimation->translationVec, false);
 		}
 	}
 
