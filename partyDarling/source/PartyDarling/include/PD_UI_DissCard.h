@@ -28,5 +28,6 @@ public:
 	~PD_UI_DissCard();
 
 	void updateStats();
+	void setLevel(int _level);
 	void setEnemy(PD_Character * _enemy);
 };
