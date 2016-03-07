@@ -17,6 +17,8 @@
 #include <sweet/Input.h>
 #include <PD_Listing.h>
 
+unsigned long int PD_Character::numRandomCharacters = 0;
+
 PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShader, Anchor_t _anchor):
 	RoomObject(_world, _mesh, _shader, _anchor),
 	state(&_definition->states.at(_definition->defaultState)),
@@ -93,8 +95,7 @@ void PD_Character::update(Step * _step){
 PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 	Json::Value charDef= genRandomComponents();
 	
-	std::string id = std::to_string(sweet::NumberUtils::randomFloat(100000, 999999));
-	id += std::to_string(sweet::step.time);
+	std::string id = "RANDOM_CHARACTER_" + std::to_string(++numRandomCharacters);
 
 	charDef["name"]         = PD_ResourceManager::characterNames.pop();
 	charDef["id"]			= id;

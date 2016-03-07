@@ -1043,20 +1043,20 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 
 	// count the total number of rooms so that we can show progress
 	unsigned long int numRooms = 0;
-	for(auto s : activeScenarios){
-		numRooms += s->assets["room"].size();
+	for(auto scenario : activeScenarios){
+		numRooms += scenario->assets["room"].size();
 	}
 
 
 	// build all of the rooms contained in the selected scenarios
 	unsigned long int progress = 0;
-	for(auto s : activeScenarios){
+	for(auto scenario : activeScenarios){
 		
 		// create a listing for this scenario
-		PD_Listing * listing = new PD_Listing(s);
+		PD_Listing * listing = new PD_Listing(scenario);
 
 		// build the rooms in this scenario
-		for(auto rd : s->assets.at("room")){
+		for(auto rd : scenario->assets.at("room")){
 			g->showLoading((float)++progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			

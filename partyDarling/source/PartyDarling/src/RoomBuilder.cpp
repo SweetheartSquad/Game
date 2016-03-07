@@ -334,7 +334,8 @@ Room * RoomBuilder::getRoom(){
 			Log::warn("Search FAILED; room object not placed.");
 			
 			// make sure we remove the object from the item or character list if it's there
-			if(dynamic_cast<PD_Character *>(obj) != nullptr){
+			if(PD_Character * c = dynamic_cast<PD_Character *>(obj)){
+				PD_Listing::listings[c->definition->scenario]->characters.erase(c->definition->id);
 				for(signed long int i = room->characters.size()-1; i >= 0; --i){
 					if(room->characters.at(i) == obj){
 						room->characters.erase(room->characters.begin() + i);
@@ -1197,7 +1198,7 @@ std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random){
 			characters.push_back(p);
 		}
 	}else{
-		auto randPD_Character = PD_Character::createRandomPD_Character(PD_ResourceManager::scenario, world, characterShader, emoteShader);
+		auto randPD_Character = PD_Character::createRandomPD_Character(definition->scenario, world, characterShader, emoteShader);
 		randPD_Character->room = room;
 		characters.push_back(randPD_Character);
 	}

@@ -24,7 +24,6 @@ ConditionImplementations * PD_ResourceManager::conditionImplementations = new Co
 std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::characterDefinitions;
 std::map<std::string, EmoteDef *> PD_ResourceManager::emotes;
 sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
-PD_Listing * PD_ResourceManager::globalScenarioListing;
 std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
 std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
 sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
@@ -209,8 +208,6 @@ PD_ResourceManager::PD_ResourceManager(){
 
 	db = new DatabaseConnection("data/test.db");
 	
-	globalScenarioListing = new PD_Listing(scenario);
-	
 
 	load();
 }
@@ -218,7 +215,6 @@ PD_ResourceManager::PD_ResourceManager(){
 PD_ResourceManager::~PD_ResourceManager(){
 	unload();
 	
-	delete globalScenarioListing;
 	for(auto e : emotes){
 		delete e.second;
 	}

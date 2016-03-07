@@ -137,6 +137,8 @@ public:
 };
 
 class PD_Character : public RoomObject {
+private:
+	static unsigned long int numRandomCharacters;
 public:
 
 	int defense;

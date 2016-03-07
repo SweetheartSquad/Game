@@ -39,7 +39,6 @@ public:
 	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
 	static std::map<std::string, EmoteDef *> emotes;
 	static sweet::ShuffleVector<std::string> characterNames;
-	static PD_Listing * globalScenarioListing;
 
 	static std::vector<PD_PropDefinition *> propDefinitions;
 	static std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> furniturePropDefinitions;

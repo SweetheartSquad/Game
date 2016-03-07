@@ -11,31 +11,20 @@ PD_PhraseGenerator_Incidental::PD_PhraseGenerator_Incidental()
 
 std::string PD_PhraseGenerator_Incidental::getLineNormal(){
 	sweet::ShuffleVector<std::string> names;
-	/* Uncomment once characters aren't deleted by RoomBuilder 
 	for(auto l : PD_Listing::listingsById) {
 		for(auto c : l.second->characters) {
 			if(c.second != nullptr){
 				std::string n = c.second->definition->name;
-				names.push_back(n);
+				names.push(n);
 			}
 		}
-	}*/
-	names.push("NAME");
+	}
 	terms["name"] = names;
 	return replaceWords("*phrases*");
 }
 
 std::string PD_PhraseGenerator_Incidental::getLineWon(){
 	sweet::ShuffleVector<std::string> names;
-	/* Uncomment once characters aren't deleted by RoomBuilder 
-	for(auto l : PD_Listing::listingsById) {
-		for(auto c : l.second->characters) {
-			if(c.second != nullptr){
-				std::string n = c.second->definition->name;
-				names.push_back(n);
-			}
-		}
-	}*/
 	names.push("NAME");
 	terms["name"] = names;
 	return replaceWords("*gloats*");
@@ -43,15 +32,6 @@ std::string PD_PhraseGenerator_Incidental::getLineWon(){
 
 std::string PD_PhraseGenerator_Incidental::getLineLost(){
 	sweet::ShuffleVector<std::string> names;
-	/* Uncomment once characters aren't deleted by RoomBuilder 
-	for(auto l : PD_Listing::listingsById) {
-		for(auto c : l.second->characters) {
-			if(c.second != nullptr){
-				std::string n = c.second->definition->name;
-				names.push_back(n);
-			}
-		}
-	}*/
 	names.push("NAME");
 	terms["name"] = names;
 	return replaceWords("*mopes*");
