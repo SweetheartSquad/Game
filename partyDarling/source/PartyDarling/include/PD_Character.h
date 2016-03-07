@@ -79,6 +79,13 @@ public:
 
 	float talkHeight;
 	Animation<float> * talk;
+
+	glm::vec3 eyeScale;
+	Animation<glm::vec3> * eyeAnim;
+
+	glm::vec3 pelvisScale;
+	Animation<glm::vec3> * pelvisAnim;
+
 	std::vector<Transform *> joints;
 	CharacterComponent
 		* pelvis,

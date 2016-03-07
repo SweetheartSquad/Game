@@ -13,7 +13,9 @@
   <ItemGroup>
     <ClCompile Include="include\PD_Door.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
+    <ClCompile Include="src\IntroRoom.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\LabRoom.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\PD_Assets.cpp" />
     <ClCompile Include="src\PD_Button.cpp" />
@@ -50,12 +52,14 @@
     <ClCompile Include="src\PD_UI_Bubble.cpp" />
     <ClCompile Include="src\PD_UI_ConfirmNewGame.cpp" />
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
+    <ClCompile Include="src\PD_UI_DissCard.cpp" />
+    <ClCompile Include="src\PD_DissStats.cpp" />
     <ClCompile Include="src\PD_UI_Fade.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
     <ClCompile Include="src\PD_UI_Map.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
-    <ClCompile Include="src\PD_UI_YellingContest.cpp" />
+    <ClCompile Include="src\PD_UI_DissBattle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
@@ -64,7 +68,9 @@
   <ItemGroup>
     <ClInclude Include="include\DialogueDisplay.h" />
     <ClInclude Include="include\FurnitureComponent.h" />
+    <ClInclude Include="include\IntroRoom.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\LabRoom.h" />
     <ClInclude Include="include\PD_Assets.h" />
     <ClInclude Include="include\PD_Button.h" />
     <ClInclude Include="include\PD_Character.h" />
@@ -101,12 +107,14 @@
     <ClInclude Include="include\PD_UI_Bubble.h" />
     <ClInclude Include="include\PD_UI_ConfirmNewGame.h" />
     <ClInclude Include="include\PD_UI_Dialogue.h" />
+    <ClInclude Include="include\PD_UI_DissCard.h" />
+    <ClInclude Include="include\PD_DissStats.h" />
     <ClInclude Include="include\PD_UI_Fade.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
     <ClInclude Include="include\PD_UI_Map.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
-    <ClInclude Include="include\PD_UI_YellingContest.h" />
+    <ClInclude Include="include\PD_UI_DissBattle.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
@@ -222,7 +230,7 @@ copy /Y "$(OPENAL_DIR)\bin\Win32\soft_oal.dll" "$(TargetDir)\OpenAL32.dll"
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;libsndfile-1.lib;OpenAL32.lib;LibOVR.lib;Box2D.lib;freetype255MT.lib;cpprest120_2_5.lib;BulletSoftBody_vs2010.lib;BulletDynamics_vs2010.lib;BulletCollision_vs2010.lib;LinearMath_vs2010.lib;S-Tengine2 - 2013.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2012-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\S-Tengine2 - 2013-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;</IgnoreSpecificDefaultLibraries>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
