@@ -29,6 +29,31 @@
             "id": 6,
             "src": "items/f288c511-77cf-4a6a-947a-6c4b89b0b065.png",
             "type": "texture"
+        },
+        {
+            "id": 611,
+            "src": "items/passcode.png",
+            "type": "texture"
+        },
+        {
+            "id": 612,
+            "src": "items/Pants.png",
+            "type": "texture"
+        },
+        {
+            "id": 613,
+            "src": "items/Scarab.png",
+            "type": "texture"
+        },
+        {
+            "id": 614,
+            "src": "items/DazNecklace.png",
+            "type": "texture"
+        },
+        {
+            "id": 617,
+            "src": "items/Planner.png",
+            "type": "texture"
         }
     ]
 }
