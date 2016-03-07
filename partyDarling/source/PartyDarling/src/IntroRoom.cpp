@@ -46,8 +46,8 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	
-	ceiling->meshTransform->scale(glm::vec3(24, 24, 1), false);
-	floor->meshTransform->scale(glm::vec3(24, 24, 1), false);
+	ceiling->setVisible(false);
+	floor->setVisible(false);
 
 	// lights
 	{
