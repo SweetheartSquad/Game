@@ -39,7 +39,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
 	
 	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
-	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE;
+	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE * 0.35f;
 	boundingBox.depth = boundingBox.width;
 
 	boundingBox.x = -boundingBox.width/2.f;
