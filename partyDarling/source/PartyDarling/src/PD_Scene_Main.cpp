@@ -744,6 +744,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			player->dissStats->incrementStrength();
 			playerCard->updateStats();
 			++player->level;
+			playerCard->setLevel(player->level);
 
 			levelUp->setVisible(true);
 			levelUp->firstParent()->scale(0, false);
@@ -787,11 +788,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.2f){
-			player->experience = 100 * (1-p/0.2f);
+		if(p <= 0.3f){
+			player->experience = 100 * (1-p/0.3f);
 		}
 
-		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f), false);
+		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f), false);
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
 }
