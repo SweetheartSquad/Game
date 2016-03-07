@@ -655,23 +655,32 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			playerCard->firstParent()->scale(Easing::easeOutBounce(p, 0, 1, 0.33), false);
 			vs->firstParent()->scale(0, false);
 			enemyCard->firstParent()->scale(0, false);
-			playerCard->setVisible(true);
-			vs->setVisible(false);
-			enemyCard->setVisible(false);
+			if(!playerCard->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(false);
+				enemyCard->setVisible(false);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else if(p < 0.5){
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(0, false);
 			enemyCard->firstParent()->scale(Easing::easeOutBounce(p-0.25, 0, 1, 0.33), false);
-			playerCard->setVisible(true);
-			vs->setVisible(false);
-			enemyCard->setVisible(true);
+			if(!enemyCard->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(false);
+				enemyCard->setVisible(true);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else if(p < 0.75){
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(Easing::easeOutBounce(p-0.5, 0, 1, 0.33), false);
 			enemyCard->firstParent()->scale(1, false);
-			playerCard->setVisible(true);
-			vs->setVisible(true);
-			enemyCard->setVisible(true);
+			if(!vs->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(true);
+				enemyCard->setVisible(true);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else{
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(1, false);
