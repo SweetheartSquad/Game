@@ -799,6 +799,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
+
 	activeScenarios.clear();
 
 	Json::Value root;
@@ -814,6 +815,7 @@ void PD_Scene_Main::pickScenarios(){
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
 	std::vector<Json::Value> allPlotDefs;
 	std::vector<Json::Value> allLabDefs;
+	std::vector<Json::Value> allIntroDefs;
 
 	for(auto scenarioDef : root) {
 		ScenarioType type = static_cast<ScenarioType>(scenarioDef.get("type", 0).asInt());
@@ -830,6 +832,9 @@ void PD_Scene_Main::pickScenarios(){
 			case kLAB: 
 				allLabDefs.push_back(scenarioDef);
 				break;
+			case kINTRO: 
+				allIntroDefs.push_back(scenarioDef);
+				break;
 			default: 
 				ST_LOG_ERROR("Invalid Scenario Type");
 				break;
@@ -844,6 +849,10 @@ void PD_Scene_Main::pickScenarios(){
 	});
 
 	std::sort(allLabDefs.begin(), allLabDefs.end(), [](Json::Value a, Json::Value b){
+		return a["order"] < b["order"];
+	});
+
+	std::sort(allIntroDefs.begin(), allIntroDefs.end(), [](Json::Value a, Json::Value b){
 		return a["order"] < b["order"];
 	});
 
@@ -874,13 +883,20 @@ void PD_Scene_Main::pickScenarios(){
 			}
 		}
 
+		// Add the intro scenario second last
+		if(allIntroDefs.size() > i){
+			scenariosList.append(allIntroDefs[i]["src"].asString());
+		}
 		// Add the lab def last
 		// We shouldn't need this check but we'll leave it here until all the scenarios are in
 		if(allLabDefs.size() > i){
 			scenariosList.append(allLabDefs[i]["src"].asString());
 		}
 
-		scenarioFile.append(scenariosList);
+		Json::Value outValue;
+		outValue["scenarios"] = scenariosList;
+		outValue["seed"] = sweet::NumberUtils::randomInt(1111111, 9999999);
+		scenarioFile.append(outValue);
 	}
 
 	// SAVE senarioFile
@@ -910,7 +926,7 @@ void PD_Scene_Main::pickScenarios(){
 		++i;
 	}
 	
-	for(auto scenarioDef : currentScenario) {
+	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
 	}
 
