@@ -49,6 +49,7 @@ public:
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
 	std::map<PD_Door::Door_t, PD_Door *> doors;
+	std::map<PD_Door::Door_t, glm::vec3> doorPositions;
 
 	std::vector<PD_Character *> characters;
 	std::vector<PD_Item *> items;

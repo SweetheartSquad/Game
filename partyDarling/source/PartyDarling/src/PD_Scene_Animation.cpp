@@ -21,7 +21,7 @@ Keyframe::Keyframe(BulletWorld * _bulletWorld, PD_Character * _character) :
 	setWidth(20.f);
 	setHeight(20.f);
 	setBackgroundColour(1.f, 0.f, 0.f);
-	setMarginRight(5.f);
+	marginRight.setPixelSize(5.0f);
 	mouseEnabled = true;
 }
 

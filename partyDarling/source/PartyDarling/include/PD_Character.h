@@ -17,7 +17,7 @@
 #include <Timeout.h>
 #include "Room.h"
 
-#define CHARACTER_SCALE 0.001f
+#define CHARACTER_SCALE 0.00085f
 
 class Scenario;
 class PD_CharacterAnimationStep;

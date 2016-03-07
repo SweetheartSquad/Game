@@ -62,13 +62,13 @@
                     "id":1,
                     "name":"DefaultState",
                     "convo":1,
-                    "animation":"RANDOM"
+                    "animation":"BUTLER"
                 },
                 {  
                     "id":2,
                     "name":"TalkedOnce",
                     "convo":5,
-                    "animation":"RANDOM"
+                    "animation":"BUTLER"
                 }
             ],
             "items":[  

@@ -611,8 +611,30 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	placeRooms(buildRooms());
 
 	// move the player to the entrance of the first room
-	navigate(currentHousePosition, false);
-
+	// to do this, we set the currentHousePosition to be one unit outside the grid
+	// and then navigate into it
+	glm::ivec2 introHousePosition = currentHousePosition;
+	if(currentHousePosition.x == 0){
+		// west
+		currentHousePosition.x -= 1;
+		player->playerCamera->yaw += 90;
+		navigate(glm::ivec2(1,0));
+	}else if(currentHousePosition.x == houseSize-1){
+		// east
+		currentHousePosition.x += 1;
+		player->playerCamera->yaw -= 90;
+		navigate(glm::ivec2(-1,0));
+	}else if(currentHousePosition.y == 0){
+		// north
+		currentHousePosition.y -= 1;
+		//player->playerCamera->yaw += 0;
+		navigate(glm::ivec2(0,1));
+	}else{
+		// south
+		currentHousePosition.y += 1;
+		player->playerCamera->yaw += 180;
+		navigate(glm::ivec2(0,-1));
+	}
 	
 
 
@@ -673,23 +695,32 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			playerCard->firstParent()->scale(Easing::easeOutBounce(p, 0, 1, 0.33), false);
 			vs->firstParent()->scale(0, false);
 			enemyCard->firstParent()->scale(0, false);
-			playerCard->setVisible(true);
-			vs->setVisible(false);
-			enemyCard->setVisible(false);
+			if(!playerCard->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(false);
+				enemyCard->setVisible(false);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else if(p < 0.5){
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(0, false);
 			enemyCard->firstParent()->scale(Easing::easeOutBounce(p-0.25, 0, 1, 0.33), false);
-			playerCard->setVisible(true);
-			vs->setVisible(false);
-			enemyCard->setVisible(true);
+			if(!enemyCard->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(false);
+				enemyCard->setVisible(true);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else if(p < 0.75){
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(Easing::easeOutBounce(p-0.5, 0, 1, 0.33), false);
 			enemyCard->firstParent()->scale(1, false);
-			playerCard->setVisible(true);
-			vs->setVisible(true);
-			enemyCard->setVisible(true);
+			if(!vs->isVisible()){
+				playerCard->setVisible(true);
+				vs->setVisible(true);
+				enemyCard->setVisible(true);
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+			}
 		}else{
 			playerCard->firstParent()->scale(1, false);
 			vs->firstParent()->scale(1, false);
@@ -906,7 +937,6 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	}
 
 	// generate a random rectangle which has enough cells for each room
-	unsigned long int houseSize;
 	houseSize = glm::max(2, sweet::NumberUtils::randomInt(sqrt(numRooms), numRooms)) + 2;
 	//houseSize.y = glm::max(2, numRooms/houseSize.x);
 	while(pow(houseSize,2) < numRooms){
@@ -957,16 +987,12 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom;
 	if(currentHousePosition.x == 0){
 		introRoom->setEdge(PD_Door::kWEST);
-		player->playerCamera->yaw += 90;
 	}else if(currentHousePosition.x == houseSize-1){
 		introRoom->setEdge(PD_Door::kEAST);
-		player->playerCamera->yaw -= 90;
 	}else if(currentHousePosition.y == 0){
 		introRoom->setEdge(PD_Door::kNORTH);
-		//player->playerCamera->yaw += 0;
 	}else{
 		introRoom->setEdge(PD_Door::kSOUTH);
-		player->playerCamera->yaw += 180;
 	}
 
 
@@ -1024,14 +1050,20 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 	
 	// loop through all of the rooms and remove doors which don't lead anywhere
+	// and save the door positions while we're at it
+	float doorSpacing = 1.5f;
 	for(auto c : houseGrid){
 		int x = c.first.first;
 		int y = c.first.second;
 
 		PD_Door::Door_t side;
+		btVector3 p;
 		Room * room = c.second;
 		
 		side = PD_Door::kEAST;
+
+		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
+		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(-doorSpacing,0,0);
 		auto it = houseGrid.find(std::make_pair(x-1,y));
 		if(it == houseGrid.end()){
 			room->removeComponent(room->doors.at(side));
@@ -1042,6 +1074,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 		
 		side = PD_Door::kWEST;
+		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
+		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(doorSpacing,0,0);
 		it = houseGrid.find(std::make_pair(x+1,y));
 		if(it == houseGrid.end()){
 			room->removeComponent(c.second->doors.at(side));
@@ -1052,6 +1086,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 		
 		side = PD_Door::kNORTH;
+		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
+		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(0,0,doorSpacing);
 		it = houseGrid.find(std::make_pair(x,y+1));
 		if(it == houseGrid.end()){
 			room->removeComponent(room->doors.at(side));
@@ -1062,6 +1098,8 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 		
 		side = PD_Door::kSOUTH;
+		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
+		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(0,0,-doorSpacing);
 		it = houseGrid.find(std::make_pair(x,y-1));
 		if(it == houseGrid.end()){
 			room->removeComponent(room->doors.at(side));
@@ -1237,14 +1275,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}
 
 	// make sure the door is up-to-date, and then place the player in front of it
-	currentRoom->doors.at(doorToEnter)->realign();
-	glm::quat o = currentRoom->doors.at(doorToEnter)->childTransform->getOrientationQuat();
-	btVector3 p = currentRoom->doors.at(doorToEnter)->body->getWorldTransform().getOrigin();
-	glm::vec3 p2(0,0,3);
-	p2 = o * p2;
-	p2 += glm::vec3(p.x(), p.y(), p.z());
-
-	player->translatePhysical(p2, false);
+	player->translatePhysical(currentRoom->doorPositions.at(doorToEnter), false);
 
 	// Trigger room entry events (important to do this before map is updated, otherwise we won't get the once-only triggers)
 	if(currentRoom->visibility != Room::kENTERED){

@@ -22,7 +22,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 		_game->switchScene("game", true);
 	});
 
-	textShader = new ComponentShaderText(false);
+	textShader = new ComponentShaderText(true);
 
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->load();
@@ -47,7 +47,6 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 }
 
 PD_Scene_IntroSlideShow::~PD_Scene_IntroSlideShow(){
-	delete textShader;
 }
 
 void PD_Scene_IntroSlideShow::update(Step * _step){

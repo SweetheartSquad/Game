@@ -7,11 +7,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/ef8b38cc-adc4-4ea2-af05-0d8b618044c1.json",
-            "type": "LEG"
-        },
-        {
-            "random": true,
             "src": "components/definitions/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
             "type": "PELVIS"
         },
@@ -111,7 +106,7 @@
             "type": "PELVIS"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Daz_HEAD.json",
             "type": "HEAD"
         },
@@ -256,7 +251,7 @@
             "type": "LEG"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/LilTomward_LEG.json",
             "type": "LEG"
         },
@@ -276,7 +271,7 @@
             "type": "HEAD"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/LilTomward_TORSO.json",
             "type": "TORSO"
         },
@@ -286,12 +281,12 @@
             "type": "PELVIS"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/LilTomward_HEAD.json",
             "type": "HEAD"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/LilTomward_PELVIS.json",
             "type": "PELVIS"
         },
@@ -336,7 +331,7 @@
             "type": "TORSO"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Eloise_HEAD.json",
             "type": "HEAD"
         },
@@ -462,11 +457,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Felix_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Gladys_LEG.json",
             "type": "LEG"
         },
@@ -519,6 +509,266 @@
             "random": true,
             "src": "components/definitions/deadOmar_LEG.json",
             "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/deadOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/deadOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/deadOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/scifiOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/deadOmar_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/scifiOmar_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/advenOmar_Leftleg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/advenOmar_Rightleg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/advenOmar_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/advenOmar_rightarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/advenOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/advenOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/advenOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Bexley_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mahmoud_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mahmoud_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mahmoud_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Mahmoud_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Mahmoud_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Julian_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Julian_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kyllene_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/kKyllene_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kyllene_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kyllene_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kyllene_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/roboOmar_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/roboOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/roboOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Dougie_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Dougie_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Dougie_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Dougie_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Dougie_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_Rightarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_Leftarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Rhubenia_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/RoboOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/emptyarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Daz_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/ScifiOmar_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/ScifiOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Felix_HEAD.json",
+            "type": "HEAD"
         }
     ]
 }

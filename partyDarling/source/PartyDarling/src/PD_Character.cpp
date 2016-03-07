@@ -41,7 +41,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
 	
 	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
-	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE;
+	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE * 0.35f;
 	boundingBox.depth = boundingBox.width;
 
 	boundingBox.x = -boundingBox.width/2.f;
@@ -114,7 +114,9 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 
 	PD_Character * p = new PD_Character(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
-	PD_Listing::listings[_scenario]->characters[id] = p;
+	if(PD_Listing::listings.find(_scenario) != PD_Listing::listings.end()){
+		PD_Listing::listings[_scenario]->characters[id] = p;
+	}
 
 	return p;
 }
@@ -359,7 +361,6 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
 	solverBod->target = glm::vec2(0, solverBod->getChainLength());
 	
-	
 	// talking thing
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
@@ -406,6 +407,7 @@ void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _ste
 		currentAnimation->leftLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg * solverLegL->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->rightLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg * solverLegR->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->body->tweens.push_back(new Tween<glm::vec2>(step.time, step.body * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
+		currentAnimation->translation->tweens.push_back(new Tween<glm::vec3>(step.time, step.translation  * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
 	}	
 
 	if(_steps.size() > 0) {
@@ -538,6 +540,7 @@ void CharacterRenderer::update(Step * _step){
 
 		}else if(currentAnimation != nullptr) {
 			currentAnimation->update(_step);
+			childTransform->translate(currentAnimation->translationVec, false);
 		}
 	}
 

@@ -10,6 +10,13 @@ PD_CharacterAnimationStep::PD_CharacterAnimationStep(Json::Value _jsonDef) {
 	leftLeg = glm::vec2(_jsonDef["leftLeg"][0].asFloat(), _jsonDef["leftLeg"][1].asFloat());
 	rightLeg = glm::vec2(_jsonDef["rightLeg"][0].asFloat(), _jsonDef["rightLeg"][1].asFloat());
 	body = glm::vec2(_jsonDef["body"][0].asFloat(), _jsonDef["body"][1].asFloat());
+	if(_jsonDef.isMember("translation")) {
+		translation = glm::vec3(
+				_jsonDef["translation"][0].asFloat(),
+				_jsonDef["translation"][1].asFloat(),
+				_jsonDef["translation"][2].asFloat()
+			);
+	}
 }
 
 
