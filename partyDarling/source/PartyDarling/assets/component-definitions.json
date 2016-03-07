@@ -82,11 +82,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/1c4c99a5-ad0b-4fcf-8b85-1b1532a964f4.json",
-            "type": "LEG"
-        },
-        {
-            "random": true,
             "src": "components/definitions/b64024a7-df64-42f8-b146-6f4c933c66a1.json",
             "type": "ARM"
         },
@@ -326,7 +321,7 @@
             "type": "TORSO"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Dmitri_TORSO.json",
             "type": "TORSO"
         },
@@ -336,7 +331,7 @@
             "type": "HEAD"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Dmitri_HEAD.json",
             "type": "HEAD"
         },
@@ -416,12 +411,12 @@
             "type": "HEAD"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/goodsee_leftarm_ARM.json",
             "type": "ARM"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/goodsee_rightarm_ARM.json",
             "type": "ARM"
         },
@@ -721,7 +716,7 @@
             "type": "ARM"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Rhubenia_TORSO.json",
             "type": "TORSO"
         },
@@ -769,6 +764,11 @@
             "random": true,
             "src": "components/definitions/Felix_HEAD.json",
             "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/ThessleLeg_LEG.json",
+            "type": "LEG"
         }
     ]
 }
