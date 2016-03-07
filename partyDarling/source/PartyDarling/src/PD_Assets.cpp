@@ -4,6 +4,7 @@
 #include <PD_Item.h>
 
 #include <scenario/Scenario.h>
+#include <PD_ResourceManager.h>
 
 
 //texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
@@ -68,7 +69,8 @@ AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	strength(_json.get("strength", 0).asInt()),
 	defense(_json.get("defense", 0).asInt()),
 	insight(_json.get("insight", 0).asInt()),
-	sass(_json.get("sass", 0).asInt())
+	sass(_json.get("sass", 0).asInt()),
+	visible(_json.get("visible", true).asBool())
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){
@@ -143,12 +145,24 @@ PD_Item * AssetItem::getItem(BulletWorld * _world, Shader * _shader){
 // room
 AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
-	roomType(_json.get("roomType", "NO_TYPE").asString()),
 	name(_json.get("name", "NO_NAME").asString()),
 	description(_json.get("description", "NO_DESCRIPTION").asString()),
 	locked(_json.get("locked", false).asBool())
 {
-	std::string sizeString = _json.get("size", "MEDIUM").asString();
+
+	std::string sizeString = "";
+	roomType = _json.get("furnitureTypes", "RANDOM") != "RANDOM";
+
+	if(roomType != "RANDOM" &&  PD_ResourceManager::roomTypes.find(roomType) !=  PD_ResourceManager::roomTypes.end()) {
+		sizeString = _json.get("size", "MEDIUM").asString();
+	}else {
+		int numTypes = PD_ResourceManager::roomTypes.size();
+		auto it = PD_ResourceManager::roomTypes.begin();
+		std::advance(it, sweet::NumberUtils::randomInt(0, numTypes-1));
+		roomType = it->first;
+		sizeString = it->second.pop();
+	}
+
 	if(sizeString == "SMALL"){
 		size = kSMALL;
 	}else if(sizeString == "MEDIUM"){

@@ -68,6 +68,8 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	pr->setAnimation(state->animation);
 
 	items = definition->items;
+
+	enabled = definition->visible;
 }
 
 void PD_Character::setShader(Shader * _shader, bool _configureDefault){

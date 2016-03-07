@@ -301,21 +301,6 @@
             "type": "texture"
         },
         {
-            "id": 83,
-            "src": "components/ff4a8a23-de6f-48a1-939d-4e61de54b399.png",
-            "type": "texture"
-        },
-        {
-            "id": 84,
-            "src": "components/8b7b6876-e500-4c36-b43f-be5d724a737c.png",
-            "type": "texture"
-        },
-        {
-            "id": 85,
-            "src": "components/e73b907f-ddaa-409d-a947-0ca2f0bb5c32.png",
-            "type": "texture"
-        },
-        {
             "id": 86,
             "src": "components/e0a67d10-e300-47a1-bce7-b4ac4058e3b7.png",
             "type": "texture"
@@ -2608,6 +2593,21 @@
         {
             "id": 641,
             "src": "components/Felix_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 645,
+            "src": "components/ThessleLeg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 646,
+            "src": "components/ThessleLeg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 647,
+            "src": "components/ThessleLeg_Foot.png",
             "type": "texture"
         }
     ]

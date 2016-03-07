@@ -43,6 +43,7 @@ public:
 	static std::vector<PD_PropDefinition *> propDefinitions;
 	static std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> furniturePropDefinitions;
 	static sweet::ShuffleVector<PD_PropDefinition *> independentPropDefinitions;
+	static std::map<std::string, sweet::ShuffleVector<std::string>> roomTypes;
 	
 	PD_ResourceManager();
 	~PD_ResourceManager();
