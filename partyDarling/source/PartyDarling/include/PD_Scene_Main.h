@@ -150,8 +150,14 @@ public:
 
 	// diss battle intro stuff
 	Timeout * dissBattleStartTimeout;
-	HorizontalLinearLayout * dissBattleStartLayout;
+
+	NodeUI * dissBattleStartLayout;
+	NodeUI * levelUp;
+
 	PD_Character * dissEnemy;
 	PD_UI_DissCard * playerCard, * enemyCard;
 	NodeUI * vs;
+
+	Timeout * dissBattleEndTimeout;
+	Timeout * dissBattleLevelUpTimeout;
 };

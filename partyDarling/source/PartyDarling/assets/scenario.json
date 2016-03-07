@@ -308,6 +308,12 @@
     },
 
 	{
+      "id": "DISS-BATTLE-LEVEL-UP",
+      "type": "texture",
+      "src": "UI/LevelUp.png"
+    },
+
+	{
       "id": "DISS-BATTLE-INTERJECT",
       "type": "texture",
       "src": "UI/yelling contest/interject.png"

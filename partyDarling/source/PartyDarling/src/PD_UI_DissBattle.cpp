@@ -16,6 +16,7 @@
 #include <regex>
 #include <ProgrammaticTexture.h>
 #include <TextureUtils.h>
+#include <PD_DissStats.h>
 
 #define FAIL_INSULT	"glassBreak"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
@@ -447,7 +448,7 @@ void PD_UI_DissBattle::update(Step * _step){
 		VerticalLinearLayout::update(_step);
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
-				float totInsightEffect = (player->insight - enemy->insight) * 0.1f;
+				float totInsightEffect = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) * 0.1f;
 
 				if(totInsightEffect < -FLT_EPSILON) {
 					if(totInsightEffect <= -0.9f) {
@@ -610,7 +611,7 @@ void PD_UI_DissBattle::update(Step * _step){
 				if(playerQuestionTimer >= playerQuestionTimerLength){
 					if(!playerResult){
 						// Increment player answer timer
-						float modPlayerAnswerTimeLegnth = playerAnswerTimerLength + player->sass/10.f - enemy->sass/10.f;
+						float modPlayerAnswerTimeLegnth = playerAnswerTimerLength + player->dissStats->getSass()/10.f - enemy->dissStats->getSass()/10.f;
 						if(playerAnswerTimer >= modPlayerAnswerTimeLegnth){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
@@ -1042,11 +1043,11 @@ void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
 		 // Factor in enemy's defense
-		_value -= enemy->defense;
-		_value += player->strength;
+		_value -= enemy->dissStats->getDefense();
+		_value += player->dissStats->getStrength();
 	}else {
-		_value -= enemy->strength;
-		_value += player->defense;
+		_value -= enemy->dissStats->getStrength();
+		_value += player->dissStats->getDefense();
 	}
 	
 	sweet::Event * e = new sweet::Event("confidence");

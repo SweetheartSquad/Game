@@ -9,6 +9,7 @@
 
 #include <Mouse.h>
 #include <Keyboard.h>
+#include <PD_DissStats.h>
 
 Player::Player(BulletWorld * _bulletWorld) : 
 	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
@@ -20,10 +21,9 @@ Player::Player(BulletWorld * _bulletWorld) :
 	jumpSpeed(5.f),
 	// collider
 	mass(1.f),
-	defense(0),
-	insight(0),
-	strength(0),
-	sass(0),
+	experience(0),
+	level(1),
+	dissStats(new PD_DissStats()),
 	wonLastDissBattle(false)
 {
 	// override sounds

@@ -1506,51 +1506,6 @@
             "type": "texture"
         },
         {
-            "id": 375,
-            "src": "components/Felix_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 376,
-            "src": "components/Felix_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 377,
-            "src": "components/Felix_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 378,
-            "src": "components/Felix_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 379,
-            "src": "components/Felix_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 380,
-            "src": "components/Felix_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 381,
-            "src": "components/Felix_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 382,
-            "src": "components/Felix_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 383,
-            "src": "components/Felix_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 384,
             "src": "components/Gladys_Upper_Leg.png",
             "type": "texture"
@@ -1791,73 +1746,8 @@
             "type": "texture"
         },
         {
-            "id": 438,
-            "src": "components/scifiOmar_Upper_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 439,
-            "src": "components/scifiOmar_Lower_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 440,
-            "src": "components/scifiOmar_Foot.png",
-            "type": "texture"
-        },
-        {
             "id": 444,
             "src": "components/scifiOmar_Torso.png",
-            "type": "texture"
-        },
-        {
-            "id": 445,
-            "src": "components/scifiOmar_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 446,
-            "src": "components/scifiOmar_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 447,
-            "src": "components/scifiOmar_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 448,
-            "src": "components/scifiOmar_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 449,
-            "src": "components/scifiOmar_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 450,
-            "src": "components/scifiOmar_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 451,
-            "src": "components/scifiOmar_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 452,
-            "src": "components/scifiOmar_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 453,
-            "src": "components/scifiOmar_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 454,
-            "src": "components/scifiOmar_Pelvis.png",
             "type": "texture"
         },
         {
@@ -2608,6 +2498,116 @@
         {
             "id": 610,
             "src": "components/Daz_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 620,
+            "src": "components/ScifiOmar_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 621,
+            "src": "components/ScifiOmar_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 622,
+            "src": "components/ScifiOmar_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 623,
+            "src": "components/ScifiOmar_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 624,
+            "src": "components/ScifiOmar_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 625,
+            "src": "components/ScifiOmar_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 626,
+            "src": "components/ScifiOmar_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 627,
+            "src": "components/ScifiOmar_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 628,
+            "src": "components/ScifiOmar_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 629,
+            "src": "components/ScifiOmar_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 630,
+            "src": "components/ScifiOmar_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 631,
+            "src": "components/ScifiOmar_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 632,
+            "src": "components/ScifiOmar_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 633,
+            "src": "components/Felix_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 634,
+            "src": "components/Felix_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 635,
+            "src": "components/Felix_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 636,
+            "src": "components/Felix_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 637,
+            "src": "components/Felix_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 638,
+            "src": "components/Felix_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 639,
+            "src": "components/Felix_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 640,
+            "src": "components/Felix_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 641,
+            "src": "components/Felix_Right_Pupil.png",
             "type": "texture"
         }
     ]

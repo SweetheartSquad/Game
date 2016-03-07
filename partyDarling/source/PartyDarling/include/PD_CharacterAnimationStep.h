@@ -17,6 +17,7 @@ public:
 	glm::vec2 leftLeg;
 	glm::vec2 rightLeg;
 	glm::vec2 body;
+	glm::vec3 translation;
 
 	explicit PD_CharacterAnimationStep(Json::Value _jsonDef);
 	explicit PD_CharacterAnimationStep();

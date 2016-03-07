@@ -54,6 +54,26 @@
             "id": 617,
             "src": "items/Planner.png",
             "type": "texture"
+        },
+        {
+            "id": 618,
+            "src": "items/RFIDtag.png",
+            "type": "texture"
+        },
+        {
+            "id": 619,
+            "src": "items/Keycard.png",
+            "type": "texture"
+        },
+        {
+            "id": 642,
+            "src": "items/garlic.png",
+            "type": "texture"
+        },
+        {
+            "id": 643,
+            "src": "items/candle.png",
+            "type": "texture"
         }
     ]
 }

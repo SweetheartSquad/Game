@@ -16,6 +16,7 @@
 
 #include <sweet/Input.h>
 #include <PD_Listing.h>
+#include <PD_DissStats.h>
 
 unsigned long int PD_Character::numRandomCharacters = 0;
 
@@ -27,12 +28,13 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	pr(new CharacterRenderer(_world, _definition, _shader, _emoticonShader)),
 	enabled(true),
 	dissedAt(false),
-	wonDissBattle(false)
+	wonDissBattle(false),
+	dissStats(new PD_DissStats())
 {
-	defense  = definition->defense;
-	insight  = definition->insight;
-	sass	 = definition->sass;
-	strength = definition->strength;
+	dissStats->incrementDefense(definition->defense);
+	dissStats->incrementInsight(definition->insight);
+	dissStats->incrementSass(definition->sass);
+	dissStats->incrementStrength(definition->strength);
 
 	billboarded = true;
 
@@ -424,6 +426,7 @@ void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _ste
 		currentAnimation->leftLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.leftLeg * solverLegL->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->rightLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg * solverLegR->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->body->tweens.push_back(new Tween<glm::vec2>(step.time, step.body * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
+		currentAnimation->translation->tweens.push_back(new Tween<glm::vec3>(step.time, step.translation  * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
 	}	
 
 	if(_steps.size() > 0) {
@@ -563,6 +566,7 @@ void CharacterRenderer::update(Step * _step){
 
 		}else if(currentAnimation != nullptr) {
 			currentAnimation->update(_step);
+			childTransform->translate(currentAnimation->translationVec, false);
 		}
 	}
 
