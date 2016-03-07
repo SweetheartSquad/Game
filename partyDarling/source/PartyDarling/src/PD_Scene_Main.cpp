@@ -623,6 +623,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(dissBattleStartLayout);
 	dissBattleStartLayout->setRationalHeight(1.f, uiLayer);
 	dissBattleStartLayout->setRationalWidth(1.f, uiLayer);
+	dissBattleStartLayout->setMarginLeft(0.3f);
 	dissBattleStartLayout->horizontalAlignment = kCENTER;
 	dissBattleStartLayout->verticalAlignment = kMIDDLE;
 	dissBattleStartLayout->setVisible(false);
@@ -650,15 +651,31 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleStartTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p < 0.33){
+		if(p < 0.25){
+			playerCard->firstParent()->scale(Easing::easeOutBounce(p, 0, 1, 0.33), false);
+			vs->firstParent()->scale(0, false);
+			enemyCard->firstParent()->scale(0, false);
 			playerCard->setVisible(true);
 			vs->setVisible(false);
 			enemyCard->setVisible(false);
-		}else if(p < 0.66){
+		}else if(p < 0.5){
+			playerCard->firstParent()->scale(1, false);
+			vs->firstParent()->scale(0, false);
+			enemyCard->firstParent()->scale(Easing::easeOutBounce(p-0.25, 0, 1, 0.33), false);
 			playerCard->setVisible(true);
 			vs->setVisible(false);
 			enemyCard->setVisible(true);
+		}else if(p < 0.75){
+			playerCard->firstParent()->scale(1, false);
+			vs->firstParent()->scale(Easing::easeOutBounce(p-0.5, 0, 1, 0.33), false);
+			enemyCard->firstParent()->scale(1, false);
+			playerCard->setVisible(true);
+			vs->setVisible(true);
+			enemyCard->setVisible(true);
 		}else{
+			playerCard->firstParent()->scale(1, false);
+			vs->firstParent()->scale(1, false);
+			enemyCard->firstParent()->scale(1, false);
 			playerCard->setVisible(true);
 			vs->setVisible(true);
 			enemyCard->setVisible(true);
@@ -1085,6 +1102,10 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy) {
 	playerCard->setVisible(false);
 	vs->setVisible(false);
 	enemyCard->setVisible(false);
+	
+	playerCard->childTransform->translate(glm::vec3(-playerCard->getWidth(true,false)*0.5f, -playerCard->getHeight(true,false)*0.5f, 0), false);
+	vs->childTransform->translate(glm::vec3(-vs->getWidth(true,false)*0.5f, -vs->getHeight(true,false)*0.5f, 0), false);
+	enemyCard->childTransform->translate(glm::vec3(-enemyCard->getWidth(true,false)*0.5f, -enemyCard->getHeight(true,false)*0.5f, 0), false);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
