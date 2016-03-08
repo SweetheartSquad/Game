@@ -1144,7 +1144,13 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 
 	for(auto c : room->characters){
 		listing->addCharacter(c);
-	}for(auto i : room->items){
+		for(auto c : definition->getCharacters()) {
+			for(auto i : c->getItems()) {
+				listing->addItem(new PD_Item(i, world, baseShader));
+			}
+		}
+	}
+	for(auto i : room->items){
 		listing->addItem(i);
 	}
 
@@ -1168,6 +1174,11 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	for(auto c : characters){
 		listing->addCharacter(c);
+		for(auto c : definition->getCharacters()) {
+			for(auto i : c->getItems()) {
+				listing->addItem(new PD_Item(i, world, baseShader));
+			}
+		}
 	}for(auto i : items){
 		listing->addItem(i);
 	}
@@ -1282,7 +1293,8 @@ std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 		for(auto def : itemDefinitions){
 			items.push_back(new PD_Item(def, world, baseShader));
 		}
-	}else{
+
+
 
 	}
 

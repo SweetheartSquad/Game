@@ -45,7 +45,7 @@
 #include <PD_DissStats.h>
 
 #define MAX_SIDE_SCENARIOS 5
-#define LEVEL_UP_DURATION 3
+#define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
@@ -468,7 +468,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("changeOwnership", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
 		// CHARACTER newOwner
@@ -498,14 +498,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		if(prevOwnerHasItem){
 			if(ownerCharId == "0") {
-				uiInventory->items.push_back(item);	
+				uiInventory->pickupItem(item);
 			}else if (prevOwnerCharId == "0") {
-				for(unsigned long int i = 0; i < uiInventory->items.size(); ++i) {
-					if(uiInventory->items[i]->definition->id == item->definition->id) {
-						uiInventory->items.erase(uiInventory->items.begin() + i);
-						break;
-					}
-				}
+				uiInventory->selectItem(item);
+				uiInventory->removeSelected();
 			}
 			if(ownerCharId != "0") {
 				listing->characters[ownerCharId]->items.push_back(item->definition->id);
@@ -679,12 +675,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	enemyCard->setRationalHeight(0.3f, dissBattleCards);
 	enemyCard->setSquareWidth(1.4f);
 
-	HorizontalLinearLayout * levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
+	levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
 	dissBattleStartLayout->addChild(levelUpContainer);
 	levelUpContainer->setRationalWidth(1.f, dissBattleStartLayout);
 	levelUpContainer->setRationalHeight(1.f, dissBattleStartLayout);
 	levelUpContainer->horizontalAlignment = kCENTER;
 	levelUpContainer->verticalAlignment = kMIDDLE;
+	levelUpContainer->setVisible(false);
 
 	levelUp = new NodeUI(uiLayer->world);
 	levelUpContainer->addChild(levelUp);
@@ -692,7 +689,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	levelUp->setSquareWidth(1.f);
 	levelUp->background->mesh->setScaleMode(GL_NEAREST);
 	levelUp->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LEVEL-UP")->texture);
-	levelUp->setVisible(false);
 
 	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
 		dissBattleStartLayout->setVisible(false);
@@ -742,7 +738,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	childTransform->addChild(dissBattleStartTimeout, false);
 
 	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		if(player->experience >= 100 * player->level){
+		if(player->experience >= 100){
 			// LEVEL UP
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
@@ -752,8 +748,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			++player->level;
 			playerCard->setLevel(player->level);
 
-			levelUp->setVisible(true);
-			levelUp->firstParent()->scale(0, false);
+			levelUpContainer->setVisible(true);
+			levelUp->setRationalHeight(0.f, levelUpContainer);
+			levelUp->setSquareWidth(1.f);
+			uiLayer->invalidateLayout();
 			
 			dissBattleLevelUpTimeout->restart();
 		}else{
@@ -783,7 +781,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
-		levelUp->setVisible(false);
+		levelUpContainer->setVisible(false);
 		player->experience = 0.f; // just in case
 		dissBattleStartLayout->setVisible(false);
 		if(!uiDialogue->hadNextDialogue){
@@ -794,13 +792,31 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.3f){
-			player->experience = 100 * (1-p/0.3f);
+		if(p <= 0.5f){
+			player->experience = 100 * (1-p/0.5f);
+		}else{
+			int wowow = 0;
 		}
 
-		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f), false);
+		float size;
+		if(p <= 0.5f){
+			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);
+			levelUp->setRationalHeight(size, levelUpContainer);
+		}else if(p >= 0.8f){
+			size = Easing::easeInCubic((p - 0.8f) * LEVEL_UP_DURATION, 1, -1, LEVEL_UP_DURATION * 0.2f);
+			levelUp->setRationalHeight(size, levelUpContainer);
+		}
+
+		uiLayer->invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
+
+	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// XP GAIN SOUND
+	});
+	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// LEVEL UP SOUND
+	});
 }
 
 
@@ -1001,17 +1017,12 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
-
-	for(unsigned long int i = 0; i < possibleBlockedCellPositions.size()/3*2; ++i){
-		glm::ivec2 pos = possibleBlockedCellPositions.pop();
-		blockedPositions.push(pos);
-		allCells[std::make_pair(pos.x, pos.y)] = false;
-	}
 	
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
 	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom;
+	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
 	if(currentHousePosition.x == 0){
 		introRoom->setEdge(PD_Door::kWEST);
 	}else if(currentHousePosition.x == houseSize-1){
@@ -1022,10 +1033,17 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		introRoom->setEdge(PD_Door::kSOUTH);
 	}
 
+	for (unsigned long int i = 0; i < possibleBlockedCellPositions.size() / 3 * 2; ++i){
+		glm::ivec2 pos = possibleBlockedCellPositions.pop();
+		if (pos != currentHousePosition){
+			blockedPositions.push(pos);
+			allCells[std::make_pair(pos.x, pos.y)] = false;
+		}
+	}
+
 
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
-	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
 
 	// place the unlocked rooms by picking a random open cell and a random room,
 	// assigning the room to the cell, and storing any open adjacent cells in the list
@@ -1033,11 +1051,16 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		glm::ivec2 cell;
 		if(openCells.size() > 0){
 			cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
-		}else{
+		}else if(blockedPositions.size() > 0){
 			cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+		}else{
+			Log::error("Room can't be placed!");
 		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = unlockedRooms.pop(true);
+		if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+			Log::error("House position already used.");
+		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
 		
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
@@ -1056,6 +1079,10 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = lockedRooms.pop(true);
+
+		if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+			Log::error("House position already used.");
+		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
 		
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
@@ -1072,6 +1099,10 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		Log::error("Room can't be placed!");
 	}
 	allCells[std::make_pair(cell.x, cell.y)] = false;
+
+	if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+		Log::error("House position already used.");
+	}
 	houseGrid[std::make_pair(cell.x, cell.y)] = labRoom;
 
 
@@ -1147,21 +1178,25 @@ std::vector<glm::ivec2> PD_Scene_Main::getAdjacentCells(glm::ivec2 _pos, std::ma
 	glm::ivec2 temp = _pos + glm::ivec2(-1,0);
 	if(temp.x >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(1,0);
 	if(temp.x < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(0,-1);
 	if(temp.y >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(0,1);
 	if(temp.y < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	return res;
@@ -1945,7 +1980,7 @@ void PD_Scene_Main::updateSelection(){
 						uiBubble->clear();
 						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
 							std::string c = person->state->conversation;
-							if(c == "NO_CONVO" || c == ""){
+							if(c == "NO_CONVO" || c ==""){
 								// incidental conversation
 								Json::Value dialogue;
 								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));

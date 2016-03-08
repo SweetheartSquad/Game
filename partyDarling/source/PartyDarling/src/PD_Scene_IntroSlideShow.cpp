@@ -22,10 +22,10 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	tex = new Texture("assets/textures/introSlides/4.png", false, true);
 	tex->load();
 	push(new Slide(tex, 0));
-	tex = new Texture("assets/textures/introSlides/5.png", false, true);
+	tex = new Texture("assets/textures/introSlides/6.png", false, true);
 	tex->load();
 	push(new Slide(tex));
-	tex = new Texture("assets/textures/introSlides/6.png", false, true);
+	tex = new Texture("assets/textures/introSlides/7.png", false, true);
 	tex->load();
 	push(new Slide(tex));
 	tex = new Texture("assets/textures/introSlides/7.png", false, true);

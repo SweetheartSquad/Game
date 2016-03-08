@@ -154,6 +154,7 @@ public:
 	Timeout * dissBattleStartTimeout;
 
 	NodeUI * dissBattleStartLayout;
+	HorizontalLinearLayout * levelUpContainer;
 	NodeUI * levelUp;
 
 	PD_Character * dissEnemy;
