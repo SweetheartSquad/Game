@@ -31,7 +31,103 @@
     {
     	"id":"voice1",
     	"type":"audio",
-    	"src":"voices/voice1.wav",
+    	"src":"voices/voice-01.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice2",
+    	"type":"audio",
+    	"src":"voices/voice-02.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice3",
+    	"type":"audio",
+    	"src":"voices/voice-03.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice4",
+    	"type":"audio",
+    	"src":"voices/voice-04.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice5",
+    	"type":"audio",
+    	"src":"voices/voice-05.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice6",
+    	"type":"audio",
+    	"src":"voices/voice-06.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice7",
+    	"type":"audio",
+    	"src":"voices/voice-07.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice8",
+    	"type":"audio",
+    	"src":"voices/voice-08.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice9",
+    	"type":"audio",
+    	"src":"voices/voice-09.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice10",
+    	"type":"audio",
+    	"src":"voices/voice-10.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice11",
+    	"type":"audio",
+    	"src":"voices/voice-11.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice12",
+    	"type":"audio",
+    	"src":"voices/voice-12.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice13",
+    	"type":"audio",
+    	"src":"voices/voice-13.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice14",
+    	"type":"audio",
+    	"src":"voices/voice-14.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice15",
+    	"type":"audio",
+    	"src":"voices/voice-15.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice16",
+    	"type":"audio",
+    	"src":"voices/voice-16.ogg",
+    	"category":"sfx"
+    },
+     {
+    	"id":"voice17",
+    	"type":"audio",
+    	"src":"voices/voice-17.ogg",
     	"category":"sfx"
     },
 
@@ -242,6 +338,12 @@
     "id": "applause",
     "type": "audio",
     "src": "applause.ogg",
+    "category": "sfx"
+  },
+  {
+    "id": "ohhh",
+    "type": "audio",
+    "src": "ohhh.ogg",
     "category": "sfx"
   },
 	{
