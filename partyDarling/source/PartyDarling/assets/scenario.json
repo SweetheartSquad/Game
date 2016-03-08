@@ -405,6 +405,11 @@
       "src": "UI/mapCell.png"
     },
     {
+      "id": "MAPCELL-UNENTERED",
+      "type": "texture",
+      "src": "UI/mapCell -unentered.png"
+    },
+    {
       "id": "MAPCELL-LOCKED",
       "type": "texture",
       "src": "UI/mapCell -locked.png"
