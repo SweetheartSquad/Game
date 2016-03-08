@@ -65,7 +65,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 
 void IntroRoom::setEdge(PD_Door::Door_t _edge){
 	float forward = 2.5f;
-	float backward = -30.f;
+	float backward = -40.f;
 	float left = -5.8f;
 	float right = 5.8f;
 	Transform t;
