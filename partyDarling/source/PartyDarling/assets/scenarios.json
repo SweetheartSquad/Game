@@ -30,14 +30,14 @@
         "type": 2
     },
     {
-        "order": 0,
+        "order": 5,
         "src": "scenarios/8b58c7ed-a496-49e1-ba21-f8ba626a23ea.json",
-        "type": 0
+        "type": 2
     },
     {
-        "order": 0,
+        "order": 6,
         "src": "scenarios/8163abde-756f-4f03-8b90-57289e0744ae.json",
-        "type": 0
+        "type": 2
     },
     {
         "order": 0,
@@ -55,19 +55,19 @@
         "type": 0
     },
     {
-        "order": 2,
+        "order": 0,
         "src": "scenarios/Adventure_Omar.json",
         "type": 1
     },
     {
         "order": 0,
         "src": "scenarios/Robot_Omar.json",
-        "type": 0
+        "type": 1
     },
     {
         "order": 0,
         "src": "scenarios/Ghost_Omar.json",
-        "type": 0
+        "type": 1
     },
     {
         "order": 0,
@@ -82,17 +82,17 @@
     {
         "order": 1,
         "src": "scenarios/Butler_1.json",
-        "type": 2
+        "type": 4
     },
     {
         "order": 2,
         "src": "scenarios/Butler_2.json",
-        "type": 2
+        "type": 4
     },
     {
-        "order": 0,
+        "order": 3,
         "src": "scenarios/Butler_3.json",
-        "type": 0
+        "type": 4
     },
     {
         "order": 3,
@@ -102,7 +102,7 @@
     {
         "order": 4,
         "src": "scenarios/Butler_4.json",
-        "type": 2
+        "type": 4
     },
     {
         "order": 6,
@@ -117,11 +117,16 @@
     {
         "order": 5,
         "src": "scenarios/Fifth_Mansion_Lab.json",
-        "type": 1
+        "type": 2
     },
     {
         "order": 1,
         "src": "scenarios/Intro_Lab.json",
         "type": 2
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Robot_Omar_Lab.json",
+        "type": 1
     }
 ]
