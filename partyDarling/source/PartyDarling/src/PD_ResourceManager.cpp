@@ -26,6 +26,7 @@ std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
 std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
 sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
 std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::roomTypes;
+sweet::ShuffleVector<OpenAL_Sound *> PD_ResourceManager::voices;
 
 PD_ResourceManager::PD_ResourceManager(){
 	// register custom asset types
@@ -214,6 +215,10 @@ PD_ResourceManager::PD_ResourceManager(){
 				def->offset = glm::vec2(emote["offset"][0].asFloat(), emote["offset"][1].asFloat());
 			}
 		}
+	}
+
+	for(unsigned long int i = 1; i < 18; ++i) {
+		voices.push(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
 	}
 
 	db = new DatabaseConnection("data/test.db");

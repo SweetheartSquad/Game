@@ -161,7 +161,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world, uiBubble->textShader);
+	uiInventory = new PD_UI_Inventory(uiLayer->world);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
@@ -2066,9 +2066,8 @@ void PD_Scene_Main::updateSelection(){
 					// dropping an item
 					if(PD_Item * item = uiInventory->removeSelected()){
 						// put the item back into the scene
-						childTransform->addChild(item);
 						item->addToWorld();
-			
+
 						// figure out where to put the item
 						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
 						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
@@ -2077,6 +2076,9 @@ void PD_Scene_Main::updateSelection(){
 						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
 
 						currentRoom->addComponent(item);
+						currentRoom->items.push_back(item);
+
+						childTransform->addChild(item);
 					}
 
 					resetCrosshair();
