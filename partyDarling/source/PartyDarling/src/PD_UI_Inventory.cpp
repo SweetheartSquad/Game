@@ -208,8 +208,8 @@ PD_Item * PD_UI_Inventory::getSelected(){
 	return selectedItem;
 }
 
-PD_Item * PD_UI_Inventory::removeSelected(){
-	PD_Item * res = selectedItem;
+PD_Item * PD_UI_Inventory::removeItem(PD_Item * _item){
+	PD_Item * res = _item;
 	// if nothing is selected, log a warning and return early
 	if(res == nullptr){
 		Log::warn("Tried to remove the selected inventory item but nothing was selected.");
@@ -220,10 +220,10 @@ PD_Item * PD_UI_Inventory::removeSelected(){
 	// when found, remove it, flag the grid as dirty
 	// (assumes that there are no duplicated)
 	for(signed long int i = items.size()-1; i >= 0; --i){
-		if(items.at(i) == res){
+		if(items.at(i) == _item){
 			items.erase(items.begin() + i);
 			gridDirty = true;
-			selectedItem = nullptr;
+			_item = nullptr;
 			break;
 		}
 	}
@@ -231,10 +231,16 @@ PD_Item * PD_UI_Inventory::removeSelected(){
 	// if we still have a selected item at this point, it means
 	// that it wasn't in the inventory in the first place
 	// this shouldn't happen, so log an error
-	if(selectedItem != nullptr){
+	if(_item != nullptr){
 		Log::error("Tried to remove selected inventory item, but the item wasn't in the inventory?");
 	}
 
+	return res;
+}
+
+PD_Item * PD_UI_Inventory::removeSelected(){
+	PD_Item * res = removeItem(selectedItem);
+	selectedItem = nullptr;
 	return res;
 }
 
