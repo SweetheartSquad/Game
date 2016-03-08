@@ -95,13 +95,13 @@ void PD_UI_Bubble::selectCurrent(){
 }
 
 void PD_UI_Bubble::placeOptions(){
-	float verticalSpacing = options.back()->label->font->getLineHeight()*2.f;
+	float verticalSpacing = options.back()->label->font->getLineHeight()* (options.size() == 2 ? 1.f : 2.f);
 	float bubbleWidth = 500;
 	for(unsigned long int i = 0; i < options.size(); ++i){
 		float offset = (float)(i) / options.size();
 		offset -= displayOffset;
 		offset *= glm::pi<float>()*2.f;
-		float w = (glm::sin(offset)+1)*0.5f;
+		float w = options.size() == 2 ? (1.f-(glm::sin(offset)+1)*0.5f): (glm::sin(offset)+1)*0.5f;
 
 		options.at(i)->firstParent()->translate(0, glm::sin(offset)*verticalSpacing, 0, false);
 		options.at(i)->marginLeft.setRationalSize(w*0.25f+0.1f, &this->width);
@@ -147,7 +147,7 @@ void PD_UI_Bubble::update(Step * _step){
 		test->translate(0, getHeight(true, true)*0.5f, 0, false);
 		
 		// interpolate the rotation of the options
-		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + (options.size() == 2 ? 0.2f : 0.05f)) : 0;
+		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + (options.size() == 2 ? -0.2f : 0.05f)) : 0;
 		float delta = targetDispayOffset - displayOffset;
 		if(std::abs(delta) > FLT_EPSILON){
 			displayOffset += (targetDispayOffset - displayOffset) * 0.2f;
