@@ -233,6 +233,12 @@
     "category": "sfx"
   },
   {
+    "id": "XP_UP",
+    "type": "audio",
+    "src": "xp_up.ogg",
+    "category": "sfx"
+  },
+  {
     "id": "applause",
     "type": "audio",
     "src": "applause.ogg",
