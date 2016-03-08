@@ -45,7 +45,7 @@
 #include <PD_DissStats.h>
 
 #define MAX_SIDE_SCENARIOS 5
-#define LEVEL_UP_DURATION 3
+#define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
@@ -736,7 +736,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	childTransform->addChild(dissBattleStartTimeout, false);
 
 	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		if(player->experience >= 100 * player->level){
+		if(player->experience >= 100){
 			// LEVEL UP
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
@@ -779,7 +779,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
-		levelUp->setVisible(false);
+		levelUpContainer->setVisible(false);
 		player->experience = 0.f; // just in case
 		dissBattleStartLayout->setVisible(false);
 		if(!uiDialogue->hadNextDialogue){
@@ -790,19 +790,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.3f){
-			player->experience = 100 * (1-p/0.3f);
+		if(p <= 0.5f){
+			player->experience = 100 * (1-p/0.5f);
 		}else{
 			int wowow = 0;
 		}
 
-		float size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f);
-		if(size > 1.f){
-			size = 1.f;
+		float size;
+		if(p <= 0.5f){
+			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);
+			levelUp->setRationalHeight(size, levelUpContainer);
+		}else if(p >= 0.8f){
+			size = Easing::easeInCubic((p - 0.8f) * LEVEL_UP_DURATION, 1, -1, LEVEL_UP_DURATION * 0.2f);
+			levelUp->setRationalHeight(size, levelUpContainer);
 		}
 
-		levelUp->setRationalHeight(size, levelUpContainer);
-		levelUp->setSquareWidth(1.f);
 		uiLayer->invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);

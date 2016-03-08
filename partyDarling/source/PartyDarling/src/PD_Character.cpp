@@ -72,6 +72,10 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	enabled = definition->visible;
 }
 
+PD_Character::~PD_Character(){
+	delete dissStats;
+}
+
 void PD_Character::setShader(Shader * _shader, bool _configureDefault){
 	RoomObject::setShader(_shader, _configureDefault);
 	pr->setShader(_shader, _configureDefault);
