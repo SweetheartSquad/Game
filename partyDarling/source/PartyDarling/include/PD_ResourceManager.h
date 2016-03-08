@@ -27,8 +27,6 @@ struct EmoteDef {
 class PD_ResourceManager : public ResourceManager{
 public:
 	static PD_Scenario * scenario;
-	static PD_Scenario * introScenario;
-	static PD_Scenario * labScenario;
 	static PD_Scenario * itemTextures;
 	static PD_Scenario * componentTextures;
 	static DatabaseConnection * db;

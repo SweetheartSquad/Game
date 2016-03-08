@@ -863,11 +863,6 @@ void PD_Scene_Main::pickScenarios(){
 	});
 
 	assert(allPlotDefs.size() > 0);
-	/* Just for now
-	assert(allPlotDefs.size() == 5);
-	assert(allLabDefs.size() == 5);
-	assert(allOmarDefs.size() >= 3);
-	*/
 	for(unsigned long int i = 0; i < allPlotDefs.size(); ++i) {
 		Json::Value scenariosList;
 
@@ -878,26 +873,23 @@ void PD_Scene_Main::pickScenarios(){
 
 		assert(scenariosList.size() > 0);
 		
+		// pick some random side scenarios
 		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
 		for(unsigned long int i = 0; i < numSidePlots; ++i) {
 			scenariosList.append(allSideDefs.pop()["src"].asString());			
 		}
 
+		// if we're in the middle, pick an omar scenario
 		if(plotPosition != kBEGINNING && plotPosition != kEND){
-			if(allOmarDefs.size() > 0){
-				scenariosList.append(allOmarDefs.pop()["src"].asString());
-			}
+			scenariosList.append(allOmarDefs.pop()["src"].asString());
 		}
 
 		// Add the intro scenario second last
-		if(allIntroDefs.size() > i){
-			scenariosList.append(allIntroDefs[i]["src"].asString());
-		}
+		scenariosList.append(allIntroDefs[i]["src"].asString());
+
 		// Add the lab def last
 		// We shouldn't need this check but we'll leave it here until all the scenarios are in
-		if(allLabDefs.size() > i){
-			scenariosList.append(allLabDefs[i]["src"].asString());
-		}
+		scenariosList.append(allLabDefs[i]["src"].asString());
 
 		Json::Value outValue;
 		outValue["scenarios"] = scenariosList;
@@ -908,20 +900,10 @@ void PD_Scene_Main::pickScenarios(){
 	// SAVE senarioFile
 
 	// ****************
-	// grab the current main plot scenario
-	
-	// pick an omar scenario
-	
-	// first is always the tutorial/intro
-
-	// middle are random from the a given set
-
-	// last is always the final
 
 
-	// pick side scenarios
-	// random from static shuffle vector
 
+	// grab the current scenario list from the save file
 	Json::Value currentScenario;
 	int i = 1;
 	for(auto scenariosList : scenarioFile) {
@@ -931,12 +913,11 @@ void PD_Scene_Main::pickScenarios(){
 		}
 		++i;
 	}
-	
+
 	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
 	}
 
-	// TODO: all of this
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
@@ -947,6 +928,13 @@ void PD_Scene_Main::pickScenarios(){
 		PD_ResourceManager::scenario->eventManager->addChildManager(s->eventManager);
 		s->conditionImplementations = PD_ResourceManager::conditionImplementations;
 	}
+
+	
+	// pop the last two scenarios off of the file (they're the intro and lab scenario for this run)
+	labScenario = activeScenarios.back();
+	activeScenarios.pop_back();
+	introScenario = activeScenarios.back();
+	activeScenarios.pop_back();
 }
 
 void PD_Scene_Main::bundleScenarios(){
@@ -1226,8 +1214,8 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 
 
 	// construct static rooms (into room, lab room)
-	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::labScenario->getAsset("room","1"))));
-	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, dynamic_cast<AssetRoom *>(PD_ResourceManager::introScenario->getAsset("room","1"))));
+	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, labScenario));
+	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, introScenario));
 
 
 	return res;

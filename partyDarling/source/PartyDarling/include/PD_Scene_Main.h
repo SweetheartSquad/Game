@@ -115,6 +115,8 @@ public:
 	// a map which stores all of the currently available rooms using their positions as the keys
 	std::map<std::pair<int, int>, Room *> houseGrid;
 
+	Scenario * introScenario;
+	Scenario * labScenario;
 	std::vector<Scenario *> activeScenarios;
 
 

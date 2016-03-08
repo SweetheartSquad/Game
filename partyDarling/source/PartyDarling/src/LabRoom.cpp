@@ -7,8 +7,8 @@
 #include <PD_Character.h>
 #include <MeshFactory.h>
 
-LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, AssetRoom * const _definition) :
-	Room(_world, _toonShader, _definition)
+LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, Scenario * _labScenario) :
+	Room(_world, _toonShader, dynamic_cast<AssetRoom *>(_labScenario->getAsset("room","1")))
 {
 	PD_Door * doorNorth = new PD_Door(world, _toonShader, PD_Door::kNORTH, 4);
 	PD_Door * doorSouth = new PD_Door(world, _toonShader, PD_Door::kSOUTH, 4);
@@ -34,18 +34,18 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doorWest->translatePhysical(glm::vec3(-22,0,0));
 	
 	
-	TriMesh * mesh = PD_ResourceManager::labScenario->getMesh("LAB-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(PD_ResourceManager::labScenario->getTexture("LAB-ROOM")->texture);
+	TriMesh * mesh = _labScenario->getMesh("LAB-ROOM")->meshes.at(0);
+	mesh->pushTexture2D(_labScenario->getTexture("LAB-ROOM")->texture);
 	mesh->setScaleMode(GL_NEAREST);
 	childTransform->addChild(new MeshEntity(mesh, _toonShader));
-	setColliderAsMesh(PD_ResourceManager::labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
+	setColliderAsMesh(_labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::labScenario->getAsset("character", std::to_string(1)));
+	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_labScenario->getAsset("character", std::to_string(1)));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 	addComponent(p);
 	characters.push_back(p);
-	PD_Listing * listing = new PD_Listing(PD_ResourceManager::labScenario);
+	PD_Listing * listing = new PD_Listing(_labScenario);
 	listing->addCharacter(p);
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);

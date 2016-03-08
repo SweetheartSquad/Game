@@ -9,8 +9,8 @@
 
 #include <PointLight.h>
 
-IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, AssetRoom * const _definition) :
-	Room(_world, _toonShader, _definition)
+IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, Scenario * _introScenario) :
+	Room(_world, _toonShader, dynamic_cast<AssetRoom *>(_introScenario->getAsset("room","1")))
 {
 	PD_Door * doorNorth = new PD_Door(world, _toonShader, PD_Door::kNORTH, 5);
 	PD_Door * doorSouth = new PD_Door(world, _toonShader, PD_Door::kSOUTH, 5);
@@ -31,17 +31,19 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	doorWest->rotatePhysical(90, 0, 1, 0);
 	doorSouth->rotatePhysical(180, 0, 1, 0);
 
-	TriMesh * mesh = PD_ResourceManager::introScenario->getMesh("INTRO-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(PD_ResourceManager::introScenario->getTexture("INTRO-ROOM")->texture);
+	TriMesh * mesh = _introScenario->getMesh("INTRO-ROOM")->meshes.at(0);
+	mesh->pushTexture2D(_introScenario->getTexture("INTRO-ROOM")->texture);
 	mesh->setScaleMode(GL_NEAREST);
 	visibleMesh = new MeshEntity(mesh, _toonShader);
 	childTransform->addChild(visibleMesh);
 
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(PD_ResourceManager::introScenario->getAsset("character", "Butler"));
+	colliderMesh = _introScenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
+
+	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_introScenario->getAsset("character", "Butler"));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 	addComponent(p);
 	characters.push_back(p);
-	PD_Listing * listing = new PD_Listing(PD_ResourceManager::introScenario);
+	PD_Listing * listing = new PD_Listing(_introScenario);
 	listing->addCharacter(p);
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
@@ -66,7 +68,6 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 	float backward = -30.f;
 	float left = -5.8f;
 	float right = 5.8f;
-	TriMesh * colliderMesh = PD_ResourceManager::introScenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
 	Transform t;
 
 	switch(_edge){
