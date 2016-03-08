@@ -176,7 +176,7 @@
     {
       "id": "PLAYER_FOOTSTEP",
       "type": "audio",
-      "src": "crunchyStep.ogg",
+      "src": "footstep.ogg",
       "category": "sfx"
     },
     {

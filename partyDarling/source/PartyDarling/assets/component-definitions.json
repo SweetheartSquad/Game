@@ -602,11 +602,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Mahmoud_LEG.json",
-            "type": "LEG"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Mahmoud_ARM.json",
             "type": "ARM"
         },
@@ -768,6 +763,11 @@
         {
             "random": true,
             "src": "components/definitions/ThessleLeg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Mahmoud_LEG.json",
             "type": "LEG"
         }
     ]

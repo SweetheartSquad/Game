@@ -117,6 +117,9 @@ public:
 	
 	virtual void load() override;
 	virtual void unload() override;
+
+	std::vector<AssetItem *> getItems();
+	AssetItem * getItem(unsigned long int _index);
 };
 
 

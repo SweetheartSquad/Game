@@ -1981,21 +1981,6 @@
             "type": "texture"
         },
         {
-            "id": 510,
-            "src": "components/Mahmoud_Upper_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 511,
-            "src": "components/Mahmoud_Lower_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 512,
-            "src": "components/Mahmoud_Foot.png",
-            "type": "texture"
-        },
-        {
             "id": 513,
             "src": "components/Mahmoud_Upper_Arm.png",
             "type": "texture"
@@ -2608,6 +2593,21 @@
         {
             "id": 647,
             "src": "components/ThessleLeg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 648,
+            "src": "components/Mahmoud_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 649,
+            "src": "components/Mahmoud_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 650,
+            "src": "components/Mahmoud_Foot.png",
             "type": "texture"
         }
     ]

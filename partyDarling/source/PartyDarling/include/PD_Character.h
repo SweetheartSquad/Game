@@ -169,6 +169,7 @@ public:
 	std::vector<std::string> items;
 
 	PD_Character(BulletWorld * _world, AssetCharacter * const _definition, MeshInterface * _mesh, Shader * _shader, Shader * _emoticonShder, Anchor_t _anchor = Anchor_t::GROUND);
+	~PD_Character();
 
 	//virtual void update(Step * _step) override;
 
