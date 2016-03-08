@@ -340,6 +340,12 @@
     "src": "applause.ogg",
     "category": "sfx"
   },
+  {
+    "id": "ohhh",
+    "type": "audio",
+    "src": "ohhh.ogg",
+    "category": "sfx"
+  },
 	{
 		"id": "DISS-TUTORIAL-SPACEBAR",
 		"type": "texture",
