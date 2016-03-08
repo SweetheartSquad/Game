@@ -775,7 +775,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				break;
 			case PD_Side::kTOP:
 				sidePos.x += (-_parent->boundingBox.width + childDimensions.x) / 2.f + _slot->spaceFilled;
-				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
+				sidePos.y += _parent->boundingBox.height;
 				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth / 2.f + childDimensions.z, _parent->boundingBox.depth / 2.f - childDimensions.z) / 2.f;
 				break;	
 		}
@@ -805,7 +805,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				moveChildren.z = 1;
 				break;
 			case PD_Side::kTOP:
-				sidePos.y += _parent->boundingBox.height + childDimensions.y / 2.f;
+				sidePos.y += _parent->boundingBox.height;
 				sidePos.x += centerPos;
 				sidePos.z += sweet::NumberUtils::randomFloat(-_parent->boundingBox.depth / 2.f + childDimensions.z, _parent->boundingBox.depth / 2.f - childDimensions.z) / 2.f;
 				moveChildren.x = -1;
@@ -911,7 +911,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.0001f)){
 			std::stringstream s;
-			s << "Can't place due to COLLISION with: " << o->boundingBox.height << " address: " << o;
+			s << "Can't place due to COLLISION with: " << o->type << " address: " << o;
 			Log::warn(s.str());
 			
 			_obj->translatePhysical(-_pos);
