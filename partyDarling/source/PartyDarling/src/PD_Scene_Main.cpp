@@ -474,39 +474,48 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// CHARACTER newOwner
 		// ITEM item
 		// CHARACTER prevOwner
-		std::string ownerCharId = _event->getStringData("newOwner");
+		std::string newOwnerCharId = _event->getStringData("newOwner");
 		std::string itemId = _event->getStringData("item");
 		std::string prevOwnerCharId = _event->getStringData("prevOwner");
 		std::string scenarioId = _event->getStringData("scenario");
 
-		if(ownerCharId == "" || itemId == "" || prevOwnerCharId == "") {
+		if(newOwnerCharId == "" || itemId == "" || prevOwnerCharId == "") {
 			ST_LOG_ERROR_V("Missing field in trigger changerOwnership")
 		}
 		auto listing = PD_Listing::listingsById[scenarioId];
 		PD_Item * item = listing->items[itemId];
 		
-		if(ownerCharId == prevOwnerCharId) {
+		if(newOwnerCharId == prevOwnerCharId) {
 			ST_LOG_ERROR_V("Invalid arguments is trigger changeOwnership - owner == prevOwner");
 		}
 
 		bool prevOwnerHasItem = false;
-		for(auto it : listing->characters[prevOwnerCharId]->items) {
-			if(it == item->definition->id) {
-				prevOwnerHasItem = true;
+		if(prevOwnerCharId == "0"){
+			for(auto it : uiInventory->items){
+				if(it == item){
+					prevOwnerHasItem = true;
+					break;
+				}
+			}
+		}else{
+			for(auto it : listing->characters[prevOwnerCharId]->items) {
+				if(it == item->definition->id) {
+					prevOwnerHasItem = true;
+					break;
+				}
 			}
 		}
 
 		if(prevOwnerHasItem){
-			if(ownerCharId == "0") {
+			if(newOwnerCharId == "0"){
 				uiInventory->pickupItem(item);
-			}else if (prevOwnerCharId == "0") {
-				uiInventory->selectItem(item);
-				uiInventory->removeSelected();
+			}else{
+				listing->characters[newOwnerCharId]->items.push_back(item->definition->id);
+				if (prevOwnerCharId == "0"){
+					uiInventory->removeItem(item);
+				}	
 			}
-			if(ownerCharId != "0") {
-				listing->characters[ownerCharId]->items.push_back(item->definition->id);
-			}
-			if(prevOwnerCharId != "0") {
+			if(prevOwnerCharId != "0"){
 				for(unsigned long int i = 0; i < listing->characters[prevOwnerCharId]->items.size(); ++i) {
 					if(listing->characters[prevOwnerCharId]->items[i] == item->definition->id) {
 						listing->characters[prevOwnerCharId]->items.erase(listing->characters[prevOwnerCharId]->items.begin() + i);

@@ -66,6 +66,10 @@ public:
 	// returns the selected item
 	// if nullptr, does nothing
 	PD_Item * removeSelected();
+	// removes the selected item from the inventory
+	// returns the item
+	// if nullptr, does nothing
+	PD_Item * removeItem(PD_Item * _item);
 
 	// returns the currently selected item, or nullptr if nothing is selected
 	PD_Item * getSelected();
