@@ -13,6 +13,7 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	speechTimeout(nullptr),
 	hadNextDialogue(false)
 {
+	text->setWrapMode(kWORD);
 	setRenderMode(kTEXTURE);
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	vl->setRationalWidth(1.f, this);
