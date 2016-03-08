@@ -814,6 +814,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		uiLayer->invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
+
+	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// XP GAIN SOUND
+	});
+	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// LEVEL UP SOUND
+	});
 }
 
 
