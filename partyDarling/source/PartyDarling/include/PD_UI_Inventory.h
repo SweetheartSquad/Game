@@ -3,9 +3,9 @@
 #include <sweet/UI.h>
 #include <PD_Item.h>
 
-#define UI_INVENTORY_GRID_SIZE_X 5
-#define UI_INVENTORY_GRID_SIZE_Y 5
-#define UI_INVENTORY_GRID_PADDING 0.01f
+#define UI_INVENTORY_GRID_SIZE_X 3
+#define UI_INVENTORY_GRID_SIZE_Y 3
+#define UI_INVENTORY_GRID_PADDING 0.02f
 
 class PD_UI_Inventory : public HorizontalLinearLayout{
 private:
@@ -43,7 +43,7 @@ public:
 	// the number of rows that have been scrolled since the top of the grid
 	float gridOffset;
 
-	PD_UI_Inventory(BulletWorld * _world, ComponentShaderText * _textShader);
+	PD_UI_Inventory(BulletWorld * _world);
 
 	// add an item to the inventory
 	void pickupItem(PD_Item * _item);
