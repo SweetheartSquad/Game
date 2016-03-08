@@ -1146,7 +1146,9 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 		listing->addCharacter(c);
 		for(auto c : definition->getCharacters()) {
 			for(auto i : c->getItems()) {
-				listing->addItem(new PD_Item(i, world, baseShader));
+				PD_Item * item = new PD_Item(i, world, baseShader);
+				listing->addItem(item);
+				world->world->removeRigidBody(item->body);
 			}
 		}
 	}
@@ -1176,7 +1178,9 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 		listing->addCharacter(c);
 		for(auto c : definition->getCharacters()) {
 			for(auto i : c->getItems()) {
-				listing->addItem(new PD_Item(i, world, baseShader));
+				PD_Item * item = new PD_Item(i, world, baseShader);
+				listing->addItem(item);
+				world->world->removeRigidBody(item->body);
 			}
 		}
 	}for(auto i : items){

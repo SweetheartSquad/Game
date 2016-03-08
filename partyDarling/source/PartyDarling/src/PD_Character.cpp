@@ -70,6 +70,8 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	items = definition->items;
 
 	enabled = definition->visible;
+
+	voice = PD_ResourceManager::voices.pop();
 }
 
 PD_Character::~PD_Character(){

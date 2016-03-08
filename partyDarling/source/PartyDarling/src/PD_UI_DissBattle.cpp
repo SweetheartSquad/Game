@@ -19,7 +19,7 @@
 #include <PD_DissStats.h>
 
 #define FAIL_INSULT	"glassBreak"
-#define SUCCEED_INSULT	"applause"
+#define SUCCEED_INSULT	"ohhh"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
@@ -595,7 +595,7 @@ void PD_UI_DissBattle::update(Step * _step){
 								*/
 								// play sound
 								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
-									auto sound = PD_ResourceManager::scenario->getAudio("voice1")->sound;
+									auto sound = enemy->voice;
 									sound->setPitch(glyphs.at(glyphIdx)->character/178.f+0.75f);
 									sound->play();
 								}
