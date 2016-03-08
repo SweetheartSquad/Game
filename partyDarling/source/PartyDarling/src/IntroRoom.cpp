@@ -37,9 +37,10 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	meshFlats->setScaleMode(GL_NEAREST);
 	meshDetail->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-DETAIL")->texture);
 	meshDetail->setScaleMode(GL_NEAREST);
-	visibleMesh = new MeshEntity(meshFlats, _toonShader);
-	visibleMesh->meshTransform->addChild(meshDetail,false);
-	childTransform->addChild(visibleMesh);
+	visibleMesh = new Transform();
+	visibleMesh->addChild(new MeshEntity(meshFlats, _toonShader), false);
+	visibleMesh->addChild(new MeshEntity(meshDetail, _toonShader), false);
+	childTransform->addChild(visibleMesh, false);
 
 	colliderMesh = PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
 
@@ -58,11 +59,11 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	// lights
 	{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->childTransform->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
+		visibleMesh->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
 		lights.push_back(light);
 	}{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->childTransform->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
+		visibleMesh->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
 		lights.push_back(light);
 	}
 }
@@ -81,7 +82,7 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
 		//t.rotate(180, 0, 1, 0, kOBJECT);
-		//visibleMesh->firstParent()->rotate(180, 0, 1, 0, kOBJECT);
+		//visibleMesh->rotate(180, 0, 1, 0, kOBJECT);
 		break;
 	case PD_Door::kSOUTH:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,backward));
@@ -89,7 +90,7 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
 		t.rotate(180, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(180, 0, 1, 0, kOBJECT);
+		visibleMesh->rotate(180, 0, 1, 0, kOBJECT);
 		break;
 	case PD_Door::kWEST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
@@ -97,7 +98,7 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(-backward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(-forward,0,0));
 		t.rotate(90, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(90, 0, 1, 0, kOBJECT);
+		visibleMesh->rotate(90, 0, 1, 0, kOBJECT);
 		break;
 	case PD_Door::kEAST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
@@ -105,7 +106,7 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(forward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(backward,0,0));
 		t.rotate(-90, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(-90, 0, 1, 0, kOBJECT);
+		visibleMesh->rotate(-90, 0, 1, 0, kOBJECT);
 		break;
 
 	}
