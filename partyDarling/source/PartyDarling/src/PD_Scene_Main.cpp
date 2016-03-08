@@ -901,11 +901,11 @@ void PD_Scene_Main::pickScenarios(){
 		}
 
 		// Add the intro scenario second last
-		scenariosList.append(allIntroDefs[i]["src"].asString());
+		scenariosList.append(i < allIntroDefs.size() ? allIntroDefs[i]["src"].asString() : "intro-scenario.json");
 
 		// Add the lab def last
 		// We shouldn't need this check but we'll leave it here until all the scenarios are in
-		scenariosList.append(allLabDefs[i]["src"].asString());
+		scenariosList.append(i < allLabDefs.size() ? allLabDefs[i]["src"].asString() : "lab-scenario.json");
 
 		Json::Value outValue;
 		outValue["scenarios"] = scenariosList;
