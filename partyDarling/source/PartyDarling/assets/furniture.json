@@ -708,9 +708,6 @@
         }, 
         {
             "src": "furnitureTypes/mask.json"
-        }, 
-        {
-            "src": "furnitureTypes/kitchen_shelf.json"
         }
     ]
 }
