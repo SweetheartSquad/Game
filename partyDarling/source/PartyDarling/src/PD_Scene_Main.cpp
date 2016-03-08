@@ -376,7 +376,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->disable();
 		uiBubble->disable();
 
-		PD_ResourceManager::scenario->getAudio("doorOpen")->sound->play();
+		
 		
 		transition = 0.f;
 		transitionTarget = 1.f;
@@ -824,8 +824,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
 
 	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		// XP GAIN SOUND
+		PD_ResourceManager::scenario->getAudio("XP_UP")->sound->play();
 	});
+
 	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
 		// LEVEL UP SOUND
 	});
