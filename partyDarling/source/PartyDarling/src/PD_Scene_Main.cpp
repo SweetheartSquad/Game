@@ -957,7 +957,6 @@ void PD_Scene_Main::pickScenarios(){
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
 	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
-	activeScenarios.push_back(new PD_Scenario("assets/scenarios/Robot_Omar.json"));
 
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){
