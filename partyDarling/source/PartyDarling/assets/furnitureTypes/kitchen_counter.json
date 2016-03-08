@@ -19,9 +19,41 @@
 							{
 									"componentTypes": ["kitchen_counter_content"], 
 									"multiplier": 1, 
-									"outComponents": [
-									], 
+									"outComponents": [], 
 									"required": false,
+									"scale": [1.0,1.0,1.0]
+									},
+									{
+									"componentTypes": ["kitchen_shelf_main"], 
+									"multiplier": 1, 
+									"outComponents": [
+									 
+										{
+											"componentTypes": ["kitchen_shelf_content_1"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										},
+										{
+											"componentTypes": ["kitchen_shelf_content_2"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										},
+										{
+											"componentTypes": ["kitchen_shelf_content_3"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										}
+									], 
+									"required": true,
 									"scale": [1.0,1.0,1.0]
 									}
 							], 
@@ -58,4 +90,4 @@
     "flare": false,
     "numTextures": 2    
 
-        }
+        }]}
