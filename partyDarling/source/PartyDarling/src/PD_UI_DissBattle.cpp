@@ -19,6 +19,7 @@
 #include <PD_DissStats.h>
 
 #define FAIL_INSULT	"glassBreak"
+#define SUCCEED_INSULT	"applause"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
@@ -1054,6 +1055,7 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
 	}else {
+		PD_ResourceManager::scenario->getAudio(SUCCEED_INSULT)->sound->play();	
 		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
 		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-COMPLIMENT" + std::to_string(randComp))->texture);
 		complimentBubbleTimer = 0.f;
