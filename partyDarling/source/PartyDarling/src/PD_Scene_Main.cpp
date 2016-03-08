@@ -1033,17 +1033,12 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
-
-	for(unsigned long int i = 0; i < possibleBlockedCellPositions.size()/3*2; ++i){
-		glm::ivec2 pos = possibleBlockedCellPositions.pop();
-		blockedPositions.push(pos);
-		allCells[std::make_pair(pos.x, pos.y)] = false;
-	}
 	
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
 	houseGrid[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = introRoom;
+	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
 	if(currentHousePosition.x == 0){
 		introRoom->setEdge(PD_Door::kWEST);
 	}else if(currentHousePosition.x == houseSize-1){
@@ -1054,10 +1049,17 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		introRoom->setEdge(PD_Door::kSOUTH);
 	}
 
+	for (unsigned long int i = 0; i < possibleBlockedCellPositions.size() / 3 * 2; ++i){
+		glm::ivec2 pos = possibleBlockedCellPositions.pop();
+		if (pos != currentHousePosition){
+			blockedPositions.push(pos);
+			allCells[std::make_pair(pos.x, pos.y)] = false;
+		}
+	}
+
 
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
-	allCells[std::make_pair(currentHousePosition.x, currentHousePosition.y)] = false;
 
 	// place the unlocked rooms by picking a random open cell and a random room,
 	// assigning the room to the cell, and storing any open adjacent cells in the list
@@ -1065,11 +1067,16 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		glm::ivec2 cell;
 		if(openCells.size() > 0){
 			cell = openCells.pop(true); // make sure to remove the cell from the shuffle vector
-		}else{
+		}else if(blockedPositions.size() > 0){
 			cell = blockedPositions.pop(true); // if we ran out of possible places to go, use one of the pre-blocked cells instead
+		}else{
+			Log::error("Room can't be placed!");
 		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = unlockedRooms.pop(true);
+		if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+			Log::error("House position already used.");
+		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
 		
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
@@ -1088,6 +1095,10 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 		allCells[std::make_pair(cell.x, cell.y)] = false;
 		Room * room = lockedRooms.pop(true);
+
+		if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+			Log::error("House position already used.");
+		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
 		
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
@@ -1104,6 +1115,10 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		Log::error("Room can't be placed!");
 	}
 	allCells[std::make_pair(cell.x, cell.y)] = false;
+
+	if (houseGrid.count(std::make_pair(cell.x, cell.y)) != 0){
+		Log::error("House position already used.");
+	}
 	houseGrid[std::make_pair(cell.x, cell.y)] = labRoom;
 
 
@@ -1179,21 +1194,25 @@ std::vector<glm::ivec2> PD_Scene_Main::getAdjacentCells(glm::ivec2 _pos, std::ma
 	glm::ivec2 temp = _pos + glm::ivec2(-1,0);
 	if(temp.x >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(1,0);
 	if(temp.x < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(0,-1);
 	if(temp.y >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	temp = _pos + glm::ivec2(0,1);
 	if(temp.y < _maxSize && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
+		_cells.at(std::make_pair(temp.x, temp.y)) = false;
 	}
 
 	return res;
