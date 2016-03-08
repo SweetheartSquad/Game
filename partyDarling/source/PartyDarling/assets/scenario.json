@@ -220,6 +220,24 @@
 	
 
   // DISS BATTLE
+  {
+    "id": "DISS-BATTLE-INTRO",
+    "type": "audio",
+    "src": "diss-card.ogg",
+    "category": "sfx"
+  },
+  {
+    "id": "LEVEL_UP",
+    "type": "audio",
+    "src": "level_up.ogg",
+    "category": "sfx"
+  },
+  {
+    "id": "applause",
+    "type": "audio",
+    "src": "applause.ogg",
+    "category": "sfx"
+  },
 	{
 		"id": "DISS-TUTORIAL-SPACEBAR",
 		"type": "texture",

@@ -739,6 +739,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		if(player->experience >= 100){
+
+			PD_ResourceManager::scenario->getAudio("LEVEL_UP")->sound->play();	
+
 			// LEVEL UP
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
