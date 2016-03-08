@@ -45,7 +45,7 @@
 #include <PD_DissStats.h>
 
 #define MAX_SIDE_SCENARIOS 5
-#define LEVEL_UP_DURATION 3
+#define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
 
 Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
@@ -536,7 +536,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		PD_Listing::listingsById[scenario]->characters[charId]->pr->setEmote(emote, duration);
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("unlockRoom", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("unlockRoom", [this](sweet::Event * _event){
 		//Unlock the chosen room. If it is already unlocked, nothing will happen.
 		// ROOM room = room to unlock
 		std::string room = _event->getStringData("room");
@@ -547,11 +547,17 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 
 		PD_Listing::listingsById[scenario]->rooms[room]->locked = false;
+
+		// update the map to get rid of the locked icon for the room
+		uiMap->updateMap(currentHousePosition);
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
 		// unlocks the lab room for the run
 		labRoom->locked = false;
+
+		// update the map to get rid of the locked icon for the room
+		uiMap->updateMap(currentHousePosition);
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerDissBattle", [this](sweet::Event * _event){
@@ -673,12 +679,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	enemyCard->setRationalHeight(0.3f, dissBattleCards);
 	enemyCard->setSquareWidth(1.4f);
 
-	HorizontalLinearLayout * levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
+	levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
 	dissBattleStartLayout->addChild(levelUpContainer);
 	levelUpContainer->setRationalWidth(1.f, dissBattleStartLayout);
 	levelUpContainer->setRationalHeight(1.f, dissBattleStartLayout);
 	levelUpContainer->horizontalAlignment = kCENTER;
 	levelUpContainer->verticalAlignment = kMIDDLE;
+	levelUpContainer->setVisible(false);
 
 	levelUp = new NodeUI(uiLayer->world);
 	levelUpContainer->addChild(levelUp);
@@ -686,7 +693,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	levelUp->setSquareWidth(1.f);
 	levelUp->background->mesh->setScaleMode(GL_NEAREST);
 	levelUp->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LEVEL-UP")->texture);
-	levelUp->setVisible(false);
 
 	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
 		dissBattleStartLayout->setVisible(false);
@@ -736,7 +742,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	childTransform->addChild(dissBattleStartTimeout, false);
 
 	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		if(player->experience >= 100 * player->level){
+		if(player->experience >= 100){
 			// LEVEL UP
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
@@ -746,8 +752,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			++player->level;
 			playerCard->setLevel(player->level);
 
-			levelUp->setVisible(true);
-			levelUp->firstParent()->scale(0, false);
+			levelUpContainer->setVisible(true);
+			levelUp->setRationalHeight(0.f, levelUpContainer);
+			levelUp->setSquareWidth(1.f);
+			uiLayer->invalidateLayout();
 			
 			dissBattleLevelUpTimeout->restart();
 		}else{
@@ -777,7 +785,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
-		levelUp->setVisible(false);
+		levelUpContainer->setVisible(false);
 		player->experience = 0.f; // just in case
 		dissBattleStartLayout->setVisible(false);
 		if(!uiDialogue->hadNextDialogue){
@@ -788,17 +796,36 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.3f){
-			player->experience = 100 * (1-p/0.3f);
+		if(p <= 0.5f){
+			player->experience = 100 * (1-p/0.5f);
+		}else{
+			int wowow = 0;
 		}
 
-		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f), false);
+		float size;
+		if(p <= 0.5f){
+			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);
+			levelUp->setRationalHeight(size, levelUpContainer);
+		}else if(p >= 0.8f){
+			size = Easing::easeInCubic((p - 0.8f) * LEVEL_UP_DURATION, 1, -1, LEVEL_UP_DURATION * 0.2f);
+			levelUp->setRationalHeight(size, levelUpContainer);
+		}
+
+		uiLayer->invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
+
+	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// XP GAIN SOUND
+	});
+	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		// LEVEL UP SOUND
+	});
 }
 
 
 void PD_Scene_Main::pickScenarios(){
+
 	activeScenarios.clear();
 
 	Json::Value root;
@@ -814,6 +841,7 @@ void PD_Scene_Main::pickScenarios(){
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
 	std::vector<Json::Value> allPlotDefs;
 	std::vector<Json::Value> allLabDefs;
+	std::vector<Json::Value> allIntroDefs;
 
 	for(auto scenarioDef : root) {
 		ScenarioType type = static_cast<ScenarioType>(scenarioDef.get("type", 0).asInt());
@@ -830,6 +858,9 @@ void PD_Scene_Main::pickScenarios(){
 			case kLAB: 
 				allLabDefs.push_back(scenarioDef);
 				break;
+			case kINTRO: 
+				allIntroDefs.push_back(scenarioDef);
+				break;
 			default: 
 				ST_LOG_ERROR("Invalid Scenario Type");
 				break;
@@ -844,6 +875,10 @@ void PD_Scene_Main::pickScenarios(){
 	});
 
 	std::sort(allLabDefs.begin(), allLabDefs.end(), [](Json::Value a, Json::Value b){
+		return a["order"] < b["order"];
+	});
+
+	std::sort(allIntroDefs.begin(), allIntroDefs.end(), [](Json::Value a, Json::Value b){
 		return a["order"] < b["order"];
 	});
 
@@ -874,13 +909,20 @@ void PD_Scene_Main::pickScenarios(){
 			}
 		}
 
+		// Add the intro scenario second last
+		if(allIntroDefs.size() > i){
+			scenariosList.append(allIntroDefs[i]["src"].asString());
+		}
 		// Add the lab def last
 		// We shouldn't need this check but we'll leave it here until all the scenarios are in
 		if(allLabDefs.size() > i){
 			scenariosList.append(allLabDefs[i]["src"].asString());
 		}
 
-		scenarioFile.append(scenariosList);
+		Json::Value outValue;
+		outValue["scenarios"] = scenariosList;
+		outValue["seed"] = sweet::NumberUtils::randomInt(1111111, 9999999);
+		scenarioFile.append(outValue);
 	}
 
 	// SAVE senarioFile
@@ -910,7 +952,7 @@ void PD_Scene_Main::pickScenarios(){
 		++i;
 	}
 	
-	for(auto scenarioDef : currentScenario) {
+	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
 	}
 
@@ -1935,7 +1977,7 @@ void PD_Scene_Main::updateSelection(){
 						uiBubble->clear();
 						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
 							std::string c = person->state->conversation;
-							if(c == "NO_CONVO" || c == ""){
+							if(c == "NO_CONVO"){
 								// incidental conversation
 								Json::Value dialogue;
 								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));

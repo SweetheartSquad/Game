@@ -20,13 +20,6 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 {
 	background->setVisible(false);
 
-	roomName = new TextLabel(world, _font, _textShader);
-	addChild(roomName);
-	roomName->horizontalAlignment = kCENTER;
-	roomName->setRationalWidth(1.f, this);
-	roomName->setMarginBottom(0.05f);
-	roomName->setVisible(false);
-
 	compass = new NodeUI(world);
 	compass->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("COMPASS")->texture);
 	compass->background->mesh->setScaleMode(GL_NEAREST);
@@ -124,13 +117,6 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 			cell->setRationalHeight(1.f, hl);
 			cell->setSquareWidth(1.f);
 			cell->boxSizing = kCONTENT_BOX;
-			cell->eventManager->addEventListener("mousein", [cell, this](sweet::Event * _event){
-				if(cell->room != nullptr && cell->room->visibility == Room::kENTERED){
-					roomName->setText(cell->room->definition->name);
-				}else{
-					roomName->setText("???");
-				}
-			});
 		}
 	}
 
@@ -177,12 +163,7 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				compass->setRationalHeight(1.f, cell.second);
 				compass->setSquareWidth(1.f);
 				// the current cell becomes entered
-				// and opaque
-				cell.second->setBackgroundColour(1,1,1, 1);
 				cell.second->room->visibility = Room::kENTERED;
-			}else{
-				// all other cells become transparent
-				cell.second->setBackgroundColour(1,1,1, 0.5f);
 			}
 
 			// hidden cells aren't drawn
@@ -194,7 +175,7 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				break;
 			case Room::kSEEN:
 				cell.second->setVisible(true);
-				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL")->texture);
+				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL-UNENTERED")->texture);
 				break;
 			case Room::kENTERED:
 				cell.second->setVisible(true);

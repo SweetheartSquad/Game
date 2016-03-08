@@ -327,7 +327,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	NodeUI * playerArrows = new NodeUI(_bulletWorld);
 	playerBubbleOptions->addChild(playerArrows);
-	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-OFFENSE-ARROWS")->texture);
+	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-ARROWS")->texture);
 	playerArrows->setRationalHeight(0.4f, playerBubbleOptions);
 	playerArrows->setSquareWidth(0.8f);
 	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
@@ -405,6 +405,40 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 		interjectBubble->mesh->vertices.at(i).y += 0.5f;
 	}
 	childTransform->addChild(interjectBubble);
+	
+	tutorialSpacebar = new HorizontalLinearLayout(_bulletWorld);
+	gameContainer->addChild(tutorialSpacebar);
+	tutorialSpacebar->setRationalWidth(1.f, gameContainer);
+	tutorialSpacebar->setRationalHeight(0.4f, gameContainer);
+	tutorialSpacebar->verticalAlignment = kMIDDLE;
+	tutorialSpacebar->horizontalAlignment = kCENTER;
+	tutorialSpacebar->setMarginLeft(0.6f);
+	tutorialSpacebar->setVisible(false);
+
+	NodeUI * tutorialSpacebarImage = new NodeUI(_bulletWorld);
+	tutorialSpacebar->addChild(tutorialSpacebarImage);
+	tutorialSpacebarImage->setRationalHeight(1.f, tutorialSpacebar);
+	tutorialSpacebarImage->setSquareWidth(1.f);
+	tutorialSpacebarImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-SPACEBAR")->texture);
+	tutorialSpacebarImage->background->mesh->setScaleMode(GL_NEAREST);
+
+	tutorialArrows = new HorizontalLinearLayout(_bulletWorld);
+	gameContainer->addChild(tutorialArrows);
+	tutorialArrows->setRationalWidth(0.5f, gameContainer);
+	tutorialArrows->setRationalHeight(1.f, gameContainer);
+	tutorialArrows->setMarginTop(0.3f);
+	tutorialArrows->verticalAlignment = kMIDDLE;
+	tutorialArrows->horizontalAlignment = kCENTER;
+	tutorialArrows->setMarginLeft(0.3f);
+	tutorialArrows->setVisible(false);
+	/*
+	NodeUI * tutorialArrowsImage = new NodeUI(_bulletWorld);
+	tutorialArrows->addChild(tutorialArrowsImage);
+	tutorialArrowsImage->setRationalWidth(1.f, tutorialArrows);
+	tutorialArrowsImage->setSquareHeight(1.f);
+	tutorialArrowsImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-ARROWS")->texture);
+	tutorialArrowsImage->background->mesh->setScaleMode(GL_NEAREST);
+	*/
 
 	// disable and hide by default
 	disable();
@@ -940,6 +974,9 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 
 	playerBubble->setVisible(_isOffensive);
 	
+	tutorialSpacebar->setVisible(!_isOffensive);
+	tutorialArrows->setVisible(_isOffensive);
+
 	if (!_isOffensive){
 		setEnemyText();
 	}

@@ -45,6 +45,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 
 Player::~Player(){
 	delete shakeTimeout;
+	delete dissStats;
 }
 
 void Player::update(Step * _step){
