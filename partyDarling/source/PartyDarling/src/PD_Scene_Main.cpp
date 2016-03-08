@@ -909,7 +909,7 @@ void PD_Scene_Main::pickScenarios(){
 
 		Json::Value outValue;
 		outValue["scenarios"] = scenariosList;
-		outValue["seed"] = sweet::NumberUtils::randomInt(1111111, 9999999);
+		outValue["seed"] = sweet::NumberUtils::randomInt(0, INT_MAX);
 		scenarioFile.append(outValue);
 	}
 
