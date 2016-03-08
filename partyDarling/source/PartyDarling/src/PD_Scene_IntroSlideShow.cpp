@@ -28,7 +28,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	tex = new Texture("assets/textures/introSlides/7.png", false, true);
 	tex->load();
 	push(new Slide(tex));
-	tex = new Texture("assets/textures/introSlides/7.png", false, true);
+	tex = new Texture("assets/textures/introSlides/8.png", false, true);
 	tex->load();
 	push(new Slide(tex));
 
