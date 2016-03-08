@@ -2066,9 +2066,8 @@ void PD_Scene_Main::updateSelection(){
 					// dropping an item
 					if(PD_Item * item = uiInventory->removeSelected()){
 						// put the item back into the scene
-						childTransform->addChild(item);
 						item->addToWorld();
-			
+
 						// figure out where to put the item
 						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
 						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
@@ -2077,6 +2076,9 @@ void PD_Scene_Main::updateSelection(){
 						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
 
 						currentRoom->addComponent(item);
+						currentRoom->items.push_back(item);
+
+						childTransform->addChild(item);
 					}
 
 					resetCrosshair();

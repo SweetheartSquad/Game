@@ -25,8 +25,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 
 	boundingBox = mesh->calcBoundingBox();
 
-	setColliderAsBoundingBox();
-	createRigidBody(0);
+	addToWorld();
 
 	translatePhysical(glm::vec3(0, ITEM_POS_Y, 0), false);
 
