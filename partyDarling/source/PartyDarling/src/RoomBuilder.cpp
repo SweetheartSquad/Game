@@ -1255,7 +1255,7 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Random
 	if(definitions.size() > 0){
 		float area = room->tilemap->width * room->tilemap->height;
-		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.2f, area * 0.4f);
+		unsigned long int n = sweet::NumberUtils::randomInt(area * 0.3f, area * 0.5f);
 		for(unsigned int i = 0; i < n; ++i){
 			int randIdx = sweet::NumberUtils::randomInt(0, definitions.size()-1);
 

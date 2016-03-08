@@ -1351,7 +1351,9 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	}
 
 	// make sure the door is up-to-date, and then place the player in front of it
-	player->translatePhysical(currentRoom->doorPositions.at(doorToEnter), false);
+	glm::vec3 pos = currentRoom->doorPositions.at(doorToEnter);
+	pos.y = player->childTransform->getTranslationVector().y;
+	player->translatePhysical(pos, false);
 
 	// Trigger room entry events (important to do this before map is updated, otherwise we won't get the once-only triggers)
 	if(currentRoom->visibility != Room::kENTERED){
