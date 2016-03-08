@@ -932,6 +932,7 @@ void PD_Scene_Main::pickScenarios(){
 
 	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
+		activeScenarios.back()->load();
 	}
 
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-1.json"));
