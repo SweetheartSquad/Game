@@ -10,6 +10,9 @@ PD_DissStats::PD_DissStats() :
 {
 }
 
+PD_DissStats::~PD_DissStats(){
+}
+
 void PD_DissStats::incrementDefense(int _n){
 	int res = defense + _n;
 	defense = res > MAX_DISS_LEVEL ? MAX_DISS_LEVEL : res < 0 ? 0 : res;

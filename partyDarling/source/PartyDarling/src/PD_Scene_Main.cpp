@@ -673,12 +673,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	enemyCard->setRationalHeight(0.3f, dissBattleCards);
 	enemyCard->setSquareWidth(1.4f);
 
-	HorizontalLinearLayout * levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
+	levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
 	dissBattleStartLayout->addChild(levelUpContainer);
 	levelUpContainer->setRationalWidth(1.f, dissBattleStartLayout);
 	levelUpContainer->setRationalHeight(1.f, dissBattleStartLayout);
 	levelUpContainer->horizontalAlignment = kCENTER;
 	levelUpContainer->verticalAlignment = kMIDDLE;
+	levelUpContainer->setVisible(false);
 
 	levelUp = new NodeUI(uiLayer->world);
 	levelUpContainer->addChild(levelUp);
@@ -686,7 +687,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	levelUp->setSquareWidth(1.f);
 	levelUp->background->mesh->setScaleMode(GL_NEAREST);
 	levelUp->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LEVEL-UP")->texture);
-	levelUp->setVisible(false);
 
 	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
 		dissBattleStartLayout->setVisible(false);
@@ -746,8 +746,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			++player->level;
 			playerCard->setLevel(player->level);
 
-			levelUp->setVisible(true);
-			levelUp->firstParent()->scale(0, false);
+			levelUpContainer->setVisible(true);
+			levelUp->setRationalHeight(0.f, levelUpContainer);
+			levelUp->setSquareWidth(1.f);
+			uiLayer->invalidateLayout();
 			
 			dissBattleLevelUpTimeout->restart();
 		}else{
@@ -790,9 +792,18 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		float p = _event->getFloatData("progress");
 		if(p <= 0.3f){
 			player->experience = 100 * (1-p/0.3f);
+		}else{
+			int wowow = 0;
 		}
 
-		levelUp->firstParent()->scale(Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f), false);
+		float size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.3f);
+		if(size > 1.f){
+			size = 1.f;
+		}
+
+		levelUp->setRationalHeight(size, levelUpContainer);
+		levelUp->setSquareWidth(1.f);
+		uiLayer->invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
 }
@@ -1935,7 +1946,7 @@ void PD_Scene_Main::updateSelection(){
 						uiBubble->clear();
 						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
 							std::string c = person->state->conversation;
-							if(c == "NO_CONVO" || c == ""){
+							if(c == "NO_CONVO"){
 								// incidental conversation
 								Json::Value dialogue;
 								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));
