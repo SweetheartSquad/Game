@@ -468,7 +468,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("changeOwnership", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
 		// CHARACTER newOwner
@@ -498,14 +498,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 		if(prevOwnerHasItem){
 			if(ownerCharId == "0") {
-				uiInventory->items.push_back(item);	
+				uiInventory->pickupItem(item);
 			}else if (prevOwnerCharId == "0") {
-				for(unsigned long int i = 0; i < uiInventory->items.size(); ++i) {
-					if(uiInventory->items[i]->definition->id == item->definition->id) {
-						uiInventory->items.erase(uiInventory->items.begin() + i);
-						break;
-					}
-				}
+				uiInventory->selectItem(item);
+				uiInventory->removeSelected();
 			}
 			if(ownerCharId != "0") {
 				listing->characters[ownerCharId]->items.push_back(item->definition->id);
@@ -961,6 +957,7 @@ void PD_Scene_Main::pickScenarios(){
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-external-2.json"));
 	//activeScenarios.push_back(new PD_Scenario("assets/scenario-intro.json"));
 	//activeScenarios.push_back(new Scenario("assets/scenario-external-3.json"));
+	activeScenarios.push_back(new PD_Scenario("assets/scenarios/Robot_Omar.json"));
 
 	// set event managers on selected scenarios as children of the global scenario
 	for(auto s : activeScenarios){

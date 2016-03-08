@@ -93,6 +93,19 @@ void AssetCharacter::load(){
 	Asset::load();
 }
 
+std::vector<AssetItem *> AssetCharacter::getItems(){
+	std::vector<AssetItem *> res;
+	for(unsigned long int i = 0; i < items.size(); ++i){
+		res.push_back(getItem(i));
+	}
+
+	return res;
+}
+
+AssetItem * AssetCharacter::getItem(unsigned long _index){
+	return dynamic_cast<AssetItem *>(scenario->getAsset("item", items.at(_index)));
+}
+
 void AssetCharacter::unload(){
 	if(loaded){
 	}
@@ -219,6 +232,7 @@ std::vector<AssetCharacter *> AssetRoom::getCharacters(){
 AssetItem * AssetRoom::getItem(unsigned long int _index){
 	return dynamic_cast<AssetItem *>(scenario->getAsset("item", items.at(_index)));
 }
+
 std::vector<AssetItem *> AssetRoom::getItems(){
 	std::vector<AssetItem *> res;
 	for(unsigned long int i = 0; i < items.size(); ++i){
