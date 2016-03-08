@@ -606,5 +606,26 @@
       "type": "texture",
       "src": "UI/track.png"
     }
+
+    // STATIC ROOM
+    ,{
+      "id": "INTRO-ROOM-DETAIL",
+      "type": "texture",
+      "src": "introRoom_detail.png",
+      "generateMipmaps": false
+    },{
+      "id": "INTRO-ROOM-FLATS",
+      "type": "texture",
+      "src": "introRoom_flats.png",
+      "generateMipmaps": false
+    },{
+      "id": "INTRO-ROOM",
+      "type": "mesh",
+      "src": "introRoom.obj"
+    },{
+      "id": "INTRO-ROOM-COLLIDER",
+      "type": "mesh",
+      "src": "introRoom_collider.obj"
+    }
   ]
 }

@@ -30,14 +30,18 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	doorEast->rotatePhysical(-90, 0, 1, 0);
 	doorWest->rotatePhysical(90, 0, 1, 0);
 	doorSouth->rotatePhysical(180, 0, 1, 0);
-
-	TriMesh * mesh = _introScenario->getMesh("INTRO-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(_introScenario->getTexture("INTRO-ROOM")->texture);
-	mesh->setScaleMode(GL_NEAREST);
-	visibleMesh = new MeshEntity(mesh, _toonShader);
+	
+	TriMesh * meshFlats = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(0);
+	TriMesh * meshDetail = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(1);
+	meshFlats->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-FLATS")->texture);
+	meshFlats->setScaleMode(GL_NEAREST);
+	meshDetail->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-DETAIL")->texture);
+	meshDetail->setScaleMode(GL_NEAREST);
+	visibleMesh = new MeshEntity(meshFlats, _toonShader);
+	visibleMesh->meshTransform->addChild(meshDetail,false);
 	childTransform->addChild(visibleMesh);
 
-	colliderMesh = _introScenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
+	colliderMesh = PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_introScenario->getAsset("character", "Butler"));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);

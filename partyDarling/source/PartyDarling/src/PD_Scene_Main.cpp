@@ -1401,6 +1401,8 @@ PD_Scene_Main::~PD_Scene_Main(){
 		delete activeScenarios.back();
 		activeScenarios.pop_back();
 	}
+	delete introScenario;
+	delete labScenario;
 
 	delete bulletWorld;
 	delete toonShader;
