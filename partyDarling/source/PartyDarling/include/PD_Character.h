@@ -16,6 +16,7 @@
 #include "PD_CharacterAnimationSet.h"
 #include <Timeout.h>
 #include "Room.h"
+#include <OpenALSound.h>
 
 #define CHARACTER_SCALE 0.00085f
 
@@ -165,6 +166,8 @@ public:
 	Room * room;
 
 	AssetCharacter * const definition;
+
+	OpenAL_Sound * voice; 
 
 	std::vector<std::string> items;
 
