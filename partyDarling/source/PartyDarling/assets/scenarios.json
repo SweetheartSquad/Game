@@ -85,11 +85,11 @@
         "src": "scenarios/Butler_4.json",
         "type": 4
     },
-    /*{
+    {
         "order": 6,
         "src": "scenarios/Butler_6.json",
-        "type": 0
-    },*/
+        "type": 4
+    },
     {
         "order": 2,
         "src": "scenarios/Adventure_Omar_Lab.json",
