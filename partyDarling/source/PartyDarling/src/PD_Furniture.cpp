@@ -59,19 +59,9 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		MeshDeformation::flare(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	}
 
-	/**** Won't work, since I guess the stuff over the origin won't necessarily be the same height as the stuf below???? *****
-	// move all of the vertices up so that the origin is at the base of the mesh
-	float h = mesh->calcBoundingBox().height * 0.5f;
-	for(Vertex & v : mesh->vertices){
-		v.y += h;
-	}
-	*/
-
 	// Make the mesh dirty since the verts have changed
 	// May be redunant but do it as a safe guard
 	mesh->dirty = true;
-	
-	
 
 	// we need to inform the RoomObject of the new bounding box here
 	boundingBox = mesh->calcBoundingBox();
@@ -93,13 +83,14 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	}
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
 	
-	translatePhysical(glm::vec3(0, -boundingBox.y, 0.f), false);
-
-	if(type == "TV"){
-		int wow = 0;
-	}
-	// padding
-	boundingBox.x = -boundingBox.width * (0.5f + _def->paddingLeft);
+	// position bottom on ground
+	realign(); // update the current position from creation
+	translatePhysical(glm::vec3(0, childTransform->getTranslationVector().y - boundingBox.y, 0.f), false); // false false false
+	realign();
+	
+	// properly size and position the bounding box based on mesh origin and padding
+	boundingBox.x = -boundingBox.width * (0.5f + _def->paddingLeft);;
+	boundingBox.y = -childTransform->getTranslationVector().y;
 	boundingBox.z = -boundingBox.depth * (0.5f + _def->paddingBack);
 
 	boundingBox.width *= 1.f + _def->paddingLeft + _def->paddingRight;

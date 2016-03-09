@@ -16,6 +16,35 @@
                             "componentTypes": ["kitchen_stove_top"], 
                             "multiplier": 1, 
                             "outComponents": [
+								{
+									"componentTypes": ["kitchen_shelf_main"], 
+									"multiplier": 1, 
+									"outComponents": [
+									 
+										{
+											"componentTypes": ["kitchen_shelf_content_1"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										},
+										{
+											"componentTypes": ["kitchen_shelf_content_2"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										},
+										{
+											"componentTypes": ["kitchen_shelf_content_3"], 
+											"multiplier": 1, 
+											"outComponents": [
+											], 
+											"required": true,
+											"scale": [1.0,1.0,1.0]
+										}
 							], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
@@ -46,4 +75,4 @@
     "numTextures": 2,
 	"parentMax": 1
 
-        }
+        }]}
