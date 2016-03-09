@@ -40,13 +40,25 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	childTransform->addChild(new MeshEntity(mesh, _toonShader));
 	setColliderAsMesh(_labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
-
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_labScenario->getAsset("character", std::to_string(1)));
-	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
-	addComponent(p);
-	characters.push_back(p);
+	
 	PD_Listing * listing = new PD_Listing(_labScenario);
-	listing->addCharacter(p);
+	auto it = _labScenario->assets["character"].begin();
+	AssetCharacter * c = dynamic_cast<AssetCharacter *>(it->second);
+	if(c->id == "0"){
+		++it;
+		if(it != _labScenario->assets["character"].end()){
+			c = dynamic_cast<AssetCharacter *>(it->second);
+		}else{
+			c = nullptr;
+		}
+	}
+
+	if(c != nullptr){
+		PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+		addComponent(p);
+		characters.push_back(p);
+		listing->addCharacter(p);
+	}
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	

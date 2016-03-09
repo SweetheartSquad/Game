@@ -44,14 +44,26 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 
 	colliderMesh = new TriMesh(true);
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
-
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_introScenario->getAsset("character", "Butler"));
-	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
-	addComponent(p);
-	characters.push_back(p);
-	PD_Listing * listing = new PD_Listing(_introScenario);
-	listing->addCharacter(p);
 	
+	PD_Listing * listing = new PD_Listing(_introScenario);
+	auto it = _introScenario->assets["character"].begin();
+	AssetCharacter * c = dynamic_cast<AssetCharacter *>(it->second);
+	if(c->id == "0"){
+		++it;
+		if(it != _introScenario->assets["character"].end()){
+			c = dynamic_cast<AssetCharacter *>(it->second);
+		}else{
+			c = nullptr;
+		}
+	}
+
+	if(c != nullptr){
+		PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+		addComponent(p);
+		characters.push_back(p);
+		listing->addCharacter(p);
+	}
+
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
 	
 	ceiling->setVisible(false);
