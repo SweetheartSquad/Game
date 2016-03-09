@@ -25,4 +25,6 @@ public:
 	void addCharacter(PD_Character * _person);
 	void addItem(PD_Item * _item);
 	void addRoom(Room * _room);
+
+	static void removeListing(Scenario * _scenario);
 };

@@ -46,14 +46,17 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
 	
 	PD_Listing * listing = new PD_Listing(_introScenario);
+	AssetCharacter * c = nullptr;
 	auto it = _introScenario->assets["character"].begin();
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(it->second);
-	if(c->id == "0"){
-		++it;
-		if(it != _introScenario->assets["character"].end()){
-			c = dynamic_cast<AssetCharacter *>(it->second);
-		}else{
-			c = nullptr;
+	if(it != _introScenario->assets["character"].end()){
+		c = dynamic_cast<AssetCharacter *>(it->second);
+		if(c->id == "0"){
+			++it;
+			if(it != _introScenario->assets["character"].end()){
+				c = dynamic_cast<AssetCharacter *>(it->second);
+			}else{
+				c = nullptr;
+			}
 		}
 	}
 

@@ -34,22 +34,25 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doorWest->translatePhysical(glm::vec3(-22,0,0));
 	
 	
-	TriMesh * mesh = _labScenario->getMesh("LAB-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(_labScenario->getTexture("LAB-ROOM")->texture);
+	TriMesh * mesh = PD_ResourceManager::scenario->getMesh("LAB-ROOM")->meshes.at(0);
+	mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("LAB-ROOM")->texture);
 	mesh->setScaleMode(GL_NEAREST);
 	childTransform->addChild(new MeshEntity(mesh, _toonShader));
-	setColliderAsMesh(_labScenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
+	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 	
 	PD_Listing * listing = new PD_Listing(_labScenario);
+	AssetCharacter * c = nullptr;
 	auto it = _labScenario->assets["character"].begin();
-	AssetCharacter * c = dynamic_cast<AssetCharacter *>(it->second);
-	if(c->id == "0"){
-		++it;
-		if(it != _labScenario->assets["character"].end()){
-			c = dynamic_cast<AssetCharacter *>(it->second);
-		}else{
-			c = nullptr;
+	if(it != _labScenario->assets["character"].end()){
+		c = dynamic_cast<AssetCharacter *>(it->second);
+		if(c->id == "0"){
+			++it;
+			if(it != _labScenario->assets["character"].end()){
+				c = dynamic_cast<AssetCharacter *>(it->second);
+			}else{
+				c = nullptr;
+			}
 		}
 	}
 

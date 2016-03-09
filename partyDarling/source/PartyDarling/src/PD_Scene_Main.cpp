@@ -771,7 +771,6 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 		numRooms += scenario->assets["room"].size();
 	}
 
-
 	// build all of the rooms contained in the selected scenarios
 	unsigned long int progress = 0;
 	for(auto scenario : activeScenarios){
@@ -943,13 +942,16 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
-
+	
+	// add the intro/lab scenarios back to the active list so they get deleted too
+	activeScenarios.push_back(introScenario);
+	activeScenarios.push_back(labScenario);
+	// delete all of the scenarios
 	while(activeScenarios.size() > 0){
+		PD_Listing::removeListing(activeScenarios.back());
 		delete activeScenarios.back();
 		activeScenarios.pop_back();
 	}
-	delete introScenario;
-	delete labScenario;
 
 	delete bulletWorld;
 	delete toonShader;

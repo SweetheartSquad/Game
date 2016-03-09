@@ -720,5 +720,20 @@
       "type": "mesh",
       "src": "introRoom_collider.obj"
     }
+
+    ,{
+      "id": "LAB-ROOM",
+      "type":"mesh",
+      "src":"labRoom.obj"
+    },{
+      "id": "LAB-ROOM-COLLIDER",
+      "type":"mesh",
+      "src":"labRoom_collider.obj"
+    },{
+      "id": "LAB-ROOM",
+      "type":"texture",
+      "src":"labRoom.png",
+      "generateMipmaps": false
+    }
   ]
 }

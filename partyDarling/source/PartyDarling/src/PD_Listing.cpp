@@ -25,3 +25,7 @@ void PD_Listing::addItem(PD_Item * _item){
 void PD_Listing::addRoom(Room * _room){
 	rooms[_room->definition->id] = _room;
 }
+
+void PD_Listing::removeListing(Scenario * _scenario){
+	delete listings[_scenario];
+}
