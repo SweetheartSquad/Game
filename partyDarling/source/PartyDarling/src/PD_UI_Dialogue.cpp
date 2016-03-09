@@ -51,9 +51,11 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 			std::wstring word = speechBuffer.front();
 			char fc = tolower(word[0]);
 			speechBuffer.pop();
-			auto sound = currentSpeaker->voice;
-			sound->setPitch(fc/178.f+0.75f);
-			sound->play();
+			if(currentSpeaker != nullptr){
+				auto sound = currentSpeaker->voice;
+				sound->setPitch(fc/178.f+0.75f);
+				sound->play();
+			}
 			speechTimeout->restart();
 		}else {
 			if(currentSpeaker != nullptr) {

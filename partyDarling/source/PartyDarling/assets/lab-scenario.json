@@ -244,7 +244,14 @@
                 "speaker":1,
                 "name":"Dialogue 2",
                 "conditions":[],
-                "triggers":[]
+                "triggers":[
+					{  
+                     "type":"endRun",
+                     "args":{
+                     },
+                     "id":1
+                  }
+				]
             }
           ],
           "options": [],

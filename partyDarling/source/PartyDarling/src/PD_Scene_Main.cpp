@@ -44,6 +44,9 @@
 #include <LabRoom.h>
 #include <PD_DissStats.h>
 
+#include <PD_Scene_MainMenu.h>
+#include <PD_UI_Text.h>
+
 #define MAX_SIDE_SCENARIOS 5
 #define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
@@ -614,6 +617,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}else {
 			person->disable();
 		}
+	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("endRun", [this](sweet::Event * _event){
+		uiDialogue->setVisible(false);
+		uiBubble->disable();
+		dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
+		game->switchScene("menu", true);
 	});
 
 	// Load the save file
