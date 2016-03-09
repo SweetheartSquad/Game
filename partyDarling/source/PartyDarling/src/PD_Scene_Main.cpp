@@ -915,7 +915,9 @@ void PD_Scene_Main::pickScenarios(){
 		// pick some random side scenarios
 		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
 		for(unsigned long int i = 0; i < numSidePlots; ++i) {
-			scenariosList.append(allSideDefs.pop()["src"].asString());			
+			if (allSideDefs.size() > 0){
+				scenariosList.append(allSideDefs.pop()["src"].asString());
+			}
 		}
 
 		// if we're in the middle, pick an omar scenario
