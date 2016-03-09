@@ -1,10 +1,5 @@
 [
-    /*{
-        "order": 0,
-        "src": "scenarios/4b208fb6-919a-4d59-9390-60556541fee1.json",
-        "type": 0
-    },*/
-    {
+       {
         "order": 1,
         "src": "scenarios/cfbf7375-cdf5-4774-b530-67f1d95eb97b.json",
         "type": 2
