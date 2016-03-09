@@ -144,10 +144,10 @@ void PD_Scene_Main::setupEventListeners(){
 	// Called when going through a door
 	PD_ResourceManager::scenario->eventManager->addEventListener("navigate", [this](sweet::Event * _event){
 		glm::ivec2 navigation(_event->getIntData("x"), _event->getIntData("y"));
-
+		
+		PD_ResourceManager::scenario->getAudio("doorOpen")->sound->play();
 		player->disable();
 		uiBubble->disable();
-
 		
 		
 		transition = 0.f;
@@ -157,12 +157,7 @@ void PD_Scene_Main::setupEventListeners(){
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
 		Timeout * t = new Timeout(1.f, [this, navigation](sweet::Event * _event){
-			std::stringstream ss;
-			ss << "COMBINED_TEST_" << sweet::lastTimestamp;
-			//_game->scenes[ss.str()] = new PD_Scene_Main(dynamic_cast<PD_Game *>(_game));
-			//_game->switchScene(ss.str(), false); // TODO: fix memory issues so that this can be true
-
-			navigate(navigation); // TODO: replace this with actual navigation vector
+			navigate(navigation);
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
 			player->enable();
@@ -171,9 +166,6 @@ void PD_Scene_Main::setupEventListeners(){
 		t->start();
 		childTransform->addChild(t, false);
 
-		//PD_ResourceManager::scenario->eventManager->listeners.clear();
-
-		
 		GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 		checkForGlError(false);
 		if(test != -1){
