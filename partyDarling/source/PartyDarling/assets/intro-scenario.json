@@ -3,25 +3,6 @@
 	"description": "Scenario including everything needed for the first room.",
 	"type": 1,
 	"assets": [
-
-        {
-          "id": "INTRO-ROOM",
-          "type": "mesh",
-          "src": "intro_Room.obj"
-        },
-        {
-          "id": "INTRO-ROOM-COLLIDER",
-          "type": "mesh",
-          "src": "intro_Room_collider.obj"
-        },
-        {
-          "id": "INTRO-ROOM",
-          "type": "texture",
-          "src": "intro_Room.png"
-        },
-
-        
-
         {  
             "name":"Ante Room",
             "id":1,

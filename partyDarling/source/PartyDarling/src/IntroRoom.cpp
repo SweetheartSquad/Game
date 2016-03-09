@@ -30,14 +30,20 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	doorEast->rotatePhysical(-90, 0, 1, 0);
 	doorWest->rotatePhysical(90, 0, 1, 0);
 	doorSouth->rotatePhysical(180, 0, 1, 0);
-
-	TriMesh * mesh = _introScenario->getMesh("INTRO-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(_introScenario->getTexture("INTRO-ROOM")->texture);
-	mesh->setScaleMode(GL_NEAREST);
-	visibleMesh = new MeshEntity(mesh, _toonShader);
+	
+	TriMesh * meshFlats = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(0);
+	TriMesh * meshDetail = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(1);
+	meshFlats->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-FLATS")->texture);
+	meshFlats->setScaleMode(GL_NEAREST);
+	meshDetail->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-DETAIL")->texture);
+	meshDetail->setScaleMode(GL_NEAREST);
+	visibleMesh = new Transform();
+	visibleMesh->addChild(new MeshEntity(meshFlats, _toonShader), false);
+	visibleMesh->addChild(new MeshEntity(meshDetail, _toonShader), false);
 	childTransform->addChild(visibleMesh);
 
-	colliderMesh = _introScenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
+	colliderMesh = new TriMesh(true);
+	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_introScenario->getAsset("character", "Butler"));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
@@ -54,11 +60,11 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	// lights
 	{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->childTransform->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
+		visibleMesh->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
 		lights.push_back(light);
 	}{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->childTransform->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
+		visibleMesh->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
 		lights.push_back(light);
 	}
 }
@@ -69,43 +75,44 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 	float left = -5.8f;
 	float right = 5.8f;
 	Transform t;
-
+	float angle = 0;
 	switch(_edge){
 	case PD_Door::kNORTH:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,-forward));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,-backward));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
-		//t.rotate(180, 0, 1, 0, kOBJECT);
-		//visibleMesh->firstParent()->rotate(180, 0, 1, 0, kOBJECT);
+		angle = 0;
 		break;
 	case PD_Door::kSOUTH:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,backward));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,forward));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
-		t.rotate(180, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(180, 0, 1, 0, kOBJECT);
+		angle = 180;
 		break;
 	case PD_Door::kWEST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,right));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(-backward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(-forward,0,0));
-		t.rotate(90, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(90, 0, 1, 0, kOBJECT);
+		angle = 90;
 		break;
 	case PD_Door::kEAST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,right));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(forward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(backward,0,0));
-		t.rotate(-90, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(-90, 0, 1, 0, kOBJECT);
+		angle = -90;
 		break;
 
 	}
 	
+	if(angle != 0){
+		t.rotate(angle, 0, 1, 0, kOBJECT);
+		visibleMesh->firstParent()->rotate(angle, 0, 1, 0, kOBJECT);
+	}
+
 	colliderMesh->applyTransformation(&t);
 	setColliderAsMesh(colliderMesh, false);
 	createRigidBody(0);
