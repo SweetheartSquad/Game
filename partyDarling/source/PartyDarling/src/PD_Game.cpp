@@ -16,6 +16,7 @@
 
 sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
 OpenAL_Sound * PD_Game::bgmTrack = nullptr;
+ProgressManager * PD_Game::progressManager = nullptr;
 
 bool PD_Game::staticInit(){
 	bgmTrackIdx.push(1);

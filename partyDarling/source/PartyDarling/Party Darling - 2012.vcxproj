@@ -65,6 +65,7 @@
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_DissBattle.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\ProgressManager.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_DissBattle.h" />
     <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\ProgressManager.h" />
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />

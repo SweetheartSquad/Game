@@ -2,6 +2,7 @@
 
 #include <Game.h>
 #include <NumberUtils.h>
+#include <ProgressManager.h>
 class OpenAL_Sound;
 class AutoDrums;
 
@@ -16,6 +17,7 @@ public:
 	PD_Game();
 	~PD_Game();
 
+	static ProgressManager * progressManager;
 
 	static OpenAL_Sound * bgmTrack;
 

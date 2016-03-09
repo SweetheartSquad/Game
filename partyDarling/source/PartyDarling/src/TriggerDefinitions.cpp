@@ -385,5 +385,6 @@ void PD_Scene_Main::setupEventListeners(){
 		uiBubble->disable();
 		dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
 		game->switchScene("menu", true);
+		++PD_Game::progressManager->plotPosition;
 	});
 }
