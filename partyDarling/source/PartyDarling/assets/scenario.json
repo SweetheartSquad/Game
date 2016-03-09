@@ -130,6 +130,73 @@
     	"src":"voices/voice-17.ogg",
     	"category":"sfx"
     },
+ {
+      "id":"voice18",
+      "type":"audio",
+      "src":"voices/voice-18.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice19",
+      "type":"audio",
+      "src":"voices/voice-19.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice20",
+      "type":"audio",
+      "src":"voices/voice-20.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice21",
+      "type":"audio",
+      "src":"voices/voice-21.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice22",
+      "type":"audio",
+      "src":"voices/voice-22.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice23",
+      "type":"audio",
+      "src":"voices/voice-23.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice24",
+      "type":"audio",
+      "src":"voices/voice-24.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice25",
+      "type":"audio",
+      "src":"voices/voice-25.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice26",
+      "type":"audio",
+      "src":"voices/voice-26.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice27",
+      "type":"audio",
+      "src":"voices/voice-27.ogg",
+      "category":"sfx"
+    },
+     {
+      "id":"voice28",
+      "type":"audio",
+      "src":"voices/voice-28.ogg",
+      "category":"sfx"
+    },
+
 
     // fonts
     {
