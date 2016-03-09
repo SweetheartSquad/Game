@@ -1,12 +1,8 @@
 [
-       {
-        "order": 1,
-        "src": "scenarios/cfbf7375-cdf5-4774-b530-67f1d95eb97b.json",
-        "type": 2
-    },
+
     {
-        "order": 2,
-        "src": "scenarios/5e337c87-4391-4a22-af3b-8bcd75dfcf6c.json",
+        "order": 1,
+        "src": "scenarios/Plot_1.json",
         "type": 2
     },
     {
@@ -16,22 +12,22 @@
     },
     {
         "order": 3,
-        "src": "scenarios/dca3a5fa-e086-4b50-98cc-78efc56697d1.json",
+        "src": "scenarios/Plot_3.json",
         "type": 2
     },
     {
         "order": 4,
-        "src": "scenarios/4955b422-32d9-4f53-913b-64347ef8f1f6.json",
+        "src": "scenarios/Plot_4.json",
         "type": 2
     },
     {
         "order": 5,
-        "src": "scenarios/8b58c7ed-a496-49e1-ba21-f8ba626a23ea.json",
+        "src": "scenarios/Plot_5.json",
         "type": 2
     },
     {
         "order": 6,
-        "src": "scenarios/8163abde-756f-4f03-8b90-57289e0744ae.json",
+        "src": "scenarios/Plot_6.json",
         "type": 2
     },
     {
@@ -66,11 +62,6 @@
     },
     {
         "order": 0,
-        "src": "scenarios/Mini-Scene_1.json",
-        "type": 0
-    },
-    {
-        "order": 0,
         "src": "scenarios/Ghost_Omar_Lab.json",
         "type": 0
     },
@@ -90,20 +81,15 @@
         "type": 4
     },
     {
-        "order": 3,
-        "src": "scenarios/Butler_3.json",
-        "type": 2
-    },
-    {
         "order": 4,
         "src": "scenarios/Butler_4.json",
         "type": 4
     },
-    {
+    /*{
         "order": 6,
         "src": "scenarios/Butler_6.json",
         "type": 0
-    },
+    },*/
     {
         "order": 2,
         "src": "scenarios/Adventure_Omar_Lab.json",
@@ -111,13 +97,13 @@
     },
     {
         "order": 5,
-        "src": "scenarios/Fifth_Mansion_Lab.json",
+        "src": "scenarios/Lab_5.json",
         "type": 2
     },
     {
         "order": 1,
-        "src": "scenarios/Intro_Lab.json",
-        "type": 2
+        "src": "scenarios/Lab_1.json",
+        "type": 3
     },
     {
         "order": 0,
