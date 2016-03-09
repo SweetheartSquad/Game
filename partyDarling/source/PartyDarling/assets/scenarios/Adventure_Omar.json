@@ -1,1 +1,1589 @@
-{"name":"Adventure Omar","type":1,"order":0,"assets":[{"id":0,"name":"Player","states":[],"items":[],"type":"character","defaultState":-1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]}]},{"id":1,"name":"Dazmina","states":[{"id":1,"name":"DefaultState","convo":1,"animation":"WAVE"},{"id":2,"name":"PostFavour","convo":11,"animation":"CROSS_ARMS"},{"id":3,"name":"PostFavour2","convo":null,"animation":"CROSS_ARMS"},{"id":4,"name":"PostFight","convo":null,"animation":"CROSS_ARMS"},{"id":5,"name":"MissionComplete","convo":null,"animation":"IDLE_TALK_3"},{"id":6,"name":"TalkedOnceNo","convo":9,"animation":"CROSS_ARMS"}],"items":[4],"type":"character","defaultState":1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_PELVIS.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Daz_LEG.json"}]}]},{"id":2,"name":"Mahmoud","states":[{"id":1,"name":"DefaultState","convo":12,"animation":"WAVE"},{"id":3,"name":"TalkedOnceYes","convo":16,"animation":"IDLE_TALK_3"},{"id":4,"name":"MissionComplete","convo":17,"animation":"IDLE_TALK_3"},{"id":5,"name":"TalkedOnceNo","convo":15,"animation":"IDLE_TALK_3"}],"items":[5],"type":"character","defaultState":1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_PELVIS.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Mahmoud_LEG.json"}]}]},{"id":3,"name":"Eloise","states":[{"id":1,"name":"DefaultState","convo":18,"animation":"WAVE"},{"id":2,"name":"PostFavour","convo":23,"animation":"IDLE_TALK_2"},{"id":3,"name":"MissionComplete","convo":24,"animation":"IDLE_TALK_2"}],"items":[],"type":"character","defaultState":1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_PELVIS.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_leftarm_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_rightarm_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Eloise_LEG.json"}]}]},{"id":4,"name":"Omar Clean","states":[{"id":1,"name":"DefaultState","convo":null,"animation":"RANDOM"}],"items":[],"type":"character","defaultState":1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_PELVIS.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_rightarm_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_Leftleg_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/advenOmar_Rightleg_LEG.json"}]}]},{"id":1,"name":"Dazmina1","dialogue":[{"text":["Hey! You there.","Where is Omar Clean?"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":2,"label":"I don't know."},{"convoId":3,"label":"I'll never tell!"}],"type":"conversation","settings":{"indentation":0,"order":0}},{"id":2,"name":"DazminaDunno","dialogue":[{"text":["A cowardly answer...","...but probably a true one.","Listen, would you do me a favour?"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":4,"label":"Sure."},{"convoId":5,"label":"Not right now."}],"type":"conversation","settings":{"indentation":0,"order":1}},{"id":3,"name":"DazminaRefuse","dialogue":[{"text":["Aha, another one of his pathetic middlemen, always solving his problems...","Very well. I will crush you. Then you will tell me where he is."],"triggers":[{"type":"triggerYellingContest","args":{"opponent":{"value":1,"type":"CHARACTER","dependsOn":"NONE"},"playerInterjectInit":{"value":0,"type":"INT","dependsOn":"NONE"}},"id":11}],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":2}},{"id":4,"name":"DazminaYes","dialogue":[{"text":["Excellent.","A bit of background: Omar is a piece of human refuse.","I've often wondered if I'm being too hard on him...","But one grows tired of being left at the bottom of a giant dirt pit with nothing to show for it."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":6,"label":"Sounds rough."},{"convoId":7,"label":"Maybe you're overreacting?"},{"convoId":8,"label":"Dirt pits?"}],"type":"conversation","settings":{"indentation":0,"order":3}},{"id":5,"name":"DazminaNo","dialogue":[{"text":["Very well.","If you have a change of heart, come find me once more."],"triggers":[{"type":"changeState","args":{"State":{"value":6,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":1,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":4}},{"id":6,"name":"DazminaRough","dialogue":[{"text":["Well, yes, but, I digress.","You don't need to hear the whole torrid affair.","It's a tale as old as time, as they say.","Boy meets girl, boy uses girl to get treasure...","Boy runs off with some idiot poet...","Boy leaves girl with gigantic debt and jail time.","...","Forgive me. This time I will digress properly."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":10,"label":""}],"type":"conversation","settings":{"indentation":0,"order":5}},{"id":7,"name":"DazminaOverreact","dialogue":[{"text":["Maybe you're passing judgement on a situation you know nothing about.","Just a thought."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":10,"label":""}],"type":"conversation","settings":{"indentation":0,"order":6}},{"id":8,"name":"DazminaPit","dialogue":[{"text":["Dig sites, to be more specific.","We used to be... archaeologists.","Of a sort."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":10,"label":""}],"type":"conversation","settings":{"indentation":0,"order":7}},{"id":9,"name":"DazminaTalkedOnceNo","dialogue":[{"text":["Hello again.","Are you ready to take on that favour I mentioned?"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":4,"label":"Yep!"},{"convoId":5,"label":"Maybe later."}],"type":"conversation","settings":{"indentation":0,"order":8}},{"id":10,"name":"Dazmina2","dialogue":[{"text":["Now then, about this favour.","I'd like you to bring me any personal effects of Omar's that you find.","Simply put, I want to destroy them.","I'm not normally so petty, but... I'm afraid my pettiness is all I have left.","...","Goodness. That is... truly one of the most depressing things I've said out loud.","Well then, if that didn't make me seem like an irredeemable mess, I'd love your help.","Here, take this paper. It's a list of possible combinations for his door locks.","Some may no longer work, but it may get you into a door or two.","Let me know what you find."],"triggers":[{"type":"changeState","args":{"State":{"value":2,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":1,"type":"CHARACTER","dependsOn":"NONE"}},"id":1},{"type":"changerOwnership","args":{"newOwner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":4,"type":"ITEM","dependsOn":"NONE"},"prevOwner":{"value":1,"type":"CHARACTER","dependsOn":"NONE"}},"id":4},{"type":"unlockRoom","args":{"room":{"value":2,"type":"ROOM","dependsOn":"NONE"}},"id":10}],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":9}},{"id":11,"name":"DazminaTalkedOnceYes","dialogue":[{"text":["When I see that Omar, I am going to give him a piece of my mind."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"},{"text":["Oh, you've found something?","Yes, excellent! Excellent! This must be some sort of prized heirloom.","I will destroy it presently. Thank you."],"triggers":[{"type":"changerOwnership","args":{"newOwner":{"value":1,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":3,"type":"ITEM","dependsOn":"NONE"},"prevOwner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"}},"id":4}],"conditions":[{"type":"checkInventory","args":{"owner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":3,"type":"ITEM","dependsOn":"NONE"}},"id":3}],"speaker":1,"name":"Dialogue 1"},{"text":["Ooh, you've found a pair of his best pants!","Magnificent! I cannot wait to tear these to shreds.","Thank you for finding these."],"triggers":[{"type":"changerOwnership","args":{"newOwner":{"value":1,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":2,"type":"ITEM","dependsOn":"NONE"},"prevOwner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"}},"id":4}],"conditions":[{"type":"checkInventory","args":{"owner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":2,"type":"ITEM","dependsOn":"NONE"}},"id":3}],"speaker":1,"name":"Dialogue 2"},{"text":["Thank you again for looking for these trinkets. Let me know if you find more."],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 4"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":10}},{"id":12,"name":"Mahmoud1","dialogue":[{"text":["Good evening. I am Mahmoud, the poet.","I seem to have lost something of mine.","Would you be a dear and help me find it?"],"triggers":[],"conditions":[],"speaker":2,"name":"Dialogue 0"}],"options":[{"convoId":13,"label":"Sure!"},{"convoId":14,"label":"Maybe later."}],"type":"conversation","settings":{"indentation":0,"order":11}},{"id":13,"name":"MahmoudSure","dialogue":[{"text":["Ah, very good!","I'm looking for a locket I've lost.","Well, lost is perhaps not the right word.","I gave it to a man named Omar Clean a long time ago.","He refuses to give it back.","I was sort of hoping I would be able to find it here.","If you could take a look around for it, I would really appreciate it.","I'll be here if you find anything."],"triggers":[{"type":"changeState","args":{"State":{"value":3,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":2,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":2,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":12}},{"id":14,"name":"MahmoudNah","dialogue":[{"text":["Drat.","If you change your mind, please, come find me.","Until then, I must bid farewell."],"triggers":[{"type":"changeState","args":{"State":{"value":5,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":2,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":2,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":13}},{"id":15,"name":"MahmoudTalkedOnceNo","dialogue":[{"text":["Have you given any more consideration to helping me find my locket?"],"triggers":[],"conditions":[],"speaker":2,"name":"Dialogue 0"}],"options":[{"convoId":13,"label":"Sure."},{"convoId":14,"label":"Not right now."}],"type":"conversation","settings":{"indentation":0,"order":14}},{"id":16,"name":"MahmoudTalkedOnceYes","dialogue":[{"text":["You've been keeping an eye out for my locket, I hope?"],"triggers":[],"conditions":[],"speaker":2,"name":"Dialogue 0"},{"text":["My goodness! You've found it!","Thank you so much.","I can finally be rid of this man.","I don't have much of a reward to give you, but, here's a key. It may be useful to you.","It's certainly of no use to me, anymore.","Have a wonderful evening!"],"triggers":[{"type":"changerOwnership","args":{"newOwner":{"value":2,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":1,"type":"ITEM","dependsOn":"NONE"},"prevOwner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"}},"id":4},{"type":"changeState","args":{"State":{"value":4,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":2,"type":"CHARACTER","dependsOn":"NONE"}},"id":1},{"type":"changerOwnership","args":{"newOwner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":5,"type":"ITEM","dependsOn":"NONE"},"prevOwner":{"value":2,"type":"CHARACTER","dependsOn":"NONE"}},"id":4},{"type":"unlockRoom","args":{"room":{"value":1,"type":"ROOM","dependsOn":"NONE"}},"id":10}],"conditions":[{"type":"checkInventory","args":{"owner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":1,"type":"ITEM","dependsOn":"NONE"}},"id":3}],"speaker":2,"name":"Dialogue 1"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":15}},{"id":17,"name":"MahmoudMissionComplete","dialogue":[{"text":["Omar was always such a showboat.","Look at this ridiculous house.","Thanks again for finding my locket."],"triggers":[],"conditions":[],"speaker":2,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":16}},{"id":18,"name":"Eloise1","dialogue":[{"text":["Good evening.","Just so you know, I would have karate-chopped you in the neck for approaching me like this.","But I'm trying to take it easy.","I, uh, ahem, broke my hand on the last guy's throat.","Name's Eloise.","I'm here tracking down a dangerous criminal named Omar Clean."],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[{"convoId":19,"label":"Hey, me too!"},{"convoId":20,"label":"Why?"},{"convoId":21,"label":"Need any help?"}],"type":"conversation","settings":{"indentation":0,"order":17}},{"id":19,"name":"EloiseMeToo","dialogue":[{"text":["Are you from the agency? I don't recognize you.","You must be a private investigator, then.","Omar's made a lot of enemies, I'll give him that."],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[{"convoId":22,"label":""}],"type":"conversation","settings":{"indentation":0,"order":18}},{"id":20,"name":"EloiseWhy","dialogue":[{"text":["The man's wanted worldwide for a serious of heists and raids of archaeological sites.","The house we're in right now, it's been funded by these missions."],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[{"convoId":22,"label":""}],"type":"conversation","settings":{"indentation":0,"order":19}},{"id":21,"name":"EloiseHelp","dialogue":[{"text":["Well, I could use any information you have on Omar."],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[{"convoId":22,"label":""}],"type":"conversation","settings":{"indentation":0,"order":20}},{"id":22,"name":"Eloise2","dialogue":[{"text":["I'm here to arrest Omar and also an accomplice of his, named Dazmina.","If you can find them, or any evidence of misdeeds, I'd love to hear about it.","I'm still looking for an incriminating set of flight records, if you can find them.","I'll be here if you need me.","But, don't tell anyone I'm here. Or I'll take this arm brace off and hit you with it."],"triggers":[{"type":"changeState","args":{"State":{"value":2,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":3,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":21}},{"id":23,"name":"EloiseTalkedOnce","dialogue":[{"text":["Still on the lookout for those flight records?"],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"},{"text":["Ah, you found them. Excellent.","Listen, I've heard from one of my moles that Omar has been spotted moving about.","You can help me trap him if you like.","Try retracing your steps and see if you can find him."],"triggers":[{"type":"hideCharacter","args":{"name":{"value":4,"type":"CHARACTER","dependsOn":"NONE"},"visibility":{"value":1,"type":"INT","dependsOn":"NONE"}},"id":14},{"type":"changeState","args":{"State":{"value":3,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":3,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[{"type":"checkInventory","args":{"owner":{"value":0,"type":"CHARACTER","dependsOn":"NONE"},"item":{"value":6,"type":"ITEM","dependsOn":"NONE"}},"id":3}],"speaker":3,"name":"Dialogue 1"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":22}},{"id":24,"name":"EloiseMissionComplete","dialogue":[{"text":["Good work today.","Stay on your toes. We're close to catching Omar."],"triggers":[],"conditions":[],"speaker":3,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":23}},{"id":25,"name":"Omar1","dialogue":[{"text":["You must be this investigator I've heard so much about.","Well, here I am.","You found me, you clever little sleuth!","I suppose this means the gig is up, as they say.","Eloise sent you, then? Are you here to arrest me?"],"triggers":[],"conditions":[],"speaker":4,"name":"Dialogue 0"}],"options":[{"convoId":26,"label":"Er, yes."},{"convoId":27,"label":"Er, no."}],"type":"conversation","settings":{"indentation":0,"order":24}},{"id":26,"name":"OmarYes","dialogue":[{"text":["Very well. I just...","I feel like we have a sort of, connection, you know?","Can you feel it?"],"triggers":[],"conditions":[],"speaker":4,"name":"Dialogue 0"}],"options":[{"convoId":30,"label":"Uh.. are you coming onto me?"},{"convoId":30,"label":"No thank you."},{"convoId":29,"label":"Yes... I feel it too..."}],"type":"conversation","settings":{"indentation":0,"order":25}},{"id":27,"name":"OmarNo","dialogue":[],"options":[],"type":"conversation","settings":{"indentation":0,"order":26}},{"id":28,"name":"Omar2","dialogue":[],"options":[],"type":"conversation","settings":{"indentation":0,"order":27}},{"id":29,"name":"OmarYesFlirt","dialogue":[{"text":["I knew it. When we locked eyes... I knew it was fate.","You're the most beautiful creature I've ever seen.","Come, take my hand.","I can show you so much beauty and--","Wait, what's... happening? Your hand-- It's--"],"triggers":[{"type":"fadeOut","args":{"length":{"value":1000,"type":"INT","dependsOn":"NONE"},"r":{"value":255,"type":"INT","dependsOn":"NONE"},"g":{"value":255,"type":"INT","dependsOn":"NONE"},"b":{"value":255,"type":"INT","dependsOn":"NONE"}},"id":-1}],"conditions":[],"speaker":4,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":28}},{"id":30,"name":"OmarNoFlirt","dialogue":[{"text":["You're not interested. That's fair.","The other option, of course, is I use you as collateral to make my \"clean\" getaway.","\"Clean\". Ha ha. Just my style.","Come here, my little bargaining chip.","Wait, what's happening? You're--"],"triggers":[{"type":"fadeOut","args":{"length":{"value":1000,"type":"INT","dependsOn":"NONE"},"r":{"value":255,"type":"INT","dependsOn":"NONE"},"g":{"value":255,"type":"INT","dependsOn":"NONE"},"b":{"value":255,"type":"INT","dependsOn":"NONE"}},"id":-1}],"conditions":[],"speaker":4,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":29}},{"name":"Locket","id":1,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"A beautiful locket, inscribed with: \"From M to O -- with love\"","texture":614,"effects":[],"pickupEffects":[],"type":"item"},{"name":"Nice Pants","id":2,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"A beautiful pair of pants. The name tag says \"O. Clean\".","texture":612,"effects":[],"pickupEffects":[],"type":"item"},{"name":"Weird Heirloom","id":3,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"Some sort of trinket. An inscription reads: \"My treasured grandson\".","texture":613,"effects":[],"pickupEffects":[],"type":"item"},{"name":"List of Passcodes","id":4,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"Dazmina said some of these  might be able to unlock a door for you.","texture":611,"effects":[],"pickupEffects":[],"type":"item"},{"name":"Bedroom Key","id":5,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"A key labelled \"bedroom\". How convenient!","texture":-1,"effects":[],"pickupEffects":[],"type":"item"},{"name":"Flight Records","id":6,"collectable":true,"pixelPerfect":true,"consumable":false,"description":"A summary of where Omar Clean has traveled lately.","texture":617,"effects":[],"pickupEffects":[],"type":"item"},{"name":"Bedroom","id":1,"description":"Omar's bedroom","furnitureTypes":"RANDOM","characters":[4],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":true,"items":[],"triggersOnce":[{"type":"hideCharacter","args":{"name":{"value":4,"type":"CHARACTER","dependsOn":"NONE"},"visibility":{"value":0,"type":"INT","dependsOn":"NONE"}},"id":-1}],"triggersMulti":[]},{"name":"Storage Room","id":2,"description":"storage space","furnitureTypes":"RANDOM","characters":[3],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":true,"items":[2,1],"triggersOnce":[],"triggersMulti":[]},{"name":"Daz Room","id":3,"description":"daz","furnitureTypes":"RANDOM","characters":[1],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":false,"items":[],"triggersOnce":[],"triggersMulti":[]},{"name":"Mahmoud Room","id":4,"description":"mahmoud","furnitureTypes":"RANDOM","characters":[2],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":false,"items":[3],"triggersOnce":[],"triggersMulti":[]}]}
+{
+	"name": "Adventure Omar",
+	"description": "Adventure Omar",
+	"type": 1,
+	"order": 0,
+	"assets": [
+		{
+			"id": 0,
+			"name": "Player",
+			"states": [],
+			"items": [],
+			"type": "character",
+			"defaultState": -1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"visible": true,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": ""
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "Dazmina",
+			"states": [
+				{
+					"id": 1,
+					"name": "DefaultState",
+					"convo": 1,
+					"animation": "WAVE"
+				},
+				{
+					"id": 2,
+					"name": "PostFavour",
+					"convo": 11,
+					"animation": "CROSS_ARMS"
+				},
+				{
+					"id": 3,
+					"name": "PostFavour2",
+					"convo": null,
+					"animation": "CROSS_ARMS"
+				},
+				{
+					"id": 4,
+					"name": "PostFight",
+					"convo": null,
+					"animation": "CROSS_ARMS"
+				},
+				{
+					"id": 5,
+					"name": "MissionComplete",
+					"convo": null,
+					"animation": "IDLE_TALK_3"
+				},
+				{
+					"id": 6,
+					"name": "TalkedOnceNo",
+					"convo": 9,
+					"animation": "CROSS_ARMS"
+				}
+			],
+			"items": [
+				4
+			],
+			"type": "character",
+			"defaultState": 1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"visible": true,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "components/definitions/Daz_PELVIS.json",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Daz_TORSO.json",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Daz_HEAD.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Daz_ARM.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Daz_ARM.json"
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Daz_LEG.json"
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Daz_LEG.json"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 2,
+			"name": "Mahmoud",
+			"states": [
+				{
+					"id": 1,
+					"name": "DefaultState",
+					"convo": 12,
+					"animation": "WAVE"
+				},
+				{
+					"id": 3,
+					"name": "TalkedOnceYes",
+					"convo": 16,
+					"animation": "IDLE_TALK_3"
+				},
+				{
+					"id": 4,
+					"name": "MissionComplete",
+					"convo": 17,
+					"animation": "IDLE_TALK_3"
+				},
+				{
+					"id": 5,
+					"name": "TalkedOnceNo",
+					"convo": 15,
+					"animation": "IDLE_TALK_3"
+				}
+			],
+			"items": [
+				5
+			],
+			"type": "character",
+			"defaultState": 1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"visible": true,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "components/definitions/Mahmoud_PELVIS.json",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Mahmoud_TORSO.json",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Mahmoud_HEAD.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Mahmoud_ARM.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Mahmoud_ARM.json"
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Mahmoud_LEG.json"
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Mahmoud_LEG.json"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 3,
+			"name": "Eloise",
+			"states": [
+				{
+					"id": 1,
+					"name": "DefaultState",
+					"convo": 18,
+					"animation": "WAVE"
+				},
+				{
+					"id": 2,
+					"name": "PostFavour",
+					"convo": 23,
+					"animation": "IDLE_TALK_2"
+				},
+				{
+					"id": 3,
+					"name": "MissionComplete",
+					"convo": 24,
+					"animation": "IDLE_TALK_2"
+				}
+			],
+			"items": [],
+			"type": "character",
+			"defaultState": 1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"visible": true,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "components/definitions/Eloise_PELVIS.json",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Eloise_TORSO.json",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Eloise_HEAD.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Eloise_leftarm_ARM.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Eloise_rightarm_ARM.json"
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Eloise_LEG.json"
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Eloise_LEG.json"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "Dazmina1",
+			"dialogue": [
+				{
+					"text": [
+						"Hey! You there.",
+						"Where is Omar Clean?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 2,
+					"label": "I don't know."
+				},
+				{
+					"convoId": 3,
+					"label": "I'll never tell!"
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 0
+			}
+		},
+		{
+			"id": 2,
+			"name": "DazminaDunno",
+			"dialogue": [
+				{
+					"text": [
+						"A cowardly answer...",
+						"...but probably a true one.",
+						"Listen, would you do me a favour?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 4,
+					"label": "Sure."
+				},
+				{
+					"convoId": 5,
+					"label": "Not right now."
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 1
+			}
+		},
+		{
+			"id": 3,
+			"name": "DazminaRefuse",
+			"dialogue": [
+				{
+					"text": [
+						"Aha, another one of his pathetic middlemen, always solving his problems...",
+						"Very well. I will crush you. Then you will tell me where he is."
+					],
+					"triggers": [
+						{
+							"type": "triggerYellingContest",
+							"args": {
+								"opponent": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"playerInterjectInit": {
+									"value": 0,
+									"type": "INT",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 11
+						}
+					],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 2
+			}
+		},
+		{
+			"id": 4,
+			"name": "DazminaYes",
+			"dialogue": [
+				{
+					"text": [
+						"Excellent.",
+						"A bit of background: Omar is a piece of human refuse.",
+						"I've often wondered if I'm being too hard on him...",
+						"But one grows tired of being left at the bottom of a giant dirt pit with nothing to show for it."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 6,
+					"label": "Sounds rough."
+				},
+				{
+					"convoId": 7,
+					"label": "Maybe you're overreacting?"
+				},
+				{
+					"convoId": 8,
+					"label": "Dirt pits?"
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 3
+			}
+		},
+		{
+			"id": 5,
+			"name": "DazminaNo",
+			"dialogue": [
+				{
+					"text": [
+						"Very well.",
+						"If you have a change of heart, come find me once more."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 6,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 4
+			}
+		},
+		{
+			"id": 6,
+			"name": "DazminaRough",
+			"dialogue": [
+				{
+					"text": [
+						"Well, yes, but, I digress.",
+						"You don't need to hear the whole torrid affair.",
+						"It's a tale as old as time, as they say.",
+						"Boy meets girl, boy uses girl to get treasure...",
+						"Boy runs off with some idiot poet...",
+						"Boy leaves girl with gigantic debt and jail time.",
+						"...",
+						"Forgive me. This time I will digress properly."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 5
+			}
+		},
+		{
+			"id": 7,
+			"name": "DazminaOverreact",
+			"dialogue": [
+				{
+					"text": [
+						"Maybe you're passing judgement on a situation you know nothing about.",
+						"Just a thought."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 6
+			}
+		},
+		{
+			"id": 8,
+			"name": "DazminaPit",
+			"dialogue": [
+				{
+					"text": [
+						"Dig sites, to be more specific.",
+						"We used to be... archaeologists.",
+						"Of a sort."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 7
+			}
+		},
+		{
+			"id": 9,
+			"name": "DazminaTalkedOnceNo",
+			"dialogue": [
+				{
+					"text": [
+						"Hello again.",
+						"Are you ready to take on that favour I mentioned?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 4,
+					"label": "Yep!"
+				},
+				{
+					"convoId": 5,
+					"label": "Maybe later."
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 8
+			}
+		},
+		{
+			"id": 10,
+			"name": "Dazmina2",
+			"dialogue": [
+				{
+					"text": [
+						"Now then, about this favour.",
+						"I'd like you to bring me any personal effects of Omar's that you find.",
+						"Simply put, I want to destroy them.",
+						"I'm not normally so petty, but... I'm afraid my pettiness is all I have left.",
+						"...",
+						"Goodness. That is... truly one of the most depressing things I've said out loud.",
+						"Well then, if that didn't make me seem like an irredeemable mess, I'd love your help.",
+						"Here, take this paper. It's a list of possible combinations for his door locks.",
+						"Some may no longer work, but it may get you into a door or two.",
+						"Let me know what you find."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 2,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						},
+						{
+							"type": "changerOwnership",
+							"args": {
+								"newOwner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 4,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								},
+								"prevOwner": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 4
+						},
+						{
+							"type": "unlockRoom",
+							"args": {
+								"room": {
+									"value": 2,
+									"type": "ROOM",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 10
+						}
+					],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 9
+			}
+		},
+		{
+			"id": 11,
+			"name": "DazminaTalkedOnceYes",
+			"dialogue": [
+				{
+					"text": [
+						"When I see that Omar, I am going to give him a piece of my mind."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				},
+				{
+					"text": [
+						"Oh, you've found something?",
+						"Yes, excellent! Excellent! This must be some sort of prized heirloom.",
+						"I will destroy it presently. Thank you."
+					],
+					"triggers": [
+						{
+							"type": "changerOwnership",
+							"args": {
+								"newOwner": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 3,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								},
+								"prevOwner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 4
+						}
+					],
+					"conditions": [
+						{
+							"type": "checkInventory",
+							"args": {
+								"owner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 3,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 3
+						}
+					],
+					"speaker": 1,
+					"name": "Dialogue 1"
+				},
+				{
+					"text": [
+						"Ooh, you've found a pair of his best pants!",
+						"Magnificent! I cannot wait to tear these to shreds.",
+						"Thank you for finding these."
+					],
+					"triggers": [
+						{
+							"type": "changerOwnership",
+							"args": {
+								"newOwner": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 2,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								},
+								"prevOwner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 4
+						}
+					],
+					"conditions": [
+						{
+							"type": "checkInventory",
+							"args": {
+								"owner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 2,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 3
+						}
+					],
+					"speaker": 1,
+					"name": "Dialogue 2"
+				},
+				{
+					"text": [
+						"Thank you again for looking for these trinkets. Let me know if you find more."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 4"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 10
+			}
+		},
+		{
+			"id": 12,
+			"name": "Mahmoud1",
+			"dialogue": [
+				{
+					"text": [
+						"Good evening. I am Mahmoud, the poet.",
+						"I seem to have lost something of mine.",
+						"Would you be a dear and help me find it?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 13,
+					"label": "Sure!"
+				},
+				{
+					"convoId": 14,
+					"label": "Maybe later."
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 11
+			}
+		},
+		{
+			"id": 13,
+			"name": "MahmoudSure",
+			"dialogue": [
+				{
+					"text": [
+						"Ah, very good!",
+						"I'm looking for a locket I've lost.",
+						"Well, lost is perhaps not the right word.",
+						"I gave it to a man named Omar Clean a long time ago.",
+						"He refuses to give it back.",
+						"I was sort of hoping I would be able to find it here.",
+						"If you could take a look around for it, I would really appreciate it.",
+						"I'll be here if you find anything."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 3,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 12
+			}
+		},
+		{
+			"id": 14,
+			"name": "MahmoudNah",
+			"dialogue": [
+				{
+					"text": [
+						"Drat.",
+						"If you change your mind, please, come find me.",
+						"Until then, I must bid farewell."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 5,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 13
+			}
+		},
+		{
+			"id": 15,
+			"name": "MahmoudTalkedOnceNo",
+			"dialogue": [
+				{
+					"text": [
+						"Have you given any more consideration to helping me find my locket?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 13,
+					"label": "Sure."
+				},
+				{
+					"convoId": 14,
+					"label": "Not right now."
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 14
+			}
+		},
+		{
+			"id": 16,
+			"name": "MahmoudTalkedOnceYes",
+			"dialogue": [
+				{
+					"text": [
+						"You've been keeping an eye out for my locket, I hope?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				},
+				{
+					"text": [
+						"My goodness! You've found it!",
+						"Thank you so much.",
+						"I can finally be rid of this man.",
+						"I don't have much of a reward to give you, but, here's a key. It may be useful to you.",
+						"It's certainly of no use to me, anymore.",
+						"Have a wonderful evening!"
+					],
+					"triggers": [
+						{
+							"type": "changerOwnership",
+							"args": {
+								"newOwner": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 1,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								},
+								"prevOwner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 4
+						},
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 4,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						},
+						{
+							"type": "changerOwnership",
+							"args": {
+								"newOwner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 5,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								},
+								"prevOwner": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 4
+						},
+						{
+							"type": "unlockLab",
+							"args": {},
+							"id": -1
+						}
+					],
+					"conditions": [
+						{
+							"type": "checkInventory",
+							"args": {
+								"owner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 1,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 3
+						}
+					],
+					"speaker": 2,
+					"name": "Dialogue 1"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 15
+			}
+		},
+		{
+			"id": 17,
+			"name": "MahmoudMissionComplete",
+			"dialogue": [
+				{
+					"text": [
+						"Omar was always such a showboat.",
+						"Look at this ridiculous house.",
+						"Thanks again for finding my locket."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 16
+			}
+		},
+		{
+			"id": 18,
+			"name": "Eloise1",
+			"dialogue": [
+				{
+					"text": [
+						"Good evening.",
+						"Just so you know, I would have karate-chopped you in the neck for approaching me like this.",
+						"But I'm trying to take it easy.",
+						"I, uh, ahem, broke my hand on the last guy's throat.",
+						"Name's Eloise.",
+						"I'm here tracking down a dangerous criminal named Omar Clean."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 19,
+					"label": "Hey, me too!"
+				},
+				{
+					"convoId": 20,
+					"label": "Why?"
+				},
+				{
+					"convoId": 21,
+					"label": "Need any help?"
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 17
+			}
+		},
+		{
+			"id": 19,
+			"name": "EloiseMeToo",
+			"dialogue": [
+				{
+					"text": [
+						"Are you from the agency? I don't recognize you.",
+						"You must be a private investigator, then.",
+						"Omar's made a lot of enemies, I'll give him that."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 22,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 18
+			}
+		},
+		{
+			"id": 20,
+			"name": "EloiseWhy",
+			"dialogue": [
+				{
+					"text": [
+						"The man's wanted worldwide for a serious of heists and raids of archaeological sites.",
+						"The house we're in right now, it's been funded by these missions."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 22,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 19
+			}
+		},
+		{
+			"id": 21,
+			"name": "EloiseHelp",
+			"dialogue": [
+				{
+					"text": [
+						"Well, I could use any information you have on Omar."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 22,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 20
+			}
+		},
+		{
+			"id": 22,
+			"name": "Eloise2",
+			"dialogue": [
+				{
+					"text": [
+						"I'm here to arrest Omar and also an accomplice of his, named Dazmina.",
+						"If you can find them, or any evidence of misdeeds, I'd love to hear about it.",
+						"I'm still looking for an incriminating set of flight records, if you can find them.",
+						"I'll be here if you need me.",
+						"But, don't tell anyone I'm here. Or I'll take this arm brace off and hit you with it."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 2,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 3,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 21
+			}
+		},
+		{
+			"id": 23,
+			"name": "EloiseTalkedOnce",
+			"dialogue": [
+				{
+					"text": [
+						"Still on the lookout for those flight records?"
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				},
+				{
+					"text": [
+						"Ah, you found them. Excellent.",
+						"Listen, I've heard from one of my moles that Omar has been spotted moving about.",
+						"You can help me trap him if you like.",
+						"Try retracing your steps and see if you can find him."
+					],
+					"triggers": [
+						{
+							"type": "hideCharacter",
+							"args": {
+								"name": {
+									"value": 4,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"visibility": {
+									"value": 1,
+									"type": "INT",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 14
+						},
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 3,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 3,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [
+						{
+							"type": "checkInventory",
+							"args": {
+								"owner": {
+									"value": 0,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								},
+								"item": {
+									"value": 6,
+									"type": "ITEM",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 3
+						}
+					],
+					"speaker": 3,
+					"name": "Dialogue 1"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 22
+			}
+		},
+		{
+			"id": 24,
+			"name": "EloiseMissionComplete",
+			"dialogue": [
+				{
+					"text": [
+						"Good work today.",
+						"Stay on your toes. We're close to catching Omar."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 3,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 23
+			}
+		},
+		{
+			"name": "Locket",
+			"id": 1,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "A beautiful locket, inscribed with: \"From M to O -- with love\"",
+			"texture": 614,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "Nice Pants",
+			"id": 2,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "A beautiful pair of pants. The name tag says \"O. Clean\".",
+			"texture": 612,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "Weird Heirloom",
+			"id": 3,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "Some sort of trinket. An inscription reads: \"My treasured grandson\".",
+			"texture": 613,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "List of Passcodes",
+			"id": 4,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "Dazmina said some of these  might be able to unlock a door for you.",
+			"texture": 611,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "Bedroom Key",
+			"id": 5,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "A key labelled \"bedroom\". How convenient!",
+			"texture": -1,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "Flight Records",
+			"id": 6,
+			"collectable": true,
+			"pixelPerfect": true,
+			"consumable": false,
+			"description": "A summary of where Omar Clean has traveled lately.",
+			"texture": 617,
+			"effects": [],
+			"pickupEffects": [],
+			"type": "item"
+		},
+		{
+			"name": "Storage Room",
+			"id": 2,
+			"description": "storage space",
+			"furnitureTypes": "RANDOM",
+			"characters": [
+				3
+			],
+			"tags": {
+				"not": [],
+				"required": [],
+				"preferred": []
+			},
+			"size": "MEDIUM",
+			"type": "room",
+			"locked": true,
+			"items": [
+				2,
+				1
+			],
+			"triggersOnce": [],
+			"triggersMulti": []
+		},
+		{
+			"name": "Daz Room",
+			"id": 3,
+			"description": "daz",
+			"furnitureTypes": "RANDOM",
+			"characters": [
+				1
+			],
+			"tags": {
+				"not": [],
+				"required": [],
+				"preferred": []
+			},
+			"size": "MEDIUM",
+			"type": "room",
+			"locked": false,
+			"items": [],
+			"triggersOnce": [],
+			"triggersMulti": []
+		},
+		{
+			"name": "Mahmoud Room",
+			"id": 4,
+			"description": "mahmoud",
+			"furnitureTypes": "RANDOM",
+			"characters": [
+				2
+			],
+			"tags": {
+				"not": [],
+				"required": [],
+				"preferred": []
+			},
+			"size": "MEDIUM",
+			"type": "room",
+			"locked": false,
+			"items": [
+				3
+			],
+			"triggersOnce": [],
+			"triggersMulti": []
+		}
+	]
+}

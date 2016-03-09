@@ -1,8 +1,7 @@
 {
-	"name": "Butler 4",
-	"description": "Butler 4",
-	"type": 4,
-	"order": 4,
+	"name": "fifth mansion",
+	"type": 2,
+	"order": 5,
 	"assets": [
 		{
 			"id": 0,
@@ -79,21 +78,27 @@
 				}
 			]
 		},
-				{
+		{
 			"id": 1,
-			"name": "Butler",
+			"name": "Goodsee Beauregard",
 			"states": [
 				{
 					"id": 1,
 					"name": "DefaultState",
 					"convo": 1,
-					"animation": "RANDOM"
+					"animation": "SICK_1"
 				},
 				{
 					"id": 2,
 					"name": "State2",
-					"convo": 6,
-					"animation": "RANDOM"
+					"convo": 2,
+					"animation": "SICK_1"
+				},
+				{
+					"id": 3,
+					"name": "State3",
+					"convo": 11,
+					"animation": "SICK_1"
 				}
 			],
 			"items": [],
@@ -103,6 +108,7 @@
 			"sass": 0,
 			"insight": 0,
 			"defense": 0,
+			"visible": true,
 			"components": [
 				{
 					"tags": {
@@ -110,7 +116,7 @@
 						"required": [],
 						"preferred": []
 					},
-					"src": "components/definitions/LilTomward_PELVIS.json",
+					"src": "components/definitions/Goodsee_PELVIS.json",
 					"components": [
 						{
 							"tags": {
@@ -118,7 +124,7 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_TORSO.json",
+							"src": "components/definitions/Goodsee_TORSO.json",
 							"components": [
 								{
 									"tags": {
@@ -126,7 +132,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_HEAD.json"
+									"src": "components/definitions/Goodsee_HEAD.json"
 								},
 								{
 									"tags": {
@@ -134,7 +140,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_leftarm_ARM.json"
+									"src": "components/definitions/goodsee_leftarm_ARM.json"
 								},
 								{
 									"tags": {
@@ -142,7 +148,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_rightarm_ARM.json"
+									"src": "components/definitions/goodsee_rightarm_ARM.json"
 								}
 							]
 						},
@@ -152,7 +158,7 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_LEG.json"
+							"src": "components/definitions/Goodsee_LEG.json"
 						},
 						{
 							"tags": {
@@ -160,21 +166,22 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_LEG.json"
+							"src": "components/definitions/Goodsee_LEG.json"
 						}
 					]
 				}
 			]
 		},
-				{
+		{
 			"id": 1,
-			"name": "Butler1",
+			"name": "Goodsee1",
 			"dialogue": [
 				{
 					"text": [
-						"Good evening.",
-						"I hope it was not too much trouble getting here.",
-						"May I take your coat?"
+						"H-hello.",
+						"Something went... wrong, clearly.",
+						"I was no match for our suspect.",
+						"I... don't think I'm going to make it."
 					],
 					"triggers": [],
 					"conditions": [],
@@ -184,16 +191,16 @@
 			],
 			"options": [
 				{
-					"convoId": 2,
-					"label": "Yes."
-				},
-				{
 					"convoId": 3,
-					"label": "No."
+					"label": "No!!!!"
 				},
 				{
 					"convoId": 4,
-					"label": "We've met three separate times over the past few hours."
+					"label": "I'll avenge you!"
+				},
+				{
+					"convoId": 5,
+					"label": "What happened?!"
 				}
 			],
 			"type": "conversation",
@@ -203,13 +210,13 @@
 			}
 		},
 		{
-			"id": 2,
-			"name": "ButlerYes",
+			"id": 3,
+			"name": "GoodseeNo",
 			"dialogue": [
 				{
 					"text": [
-						"Very good.",
-						"When you are ready to leave I will fetch it for you."
+						"It's alright.",
+						"I knew this would happen sooner or later."
 					],
 					"triggers": [],
 					"conditions": [],
@@ -219,7 +226,7 @@
 			],
 			"options": [
 				{
-					"convoId": 5,
+					"convoId": 6,
 					"label": ""
 				}
 			],
@@ -230,13 +237,13 @@
 			}
 		},
 		{
-			"id": 3,
-			"name": "ButlerNo",
+			"id": 4,
+			"name": "GoodseeAvenge",
 			"dialogue": [
 				{
 					"text": [
-						"If you so desire.",
-						"If you change your mind, you can find me here again later."
+						"I... appreciate that.",
+						"Partner."
 					],
 					"triggers": [],
 					"conditions": [],
@@ -246,7 +253,7 @@
 			],
 			"options": [
 				{
-					"convoId": 5,
+					"convoId": 6,
 					"label": ""
 				}
 			],
@@ -257,13 +264,15 @@
 			}
 		},
 		{
-			"id": 4,
-			"name": "ButlerMet",
+			"id": 5,
+			"name": "GoodseeWhat",
 			"dialogue": [
 				{
 					"text": [
-						"I'm afraid I don't remember this at all. My apologies.",
-						"Perhaps you have met other people who look like me?"
+						"I tried to accost him...",
+						"He used some device to incapacitate me.",
+						"A sort of taser.",
+						"He fled off through the house."
 					],
 					"triggers": [],
 					"conditions": [],
@@ -273,7 +282,7 @@
 			],
 			"options": [
 				{
-					"convoId": 5,
+					"convoId": 6,
 					"label": ""
 				}
 			],
@@ -284,15 +293,131 @@
 			}
 		},
 		{
-			"id": 5,
-			"name": "Butler2",
+			"id": 6,
+			"name": "Goodsee2",
 			"dialogue": [
 				{
 					"text": [
-						"There are hors-d'oeuvres on the table to my left, if you would like one.",
-						"The door to my right will take you into the mansion proper.",
-						"Please do not hesitate to find me if you need anything.",
-						"I hope you have a very rewarding evening."
+						"You're the only one who can stop him now.",
+						"Don't let this all be in vain.",
+						"...",
+						"Listen...",
+						"When you find a way back to our own dimension...",
+						"Take me with you?",
+						"My aunt would want to know I... made it back."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 7,
+					"label": "Of course!"
+				},
+				{
+					"convoId": 8,
+					"label": "You'll make it back yourself!"
+				},
+				{
+					"convoId": 9,
+					"label": "I'll try."
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 4
+			}
+		},
+		{
+			"id": 7,
+			"name": "GoodseeCourse",
+			"dialogue": [
+				{
+					"text": [
+						"Thank you."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 5
+			}
+		},
+		{
+			"id": 8,
+			"name": "GoodseeWill",
+			"dialogue": [
+				{
+					"text": [
+						"I'd normally agree.",
+						"But I don't think so, this time."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 6
+			}
+		},
+		{
+			"id": 9,
+			"name": "GoodseeTry",
+			"dialogue": [
+				{
+					"text": [
+						"That's all I can ask."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [
+				{
+					"convoId": 10,
+					"label": ""
+				}
+			],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 7
+			}
+		},
+		{
+			"id": 10,
+			"name": "Goodsee3",
+			"dialogue": [
+				{
+					"text": [
+						"I... be careful out there."
 					],
 					"triggers": [
 						{
@@ -321,17 +446,57 @@
 			"type": "conversation",
 			"settings": {
 				"indentation": 0,
-				"order": 4
+				"order": 8
 			}
 		},
 		{
-			"id": 6,
-			"name": "ButlerState2",
+			"id": 2,
+			"name": "GoodseeState2",
 			"dialogue": [
 				{
 					"text": [
-						"Enter the door to my right when you are ready to join the party.",
-						"If you need anything, you can find me here again."
+						"Leave me here. I'm not important right now.",
+						"Go catch our suspect.",
+						"Although I think he's a little more than a \"suspect\", now.",
+						"Ha."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 3,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 1,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": 1
+						}
+					],
+					"conditions": [],
+					"speaker": 1,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 9
+			}
+		},
+		{
+			"id": 11,
+			"name": "GoodseeState3",
+			"dialogue": [
+				{
+					"text": [
+						"Go get him."
 					],
 					"triggers": [],
 					"conditions": [],
@@ -343,10 +508,10 @@
 			"type": "conversation",
 			"settings": {
 				"indentation": 0,
-				"order": 5
+				"order": 10
 			}
 		},
-				{
+		{
 			"name": "Main Room",
 			"id": 1,
 			"description": "The first room.",

@@ -1,7 +1,7 @@
 {
-	"name": "Butler 4",
-	"description": "Butler 4",
-	"type": 4,
+	"name": "Fourth Mansion",
+	"description": "Fourth Mansion",
+	"type": 2,
 	"order": 4,
 	"assets": [
 		{
@@ -15,7 +15,6 @@
 			"sass": 0,
 			"insight": 0,
 			"defense": 0,
-			"visible": true,
 			"components": [
 				{
 					"tags": {
@@ -79,20 +78,20 @@
 				}
 			]
 		},
-				{
-			"id": 1,
-			"name": "Butler",
+		{
+			"id": 2,
+			"name": "Goodsee Beauregard",
 			"states": [
 				{
 					"id": 1,
 					"name": "DefaultState",
-					"convo": 1,
+					"convo": 7,
 					"animation": "RANDOM"
 				},
 				{
 					"id": 2,
 					"name": "State2",
-					"convo": 6,
+					"convo": 8,
 					"animation": "RANDOM"
 				}
 			],
@@ -110,7 +109,7 @@
 						"required": [],
 						"preferred": []
 					},
-					"src": "components/definitions/LilTomward_PELVIS.json",
+					"src": "components/definitions/Goodsee_PELVIS.json",
 					"components": [
 						{
 							"tags": {
@@ -118,7 +117,7 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_TORSO.json",
+							"src": "components/definitions/Goodsee_TORSO.json",
 							"components": [
 								{
 									"tags": {
@@ -126,7 +125,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_HEAD.json"
+									"src": "components/definitions/Goodsee_HEAD.json"
 								},
 								{
 									"tags": {
@@ -134,7 +133,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_leftarm_ARM.json"
+									"src": "components/definitions/goodsee_leftarm_ARM.json"
 								},
 								{
 									"tags": {
@@ -142,7 +141,7 @@
 										"required": [],
 										"preferred": []
 									},
-									"src": "components/definitions/LilTomward_rightarm_ARM.json"
+									"src": "components/definitions/goodsee_rightarm_ARM.json"
 								}
 							]
 						},
@@ -152,7 +151,7 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_LEG.json"
+							"src": "components/definitions/Goodsee_LEG.json"
 						},
 						{
 							"tags": {
@@ -160,139 +159,23 @@
 								"required": [],
 								"preferred": []
 							},
-							"src": "components/definitions/LilTomward_LEG.json"
+							"src": "components/definitions/Goodsee_LEG.json"
 						}
 					]
 				}
 			]
 		},
-				{
-			"id": 1,
-			"name": "Butler1",
-			"dialogue": [
-				{
-					"text": [
-						"Good evening.",
-						"I hope it was not too much trouble getting here.",
-						"May I take your coat?"
-					],
-					"triggers": [],
-					"conditions": [],
-					"speaker": 1,
-					"name": "Dialogue 0"
-				}
-			],
-			"options": [
-				{
-					"convoId": 2,
-					"label": "Yes."
-				},
-				{
-					"convoId": 3,
-					"label": "No."
-				},
-				{
-					"convoId": 4,
-					"label": "We've met three separate times over the past few hours."
-				}
-			],
-			"type": "conversation",
-			"settings": {
-				"indentation": 0,
-				"order": 0
-			}
-		},
 		{
-			"id": 2,
-			"name": "ButlerYes",
+			"id": 7,
+			"name": "Goodsee1",
 			"dialogue": [
 				{
 					"text": [
-						"Very good.",
-						"When you are ready to leave I will fetch it for you."
-					],
-					"triggers": [],
-					"conditions": [],
-					"speaker": 1,
-					"name": "Dialogue 0"
-				}
-			],
-			"options": [
-				{
-					"convoId": 5,
-					"label": ""
-				}
-			],
-			"type": "conversation",
-			"settings": {
-				"indentation": 0,
-				"order": 1
-			}
-		},
-		{
-			"id": 3,
-			"name": "ButlerNo",
-			"dialogue": [
-				{
-					"text": [
-						"If you so desire.",
-						"If you change your mind, you can find me here again later."
-					],
-					"triggers": [],
-					"conditions": [],
-					"speaker": 1,
-					"name": "Dialogue 0"
-				}
-			],
-			"options": [
-				{
-					"convoId": 5,
-					"label": ""
-				}
-			],
-			"type": "conversation",
-			"settings": {
-				"indentation": 0,
-				"order": 2
-			}
-		},
-		{
-			"id": 4,
-			"name": "ButlerMet",
-			"dialogue": [
-				{
-					"text": [
-						"I'm afraid I don't remember this at all. My apologies.",
-						"Perhaps you have met other people who look like me?"
-					],
-					"triggers": [],
-					"conditions": [],
-					"speaker": 1,
-					"name": "Dialogue 0"
-				}
-			],
-			"options": [
-				{
-					"convoId": 5,
-					"label": ""
-				}
-			],
-			"type": "conversation",
-			"settings": {
-				"indentation": 0,
-				"order": 3
-			}
-		},
-		{
-			"id": 5,
-			"name": "Butler2",
-			"dialogue": [
-				{
-					"text": [
-						"There are hors-d'oeuvres on the table to my left, if you would like one.",
-						"The door to my right will take you into the mansion proper.",
-						"Please do not hesitate to find me if you need anything.",
-						"I hope you have a very rewarding evening."
+						"Hello.",
+						"We seem to be catching up to our suspect.",
+						"Keep an eye out for anything suspicious.",
+						"He may be nearby.",
+						"If we don't find him here, meet me at the next Omar."
 					],
 					"triggers": [
 						{
@@ -304,16 +187,16 @@
 									"dependsOn": "Character"
 								},
 								"Character": {
-									"value": 1,
+									"value": 2,
 									"type": "CHARACTER",
 									"dependsOn": "NONE"
 								}
 							},
-							"id": 1
+							"id": -1
 						}
 					],
 					"conditions": [],
-					"speaker": 1,
+					"speaker": 2,
 					"name": "Dialogue 0"
 				}
 			],
@@ -321,21 +204,21 @@
 			"type": "conversation",
 			"settings": {
 				"indentation": 0,
-				"order": 4
+				"order": 6
 			}
 		},
 		{
-			"id": 6,
-			"name": "ButlerState2",
+			"id": 8,
+			"name": "GoodseeState2",
 			"dialogue": [
 				{
 					"text": [
-						"Enter the door to my right when you are ready to join the party.",
-						"If you need anything, you can find me here again."
+						"Watch yourself.",
+						"We both need to be in top form to capture our suspect."
 					],
 					"triggers": [],
 					"conditions": [],
-					"speaker": 1,
+					"speaker": 2,
 					"name": "Dialogue 0"
 				}
 			],
@@ -343,7 +226,7 @@
 			"type": "conversation",
 			"settings": {
 				"indentation": 0,
-				"order": 5
+				"order": 7
 			}
 		},
 				{
@@ -352,7 +235,7 @@
 			"description": "The first room.",
 			"furnitureTypes": "RANDOM",
 			"characters": [
-				1
+				2
 			],
 			"tags": {
 				"not": [],
