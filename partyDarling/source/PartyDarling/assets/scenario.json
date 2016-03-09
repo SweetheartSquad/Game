@@ -382,8 +382,21 @@
     },
 	
 
-  // DISS BATTLE
   {
+    "id": "OPEN-ENVELOPE",
+    "src": "open_envelope.ogg",
+    "type": "audio",
+    "category": "sfx"
+  },
+  {
+    "id": "PAPER-OUT-ENVELOPE",
+    "src": "paper_out_envelope.ogg",
+    "type": "audio",
+    "category": "sfx"
+  }
+
+  // DISS BATTLE
+  ,{
     "id": "DISS-BATTLE-INTRO",
     "type": "audio",
     "src": "diss-card.ogg",

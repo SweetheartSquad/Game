@@ -15,13 +15,13 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	push(new Slide(tex, 0));
 	tex = new Texture("assets/textures/introSlides/2.png", false, true);
 	tex->load();
-	push(new Slide(tex, 0));
+	push(new Slide(tex, 0, PD_ResourceManager::scenario->getAudio("OPEN-ENVELOPE")->sound));
 	tex = new Texture("assets/textures/introSlides/3.png", false, true);
 	tex->load();
-	push(new Slide(tex, 0));
+	push(new Slide(tex, 0, PD_ResourceManager::scenario->getAudio("OPEN-ENVELOPE")->sound));
 	tex = new Texture("assets/textures/introSlides/4.png", false, true);
 	tex->load();
-	push(new Slide(tex, 0));
+	push(new Slide(tex, 0, PD_ResourceManager::scenario->getAudio("PAPER-OUT-ENVELOPE")->sound));
 	tex = new Texture("assets/textures/introSlides/6.png", false, true);
 	tex->load();
 	push(new Slide(tex));
