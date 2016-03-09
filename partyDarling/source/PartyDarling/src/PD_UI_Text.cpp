@@ -23,6 +23,7 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	
 	eventManager->addEventListener("mousein", [this](sweet::Event * _event){
 		curTextColour = overColour;
+		PD_ResourceManager::scenario->getAudio("hover")->sound->play();
 	});
 	
 	eventManager->addEventListener("mouseout", [this](sweet::Event * _event){
@@ -30,6 +31,7 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	});
 
 	eventManager->addEventListener("click", [this](sweet::Event * _event){
+		PD_ResourceManager::scenario->getAudio("click")->sound->play();
 	});
 }
 
