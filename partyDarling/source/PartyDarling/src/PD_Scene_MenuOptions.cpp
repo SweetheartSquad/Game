@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_Scene_MenuOptions.h>
+#include <PD_Scene_InstructionsSlideShow.h>
 #include <PD_ResourceManager.h>
 #include <VerticalLinearLayout.h>
 #include <PD_UI_VolumeControl.h>
@@ -64,6 +65,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	howToPlay->horizontalAlignment = kCENTER;
 	howToPlay->verticalAlignment = kMIDDLE;
 	howToPlay->eventManager->addEventListener("click", [this](sweet::Event * _event){
+		game->scenes["howToPlay"] = new PD_Scene_InstructionsSlideShow(game);
 		game->switchScene("howToPlay", false);
 	});
 
