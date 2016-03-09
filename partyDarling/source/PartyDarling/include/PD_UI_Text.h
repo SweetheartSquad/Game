@@ -21,10 +21,6 @@ public:
 	void setDownColour(float _r, float _g, float _b);
 	glm::vec3 getDownColour() const;
 
-	std::function<void(sweet::Event * _event)> onOver;
-	std::function<void(sweet::Event * _event)> onClick;
-	std::function<void(sweet::Event * _event)> onDown;
-
 	void enable();
 	void disable();
 

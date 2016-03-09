@@ -69,7 +69,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	joinPartyText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	joinPartyText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
-	joinPartyText->onClick = [this](sweet::Event * _event){
+	joinPartyText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		if(savedGame){
 			// warning
 			showConfirmBox();
@@ -82,7 +82,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 			joinPartyText->setText("Reset");
 			uiLayer->invalidateLayout();
 		}
-	};
+	});
 
 	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(continueText);
@@ -100,14 +100,14 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	continueText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	continueText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
-	continueText->onClick = [this](sweet::Event * _event){
+	continueText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		auto it = game->scenes.find("game");
 		if(it == game->scenes.end()){
 			// load game from save file
 		}else{
 			game->switchScene("game", false);
 		}
-	};
+	});
 
 	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(optionsText);
@@ -122,9 +122,9 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	optionsText->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	optionsText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	//optionsText->setMarginTop(0.05f);
-	optionsText->onClick = [this](sweet::Event * _event){
+	optionsText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		game->switchScene("options", false);
-	};
+	});
 
 	callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(callNightText);
@@ -133,9 +133,9 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	callNightText->setMarginTop(0.05f);
 	callNightText->setMarginBottom(0.05f);
 
-	callNightText->onClick = [this](sweet::Event * _event){
+	callNightText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		game->exit();		
-	}; 
+	});
 
 	callNightText->horizontalAlignment = kCENTER;
 
@@ -159,19 +159,19 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	confirmNewGame->setPadding(0.1f);
 	confirmNewGame->setBackgroundColour(1.f, 1.f, 1.f);
 
-	confirmNewGame->btnConfirm->onClick = [this](sweet::Event * _event){
+	confirmNewGame->btnConfirm->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
 		game->switchScene("intro", false);
 		continueText->enable();
 		continueText->setTextColour(0.f, 0.f, 0.f);
 		joinPartyText->setText("Reset");
 		hideConfirmBox();
-	};
+	});
 
 	
-	confirmNewGame->btnCancel->onClick = [this](sweet::Event * _event){
+	confirmNewGame->btnCancel->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		hideConfirmBox();
-	};
+	});
 
 	hideConfirmBox();
 	
