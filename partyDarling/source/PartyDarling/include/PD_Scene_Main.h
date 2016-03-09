@@ -120,6 +120,11 @@ public:
 	std::vector<Scenario *> activeScenarios;
 
 
+
+	void setupEventListeners();
+	void setupConditions();
+
+
 	void updateSelection();
 	// randomly pick one main plot scenario and a few side plot scenarios
 	void pickScenarios();

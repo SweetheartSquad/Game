@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_Scene_MenuOptions.h>
+#include <PD_Scene_InstructionsSlideShow.h>
 #include <PD_ResourceManager.h>
 #include <VerticalLinearLayout.h>
 #include <PD_UI_VolumeControl.h>
@@ -50,9 +51,9 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	rsvp->setRationalHeight(0.15f, subLayout);
 	rsvp->horizontalAlignment = kCENTER;
 	rsvp->verticalAlignment = kMIDDLE;
-	rsvp->onClick = [this](sweet::Event * _event){
+	rsvp->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		game->switchScene("menu", false);
-	};
+	});
 
 	PD_UI_Text * howToPlay = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
 	howToPlay->setText("How To Play");
@@ -63,9 +64,10 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	howToPlay->setRationalHeight(0.15f, subLayout);
 	howToPlay->horizontalAlignment = kCENTER;
 	howToPlay->verticalAlignment = kMIDDLE;
-	howToPlay->onClick = [this](sweet::Event * _event){
+	howToPlay->eventManager->addEventListener("click", [this](sweet::Event * _event){
+		game->scenes["howToPlay"] = new PD_Scene_InstructionsSlideShow(game);
 		game->switchScene("howToPlay", false);
-	};
+	});
 
 	HorizontalLinearLayout * audioContainer = new HorizontalLinearLayout(uiLayer->world);
 	audioContainer->horizontalAlignment = kCENTER;

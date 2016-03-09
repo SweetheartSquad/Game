@@ -44,6 +44,7 @@
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scenario.cpp" />
     <ClCompile Include="src\PD_Scene_Animation.cpp" />
+    <ClCompile Include="src\PD_Scene_InstructionsSlideShow.cpp" />
     <ClCompile Include="src\PD_Scene_IntroSlideShow.cpp" />
     <ClCompile Include="src\PD_Scene_LoadingScreen.cpp" />
     <ClCompile Include="src\PD_Scene_Main.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
+    <ClCompile Include="src\TriggerDefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DialogueDisplay.h" />
@@ -99,6 +101,7 @@
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scenario.h" />
     <ClInclude Include="include\PD_Scene_Animation.h" />
+    <ClInclude Include="include\PD_Scene_InstructionsSlideShow.h" />
     <ClInclude Include="include\PD_Scene_IntroSlideShow.h" />
     <ClInclude Include="include\PD_Scene_LoadingScreen.h" />
     <ClInclude Include="include\PD_Scene_Main.h" />
