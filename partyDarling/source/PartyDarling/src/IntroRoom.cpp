@@ -40,9 +40,10 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	visibleMesh = new Transform();
 	visibleMesh->addChild(new MeshEntity(meshFlats, _toonShader), false);
 	visibleMesh->addChild(new MeshEntity(meshDetail, _toonShader), false);
-	childTransform->addChild(visibleMesh, false);
+	childTransform->addChild(visibleMesh);
 
-	colliderMesh = PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0);
+	colliderMesh = new TriMesh(true);
+	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
 
 	AssetCharacter * c = dynamic_cast<AssetCharacter *>(_introScenario->getAsset("character", "Butler"));
 	PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
@@ -74,43 +75,44 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 	float left = -5.8f;
 	float right = 5.8f;
 	Transform t;
-
+	float angle = 0;
 	switch(_edge){
 	case PD_Door::kNORTH:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,-forward));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,-backward));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
-		//t.rotate(180, 0, 1, 0, kOBJECT);
-		//visibleMesh->rotate(180, 0, 1, 0, kOBJECT);
+		angle = 0;
 		break;
 	case PD_Door::kSOUTH:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,backward));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,forward));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(right,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(left,0,0));
-		t.rotate(180, 0, 1, 0, kOBJECT);
-		visibleMesh->rotate(180, 0, 1, 0, kOBJECT);
+		angle = 180;
 		break;
 	case PD_Door::kWEST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,right));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(-backward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(-forward,0,0));
-		t.rotate(90, 0, 1, 0, kOBJECT);
-		visibleMesh->rotate(90, 0, 1, 0, kOBJECT);
+		angle = 90;
 		break;
 	case PD_Door::kEAST:
 		doors[PD_Door::kNORTH]->translatePhysical(glm::vec3(0,0,left));
 		doors[PD_Door::kSOUTH]->translatePhysical(glm::vec3(0,0,right));
 		doors[PD_Door::kEAST]->translatePhysical(glm::vec3(forward,0,0));
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(backward,0,0));
-		t.rotate(-90, 0, 1, 0, kOBJECT);
-		visibleMesh->rotate(-90, 0, 1, 0, kOBJECT);
+		angle = -90;
 		break;
 
 	}
 	
+	if(angle != 0){
+		t.rotate(angle, 0, 1, 0, kOBJECT);
+		visibleMesh->firstParent()->rotate(angle, 0, 1, 0, kOBJECT);
+	}
+
 	colliderMesh->applyTransformation(&t);
 	setColliderAsMesh(colliderMesh, false);
 	createRigidBody(0);
