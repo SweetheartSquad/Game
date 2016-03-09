@@ -1,12 +1,55 @@
 [
-{
-	"interpolation" : "LINEAR",
-	"time" : 0,
-	"leftArm" : [-0.037554, 0.485072],
-	"rightArm" : [-1.28547, 2.76944],
-	"leftLeg" : [1.45337, -2.14876],
-	"rightLeg" : [2.38792, -3.36906],
-	"body" : [-2.42536, 0.566151],
-	"translation": [0,-1.0,0]
-}
+    {
+        "body": [
+            -2.42536, 
+            0.566151
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            -0.037554, 
+            0.485072
+        ], 
+        "leftLeg": [
+            1.45337, 
+            -2.14876
+        ], 
+        "rightArm": [
+            -1.28547, 
+            2.76944
+        ], 
+        "rightLeg": [
+            2.38792, 
+            -3.36906
+        ], 
+        "time": 0, 
+        "translation": [
+            0, 
+            -1.0, 
+            0
+        ]
+    }, 
+    {
+        "body": [
+            0, 
+            0
+        ], 
+        "interpolation": "LINEAR", 
+        "leftArm": [
+            0, 
+            0
+        ], 
+        "leftLeg": [
+            0, 
+            0
+        ], 
+        "rightArm": [
+            0, 
+            0
+        ], 
+        "rightLeg": [
+            0, 
+            0
+        ], 
+        "time": 0.3
+    }
 ]

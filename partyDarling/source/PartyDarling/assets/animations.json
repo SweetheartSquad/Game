@@ -67,6 +67,14 @@
 		{
 			"name":"BUTLER",
 			"src":"butler.json"
+		},
+		{
+			"name":"DEAD",
+			"src" : "dead.json"
+		},
+		{
+			"name":"GOODSEE",
+			"src":"goodsee_writing.json"
 		}
 	]	
 }
