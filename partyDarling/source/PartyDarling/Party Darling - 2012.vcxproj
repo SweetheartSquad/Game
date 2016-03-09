@@ -67,6 +67,7 @@
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
+    <ClCompile Include="src\TriggerDefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DialogueDisplay.h" />
