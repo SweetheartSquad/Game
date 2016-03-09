@@ -329,6 +329,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	};
 
 	// setup event listeners
+	// make sure to clear the old ones in case they already exist
+	PD_ResourceManager::scenario->eventManager->listeners.clear();
 	PD_ResourceManager::scenario->eventManager->addEventListener("changeState", [](sweet::Event * _event){
 		std::string characterName = _event->getStringData("Character");
 		std::string stateName = _event->getStringData("State");
