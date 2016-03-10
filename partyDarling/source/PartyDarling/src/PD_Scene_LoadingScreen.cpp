@@ -23,6 +23,10 @@ PD_PhraseGenerator_Loading::PD_PhraseGenerator_Loading(){
 std::string PD_PhraseGenerator_Loading::getMessage(unsigned long int _phase) {
 	return replaceWords(escapeChar + std::to_string(_phase) + escapeChar);
 }
+void PD_PhraseGenerator_Loading::reset(){
+	terms.clear();
+	makeDatabases("assets/wordlists/loading.json");
+}
 
 class PD_UI_Text;
 
@@ -135,13 +139,17 @@ void PD_Scene_LoadingScreen::unload() {
 }
 
 void PD_Scene_LoadingScreen::updateProgress(float _progress){
+	if(_progress <= FLT_EPSILON){
+		loadingMessages.reset();
+	}
 	double t = glfwGetTime();
 	unsigned long int phase = glm::clamp((int)glm::round(loadingPercent*LOADING_PHASES), 1, LOADING_PHASES);
 	loadingPercent = _progress;
 	if(t - lastMessageTime >= TIME_PER_MESSAGE){
-		loadingMessage->setText(/*loadingMessages.getMessage(phase)*/"loading");
+		loadingMessage->setText(loadingMessages.getMessage(phase));
 		lastMessagePhase = phase;
 		lastMessageTime = t;
 	}
 	uiLayer->invalidateLayout();
+	uiLayer->update(nullptr);
 }

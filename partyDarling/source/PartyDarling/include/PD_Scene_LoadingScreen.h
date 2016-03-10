@@ -16,6 +16,7 @@ class PD_PhraseGenerator_Loading : public PhraseGenerator{
 public:
 	PD_PhraseGenerator_Loading();
 	std::string getMessage(unsigned long int _phase);
+	void reset();
 };
 
 class PD_Scene_LoadingScreen: public Scene {

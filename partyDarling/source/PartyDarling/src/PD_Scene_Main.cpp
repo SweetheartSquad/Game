@@ -81,6 +81,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedPropDistance(0),
 	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f))
 {
+	_game->showLoading(0);
+
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);

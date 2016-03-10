@@ -16,7 +16,6 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game) :
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
-		dynamic_cast<PD_Game *>(_game)->showLoading(0);
 		_game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(_game));
 		_game->switchScene("game", true);
 	});
