@@ -12,38 +12,48 @@
 ProgressManager::ProgressManager() :
 	plotPosition(1)
 {
+}
+
+void ProgressManager::getNew(){
+	plotPosition = 1;
+	sweet::ShuffleVector<Json::Value> allSideDefs;
+	sweet::ShuffleVector<Json::Value> allOmarDefs;
+	std::vector<Json::Value> allPlotDefs;
+	std::vector<Json::Value> allLabDefs;
+	std::vector<Json::Value> allIntroDefs;
+
 	Json::Value root;
 	Json::Reader reader;
 	std::string jsonLoaded = sweet::FileUtils::readFile("assets/scenarios.json");
 	bool parsingSuccessful = reader.parse(jsonLoaded, root);
-	if(!parsingSuccessful) {
+	if (!parsingSuccessful) {
 		ST_LOG_ERROR("Could not load scenarios listing");
 	}
 
-	for(auto scenarioDef : root) {
+	for (auto scenarioDef : root) {
 		ScenarioType type = static_cast<ScenarioType>(scenarioDef.get("type", 0).asInt());
-		switch(type) {
-			case kSIDE: 
-				allSideDefs.push(scenarioDef);
-				break;
-			case kOMAR: 
-				allOmarDefs.push(scenarioDef);
-				break;
-			case kPLOT: 
-				allPlotDefs.push_back(scenarioDef);
-				break;
-			case kLAB: 
-				allLabDefs.push_back(scenarioDef);
-				break;
-			case kINTRO: 
-				allIntroDefs.push_back(scenarioDef);
-				break;
-			default: 
-				ST_LOG_ERROR("Invalid Scenario Type");
-				break;
+		switch (type) {
+		case kSIDE:
+			allSideDefs.push(scenarioDef);
+			break;
+		case kOMAR:
+			allOmarDefs.push(scenarioDef);
+			break;
+		case kPLOT:
+			allPlotDefs.push_back(scenarioDef);
+			break;
+		case kLAB:
+			allLabDefs.push_back(scenarioDef);
+			break;
+		case kINTRO:
+			allIntroDefs.push_back(scenarioDef);
+			break;
+		default:
+			ST_LOG_ERROR("Invalid Scenario Type");
+			break;
 		}
 	}
-	
+
 	// Sort the plot and lab defs 
 	// Each should have five items - each with a different order going from 1 to 5
 	// The lab and plot defs mus line up with one another
@@ -58,9 +68,7 @@ ProgressManager::ProgressManager() :
 	std::sort(allIntroDefs.begin(), allIntroDefs.end(), [](Json::Value a, Json::Value b){
 		return a["order"] < b["order"];
 	});
-}
 
-void ProgressManager::getNew(){
 
 	// seed the RNG with the current time to give us different results
 	sweet::NumberUtils::seed(sweet::lastTimestamp);
@@ -85,7 +93,7 @@ void ProgressManager::getNew(){
 		}
 
 		// if we're in the middle, pick an omar scenario
-		if(i != kBEGINNING && i != kEPILOGUE){
+		if (i != kBEGINNING && i != kEPILOGUE){
 			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
 		}
 
