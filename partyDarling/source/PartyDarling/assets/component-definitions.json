@@ -769,6 +769,121 @@
             "random": false,
             "src": "components/definitions/ScifiOmar_PELVIS.json",
             "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Abigail_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party1_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party1_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party1_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party1_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party1_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party2_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party2_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party2_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party2_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party2_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_leftleg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_rightleg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_leftarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_rightarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Abigail_arm2_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Party3_HEAD.json",
+            "type": "HEAD"
         }
     ]
 }

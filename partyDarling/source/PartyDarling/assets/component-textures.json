@@ -2609,6 +2609,391 @@
             "id": 668,
             "src": "components/ScifiOmar_Pelvis.png",
             "type": "texture"
+        },
+        {
+            "id": 669,
+            "src": "components/Abigail_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 670,
+            "src": "components/Abigail_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 671,
+            "src": "components/Abigail_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 672,
+            "src": "components/Abigail_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 673,
+            "src": "components/Abigail_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 674,
+            "src": "components/Abigail_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 675,
+            "src": "components/Abigail_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 676,
+            "src": "components/Abigail_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 677,
+            "src": "components/Abigail_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 678,
+            "src": "components/Abigail_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 679,
+            "src": "components/Abigail_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 680,
+            "src": "components/Abigail_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 681,
+            "src": "components/Abigail_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 682,
+            "src": "components/Abigail_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 683,
+            "src": "components/Abigail_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 684,
+            "src": "components/Abigail_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 685,
+            "src": "components/Abigail_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 686,
+            "src": "components/Party1_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 687,
+            "src": "components/Party1_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 688,
+            "src": "components/Party1_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 689,
+            "src": "components/Party1_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 690,
+            "src": "components/Party1_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 691,
+            "src": "components/Party1_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 692,
+            "src": "components/Party1_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 693,
+            "src": "components/Party1_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 694,
+            "src": "components/Party1_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 695,
+            "src": "components/Party1_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 696,
+            "src": "components/Party1_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 697,
+            "src": "components/Party1_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 698,
+            "src": "components/Party1_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 699,
+            "src": "components/Party1_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 700,
+            "src": "components/Party1_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 701,
+            "src": "components/Party1_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 702,
+            "src": "components/Party1_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 703,
+            "src": "components/Party2_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 704,
+            "src": "components/Party2_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 705,
+            "src": "components/Party2_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 706,
+            "src": "components/Party2_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 707,
+            "src": "components/Party2_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 708,
+            "src": "components/Party2_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 709,
+            "src": "components/Party2_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 710,
+            "src": "components/Party2_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 711,
+            "src": "components/Party2_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 712,
+            "src": "components/Party2_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 713,
+            "src": "components/Party2_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 714,
+            "src": "components/Party2_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 715,
+            "src": "components/Party2_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 716,
+            "src": "components/Party2_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 717,
+            "src": "components/Party2_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 718,
+            "src": "components/Party2_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 719,
+            "src": "components/Party2_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 720,
+            "src": "components/Party3_leftleg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 721,
+            "src": "components/Party3_leftleg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 722,
+            "src": "components/Party3_leftleg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 723,
+            "src": "components/Party3_rightleg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 724,
+            "src": "components/Party3_rightleg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 725,
+            "src": "components/Party3_rightleg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 726,
+            "src": "components/Party3_leftarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 727,
+            "src": "components/Party3_leftarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 728,
+            "src": "components/Party3_leftarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 729,
+            "src": "components/Party3_rightarm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 730,
+            "src": "components/Party3_rightarm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 731,
+            "src": "components/Party3_rightarm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 732,
+            "src": "components/Party3_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 737,
+            "src": "components/Party3_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 752,
+            "src": "components/Abigail_arm2_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 753,
+            "src": "components/Abigail_arm2_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 754,
+            "src": "components/Abigail_arm2_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 755,
+            "src": "components/Party3_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 756,
+            "src": "components/Party3_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 757,
+            "src": "components/Party3_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 758,
+            "src": "components/Party3_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 759,
+            "src": "components/Party3_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 760,
+            "src": "components/Party3_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 761,
+            "src": "components/Party3_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 762,
+            "src": "components/Party3_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 763,
+            "src": "components/Party3_Right_Pupil.png",
+            "type": "texture"
         }
     ]
 }

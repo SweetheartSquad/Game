@@ -9,6 +9,7 @@
 #include <PD_DissStats.h>
 #include <Player.h>
 #include <ctime>
+#include <StringUtils.h>
 
 ProgressManager::ProgressManager() :
 	plotPosition(1)
@@ -62,14 +63,9 @@ void ProgressManager::getNew(){
 		return a["order"] < b["order"];
 	});
 
-	std::sort(allLabDefs.begin(), allLabDefs.end(), [](Json::Value a, Json::Value b){
-		return a["order"] < b["order"];
-	});
-
 	std::sort(allIntroDefs.begin(), allIntroDefs.end(), [](Json::Value a, Json::Value b){
 		return a["order"] < b["order"];
-	});
-
+	});;
 
 	// seed the RNG with the current time to give us different results
 	sweet::NumberUtils::seed(time(nullptr));
@@ -93,17 +89,32 @@ void ProgressManager::getNew(){
 			}
 		}
 
+		std::string omarScenario = "";
+
 		// if we're in the middle, pick an omar scenario
-		if (i != kBEGINNING && i != kEPILOGUE){
-			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
+		if (i + 1 != kBEGINNING && i + 1 < kEND){
+			omarScenario = allOmarDefs.pop(true)["src"].asString(); 
+			scenariosList.append(omarScenario);
 		}
 
 		// Add the intro scenario second last
 		scenariosList.append(i < allIntroDefs.size() ? allIntroDefs[i]["src"].asString() : "intro-scenario.json");
 
-		// Add the lab def last
-		// We shouldn't need this check but we'll leave it here until all the scenarios are in
-		scenariosList.append(i < allLabDefs.size() ? allLabDefs[i]["src"].asString() : "lab-scenario.json");
+		if (i + 1 != kBEGINNING && i + 1 < kEND){
+			std::string omarPrefix = sweet::StringUtils::split(omarScenario, '_')[0];
+			for(auto s : allLabDefs) {
+				 if(s["src"].asString().find(omarPrefix) != std::string::npos) {
+					 scenariosList.append(s["src"]);
+					 break;
+				 }
+			}
+		}else {
+			for(auto s : allLabDefs) {
+				if(s["order"].asInt() == i + 1) {
+					scenariosList.append(s["src"]);
+				}
+			}
+		}
 
 		Json::Value outValue;
 		outValue["scenarios"] = scenariosList;

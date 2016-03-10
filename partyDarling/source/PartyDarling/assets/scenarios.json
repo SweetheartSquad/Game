@@ -60,9 +60,9 @@
         "type": 1
     },
     {
-        "order": 0,
+        "order": 3,
         "src": "scenarios/Ghost_Omar_Lab.json",
-        "type": 0
+        "type": 3
     },
     {
         "order": 1,
@@ -90,14 +90,14 @@
         "type": 4
     },
     {
-        "order": 2,
+        "order": 3,
         "src": "scenarios/Adventure_Omar_Lab.json",
-        "type": 1
+        "type": 3
     },
     {
         "order": 5,
         "src": "scenarios/Lab_5.json",
-        "type": 2
+        "type": 3
     },
     {
         "order": 1,
@@ -105,18 +105,18 @@
         "type": 3
     },
     {
-        "order": 0,
+        "order": 3,
         "src": "scenarios/Robot_Omar_Lab.json",
-        "type": 1
+        "type": 3
     },
     {
-        "order": 0,
+        "order": 2,
         "src": "scenarios/Plot_2.json",
-        "type": 0
+        "type": 2
     },
     {
-        "order": 0,
+        "order": 5,
         "src": "scenarios/Butler_5.json",
-        "type": 0
+        "type": 4
     }
 ]
