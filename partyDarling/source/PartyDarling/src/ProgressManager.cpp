@@ -16,6 +16,9 @@ ProgressManager::ProgressManager() :
 }
 
 void ProgressManager::getNew(){
+	// seed the RNG with the current time to give us different results
+	sweet::NumberUtils::seed(time(nullptr));
+
 	plotPosition = 1;
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
@@ -69,10 +72,6 @@ void ProgressManager::getNew(){
 	std::sort(allIntroDefs.begin(), allIntroDefs.end(), [](Json::Value a, Json::Value b){
 		return a["order"] < b["order"];
 	});
-
-
-	// seed the RNG with the current time to give us different results
-	sweet::NumberUtils::seed(time(nullptr));
 
 	assert(allPlotDefs.size() > 0);
 	for(unsigned long int i = 0; i < allPlotDefs.size(); ++i) {

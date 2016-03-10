@@ -51,8 +51,6 @@
 #define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
 
-Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
-
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
 	panSpeed(20.f),
@@ -80,7 +78,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	currentRoom(nullptr),
 	currentHousePosition(0),
 	carriedProp(nullptr),
-	carriedPropDistance(0)
+	carriedPropDistance(0),
+	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f))
 {
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world);
@@ -88,7 +87,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// Load the save file
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	PD_Game::progressManager->loadSave(player, uiDissBattle);
-	Log::error("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+
+	incidentalPhraseGenerator = new PD_PhraseGenerator_Incidental();
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -446,7 +447,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		// LEVEL UP SOUND
 	});
 
-	Log::error("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 }
 
 
@@ -934,6 +935,7 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete emoteShader;
 
 	delete toonRamp;
+	delete incidentalPhraseGenerator;
 }
 
 
@@ -1481,7 +1483,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO" || c ==""){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator->getLineWon() : incidentalPhraseGenerator->getLineLost()) : incidentalPhraseGenerator->getLineNormal(person)));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
