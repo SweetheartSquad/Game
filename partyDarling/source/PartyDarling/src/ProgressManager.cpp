@@ -2,8 +2,12 @@
 
 #include <ProgressManager.h>
 #include <FileUtils.h>
+#include <DateUtils.h>
 #include <Log.h>
 #include <PD_Scenario.h>
+#include <PD_UI_DissBattle.h>
+#include <PD_DissStats.h>
+#include <Player.h>
 
 ProgressManager::ProgressManager() :
 	plotPosition(1)
@@ -73,7 +77,7 @@ void ProgressManager::getNew(){
 		assert(scenariosList.size() > 0);
 		
 		// pick some random side scenarios
-		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
+		unsigned long int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
 		for(unsigned long int j = 0; j < numSidePlots; ++j) {
 			if (allSideDefs.size() > 0){
 				scenariosList.append(allSideDefs.pop(true)["src"].asString());
@@ -81,7 +85,7 @@ void ProgressManager::getNew(){
 		}
 
 		// if we're in the middle, pick an omar scenario
-		if(plotPosition != kBEGINNING && plotPosition != kEPILOGUE){
+		if(i != kBEGINNING && i != kEPILOGUE){
 			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
 		}
 
@@ -99,15 +103,71 @@ void ProgressManager::getNew(){
 	}
 }
 
-Json::Value ProgressManager::getCurrentScenarios(){
-	Json::Value res;
-	// grab the current scenario list from the save file
-	int i = 0;
-	for(auto scenariosList : scenarioFile) {
-		if(++i == plotPosition){
-			res = scenariosList;
-			return res;
-		}
+
+void ProgressManager::eraseSave() {
+	if(sweet::FileUtils::fileExists("data/save.json")){
+		// save a backup file
+		std::stringstream backupFilename;
+		backupFilename << "data/save." << sweet::DateUtils::getDatetime() << ".json";
+		std::ofstream backupFile;
+		backupFile.open(backupFilename.str());
+		backupFile << sweet::FileUtils::readFile("data/save.json");
+		backupFile.close();
+		
+		// remove the existing file
+		std::remove("data/save.json");
+	}else{
+		Log::warn("Tried to erase save, but no save file was found.");
 	}
-	Log::error("Scenarios for current plot position not found.");
+}
+
+void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
+	Json::Value saveOut;
+	saveOut["plotPosition"] = (int)plotPosition;
+	saveOut["stats"] = Json::Value();
+	saveOut["stats"]["strength"] = _player->dissStats->getStrength();
+	saveOut["stats"]["sass"] = _player->dissStats->getSass();
+	saveOut["stats"]["defense"] = _player->dissStats->getDefense();
+	saveOut["stats"]["insight"] = _player->dissStats->getInsight();
+	for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
+		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+		_uiDissBattle->lifeTokens[i]->saveImageData(fileName);
+		saveOut["lifeTokens"].append(fileName);
+	}
+
+	saveOut["progress"] = scenarioFile;
+
+	std::ofstream saveFile;
+	saveFile.open ("data/save.json");
+	saveFile << saveOut;
+	saveFile.close();
+}
+
+void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
+	if(!sweet::FileUtils::fileExists("data/save.json")){
+		// if a save file doesn't exist, create a new one, save it immediately, then load that instead
+		getNew();
+		save(_player, _uiDissBattle);
+	}
+
+	// load the previous save file properties into the appropriate objects
+	std::string saveJson = sweet::FileUtils::readFile("data/save.json");
+	Json::Reader reader;
+	Json::Value root;
+	bool parsingSuccsessful = reader.parse(saveJson, root);
+	assert(parsingSuccsessful);
+	plotPosition = root["plotPosition"].asInt();
+
+	_player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
+	_player->dissStats->incrementSass(root["stats"]["sass"].asInt());
+	_player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
+	_player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
+	for(auto tex : root["lifeTokens"]) {
+		Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
+		texture->load();
+		_uiDissBattle->addLife(texture);
+	}
+	scenarioFile = root["progress"];
+	currentScenarios = scenarioFile[(int)plotPosition-1];
+	sweet::NumberUtils::seed(currentScenarios["seed"].asInt());
 }

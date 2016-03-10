@@ -39,6 +39,8 @@ PD_Game::PD_Game() :
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
 	scenes["options"] = new PD_Scene_MenuOptions(this);
 
+	progressManager = new ProgressManager();
+
 	//scenes["game"] = new PD_Scene_Main(this);
 
 	playBGM();

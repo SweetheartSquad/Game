@@ -118,7 +118,6 @@ public:
 	std::vector<Scenario *> activeScenarios;
 
 
-	void eraseSave();
 	void setupEventListeners();
 	void setupConditions();
 
@@ -142,9 +141,6 @@ public:
 	Texture * getToken();
 	// Resets crosshair texture to a crosshair
 	void resetCrosshair();
-
-	void save();
-	void loadSave();
 
 	// carrying stuff
 

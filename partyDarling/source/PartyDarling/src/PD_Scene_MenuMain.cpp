@@ -101,12 +101,10 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	continueText->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 
 	continueText->eventManager->addEventListener("click", [this](sweet::Event * _event){
-		auto it = game->scenes.find("game");
-		if(it == game->scenes.end()){
-			// load game from save file
-		}else{
-			game->switchScene("game", false);
+		if(game->scenes.count("game") == 0){
+			game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(game));
 		}
+		game->switchScene("game", false);
 	});
 
 	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
@@ -160,6 +158,16 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	confirmNewGame->setBackgroundColour(1.f, 1.f, 1.f);
 
 	confirmNewGame->btnConfirm->eventManager->addEventListener("click", [this](sweet::Event * _event){
+		// erase the existing save file
+		PD_Game::progressManager->eraseSave();
+		
+		// delete the existing game
+		auto it = game->scenes.find("game");
+		if(it != game->scenes.end()){
+			delete it->second;
+		}
+
+		// switch to the intro
 		game->scenes["intro"] = new PD_Scene_IntroSlideShow(game);
 		game->switchScene("intro", false);
 		continueText->enable();
