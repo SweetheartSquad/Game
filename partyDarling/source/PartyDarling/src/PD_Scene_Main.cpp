@@ -51,8 +51,6 @@
 #define LEVEL_UP_DURATION 2
 #define XP_GAIN_PAUSE 1
 
-Colour PD_Scene_Main::wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f));
-
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
 	panSpeed(20.f),
@@ -80,8 +78,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	currentRoom(nullptr),
 	currentHousePosition(0),
 	carriedProp(nullptr),
-	carriedPropDistance(0)
+	carriedPropDistance(0),
+	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f))
 {
+	_game->showLoading(0);
+
+	player = new Player(bulletWorld);
+	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
+	// Load the save file
+	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+	PD_Game::progressManager->loadSave(player, uiDissBattle);
+	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+
+	incidentalPhraseGenerator = new PD_PhraseGenerator_Incidental();
+
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
@@ -106,12 +117,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
 
-
-	// remove initial camera
-	/*childTransform->removeChild(cameras.at(0)->parents.at(0));
-	delete cameras.at(0)->parents.at(0);
-	cameras.pop_back();*/
-
 	// add crosshair
 	VerticalLinearLayout * l = new VerticalLinearLayout(uiLayer->world);
 	l->setRationalHeight(1.f, uiLayer);
@@ -132,26 +137,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(l);
 	l->addChild(crosshairIndicator);
 
-	/*for(unsigned long int i = 0; i < 50; ++i){
-		std::map<std::string, Asset *>::iterator itemDef = PD_ResourceManager::scenario->assets["item"].begin();
-		if(itemDef != PD_ResourceManager::scenario->assets["item"].end()){
-			std::advance(itemDef, sweet::NumberUtils::randomInt(0, PD_ResourceManager::scenario->assets["item"].size()-1));
-			PD_Item * item = dynamic_cast<AssetItem *>(itemDef->second)->getItem(bulletWorld, shader);
-			item->addToWorld();
-			childTransform->addChild(item);
-	
-			item->setTranslationPhysical(sweet::NumberUtils::randomFloat(-50, 50), 2, sweet::NumberUtils::randomFloat(-50, 50));
-			item->rotatePhysical(45,0,1,0,false);
-		}
-	}*/
-
 
 	uiFade = new PD_UI_Fade(uiLayer->world);
 	uiLayer->addChild(uiFade);
 	uiFade->setRationalHeight(1.f, uiLayer);
 	uiFade->setRationalWidth(1.f, uiLayer);
 	
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
 	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
 	uiLayer->addChild(uiMap);
 	uiMap->setRationalHeight(1.f, uiLayer);
@@ -196,7 +187,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 	
 	// add the player to the scene
-	player = new Player(bulletWorld);
 	childTransform->addChild(player);
 	cameras.push_back(player->playerCamera);
 	activeCamera = player->playerCamera;
@@ -204,7 +194,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
 	
-	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
 	uiLayer->addChild(uiDissBattle);
 	uiDissBattle->setRationalHeight(1.f, uiLayer);
 	uiDissBattle->setRationalWidth(1.f, uiLayer);
@@ -247,9 +236,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// make sure to clear the old ones in case they already exist
 	PD_ResourceManager::scenario->eventManager->listeners.clear();
 	setupEventListeners();
-
-	// Load the save file
-	PD_Game::progressManager->loadSave(player, uiDissBattle);
 
 	// build house
 	pickScenarios();
@@ -462,6 +448,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
 		// LEVEL UP SOUND
 	});
+
+	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 }
 
 
@@ -949,6 +937,7 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete emoteShader;
 
 	delete toonRamp;
+	delete incidentalPhraseGenerator;
 }
 
 
@@ -1116,7 +1105,6 @@ void PD_Scene_Main::update(Step * _step){
 
 	if(keyboard->keyJustDown(GLFW_KEY_ESCAPE)){
 		game->switchScene("menu", false);
-		game->scenes["game"] = this;
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_R)){
@@ -1496,7 +1484,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO" || c ==""){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator.getLineWon() : incidentalPhraseGenerator.getLineLost()) : incidentalPhraseGenerator.getLineNormal(person)));
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator->getLineWon() : incidentalPhraseGenerator->getLineLost()) : incidentalPhraseGenerator->getLineNormal(person)));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();

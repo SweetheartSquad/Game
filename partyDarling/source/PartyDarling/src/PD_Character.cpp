@@ -103,7 +103,7 @@ void PD_Character::update(Step * _step){
 }
 
 PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
-	Json::Value charDef= genRandomComponents();
+	Json::Value charDef = genRandomComponents();
 	
 	std::string id = "RANDOM_CHARACTER_" + std::to_string(++numRandomCharacters);
 
@@ -230,7 +230,6 @@ CharacterState::CharacterState(Json::Value _json) :
 
 CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
 	paletteTex(new PD_Palette(true)),
-	randomAnimations(false),
 	animate(true),
 	currentAnimation(nullptr),
 	emote(nullptr),

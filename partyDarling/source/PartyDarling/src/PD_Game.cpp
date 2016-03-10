@@ -14,14 +14,14 @@
 #include <RenderOptions.h>
 #include <PD_Scene_MenuOptions.h>
 
-sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
+std::vector<unsigned long> PD_Game::bgmTrackIdx;
 OpenAL_Sound * PD_Game::bgmTrack = nullptr;
 ProgressManager * PD_Game::progressManager = nullptr;
 
 bool PD_Game::staticInit(){
-	bgmTrackIdx.push(1);
-	bgmTrackIdx.push(2);
-	bgmTrackIdx.push(3);
+	bgmTrackIdx.push_back(1);
+	bgmTrackIdx.push_back(2);
+	bgmTrackIdx.push_back(3);
 	return true;
 }
 bool PD_Game::staticInitialized = staticInit();
@@ -41,17 +41,17 @@ PD_Game::PD_Game() :
 
 	progressManager = new ProgressManager();
 
-	//scenes["game"] = new PD_Scene_Main(this);
-
-	playBGM();
+	//playBGM();
 }
 
 PD_Game::~PD_Game(){
-	bgmTrack->decrementAndDelete();
+	if(bgmTrack != nullptr){
+		bgmTrack->decrementAndDelete();
+	}
 }
 
 void PD_Game::update(Step * _step){
-	if(bgmTrack != nullptr){
+	if(currentSceneKey == "game" && bgmTrack != nullptr){
 		bgmTrack->update(_step);
 		if(bgmTrack->source->state != AL_PLAYING){
 			playBGM();
@@ -66,7 +66,7 @@ void PD_Game::playBGM(){
 		bgmTrack->decrementAndDelete();
 	}
 	std::stringstream ss;
-	ss << "BGM" << bgmTrackIdx.pop();
+	ss << "BGM" << sweet::NumberUtils::randomItem(bgmTrackIdx);
 
 	bgmTrack = PD_ResourceManager::scenario->getAudio(ss.str())->sound;
 	++bgmTrack->referenceCount;

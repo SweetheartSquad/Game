@@ -116,7 +116,6 @@ public:
 
 	PD_Palette * paletteTex;
 
-	bool randomAnimations;
 	bool animate;
 
 	PD_CharacterAnimationSet * currentAnimation;

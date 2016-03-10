@@ -73,7 +73,7 @@ public:
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * emoteShader;
 	
-	PD_PhraseGenerator_Incidental incidentalPhraseGenerator;
+	PD_PhraseGenerator_Incidental * incidentalPhraseGenerator;
 
 	NodeUI * crosshairIndicator;
 
@@ -92,7 +92,7 @@ public:
 	// how much the screen should transitioned in
 	// i.e. 0 is completely out, 1 is normal
 	float transitionTarget;
-	static Colour wipeColour;
+	Colour wipeColour;
 
 	PD_Scene_Main(PD_Game * _game);
 	~PD_Scene_Main();

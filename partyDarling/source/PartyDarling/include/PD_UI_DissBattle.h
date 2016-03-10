@@ -156,7 +156,7 @@ private:
 	float interjectTimer;
 
 	//Sounds
-	sweet::ShuffleVector<OpenAL_Sound *> missInterjectSounds;
+	std::vector<OpenAL_Sound *> missInterjectSounds;
 	Player * player;
 
 public:

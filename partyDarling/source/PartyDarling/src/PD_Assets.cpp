@@ -164,7 +164,7 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 {
 
 	std::string sizeString = "";
-	roomType = _json.get("furnitureTypes", "RANDOM") != "RANDOM";
+	roomType = _json.get("furnitureTypes", "RANDOM").asString();
 
 	if(roomType != "RANDOM" &&  PD_ResourceManager::roomTypes.find(roomType) !=  PD_ResourceManager::roomTypes.end()) {
 		sizeString = _json.get("size", "MEDIUM").asString();

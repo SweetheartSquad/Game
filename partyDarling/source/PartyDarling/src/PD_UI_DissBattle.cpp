@@ -451,7 +451,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	// Init sound vectors
 	for(unsigned long int i = 1; i < 11; ++i) {
-		missInterjectSounds.push(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
+		missInterjectSounds.push_back(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
 	}
 
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
@@ -953,7 +953,7 @@ void PD_UI_DissBattle::interject(){
 
 	if(!isPunctuation){
 		// Play sound effect for missing
-		auto sound = missInterjectSounds.pop();
+		auto sound = sweet::NumberUtils::randomItem(missInterjectSounds);
 		sound->play();
 	}else {
 		PD_ResourceManager::scenario->getAudio(INTERJECT)->sound->play();
