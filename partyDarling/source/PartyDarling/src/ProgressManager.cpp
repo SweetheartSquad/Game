@@ -8,6 +8,7 @@
 #include <PD_UI_DissBattle.h>
 #include <PD_DissStats.h>
 #include <Player.h>
+#include <ctime>
 
 ProgressManager::ProgressManager() :
 	plotPosition(1)
@@ -71,7 +72,7 @@ void ProgressManager::getNew(){
 
 
 	// seed the RNG with the current time to give us different results
-	sweet::NumberUtils::seed(sweet::lastTimestamp);
+	sweet::NumberUtils::seed(time(nullptr));
 
 	assert(allPlotDefs.size() > 0);
 	for(unsigned long int i = 0; i < allPlotDefs.size(); ++i) {
