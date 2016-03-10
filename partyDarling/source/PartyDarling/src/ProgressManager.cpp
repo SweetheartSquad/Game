@@ -58,6 +58,9 @@ ProgressManager::ProgressManager() :
 
 void ProgressManager::getNew(){
 
+	// seed the RNG with the current time to give us different results
+	sweet::NumberUtils::seed(sweet::lastTimestamp);
+
 	assert(allPlotDefs.size() > 0);
 	for(unsigned long int i = 0; i < allPlotDefs.size(); ++i) {
 		Json::Value scenariosList;

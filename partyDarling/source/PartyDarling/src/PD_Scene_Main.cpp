@@ -473,7 +473,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 void PD_Scene_Main::pickScenarios(){
 	Json::Value currentScenario = PD_Game::progressManager->getCurrentScenarios();
 
-	
+	// seed the RNG with the given seed
+	sweet::NumberUtils::seed(currentScenario["seed"].asInt());
 
 	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
