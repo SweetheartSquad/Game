@@ -537,73 +537,9 @@ void CharacterRenderer::update(Step * _step){
 	}
 
 	if(animate){
-		if(randomAnimations && timer > 1){
-			timer = 0;
-			float l;
-
-			l = solverArmR->getChainLength();
-			solverArmR->target.x = sweet::NumberUtils::randomFloat(-l, 0);
-			solverArmR->target.y = sweet::NumberUtils::randomFloat(-l, l);
-		
-			l = solverArmL->getChainLength();
-			solverArmL->target.x = sweet::NumberUtils::randomFloat(l, 0);
-			solverArmL->target.y = sweet::NumberUtils::randomFloat(-l, l);
-		
-			l = solverLegR->getChainLength();
-			solverLegR->target.x = sweet::NumberUtils::randomFloat(0, l*0.5);
-			solverLegR->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
-		
-			l = solverLegL->getChainLength();
-			solverLegL->target.x = sweet::NumberUtils::randomFloat(-l*0.5, 0);
-			solverLegL->target.y = sweet::NumberUtils::randomFloat(-l, -l*0.8);
-		
-			l = solverBod->getChainLength();
-			solverBod->target.x = sweet::NumberUtils::randomFloat(-l*0.5, l*0.5);
-			solverBod->target.y = sweet::NumberUtils::randomFloat(l*0.95, l);
-
-			/*solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
-			solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
-			solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
-			solverBod->target = glm::vec2(0, solverBod->getChainLength());
-		
-			for(unsigned long int s = 1; s < solvers.size(); ++s){
-				float l = solvers.at(s)->getChainLength();
-				solvers.at(s)->target.x = sweet::NumberUtils::randomFloat(-l, l);
-				solvers.at(s)->target.y = sweet::NumberUtils::randomFloat(-l, l);
-			}*/
-
-		}else if(currentAnimation != nullptr) {
+		if(currentAnimation != nullptr) {
 			currentAnimation->update(_step);
 			childTransform->translate(currentAnimation->translationVec, false);
-		}
-	}
-
-
-	Keyboard & k = Keyboard::getInstance();
-
-	glm::vec2 test(0);
-	if(k.keyDown(GLFW_KEY_I)){
-		test.y += 50;
-	}if(k.keyDown(GLFW_KEY_J)){
-		test.x -= 50;
-	}if(k.keyDown(GLFW_KEY_K)){
-		test.y -= 50;
-	}if(k.keyDown(GLFW_KEY_L)){
-		test.x += 50;
-	}
-
-	currentSolver->target += test;
-	
-	if(k.keyJustDown(GLFW_KEY_U)){
-		if(currentSolver == solvers.back()){
-			currentSolver = solvers.at(0);
-		}else{
-			for(unsigned long int i = 0; i < solvers.size()-1; ++i){
-				if(currentSolver == solvers.at(i)){
-					currentSolver = solvers.at(i+1);
-					break;
-				}
-			}
 		}
 	}
 	

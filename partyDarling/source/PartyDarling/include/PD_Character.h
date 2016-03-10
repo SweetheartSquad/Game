@@ -66,8 +66,6 @@ public:
 
 class CharacterRenderer : public Entity{
 public:
-	float timer;
-
 	bool talking;
 
 	CharacterLimbSolver * solverArmR;
