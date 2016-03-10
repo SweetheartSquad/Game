@@ -230,7 +230,6 @@ CharacterState::CharacterState(Json::Value _json) :
 
 CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
 	paletteTex(new PD_Palette(true)),
-	timer(0),
 	randomAnimations(false),
 	animate(true),
 	currentAnimation(nullptr),
@@ -529,8 +528,6 @@ void CharacterRenderer::update(Step * _step){
 		paletteTex->generateRandomTable();
 		paletteTex->bufferData();
 	}
-
-	timer += _step->deltaTime;
 
 	if(emoteTimeout != nullptr) {
 		emoteTimeout->update(_step);
