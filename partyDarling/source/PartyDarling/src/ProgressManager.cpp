@@ -73,13 +73,13 @@ void ProgressManager::getNew(){
 		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
 		for(unsigned long int j = 0; j < numSidePlots; ++j) {
 			if (allSideDefs.size() > 0){
-				scenariosList.append(allSideDefs.pop()["src"].asString());
+				scenariosList.append(allSideDefs.pop(true)["src"].asString());
 			}
 		}
 
 		// if we're in the middle, pick an omar scenario
 		if(plotPosition != kBEGINNING && plotPosition != kEND){
-			scenariosList.append(allOmarDefs.pop()["src"].asString());
+			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
 		}
 
 		// Add the intro scenario second last
