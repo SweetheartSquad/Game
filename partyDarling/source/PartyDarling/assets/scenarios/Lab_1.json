@@ -1,1 +1,270 @@
-{"name":"Lab 1","description":"Lab 1","type":3,"order":1,"assets":[{"id":0,"name":"Player","states":[],"items":[],"type":"character","defaultState":-1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]}]},{"id":1,"name":"Suspect","states":[{"id":1,"name":"DefaultState","convo":1,"animation":"IDLE_TALK_1"}],"items":[],"type":"character","defaultState":1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ScifiOmar_PELVIS.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ScifiOmar_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ScifiOmar_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/scifiOmar_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/scifiOmar_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ScifiOmar_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ScifiOmar_LEG.json"}]}]},{"id":1,"name":"Suspect1","dialogue":[{"text":["Alas, you're alive.","I'm terribly sorry you got wrapped up in all this.","I'm sure, in another life, we could have been great friends.","But in this life, I'm afraid you're very much in my way.","I have a lot of terrible, horrible things to do.","I can't have you trying to stop me.","Don't try and find me again."],"triggers":[{"type":"fadeOut","args":{"length":{"value":1500,"type":"INT","dependsOn":"NONE"},"r":{"value":255,"type":"INT","dependsOn":"NONE"},"g":{"value":255,"type":"INT","dependsOn":"NONE"},"b":{"value":255,"type":"INT","dependsOn":"NONE"}},"id":-1},{"type":"goToNextLevel","args":{},"id":-1},{"type":"fadeIn","args":{"length":{"value":2000,"type":"INT","dependsOn":"NONE"},"r":{"value":255,"type":"INT","dependsOn":"NONE"},"g":{"value":255,"type":"INT","dependsOn":"NONE"},"b":{"value":255,"type":"INT","dependsOn":"NONE"}},"id":-1}],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":0}},{"name":"Lab","id":1,"description":"lab","furnitureTypes":"LABORATORY","characters":[1],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":false,"items":[],"triggersOnce":[],"triggersMulti":[]}]}
+{
+  "name": "Lab 1",
+  "description": "Lab 1",
+  "type": 3,
+  "order": 1,
+  "assets": [
+    {
+      "id": 0,
+      "name": "Player",
+      "states": [],
+      "items": [],
+      "type": "character",
+      "defaultState": -1,
+      "strength": 0,
+      "sass": 0,
+      "insight": 0,
+      "defense": 0,
+      "visible": true,
+      "components": [
+        {
+          "tags": {
+            "not": [],
+            "required": [],
+            "preferred": []
+          },
+          "src": "",
+          "components": [
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "",
+              "components": [
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": ""
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": ""
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": ""
+                }
+              ]
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": ""
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Suspect",
+      "states": [
+        {
+          "id": 1,
+          "name": "DefaultState",
+          "convo": 1,
+          "animation": "IDLE_TALK_1"
+        }
+      ],
+      "items": [],
+      "type": "character",
+      "defaultState": 1,
+      "strength": 0,
+      "sass": 0,
+      "insight": 0,
+      "defense": 0,
+      "visible": true,
+      "components": [
+        {
+          "tags": {
+            "not": [],
+            "required": [],
+            "preferred": []
+          },
+          "src": "components/definitions/ScifiOmar_PELVIS.json",
+          "components": [
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "components/definitions/ScifiOmar_TORSO.json",
+              "components": [
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/ScifiOmar_HEAD.json"
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/scifiOmar_ARM.json"
+                },
+                {
+                  "tags": {
+                    "not": [],
+                    "required": [],
+                    "preferred": []
+                  },
+                  "src": "components/definitions/scifiOmar_ARM.json"
+                }
+              ]
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "components/definitions/ScifiOmar_LEG.json"
+            },
+            {
+              "tags": {
+                "not": [],
+                "required": [],
+                "preferred": []
+              },
+              "src": "components/definitions/ScifiOmar_LEG.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Suspect1",
+      "dialogue": [
+        {
+          "text": [
+            "Alas, you're alive.",
+            "I'm terribly sorry you got wrapped up in all this.",
+            "I'm sure, in another life, we could have been great friends.",
+            "But in this life, I'm afraid you're very much in my way.",
+            "I have a lot of terrible, horrible things to do.",
+            "I can't have you trying to stop me.",
+            "Don't try and find me again."
+          ],
+          "triggers": [
+            {
+              "type": "fadeOut",
+              "args": {
+                "length": {
+                  "value": 1500,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "r": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "g": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "b": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                }
+              },
+              "id": -1
+            },
+            {
+              "type": "goToNextLevel",
+              "args": {},
+              "id": -1
+            },
+            {
+              "type": "fadeIn",
+              "args": {
+                "length": {
+                  "value": 2000,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "r": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "g": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                },
+                "b": {
+                  "value": 255,
+                  "type": "INT",
+                  "dependsOn": "NONE"
+                }
+              },
+              "id": -1
+            }
+          ],
+          "conditions": [],
+          "speaker": 1,
+          "name": "Dialogue 0"
+        }
+      ],
+      "options": [],
+      "type": "conversation",
+      "settings": {
+        "indentation": 0,
+        "order": 0
+      }
+    },
+    {
+      "name": "Lab",
+      "id": 1,
+      "description": "lab",
+      "furnitureTypes": "LABORATORY",
+      "characters": [
+        1
+      ],
+      "tags": {
+        "not": [],
+        "required": [],
+        "preferred": []
+      },
+      "size": "MEDIUM",
+      "type": "room",
+      "locked": false,
+      "items": [],
+      "triggersOnce": [],
+      "triggersMulti": []
+    }
+  ]
+}

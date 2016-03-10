@@ -249,6 +249,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	PD_ResourceManager::scenario->eventManager->listeners.clear();
 	setupEventListeners();
 
+	// Init progress manager
+	if(PD_Game::progressManager == nullptr){
+		PD_Game::progressManager = new ProgressManager();
+	}
+
 	// Load the save file
 	loadSave();
 
@@ -467,14 +472,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
-	if(PD_Game::progressManager == nullptr){
-		PD_Game::progressManager = new ProgressManager();
-	}
+
 	PD_Game::progressManager->getNew();
 
 	Json::Value currentScenario = PD_Game::progressManager->getCurrentScenarios();
-
-	
 
 	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
@@ -1441,28 +1442,28 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->invalidateLayout();
 }
 
+void PD_Scene_Main::eraseSave() {
+	std::remove("data/save.json");
+}
+
 void PD_Scene_Main::save() {
 	Json::Value saveOut;
-	if(plotPosition != kEND) {
-		int pos = static_cast<int>(plotPosition);
-		saveOut["plotPosition"] = ++pos;
-		saveOut["strength"] = player->dissStats->getStrength();
-		saveOut["sass"] = player->dissStats->getSass();
-		saveOut["defense"] = player->dissStats->getDefense();
-		saveOut["insight"] = player->dissStats->getInsight();
-		for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
-			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-			uiDissBattle->lifeTokens[i]->saveImageData(fileName);
-			saveOut["lifeTokens"].append(fileName);
-		}
-
-		std::ofstream saveFile;
-		saveFile.open ("data/save.json");
-		saveFile << saveOut;
-		saveFile.close();
-	}else {
-		// Delete save file
+	int pos = static_cast<int>(plotPosition);
+	saveOut["plotPosition"] = static_cast<int>(PD_Game::progressManager->plotPosition);
+	saveOut["strength"] = player->dissStats->getStrength();
+	saveOut["sass"] = player->dissStats->getSass();
+	saveOut["defense"] = player->dissStats->getDefense();
+	saveOut["insight"] = player->dissStats->getInsight();
+	for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
+		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+		uiDissBattle->lifeTokens[i]->saveImageData(fileName);
+		saveOut["lifeTokens"].append(fileName);
 	}
+
+	std::ofstream saveFile;
+	saveFile.open ("data/save.json");
+	saveFile << saveOut;
+	saveFile.close();
 }
 
 void PD_Scene_Main::loadSave() {
@@ -1472,7 +1473,7 @@ void PD_Scene_Main::loadSave() {
 		Json::Value root;
 		bool parsingSuccsessful = reader.parse(saveJson, root);
 		assert(parsingSuccsessful);
-		plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
+		PD_Game::progressManager->plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
 		player->dissStats->incrementStrength(root["strength"].asInt());
 		player->dissStats->incrementSass(root["sass"].asInt());
 		player->dissStats->incrementDefense(root["defense"].asInt());

@@ -380,11 +380,21 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("endRun", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("goToNextLevel", [this](sweet::Event * _event){
 		uiDialogue->setVisible(false);
-		uiBubble->disable();
-		dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
-		game->switchScene("menu", true);
-		++PD_Game::progressManager->plotPosition;
+		uiBubble->disable();		
+		if(PD_Game::progressManager->plotPosition != kEPILOGUE){
+			++PD_Game::progressManager->plotPosition;
+			// Make sure to save the game 
+			save();
+			std::string mainStr = "main" + std::to_string(++PD_Game::progressManager->plotPosition);
+			game->scenes[mainStr] = new PD_Scene_Main(static_cast<PD_Game *>(game));
+			game->switchScene(mainStr, true);	
+		}else {
+			eraseSave();
+			PD_Game::progressManager->plotPosition = kBEGINNING;
+			dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
+ 			game->switchScene("menu", true);
+		}
 	});
 }
