@@ -44,7 +44,7 @@
 #include <LabRoom.h>
 #include <PD_DissStats.h>
 
-#include <PD_Scene_MainMenu.h>
+#include <PD_Scene_MenuMain.h>
 #include <PD_UI_Text.h>
 
 #define MAX_SIDE_SCENARIOS 5

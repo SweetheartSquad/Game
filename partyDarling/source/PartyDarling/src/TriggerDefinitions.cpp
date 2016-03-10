@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PD_Scene_Main.h>
-#include <PD_Scene_MainMenu.h>
+#include <PD_Scene_MenuMain.h>
 #include <PD_ResourceManager.h>
 #include <Player.h>
 #include <PD_DissStats.h>
@@ -393,7 +393,7 @@ void PD_Scene_Main::setupEventListeners(){
 		}else {
 			eraseSave();
 			PD_Game::progressManager->plotPosition = kBEGINNING;
-			dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
+			dynamic_cast<PD_Scene_MenuMain *>(game->scenes.at("menu"))->continueText->disable();
  			game->switchScene("menu", true);
 		}
 	});

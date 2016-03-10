@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PD_Scene_MainMenu.h"
+#include "PD_Scene_MenuMain.h"
 #include <StandardFrameBuffer.h>
 #include <RenderSurface.h>
 #include <RenderOptions.h>
@@ -16,7 +16,7 @@
 #include <PD_Scene_IntroSlideShow.h>
 #include <PD_UI_ConfirmNewGame.h>
 
-PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
+PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	Scene(_game),
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
@@ -181,7 +181,7 @@ PD_Scene_MainMenu::PD_Scene_MainMenu(Game * _game) :
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 }
 
-PD_Scene_MainMenu::~PD_Scene_MainMenu() {
+PD_Scene_MenuMain::~PD_Scene_MenuMain() {
 	deleteChildTransform();
 	delete uiLayer;
 	
@@ -191,7 +191,7 @@ PD_Scene_MainMenu::~PD_Scene_MainMenu() {
 	delete textShader;
 }
 
-void PD_Scene_MainMenu::showConfirmBox(){
+void PD_Scene_MenuMain::showConfirmBox(){
 	screen->setVisible(true);
 	confirmNewGame->enable();
 
@@ -201,7 +201,7 @@ void PD_Scene_MainMenu::showConfirmBox(){
 	callNightText->setMouseEnabled(false);
 }
 
-void PD_Scene_MainMenu::hideConfirmBox(){
+void PD_Scene_MenuMain::hideConfirmBox(){
 	screen->setVisible(false);
 	confirmNewGame->disable();
 
@@ -211,7 +211,7 @@ void PD_Scene_MainMenu::hideConfirmBox(){
 	callNightText->setMouseEnabled(true);
 }
 
-void PD_Scene_MainMenu::update(Step* _step) {
+void PD_Scene_MenuMain::update(Step* _step) {
 
 	Scene::update(_step);
 
@@ -220,7 +220,7 @@ void PD_Scene_MainMenu::update(Step* _step) {
 	uiLayer->update(_step);
 }
 
-void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+void PD_Scene_MenuMain::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	
 
@@ -238,7 +238,7 @@ void PD_Scene_MainMenu::render(sweet::MatrixStack* _matrixStack, RenderOptions* 
 	screenSurface->render(screenFBO->getTextureId());
 }
 
-void PD_Scene_MainMenu::load() {
+void PD_Scene_MenuMain::load() {
 	Scene::load();	
 	uiLayer->load();
 	screenSurface->load();
@@ -246,7 +246,7 @@ void PD_Scene_MainMenu::load() {
 	screenFBO->load();
 }
 
-void PD_Scene_MainMenu::unload() {
+void PD_Scene_MenuMain::unload() {
 	uiLayer->unload();
 	screenSurface->unload();
 	screenSurfaceShader->unload();

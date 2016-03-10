@@ -4,7 +4,7 @@
 #include <PD_Scene_Main.h>
 #include <PD_ResourceManager.h>
 
-#include <PD_Scene_MainMenu.h>
+#include <PD_Scene_MenuMain.h>
 #include <PD_Scene_LoadingScreen.h>
 #include <PD_Scene_Animation.h>
 
@@ -31,7 +31,7 @@ void PD_Game::addSplashes(){
 }
 
 PD_Game::PD_Game() :
-	Game("menu", new PD_Scene_MainMenu(this), true)
+	Game("menu", new PD_Scene_MenuMain(this), true)
 {
 	printFPS = false;
 

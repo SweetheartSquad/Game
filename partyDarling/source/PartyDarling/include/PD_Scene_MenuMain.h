@@ -9,7 +9,7 @@ class ComponentShaderText;
 class PD_UI_ConfirmNewGame;
 class PD_UI_Text;
 
-class PD_Scene_MainMenu: public Scene {
+class PD_Scene_MenuMain: public Scene {
 public:		
 
 	Shader * screenSurfaceShader;
@@ -31,8 +31,8 @@ public:
 
 	bool savedGame;
 
-	explicit PD_Scene_MainMenu(Game * _game);
-	~PD_Scene_MainMenu();
+	explicit PD_Scene_MenuMain(Game * _game);
+	~PD_Scene_MenuMain();
 
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
