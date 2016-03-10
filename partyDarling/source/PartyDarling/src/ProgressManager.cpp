@@ -71,7 +71,7 @@ void ProgressManager::getNew(){
 		
 		// pick some random side scenarios
 		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
-		for(unsigned long int i = 0; i < numSidePlots; ++i) {
+		for(unsigned long int j = 0; j < numSidePlots; ++j) {
 			if (allSideDefs.size() > 0){
 				scenariosList.append(allSideDefs.pop()["src"].asString());
 			}
