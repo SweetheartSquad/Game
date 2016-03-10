@@ -1460,48 +1460,25 @@ void PD_Scene_Main::eraseSave() {
 
 void PD_Scene_Main::save() {
 	Json::Value saveOut;
-<<<<<<< HEAD
-	int pos = static_cast<int>(plotPosition);
-	saveOut["plotPosition"] = static_cast<int>(PD_Game::progressManager->plotPosition);
-	saveOut["strength"] = player->dissStats->getStrength();
-	saveOut["sass"] = player->dissStats->getSass();
-	saveOut["defense"] = player->dissStats->getDefense();
-	saveOut["insight"] = player->dissStats->getInsight();
+	int pos = static_cast<int>(PD_Game::progressManager->plotPosition);
+	saveOut["plotPosition"] = pos;
+	saveOut["stats"] = Json::Value();
+	saveOut["stats"]["strength"] = player->dissStats->getStrength();
+	saveOut["stats"]["sass"] = player->dissStats->getSass();
+	saveOut["stats"]["defense"] = player->dissStats->getDefense();
+	saveOut["stats"]["insight"] = player->dissStats->getInsight();
 	for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
 		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
 		uiDissBattle->lifeTokens[i]->saveImageData(fileName);
 		saveOut["lifeTokens"].append(fileName);
 	}
 
+	saveOut["progress"] = PD_Game::progressManager->scenarioFile;
+
 	std::ofstream saveFile;
 	saveFile.open ("data/save.json");
 	saveFile << saveOut;
 	saveFile.close();
-=======
-	if(PD_Game::progressManager->plotPosition != kEND) {
-		int pos = static_cast<int>(PD_Game::progressManager->plotPosition);
-		saveOut["plotPosition"] = pos;
-		saveOut["stats"] = Json::Value();
-		saveOut["stats"]["strength"] = player->dissStats->getStrength();
-		saveOut["stats"]["sass"] = player->dissStats->getSass();
-		saveOut["stats"]["defense"] = player->dissStats->getDefense();
-		saveOut["stats"]["insight"] = player->dissStats->getInsight();
-		for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
-			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-			uiDissBattle->lifeTokens[i]->saveImageData(fileName);
-			saveOut["lifeTokens"].append(fileName);
-		}
-
-		saveOut["progress"] = PD_Game::progressManager->scenarioFile;
-
-		std::ofstream saveFile;
-		saveFile.open ("data/save.json");
-		saveFile << saveOut;
-		saveFile.close();
-	}else {
-		// Delete save file
-	}
->>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 }
 
 void PD_Scene_Main::loadSave() {
@@ -1513,17 +1490,11 @@ void PD_Scene_Main::loadSave() {
 		bool parsingSuccsessful = reader.parse(saveJson, root);
 		assert(parsingSuccsessful);
 		PD_Game::progressManager->plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
-<<<<<<< HEAD
-		player->dissStats->incrementStrength(root["strength"].asInt());
-		player->dissStats->incrementSass(root["sass"].asInt());
-		player->dissStats->incrementDefense(root["defense"].asInt());
-		player->dissStats->incrementInsight(root["insight"].asInt());
-=======
+
 		player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
 		player->dissStats->incrementSass(root["stats"]["sass"].asInt());
 		player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
 		player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
->>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
