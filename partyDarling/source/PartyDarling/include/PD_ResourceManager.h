@@ -34,15 +34,16 @@ public:
 	static PD_FurnitureComponentContainer * furnitureComponents;
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
-	static std::map<std::string, sweet::ShuffleVector<std::string>> characterDefinitions;
+	static std::map<std::string, std::vector<std::string>> characterDefinitions;
 	static std::map<std::string, EmoteDef *> emotes;
-	static sweet::ShuffleVector<std::string> characterNames;
+	static std::vector<std::string> characterNames;
 
 	static std::vector<PD_PropDefinition *> propDefinitions;
-	static std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> furniturePropDefinitions;
-	static sweet::ShuffleVector<PD_PropDefinition *> independentPropDefinitions;
-	static std::map<std::string, sweet::ShuffleVector<std::string>> roomTypes;
-	static sweet::ShuffleVector<OpenAL_Sound *> voices;
+	static std::map<std::string, std::vector<PD_PropDefinition *>> furniturePropDefinitions;
+	static std::vector<PD_PropDefinition *> independentPropDefinitions;
+	static std::map<std::string, std::vector<std::string>> roomTypes;
+	static std::vector<std::string> roomTypesKeys;
+	static std::vector<OpenAL_Sound *> voices;
 	
 	PD_ResourceManager();
 	~PD_ResourceManager();

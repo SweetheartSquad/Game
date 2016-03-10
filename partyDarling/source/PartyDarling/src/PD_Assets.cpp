@@ -172,8 +172,8 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 		int numTypes = PD_ResourceManager::roomTypes.size();
 		auto it = PD_ResourceManager::roomTypes.begin();
 		std::advance(it, sweet::NumberUtils::randomInt(0, numTypes-1));
-		roomType = it->first;
-		sizeString = it->second.pop();
+		roomType = sweet::NumberUtils::randomItem(PD_ResourceManager::roomTypesKeys);
+		sizeString = sweet::NumberUtils::randomItem(PD_ResourceManager::roomTypes[roomType]);
 	}
 
 	if(sizeString == "SMALL"){

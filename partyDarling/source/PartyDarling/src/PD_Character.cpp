@@ -71,7 +71,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	enabled = definition->visible;
 
-	voice = PD_ResourceManager::voices.pop();
+	voice = sweet::NumberUtils::randomItem(PD_ResourceManager::voices);
 }
 
 PD_Character::~PD_Character(){
@@ -107,7 +107,7 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 	
 	std::string id = "RANDOM_CHARACTER_" + std::to_string(++numRandomCharacters);
 
-	charDef["name"]         = PD_ResourceManager::characterNames.pop();
+	charDef["name"]         = sweet::NumberUtils::randomItem(PD_ResourceManager::characterNames);
 	charDef["id"]			= id;
 	charDef["defaultState"] = id;
 
@@ -132,15 +132,15 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 Json::Value PD_Character::genRandomComponents(){
 	Json::Value root;
 	Json::Value pelvis;
-	pelvis["src"] = PD_ResourceManager::characterDefinitions["PELVIS"].pop();
+	pelvis["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["PELVIS"]);
 	Json::Value arm;
-	arm["src"] = PD_ResourceManager::characterDefinitions["ARM"].pop();
+	arm["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["ARM"]);
 	Json::Value leg;	
-	leg["src"] = PD_ResourceManager::characterDefinitions["LEG"].pop();
+	leg["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["LEG"]);
 	Json::Value torso;  
-	torso["src"] = PD_ResourceManager::characterDefinitions["TORSO"].pop();
+	torso["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["TORSO"]);
 	Json::Value head;  
-	head["src"] = PD_ResourceManager::characterDefinitions["HEAD"].pop();
+	head["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["HEAD"]);
 
 	torso ["components"].append(head);
 	torso ["components"].append(arm);

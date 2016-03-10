@@ -65,15 +65,6 @@ private:
 
 	// the definition for this room
 	AssetRoom * const definition;
-	
-	static sweet::ShuffleVector<unsigned long int> debugTexIdx;
-	static sweet::ShuffleVector<unsigned long int> wallTexIdx;
-	static sweet::ShuffleVector<unsigned long int> ceilTexIdx;
-	static sweet::ShuffleVector<unsigned long int> floorTexIdx;
-	static sweet::ShuffleVector<unsigned long int> doorTexIdx;
-
-	static bool staticInit();
-	static bool staticInitialized;
 public:
 	unsigned long int thresh;
 
@@ -99,7 +90,6 @@ public:
 	bool placeDoors();
 	bool placeDoor(PD_Door * _door);
 	RoomObject * getWallFromEdge(Edge * _e); // because I don't save them in a map...
-	RoomObject * getDoor(glm::ivec2 _navigation);
 
 	// Furniture placement
 	bool search(RoomObject * child);
@@ -130,4 +120,5 @@ public:
 	Texture * getCeilTex();
 	Texture * getWallTex();
 	Texture * getDebugTex();
+	unsigned long int getDoorTexIdx();
 };

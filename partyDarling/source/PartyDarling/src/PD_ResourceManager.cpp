@@ -19,14 +19,15 @@ std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
-std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::characterDefinitions;
+std::map<std::string, std::vector<std::string>> PD_ResourceManager::characterDefinitions;
 std::map<std::string, EmoteDef *> PD_ResourceManager::emotes;
-sweet::ShuffleVector<std::string> PD_ResourceManager::characterNames;
+std::vector<std::string> PD_ResourceManager::characterNames;
 std::vector<PD_PropDefinition *> PD_ResourceManager::propDefinitions;
-std::map<std::string, sweet::ShuffleVector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
-sweet::ShuffleVector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
-std::map<std::string, sweet::ShuffleVector<std::string>> PD_ResourceManager::roomTypes;
-sweet::ShuffleVector<OpenAL_Sound *> PD_ResourceManager::voices;
+std::map<std::string, std::vector<PD_PropDefinition *>> PD_ResourceManager::furniturePropDefinitions;
+std::vector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
+std::map<std::string, std::vector<std::string>> PD_ResourceManager::roomTypes;
+std::vector<std::string> PD_ResourceManager::roomTypesKeys;
+std::vector<OpenAL_Sound *> PD_ResourceManager::voices;
 
 PD_ResourceManager::PD_ResourceManager(){
 	// register custom asset types
@@ -50,11 +51,10 @@ PD_ResourceManager::PD_ResourceManager(){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto m : root.getMemberNames()) {
-				sweet::ShuffleVector<std::string> types;
 				for(auto t : root[m]) {
-					types.push(t.asString());
+					roomTypes[m].push_back(t.asString());
+					roomTypesKeys.push_back(m);
 				}
-				roomTypes[m] = types;
 			}
 		}
 	}
@@ -118,18 +118,18 @@ PD_ResourceManager::PD_ResourceManager(){
 
 	for(auto d : propDefinitions){
 		if(!d->parentDependent){
-			independentPropDefinitions.push(d);
+			independentPropDefinitions.push_back(d);
 		}
 	}
 
 	for(auto fDef : furnitureDefinitions){
-		sweet::ShuffleVector<PD_PropDefinition *> propDefs;
+		std::vector<PD_PropDefinition *> propDefs;
 
 		for(auto pDef : PD_ResourceManager::propDefinitions){
 			bool found = false;
 			for(auto p :pDef->parents){
 				if(p.parent == fDef->type){
-					propDefs.push(pDef);
+					propDefs.push_back(pDef);
 					break;
 				}
 			}
@@ -172,7 +172,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		}else{
 			for(auto comp : root["components"]) {
 				if(comp.get("random", true).asBool()){
-					characterDefinitions[comp["type"].asString()].push(comp["src"].asString());
+					characterDefinitions[comp["type"].asString()].push_back(comp["src"].asString());
 				}
 			}
 		}
@@ -186,7 +186,7 @@ PD_ResourceManager::PD_ResourceManager(){
 			Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
 		}else{
 			for(auto name : root["names"]) {
-				characterNames.push(name.asString());
+				characterNames.push_back(name.asString());
 			}
 		}
 	}
@@ -218,7 +218,7 @@ PD_ResourceManager::PD_ResourceManager(){
 	}
 
 	for(unsigned long int i = 1; i < 29; ++i) {
-		voices.push(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
+		voices.push_back(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
 	}
 
 	db = new DatabaseConnection("data/test.db");

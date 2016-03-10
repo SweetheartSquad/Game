@@ -43,7 +43,7 @@ public:
 
 	int parentMax;
 
-	sweet::ShuffleVector<Texture *> textures;
+	std::vector<Texture *> textures;
 	
 	bool twist;
 	bool flare;

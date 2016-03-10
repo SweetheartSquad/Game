@@ -66,14 +66,15 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 		std::stringstream ss;
 		ss << "assets/textures/furniture/" << type << "_" << i << ".png";
 		Texture * tex = new Texture(ss.str(), false, false, true);
-		textures.push(tex);
+		textures.push_back(tex);
 	}
 	
 }
 
 PD_FurnitureDefinition::~PD_FurnitureDefinition(){
 	while(textures.size() > 0){
-		delete textures.pop(true);
+		delete textures.back();
+		textures.pop_back();
 	}
 	while(components.size() > 0){
 		delete components.back();

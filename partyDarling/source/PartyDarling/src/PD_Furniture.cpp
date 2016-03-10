@@ -23,7 +23,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	lights = buildResult.lights;
 	
 	// get a texture for the furniture type
-	Texture * tex = _def->textures.pop();
+	Texture * tex = sweet::NumberUtils::randomItem(_def->textures);
 	tex->load();
 	mesh->pushTexture2D(tex);
 	mesh->setScaleMode(GL_NEAREST);

@@ -109,27 +109,6 @@ bool Edge::isInside(glm::vec2 _point, float _scale){
 	return false;
 }
 
-sweet::ShuffleVector<unsigned long int> RoomBuilder::debugTexIdx;
-sweet::ShuffleVector<unsigned long int> RoomBuilder::wallTexIdx;
-sweet::ShuffleVector<unsigned long int> RoomBuilder::ceilTexIdx;
-sweet::ShuffleVector<unsigned long int> RoomBuilder::floorTexIdx;
-sweet::ShuffleVector<unsigned long int> RoomBuilder::doorTexIdx;
-
-bool RoomBuilder::staticInit(){
-	for(unsigned long int i = 1; i <= 5; ++i){
-		wallTexIdx.push(i);
-		ceilTexIdx.push(i);
-		floorTexIdx.push(i);
-		doorTexIdx.push(i);
-	}
-	for(unsigned long int i = 1; i <= 12; ++i){
-		debugTexIdx.push(i);
-	}
-
-	return true;
-}
-bool RoomBuilder::staticInitialized = RoomBuilder::staticInit();
-
 RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader):
 	world(_world),
 	baseShader(_baseShader),
@@ -441,10 +420,10 @@ Room * RoomBuilder::getRoom(){
 
 bool RoomBuilder::placeDoors(){
 
-	PD_Door * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, doorTexIdx.pop());
-	PD_Door * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, doorTexIdx.pop());
-	PD_Door * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, doorTexIdx.pop());
-	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, doorTexIdx.pop());
+	PD_Door * doorNorth = new PD_Door(world, baseShader, PD_Door::kNORTH, getDoorTexIdx());
+	PD_Door * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, getDoorTexIdx());
+	PD_Door * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, getDoorTexIdx());
+	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, getDoorTexIdx());
 
 	// Place new door
 	if(!placeDoor(doorNorth)){
@@ -1278,17 +1257,6 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	return furniture;
 }
 
-RoomObject * RoomBuilder::getDoor(glm::ivec2 _navigation){
-	std::stringstream ss;
-	ss << doorTexIdx.pop();
-	PD_Item * door = new PD_Item(dynamic_cast<AssetItem *>(PD_ResourceManager::scenario->getAsset("item","DOOR_" + ss.str())), world, baseShader, Anchor_t::WALL);
-	PD_ParentDef wallDef;
-	wallDef.parent = "wall";
-	wallDef.sides.push_back(PD_Side::kFRONT);
-	door->parentTypes.push_back(wallDef);
-	return door;
-}
-
 std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 	std::vector<PD_Item *> items;
 	if(!_random){
@@ -1331,7 +1299,7 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 					PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
 
 					while(spaceFilled <  slot->length){
-						props.push_back(new PD_Prop(world, PD_ResourceManager::furniturePropDefinitions.at(type).pop(), baseShader, GROUND));
+						props.push_back(new PD_Prop(world, sweet::NumberUtils::randomItem(PD_ResourceManager::furniturePropDefinitions.at(type)), baseShader, GROUND));
 						spaceFilled += props.back()->boundingBox.width;
 					}
 				}
@@ -1343,7 +1311,7 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 	if(PD_ResourceManager::independentPropDefinitions.size() > 0){
 		unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.01f);
 		for(unsigned int i = 0; i < n; ++i){
-			props.push_back(new PD_Prop(world, PD_ResourceManager::independentPropDefinitions.pop(), baseShader, GROUND));
+			props.push_back(new PD_Prop(world, sweet::NumberUtils::randomItem(PD_ResourceManager::independentPropDefinitions), baseShader, GROUND));
 		}
 	}
 	
@@ -1356,7 +1324,7 @@ Texture * RoomBuilder::getFloorTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/floor/" << floorTexIdx.pop() << ".png";
+	ss << "assets/textures/room/floor/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1369,7 +1337,7 @@ Texture * RoomBuilder::getCeilTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/ceiling/" << ceilTexIdx.pop() << ".png";
+	ss << "assets/textures/room/ceiling/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1382,7 +1350,7 @@ Texture * RoomBuilder::getWallTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/walls/" << wallTexIdx.pop() << ".png";
+	ss << "assets/textures/room/walls/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1391,8 +1359,12 @@ Texture * RoomBuilder::getWallTex(){
 
 Texture * RoomBuilder::getDebugTex(){
 	std::stringstream s;
-	s << "assets/textures/room/debug/" << debugTexIdx.pop() << ".png";
+	s << "assets/textures/room/debug/" << std::to_string(sweet::NumberUtils::randomInt(1, 12)) << ".png";
 	Texture * res = new Texture(s.str(), false, true, true);
 	res->load();
 	return res;
+}
+
+unsigned long int RoomBuilder::getDoorTexIdx(){
+	return sweet::NumberUtils::randomInt(1, 5);
 }
