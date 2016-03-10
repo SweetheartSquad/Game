@@ -48,8 +48,6 @@ public:
 	bool trackLeft;
 	bool trackRight;
 
-	ScenarioOrder plotPosition;
-
 	ComponentShaderBase * toonShader;
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

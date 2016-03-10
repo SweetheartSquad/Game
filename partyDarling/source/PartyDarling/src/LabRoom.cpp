@@ -41,7 +41,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 	
-	PD_Listing * listing = new PD_Listing(_labScenario);
+	PD_Listing * listing = PD_Listing::listings[_labScenario];
 	AssetCharacter * c = nullptr;
 	auto it = _labScenario->assets["character"].begin();
 	if(it != _labScenario->assets["character"].end()){

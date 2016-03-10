@@ -61,7 +61,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	trackSpeed(0.1f),
 	trackLeft(false),
 	trackRight(false),
-	plotPosition(kBEGINNING),
 	toonShader(new ComponentShaderBase(false)),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
@@ -248,6 +247,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// make sure to clear the old ones in case they already exist
 	PD_ResourceManager::scenario->eventManager->listeners.clear();
 	setupEventListeners();
+	
+
+	if(PD_Game::progressManager == nullptr){
+		PD_Game::progressManager = new ProgressManager();
+	}
 
 	// Init progress manager
 	if(PD_Game::progressManager == nullptr){
@@ -472,11 +476,19 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
+<<<<<<< HEAD
 
 	PD_Game::progressManager->getNew();
 
 	Json::Value currentScenario = PD_Game::progressManager->getCurrentScenarios();
 
+=======
+	Json::Value currentScenario = PD_Game::progressManager->getCurrentScenarios();
+
+	// seed the RNG with the given seed
+	sweet::NumberUtils::seed(currentScenario["seed"].asInt());
+
+>>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 	for(auto scenarioDef : currentScenario["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
 		activeScenarios.back()->load();
@@ -490,6 +502,9 @@ void PD_Scene_Main::pickScenarios(){
 	for(auto s : activeScenarios){
 		PD_ResourceManager::scenario->eventManager->addChildManager(s->eventManager);
 		s->conditionImplementations = PD_ResourceManager::conditionImplementations;
+		
+		// create a listing for this scenario
+		PD_Listing * listing = new PD_Listing(s);
 	}
 
 	
@@ -775,9 +790,6 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	// build all of the rooms contained in the selected scenarios
 	unsigned long int progress = 0;
 	for(auto scenario : activeScenarios){
-		
-		// create a listing for this scenario
-		PD_Listing * listing = new PD_Listing(scenario);
 
 		// build the rooms in this scenario
 		for(auto rd : scenario->assets.at("room")){
@@ -1448,6 +1460,7 @@ void PD_Scene_Main::eraseSave() {
 
 void PD_Scene_Main::save() {
 	Json::Value saveOut;
+<<<<<<< HEAD
 	int pos = static_cast<int>(plotPosition);
 	saveOut["plotPosition"] = static_cast<int>(PD_Game::progressManager->plotPosition);
 	saveOut["strength"] = player->dissStats->getStrength();
@@ -1464,25 +1477,63 @@ void PD_Scene_Main::save() {
 	saveFile.open ("data/save.json");
 	saveFile << saveOut;
 	saveFile.close();
+=======
+	if(PD_Game::progressManager->plotPosition != kEND) {
+		int pos = static_cast<int>(PD_Game::progressManager->plotPosition);
+		saveOut["plotPosition"] = pos;
+		saveOut["stats"] = Json::Value();
+		saveOut["stats"]["strength"] = player->dissStats->getStrength();
+		saveOut["stats"]["sass"] = player->dissStats->getSass();
+		saveOut["stats"]["defense"] = player->dissStats->getDefense();
+		saveOut["stats"]["insight"] = player->dissStats->getInsight();
+		for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			uiDissBattle->lifeTokens[i]->saveImageData(fileName);
+			saveOut["lifeTokens"].append(fileName);
+		}
+
+		saveOut["progress"] = PD_Game::progressManager->scenarioFile;
+
+		std::ofstream saveFile;
+		saveFile.open ("data/save.json");
+		saveFile << saveOut;
+		saveFile.close();
+	}else {
+		// Delete save file
+	}
+>>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 }
 
 void PD_Scene_Main::loadSave() {
 	if(sweet::FileUtils::fileExists("data/save.json")){
+		// load the previous save file properties into the appropriate objects
 		std::string saveJson = sweet::FileUtils::readFile("data/save.json");
 		Json::Reader reader;
 		Json::Value root;
 		bool parsingSuccsessful = reader.parse(saveJson, root);
 		assert(parsingSuccsessful);
 		PD_Game::progressManager->plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
+<<<<<<< HEAD
 		player->dissStats->incrementStrength(root["strength"].asInt());
 		player->dissStats->incrementSass(root["sass"].asInt());
 		player->dissStats->incrementDefense(root["defense"].asInt());
 		player->dissStats->incrementInsight(root["insight"].asInt());
+=======
+		player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
+		player->dissStats->incrementSass(root["stats"]["sass"].asInt());
+		player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
+		player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
+>>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
 			uiDissBattle->addLife(texture);
 		}
+		PD_Game::progressManager->scenarioFile = root["progress"];
+	}else{
+		// if a save file doesn't exist, create a new one and save it immediately
+		PD_Game::progressManager->getNew();
+		save();
 	}
 }
 

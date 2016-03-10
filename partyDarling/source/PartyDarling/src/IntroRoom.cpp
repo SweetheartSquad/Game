@@ -45,7 +45,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	colliderMesh = new TriMesh(true);
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
 	
-	PD_Listing * listing = new PD_Listing(_introScenario);
+	PD_Listing * listing = PD_Listing::listings[_introScenario];
 	AssetCharacter * c = nullptr;
 	auto it = _introScenario->assets["character"].begin();
 	if(it != _introScenario->assets["character"].end()){

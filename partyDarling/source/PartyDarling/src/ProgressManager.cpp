@@ -58,6 +58,9 @@ ProgressManager::ProgressManager() :
 
 void ProgressManager::getNew(){
 
+	// seed the RNG with the current time to give us different results
+	sweet::NumberUtils::seed(sweet::lastTimestamp);
+
 	assert(allPlotDefs.size() > 0);
 	for(unsigned long int i = 0; i < allPlotDefs.size(); ++i) {
 		Json::Value scenariosList;
@@ -73,13 +76,18 @@ void ProgressManager::getNew(){
 		int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
 		for(unsigned long int j = 0; j < numSidePlots; ++j) {
 			if (allSideDefs.size() > 0){
-				scenariosList.append(allSideDefs.pop()["src"].asString());
+				scenariosList.append(allSideDefs.pop(true)["src"].asString());
 			}
 		}
 
 		// if we're in the middle, pick an omar scenario
+<<<<<<< HEAD
 		if(plotPosition != kBEGINNING && plotPosition != kEPILOGUE){
 			scenariosList.append(allOmarDefs.pop()["src"].asString());
+=======
+		if(plotPosition != kBEGINNING && plotPosition != kEND){
+			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
+>>>>>>> c1a9db5a5c4f6a31808ccb2b64eecb16e48c95c0
 		}
 
 		// Add the intro scenario second last
