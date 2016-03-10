@@ -1731,11 +1731,6 @@
             "type": "texture"
         },
         {
-            "id": 444,
-            "src": "components/scifiOmar_Torso.png",
-            "type": "texture"
-        },
-        {
             "id": 455,
             "src": "components/portraitOmar_Upper_Leg.png",
             "type": "texture"
@@ -2471,71 +2466,6 @@
             "type": "texture"
         },
         {
-            "id": 620,
-            "src": "components/ScifiOmar_Upper_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 621,
-            "src": "components/ScifiOmar_Lower_Leg.png",
-            "type": "texture"
-        },
-        {
-            "id": 622,
-            "src": "components/ScifiOmar_Foot.png",
-            "type": "texture"
-        },
-        {
-            "id": 623,
-            "src": "components/ScifiOmar_Pelvis.png",
-            "type": "texture"
-        },
-        {
-            "id": 624,
-            "src": "components/ScifiOmar_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 625,
-            "src": "components/ScifiOmar_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 626,
-            "src": "components/ScifiOmar_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 627,
-            "src": "components/ScifiOmar_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 628,
-            "src": "components/ScifiOmar_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 629,
-            "src": "components/ScifiOmar_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 630,
-            "src": "components/ScifiOmar_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 631,
-            "src": "components/ScifiOmar_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 632,
-            "src": "components/ScifiOmar_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 633,
             "src": "components/Felix_Lower_Jaw.png",
             "type": "texture"
@@ -2608,6 +2538,76 @@
         {
             "id": 650,
             "src": "components/Mahmoud_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 651,
+            "src": "components/ScifiOmar_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 652,
+            "src": "components/ScifiOmar_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 653,
+            "src": "components/ScifiOmar_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 654,
+            "src": "components/ScifiOmar_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 655,
+            "src": "components/ScifiOmar_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 656,
+            "src": "components/ScifiOmar_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 657,
+            "src": "components/ScifiOmar_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 658,
+            "src": "components/ScifiOmar_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 659,
+            "src": "components/ScifiOmar_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 664,
+            "src": "components/ScifiOmar_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 665,
+            "src": "components/ScifiOmar_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 666,
+            "src": "components/ScifiOmar_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 667,
+            "src": "components/ScifiOmar_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 668,
+            "src": "components/ScifiOmar_Pelvis.png",
             "type": "texture"
         }
     ]

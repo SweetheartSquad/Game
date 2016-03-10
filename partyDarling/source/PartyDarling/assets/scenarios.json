@@ -1,5 +1,4 @@
 [
-
     {
         "order": 1,
         "src": "scenarios/Plot_1.json",
@@ -109,5 +108,15 @@
         "order": 0,
         "src": "scenarios/Robot_Omar_Lab.json",
         "type": 1
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Plot_2.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Butler_5.json",
+        "type": 0
     }
 ]

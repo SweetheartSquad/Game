@@ -522,11 +522,6 @@
         },
         {
             "random": false,
-            "src": "components/definitions/scifiOmar_TORSO.json",
-            "type": "TORSO"
-        },
-        {
-            "random": false,
             "src": "components/definitions/portraitOmar_LEG.json",
             "type": "LEG"
         },
@@ -742,21 +737,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/ScifiOmar_LEG.json",
-            "type": "LEG"
-        },
-        {
-            "random": true,
-            "src": "components/definitions/ScifiOmar_PELVIS.json",
-            "type": "PELVIS"
-        },
-        {
-            "random": false,
-            "src": "components/definitions/ScifiOmar_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Felix_HEAD.json",
             "type": "HEAD"
         },
@@ -769,6 +749,26 @@
             "random": false,
             "src": "components/definitions/Mahmoud_LEG.json",
             "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_PELVIS.json",
+            "type": "PELVIS"
         }
     ]
 }
