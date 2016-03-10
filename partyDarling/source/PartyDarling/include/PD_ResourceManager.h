@@ -3,7 +3,6 @@
 #include <ResourceManager.h>
 
 #include <scenario\Scenario.h>
-#include <DatabaseConnection.h>
 #include <PD_PropDefinition.h>
 #include <PD_FurnitureDefinition.h>
 #include <PD_FurnitureParser.h>
@@ -29,7 +28,6 @@ public:
 	static PD_Scenario * scenario;
 	static PD_Scenario * itemTextures;
 	static PD_Scenario * componentTextures;
-	static DatabaseConnection * db;
 	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;
 	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
@@ -47,7 +45,4 @@ public:
 	
 	PD_ResourceManager();
 	~PD_ResourceManager();
-
-	static int dbCallback(void *NotUsed, int argc, char **argv, char **azColName);
-	static void testSql(std::string _sql, bool _async);
 };

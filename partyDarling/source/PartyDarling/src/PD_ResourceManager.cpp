@@ -14,7 +14,6 @@ EmoteDef::~EmoteDef(){
 PD_Scenario * PD_ResourceManager::scenario = nullptr;
 PD_Scenario * PD_ResourceManager::itemTextures = nullptr;
 PD_Scenario * PD_ResourceManager::componentTextures = nullptr;
-DatabaseConnection * PD_ResourceManager::db = nullptr;
 std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
 std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
@@ -221,9 +220,6 @@ PD_ResourceManager::PD_ResourceManager(){
 		voices.push_back(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
 	}
 
-	db = new DatabaseConnection("data/test.db");
-	
-
 	load();
 }
 
@@ -234,8 +230,6 @@ PD_ResourceManager::~PD_ResourceManager(){
 		delete e.second;
 	}
 	emotes.clear();
-
-	delete db;
 
 	while(furnitureDefinitions.size() > 0){
 		delete furnitureDefinitions.back();
@@ -250,21 +244,4 @@ PD_ResourceManager::~PD_ResourceManager(){
 	}
 
 	destruct();
-}
-
-int PD_ResourceManager::dbCallback(void *NotUsed, int argc, char **argv, char **azColName){
-	int i;
-	for(i=0; i<argc; i++){
-		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-	}
-	printf("\n");
-	return 0;
-}
-
-void PD_ResourceManager::testSql(std::string _sql, bool _async){
-	if(_async){
-		db->queryDbAsync(_sql, dbCallback);
-	}else{
-		db->queryDb(_sql, dbCallback);
-	}
 }
