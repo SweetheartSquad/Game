@@ -81,7 +81,7 @@ void ProgressManager::getNew(){
 		}
 
 		// if we're in the middle, pick an omar scenario
-		if(plotPosition != kBEGINNING && plotPosition != kEND){
+		if(plotPosition != kBEGINNING && plotPosition != kEPILOGUE){
 			scenariosList.append(allOmarDefs.pop(true)["src"].asString());
 		}
 

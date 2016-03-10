@@ -380,19 +380,21 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("endRun", [this](sweet::Event * _event){
-		// make sure the ui isn't still visible during any transition stuff
+	PD_ResourceManager::scenario->eventManager->addEventListener("goToNextLevel", [this](sweet::Event * _event){
 		uiDialogue->setVisible(false);
-		uiBubble->disable();
-
-		// switch back to the menu scene
-		dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
-		game->switchScene("menu", true);
-		
-		// move to the next plot position
-		++PD_Game::progressManager->plotPosition;
-
-		// save progress
-		save();
+		uiBubble->disable();		
+		if(PD_Game::progressManager->plotPosition != kEPILOGUE){
+			++PD_Game::progressManager->plotPosition;
+			// Make sure to save the game 
+			save();
+			std::string mainStr = "main" + std::to_string(++PD_Game::progressManager->plotPosition);
+			game->scenes[mainStr] = new PD_Scene_Main(static_cast<PD_Game *>(game));
+			game->switchScene(mainStr, true);	
+		}else {
+			eraseSave();
+			PD_Game::progressManager->plotPosition = kBEGINNING;
+			dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
+ 			game->switchScene("menu", true);
+		}
 	});
 }

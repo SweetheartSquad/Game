@@ -17,7 +17,8 @@ enum ScenarioOrder {
 	kMIDDLE_ONE    = 2,
 	kMIDDLE_TWO    = 3,
 	kMIDDLE_THREE  = 4,
-	kEND           = 5
+	kEND           = 5,
+	kEPILOGUE	   = 6
 };
 
 class PD_Scenario : public Scenario {

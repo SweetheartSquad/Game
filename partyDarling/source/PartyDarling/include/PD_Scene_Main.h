@@ -118,7 +118,7 @@ public:
 	std::vector<Scenario *> activeScenarios;
 
 
-
+	void eraseSave();
 	void setupEventListeners();
 	void setupConditions();
 
