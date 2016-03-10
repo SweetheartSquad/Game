@@ -884,6 +884,26 @@
             "random": false,
             "src": "components/definitions/Party3_HEAD.json",
             "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Ghostleg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ghost_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ghost_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ghost_HEAD.json",
+            "type": "HEAD"
         }
     ]
 }

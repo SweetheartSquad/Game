@@ -2994,6 +2994,76 @@
             "id": 763,
             "src": "components/Party3_Right_Pupil.png",
             "type": "texture"
+        },
+        {
+            "id": 764,
+            "src": "components/Ghostleg_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 765,
+            "src": "components/Ghostleg_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 766,
+            "src": "components/Ghostleg_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 767,
+            "src": "components/ghost_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 768,
+            "src": "components/ghost_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 769,
+            "src": "components/ghost_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 770,
+            "src": "components/ghost_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 771,
+            "src": "components/ghost_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 772,
+            "src": "components/ghost_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 773,
+            "src": "components/ghost_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 774,
+            "src": "components/ghost_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 775,
+            "src": "components/ghost_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 776,
+            "src": "components/ghost_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 777,
+            "src": "components/ghost_Right_Pupil.png",
+            "type": "texture"
         }
     ]
 }
