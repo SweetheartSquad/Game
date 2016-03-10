@@ -139,7 +139,7 @@ void PD_Scene_LoadingScreen::updateProgress(float _progress){
 	unsigned long int phase = glm::clamp((int)glm::round(loadingPercent*LOADING_PHASES), 1, LOADING_PHASES);
 	loadingPercent = _progress;
 	if(t - lastMessageTime >= TIME_PER_MESSAGE){
-		loadingMessage->setText(loadingMessages.getMessage(phase));
+		loadingMessage->setText(/*loadingMessages.getMessage(phase)*/"loading");
 		lastMessagePhase = phase;
 		lastMessageTime = t;
 	}

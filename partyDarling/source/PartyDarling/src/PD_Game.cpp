@@ -41,8 +41,6 @@ PD_Game::PD_Game() :
 
 	progressManager = new ProgressManager();
 
-	//scenes["game"] = new PD_Scene_Main(this);
-
 	//playBGM();
 }
 

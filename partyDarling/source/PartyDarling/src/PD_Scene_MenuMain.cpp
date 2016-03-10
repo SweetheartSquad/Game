@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PD_Scene_MenuMain.h"
+#include "PD_Scene_IntermissionSlideshow.h"
 #include <StandardFrameBuffer.h>
 #include <RenderSurface.h>
 #include <RenderOptions.h>
@@ -102,9 +103,11 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	continueText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		if(game->scenes.count("game") == 0){
-			game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(game));
+			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game);
+			game->switchScene("intermission", false);
+		}else{
+			game->switchScene("game", false);
 		}
-		game->switchScene("game", false);
 	});
 
 	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);

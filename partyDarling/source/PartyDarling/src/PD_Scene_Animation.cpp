@@ -90,7 +90,6 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	activeCamera = debugCam;
 
 	character = PD_Character::createRandomPD_Character(PD_ResourceManager::scenario, uiLayer->world, characterShader, baseShader);
-	character->pr->randomAnimations = false;
 	uiLayer->childTransform->addChild(character);
 		
 	for(auto solver : character->pr->solvers) {

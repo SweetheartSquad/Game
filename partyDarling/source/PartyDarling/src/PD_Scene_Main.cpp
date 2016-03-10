@@ -1103,7 +1103,6 @@ void PD_Scene_Main::update(Step * _step){
 
 	if(keyboard->keyJustDown(GLFW_KEY_ESCAPE)){
 		game->switchScene("menu", false);
-		game->scenes["game"] = this;
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_R)){

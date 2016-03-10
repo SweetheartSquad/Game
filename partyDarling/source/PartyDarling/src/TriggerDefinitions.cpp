@@ -2,6 +2,7 @@
 
 #include <PD_Scene_Main.h>
 #include <PD_Scene_MenuMain.h>
+#include <PD_Scene_IntermissionSlideshow.h>
 #include <PD_ResourceManager.h>
 #include <Player.h>
 #include <PD_DissStats.h>
@@ -387,10 +388,8 @@ void PD_Scene_Main::setupEventListeners(){
 			++PD_Game::progressManager->plotPosition;
 			// Make sure to save the game 
 			PD_Game::progressManager->save(player, uiDissBattle);
-			game->currentSceneKey = "gameToDelete";
-			game->scenes[game->currentSceneKey] = this;
-			game->scenes["game"] = new PD_Scene_Main(static_cast<PD_Game *>(game));
-			game->switchScene("game", true);	
+			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game);
+			game->switchScene("intermission", true);	
 		}else {
 			PD_Game::progressManager->eraseSave();
 			PD_Game::progressManager->plotPosition = kBEGINNING;

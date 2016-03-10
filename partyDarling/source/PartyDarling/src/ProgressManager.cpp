@@ -106,9 +106,11 @@ void ProgressManager::getNew(){
 
 		Json::Value outValue;
 		outValue["scenarios"] = scenariosList;
-		outValue["seed"] = sweet::NumberUtils::randomInt(0, INT_MAX);
+		outValue["seed"] = sweet::NumberUtils::randomInt();
 		scenarioFile.append(outValue);
 	}
+	// seed the RNG with 0 to make sure there aren't any differences elswhere
+	sweet::NumberUtils::seed(0);
 }
 
 

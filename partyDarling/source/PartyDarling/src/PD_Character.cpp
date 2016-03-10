@@ -230,7 +230,6 @@ CharacterState::CharacterState(Json::Value _json) :
 
 CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * const _definition, Shader * _shader, Shader * _emoticonShder) :
 	paletteTex(new PD_Palette(true)),
-	randomAnimations(false),
 	animate(true),
 	currentAnimation(nullptr),
 	emote(nullptr),
