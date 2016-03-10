@@ -247,19 +247,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// make sure to clear the old ones in case they already exist
 	PD_ResourceManager::scenario->eventManager->listeners.clear();
 	setupEventListeners();
-	
-
-	if(PD_Game::progressManager == nullptr){
-		PD_Game::progressManager = new ProgressManager();
-	}
-
-	// Init progress manager
-	if(PD_Game::progressManager == nullptr){
-		PD_Game::progressManager = new ProgressManager();
-	}
 
 	// Load the save file
-	loadSave();
+	PD_Game::progressManager->loadSave(player, uiDissBattle);
 
 	// build house
 	pickScenarios();
@@ -476,13 +466,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 
 void PD_Scene_Main::pickScenarios(){
-
-	Json::Value currentScenario = PD_Game::progressManager->getCurrentScenarios();
-
-	// seed the RNG with the given seed
-	sweet::NumberUtils::seed(currentScenario["seed"].asInt());
-
-	for(auto scenarioDef : currentScenario["scenarios"]) {
+	for(auto scenarioDef : PD_Game::progressManager->currentScenarios["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
 		activeScenarios.back()->load();
 	}
@@ -1040,7 +1024,7 @@ void PD_Scene_Main::update(Step * _step){
 		uiFade->fadeOut();
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_0)){
-		PD_ResourceManager::scenario->eventManager->triggerEvent("endRun");
+		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
 	}
 
 
@@ -1311,7 +1295,7 @@ void PD_Scene_Main::update(Step * _step){
 #ifdef _DEBUG
 
 	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
-		save();
+		PD_Game::progressManager->save(player, uiDissBattle);
 	}
 
 #endif
@@ -1446,61 +1430,6 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->setHeight(16);
 	crosshairIndicator->invalidateLayout();
 }
-
-void PD_Scene_Main::eraseSave() {
-	std::remove("data/save.json");
-}
-
-void PD_Scene_Main::save() {
-	Json::Value saveOut;
-	int pos = static_cast<int>(PD_Game::progressManager->plotPosition);
-	saveOut["plotPosition"] = pos;
-	saveOut["stats"] = Json::Value();
-	saveOut["stats"]["strength"] = player->dissStats->getStrength();
-	saveOut["stats"]["sass"] = player->dissStats->getSass();
-	saveOut["stats"]["defense"] = player->dissStats->getDefense();
-	saveOut["stats"]["insight"] = player->dissStats->getInsight();
-	for(unsigned long int i = 0; i < uiDissBattle->lifeTokens.size(); ++i) {
-		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-		uiDissBattle->lifeTokens[i]->saveImageData(fileName);
-		saveOut["lifeTokens"].append(fileName);
-	}
-
-	saveOut["progress"] = PD_Game::progressManager->scenarioFile;
-
-	std::ofstream saveFile;
-	saveFile.open ("data/save.json");
-	saveFile << saveOut;
-	saveFile.close();
-}
-
-void PD_Scene_Main::loadSave() {
-	if(sweet::FileUtils::fileExists("data/save.json")){
-		// load the previous save file properties into the appropriate objects
-		std::string saveJson = sweet::FileUtils::readFile("data/save.json");
-		Json::Reader reader;
-		Json::Value root;
-		bool parsingSuccsessful = reader.parse(saveJson, root);
-		assert(parsingSuccsessful);
-		PD_Game::progressManager->plotPosition = static_cast<ScenarioOrder>(root["plotPosition"].asInt());
-
-		player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
-		player->dissStats->incrementSass(root["stats"]["sass"].asInt());
-		player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
-		player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
-		for(auto tex : root["lifeTokens"]) {
-			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
-			texture->load();
-			uiDissBattle->addLife(texture);
-		}
-		PD_Game::progressManager->scenarioFile = root["progress"];
-	}else{
-		// if a save file doesn't exist, create a new one and save it immediately
-		PD_Game::progressManager->getNew();
-		save();
-	}
-}
-
 
 void PD_Scene_Main::updateSelection(){
 	if(player->isEnabled()){
