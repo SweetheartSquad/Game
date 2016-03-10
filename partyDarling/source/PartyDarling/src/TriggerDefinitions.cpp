@@ -381,10 +381,18 @@ void PD_Scene_Main::setupEventListeners(){
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("endRun", [this](sweet::Event * _event){
+		// make sure the ui isn't still visible during any transition stuff
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
+
+		// switch back to the menu scene
 		dynamic_cast<PD_Scene_MainMenu *>(game->scenes.at("menu"))->continueText->disable();
 		game->switchScene("menu", true);
+		
+		// move to the next plot position
 		++PD_Game::progressManager->plotPosition;
+
+		// save progress
+		save();
 	});
 }
