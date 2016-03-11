@@ -801,6 +801,11 @@
       "type":"texture",
       "src":"labRoom_detail.png",
       "generateMipmaps": false
+    },{
+      "id": "LAB-ROOM-FLOATERS",
+      "type":"texture",
+      "src":"labRoom_floaters.png",
+      "generateMipmaps": false
     }
   ]
 }
