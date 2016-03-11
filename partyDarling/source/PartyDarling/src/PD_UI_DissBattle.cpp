@@ -480,7 +480,6 @@ PD_UI_DissBattle::~PD_UI_DissBattle(){
 
 void PD_UI_DissBattle::update(Step * _step){
 	if(isEnabled()){
-		VerticalLinearLayout::update(_step);
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
 				float totInsightEffect = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) * 0.1f;
@@ -704,6 +703,7 @@ void PD_UI_DissBattle::update(Step * _step){
 		}
 
 		canInterject = !interjectBubble->isVisible() && !modeOffensive;
+		VerticalLinearLayout::update(_step);
 	}
 }
 
@@ -759,7 +759,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy){
 
 	interjected = false;
 	interjectBubble->setVisible(false);
-	setUIMode(false);
+	setUIMode(true);
 	enable();
 }
 
@@ -988,7 +988,6 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
-	invalidateLayout();
 
 	sweet::Event * e = new sweet::Event("changeturn");
 	e->setIntData("isPlayerTurn", _isOffensive);
@@ -1018,6 +1017,8 @@ void PD_UI_DissBattle::setEnemyText(){
 	prevHighlightedPunctuation = nullptr;
 	highlightedPunctuation = findFirstPunctuation();
 	highlightNextWord();
+
+	invalidateLayout();
 }
 
 void PD_UI_DissBattle::setPlayerText(){
@@ -1048,6 +1049,8 @@ void PD_UI_DissBattle::setPlayerText(){
 	
 	playerBubbleOptions->setVisible(false);
 	playerTimerSlider->setVisible(false);
+
+	invalidateLayout();
 }
 
 void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){

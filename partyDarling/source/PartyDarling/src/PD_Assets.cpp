@@ -70,7 +70,8 @@ AssetCharacter::AssetCharacter(Json::Value _json, Scenario * const _scenario) :
 	defense(_json.get("defense", 0).asInt()),
 	insight(_json.get("insight", 0).asInt()),
 	sass(_json.get("sass", 0).asInt()),
-	visible(_json.get("visible", true).asBool())
+	visible(_json.get("visible", true).asBool()),
+	voice(_json.get("voice", "RANDOM").asString())
 {
 	Json::Value statesJson = _json["states"];
 	for(Json::ArrayIndex i = 0; i < statesJson.size(); ++i){

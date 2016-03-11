@@ -216,7 +216,7 @@ PD_ResourceManager::PD_ResourceManager(){
 		}
 	}
 
-	for(unsigned long int i = 1; i < 29; ++i) {
+	for(unsigned long int i = 1; i < 37; ++i) {
 		voices.push_back(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
 	}
 

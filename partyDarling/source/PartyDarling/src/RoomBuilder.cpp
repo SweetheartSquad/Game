@@ -1338,7 +1338,7 @@ Texture * RoomBuilder::getFloorTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/floor/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
+	ss << "assets/textures/room/floor/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1351,7 +1351,7 @@ Texture * RoomBuilder::getCeilTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/ceiling/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
+	ss << "assets/textures/room/ceiling/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1364,7 +1364,7 @@ Texture * RoomBuilder::getWallTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/walls/" << std::to_string(sweet::NumberUtils::randomInt(1, 5)) << ".png";
+	ss << "assets/textures/room/walls/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
