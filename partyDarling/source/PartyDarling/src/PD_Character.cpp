@@ -27,10 +27,13 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	definition(_definition),
 	pr(new CharacterRenderer(_world, _definition, _shader, _emoticonShader)),
 	enabled(true),
+	hidden(false),
 	dissedAt(false),
 	wonDissBattle(false),
 	dissStats(new PD_DissStats())
 {
+	pr->owner = this;
+
 	dissStats->incrementDefense(definition->defense);
 	dissStats->incrementInsight(definition->insight);
 	dissStats->incrementSass(definition->sass);
@@ -69,7 +72,9 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	items = definition->items;
 
-	enabled = definition->visible;
+	if(!definition->visible) {
+		hide();
+	}
 
 	if(_definition->voice == "RANDOM"){
 		voice = sweet::NumberUtils::randomItem(PD_ResourceManager::voices);
@@ -95,15 +100,19 @@ void PD_Character::update(Step * _step){
 		flags &= ~btCollisionObject::CF_NO_CONTACT_RESPONSE;
 		body->setCollisionFlags(flags);
 		body->activate();
-		pr->setVisible(true);
 	}else {
 		int flags = body->getCollisionFlags();
 		flags &= ~btCollisionObject::CF_STATIC_OBJECT;
 		flags |= btCollisionObject::CF_NO_CONTACT_RESPONSE;
 		body->setCollisionFlags(flags);
 		body->setActivationState(DISABLE_SIMULATION);
-		pr->setVisible(false);
 	}
+	if(hidden) {
+		pr->setVisible(false);
+	}else {
+		pr->setVisible(true);
+	}
+
 	RoomObject::update(_step);
 }
 
@@ -162,11 +171,25 @@ void PD_Character::disable(){
 	enabled = false;
 }
 
+void PD_Character::hide() {
+	hidden = true;
+	disable();
+}
+
+void PD_Character::show() {
+	hidden = false;
+	enable();
+}
+
+bool PD_Character::isHidden() const {
+	return hidden;
+}
+
 void PD_Character::enable(){
 	enabled = true;
 }
 
-bool PD_Character::isEnabled(){
+bool PD_Character::isEnabled() const {
 	return enabled;
 }
 
@@ -240,7 +263,8 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	emote(nullptr),
 	emoteTimeout(nullptr),
 	talking(false),
-	talk(nullptr)
+	talk(nullptr),
+	owner(nullptr)
 {
 	++paletteTex->referenceCount;
 	paletteTex->generateRandomTable();
@@ -413,17 +437,22 @@ CharacterRenderer::~CharacterRenderer(){
 }
 
 void CharacterRenderer::setAnimation(std::string _name) {
+	std::string selectedAnim = _name;
 	if(_name == "RANDOM"){
 		auto it = PD_ResourceManager::characterAnimations.begin();
 		int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
 		std::advance(it, idx);
 		setAnimation(it->second);
+		selectedAnim = it->first;
 	}else {
 		if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
 			setAnimation(PD_ResourceManager::characterAnimations[_name]);
 		}else {
 			ST_LOG_ERROR("Animation " + _name + " does not exist");
 		}
+	}
+	if(selectedAnim == "DEAD") {
+		owner->disable();
 	}
 }
 

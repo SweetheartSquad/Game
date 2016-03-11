@@ -375,6 +375,28 @@ void PD_Scene_Main::setupEventListeners(){
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
 		
 		if(static_cast<bool>(visible)) {
+			person->show();
+		}else {
+			person->hide();
+		}
+	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("disableCharacter", [](sweet::Event * _event){
+		// hide a character in a room until they need to appear
+		// CHARACTER name
+		// (BOOL)INT visibility
+
+		std::string character = _event->getStringData("name");
+		int visible = _event->getIntData("visibility", -1);
+		std::string scenario = _event->getStringData("scenario");
+
+		if(character == "" || visible == -1) {
+			ST_LOG_ERROR_V("Missing field on trigger hideCharacter");
+		}
+
+		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
+		
+		if(static_cast<bool>(visible)) {
 			person->enable();
 		}else {
 			person->disable();

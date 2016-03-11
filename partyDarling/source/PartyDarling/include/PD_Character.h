@@ -123,6 +123,8 @@ public:
 
 	Timeout * emoteTimeout;
 
+	PD_Character * owner;
+
 	virtual void setAnimation(std::string _name);
 	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
 	virtual void setEmote(std::string _id, float _duration);
@@ -178,8 +180,10 @@ public:
 
 	void disable();
 	void enable();
-	bool isEnabled();
-
+	void hide();
+	void show();
+	bool isEnabled() const;
+	bool isHidden() const;
 	
 	CharacterRenderer * pr;
 
@@ -188,4 +192,5 @@ public:
 
 private:
 	bool enabled;
+	bool hidden;
 };

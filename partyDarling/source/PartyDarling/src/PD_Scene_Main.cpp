@@ -1476,7 +1476,7 @@ void PD_Scene_Main::updateSelection(){
 				PD_Character * person = dynamic_cast<PD_Character*>(me);
 				if(person != nullptr && person->isEnabled()){
 					// hover over person
-					if(person != currentHoverTarget){
+					if(person != currentHoverTarget && person->isEnabled()){
 						// if we aren't already looking at the person,
 						// clear out the bubble UI and add the relevant options
 						uiBubble->clear();
