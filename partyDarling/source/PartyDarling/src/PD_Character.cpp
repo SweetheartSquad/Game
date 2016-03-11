@@ -72,6 +72,10 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	items = definition->items;
 
+	if(!definition->enabled) {
+		disable();
+	}
+
 	if(!definition->visible) {
 		hide();
 	}
