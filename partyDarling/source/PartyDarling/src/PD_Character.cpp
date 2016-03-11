@@ -71,7 +71,12 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	enabled = definition->visible;
 
-	voice = sweet::NumberUtils::randomItem(PD_ResourceManager::voices);
+	if(_definition->voice == "RANDOM"){
+		voice = sweet::NumberUtils::randomItem(PD_ResourceManager::voices);
+	}else {
+		int voiceIdx = atoi(_definition->voice.c_str());
+		voice = PD_ResourceManager::voices[voiceIdx];
+	}
 }
 
 PD_Character::~PD_Character(){

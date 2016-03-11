@@ -759,7 +759,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy){
 
 	interjected = false;
 	interjectBubble->setVisible(false);
-	setUIMode(false);
+	setUIMode(true);
 	enable();
 }
 
