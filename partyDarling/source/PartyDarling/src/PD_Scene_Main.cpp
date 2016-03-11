@@ -1246,10 +1246,10 @@ void PD_Scene_Main::update(Step * _step){
 			glm::vec3 targetPos = camPos + player->playerCamera->forwardVectorRotated * carriedPropDistance;
 			glm::vec3 d = (targetPos - carriedProp->meshTransform->getWorldPos()) * 0.5f;
 			float dl = glm::length(d);
-			if(dl > 0.3f){
-				d = glm::normalize(d) * 0.3f;
+			if(dl > 1.0f){
+				d = glm::normalize(d);
 			}
-			carriedProp->applyLinearImpulseToCenter(d);
+			carriedProp->applyLinearImpulseToCenter(d/carriedProp->body->getInvMass());
 		}
 	}
 	
