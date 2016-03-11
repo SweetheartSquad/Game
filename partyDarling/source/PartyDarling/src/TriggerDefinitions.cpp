@@ -419,4 +419,12 @@ void PD_Scene_Main::setupEventListeners(){
  			game->switchScene("menu", true);
 		}
 	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("goToConversation", [this](sweet::Event * _event){
+		uiDialogue->currentConversation = uiDialogue->currentConversation->scenario->getConversation(_event->getStringData("conversation"))->conversation;
+		uiDialogue->currentConversation->reset();
+		uiBubble->disable();
+		uiDialogue->sayNext();
+		uiBubble->enable();
+	});
 }
