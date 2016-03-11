@@ -450,6 +450,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+	_game->showLoading(1.f);
 }
 
 
