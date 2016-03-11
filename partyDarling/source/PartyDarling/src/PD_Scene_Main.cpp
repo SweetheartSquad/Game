@@ -1482,10 +1482,11 @@ void PD_Scene_Main::updateSelection(){
 						uiBubble->clear();
 						uiBubble->addOption("Talk to " + person->definition->name, [this, person](sweet::Event * _event){
 							std::string c = person->state->conversation;
-							if(c == "NO_CONVO" || c ==""){
+							if(c == "NO_CONVO" || c == ""){
 								// incidental conversation
 								Json::Value dialogue;
-								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator->getLineWon() : incidentalPhraseGenerator->getLineLost()) : incidentalPhraseGenerator->getLineNormal(person)));
+								incidentalPhraseGenerator->updateNames(person);
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator->getLineWon() : incidentalPhraseGenerator->getLineLost()) : incidentalPhraseGenerator->getLineNormal()));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
