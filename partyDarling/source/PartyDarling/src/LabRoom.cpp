@@ -45,6 +45,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	}
 	meshes.at(meshes.size()-1)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-DETAIL")->texture);
 	meshes.at(meshes.size()-2)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-DETAIL")->texture);
+	meshes.at(meshes.size()-3)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-FLOATERS")->texture);
 
 	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
