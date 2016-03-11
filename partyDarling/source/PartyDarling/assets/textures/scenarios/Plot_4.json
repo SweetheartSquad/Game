@@ -1,0 +1,253 @@
+{
+	"name": "Fourth Mansion",
+	"description": "Fourth Mansion",
+	"type": 2,
+	"order": 4,
+	"assets": [
+		{
+			"id": 0,
+			"name": "Player",
+			"states": [],
+			"items": [],
+			"type": "character",
+			"defaultState": -1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": ""
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": ""
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 2,
+			"name": "Goodsee Beauregard",
+			"states": [
+				{
+					"id": 1,
+					"name": "DefaultState",
+					"convo": 7,
+					"animation": "RANDOM"
+				},
+				{
+					"id": 2,
+					"name": "State2",
+					"convo": 8,
+					"animation": "RANDOM"
+				}
+			],
+			"items": [],
+			"type": "character",
+			"defaultState": 1,
+			"strength": 0,
+			"sass": 0,
+			"insight": 0,
+			"defense": 0,
+			"components": [
+				{
+					"tags": {
+						"not": [],
+						"required": [],
+						"preferred": []
+					},
+					"src": "components/definitions/Goodsee_PELVIS.json",
+					"components": [
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Goodsee_TORSO.json",
+							"components": [
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/Goodsee_HEAD.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/goodsee_leftarm_ARM.json"
+								},
+								{
+									"tags": {
+										"not": [],
+										"required": [],
+										"preferred": []
+									},
+									"src": "components/definitions/goodsee_rightarm_ARM.json"
+								}
+							]
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Goodsee_LEG.json"
+						},
+						{
+							"tags": {
+								"not": [],
+								"required": [],
+								"preferred": []
+							},
+							"src": "components/definitions/Goodsee_LEG.json"
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": 7,
+			"name": "Goodsee1",
+			"dialogue": [
+				{
+					"text": [
+						"Hello.",
+						"We seem to be catching up to our suspect.",
+						"Keep an eye out for anything suspicious.",
+						"He may be nearby.",
+						"If we don't find him here, meet me at the next Omar."
+					],
+					"triggers": [
+						{
+							"type": "changeState",
+							"args": {
+								"State": {
+									"value": 2,
+									"type": "CHARACTER_STATE",
+									"dependsOn": "Character"
+								},
+								"Character": {
+									"value": 2,
+									"type": "CHARACTER",
+									"dependsOn": "NONE"
+								}
+							},
+							"id": -1
+						}
+					],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 6
+			}
+		},
+		{
+			"id": 8,
+			"name": "GoodseeState2",
+			"dialogue": [
+				{
+					"text": [
+						"Watch yourself.",
+						"We both need to be in top form to capture our suspect."
+					],
+					"triggers": [],
+					"conditions": [],
+					"speaker": 2,
+					"name": "Dialogue 0"
+				}
+			],
+			"options": [],
+			"type": "conversation",
+			"settings": {
+				"indentation": 0,
+				"order": 7
+			}
+		},
+				{
+			"name": "Main Room",
+			"id": 1,
+			"description": "The first room.",
+			"furnitureTypes": "RANDOM",
+			"characters": [
+				2
+			],
+			"tags": {
+				"not": [],
+				"required": [],
+				"preferred": []
+			},
+			"size": "MEDIUM",
+			"type": "room",
+			"locked": false,
+			"items": [],
+			"triggersOnce": [],
+			"triggersMulti": []
+		}
+	]
+}

@@ -1,13 +1,13 @@
 [
     {
+        "order": 0,
+        "src": "scenarios/4b208fb6-919a-4d59-9390-60556541fee1.json",
+        "type": 0
+    },
+    {
         "order": 1,
         "src": "scenarios/Plot_1.json",
         "type": 2
-    },
-    {
-        "order": 0,
-        "src": "scenarios/Leila_wants_a_cookie.json",
-        "type": 0
     },
     {
         "order": 0,
@@ -123,5 +123,20 @@
         "order": 5,
         "src": "scenarios/Butler_5.json",
         "type": 4
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Leila_wants_a_cookie.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Quizzes_with_Kyllene.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/southside_felixside.json",
+        "type": 0
     }
 ]

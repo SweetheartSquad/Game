@@ -1,0 +1,45 @@
+{
+    "joints": {
+        "id": "OUT",
+        "in": [
+            0.493828,
+            0.695029
+        ],
+        "out": [
+            [
+                0.493443,
+                0.76293,
+                "ANY"
+            ],
+            [
+                0.51599,
+                0.431654,
+                "ANY"
+            ],
+            [
+                0.512427,
+                0.429597,
+                "ANY"
+            ]
+        ],
+<<<<<<< HEAD:components/definitions/GhostOmar_PELVIS.json
+        "texture": 788
+=======
+        "texture": 810
+>>>>>>> ee:components/definitions/portraitOmar_PELVIS.json
+    },
+    "textures": [
+        {
+            "component": "Pelvis",
+<<<<<<< HEAD:components/definitions/GhostOmar_PELVIS.json
+            "id": 788
+=======
+            "id": 471
+        },
+        {
+            "component": "Pelvis",
+            "id": 810
+>>>>>>> ee:components/definitions/portraitOmar_PELVIS.json
+        }
+    ]
+}

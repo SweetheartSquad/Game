@@ -466,7 +466,7 @@
             "type": "ARM"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Gladys_HEAD.json",
             "type": "HEAD"
         },
@@ -512,11 +512,6 @@
         },
         {
             "random": false,
-            "src": "components/definitions/deadOmar_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": false,
             "src": "components/definitions/deadOmar_PELVIS.json",
             "type": "PELVIS"
         },
@@ -534,11 +529,6 @@
             "random": false,
             "src": "components/definitions/portraitOmar_HEAD.json",
             "type": "HEAD"
-        },
-        {
-            "random": false,
-            "src": "components/definitions/portraitOmar_PELVIS.json",
-            "type": "PELVIS"
         },
         {
             "random": false,
@@ -637,11 +627,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Kyllene_TORSO.json",
-            "type": "TORSO"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Kyllene_HEAD.json",
             "type": "HEAD"
         },
@@ -711,7 +696,7 @@
             "type": "TORSO"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Rhubenia_HEAD.json",
             "type": "HEAD"
         },
@@ -774,11 +759,6 @@
             "random": true,
             "src": "components/definitions/Abigail_LEG.json",
             "type": "LEG"
-        },
-        {
-            "random": true,
-            "src": "components/definitions/Abigail_ARM.json",
-            "type": "ARM"
         },
         {
             "random": true,
@@ -877,32 +857,267 @@
         },
         {
             "random": false,
-            "src": "components/definitions/Abigail_arm2_ARM.json",
-            "type": "ARM"
-        },
-        {
-            "random": false,
             "src": "components/definitions/Party3_HEAD.json",
             "type": "HEAD"
         },
         {
             "random": false,
-            "src": "components/definitions/Ghostleg_LEG.json",
+            "src": "components/definitions/GhostOmar_LEG.json",
             "type": "LEG"
         },
         {
             "random": false,
-            "src": "components/definitions/ghost_TORSO.json",
+            "src": "components/definitions/GhostOmar_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/GhostOmar_arm2_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/GhostOmar_TORSO.json",
             "type": "TORSO"
         },
         {
             "random": false,
-            "src": "components/definitions/ghost_PELVIS.json",
+            "src": "components/definitions/GhostOmar_PELVIS.json",
             "type": "PELVIS"
         },
         {
             "random": false,
-            "src": "components/definitions/ghost_HEAD.json",
+            "src": "components/definitions/GhostOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/deadOmar_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/portraitOmar_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_arm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Abigail_gunarm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Toby_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Toby_leftArm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Toby_rightArm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Toby_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Toby_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Toby_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alph_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alph_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alph_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alph_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alph_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/jerry_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Jerry_arm2_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Jerry_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mary_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mary_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mary_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Mary_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Bellaspina_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Bellaspina_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Bellaspina_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Freddy_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Hariot_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Jackyjam_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JackyJam_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Alexis_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kyllene_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Leon_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JonJon_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Terry_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/TheMaster_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Wilson_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_leftLeg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_rightLeg_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Ronda_tattooArm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ronda_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Wilbur_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Somnothan_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Minnefred_HEAD.json",
             "type": "HEAD"
         }
     ]
