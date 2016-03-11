@@ -792,9 +792,14 @@
       "type":"mesh",
       "src":"labRoom_collider.obj"
     },{
-      "id": "LAB-ROOM",
+      "id": "LAB-ROOM-FLATS",
       "type":"texture",
-      "src":"labRoom.png",
+      "src":"labRoom_flats.png",
+      "generateMipmaps": false
+    },{
+      "id": "LAB-ROOM-DETAIL",
+      "type":"texture",
+      "src":"labRoom_detail.png",
       "generateMipmaps": false
     }
   ]
