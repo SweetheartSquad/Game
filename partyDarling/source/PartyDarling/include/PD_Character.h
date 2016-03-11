@@ -15,6 +15,7 @@
 #include <NodeBulletBody.h>
 #include "PD_CharacterAnimationSet.h"
 #include <Timeout.h>
+#include <NumberUtils.h>
 #include "Room.h"
 #include <OpenALSound.h>
 
@@ -146,6 +147,9 @@ class PD_Character : public RoomObject {
 private:
 	static unsigned long int numRandomCharacters;
 public:
+	sweet::ShuffleVector<std::string> incidentalLineWon;
+	sweet::ShuffleVector<std::string> incidentalLineLost;
+	sweet::ShuffleVector<std::string> incidentalLineNormal;
 
 	PD_DissStats * dissStats;
 	

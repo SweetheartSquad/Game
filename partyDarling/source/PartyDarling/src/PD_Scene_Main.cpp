@@ -14,8 +14,6 @@
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
 
-#include <PD_PhraseGenerator_Incidental.h>
-
 #include <NumberUtils.h>
 #include <StringUtils.h>
 #include <TextureUtils.h>
@@ -90,8 +88,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	PD_Game::progressManager->loadSave(player, uiDissBattle);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
-
-	incidentalPhraseGenerator = new PD_PhraseGenerator_Incidental();
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -938,7 +934,6 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete emoteShader;
 
 	delete toonRamp;
-	delete incidentalPhraseGenerator;
 }
 
 
@@ -1485,8 +1480,7 @@ void PD_Scene_Main::updateSelection(){
 							if(c == "NO_CONVO" || c == ""){
 								// incidental conversation
 								Json::Value dialogue;
-								incidentalPhraseGenerator->updateNames(person);
-								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? incidentalPhraseGenerator->getLineWon() : incidentalPhraseGenerator->getLineLost()) : incidentalPhraseGenerator->getLineNormal()));
+								dialogue["text"].append((person->dissedAt ? (person->wonDissBattle ? person->incidentalLineWon.pop() : person->incidentalLineLost.pop()) : person->incidentalLineNormal.pop()));
 								dialogue["speaker"] = person->definition->id;
 								Json::Value root;
 								root["dialogue"] = Json::Value();
