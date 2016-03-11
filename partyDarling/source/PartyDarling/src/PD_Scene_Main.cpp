@@ -46,8 +46,6 @@
 #include <PD_UI_Text.h>
 
 #define MAX_SIDE_SCENARIOS 5
-#define LEVEL_UP_DURATION 2
-#define XP_GAIN_PAUSE 1
 
 PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Scene(_game),
@@ -77,7 +75,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	currentHousePosition(0),
 	carriedProp(nullptr),
 	carriedPropDistance(0),
-	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f))
+	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f)),
+	dissEnemy(nullptr)
 {
 	_game->showLoading(0);
 
@@ -196,8 +195,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
-		dissBattleStartLayout->setVisible(true);
-		dissBattleXPGainTimeout->restart();
+		uiDissStats->playOutro(uiDissBattle->wonXP);
 		player->wonLastDissBattle = _event->getIntData("win");
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
@@ -263,186 +261,31 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->playerCamera->yaw += 180;
 		navigate(glm::ivec2(0,-1));
 	}
-	
 
+	uiDissStats = new PD_UI_DissStats(uiLayer->world, player, uiLayer->shader);
+	uiDissStats->setRationalWidth(1.f, uiLayer);
+	uiDissStats->setRationalHeight(1.f, uiLayer);
+	uiDissStats->setVisible(false);
+	uiLayer->addChild(uiDissStats);
 
-	dissBattleStartLayout = new NodeUI(uiLayer->world);
-	uiLayer->addChild(dissBattleStartLayout);
-	dissBattleStartLayout->setRationalHeight(1.f, uiLayer);
-	dissBattleStartLayout->setRationalWidth(1.f, uiLayer);
-	dissBattleStartLayout->background->setVisible(false);
-	dissBattleStartLayout->setVisible(false);
-
-	HorizontalLinearLayout * dissBattleCards = new HorizontalLinearLayout(uiLayer->world);
-	dissBattleStartLayout->addChild(dissBattleCards);
-	dissBattleCards->setRationalHeight(1.f, dissBattleStartLayout);
-	dissBattleCards->setRationalWidth(1.f, dissBattleStartLayout);
-	dissBattleCards->setMarginLeft(0.3f);
-	dissBattleCards->horizontalAlignment = kCENTER;
-	dissBattleCards->verticalAlignment = kMIDDLE;
-	
-	playerCard = new PD_UI_DissCard(uiLayer->world, player);
-	dissBattleCards->addChild(playerCard);
-	playerCard->setRationalHeight(0.3f, dissBattleCards);
-	playerCard->setSquareWidth(1.4f);
-
-	vs = new NodeUI(uiLayer->world);
-	dissBattleCards->addChild(vs);
-	vs->setRationalWidth(0.3f, dissBattleCards);
-	vs->setSquareHeight(1.f);
-	vs->background->mesh->setScaleMode(GL_NEAREST);
-	vs->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-VS")->texture);
-
-	enemyCard = new PD_UI_DissCard(uiLayer->world);
-	dissBattleCards->addChild(enemyCard);
-	enemyCard->setRationalHeight(0.3f, dissBattleCards);
-	enemyCard->setSquareWidth(1.4f);
-
-	levelUpContainer = new HorizontalLinearLayout(uiLayer->world);
-	dissBattleStartLayout->addChild(levelUpContainer);
-	levelUpContainer->setRationalWidth(1.f, dissBattleStartLayout);
-	levelUpContainer->setRationalHeight(1.f, dissBattleStartLayout);
-	levelUpContainer->horizontalAlignment = kCENTER;
-	levelUpContainer->verticalAlignment = kMIDDLE;
-	levelUpContainer->setVisible(false);
-
-	levelUp = new NodeUI(uiLayer->world);
-	levelUpContainer->addChild(levelUp);
-	levelUp->setRationalHeight(1.f, levelUpContainer);
-	levelUp->setSquareWidth(1.f);
-	levelUp->background->mesh->setScaleMode(GL_NEAREST);
-	levelUp->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-LEVEL-UP")->texture);
-
-	dissBattleStartTimeout = new Timeout(3, [this](sweet::Event * _event){
-		dissBattleStartLayout->setVisible(false);
+	uiDissStats->eventManager->addEventListener("introComplete", [this](sweet::Event * _event){
 		uiDissBattle->startNewFight(dissEnemy);
 	});
-	dissBattleStartTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		float p = _event->getFloatData("progress");
-		if(p < 0.25){
-			playerCard->firstParent()->scale(Easing::easeOutBounce(p, 0, 1, 0.33), false);
-			vs->firstParent()->scale(0, false);
-			enemyCard->firstParent()->scale(0, false);
-			if(!playerCard->isVisible()){
-				playerCard->setVisible(true);
-				vs->setVisible(false);
-				enemyCard->setVisible(false);
-				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
-			}
-		}else if(p < 0.5){
-			playerCard->firstParent()->scale(1, false);
-			vs->firstParent()->scale(0, false);
-			enemyCard->firstParent()->scale(Easing::easeOutBounce(p-0.25, 0, 1, 0.33), false);
-			if(!enemyCard->isVisible()){
-				playerCard->setVisible(true);
-				vs->setVisible(false);
-				enemyCard->setVisible(true);
-				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
-			}
-		}else if(p < 0.75){
-			playerCard->firstParent()->scale(1, false);
-			vs->firstParent()->scale(Easing::easeOutBounce(p-0.5, 0, 1, 0.33), false);
-			enemyCard->firstParent()->scale(1, false);
-			if(!vs->isVisible()){
-				playerCard->setVisible(true);
-				vs->setVisible(true);
-				enemyCard->setVisible(true);
-				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
-			}
-		}else{
-			playerCard->firstParent()->scale(1, false);
-			vs->firstParent()->scale(1, false);
-			enemyCard->firstParent()->scale(1, false);
-			playerCard->setVisible(true);
-			vs->setVisible(true);
-			enemyCard->setVisible(true);
-		}
-	});
-	childTransform->addChild(dissBattleStartTimeout, false);
-
-	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		if(player->experience >= 100){
-
-			PD_ResourceManager::scenario->getAudio("LEVEL_UP")->sound->play();	
-
-			// LEVEL UP
-			player->dissStats->incrementDefense();
-			player->dissStats->incrementInsight();
-			player->dissStats->incrementSass();
-			player->dissStats->incrementStrength();
-			playerCard->updateStats();
-			++player->level;
-			playerCard->setLevel(player->level);
-
-			levelUpContainer->setVisible(true);
-			levelUp->setRationalHeight(0.f, levelUpContainer);
-			levelUp->setSquareWidth(1.f);
-			uiLayer->invalidateLayout();
-			
-			dissBattleLevelUpTimeout->restart();
-		}else{
-			// NORMAL
-			dissBattleXPPause->restart();
-		}
-		
-	});
-
-	dissBattleXPGainTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		float p = _event->getFloatData("progress");
-		
-		player->experience = uiDissBattle->prevXP + p * uiDissBattle->wonXP;
-	});
-	childTransform->addChild(dissBattleXPGainTimeout, false);
-
-	dissBattleXPPause = new Timeout(1.f, [this](sweet::Event * _event){
-		// end I hate this
-		dissBattleStartLayout->setVisible(false);
+	
+	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
 	});
-	childTransform->addChild(dissBattleXPPause, false);
 
-	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
-		// end and this
-		levelUpContainer->setVisible(false);
-		player->experience = 0.f; // just in case
-		dissBattleStartLayout->setVisible(false);
+	uiDissStats->eventManager->addEventListener("changeDissStatComplete", [this](sweet::Event * _event){
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
-	});
-	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
-		float p = _event->getFloatData("progress");
-		if(p <= 0.5f){
-			player->experience = 100 * (1-p/0.5f);
-		}else{
-			int wowow = 0;
-		}
-
-		float size;
-		if(p <= 0.5f){
-			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);
-			levelUp->setRationalHeight(size, levelUpContainer);
-		}else if(p >= 0.8f){
-			size = Easing::easeInCubic((p - 0.8f) * LEVEL_UP_DURATION, 1, -1, LEVEL_UP_DURATION * 0.2f);
-			levelUp->setRationalHeight(size, levelUpContainer);
-		}
-
-		uiLayer->invalidateLayout();
-	});
-	childTransform->addChild(dissBattleLevelUpTimeout, false);
-
-	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		PD_ResourceManager::scenario->getAudio("XP_UP")->sound->play();
-	});
-
-	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		// LEVEL UP SOUND
 	});
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
@@ -793,17 +636,7 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy) {
 	dissEnemy = _enemy;
 	uiBubble->clear();
 	player->disable();
-	dissBattleStartLayout->setVisible(true);
-	dissBattleStartTimeout->restart();
-	enemyCard->setEnemy(_enemy);
-
-	playerCard->setVisible(false);
-	vs->setVisible(false);
-	enemyCard->setVisible(false);
-	
-	playerCard->childTransform->translate(glm::vec3(-playerCard->getWidth(true,false)*0.5f, -playerCard->getHeight(true,false)*0.5f, 0), false);
-	vs->childTransform->translate(glm::vec3(-vs->getWidth(true,false)*0.5f, -vs->getHeight(true,false)*0.5f, 0), false);
-	enemyCard->childTransform->translate(glm::vec3(-enemyCard->getWidth(true,false)*0.5f, -enemyCard->getHeight(true,false)*0.5f, 0), false);
+	uiDissStats->playIntro(dissEnemy);
 }
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
@@ -1019,7 +852,7 @@ void PD_Scene_Main::update(Step * _step){
 		if(uiDialogue->currentSpeaker != nullptr){
 			facing = uiDialogue->currentSpeaker;
 		}
-	}else if(uiDissBattle->isVisible() || dissBattleStartLayout->isVisible()){
+	}else if(uiDissBattle->isVisible() || (uiDissStats->dissEnemy && uiDissStats->isVisible())){
 		facing = dissEnemy;
 	}
 

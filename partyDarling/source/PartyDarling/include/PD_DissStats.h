@@ -15,6 +15,11 @@ public:
 	PD_DissStats();
 	~PD_DissStats();
 
+	int lastDefense;
+	int lastInsight;
+	int lastStrength;
+	int lastSass;
+
 	void incrementDefense(int _n = 1);
 	void incrementInsight(int _n = 1);
 	void incrementStrength(int _n = 1);

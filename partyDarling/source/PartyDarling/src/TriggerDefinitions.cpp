@@ -231,6 +231,8 @@ void PD_Scene_Main::setupEventListeners(){
 		}else {
 			ST_LOG_ERROR_V("Invalid argument provided for argument 'stat' in trigger changeDISSStat");
 		}
+
+		uiDissStats->playChangeDissStat();
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){

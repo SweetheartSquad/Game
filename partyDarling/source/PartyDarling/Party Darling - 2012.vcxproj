@@ -59,6 +59,7 @@
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_DissCard.cpp" />
     <ClCompile Include="src\PD_DissStats.cpp" />
+    <ClCompile Include="src\PD_UI_DissStats.cpp" />
     <ClCompile Include="src\PD_UI_Fade.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
     <ClCompile Include="src\PD_UI_Map.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_DissCard.h" />
     <ClInclude Include="include\PD_DissStats.h" />
+    <ClInclude Include="include\PD_UI_DissStats.h" />
     <ClInclude Include="include\PD_UI_Fade.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
     <ClInclude Include="include\PD_UI_Map.h" />

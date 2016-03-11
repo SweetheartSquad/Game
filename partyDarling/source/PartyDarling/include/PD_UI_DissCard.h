@@ -23,11 +23,15 @@ public:
 	SliderControlled * slider;
 	TextLabel * level;
 
+	int increments[4]; // for animating last star(s)
+
 	PD_UI_DissCard(BulletWorld * _world, Player * _player);
 	PD_UI_DissCard(BulletWorld * _world);
 	~PD_UI_DissCard();
 
-	void updateStats();
+	void updateStats(bool _hideLostStats = true);
 	void setLevel(int _level);
 	void setEnemy(PD_Character * _enemy);
+	void animateNewStats(float _p);
+	void animateStar(int _idx, int _n, float _p);
 };

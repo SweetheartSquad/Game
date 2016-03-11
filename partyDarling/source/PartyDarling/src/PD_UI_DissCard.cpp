@@ -112,17 +112,26 @@ void PD_UI_DissCard::init(){
 	invalidateLayout();
 }
 
-void PD_UI_DissCard::updateStats(){
+void PD_UI_DissCard::updateStats(bool _hideLostStats){
 	if(dissStats != nullptr){
 		// show earned stars and hide unearned stars
 		for(unsigned long int x = 0; x < 5; ++x){
-			stars[0][x]->setVisible(x < dissStats->getDefense());
+			stars[0][x]->setVisible(x < dissStats->getDefense() || (!_hideLostStats && stars[0][x]->isVisible()));
 		}for(unsigned long int x = 0; x < 5; ++x){
-			stars[1][x]->setVisible(x < dissStats->getInsight());
+			stars[1][x]->setVisible(x < dissStats->getInsight() || (!_hideLostStats && stars[1][x]->isVisible()));
 		}for(unsigned long int x = 0; x < 5; ++x){
-			stars[2][x]->setVisible(x < dissStats->getStrength());
+			stars[2][x]->setVisible(x < dissStats->getStrength() || (!_hideLostStats && stars[2][x]->isVisible()));
 		}for(unsigned long int x = 0; x < 5; ++x){
-			stars[3][x]->setVisible(x < dissStats->getSass());
+			stars[3][x]->setVisible(x < dissStats->getSass() || (!_hideLostStats && stars[3][x]->isVisible()));
+		}
+
+		if(!_hideLostStats){
+			increments[0] = dissStats->getDefense() - dissStats->lastDefense;
+			increments[1] = dissStats->getInsight() - dissStats->lastInsight;
+			increments[2] = dissStats->getStrength() - dissStats->lastStrength;
+			increments[3] = dissStats->getSass() - dissStats->lastSass;
+		}else{
+			increments[0] = increments[1] = increments[2] = increments[3] = 0;
 		}
 	}else{
 		for(unsigned long int x = 0; x < 5; ++x){
@@ -151,4 +160,27 @@ void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
 	updateStats();
 
 	label->setText(_enemy->definition->name);
+}
+
+void PD_UI_DissCard::animateNewStats(float _p){
+	if(increments[0] != 0){
+		animateStar(0, increments[0], _p);
+	}
+	if(increments[1] != 0){
+		animateStar(1, increments[1], _p);
+	}
+	if(increments[2] != 0){
+		animateStar(2, increments[2], _p);
+	}
+	if(increments[3] != 0){
+		animateStar(3, increments[3], _p);
+	}
+}
+
+void PD_UI_DissCard::animateStar(int _idx, int _n, float _p){
+	bool increase = _n > 0;
+
+	for(int i = abs(_n); i >= 0; --i){
+		stars[_idx][i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][i]->nodeUIParent);
+	}
 }
