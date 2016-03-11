@@ -52,6 +52,7 @@ public:
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
+
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
@@ -118,7 +119,7 @@ public:
 
 	void setupEventListeners();
 	void setupConditions();
-
+	void addLifeToken();
 
 	void updateSelection();
 	// randomly pick one main plot scenario and a few side plot scenarios

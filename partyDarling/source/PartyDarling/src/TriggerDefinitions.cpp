@@ -233,6 +233,13 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 	});
 
+
+		PD_ResourceManager::scenario->eventManager->addEventListener("addFriendToken", [this](sweet::Event * _event){
+		// Trigger
+		// Adds a friend token to the player
+		addLifeToken();
+	});
+
 	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.

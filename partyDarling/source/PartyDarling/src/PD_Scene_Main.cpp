@@ -961,6 +961,12 @@ void PD_Scene_Main::addRoom(Room * _room){
 }
 
 
+void PD_Scene_Main::addLifeToken() {
+	Texture * tex = getToken();
+	tex->load();
+	tex->saveImageData("tokenTest.tga");
+	uiDissBattle->addLife(tex);
+}
 
 void PD_Scene_Main::update(Step * _step){
 	// panning
@@ -989,10 +995,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		Texture * tex = getToken();
-		tex->load();
-		tex->saveImageData("tokenTest.tga");
-		uiDissBattle->addLife(tex);
+		addLifeToken();
 	}
 	
 	if(keyboard->keyJustDown(GLFW_KEY_3)){
