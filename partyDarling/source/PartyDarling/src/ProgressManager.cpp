@@ -154,6 +154,8 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveOut["stats"]["sass"] = _player->dissStats->getSass();
 	saveOut["stats"]["defense"] = _player->dissStats->getDefense();
 	saveOut["stats"]["insight"] = _player->dissStats->getInsight();
+	saveOut["stats"]["experience"] = _player->experience;
+	saveOut["stats"]["level"] = _player->level;
 	for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
 		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
 		_uiDissBattle->lifeTokens[i]->saveImageData(fileName);
@@ -187,6 +189,8 @@ void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const 
 	_player->dissStats->incrementSass(root["stats"]["sass"].asInt());
 	_player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
 	_player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
+	_player->experience = root["stats"]["experience"].asInt();
+	_player->level = root["stats"]["level"].asInt();
 	for(auto tex : root["lifeTokens"]) {
 		Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 		texture->load();
