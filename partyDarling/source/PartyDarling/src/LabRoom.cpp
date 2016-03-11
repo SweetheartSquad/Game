@@ -88,7 +88,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 
 void LabRoom::update(Step * _step){
 	for(unsigned long int i = 0; i < toRotate.size(); ++i){
-		toRotate.at(i)->rotate(_step->deltaTime * i * (i % 2 == 0 ? -3.f : 3.f), 0,1,0, kOBJECT);
+		toRotate.at(i)->rotate(_step->deltaTime * i * (i % 2 == 0 ? -5.f : 5.f), 0,1,0, kOBJECT);
 	}
 
 	float lRadius = 4;
