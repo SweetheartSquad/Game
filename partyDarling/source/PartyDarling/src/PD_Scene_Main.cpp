@@ -1542,9 +1542,11 @@ void PD_Scene_Main::updateSelection(){
 				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					uiInventory->getSelected()->triggerInteract();
 					auto item = uiInventory->removeSelected();
-					auto items = PD_Listing::listings[item->definition->scenario]->items;
-					items.erase(items.find(item->definition->id));
-					delete item;
+					if(item->definition->consumable){
+						auto items = PD_Listing::listings[item->definition->scenario]->items;
+						items.erase(items.find(item->definition->id));
+						delete item;
+					}
 					resetCrosshair();
 
 				});

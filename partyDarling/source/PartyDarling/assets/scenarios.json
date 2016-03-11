@@ -1,5 +1,9 @@
 [
-
+    {
+        "order": 0,
+        "src": "scenarios/4b208fb6-919a-4d59-9390-60556541fee1.json",
+        "type": 0
+    },
     {
         "order": 1,
         "src": "scenarios/Plot_1.json",
@@ -133,6 +137,11 @@
     {
         "order": 0,
         "src": "scenarios/southside_felixside.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Rhonda_gets_lit.json",
         "type": 0
     }
 ]
