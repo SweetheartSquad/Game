@@ -36,6 +36,8 @@
 #include <PD_Prop.h>
 #include <PD_Door.h>
 
+#include <PD_PhraseGenerator_Incidental.h>
+
 //#define RG_DEBUG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
@@ -414,6 +416,18 @@ Room * RoomBuilder::getRoom(){
 	availableParents.clear();
 	placedObjects.clear();
 	edges.clear();
+
+
+	// generate incidental dialogue for each character
+	PD_PhraseGenerator_Incidental phraseGenerator;
+	for(auto c : room->characters){
+		phraseGenerator.updateNames(c);
+		for(unsigned long int i = 0; i < 3; ++i){
+			c->incidentalLineLost.push(phraseGenerator.getLineLost());
+			c->incidentalLineNormal.push(phraseGenerator.getLineNormal());
+			c->incidentalLineWon.push(phraseGenerator.getLineWon());
+		}
+	}
 
 	return room;
 }

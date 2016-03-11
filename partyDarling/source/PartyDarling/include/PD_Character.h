@@ -15,6 +15,7 @@
 #include <NodeBulletBody.h>
 #include "PD_CharacterAnimationSet.h"
 #include <Timeout.h>
+#include <NumberUtils.h>
 #include "Room.h"
 #include <OpenALSound.h>
 
@@ -123,6 +124,8 @@ public:
 
 	Timeout * emoteTimeout;
 
+	PD_Character * owner;
+
 	virtual void setAnimation(std::string _name);
 	virtual void setAnimation(std::vector<PD_CharacterAnimationStep> _steps);
 	virtual void setEmote(std::string _id, float _duration);
@@ -146,6 +149,9 @@ class PD_Character : public RoomObject {
 private:
 	static unsigned long int numRandomCharacters;
 public:
+	sweet::ShuffleVector<std::string> incidentalLineWon;
+	sweet::ShuffleVector<std::string> incidentalLineLost;
+	sweet::ShuffleVector<std::string> incidentalLineNormal;
 
 	PD_DissStats * dissStats;
 	
@@ -178,8 +184,10 @@ public:
 
 	void disable();
 	void enable();
-	bool isEnabled();
-
+	void hide();
+	void show();
+	bool isEnabled() const;
+	bool isHidden() const;
 	
 	CharacterRenderer * pr;
 
@@ -188,4 +196,5 @@ public:
 
 private:
 	bool enabled;
+	bool hidden;
 };
