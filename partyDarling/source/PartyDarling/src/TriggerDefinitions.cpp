@@ -188,7 +188,7 @@ void PD_Scene_Main::setupEventListeners(){
 			_event->getFloatData("g"),
 			_event->getFloatData("b")
 		),
-		_event->getFloatData("length") / 1000.f);
+		_event->getIntData("length") / 1000.f);
 	});
 	PD_ResourceManager::scenario->eventManager->addEventListener("fadeOut", [this](sweet::Event * _event){
 		uiFade->fadeOut(glm::uvec3(
@@ -196,7 +196,7 @@ void PD_Scene_Main::setupEventListeners(){
 			_event->getFloatData("g"),
 			_event->getFloatData("b")
 		),
-		_event->getFloatData("length") / 1000.f);
+		_event->getIntData("length") / 1000.f);
 	});
 
 	
