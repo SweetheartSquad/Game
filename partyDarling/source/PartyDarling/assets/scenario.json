@@ -196,6 +196,54 @@
       "src":"voices/voice-28.ogg",
       "category":"sfx"
     },
+    {
+      "id":"voice29",
+      "type":"audio",
+      "src":"voices/voice-29.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice30",
+      "type":"audio",
+      "src":"voices/voice-30.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice31",
+      "type":"audio",
+      "src":"voices/voice-31.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice32",
+      "type":"audio",
+      "src":"voices/voice-32.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice33",
+      "type":"audio",
+      "src":"voices/voice-33.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice34",
+      "type":"audio",
+      "src":"voices/voice-34.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice35",
+      "type":"audio",
+      "src":"voices/voice-35.ogg",
+      "category":"sfx"
+    },
+    {
+      "id":"voice36",
+      "type":"audio",
+      "src":"voices/voice-36.ogg",
+      "category":"sfx"
+    },
 
 
     // fonts
