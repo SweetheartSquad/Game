@@ -33,5 +33,5 @@ public:
 	void setLevel(int _level);
 	void setEnemy(PD_Character * _enemy);
 	void animateNewStats(float _p);
-	void animateStar(int _idx, int _dissStat, int _n, float _p);
+	void animateStar(int _idx, int _dissStat, int _delta, float _p);
 };
