@@ -1,48 +1,48 @@
 {
    "components": [
                 {
-                    "componentTypes": ["tv_table"], 
+                    "componentTypes": ["bathtub_main"], 
                     "multiplier": 1, 
                     "outComponents": [
                         {
-                            "componentTypes": ["tv_main"], 
+                            "componentTypes": ["bathtub_faucet"], 
                             "multiplier": 1, 
                             "outComponents": [
-                                {
-                                    "componentTypes": ["tv_antenna"], 
-                                    "multiplier": 1,
-                                    "required": false
-                                }
+                                
                             ], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         }, 
                         {
-                            "componentTypes": ["couch_leg"], 
-                            "multiplier": 4, 
+                            "componentTypes": ["bathtub_faucet_handles"], 
+                            "multiplier": 1, 
                             "outComponents": [], 
                             "required": true,
 							"scale": [1.0,1.0,1.0]
                         }
                     ], 
                     "required": true,
-					"scale": [1.0,1.0,0.5]
+					"scale": [1.0,1.0,1.0]
                 }
             ], 
-            "type": "TV",
-			"mass": 100,
-            "roomTypes" : ["LIVING_ROOM","LABORATORY"],
+            "type": "bathtub",
+			"mass": 0,
+            "roomTypes" : ["BATHROOM"],
             "sides" : {
-				 "FRONT":"FRONT"
-             },
-			"parentDependent": true, 
+                },
+			"parentDependent": true,
             "parents":{
                 "wall":[
                     "FRONT"
                 ]
             },
-            "paddingFront": 1,
-			"paddingLeft": 0.6,
-			"paddingRight": 0.6,
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
 			"max": 1
+
         }

@@ -1,0 +1,55 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "bathtub_faucet"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        8.159605026245117, 
+                        -13.135085105895996
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "bathtub_faucet_handles"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        8.159605026245117, 
+                        -13.135085105895996
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 162, 
+    "src": "bathtub_main_1.obj", 
+    "type": "bathtub_main"
+}

@@ -675,6 +675,50 @@
         {
             "id": 161, 
             "src": "furnitureJson/bathroom_sink_basin_1.json"
+        }, 
+        {
+            "id": 162, 
+            "src": "furnitureJson/bathtub_main_1.json"
+        }, 
+        {
+            "id": 163, 
+            "src": "furnitureJson/bathtub_main_2.json"
+        }, 
+        {
+            "id": 164, 
+            "src": "furnitureJson/bathtub_faucet_1.json"
+        }, 
+        {
+            "id": 165, 
+            "src": "furnitureJson/bathtub_faucet_handles_1.json"
+        }, 
+        {
+            "id": 166, 
+            "src": "furnitureJson/bathtub_faucet_handles_2.json"
+        }, 
+        {
+            "id": 167, 
+            "src": "furnitureJson/bathtub_faucet_3.json"
+        }, 
+        {
+            "id": 168, 
+            "src": "furnitureJson/bathtub_faucet_4.json"
+        }, 
+        {
+            "id": 169, 
+            "src": "furnitureJson/bathtub_faucet_5.json"
+        }, 
+        {
+            "id": 170, 
+            "src": "furnitureJson/bathtub_faucet_6.json"
+        }, 
+        {
+            "id": 171, 
+            "src": "furnitureJson/bathtub_faucet_handles_3.json"
+        }, 
+        {
+            "id": 172, 
+            "src": "furnitureJson/bathtub_faucet_handles_4.json"
         }
     ], 
     "furniture": [
@@ -731,6 +775,9 @@
         }, 
         {
             "src": "furnitureTypes/bathroom_sink.json"
+        }, 
+        {
+            "src": "furnitureTypes/bathtub.json"
         }
     ]
 }

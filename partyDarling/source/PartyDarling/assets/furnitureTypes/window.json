@@ -9,7 +9,7 @@
     ], 
     "type": "window",
 	"mass": 0,
-    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM"],
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","OFFICE"],
     "detailedCollider": false,
 	"parentDependent": true,
     "parents":{"wall":["FRONT"]},

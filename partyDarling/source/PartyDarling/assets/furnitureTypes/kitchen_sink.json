@@ -143,5 +143,5 @@
     "twist":false,
     "flare":false,
     "numTextures":2,
-    "parentMax":1
+    "max":1
 }

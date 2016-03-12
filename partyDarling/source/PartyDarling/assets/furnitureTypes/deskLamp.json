@@ -25,7 +25,7 @@
             ], 
             "type": "lamp",
 			"mass": 10,
-            "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["LIVING_ROOM", "BEDROOM","OFFICE"],
             "sides" : {
                 },
 			"parentDependent": true,

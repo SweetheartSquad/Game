@@ -17,6 +17,13 @@ PD_DissStats::PD_DissStats() :
 PD_DissStats::~PD_DissStats(){
 }
 
+void PD_DissStats::setLastStats(){
+	lastDefense = defense;
+	lastInsight = insight;
+	lastStrength = strength;
+	lastSass = sass;
+}
+
 void PD_DissStats::incrementDefense(int _n){
 	lastDefense = defense;
 	int res = defense + _n;

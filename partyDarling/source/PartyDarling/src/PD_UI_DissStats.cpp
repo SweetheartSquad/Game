@@ -116,6 +116,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			PD_ResourceManager::scenario->getAudio("LEVEL_UP")->sound->play();	
 
 			// LEVEL UP
+			player->dissStats->setLastStats(); // so we get accurate increments
+
 			player->dissStats->incrementDefense();
 			player->dissStats->incrementInsight();
 			player->dissStats->incrementSass();

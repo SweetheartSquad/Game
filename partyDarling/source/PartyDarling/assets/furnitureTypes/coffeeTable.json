@@ -32,5 +32,6 @@
 	"paddingBack": 0.2,
 	"paddingLeft": 0.2,
 	"paddingRight": 0.2,
+	"max": 2,
 	"overflow": true
 }
