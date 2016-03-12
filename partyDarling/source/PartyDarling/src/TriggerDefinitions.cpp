@@ -184,17 +184,17 @@ void PD_Scene_Main::setupEventListeners(){
 	// fades
 	PD_ResourceManager::scenario->eventManager->addEventListener("fadeIn", [this](sweet::Event * _event){
 		uiFade->fadeIn(glm::uvec3(
-			_event->getFloatData("r"),
-			_event->getFloatData("g"),
-			_event->getFloatData("b")
+			_event->getIntData("r"),
+			_event->getIntData("g"),
+			_event->getIntData("b")
 		),
 		_event->getIntData("length") / 1000.f);
 	});
 	PD_ResourceManager::scenario->eventManager->addEventListener("fadeOut", [this](sweet::Event * _event){
 		uiFade->fadeOut(glm::uvec3(
-			_event->getFloatData("r"),
-			_event->getFloatData("g"),
-			_event->getFloatData("b")
+			_event->getIntData("r"),
+			_event->getIntData("g"),
+			_event->getIntData("b")
 		),
 		_event->getIntData("length") / 1000.f);
 	});

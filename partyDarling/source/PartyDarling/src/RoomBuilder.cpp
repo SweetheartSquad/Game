@@ -136,7 +136,7 @@ Room * RoomBuilder::getRoom(){
 	float fullL, fullW;
 
 	switch (definition->size){
-		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/2); break;
+		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/3); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/3); break;
 		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
 		case AssetRoom::Size_t::kLARGE: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/2, ROOM_SIZE_MAX); break;
 		break;
@@ -144,20 +144,6 @@ Room * RoomBuilder::getRoom(){
 
 	// get mandatory objects
 	std::vector<RoomObject *> objects = getSpecifiedObjects();
-	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
-		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
-			return i->parentTypes.size() < j->parentTypes.size();
-		}
-
-		bool isParent = false;
-		for(auto &parent: j->parentTypes){
-			if(parent.parent == i->type){
-				isParent = true;
-				break;
-			}
-		}
-		return (isParent);
-	});
 
 	int numAttempts = 0;
 
@@ -287,20 +273,6 @@ Room * RoomBuilder::getRoom(){
 	// Random room stuff
 	objects.clear();
 	objects = getRandomObjects();
-	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
-		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
-			return i->parentTypes.size() < j->parentTypes.size();
-		}
-
-		bool isParent = false;
-		for(auto &parent: j->parentTypes){
-			if(parent.parent == i->type){
-				isParent = true;
-				break;
-			}
-		}
-		return (isParent);
-	});
 	
 	for(auto obj : objects){
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
@@ -1155,6 +1127,22 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 	objects.insert(objects.begin(), room->items.begin(), room->items.end());
 	objects.insert(objects.begin(), room->characters.begin(), room->characters.end());
 
+	// Sort by parent priority
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
+			return i->parentTypes.size() < j->parentTypes.size();
+		}
+
+		bool isParent = false;
+		for(auto &parent: j->parentTypes){
+			if(parent.parent == i->type){
+				isParent = true;
+				break;
+			}
+		}
+		return (isParent);
+	});
+
 	return objects;
 }
 
@@ -1181,14 +1169,30 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	std::vector<RoomObject *> objects;
 
-	//objects.insert(objects.begin(), props.begin(), props.end());
 	objects.insert(objects.begin(), furniture.begin(), furniture.end());
 	objects.insert(objects.begin(), items.begin(), items.end());
-	objects.insert(objects.begin(), characters.begin(), characters.end());
-
 	
 	room->characters.insert(room->characters.begin(), characters.begin(), characters.end());
 	room->items.insert(room->items.begin(), items.begin(), items.end());
+
+	// sort by parent priority
+	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
+			return i->parentTypes.size() < j->parentTypes.size();
+		}
+
+		bool isParent = false;
+		for(auto &parent: j->parentTypes){
+			if(parent.parent == i->type){
+				isParent = true;
+				break;
+			}
+		}
+		return (isParent);
+	});
+
+	// add random characters last
+	objects.insert(objects.end(), characters.begin(), characters.end());
 
 	return objects;
 }
@@ -1341,7 +1345,7 @@ Texture * RoomBuilder::getFloorTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/floor/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
+	ss << "assets/textures/room/floor/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 2)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1354,7 +1358,7 @@ Texture * RoomBuilder::getCeilTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/ceiling/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
+	ss << "assets/textures/room/ceiling/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 2)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1367,7 +1371,7 @@ Texture * RoomBuilder::getWallTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/walls/" << std::to_string(sweet::NumberUtils::randomInt(1, 10)) << ".png";
+	ss << "assets/textures/room/walls/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 2)) << ".png";
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
 	return res;
@@ -1376,7 +1380,7 @@ Texture * RoomBuilder::getWallTex(){
 
 Texture * RoomBuilder::getDebugTex(){
 	std::stringstream s;
-	s << "assets/textures/room/debug/" << std::to_string(sweet::NumberUtils::randomInt(1, 12)) << ".png";
+	s << "assets/textures/room/debug/" << room->definition->type << "/" << std::to_string(sweet::NumberUtils::randomInt(1, 12)) << ".png";
 	Texture * res = new Texture(s.str(), false, true, true);
 	res->load();
 	return res;

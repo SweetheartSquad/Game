@@ -996,7 +996,7 @@
             "type": "HEAD"
         },
         {
-            "random": true,
+            "random": false,
             "src": "components/definitions/Bellaspina_ARM.json",
             "type": "ARM"
         },
@@ -1229,6 +1229,111 @@
             "random": false,
             "src": "components/definitions/ScifiOmar_HEAD.json",
             "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Norm_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Candice_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Deeze_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Deeze_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Deeze_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Deeze_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Deeze_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ramiel_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ramiel_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ramiel_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ramiel_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ramiel_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Phoebe_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Thebe_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Viatrix_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Viatrix_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Drusilla_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Drusilla_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Drusilla_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Drusilla_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Drusilla_PELVIS.json",
+            "type": "PELVIS"
         }
     ]
 }
