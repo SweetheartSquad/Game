@@ -1,0 +1,66 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["bedframe"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["mattress"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                {
+									"componentTypes": ["pillows"], 
+									"multiplier": 1, 
+									"outComponents": [
+										
+									], 
+									"required": true,
+									"scale": [1.0,1.0,1.0]
+								}
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["headboard"], 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["footboard"], 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "bed",
+			"mass": 0,
+            "roomTypes" : ["BEDROOM"],
+            "sides" : {
+					"LEFT":"RIGHT",
+					"RIGHT":"LEFT",
+					"FRONT":"BACK"
+                },
+			"parentDependent": true,
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
+			"max": 1
+
+        }

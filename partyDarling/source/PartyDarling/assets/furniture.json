@@ -735,6 +735,50 @@
         {
             "id": 176, 
             "src": "furnitureJson/walllamp_shaft_1.json"
+        }, 
+        {
+            "id": 177, 
+            "src": "furnitureJson/bedframe_2.json"
+        }, 
+        {
+            "id": 178, 
+            "src": "furnitureJson/bedframe_3.json"
+        }, 
+        {
+            "id": 179, 
+            "src": "furnitureJson/mattress_1.json"
+        }, 
+        {
+            "id": 180, 
+            "src": "furnitureJson/headboard_1.json"
+        }, 
+        {
+            "id": 181, 
+            "src": "furnitureJson/footboard_1.json"
+        }, 
+        {
+            "id": 182, 
+            "src": "furnitureJson/headboard_2.json"
+        }, 
+        {
+            "id": 183, 
+            "src": "furnitureJson/footboard_2.json"
+        }, 
+        {
+            "id": 184, 
+            "src": "furnitureJson/headboard_3.json"
+        }, 
+        {
+            "id": 185, 
+            "src": "furnitureJson/footboard_3.json"
+        }, 
+        {
+            "id": 186, 
+            "src": "furnitureJson/pillows_1.json"
+        }, 
+        {
+            "id": 187, 
+            "src": "furnitureJson/pillows_2.json"
         }
     ], 
     "furniture": [
@@ -797,6 +841,9 @@
         }, 
         {
             "src": "furnitureTypes/wallLamp.json"
+        }, 
+        {
+            "src": "furnitureTypes/bed.json"
         }
     ]
 }
