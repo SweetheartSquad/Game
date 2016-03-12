@@ -1300,8 +1300,6 @@ void PD_Scene_Main::updateSelection(){
 							});
 						}else{
 							uiBubble->addOption("Use " + item->definition->name, [this, item](sweet::Event * _event){
-								std::cout << "hey gj you interacted" << std::endl;
-
 								// run item interact triggers
 								item->triggerInteract();
 							});
@@ -1387,6 +1385,8 @@ void PD_Scene_Main::updateSelection(){
 						auto items = PD_Listing::listings[item->definition->scenario]->items;
 						items.erase(items.find(item->definition->id));
 						delete item;
+					}else{
+						uiInventory->pickupItem(item);
 					}
 					resetCrosshair();
 
