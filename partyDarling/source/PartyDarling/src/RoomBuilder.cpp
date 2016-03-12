@@ -14,7 +14,6 @@
 #include <Resource.h>
 
 #include <PD_Character.h>
-#include <Item.h>
 #include <PD_ResourceManager.h>
 
 #include <stb/stb_image.h>

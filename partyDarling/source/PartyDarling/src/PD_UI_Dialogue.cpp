@@ -3,6 +3,7 @@
 #include <PD_UI_Dialogue.h>
 #include <PD_ResourceManager.h>
 #include <StringUtils.h>
+#include <CharacterUtils.h>
 
 PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	NodeUI(_world),
@@ -46,15 +47,17 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	// disable and hide by default
 	setVisible(false);
 
-	speechTimeout = new Timeout(0.2, [this](sweet::Event * _event){
+	speechTimeout = new Timeout(0.15, [this](sweet::Event * _event){
 		if(speechBuffer.size() > 0) {
 			std::wstring word = speechBuffer.front();
-			char fc = tolower(word[0]);
+			char fc = tolower(word.at(word.size()/2));
 			speechBuffer.pop();
 			if(currentSpeaker != nullptr){
 				auto sound = currentSpeaker->voice;
-				sound->setPitch(fc/178.f+0.75f);
-				sound->play();
+				if(sweet::CharacterUtils::isLetter(fc) || sweet::CharacterUtils::isDigit(fc)){
+					sound->setPitch((fc-100.f)/100.f+1.0f);
+					sound->play();
+				}
 			}
 			speechTimeout->restart();
 		}else {

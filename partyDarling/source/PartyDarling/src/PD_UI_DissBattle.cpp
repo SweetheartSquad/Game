@@ -595,7 +595,7 @@ void PD_UI_DissBattle::update(Step * _step){
 								// play sound
 								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
 									auto sound = enemy->voice;
-									sound->setPitch(glyphs.at(glyphIdx)->character/178.f+0.75f);
+									sound->setPitch((glyphs.at(glyphIdx)->character-100.f)/100.f+1.0f);
 									sound->play();
 								}
 							}else{

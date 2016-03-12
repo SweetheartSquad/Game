@@ -403,8 +403,8 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	// talking thing
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
-	talk->tweens.push_back(new Tween<float>(0.1, head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
-	talk->tweens.push_back(new Tween<float>(0.1, -head->mesh->textures.at(1)->height*0.4, Easing::kEASE_IN_OUT_CIRC));
+	talk->tweens.push_back(new Tween<float>(0.075, head->mesh->textures.at(1)->height*0.2, Easing::kEASE_IN_OUT_CIRC));
+	talk->tweens.push_back(new Tween<float>(0.075, -head->mesh->textures.at(1)->height*0.2, Easing::kEASE_IN_OUT_CIRC));
 	talk->loopType = Animation<float>::LoopType::kLOOP;
 	talk->hasStart = true;
 
