@@ -163,10 +163,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.5f){
-			player->experience = 100 * (1-p/0.5f);
-		}else{
-			int wowow = 0;
+		if(p <= 0.1f){
+			player->experience = 100 * (1-p/0.1f);
 		}
 
 		float size;
@@ -206,14 +204,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 		}
 	});
 	childTransform->addChild(dissBattleChangeStatTimeout, false);
-
-	dissBattleXPGainTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		PD_ResourceManager::scenario->getAudio("XP_UP")->sound->play();
-	});
-
-	dissBattleLevelUpTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		// LEVEL UP SOUND
-	});
 }
 
 PD_UI_DissStats::~PD_UI_DissStats(){
@@ -237,6 +227,9 @@ void PD_UI_DissStats::playOutro(float _wonXP){
 	prevXP = player->experience;
 	wonXP = _wonXP;
 	setVisible(true);
+	if(wonXP > 0){
+		PD_ResourceManager::scenario->getAudio("XP_UP")->sound->play();
+	}
 	dissBattleXPGainTimeout->restart();
 }
 
