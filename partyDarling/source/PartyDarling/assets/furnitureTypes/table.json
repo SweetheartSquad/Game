@@ -16,7 +16,7 @@
                 }
             ], 
             "type": "table",
-			"mass": 40,
+			"mass": 100,
             "roomTypes" : ["KITCHEN"],
             "sides" : {
                     "FRONT":"FRONT",

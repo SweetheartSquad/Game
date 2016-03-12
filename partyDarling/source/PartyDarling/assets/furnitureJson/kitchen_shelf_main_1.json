@@ -52,7 +52,25 @@
             "componentTypes": [
                 "kitchen_shelf_content_three"
             ], 
-            "out": []
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        11.338661193847656, 
+                        2.5555809933602256
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
         }
     ], 
     "id": 141, 
