@@ -79,6 +79,11 @@
             "id": 1004,
             "src": "items/Contacts.png",
             "type": "texture"
+        },
+        {
+            "id": 9999,
+            "src": "items/BeakerStand.png",
+            "type": "texture"
         }
     ]
 }
