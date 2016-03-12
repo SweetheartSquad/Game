@@ -719,6 +719,22 @@
         {
             "id": 172, 
             "src": "furnitureJson/bathtub_faucet_handles_4.json"
+        }, 
+        {
+            "id": 173, 
+            "src": "furnitureJson/walllamp_base_1.json"
+        }, 
+        {
+            "id": 174, 
+            "src": "furnitureJson/walllamp_base_2.json"
+        }, 
+        {
+            "id": 175, 
+            "src": "furnitureJson/walllamp_base_3.json"
+        }, 
+        {
+            "id": 176, 
+            "src": "furnitureJson/walllamp_shaft_1.json"
         }
     ], 
     "furniture": [
@@ -778,6 +794,9 @@
         }, 
         {
             "src": "furnitureTypes/bathtub.json"
+        }, 
+        {
+            "src": "furnitureTypes/wallLamp.json"
         }
     ]
 }

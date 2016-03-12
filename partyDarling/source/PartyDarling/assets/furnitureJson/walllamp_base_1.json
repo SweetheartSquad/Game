@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "walllamp_shaft"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        19.11227798461914, 
+                        0.3550250232219696
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 173, 
+    "src": "walllamp_base_1.obj", 
+    "type": "walllamp_base"
+}
