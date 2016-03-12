@@ -40,6 +40,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 
 	//sweet::NumberUtils::seed(time(nullptr)); // NOTE: this is no longer needed; you can set the seed with "rngSeed" in config.json. If you want a time-based seed, use a seed of -1
 	//OpenAL_Sound::masterGain = 0;
+	OpenAL_Sound::categoricalGain["voice"] = 0.5f;
 	//Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
 
 	// initialize resources
