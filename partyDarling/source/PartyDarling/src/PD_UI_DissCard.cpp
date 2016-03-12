@@ -180,7 +180,9 @@ void PD_UI_DissCard::animateNewStats(float _p){
 void PD_UI_DissCard::animateStar(int _idx, int _n, float _p){
 	bool increase = _n > 0;
 
-	for(int i = abs(_n); i >= 0; --i){
-		stars[_idx][i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][i]->nodeUIParent);
+	int i = abs(_n);
+	for(i; i > 0; --i){
+		stars[_idx][i-1]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][i-1]->nodeUIParent);
 	}
+	invalidateLayout();
 }
