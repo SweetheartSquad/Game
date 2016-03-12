@@ -1,0 +1,47 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["walllamp_base"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["walllamp_shaft"], 
+                            "multiplier": 1, 
+                            "outComponents": [ 
+								{
+									"componentTypes": ["lampshade"], 
+									"multiplier": 1, 
+									"outComponents": [], 
+									"required": true,
+									"scale": [1.0,1.0,1.0]
+								}
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "wallLamp",
+			"mass": 0,
+            "roomTypes" : ["BATHROOM","LIVING_ROOM","KITCHEN","OFFICE","BEDROOM"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
+			"max": 6
+
+        }

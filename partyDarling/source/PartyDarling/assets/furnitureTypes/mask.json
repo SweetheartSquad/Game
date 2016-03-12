@@ -26,7 +26,7 @@
     ], 
     "type": "mask",
 	"mass": 0,
-    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY"],
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","LABORATORY","OFFICE"],
     "detailedCollider": false,
 	"parentDependent": true,
     "parents":{"wall":["FRONT"]},

@@ -1,0 +1,48 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["bathtub_main"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["bathtub_faucet"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }, 
+                        {
+                            "componentTypes": ["bathtub_faucet_handles"], 
+                            "multiplier": 1, 
+                            "outComponents": [], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "bathtub",
+			"mass": 0,
+            "roomTypes" : ["BATHROOM"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+                "wall":[
+                    "FRONT"
+                ]
+            },
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
+			"max": 1
+
+        }
