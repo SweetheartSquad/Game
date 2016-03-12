@@ -107,6 +107,12 @@ void PD_Character::update(Step * _step){
 		flags &= ~btCollisionObject::CF_NO_CONTACT_RESPONSE;
 		body->setCollisionFlags(flags);
 		body->activate();
+
+		pr->eyeAnim->update(_step);
+		pr->pelvisAnim->update(_step);
+		pr->eyeL->childTransform->scale(pr->eyeScale, false);
+		pr->eyeR->childTransform->scale(pr->eyeScale, false);
+		pr->childTransform->scale(pr->pelvisScale, false);
 	}else {
 		int flags = body->getCollisionFlags();
 		flags &= ~btCollisionObject::CF_STATIC_OBJECT;
@@ -446,11 +452,21 @@ CharacterRenderer::~CharacterRenderer(){
 void CharacterRenderer::setAnimation(std::string _name) {
 	std::string selectedAnim = _name;
 	if(_name == "RANDOM"){
-		auto it = PD_ResourceManager::characterAnimations.begin();
-		int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
-		std::advance(it, idx);
-		setAnimation(it->second);
-		selectedAnim = it->first;
+		bool validAnimation = false;
+		std::vector<PD_CharacterAnimationStep> anim;
+		std::string animKey;
+		while(!validAnimation){
+			auto it = PD_ResourceManager::characterAnimations.begin();
+			int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
+			std::advance(it, idx);
+			animKey = it->first;
+			if(animKey != "DEAD"){
+				anim = it->second;
+				validAnimation = true;
+			}
+		}
+		setAnimation(anim);
+		selectedAnim = animKey;
 	}else {
 		if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
 			setAnimation(PD_ResourceManager::characterAnimations[_name]);
@@ -555,15 +571,6 @@ void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 }
 
 void CharacterRenderer::update(Step * _step){
-	eyeAnim->update(_step);
-	pelvisAnim->update(_step);
-	//eyeL->meshTransform->translate(eyeScale, false);
-	//eyeR->meshTransform->translate(eyeScale, false);
-	eyeL->childTransform->scale(eyeScale, false);
-	eyeR->childTransform->scale(eyeScale, false);
-
-	childTransform->scale(pelvisScale, false);
-	
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
 		paletteTex->bufferData();
