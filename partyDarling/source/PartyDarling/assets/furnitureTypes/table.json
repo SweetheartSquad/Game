@@ -26,5 +26,6 @@
 					"TOP":"BOTTOM"
                 },
             "parents":{},
-            "padding":0
+            "padding":0,
+			"max": 1
         }

@@ -43,5 +43,6 @@
             },
             "paddingFront": 1,
 			"paddingLeft": 0.6,
-			"paddingRight": 0.6
+			"paddingRight": 0.6,
+			"max": 1
         }

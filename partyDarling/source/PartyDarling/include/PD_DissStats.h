@@ -13,7 +13,6 @@ private:
 public:
 
 	PD_DissStats();
-	PD_DissStats(int _defense, int _insight, int _strength, int _sass);
 	~PD_DissStats();
 
 	int lastDefense;
