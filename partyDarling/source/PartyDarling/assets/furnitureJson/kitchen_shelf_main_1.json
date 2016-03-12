@@ -2,25 +2,13 @@
     "connectors": [
         {
             "componentTypes": [
-                "kitchen_shelf_content"
-            ], 
-            "out": [
-                {
-                    "position": [], 
-                    "rotation": [], 
-                    "scale": []
-                }
-            ]
-        }, 
-        {
-            "componentTypes": [
-                "kitchen_shelf_content_1"
+                "kitchen_shelf_content_one"
             ], 
             "out": [
                 {
                     "position": [
                         0.0, 
-                        6.91,
+                        4.836650085449218, 
                         2.5555809933602256
                     ], 
                     "rotation": [
@@ -38,13 +26,13 @@
         }, 
         {
             "componentTypes": [
-                "kitchen_shelf_content_2"
+                "kitchen_shelf_content_two"
             ], 
             "out": [
                 {
                     "position": [
                         0.0, 
-                        11.342, 
+                        7.939399337768554, 
                         2.5555809933602256
                     ], 
                     "rotation": [
@@ -62,27 +50,9 @@
         }, 
         {
             "componentTypes": [
-                "kitchen_shelf_content_3"
+                "kitchen_shelf_content_three"
             ], 
-            "out": [
-                {
-                    "position": [
-                        0.0, 
-                        16.198, 
-                        2.5555809933602256
-                    ], 
-                    "rotation": [
-                        0.0, 
-                        0.0, 
-                        0.0
-                    ], 
-                    "scale": [
-                        1.0, 
-                        1.0, 
-                        1.0
-                    ]
-                }
-            ]
+            "out": []
         }
     ], 
     "id": 141, 
