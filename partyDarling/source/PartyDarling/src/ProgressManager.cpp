@@ -86,10 +86,12 @@ void ProgressManager::getNew(){
 		assert(scenariosList.size() > 0);
 		
 		// pick some random side scenarios
-		unsigned long int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
-		for(unsigned long int j = 0; j < numSidePlots; ++j) {
-			if (allSideDefs.size() > 0){
-				scenariosList.append(allSideDefs.pop(true)["src"].asString());
+		if (i + 1 != kBEGINNING && i + 1 < kEND){
+			unsigned long int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
+			for(unsigned long int j = 0; j < numSidePlots; ++j) {
+				if (allSideDefs.size() > 0){
+					scenariosList.append(allSideDefs.pop(true)["src"].asString());
+				}
 			}
 		}
 
