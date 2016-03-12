@@ -651,11 +651,31 @@
         {
             "id": 155, 
             "src": "furnitureJson/kitchen_counter_doors_3.json"
-        },
-		{
-			"id":156,
-			"src":"furnitureJson/kitchen_counter_contents_1.json"
-		}
+        }, 
+        {
+            "id": 156, 
+            "src": "furnitureJson/kitchen_counter_contents_1.json"
+        }, 
+        {
+            "id": 157, 
+            "src": "furnitureJson/bathroom_sink_base_1.json"
+        }, 
+        {
+            "id": 158, 
+            "src": "furnitureJson/bathroom_sink_base_2.json"
+        }, 
+        {
+            "id": 159, 
+            "src": "furnitureJson/bathroom_sink_base_3.json"
+        }, 
+        {
+            "id": 160, 
+            "src": "furnitureJson/bathroom_mirror_1.json"
+        }, 
+        {
+            "id": 161, 
+            "src": "furnitureJson/bathroom_sink_basin_1.json"
+        }
     ], 
     "furniture": [
         {
@@ -703,11 +723,14 @@
         {
             "src": "furnitureTypes/kitchen_stove.json"
         }, 
-		{
+        {
             "src": "furnitureTypes/kitchen_counter.json"
         }, 
         {
             "src": "furnitureTypes/mask.json"
+        }, 
+        {
+            "src": "furnitureTypes/bathroom_sink.json"
         }
     ]
 }
