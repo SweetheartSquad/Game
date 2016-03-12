@@ -190,7 +190,7 @@ public:
 
 	void incrementConfidence(float _value);
 
-	void startNewFight(PD_Character * _enemy);
+	void startNewFight(PD_Character * _enemy, bool _playerFirst = true);
 	void gameOver(bool _win);
 	void complete();
 	

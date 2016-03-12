@@ -707,7 +707,7 @@ void PD_UI_DissBattle::update(Step * _step){
 	}
 }
 
-void PD_UI_DissBattle::startNewFight(PD_Character * _enemy){
+void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	// clear existing friendship
 	for(unsigned int i = 0; i < lives.size(); ++i){
 		livesContainer->removeChild(lives.at(i));
@@ -759,7 +759,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy){
 
 	interjected = false;
 	interjectBubble->setVisible(false);
-	setUIMode(true);
+	setUIMode(_playerFirst);
 	enable();
 }
 
