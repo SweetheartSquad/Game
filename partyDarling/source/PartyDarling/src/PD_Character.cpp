@@ -41,20 +41,23 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	billboarded = true;
 
-	setColliderAsCapsule((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE, (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE);
+	float w = (pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength()) * CHARACTER_SCALE;
+	float h = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE * 1.2f;
+
+	setColliderAsCapsule(w * 0.25f, h * 0.5f);
 	
-	boundingBox.width = ((pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength())*0.25 *CHARACTER_SCALE) * 2.f;
-	boundingBox.height = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE * 0.35f;
+	boundingBox.width = w;
+	boundingBox.height = h;
 	boundingBox.depth = boundingBox.width;
 
-	boundingBox.x = -boundingBox.width/2.f;
-	boundingBox.y = -boundingBox.height/2.f;
-	boundingBox.z = -boundingBox.depth/2.f;
+	boundingBox.x = -boundingBox.width * 0.5f;
+	boundingBox.y = -boundingBox.height * 0.5f;
+	boundingBox.z = -boundingBox.depth * 0.5f;
 
 #ifdef _DEBUG
 	for(auto &v :  boundingBoxMesh->mesh->vertices){
 		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
-		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.y = boundingBox.y + (v.y > 0 ? boundingBox.height: 0);
 		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
 	}
 	boundingBoxMesh->mesh->dirty = true;
@@ -66,7 +69,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
 
-	translatePhysical(glm::vec3(0, (boundingBox.height+boundingBox.width) * 0.5f, 0.f), false);
+	translatePhysical(glm::vec3(0, boundingBox.height * 0.5f, 0.f), false);
 
 	pr->setAnimation(state->animation);
 
