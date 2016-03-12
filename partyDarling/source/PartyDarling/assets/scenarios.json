@@ -5,16 +5,6 @@
         "type": 0
     },
     {
-        "order": 0,
-        "src": "scenarios/Alphonse_out_of_touch.json",
-        "type": 0
-    },
-    {
-        "order": 0,
-        "src": "scenarios/Gifts_from_Jasper.json",
-        "type": 0
-    },
-    {
         "order": 1,
         "src": "scenarios/Plot_1.json",
         "type": 2
@@ -147,6 +137,21 @@
     {
         "order": 0,
         "src": "scenarios/Rhonda_gets_lit.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Gifts_from_Jasper.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Thessle_the_Thespian.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Alphonse_out_of_touch.json",
         "type": 0
     }
 ]
