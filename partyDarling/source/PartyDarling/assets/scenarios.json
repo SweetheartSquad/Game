@@ -6,6 +6,11 @@
     },
     {
         "order": 0,
+        "src": "scenarios/Alphonse_out_of_touch.json",
+        "type": 0
+    },
+    {
+        "order": 0,
         "src": "scenarios/Gifts_from_Jasper.json",
         "type": 0
     },

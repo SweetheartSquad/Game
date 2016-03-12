@@ -14,6 +14,11 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 	name("Player"),
 	experience(&_player->experience) // TODO: tie this to player experience
 {
+	_player->level = 2;
+	_player->dissStats->incrementDefense();
+	_player->dissStats->incrementInsight();
+	_player->dissStats->incrementStrength();
+	_player->dissStats->incrementSass();
 	init();
 	setLevel(_player->level);
 }
@@ -164,27 +169,38 @@ void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
 
 void PD_UI_DissCard::animateNewStats(float _p){
 	if(increments[0] != 0){
-		animateStar(0, dissStats->getDefense(), increments[0], _p);
+		animateStar(0, dissStats->lastDefense, increments[0], _p);
 	}
 	if(increments[1] != 0){
-		animateStar(1, dissStats->getInsight(),  increments[1], _p);
+		animateStar(1, dissStats->lastInsight,  increments[1], _p);
 	}
 	if(increments[2] != 0){
-		animateStar(2, dissStats->getStrength(), increments[2], _p);
+		animateStar(2, dissStats->lastStrength, increments[2], _p);
 	}
 	if(increments[3] != 0){
-		animateStar(3, dissStats->getSass(), increments[3], _p);
+		animateStar(3, dissStats->lastSass, increments[3], _p);
 	}
 }
 
-void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _n, float _p){
-	bool increase = _n > 0;
+void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _delta, float _p){
+	bool increase = _delta > 0;
 
-	int i = abs(_n);
-	for(i; i > 0; --i){
-		if(_dissStat - i >= 0){
-			stars[_idx][_dissStat - i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][_dissStat - i]->nodeUIParent);
+	int i = abs(_delta);
+
+	int newStat = _dissStat + _delta;
+	if(increase){
+		for(i; i > 0; --i){
+			if(_dissStat + i < 5){
+				stars[_idx][newStat - i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat - i]->nodeUIParent);
+			}
+		}
+	}else{
+		for(i; i > 0; --i){
+			if(_dissStat - i >= 0){
+				stars[_idx][newStat + i - 1]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat + i - 1]->nodeUIParent);
+			}
 		}
 	}
+	
 	invalidateLayout();
 }
