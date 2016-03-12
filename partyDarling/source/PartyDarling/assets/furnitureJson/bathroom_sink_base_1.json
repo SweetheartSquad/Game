@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "bathroom_sink_basin"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        8.373023986816406, 
+                        4.195763111114502
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 157, 
+    "src": "bathroom_sink_base_1.obj", 
+    "type": "bathroom_sink_base"
+}

@@ -1,0 +1,79 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "bathroom_mirror"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.5587029158762746, 
+                        -4.195762872695923
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "sink_faucet"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.5587029158762746, 
+                        -3.4387704745069088
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "sink_handles"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.5587029158762746, 
+                        -3.4387704745069088
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 161, 
+    "src": "bathroom_sink_basin_1.obj", 
+    "type": "bathroom_sink_basin"
+}
