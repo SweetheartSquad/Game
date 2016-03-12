@@ -44,5 +44,6 @@
             "sides" : {
                     "TOP":"BOTTOM"
                 },
-            "padding":0
+            "padding":0,
+			"max": 2
         }

@@ -20,6 +20,8 @@ public:
 	int lastStrength;
 	int lastSass;
 
+	void setLastStats();
+
 	void incrementDefense(int _n = 1);
 	void incrementInsight(int _n = 1);
 	void incrementStrength(int _n = 1);

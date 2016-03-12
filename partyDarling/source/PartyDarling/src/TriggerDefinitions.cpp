@@ -211,6 +211,7 @@ void PD_Scene_Main::setupEventListeners(){
 		// Modifies the DISS stats of the player. The stat can be chose from Defense, Insight, Strength, Sass. Delta is the amount to change the stat by, and can be positive or negative.
 		// STRING stat
 		// INT delta
+		player->dissStats->setLastStats(); // so we get acurate increment values later
 
 		std::string stat = _event->getStringData("stat");
 		int delta = _event->getIntData("delta", -1);
