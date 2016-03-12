@@ -14,11 +14,6 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 	name("Player"),
 	experience(&_player->experience) // TODO: tie this to player experience
 {
-	_player->level = 2;
-	_player->dissStats->incrementDefense();
-	_player->dissStats->incrementInsight();
-	_player->dissStats->incrementStrength();
-	_player->dissStats->incrementSass();
 	init();
 	setLevel(_player->level);
 }
