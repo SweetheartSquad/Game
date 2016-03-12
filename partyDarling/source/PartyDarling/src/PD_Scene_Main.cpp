@@ -76,7 +76,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedProp(nullptr),
 	carriedPropDistance(0),
 	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f)),
-	dissEnemy(nullptr)
+	dissEnemy(nullptr),
+	playerStartsDissBattle(true)
 {
 	_game->showLoading(0);
 
@@ -269,7 +270,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(uiDissStats);
 
 	uiDissStats->eventManager->addEventListener("introComplete", [this](sweet::Event * _event){
-		uiDissBattle->startNewFight(dissEnemy);
+		uiDissBattle->startNewFight(dissEnemy, playerStartsDissBattle);
 	});
 	
 	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
@@ -632,7 +633,8 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	return res;
 }
 
-void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy) {
+void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy, bool _playerStarts) {
+	playerStartsDissBattle = _playerStarts;
 	dissEnemy = _enemy;
 	uiBubble->clear();
 	player->disable();
@@ -1333,7 +1335,7 @@ void PD_Scene_Main::updateSelection(){
 						});
 						if(!person->dissedAt){
 							uiBubble->addOption("Diss " + person->definition->name, [this, person](sweet::Event * _event){
-								triggerDissBattle(person);
+								triggerDissBattle(person, true);
 								// TODO: pass in the character that's fighting here
 							});
 						}

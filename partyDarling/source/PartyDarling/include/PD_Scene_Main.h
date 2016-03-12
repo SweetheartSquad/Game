@@ -40,6 +40,7 @@ private:
 	void addRoom(Room * _room);
 
 	LabRoom * labRoom;
+	bool playerStartsDissBattle;
 public:
 	float panSpeed;
 	bool panLeft;
@@ -134,7 +135,7 @@ public:
 	// checks the cells directly above, below, and beside _pos, and returns those of which are within the house's bounds and haven't been used yet
 	std::vector<glm::ivec2> getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize);
 	// trigger a diss battle with another character
-	void triggerDissBattle(PD_Character * _enemy);
+	void triggerDissBattle(PD_Character * _enemy, bool _playerStarts);
 
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border

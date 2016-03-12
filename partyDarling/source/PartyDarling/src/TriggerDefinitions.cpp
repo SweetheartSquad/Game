@@ -358,7 +358,7 @@ void PD_Scene_Main::setupEventListeners(){
 		PD_Character * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
-		triggerDissBattle(enemy);
+		triggerDissBattle(enemy, interjectingFirst);
 		uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 			if(uiDialogue->hadNextDialogue){
 				uiDialogue->setVisible(true);
