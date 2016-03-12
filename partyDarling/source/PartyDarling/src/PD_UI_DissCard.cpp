@@ -164,25 +164,27 @@ void PD_UI_DissCard::setEnemy(PD_Character * _enemy){
 
 void PD_UI_DissCard::animateNewStats(float _p){
 	if(increments[0] != 0){
-		animateStar(0, increments[0], _p);
+		animateStar(0, dissStats->getDefense(), increments[0], _p);
 	}
 	if(increments[1] != 0){
-		animateStar(1, increments[1], _p);
+		animateStar(1, dissStats->getInsight(),  increments[1], _p);
 	}
 	if(increments[2] != 0){
-		animateStar(2, increments[2], _p);
+		animateStar(2, dissStats->getStrength(), increments[2], _p);
 	}
 	if(increments[3] != 0){
-		animateStar(3, increments[3], _p);
+		animateStar(3, dissStats->getSass(), increments[3], _p);
 	}
 }
 
-void PD_UI_DissCard::animateStar(int _idx, int _n, float _p){
+void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _n, float _p){
 	bool increase = _n > 0;
 
 	int i = abs(_n);
 	for(i; i > 0; --i){
-		stars[_idx][i-1]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][i-1]->nodeUIParent);
+		if(_dissStat - i >= 0){
+			stars[_idx][_dissStat - i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][_dissStat - i]->nodeUIParent);
+		}
 	}
 	invalidateLayout();
 }
