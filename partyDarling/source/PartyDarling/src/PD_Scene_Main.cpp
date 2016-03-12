@@ -603,14 +603,20 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
 			
 			// run the physics simulation for a few seconds to let things settle
-			Log::info("Letting the bodies hit the floor...");
+			/*Log::info("Letting the bodies hit the floor...");
 			Step s;
-			s.setDeltaTime(10);
-			unsigned long int i = bulletWorld->maxSubSteps;
-			bulletWorld->maxSubSteps = 10000;
-			bulletWorld->update(&s);
-			bulletWorld->maxSubSteps = i;
-			Log::info("The bodies have finished hitting the floor.");
+			s.setDeltaTime(1/60.f);
+			//unsigned long int i = bulletWorld->maxSubSteps;
+			//bulletWorld->maxSubSteps = 10000;
+			//bulletWorld->update(&s);
+			//bulletWorld->maxSubSteps = i;
+			for (unsigned long int i = 0; i<10; ++i){
+				for(auto c : room->components){
+					c->body->activate(true);
+				}
+				bulletWorld->update(&s);
+			}
+			Log::info("The bodies have finished hitting the floor.");*/
 
 			// remove the physics bodies (we'll put them back in as needed)
 			room->removePhysics();
