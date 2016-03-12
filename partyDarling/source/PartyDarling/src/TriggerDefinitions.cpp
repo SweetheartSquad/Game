@@ -91,7 +91,7 @@ void PD_Scene_Main::setupConditions(){
 		return curVal == desiredValue;
 	};
 
-	(*PD_ResourceManager::conditionImplementations)["wonLastDissBattle"] = [this](sweet::Event * _event){
+	(*PD_ResourceManager::conditionImplementations)["wonLastYellingContest"] = [this](sweet::Event * _event){
 		//checks if the last diss battle was won. If no diss battles have occurred than false is returned
 		return player->wonLastDissBattle;
 	};
@@ -339,7 +339,7 @@ void PD_Scene_Main::setupEventListeners(){
 		uiMap->updateMap(currentHousePosition);
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("triggerDissBattle", [this](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
 		// Launch a diss battle with the selected character. 
 		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
 		
