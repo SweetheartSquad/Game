@@ -32,217 +32,217 @@
     	"id":"voice1",
     	"type":"audio",
     	"src":"voices/voice-01.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice2",
     	"type":"audio",
     	"src":"voices/voice-02.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice3",
     	"type":"audio",
     	"src":"voices/voice-03.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice4",
     	"type":"audio",
     	"src":"voices/voice-04.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice5",
     	"type":"audio",
     	"src":"voices/voice-05.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice6",
     	"type":"audio",
     	"src":"voices/voice-06.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice7",
     	"type":"audio",
     	"src":"voices/voice-07.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice8",
     	"type":"audio",
     	"src":"voices/voice-08.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice9",
     	"type":"audio",
     	"src":"voices/voice-09.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice10",
     	"type":"audio",
     	"src":"voices/voice-10.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice11",
     	"type":"audio",
     	"src":"voices/voice-11.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice12",
     	"type":"audio",
     	"src":"voices/voice-12.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice13",
     	"type":"audio",
     	"src":"voices/voice-13.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice14",
     	"type":"audio",
     	"src":"voices/voice-14.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice15",
     	"type":"audio",
     	"src":"voices/voice-15.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice16",
     	"type":"audio",
     	"src":"voices/voice-16.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
      {
     	"id":"voice17",
     	"type":"audio",
     	"src":"voices/voice-17.ogg",
-    	"category":"sfx"
+    	"category":"voice"
     },
  {
       "id":"voice18",
       "type":"audio",
       "src":"voices/voice-18.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice19",
       "type":"audio",
       "src":"voices/voice-19.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice20",
       "type":"audio",
       "src":"voices/voice-20.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice21",
       "type":"audio",
       "src":"voices/voice-21.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice22",
       "type":"audio",
       "src":"voices/voice-22.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice23",
       "type":"audio",
       "src":"voices/voice-23.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice24",
       "type":"audio",
       "src":"voices/voice-24.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice25",
       "type":"audio",
       "src":"voices/voice-25.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice26",
       "type":"audio",
       "src":"voices/voice-26.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice27",
       "type":"audio",
       "src":"voices/voice-27.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
      {
       "id":"voice28",
       "type":"audio",
       "src":"voices/voice-28.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice29",
       "type":"audio",
       "src":"voices/voice-29.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice30",
       "type":"audio",
       "src":"voices/voice-30.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice31",
       "type":"audio",
       "src":"voices/voice-31.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice32",
       "type":"audio",
       "src":"voices/voice-32.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice33",
       "type":"audio",
       "src":"voices/voice-33.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice34",
       "type":"audio",
       "src":"voices/voice-34.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice35",
       "type":"audio",
       "src":"voices/voice-35.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
     {
       "id":"voice36",
       "type":"audio",
       "src":"voices/voice-36.ogg",
-      "category":"sfx"
+      "category":"voice"
     },
 
 
