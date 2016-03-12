@@ -41,7 +41,7 @@ PD_Game::PD_Game() :
 
 	progressManager = new ProgressManager();
 
-	//playBGM();
+	playBGM();
 }
 
 PD_Game::~PD_Game(){
@@ -51,7 +51,7 @@ PD_Game::~PD_Game(){
 }
 
 void PD_Game::update(Step * _step){
-	if(currentSceneKey == "game" && bgmTrack != nullptr){
+	if(bgmTrack != nullptr){
 		bgmTrack->update(_step);
 		if(bgmTrack->source->state != AL_PLAYING){
 			playBGM();

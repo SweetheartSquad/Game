@@ -737,11 +737,6 @@
         },
         {
             "random": false,
-            "src": "components/definitions/ScifiOmar_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": false,
             "src": "components/definitions/ScifiOmar_LEG.json",
             "type": "LEG"
         },
@@ -1118,6 +1113,121 @@
         {
             "random": true,
             "src": "components/definitions/Minnefred_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ferd_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ferd_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ferd_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ferd_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ferd_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Jake_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JakeNood_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/JakeNood_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JakeNood_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JakeNood_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JohnnyQ_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JohnnyQ_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JohnnyQ_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JohnnyQ_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JohnnyQ_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Lydia_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Lydia_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Lydia_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Lydia_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Lydia_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/JDK_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Melna_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/ScifiOmar_HEAD.json",
             "type": "HEAD"
         }
     ]
