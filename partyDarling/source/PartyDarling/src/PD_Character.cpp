@@ -104,6 +104,12 @@ void PD_Character::update(Step * _step){
 		flags &= ~btCollisionObject::CF_NO_CONTACT_RESPONSE;
 		body->setCollisionFlags(flags);
 		body->activate();
+
+		pr->eyeAnim->update(_step);
+		pr->pelvisAnim->update(_step);
+		pr->eyeL->childTransform->scale(pr->eyeScale, false);
+		pr->eyeR->childTransform->scale(pr->eyeScale, false);
+		pr->childTransform->scale(pr->pelvisScale, false);
 	}else {
 		int flags = body->getCollisionFlags();
 		flags &= ~btCollisionObject::CF_STATIC_OBJECT;
@@ -562,15 +568,6 @@ void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 }
 
 void CharacterRenderer::update(Step * _step){
-	eyeAnim->update(_step);
-	pelvisAnim->update(_step);
-	//eyeL->meshTransform->translate(eyeScale, false);
-	//eyeR->meshTransform->translate(eyeScale, false);
-	eyeL->childTransform->scale(eyeScale, false);
-	eyeR->childTransform->scale(eyeScale, false);
-
-	childTransform->scale(pelvisScale, false);
-	
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
 		paletteTex->bufferData();
