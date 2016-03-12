@@ -1,93 +1,151 @@
-{
-   "components": [
-                {
-                    "componentTypes": ["kitchen_sink_base"], 
-                    "multiplier": 1, 
-                    "outComponents": [
-                        {
-                            "componentTypes": ["counter_doors"], 
-                            "multiplier": 1, 
-                            "outComponents": [
-                            ], 
-                            "required": true,
-							"scale": [1.0,1.0,1.0]
-                        }, 
-                        {
-                            "componentTypes": ["sink_basin"], 
-                            "multiplier": 1, 
-                            "outComponents": [
-								{
-									"componentTypes": ["sink_faucet"], 
-									"multiplier": 1, 
-									"outComponents": [
-									], 
-									"required": true,
-									"scale": [1.0,1.0,1.0]
-								},
-								{
-									"componentTypes": ["sink_handles"], 
-									"multiplier": 1, 
-									"outComponents": [
-									], 
-									"required": true,
-									"scale": [1.0,1.0,1.0]
-								},
-								{
-									"componentTypes": ["kitchen_shelf_main"], 
-									"multiplier": 1, 
-									"outComponents": [
-									 
-										{
-											"componentTypes": ["kitchen_shelf_content_1"], 
-											"multiplier": 1, 
-											"outComponents": [
-											], 
-											"required": true,
-											"scale": [1.0,1.0,1.0]
-										},
-										{
-											"componentTypes": ["kitchen_shelf_content_2"], 
-											"multiplier": 1, 
-											"outComponents": [
-											], 
-											"required": true,
-											"scale": [1.0,1.0,1.0]
-										},
-										{
-											"componentTypes": ["kitchen_shelf_content_3"], 
-											"multiplier": 1, 
-											"outComponents": [
-											], 
-											"required": true,
-											"scale": [1.0,1.0,1.0]
-										}
-								], 
-								"required": true,
-								"scale": [1.0,1.0,1.0]
-								}
-                    ], 
-                    "required": true,
-					"scale": [0.7,0.7,0.7]
-                }
-            ], 
-            "type": "kitchen_sink",
-			"mass": 0,
-            "roomTypes" : ["KITCHEN"],
-            "sides" : {
-					"LEFT":"RIGHT",
-					"RIGHT":"LEFT",
-					"TOP":"BOTTOM"
-                },
-			"parentDependent": true,
-            "parents":{
-                "wall":[
-                    "FRONT"
-                ]
-            },
-            "padding":0,
-    "twist": false,
-    "flare": false,
-    "numTextures": 2,
-	"parentMax": 1	
+{  
+   "components":[  
+      {  
+         "componentTypes":[  
+            "kitchen_sink_base"
+         ],
+         "multiplier":1,
+         "outComponents":[  
+            {  
+               "componentTypes":[  
+                  "counter_doors"
+               ],
+               "multiplier":1,
+               "outComponents":[  
 
-        }]}
+               ],
+               "required":true,
+               "scale":[  
+                  1.0,
+                  1.0,
+                  1.0
+               ]
+            },
+            {  
+               "componentTypes":[  
+                  "sink_basin"
+               ],
+               "multiplier":1,
+               "outComponents":[  
+                  {  
+                     "componentTypes":[  
+                        "sink_faucet"
+                     ],
+                     "multiplier":1,
+                     "outComponents":[  
+
+                     ],
+                     "required":true,
+                     "scale":[  
+                        1.0,
+                        1.0,
+                        1.0
+                     ]
+                  },
+                  {  
+                     "componentTypes":[  
+                        "sink_handles"
+                     ],
+                     "multiplier":1,
+                     "outComponents":[  
+
+                     ],
+                     "required":true,
+                     "scale":[  
+                        1.0,
+                        1.0,
+                        1.0
+                     ]
+                  },
+                  {  
+                     "componentTypes":[  
+                        "kitchen_shelf_main"
+                     ],
+                     "multiplier":1,
+                     "outComponents":[  
+                        {  
+                           "componentTypes":[  
+                              "kitchen_shelf_content_1"
+                           ],
+                           "multiplier":1,
+                           "outComponents":[  
+
+                           ],
+                           "required":true,
+                           "scale":[  
+                              1.0,
+                              1.0,
+                              1.0
+                           ]
+                        },
+                        {  
+                           "componentTypes":[  
+                              "kitchen_shelf_content_2"
+                           ],
+                           "multiplier":1,
+                           "outComponents":[  
+
+                           ],
+                           "required":true,
+                           "scale":[  
+                              1.0,
+                              1.0,
+                              1.0
+                           ]
+                        },
+                        {  
+                           "componentTypes":[  
+                              "kitchen_shelf_content_3"
+                           ],
+                           "multiplier":1,
+                           "outComponents":[  
+
+                           ],
+                           "required":true,
+                           "scale":[  
+                              1.0,
+                              1.0,
+                              1.0
+                           ]
+                        }
+                     ],
+                     "required":true,
+                     "scale":[  
+                        1.0,
+                        1.0,
+                        1.0
+                     ]
+                  }
+               ],
+               "required":true,
+               "scale":[  
+                  0.7,
+                  0.7,
+                  0.7
+               ]
+            }
+         ]
+		}
+	],
+    "type":"kitchen_sink",
+    "mass":0,
+    "roomTypes":[  
+    "KITCHEN"
+    ],
+    "sides":{  
+    "LEFT":"RIGHT",
+    "RIGHT":"LEFT",
+    "TOP":"BOTTOM"
+    },
+    "parentDependent":true,
+    "parents":{  
+    "wall":[  
+        "FRONT"
+    ]
+    },
+    "padding":0,
+    "twist":false,
+    "flare":false,
+    "numTextures":2,
+    "parentMax":1
+}
