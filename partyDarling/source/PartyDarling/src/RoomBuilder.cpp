@@ -1195,6 +1195,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 }
 
 std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random){
+	
 	std::vector<PD_Character*> characters;
 
 	if(!_random){
@@ -1206,6 +1207,9 @@ std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random){
 			characters.push_back(p);
 		}
 	}else{
+		if(definition->empty) {
+			return characters;
+		}
 		auto randPD_Character = PD_Character::createRandomPD_Character(definition->scenario, world, characterShader, emoteShader);
 		randPD_Character->room = room;
 		characters.push_back(randPD_Character);

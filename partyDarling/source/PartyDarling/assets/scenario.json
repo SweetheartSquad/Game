@@ -490,12 +490,14 @@
 	{
 		"id": "DISS-TUTORIAL-SPACEBAR",
 		"type": "texture",
-		"src": "UI/yelling contest/tutorialSpacebar.png"
+		"src": "UI/yelling contest/tutorialSpacebar.png",
+    "generateMipmaps": false
 	},
 	{
 		"id": "DISS-TUTORIAL-ARROWS",
 		"type": "texture",
-		"src": "UI/yelling contest/tutorialArrows.png"
+		"src": "UI/yelling contest/tutorialArrows.png",
+    "generateMipmaps": false
 	},
 
    {
@@ -515,7 +517,8 @@
 	{
       "id": "DISS-BATTLE-OFFENSE-BUBBLE-TAIL",
       "type": "texture",
-      "src": "UI/yelling contest/blueBubble-tail.png"
+      "src": "UI/yelling contest/blueBubble-tail.png",
+      "generateMipmaps":false
     },
 
 	{
@@ -528,7 +531,8 @@
 	{
       "id": "DISS-BATTLE-OFFENSE-ARROWS",
       "type": "texture",
-      "src": "UI/yelling contest/blueBubble-arrows.png"
+      "src": "UI/yelling contest/blueBubble-arrows.png",
+      "generateMipmaps":false
     },
 	{
       "id": "PLAYER-BUTTON",
@@ -546,85 +550,86 @@
 	{
       "id": "DISS-BATTLE-DEFENSE-BUBBLE-TAIL",
       "type": "texture",
-      "src": "UI/yelling contest/purpleBubble-tail.png"
+      "src": "UI/yelling contest/purpleBubble-tail.png",
+      "generateMipmaps":false
     },
 
 	{
       "id": "DISS-BATTLE-CURSOR",
       "type": "texture",
-      "src": "UI/yelling contest/cursor.png"
+      "src": "UI/yelling contest/cursor.png",
+      "generateMipmaps":false
     },
 
 	{
       "id": "DISS-BATTLE-HIGHLIGHT",
       "type": "texture",
-      "src": "UI/yelling contest/highlight.png"
+      "src": "UI/yelling contest/highlight.png",
+      "generateMipmaps":false
     },
-
-	{
-      "id": "DISS-BATTLE-FRIENDSHIP",
-      "type": "texture",
-      "src": "UI/yelling contest/friendshipToken.png"
-    },
-
-	{
-      "id": "DISS-BATTLE-LOSTFRIENDSHIP",
-      "type": "texture",
-      "src": "UI/yelling contest/lostFriendshipToken.png"
-    },
-
 	{
       "id": "DISS-BATTLE-WIN",
       "type": "texture",
-      "src": "UI/yelling contest/win.png"
+      "src": "UI/yelling contest/win.png",
+      "generateMipmaps":false
     },
 
 	{
       "id": "DISS-BATTLE-LOSE",
       "type": "texture",
-      "src": "UI/yelling contest/lose.png"
+      "src": "UI/yelling contest/lose.png",
+      "generateMipmaps":false
     },
 
 	{
       "id": "DISS-BATTLE-LEVEL-UP",
       "type": "texture",
-      "src": "UI/LevelUp.png"
+      "src": "UI/LevelUp.png",
+      "generateMipmaps":false
     },
+
 
 	{
       "id": "DISS-BATTLE-INTERJECT",
       "type": "texture",
-      "src": "UI/yelling contest/interject.png"
+      "src": "UI/yelling contest/interject.png",
+      "generateMipmaps":false
     },
     {
       "id": "DISS-BATTLE-COMPLIMENT1",
       "type": "texture",
-      "src": "UI/yelling contest/compliment1.png"
+      "src": "UI/yelling contest/compliment1.png",
+      "generateMipmaps":false
     },
     {
       "id": "DISS-BATTLE-COMPLIMENT2",
       "type": "texture",
-      "src": "UI/yelling contest/compliment2.png"
+      "src": "UI/yelling contest/compliment2.png",
+      "generateMipmaps":false
     },
   	{
       "id": "DISS-BATTLE-COMPLIMENT3",
       "type": "texture",
-      "src": "UI/yelling contest/compliment3.png"
+      "src": "UI/yelling contest/compliment3.png",
+      "generateMipmaps":false
     },
      {
       "id": "DISS-BATTLE-COMPLIMENT4",
       "type": "texture",
-      "src": "UI/yelling contest/compliment4.png"
+      "src": "UI/yelling contest/compliment4.png",
+      "generateMipmaps":false
     },
     {
       "id": "DISS-BATTLE-COMPLIMENT5",
       "type": "texture",
-      "src": "UI/yelling contest/compliment5.png"
+      "src": "UI/yelling contest/compliment5.png",
+      "generateMipmaps":false
     },
     {
       "id": "DISS-BATTLE-COMPLIMENT6",
       "type": "texture",
-      "src": "UI/yelling contest/compliment6.png"
+      "src": "UI/yelling contest/compliment6.png",
+      "generateMipmaps":false
     },
 
 
@@ -655,12 +660,14 @@
     {
       "id": "BACKPACK",
       "type": "texture",
-      "src": "UI/backpack.png"
+      "src": "UI/backpack.png",
+      "generateMipmaps":false
     },
     {
       "id": "GRID",
       "type": "texture",
-      "src": "UI/GRID.png"
+      "src": "UI/GRID.png",
+      "generateMipmaps":false
     },
 
 
@@ -669,22 +676,26 @@
     {
       "id": "MAPCELL",
       "type": "texture",
-      "src": "UI/mapCell.png"
+      "src": "UI/mapCell.png",
+      "generateMipmaps":false
     },
     {
       "id": "MAPCELL-UNENTERED",
       "type": "texture",
-      "src": "UI/mapCell -unentered.png"
+      "src": "UI/mapCell -unentered.png",
+      "generateMipmaps":false
     },
     {
       "id": "MAPCELL-LOCKED",
       "type": "texture",
-      "src": "UI/mapCell -locked.png"
+      "src": "UI/mapCell -locked.png",
+      "generateMipmaps":false
     },
     {
       "id": "COMPASS",
       "type": "texture",
-      "src": "UI/compass.png"
+      "src": "UI/compass.png",
+      "generateMipmaps":false
     },
 
 
@@ -737,15 +748,18 @@
     {
       "id": "SLIDER-THUMB",
       "type": "texture",
-      "src": "UI/thumb.png"
+      "src": "UI/thumb.png",
+      "generateMipmaps":false
     },{
       "id": "SLIDER-FILL",
       "type": "texture",
-      "src": "UI/fill.png"
+      "src": "UI/fill.png",
+      "generateMipmaps":false
     },{
       "id": "SLIDER-TRACK",
       "type": "texture",
-      "src": "UI/track.png"
+      "src": "UI/track.png",
+      "generateMipmaps":false
     }
 
     // STATIC ROOM
@@ -778,9 +792,19 @@
       "type":"mesh",
       "src":"labRoom_collider.obj"
     },{
-      "id": "LAB-ROOM",
+      "id": "LAB-ROOM-FLATS",
       "type":"texture",
-      "src":"labRoom.png",
+      "src":"labRoom_flats.png",
+      "generateMipmaps": false
+    },{
+      "id": "LAB-ROOM-DETAIL",
+      "type":"texture",
+      "src":"labRoom_detail.png",
+      "generateMipmaps": false
+    },{
+      "id": "LAB-ROOM-FLOATERS",
+      "type":"texture",
+      "src":"labRoom_floaters.png",
       "generateMipmaps": false
     }
   ]

@@ -74,6 +74,11 @@
             "id": 644,
             "src": "items/candle.png",
             "type": "texture"
+        },
+        {
+            "id": 1004,
+            "src": "items/Contacts.png",
+            "type": "texture"
         }
     ]
 }

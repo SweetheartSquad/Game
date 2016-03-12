@@ -7,6 +7,8 @@
 #include <PD_Character.h>
 #include <MeshFactory.h>
 
+#include <PointLight.h>
+
 LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, Scenario * _labScenario) :
 	Room(_world, _toonShader, dynamic_cast<AssetRoom *>(_labScenario->getAsset("room","1")))
 {
@@ -34,10 +36,17 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doorWest->translatePhysical(glm::vec3(-22,0,0));
 	
 	
-	TriMesh * mesh = PD_ResourceManager::scenario->getMesh("LAB-ROOM")->meshes.at(0);
-	mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("LAB-ROOM")->texture);
-	mesh->setScaleMode(GL_NEAREST);
-	childTransform->addChild(new MeshEntity(mesh, _toonShader));
+	std::vector<TriMesh *> meshes = PD_ResourceManager::scenario->getMesh("LAB-ROOM")->meshes;
+
+	for(auto m : meshes){
+		m->pushTexture2D(PD_ResourceManager::scenario->getTexture("LAB-ROOM-FLATS")->texture);
+		m->setScaleMode(GL_NEAREST);
+		toRotate.push_back(childTransform->addChild(new MeshEntity(m, _toonShader)));
+	}
+	meshes.at(meshes.size()-1)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-DETAIL")->texture);
+	meshes.at(meshes.size()-2)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-DETAIL")->texture);
+	meshes.at(meshes.size()-3)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-FLOATERS")->texture);
+
 	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
 	
@@ -67,6 +76,27 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	
 	ceiling->setVisible(false);
 	floor->setVisible(false);
+	
+	topLight = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
+	lights.push_back(topLight);
+	childTransform->addChild(topLight);
+	bottomLight = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
+	lights.push_back(bottomLight);
+	childTransform->addChild(bottomLight);
 
 	removePhysics();
 }
+
+void LabRoom::update(Step * _step){
+	for(unsigned long int i = 0; i < toRotate.size(); ++i){
+		toRotate.at(i)->rotate(_step->deltaTime * i * (i % 2 == 0 ? -5.f : 5.f), 0,1,0, kOBJECT);
+	}
+
+	float lRadius = 4;
+	float lOffset = 8;
+	
+	topLight->firstParent()->translate(glm::vec3(sin(_step->time)* lRadius, lOffset, cos(_step->time) * lRadius), false);
+	bottomLight->firstParent()->translate(glm::vec3(sin(_step->time+glm::pi<float>())* lRadius, -lOffset, cos(_step->time+glm::pi<float>()) * lRadius), false);
+
+	Room::update(_step);
+};

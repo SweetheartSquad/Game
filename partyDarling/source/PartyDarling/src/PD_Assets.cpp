@@ -162,7 +162,8 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
 	name(_json.get("name", "NO_NAME").asString()),
 	description(_json.get("description", "NO_DESCRIPTION").asString()),
-	locked(_json.get("locked", false).asBool())
+	locked(_json.get("locked", false).asBool()),
+	empty(_json.get("empty", false).asBool())
 {
 
 	std::string sizeString = "";

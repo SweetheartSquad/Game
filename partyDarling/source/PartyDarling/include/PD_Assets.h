@@ -157,7 +157,8 @@ public:
 
 	// whether entry to the room is blocked at creation
 	bool locked;
-	
+	// Whether the room can have characters or not
+	bool empty;
 
 	std::vector<AssetCharacter *> getCharacters();
 	AssetCharacter * getCharacter(unsigned long int _index);

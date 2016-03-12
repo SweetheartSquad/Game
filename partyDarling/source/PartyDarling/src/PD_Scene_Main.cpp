@@ -794,6 +794,12 @@ void PD_Scene_Main::addRoom(Room * _room){
 }
 
 
+void PD_Scene_Main::addLifeToken() {
+	Texture * tex = getToken();
+	tex->load();
+	tex->saveImageData("tokenTest.tga");
+	uiDissBattle->addLife(tex);
+}
 
 void PD_Scene_Main::update(Step * _step){
 	// panning
@@ -822,10 +828,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		Texture * tex = getToken();
-		tex->load();
-		tex->saveImageData("tokenTest.tga");
-		uiDissBattle->addLife(tex);
+		addLifeToken();
 	}
 	
 	if(keyboard->keyJustDown(GLFW_KEY_3)){
@@ -1372,9 +1375,11 @@ void PD_Scene_Main::updateSelection(){
 				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					uiInventory->getSelected()->triggerInteract();
 					auto item = uiInventory->removeSelected();
-					auto items = PD_Listing::listings[item->definition->scenario]->items;
-					items.erase(items.find(item->definition->id));
-					delete item;
+					if(item->definition->consumable){
+						auto items = PD_Listing::listings[item->definition->scenario]->items;
+						items.erase(items.find(item->definition->id));
+						delete item;
+					}
 					resetCrosshair();
 
 				});

@@ -235,6 +235,13 @@ void PD_Scene_Main::setupEventListeners(){
 		uiDissStats->playChangeDissStat();
 	});
 
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("addFriendToken", [this](sweet::Event * _event){
+		// Trigger
+		// Adds a friend token to the player
+		addLifeToken();
+	});
+
 	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){
 		// Trigger
 		// Takes an item from a character and gives it to another character. If the previous owner does not actually have the item, it should do nothing.
@@ -389,11 +396,11 @@ void PD_Scene_Main::setupEventListeners(){
 		// (BOOL)INT visibility
 
 		std::string character = _event->getStringData("name");
-		int visible = _event->getIntData("visibility", -1);
+		int visible = _event->getIntData("enabled", -1);
 		std::string scenario = _event->getStringData("scenario");
 
 		if(character == "" || visible == -1) {
-			ST_LOG_ERROR_V("Missing field on trigger hideCharacter");
+			ST_LOG_ERROR_V("Missing field on trigger disableCharacter");
 		}
 
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];

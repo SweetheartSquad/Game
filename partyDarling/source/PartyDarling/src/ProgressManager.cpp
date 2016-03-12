@@ -21,6 +21,7 @@ void ProgressManager::getNew(){
 	sweet::NumberUtils::seed(time(nullptr));
 
 	plotPosition = 1;
+	scenarioFile = Json::Value();
 	sweet::ShuffleVector<Json::Value> allSideDefs;
 	sweet::ShuffleVector<Json::Value> allOmarDefs;
 	std::vector<Json::Value> allPlotDefs;
