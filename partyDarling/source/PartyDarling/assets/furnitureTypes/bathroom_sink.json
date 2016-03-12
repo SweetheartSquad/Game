@@ -69,6 +69,7 @@
       }
    ],
    "type":"bathroom_sink",
+   "detailedCollider": false,
    "mass":0,
    "roomTypes":[  
       "BATHROOM"
