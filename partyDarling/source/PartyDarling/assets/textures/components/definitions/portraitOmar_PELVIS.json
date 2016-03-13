@@ -22,12 +22,12 @@
                 "ANY"
             ]
         ],
-        "texture": 471
+        "texture": 810
     },
     "textures": [
         {
             "component": "Pelvis",
-            "id": 471
+            "id": 810
         }
     ]
 }

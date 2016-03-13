@@ -22,24 +22,12 @@
                 "ANY"
             ]
         ],
-<<<<<<< HEAD:components/definitions/GhostOmar_PELVIS.json
         "texture": 788
-=======
-        "texture": 810
->>>>>>> ee:components/definitions/portraitOmar_PELVIS.json
     },
     "textures": [
         {
             "component": "Pelvis",
-<<<<<<< HEAD:components/definitions/GhostOmar_PELVIS.json
             "id": 788
-=======
-            "id": 471
-        },
-        {
-            "component": "Pelvis",
-            "id": 810
->>>>>>> ee:components/definitions/portraitOmar_PELVIS.json
         }
     ]
 }
