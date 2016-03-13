@@ -5,12 +5,14 @@
 
 #include <PD_Scene_Main.h>
 
-PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game) :
+PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int _plotPosition) :
 	Scene_SlideShow(_game)
 {
 	// get the slides
 	Texture * tex;
-	tex = new Texture("assets/textures/introSlides/8.png", false, true);
+	std::stringstream s;
+	s << "assets/textures/introSlides/intermission_" << _plotPosition << ".png";
+	tex = new Texture(s.str(), false, true);
 	tex->load();
 	push(new Slide(tex));
 
