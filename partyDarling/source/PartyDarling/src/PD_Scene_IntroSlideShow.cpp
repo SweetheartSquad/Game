@@ -30,6 +30,11 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	tex = new Texture("assets/textures/introSlides/7.png", false, true);
 	tex->load();
 	push(new Slide(tex));
+	for(unsigned long int i = 1; i <= 7; ++i){
+		tex = new Texture("assets/textures/introSlides/tut-0"+std::to_string(i)+".png", false, true);
+		tex->load();
+		push(new Slide(tex));
+	}
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){

@@ -16,6 +16,11 @@ PD_Scene_InstructionsSlideShow::PD_Scene_InstructionsSlideShow(Game * _game) :
 	tex = new Texture("assets/textures/introSlides/7.png", false, true);
 	tex->load();
 	push(new Slide(tex));
+	for(unsigned long int i = 1; i <= 7; ++i){
+		tex = new Texture("assets/textures/introSlides/tut-0"+std::to_string(i)+".png", false, true);
+		tex->load();
+		push(new Slide(tex));
+	}
 
 	// setup the trigger for moving back to the menu when the slides are done
 	auto f = [_game](sweet::Event * _event){
