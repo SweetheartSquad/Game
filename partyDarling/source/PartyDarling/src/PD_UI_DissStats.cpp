@@ -123,7 +123,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			player->dissStats->incrementSass();
 			player->dissStats->incrementStrength();
 			playerCard->updateStats(false);
-			playerCard->animateNewStats(0.f);
+			playerCard->animateNewStats(FLT_EPSILON);
+			playerCard->autoResize();
 			++player->level;
 			playerCard->setLevel(player->level);
 
@@ -241,6 +242,7 @@ void PD_UI_DissStats::playChangeDissStat(){
 	vs->setVisible(false);
 	playerCard->updateStats(false);
 	playerCard->animateNewStats(0.f);
+	playerCard->autoResize();
 
 	dissBattleChangeStatTimeout->restart();
 }
