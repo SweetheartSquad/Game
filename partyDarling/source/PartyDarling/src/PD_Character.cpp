@@ -457,26 +457,20 @@ CharacterRenderer::~CharacterRenderer(){
 }
 
 void CharacterRenderer::setAnimation(std::string _name) {
-	std::string selectedAnim = _name;
 	if(_name == "RANDOM"){
 		bool validAnimation = false;
 		std::vector<PD_CharacterAnimationStep> anim;
-		std::string animKey;
 		while(!validAnimation){
 			auto it = PD_ResourceManager::characterAnimations.begin();
 			int idx = sweet::NumberUtils::randomInt(0, PD_ResourceManager::characterAnimations.size() - 1);
 			std::advance(it, idx);
-			animKey = it->first;
-			if(animKey != "DEAD"){
-				anim = it->second;
-				validAnimation = true;
-			}
+			anim = it->second.steps;
+			validAnimation = it->second.canBeRandom;
 		}
 		setAnimation(anim);
-		selectedAnim = animKey;
 	}else {
 		if(PD_ResourceManager::characterAnimations.find(_name) != PD_ResourceManager::characterAnimations.end()) {
-			setAnimation(PD_ResourceManager::characterAnimations[_name]);
+			setAnimation(PD_ResourceManager::characterAnimations[_name].steps);
 		}else {
 			ST_LOG_ERROR("Animation " + _name + " does not exist");
 		}

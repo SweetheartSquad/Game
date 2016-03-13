@@ -197,7 +197,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
 		uiDissStats->playOutro(uiDissBattle->wonXP);
-		player->wonLastDissBattle = _event->getIntData("win");
+		player->wonLastDissBattle = _event->getIntData("win") == 1;
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
@@ -497,7 +497,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	
 	// loop through all of the rooms and remove doors which don't lead anywhere
 	// and save the door positions while we're at it
-	float doorSpacing = 1.5f;
+	float doorSpacing = 1.5f; // how far in front of the door the player is placed when entering
 	for(auto c : houseGrid){
 		int x = c.first.first;
 		int y = c.first.second;
