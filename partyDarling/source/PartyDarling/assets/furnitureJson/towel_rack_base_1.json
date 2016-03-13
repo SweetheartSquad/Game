@@ -1,0 +1,55 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "towel_rack_mount"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        13.77223315813055, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "towel_rack_bar"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        13.77223315813055, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 199, 
+    "src": "towel_rack_base_1.obj", 
+    "type": "towel_rack_base"
+}

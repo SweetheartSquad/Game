@@ -1,0 +1,59 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["towel_rack_base"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["towel_rack_mount"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+								
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+							"componentTypes": ["towel_rack_bar"], 
+							"multiplier": 1, 
+							"outComponents": [
+								{
+								"componentTypes": ["towel_rack_towels"], 
+								"multiplier": 1, 
+								"outComponents": [], 
+								"required": true,
+								"scale": [1.0,1.0,1.0]
+								}
+							], 
+							"required": true,
+							"scale": [1.0,1.0,1.0]
+						}
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "towel_rack",
+			"mass": 0,
+            "roomTypes" : ["BATHROOM"],
+            "sides" : {
+                },
+			"parentDependent": true,
+            "parents":{
+				"bathtub":["RIGHT","LEFT"],
+				"bathroom_sink":["RIGHT","LEFT"],
+                "wall":[
+                    "FRONT"
+                ]
+            },
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
+			 "detailedCollider":false,
+			"max": 2
+
+        }
