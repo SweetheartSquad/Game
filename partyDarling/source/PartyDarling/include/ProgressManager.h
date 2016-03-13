@@ -11,6 +11,7 @@ class ProgressManager : public Node{
 public:
 	// current progress save file
 	Json::Value scenarioFile;
+	Json::Value variables;
 	// scenarios in the current plot position in the current progress save file
 	Json::Value currentScenarios;
 
