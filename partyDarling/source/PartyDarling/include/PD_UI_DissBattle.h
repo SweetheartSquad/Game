@@ -159,6 +159,17 @@ private:
 	std::vector<OpenAL_Sound *> missInterjectSounds;
 	Player * player;
 
+	// Stats multipliers
+
+	float playerAttackMultiplier; // enemy defense, player strength
+	float enemyAttackMultiplier; // player defense, enemy strength
+	
+	float insightMultiplier; // player insight - enemy insight
+	float insightAlpha;
+	
+	float sassInsultMultiplier; // player sass - enemy sass
+	float sassInterjectMultiplier; // player sass - enemy sass
+
 public:
 	float prevXP;
 	float wonXP;
