@@ -478,9 +478,6 @@ void CharacterRenderer::setAnimation(std::string _name) {
 			ST_LOG_ERROR("Animation " + _name + " does not exist");
 		}
 	}
-	if(selectedAnim == "DEAD") {
-		owner->disable();
-	}
 }
 
 void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
