@@ -42,10 +42,10 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	billboarded = true;
 
 	float w = (pr->solverArmL->getChainLength() + pr->solverArmR->getChainLength()) * CHARACTER_SCALE;
-	float h = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength())) * CHARACTER_SCALE * 1.2f;
+	float h = (pr->solverBod->getChainLength() + glm::max(pr->solverLegL->getChainLength(), pr->solverLegR->getChainLength()) + pr->head->meshTransform->getScaleVector().y + pr->jaw->meshTransform->getScaleVector().y + pr->footL->meshTransform->getScaleVector().y) * CHARACTER_SCALE;
 
-	setColliderAsCapsule(w * 0.25f, h * 0.5f);
-	
+	setColliderAsCapsule(w * 0.25f, h - w * 0.5f);
+
 	boundingBox.width = w;
 	boundingBox.height = h;
 	boundingBox.depth = boundingBox.width;
@@ -71,6 +71,10 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 	translatePhysical(glm::vec3(0, boundingBox.height * 0.5f, 0.f), false);
 
+	/* I don't know how to get them centered/aligned with the bottom of the collider
+	float offsetY = -pr->footL->getWorldPos().y + (pr->footL->meshTransform->getScaleVector().y * 0.5f * CHARACTER_SCALE);
+	pr->firstParent()->translate(0, offsetY, 0);
+	*/
 	pr->setAnimation(state->animation);
 
 	items = definition->items;
@@ -259,6 +263,7 @@ void CharacterLimbSolver::addComponent(CharacterComponent * _component, float _w
 	jointsLocal.back()->childTransform->addChild(_component);
 	addJointToChain(j);
 	components.push_back(_component);
+	setJointsVisible(true);
 }
 
 CharacterState::CharacterState(Json::Value _json) :
@@ -450,6 +455,7 @@ CharacterRenderer::~CharacterRenderer(){
 }
 
 void CharacterRenderer::setAnimation(std::string _name) {
+	/*
 	std::string selectedAnim = _name;
 	if(_name == "RANDOM"){
 		bool validAnimation = false;
@@ -477,6 +483,7 @@ void CharacterRenderer::setAnimation(std::string _name) {
 	if(selectedAnim == "DEAD") {
 		owner->disable();
 	}
+	*/
 }
 
 void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
