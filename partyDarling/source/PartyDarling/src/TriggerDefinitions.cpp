@@ -214,9 +214,9 @@ void PD_Scene_Main::setupEventListeners(){
 		player->dissStats->setLastStats(); // so we get acurate increment values later
 
 		std::string stat = _event->getStringData("stat");
-		int delta = _event->getIntData("delta", -1);
+		int delta = _event->getIntData("delta", -9999);
 
-		if(stat == "" || delta == -1) {
+		if(stat == "" || delta == -9999) {
 			ST_LOG_ERROR_V("Missing field in trigger changeDISSStat")
 		}
 
