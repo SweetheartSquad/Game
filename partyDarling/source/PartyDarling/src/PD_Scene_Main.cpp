@@ -197,7 +197,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
 		uiDissStats->playOutro(uiDissBattle->wonXP);
-		player->wonLastDissBattle = _event->getIntData("win");
+		player->wonLastDissBattle = _event->getIntData("win") == 1;
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;
