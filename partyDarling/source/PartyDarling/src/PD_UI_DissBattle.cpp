@@ -95,6 +95,12 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	enemy(nullptr),
 	modeOffensive(true),
 	player(_player),
+	playerAttackMultiplier(1.f),
+	enemyAttackMultiplier(1.f),
+	insightMultiplier(1.f),
+	insightAlpha(1.f),
+	sassInsultMultiplier(1.f),
+	sassInterjectMultiplier(1.f),
 	optionOneShader(new ComponentShaderText(false)),
 	optionTwoShader(new ComponentShaderText(false))
 {
@@ -482,31 +488,6 @@ void PD_UI_DissBattle::update(Step * _step){
 	if(isEnabled()){
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
-				float totInsightEffect = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) * 0.1f;
-
-				if(totInsightEffect < -FLT_EPSILON) {
-					if(totInsightEffect <= -0.9f) {
-						totInsightEffect = 0.1f;
-					}else {
-						totInsightEffect = (totInsightEffect + 1.f);  
-					}
-					optionOneShader->setColor(0.f, 0.f, 0.f, totInsightEffect);
-					optionTwoShader->setColor(0.f, 0.f, 0.f, totInsightEffect);
-				}else {
-					if(totInsightEffect >= 0.9f) {
-						totInsightEffect = 0.1f;
-					}else {
-						totInsightEffect = -1.f * (totInsightEffect - 1.f);  
-					}
-					if(pBubbleBtn1->isEffective) {
-						optionTwoShader->setColor(1.f, 1.f, 1.f, totInsightEffect);
-						optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
-					}else {
-						optionOneShader->setColor(1.f, 1.f, 1.f, totInsightEffect);	
-						optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
-					}
-				}
-
 				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
 					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
 				}
@@ -586,7 +567,7 @@ void PD_UI_DissBattle::update(Step * _step){
 
 							if(glyphIdx < glyphs.size()){
 								// set cursor delay for this glyph
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength);
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength * sassInterjectMultiplier);
 								/*
 								std::wstringstream s;
 								s << glyphs.at(glyphIdx)->character;
@@ -646,8 +627,7 @@ void PD_UI_DissBattle::update(Step * _step){
 				if(playerQuestionTimer >= playerQuestionTimerLength){
 					if(!playerResult){
 						// Increment player answer timer
-						float modPlayerAnswerTimeLegnth = playerAnswerTimerLength + player->dissStats->getSass()/10.f - enemy->dissStats->getSass()/10.f;
-						if(playerAnswerTimer >= modPlayerAnswerTimeLegnth){
+						if(playerAnswerTimer >= playerAnswerTimerLength){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
@@ -665,7 +645,8 @@ void PD_UI_DissBattle::update(Step * _step){
 								incrementConfidence(damage);
 								setPlayerText();
 								playerInsultSpeedMultiplier -= (1.f - MIN_OFFENSE_SPEED_MULTIPLIER) / NUM_OFFENSE_SPEED_CHANGES;
-								playerAnswerTimerLength = basePlayerAnswerTimerLength * playerInsultSpeedMultiplier;
+								
+								playerAnswerTimerLength = basePlayerAnswerTimerLength *  sassInsultMultiplier * playerInsultSpeedMultiplier;
 								playerQuestionTimerLength = basePlayerQuestionTimerLength * playerInsultSpeedMultiplier;
 								playerTimerSlider->setValueMax(playerAnswerTimerLength);
 							}
@@ -739,6 +720,20 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	}
 
 	confidence = 50.f;
+
+	playerAttackMultiplier = sweet::NumberUtils::map((player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
+	enemyAttackMultiplier = sweet::NumberUtils::map((enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
+	
+	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
+	if(insightMultiplier > 0){
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.25f);
+	}else{
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, -1.f, 1.f, 0.25f);
+	}
+
+	float sassMultiplier = (player->dissStats->getSass() - enemy->dissStats->getSass()) / MAX_DISS_LEVEL; // -1 to 1
+	sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.25f, 2.f); // 0.25 to 2
+	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.75f, 1.5f); // 0.75 to 1.5
 
 	if(isGameOver){
 		// Reset layout
@@ -984,7 +979,7 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 	else{
 		playerInsultSpeedMultiplier = 1.f;
 		playerQuestionTimerLength = basePlayerQuestionTimerLength;
-		playerAnswerTimerLength = basePlayerAnswerTimerLength;
+		playerAnswerTimerLength = basePlayerAnswerTimerLength * sassInsultMultiplier;
 		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
@@ -1041,6 +1036,27 @@ void PD_UI_DissBattle::setPlayerText(){
 	pBubbleBtn1->label->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
 	pBubbleBtn2->label->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
 	
+	// Apply insight effect
+	if(insightMultiplier > 0){
+		// Highlight correct choice
+		if(pBubbleBtn1->isEffective) {
+			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
+		}else {
+			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);	
+			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
+		}
+	}else{
+		// Highlight wrong choice
+		if(pBubbleBtn2->isEffective) {
+			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
+		}else {
+			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);	
+			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
+		}
+	}
+
 	// Reset timer
 	playerQuestionTimer = 0;
 	playerAnswerTimer = 0;
@@ -1090,11 +1106,9 @@ void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
 		 // Factor in enemy's defense
-		_value -= enemy->dissStats->getDefense();
-		_value += player->dissStats->getStrength();
+		_value *= playerAttackMultiplier;
 	}else {
-		_value -= enemy->dissStats->getStrength();
-		_value += player->dissStats->getDefense();
+		_value *= enemyAttackMultiplier;
 	}
 	
 	sweet::Event * e = new sweet::Event("confidence");
