@@ -54,10 +54,7 @@ void PD_UI_ItemGainLoss::gainItem(PD_Item * _item){
 	t->eventManager->addEventListener("start", [this, _item](sweet::Event * _event){
 		setVisible(true);
 
-		AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(_item->definition->texture);
-		tex->load();
-		image->background->mesh->replaceTextures(tex->texture);
-	
+		setItemTexture(_item);
 		text->setText("Acquired " + _item->definition->name);
 
 		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
@@ -78,10 +75,7 @@ void PD_UI_ItemGainLoss::loseItem(PD_Item * _item){
 	t->eventManager->addEventListener("start", [this, _item](sweet::Event * _event){
 		setVisible(true);
 
-		AssetTexture * tex = PD_ResourceManager::itemTextures->getTexture(_item->definition->texture);
-		tex->load();
-		image->background->mesh->replaceTextures(tex->texture);
-
+		setItemTexture(_item);
 		text->setText("Gave " + _item->definition->name);
 
 		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
@@ -112,6 +106,20 @@ void PD_UI_ItemGainLoss::displayMessage(std::string _message){
 	});
 
 	animationTimeouts.push_back(t);
+}
+
+void PD_UI_ItemGainLoss::setItemTexture(PD_Item * _item){
+	// make sure the item is displayed at the correct size
+	AssetTexture * assetTex = PD_ResourceManager::itemTextures->getTexture(_item->definition->texture);
+	assetTex->load();
+	Texture * tex = assetTex->texture;
+
+	image->background->mesh->replaceTextures(tex);
+
+	image->setRationalHeight(1.f, image->nodeUIParent);
+	image->setSquareWidth((float)tex->width/tex->height);
+
+	invalidateLayout();
 }
 
 void PD_UI_ItemGainLoss::animate(float _p){

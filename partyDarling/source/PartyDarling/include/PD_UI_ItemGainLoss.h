@@ -21,6 +21,7 @@ public:
 	void loseItem(PD_Item * _item);
 	void displayMessage(std::string _message);
 
+	void setItemTexture(PD_Item * _item);
 	void animate(float _p);
 
 	virtual void update(Step * _step) override;
