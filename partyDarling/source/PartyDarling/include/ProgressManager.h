@@ -20,7 +20,7 @@ public:
 	ProgressManager();
 
 	void save(const Player * const _player, PD_UI_DissBattle * const _uiDissBattle);
-	void loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle);
+	void loadSave(Player * const _player = nullptr, PD_UI_DissBattle * const _uiDissBattle = nullptr);
 	void eraseSave();
 
 	void getNew();

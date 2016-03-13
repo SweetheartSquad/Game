@@ -482,7 +482,7 @@ void PD_Scene_Main::setupEventListeners(){
 			++PD_Game::progressManager->plotPosition;
 			// Make sure to save the game 
 			PD_Game::progressManager->save(player, uiDissBattle);
-			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game);
+			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game, PD_Game::progressManager->plotPosition);
 			game->switchScene("intermission", true);	
 		}else {
 			PD_Game::progressManager->eraseSave();

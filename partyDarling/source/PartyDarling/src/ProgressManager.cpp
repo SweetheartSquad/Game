@@ -194,10 +194,12 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 }
 
 void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
-	if(!sweet::FileUtils::fileExists("data/save.json")){
-		// if a save file doesn't exist, create a new one, save it immediately, then load that instead
-		getNew();
-		save(_player, _uiDissBattle);
+	if(_player != nullptr && _uiDissBattle != nullptr){
+		if(!sweet::FileUtils::fileExists("data/save.json")){
+			// if a save file doesn't exist, create a new one, save it immediately, then load that instead
+			getNew();
+			save(_player, _uiDissBattle);
+		}
 	}
 
 	// load the previous save file properties into the appropriate objects
@@ -208,17 +210,22 @@ void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const 
 	assert(parsingSuccsessful);
 	plotPosition = root["plotPosition"].asInt();
 
-	_player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
-	_player->dissStats->incrementSass(root["stats"]["sass"].asInt());
-	_player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
-	_player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
-	_player->experience = root["stats"]["experience"].asInt();
-	_player->level = root["stats"]["level"].asInt();
-	for(auto tex : root["lifeTokens"]) {
-		Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
-		texture->load();
-		_uiDissBattle->addLife(texture);
+	if(_player != nullptr){
+		_player->dissStats->incrementStrength(root["stats"]["strength"].asInt());
+		_player->dissStats->incrementSass(root["stats"]["sass"].asInt());
+		_player->dissStats->incrementDefense(root["stats"]["defense"].asInt());
+		_player->dissStats->incrementInsight(root["stats"]["insight"].asInt());
+		_player->experience = root["stats"]["experience"].asInt();
+		_player->level = root["stats"]["level"].asInt();
 	}
+	if(_uiDissBattle != nullptr){
+		for(auto tex : root["lifeTokens"]) {
+			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
+			texture->load();
+			_uiDissBattle->addLife(texture);
+		}
+	}
+
 	variables = root["variables"];
 	scenarioFile = root["progress"];
 	currentScenarios = scenarioFile[(int)plotPosition-1];

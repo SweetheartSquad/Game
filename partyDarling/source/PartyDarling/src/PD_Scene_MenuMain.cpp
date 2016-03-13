@@ -103,7 +103,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	continueText->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		if(game->scenes.count("game") == 0){
-			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game);
+			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game, PD_Game::progressManager->plotPosition);
 			game->switchScene("intermission", false);
 		}else{
 			game->switchScene("game", false);

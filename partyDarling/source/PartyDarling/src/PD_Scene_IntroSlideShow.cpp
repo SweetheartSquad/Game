@@ -38,7 +38,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
-		_game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(dynamic_cast<PD_Game*>(_game));
+		_game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(dynamic_cast<PD_Game*>(_game), PD_Game::progressManager->plotPosition);
 		_game->switchScene("intermission", true);
 	});
 
