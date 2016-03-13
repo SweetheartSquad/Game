@@ -23,6 +23,11 @@ struct EmoteDef {
 	~EmoteDef();
 };
 
+struct AnimationDef {
+	std::vector<PD_CharacterAnimationStep> steps;
+	bool canBeRandom;
+};
+
 class PD_ResourceManager : public ResourceManager{
 public:
 	static PD_Scenario * scenario;
@@ -30,7 +35,7 @@ public:
 	static PD_Scenario * componentTextures;
 	static std::vector<PD_FurnitureDefinition *> furnitureDefinitions;
 	static PD_FurnitureComponentContainer * furnitureComponents;
-	static std::map<std::string, std::vector<PD_CharacterAnimationStep>> characterAnimations;
+	static std::map<std::string, AnimationDef> characterAnimations;
 	static ConditionImplementations * conditionImplementations;
 	static std::map<std::string, std::vector<std::string>> characterDefinitions;
 	static std::map<std::string, EmoteDef *> emotes;

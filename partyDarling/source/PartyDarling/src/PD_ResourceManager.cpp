@@ -16,7 +16,7 @@ PD_Scenario * PD_ResourceManager::itemTextures = nullptr;
 PD_Scenario * PD_ResourceManager::componentTextures = nullptr;
 std::vector<PD_FurnitureDefinition*> PD_ResourceManager::furnitureDefinitions;
 PD_FurnitureComponentContainer * PD_ResourceManager::furnitureComponents = nullptr;
-std::map<std::string, std::vector<PD_CharacterAnimationStep>> PD_ResourceManager::characterAnimations;
+std::map<std::string, AnimationDef> PD_ResourceManager::characterAnimations;
 ConditionImplementations * PD_ResourceManager::conditionImplementations = new ConditionImplementations();
 std::map<std::string, std::vector<std::string>> PD_ResourceManager::characterDefinitions;
 std::map<std::string, EmoteDef *> PD_ResourceManager::emotes;
@@ -156,7 +156,10 @@ PD_ResourceManager::PD_ResourceManager(){
 					for(auto step : animStep) {
 						steps.push_back(PD_CharacterAnimationStep(step));	
 					}
-					characterAnimations[animation.get("name", "NO_NAME").asString()] = steps;
+					AnimationDef def;
+					def.steps = steps;
+					def.canBeRandom = animation.get("random", true).asBool();
+					characterAnimations[animation.get("name", "NO_NAME").asString()] = def;
 				}
 			}
 		}

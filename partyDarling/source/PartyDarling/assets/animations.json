@@ -1,80 +1,94 @@
 {
 	"animations":[
 		{
-			"name":"test",
-			"src":"test.json"
-		},
-		{
 			"name":"WAVE",
-			"src":"wave.json"
+			"src":"wave.json",
+			"random" : false
 		},
 		{
 			"name":"DANCE_1",
-			"src":"dance1.json"
+			"src":"dance1.json",
+			"random" : true
 		},
 		{
 			"name":"DANCE_2",
-			"src":"dance2.json"
+			"src":"dance2.json",
+			"random" : true
 		},
 		{
 			"name":"CROSS_ARMS",
-			"src":"crossArms.json"
+			"src":"crossArms.json",
+			"random" : true
 		},
 		{
 			"name":"SICK_1",
-			"src":"sick1.json"
+			"src":"sick1.json",
+			"random" : true
 		},
 		{
 			"name":"IDLE_TALK_1",
-			"src":"idleTalk1.json"
+			"src":"idleTalk1.json",
+			"random" : true
 		},
 		{
 			"name":"IDLE_TALK_2",
-			"src":"idleTalk2.json"
+			"src":"idleTalk2.json",
+			"random" : true
 		},
 		{
 			"name":"IDLE_TALK_3",
-			"src":"idleTalk3.json"
+			"src":"idleTalk3.json",
+			"random" : true
 		},
 		{
 			"name":"WALK_1",
-			"src":"walk1.json"
+			"src":"walk1.json",
+			"random" : true
 		},
 		{
 			"name":"WALK_2",
-			"src":"walk2.json"
+			"src":"walk2.json",
+			"random" : true
 		},
 		{
 			"name":"DRUNK_WALK_1",
-			"src":"drunkWalk.json"
+			"src":"drunkWalk.json",
+			"random" : true
 		},
 		{
 			"name":"DRUNK_WAVE_1",
-			"src":"drunkWave.json"
+			"src":"drunkWave.json",
+			"random" : true
 		},
 		{
 			"name":"FLAILING",
-			"src":"flailing.json"
+			"src":"flailing.json",
+			"random" : true
 		},
 		{
 			"name":"SWAY",
-			"src":"sway.json"
+			"src":"sway.json",
+			"random" : true
 		},
 		{
 			"name":"JUMPING_JACKS",
-			"src":"jumpingJacks.json"
+			"src":"jumpingJacks.json",
+			"random" : true
 		},
 		{
 			"name":"BUTLER",
-			"src":"butler.json"
+			"src":"butler.json",
+			"random" : false
 		},
 		{
 			"name":"DEAD",
-			"src" : "dead.json"
+			"src" : "dead.json",
+			"random" : false
 		},
 		{
 			"name":"GOODSEE",
-			"src":"goodsee_writing.json"
+			"src":"goodsee_writing.json",
+			"random" : false
 		}
 	]	
 }
