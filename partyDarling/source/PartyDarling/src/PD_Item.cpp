@@ -28,6 +28,9 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	addToWorld();
 
 	translatePhysical(glm::vec3(0, ITEM_POS_Y, 0), false);
+	realign();
+
+	originalPos = childTransform->getTranslationVector();
 
 	boundingBox.depth = boundingBox.width*0.1f;
 	boundingBox.z = -boundingBox.depth * 0.5;

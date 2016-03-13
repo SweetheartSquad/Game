@@ -116,7 +116,7 @@ void RoomObject::resetObject(){
 	glm::vec3 axis = glm::axis(orient);
 	rotatePhysical(-a, axis.x, axis.y, axis.z);
 
-	translatePhysical(glm::vec3(), false);
+	translatePhysical(originalPos, false);
 
 	typedef std::map<PD_Side, PD_Slot *>::iterator it_type;
 	for(it_type iterator = emptySlots.begin(); iterator != emptySlots.end(); iterator++) {

@@ -58,6 +58,8 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	translatePhysical(glm::vec3(0, childTransform->getTranslationVector().y - boundingBox.y, 0.f), false); // false false false
 	realign();
 
+	originalPos = childTransform->getTranslationVector();
+
 	// padding
 	padding = _def->padding;
 
