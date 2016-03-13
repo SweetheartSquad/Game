@@ -150,7 +150,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world);
+	uiInventory = new PD_UI_Inventory(uiLayer->world, player);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
@@ -197,7 +197,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissBattle->eventManager->addEventListener("complete", [this](sweet::Event * _event){
 		uiDissBattle->disable();
 		uiDissStats->playOutro(uiDissBattle->wonXP);
-		player->wonLastDissBattle = _event->getIntData("win");
+		player->wonLastDissBattle = _event->getIntData("win") == 1;
 	});
 	uiDissBattle->eventManager->addEventListener("interject", [this](sweet::Event * _event){
 		player->shakeIntensity = 0.3f;

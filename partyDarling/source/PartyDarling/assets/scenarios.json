@@ -1,18 +1,8 @@
 [
     {
-        "order": 0,
-        "src": "scenarios/Julian_and_the_Jewellery.json",
-        "type": 0
-    },
-    {
         "order": 1,
         "src": "scenarios/Plot_1.json",
         "type": 2
-    },
-    {
-        "order": 0,
-        "src": "scenarios/bbe3253a-1829-4a70-b2a1-416ba1264357.json",
-        "type": 0
     },
     {
         "order": 3,
@@ -33,16 +23,6 @@
         "order": 6,
         "src": "scenarios/Plot_6.json",
         "type": 2
-    },
-    {
-        "order": 0,
-        "src": "scenarios/0513a095-4d53-41c4-9da8-a3148f5c51cf.json",
-        "type": 0
-    },
-    {
-        "order": 0,
-        "src": "scenarios/blah.json",
-        "type": 0
     },
     {
         "order": 0,
@@ -152,6 +132,16 @@
     {
         "order": 0,
         "src": "scenarios/Alphonse_out_of_touch.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Julian_and_the_Jewellery.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/hoo_boy.json",
         "type": 0
     }
 ]

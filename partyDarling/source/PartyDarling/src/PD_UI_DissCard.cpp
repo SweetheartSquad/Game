@@ -54,9 +54,16 @@ void PD_UI_DissCard::init(){
 		row->setSquareHeight(1.f/5.f);
 
 		for(unsigned long int x = 0; x < 5; ++x){
+			HorizontalLinearLayout * starContainer = new HorizontalLinearLayout(world);
+			row->addChild(starContainer);
+			starContainer->horizontalAlignment = kCENTER;
+			starContainer->verticalAlignment = kMIDDLE;
+			starContainer->setRationalHeight(1.f, row);
+			starContainer->setSquareWidth(1.f);
+
 			NodeUI * star = new NodeUI(world);
-			row->addChild(star);
-			star->setRationalHeight(1.f, row);
+			starContainer->addChild(star);
+			star->setRationalHeight(1.f, starContainer);
 			star->setSquareWidth(1.f);
 			star->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-STAR")->texture);
 			star->background->mesh->setScaleMode(GL_NEAREST);

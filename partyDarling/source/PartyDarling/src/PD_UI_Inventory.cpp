@@ -1,29 +1,36 @@
 #pragma once
 
 #include <PD_UI_Inventory.h>
+#include <PD_UI_DissCard.h>
 #include <PD_ResourceManager.h>
 #include <PD_Assets.h>
 
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
 
-PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
-	HorizontalLinearLayout(_world),
+PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
+	NodeUI(_world),
 	gridDirty(false),
 	gridOffset(0),
 	selectedItem(nullptr),
 	itemHovered(false),
 	enabled(true)
 {
-	horizontalAlignment = kCENTER;
-	verticalAlignment = kMIDDLE;
+	background->setVisible(false);
 
 	ComponentShaderText * textShader = new ComponentShaderText(true);
 	textShader->setColor(86/255.f, 137/255.f, 135/255.f, 1.f);
 
+	HorizontalLinearLayout * backpackContainer = new HorizontalLinearLayout(_world);
+	addChild(backpackContainer);
+	backpackContainer->horizontalAlignment = kCENTER;
+	backpackContainer->verticalAlignment = kMIDDLE;
+	backpackContainer->setRationalWidth(1.f, this);
+	backpackContainer->setRationalHeight(1.f, this);
+
 	// this is the root element which has the backpack texture
 	HorizontalLinearLayout * root = new HorizontalLinearLayout(_world);
-	addChild(root);
+	backpackContainer->addChild(root);
 	root->background->setVisible(true);
 	root->setBackgroundColour(1,1,1,1);
 	root->setRationalHeight(1.f, this);
@@ -159,6 +166,24 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world) :
 		
 	}
 	
+	HorizontalLinearLayout * cardContainer = new HorizontalLinearLayout(_world);
+	addChild(cardContainer);
+	cardContainer->horizontalAlignment = kLEFT;
+	cardContainer->verticalAlignment = kMIDDLE;
+	cardContainer->setRationalWidth(0.9f, this);
+	cardContainer->setRationalHeight(1.f, this);
+	cardContainer->setMarginTop(0.1f);
+	cardContainer->setMarginBottom(0.65f);
+	cardContainer->setMarginLeft(0.1f);
+
+	// Diss Card
+	playerCard = new PD_UI_DissCard(_world, _player);
+	cardContainer->addChild(playerCard);
+	playerCard->setRationalHeight(1.f, cardContainer);
+	playerCard->setSquareWidth(1.4f);
+	playerCard->firstParent()->rotate(15.f, 0.f, 0.f, 1.f, kOBJECT);
+
+
 	// disable and hide by default
 	disable();
 }
@@ -269,7 +294,7 @@ void PD_UI_Inventory::update(Step * _step){
 		refreshGrid();
 	}
 
-	HorizontalLinearLayout::update(_step);
+	NodeUI::update(_step);
 
 	itemHovered = false;
 }
@@ -324,6 +349,8 @@ void PD_UI_Inventory::enable(){
 	}
 	gridLayout->setMouseEnabled(true);
 	scrollbar->setMouseEnabled(true);
+
+	playerCard->updateStats();
 }
 
 void PD_UI_Inventory::disable(){
