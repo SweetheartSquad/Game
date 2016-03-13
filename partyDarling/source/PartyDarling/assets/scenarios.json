@@ -150,8 +150,8 @@
         "type": 0
     },
     {
-        "order": 0,
+        "order": 6,
         "src": "scenarios/Plot_6.json",
-        "type": 0
+        "type": 2
     }
 ]
