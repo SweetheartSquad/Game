@@ -823,6 +823,30 @@
         {
             "id": 198, 
             "src": "furnitureJson/desk_legs_2.json"
+        }, 
+        {
+            "id": 199, 
+            "src": "furnitureJson/towel_rack_base_1.json"
+        }, 
+        {
+            "id": 200, 
+            "src": "furnitureJson/towel_rack_mount_1.json"
+        }, 
+        {
+            "id": 201, 
+            "src": "furnitureJson/towel_rack_bar_1.json"
+        }, 
+        {
+            "id": 202, 
+            "src": "furnitureJson/towel_rack_towels_1.json"
+        }, 
+        {
+            "id": 203, 
+            "src": "furnitureJson/towel_rack_towels_2.json"
+        }, 
+        {
+            "id": 204, 
+            "src": "furnitureJson/towel_rack_mount_2.json"
         }
     ], 
     "furniture": [
@@ -891,6 +915,9 @@
         }, 
         {
             "src": "furnitureTypes/desk.json"
+        }, 
+        {
+            "src": "furnitureTypes/towel_rack.json"
         }
     ]
 }
