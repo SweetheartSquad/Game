@@ -431,7 +431,7 @@ void PD_Scene_Main::setupEventListeners(){
 		});
 	});
 
-	PD_ResourceManager::scenario->eventManager->addEventListener("hideCharacter", [](sweet::Event * _event){
+	PD_ResourceManager::scenario->eventManager->addEventListener("hideCharacter", [this](sweet::Event * _event){
 		// hide a character in a room until they need to appear
 		// CHARACTER name
 		// (BOOL)INT visibility
@@ -448,6 +448,23 @@ void PD_Scene_Main::setupEventListeners(){
 		
 		if(visible == 1) {
 			person->show();
+
+			//////////////////////////////////////////////
+			// SPECIAL CASE FOR SCIENTIST OMAR IN LAB_5 //
+			//////////////////////////////////////////////
+			if(PD_Game::progressManager->plotPosition == 5){
+				glm::vec3 v = player->playerCamera->forwardVectorRotated;
+				v.y = 0;
+				v = glm::normalize(v);
+				person->translatePhysical(player->getWorldPos() - v*8.f);
+				v = person->getPhysicsBodyCenter();
+				if(glm::abs(v.x) < glm::abs(v.z)){
+					v.x = 0;
+				}else{
+					v.z = 0;
+				}
+				person->translatePhysical(v, false);
+			}
 		}else {
 			person->hide();
 		}

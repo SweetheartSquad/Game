@@ -847,6 +847,30 @@
         {
             "id": 204, 
             "src": "furnitureJson/towel_rack_mount_2.json"
+        }, 
+        {
+            "id": 205, 
+            "src": "furnitureJson/kitchen_shelf_content_1_2.json"
+        }, 
+        {
+            "id": 206, 
+            "src": "furnitureJson/kitchen_shelf_content_2_2.json"
+        }, 
+        {
+            "id": 207, 
+            "src": "furnitureJson/kitchen_shelf_content_3_2.json"
+        }, 
+        {
+            "id": 208, 
+            "src": "furnitureJson/kitchen_shelf_content_1_2.json"
+        }, 
+        {
+            "id": 209, 
+            "src": "furnitureJson/kitchen_shelf_content_2_2.json"
+        }, 
+        {
+            "id": 210, 
+            "src": "furnitureJson/kitchen_shelf_content_3_2.json"
         }
     ], 
     "furniture": [

@@ -51,7 +51,7 @@
         {
             "id": 4, 
             "src": "houseplant_1", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM","OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -66,7 +66,7 @@
         {
             "id": "houseplant2", 
             "src": "houseplant_2", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM","OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -81,7 +81,7 @@
         {
             "id": "houseplant3", 
             "src": "houseplant_3", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM","OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -96,7 +96,7 @@
         {
             "id": "houseplant4", 
             "src": "houseplant_4", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM","OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -111,7 +111,7 @@
 		{
             "id": 5, 
             "src": "mug", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM","OFFICE"],
 			"parentDependent": true,
             "parents":{
                 "table":[
@@ -211,8 +211,10 @@
 		{
             "id": 11, 
             "src": "statue_1", 
-            "roomTypes" : ["LIVING_ROOM", "BEDROOM"],
-            "parents":{
+            "roomTypes" : ["LIVING_ROOM", "BEDROOM", "OFFICE"],
+            "parents":{"sideTable":[
+                    "TOP"
+                ]
             },
             "mass": 50,
             "padding":0,
@@ -258,7 +260,7 @@
         {
             "id": "clock_1", 
             "src": "clock_1", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM", "OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -273,7 +275,7 @@
         {
             "id": "clock_2", 
             "src": "clock_2", 
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM", "OFFICE"],
             "parentDependent": true,
             "parents":{
                 "sideTable":[
@@ -381,7 +383,7 @@
 		{
             "id": "banana", 
             "src": "banana", 
-            "roomTypes" : ["LIVING_ROOM","KITCHEN"],
+            "roomTypes" : ["LIVING_ROOM","KITCHEN", "OFFICE"],
             "parentDependent": true,
             "parents":{
                 "table":[
