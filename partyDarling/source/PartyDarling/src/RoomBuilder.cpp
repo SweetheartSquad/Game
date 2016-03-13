@@ -130,11 +130,11 @@ Room * RoomBuilder::getRoom(){
 	room->ceiling->mesh->pushTexture2D(getCeilTex());
 
 	thresh = 5;
-	bool success;
 
 	unsigned long int l, w;
 	float fullL, fullW;
-
+	
+	// convert size enum to actual numbers
 	switch (definition->size){
 		case AssetRoom::Size_t::kSMALL: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/3); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/4, ROOM_SIZE_MAX/3); break;
 		case AssetRoom::Size_t::kMEDIUM: l = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); w = sweet::NumberUtils::randomInt(ROOM_SIZE_MAX/3, ROOM_SIZE_MAX/1.5f); break;
@@ -146,15 +146,15 @@ Room * RoomBuilder::getRoom(){
 	std::vector<RoomObject *> objects = getSpecifiedObjects();
 
 	int numAttempts = 0;
-
+	
+	bool success;
 	do{
+		success = true;
 		++numAttempts;
 		std::stringstream s;
 		s << "ATTEMPT " << numAttempts; 
 		Log::info(s.str());
 
-		success = true;
-		// convert size enum to actual numbers
 
 		fullL = l * ROOM_TILE;
 		fullW = ROOM_TILE * w;
@@ -223,13 +223,11 @@ Room * RoomBuilder::getRoom(){
 
 			Log::warn("INCREASING ROOM SIZE.");
 			// unload walls, increase size
-			if(room->world != nullptr && room->body != nullptr) {
-				room->world->world->removeRigidBody(room->body);
-				delete room->body;
-				delete room->shape;
-				room->body = nullptr;
-				room->shape = nullptr;
-			}
+			room->world->world->removeRigidBody(room->body);
+			delete room->body;
+			delete room->shape;
+			room->body = nullptr;
+			room->shape = nullptr;
 			room->mesh->vertices.clear();
 
 			delete room->tilemap;
@@ -243,12 +241,10 @@ Room * RoomBuilder::getRoom(){
 			availableParents.clear();
 
 			for(auto o : placedObjects){
-				if(o != nullptr){
-					o->resetObject();
-					o->realign();
-					o->meshTransform->makeCumulativeModelMatrixDirty();
-					room->removeComponent(o);
-				}
+				o->resetObject();
+				o->realign();
+				o->meshTransform->makeCumulativeModelMatrixDirty();
+				room->removeComponent(o);
 			}
 			placedObjects.clear();
 
@@ -259,9 +255,8 @@ Room * RoomBuilder::getRoom(){
 			
 			tiles.clear();
 
-			typedef std::map<PD_Door::Door_t, PD_Door *>::iterator it_type;
-			for(it_type it = room->doors.begin(); it != room->doors.end(); it++) {
-				delete it->second;
+			for(auto d : room->doors) {
+				delete d.second;
 			}
 			room->doors.clear();
 
@@ -409,25 +404,33 @@ bool RoomBuilder::placeDoors(){
 	PD_Door * doorSouth = new PD_Door(world, baseShader, PD_Door::kSOUTH, getDoorTexIdx());
 	PD_Door * doorEast = new PD_Door(world, baseShader, PD_Door::kEAST, getDoorTexIdx());
 	PD_Door * doorWest = new PD_Door(world, baseShader, PD_Door::kWEST, getDoorTexIdx());
-
-	// Place new door
-	if(!placeDoor(doorNorth)){
-		Log::warn("North door not placed!!!");
-	}
-	if(!placeDoor(doorSouth)){
-		Log::warn("South door not placed!!!");
-	}
-	if(!placeDoor(doorEast)){
-		Log::warn("East door not placed!!!");
-	}
-	if(!placeDoor(doorWest)){
-		Log::warn("West door not placed!!!");
+	
+	if(room->doors.size() > 0){
+		Log::error("Doors already in room!");
 	}
 
 	room->doors.insert(std::make_pair(PD_Door::kNORTH, doorNorth));
 	room->doors.insert(std::make_pair(PD_Door::kSOUTH, doorSouth));
 	room->doors.insert(std::make_pair(PD_Door::kEAST, doorEast));
 	room->doors.insert(std::make_pair(PD_Door::kWEST, doorWest));
+
+	// Place new door
+	if(!placeDoor(doorNorth)){
+		Log::warn("North door not placed!!!");
+		return false;
+	}
+	if(!placeDoor(doorSouth)){
+		Log::warn("South door not placed!!!");
+		return false;
+	}
+	if(!placeDoor(doorEast)){
+		Log::warn("East door not placed!!!");
+		return false;
+	}
+	if(!placeDoor(doorWest)){
+		Log::warn("West door not placed!!!");
+		return false;
+	}
 
 	return true;
 }

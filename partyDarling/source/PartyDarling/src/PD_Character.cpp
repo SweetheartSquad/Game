@@ -68,8 +68,11 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
-
+	
 	translatePhysical(glm::vec3(0, boundingBox.height * 0.5f, 0.f), false);
+	realign();
+
+	originalPos = childTransform->getTranslationVector();
 
 	/* I don't know how to get them centered/aligned with the bottom of the collider
 	float offsetY = -pr->footL->getWorldPos().y + (pr->footL->meshTransform->getScaleVector().y * 0.5f * CHARACTER_SCALE);

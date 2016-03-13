@@ -347,7 +347,7 @@ void PD_Scene_Main::setupEventListeners(){
 		// CHARACTER oponent = character the player is fighting
 		// INT(BOOLEAN) playerInterjectInit = true = player interects first, false = player insults first
 		std::string opponent = _event->getStringData("opponent");
-		bool interjectingFirst = static_cast<bool>(_event->getIntData("playerInterjectInit"));
+		bool interjectingFirst = _event->getIntData("playerInterjectInit") == 1;
 		std::string scenario = _event->getStringData("scenario");
 
 		if(opponent == "") {
@@ -365,7 +365,7 @@ void PD_Scene_Main::setupEventListeners(){
 				uiDialogue->setVisible(true);
 				uiBubble->enable();
 			}
-			player->wonLastDissBattle = _event->getIntData("win");
+			player->wonLastDissBattle = _event->getIntData("win") == 1;
 		});
 	});
 
@@ -384,7 +384,7 @@ void PD_Scene_Main::setupEventListeners(){
 
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
 		
-		if(static_cast<bool>(visible)) {
+		if(visible == 1) {
 			person->show();
 		}else {
 			person->hide();
@@ -406,7 +406,7 @@ void PD_Scene_Main::setupEventListeners(){
 
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
 		
-		if(static_cast<bool>(visible)) {
+		if(visible == 1) {
 			person->enable();
 		}else {
 			person->disable();

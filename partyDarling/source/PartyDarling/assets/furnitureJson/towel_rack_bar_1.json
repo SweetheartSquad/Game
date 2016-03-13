@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "towel_rack_towels"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        0.9557866090833008
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 201, 
+    "src": "towel_rack_bar_1.obj", 
+    "type": "towel_rack_bar"
+}
