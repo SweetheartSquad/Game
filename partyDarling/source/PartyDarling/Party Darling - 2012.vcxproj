@@ -61,6 +61,7 @@
     <ClCompile Include="src\PD_UI_DissStats.cpp" />
     <ClCompile Include="src\PD_UI_Fade.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
+    <ClCompile Include="src\PD_UI_ItemGainLoss.cpp" />
     <ClCompile Include="src\PD_UI_Map.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="include\PD_UI_DissStats.h" />
     <ClInclude Include="include\PD_UI_Fade.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
+    <ClInclude Include="include\PD_UI_ItemGainLoss.h" />
     <ClInclude Include="include\PD_UI_Map.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
