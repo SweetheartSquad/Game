@@ -50,5 +50,6 @@
 			"paddingFront": 0.5,
 			"paddingBack": 0.2,
 			"paddingLeft": 0.05,
-			"paddingRight": 0.05
+			"paddingRight": 0.05,
+			"max": 4
         }

@@ -17,19 +17,19 @@ ProgressManager::ProgressManager() :
 }
 
 void ProgressManager::setInt(std::string _name, int _val) {
-	scenarioFile["intVariables"][_name] = _val;
+	variables["intVariables"][_name] = _val;
 }
 
 void ProgressManager::setString(std::string _name, std::string _val) {
-	scenarioFile["stringVariables"][_name] = _val;
+	variables["stringVariables"][_name] = _val;
 }
 
 int ProgressManager::getInt(std::string _name) {
-	return scenarioFile["intVariables"][_name].asInt();
+	return variables["intVariables"][_name].asInt();
 }
 
 std::string ProgressManager::getString(std::string _name) {
-	return scenarioFile["stringVariables"][_name].asString();
+	return variables["stringVariables"][_name].asString();
 }
 
 void ProgressManager::getNew(){
@@ -143,6 +143,9 @@ void ProgressManager::getNew(){
 		outValue["seed"] = sweet::NumberUtils::randomInt();
 		scenarioFile.append(outValue);
 	}
+	variables = Json::Value();
+	variables["intVariables"] = Json::Value();
+	variables["stringVariables"] = Json::Value();
 	// seed the RNG with 0 to make sure there aren't any differences elswhere
 	sweet::NumberUtils::seed(0);
 }
@@ -168,6 +171,7 @@ void ProgressManager::eraseSave() {
 void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
 	Json::Value saveOut;
 	saveOut["plotPosition"] = (int)plotPosition;
+	saveOut["variables"] = variables;
 	saveOut["stats"] = Json::Value();
 	saveOut["stats"]["strength"] = _player->dissStats->getStrength();
 	saveOut["stats"]["sass"] = _player->dissStats->getSass();
@@ -215,6 +219,7 @@ void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const 
 		texture->load();
 		_uiDissBattle->addLife(texture);
 	}
+	variables = root["variables"];
 	scenarioFile = root["progress"];
 	currentScenarios = scenarioFile[(int)plotPosition-1];
 	sweet::NumberUtils::seed(currentScenarios["seed"].asInt());

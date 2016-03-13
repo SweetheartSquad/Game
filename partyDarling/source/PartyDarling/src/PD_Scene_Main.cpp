@@ -904,12 +904,12 @@ void PD_Scene_Main::update(Step * _step){
 
 	// party lights!
 	float a = playerLight->getAttenuation();
-	float newa = fmod(_step->time, 142.f/300.f)*0.01f+0.01f;
+	float newa = fmod(_step->time, 142.f/300.f)*0.01f + 0.01f;
 	playerLight->setAttenuation(newa);
 	if(newa < a){
 		lightStart = glm::vec3((glm::sin(_step->time)*0.5f+0.5f)*0.2f + 0.3f, (glm::sin(_step->time*19)*0.5f+0.5f)*0.2f + 0.3f, (glm::sin(_step->time*17)*0.5f+0.5f)*0.2f + 0.3f);
 		lightEnd = glm::vec3((glm::sin(_step->time*29)*0.5f+0.5f)*0.6f + 0.9f, (glm::sin(_step->time*7)*0.5f+0.5f)*0.6f + 0.9f, (glm::sin(_step->time*3)*0.5f+0.5f)*0.6f + 0.9f);
-		lightIntensity = (glm::sin(_step->time*31)*0.5f+0.5f)*0.25f+1.f * currentRoom->lights.size() > 0 ? 0.05f : 0.5f;
+		lightIntensity = (glm::sin(_step->time*31)*0.5f+0.5f)*0.25f+1.f * currentRoom->lights.size() > 0 ? 0.05f : 1.4f;
 	}
 	toonRamp->setRamp(
 		toonRamp->start + (lightStart - toonRamp->start) * 0.1f,
