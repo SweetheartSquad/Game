@@ -1100,17 +1100,19 @@ void PD_Scene_Main::update(Step * _step){
 	}
 	
 	// inventory toggle
-	if(keyboard->keyJustDown(GLFW_KEY_TAB)){
-		if(uiInventory->isVisible()){
-			uiBubble->enable();
-			uiInventory->disable();
-			uiLayer->removeMouseIndicator();
-			player->enable();
-		}else{
-			uiBubble->disable();
-			uiInventory->enable();
-			uiLayer->addMouseIndicator();
-			player->disable();
+	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
+		if(keyboard->keyJustDown(GLFW_KEY_TAB)){
+			if(uiInventory->isVisible()){
+				uiBubble->enable();
+				uiInventory->disable();
+				uiLayer->removeMouseIndicator();
+				player->enable();
+			}else{
+				uiBubble->disable();
+				uiInventory->enable();
+				uiLayer->addMouseIndicator();
+				player->disable();
+			}
 		}
 	}
 	
