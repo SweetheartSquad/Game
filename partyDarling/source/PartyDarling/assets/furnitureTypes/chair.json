@@ -31,7 +31,7 @@
             ], 
             "type": "chair",
 			"mass": 20,
-            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM"],
+            "roomTypes" : ["KITCHEN", "LIVING_ROOM", "BEDROOM", "OFFICE"],
             "sides" : {
                 },
 			"parentDependent": true,
@@ -41,7 +41,8 @@
                     "BACK",
                     "LEFT",
                     "RIGHT"
-                ]
+                ],
+				"desk":["BACK"]
             },
             "padding":0    
 

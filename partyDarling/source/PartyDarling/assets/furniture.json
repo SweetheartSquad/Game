@@ -779,6 +779,50 @@
         {
             "id": 187, 
             "src": "furnitureJson/pillows_2.json"
+        }, 
+        {
+            "id": 188, 
+            "src": "furnitureJson/desk_top_1.json"
+        }, 
+        {
+            "id": 189, 
+            "src": "furnitureJson/desk_top_2.json"
+        }, 
+        {
+            "id": 190, 
+            "src": "furnitureJson/desk_right_1.json"
+        }, 
+        {
+            "id": 191, 
+            "src": "furnitureJson/desk_left_1.json"
+        }, 
+        {
+            "id": 192, 
+            "src": "furnitureJson/desk_middle_1.json"
+        }, 
+        {
+            "id": 193, 
+            "src": "furnitureJson/desk_right_2.json"
+        }, 
+        {
+            "id": 194, 
+            "src": "furnitureJson/desk_left_2.json"
+        }, 
+        {
+            "id": 195, 
+            "src": "furnitureJson/desk_left_3.json"
+        }, 
+        {
+            "id": 196, 
+            "src": "furnitureJson/desk_right_3.json"
+        }, 
+        {
+            "id": 197, 
+            "src": "furnitureJson/desk_legs_1.json"
+        }, 
+        {
+            "id": 198, 
+            "src": "furnitureJson/desk_legs_2.json"
         }
     ], 
     "furniture": [
@@ -844,6 +888,9 @@
         }, 
         {
             "src": "furnitureTypes/bed.json"
+        }, 
+        {
+            "src": "furnitureTypes/desk.json"
         }
     ]
 }

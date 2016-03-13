@@ -1,0 +1,66 @@
+{
+   "components": [
+                {
+                    "componentTypes": ["desk_top"], 
+                    "multiplier": 1, 
+                    "outComponents": [
+                        {
+                            "componentTypes": ["desk_legs"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": true,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["desk_left"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": false,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["desk_middle"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": false,
+							"scale": [1.0,1.0,1.0]
+                        },
+						{
+                            "componentTypes": ["desk_right"], 
+                            "multiplier": 1, 
+                            "outComponents": [
+                                
+                            ], 
+                            "required": false,
+							"scale": [1.0,1.0,1.0]
+                        }
+                    ], 
+                    "required": true,
+					"scale": [1.0,1.0,1.0]
+                }
+            ], 
+            "type": "desk",
+			"mass": 100,
+            "roomTypes" : ["OFFICE"],
+            "sides" : {
+				"BACK":"FRONT"
+                },
+			"parentDependent": false,
+            "parents":{
+            },
+			"twist": false,
+            "flare": false,
+			"paddingFront": 0.2,
+			"paddingLeft": 0.5,
+			"paddingRight": 0.5,
+			"paddingBack": 0,
+			 "numTextures":2,
+			"max": 1
+
+        }

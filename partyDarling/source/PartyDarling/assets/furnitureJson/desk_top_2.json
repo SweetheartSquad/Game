@@ -1,0 +1,103 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "desk_legs"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.06305667250895586, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "desk_middle"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.06305667250895586, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "desk_left"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        -7.878794420531154, 
+                        0.06305667250895586, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "desk_right"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        7.879, 
+                        0.06305667250895586, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 189, 
+    "src": "desk_top_2.obj", 
+    "type": "desk_top"
+}

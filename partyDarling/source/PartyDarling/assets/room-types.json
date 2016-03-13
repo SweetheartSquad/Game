@@ -1,7 +1,3 @@
 {
-"BATHROOM"   : ["SMALL"],
-"LIVING_ROOM" : ["MEDIUM", "LARGE"],
-"KITCHEN"    : ["MEDIUM"],
-"OFFICE"     : ["SMALL", "MEDIUM"],
-"BEDROOM"    : ["MEDIUM"]
+"BEDROOM"    : ["LARGE"]
 }
