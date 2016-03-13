@@ -170,22 +170,20 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	healthContainer->addChild(livesContainer);
 	//livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
 	livesContainer->setRationalWidth(1.f, healthContainer);
-	livesContainer->setRationalHeight(0.6f, healthContainer);
-	livesContainer->setMarginTop(0.1f);
-	livesContainer->setMarginBottom(0.1f);
+	livesContainer->setRationalHeight(0.5f, healthContainer);
+	livesContainer->boxSizing = kCONTENT_BOX;
+	livesContainer->setMarginBottom(0.5f);
 	livesContainer->horizontalAlignment = kLEFT;
-	livesContainer->verticalAlignment = kMIDDLE;
+	livesContainer->verticalAlignment = kTOP;
 
 
 	// healthbar
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	healthContainer->addChild(confidenceSlider);
-	confidenceSlider->boxSizing = kCONTENT_BOX;
 	//confidenceSlider->setBackgroundColour(1.f, 0, 0);
 	//confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
 	confidenceSlider->setRationalWidth(0.7f, healthContainer);
-	confidenceSlider->setRationalHeight(0.4f, healthContainer);
-	confidenceSlider->setMarginBottom(0.1f);
+	confidenceSlider->setRationalHeight(0.5f, healthContainer);
 	
 	//confidenceSlider->thumb->background->meshTransform->scale(2);
 	confidenceSlider->thumb->setBackgroundColour(1,1,1,1);

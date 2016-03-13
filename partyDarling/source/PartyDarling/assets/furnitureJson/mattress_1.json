@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "pillows"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.2075912952423096, 
+                        -9.201872942889153
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 179, 
+    "src": "mattress_1.obj", 
+    "type": "mattress"
+}

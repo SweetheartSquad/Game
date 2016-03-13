@@ -1,0 +1,79 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "mattress"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.9932287827403314, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "footboard"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        3.8214567795665033, 
+                        12.557947508265041
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "headboard"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        3.8214567795665033, 
+                        -12.639052216092033
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 178, 
+    "src": "bedframe_3.obj", 
+    "type": "bedframe"
+}

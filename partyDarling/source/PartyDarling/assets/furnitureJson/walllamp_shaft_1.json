@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "lampshade"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        2.3219574674744945, 
+                        2.5310730934143066
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 176, 
+    "src": "walllamp_shaft_1.obj", 
+    "type": "walllamp_shaft"
+}
