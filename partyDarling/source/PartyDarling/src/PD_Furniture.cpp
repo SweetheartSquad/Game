@@ -87,6 +87,8 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	realign(); // update the current position from creation
 	translatePhysical(glm::vec3(0, childTransform->getTranslationVector().y - boundingBox.y, 0.f), false); // false false false
 	realign();
+
+	originalPos = childTransform->getTranslationVector();
 	
 	// properly size and position the bounding box based on mesh origin and padding
 	boundingBox.x = -boundingBox.width * (0.5f + _def->paddingLeft);;

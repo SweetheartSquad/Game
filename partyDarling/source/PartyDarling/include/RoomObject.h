@@ -58,6 +58,8 @@ public:
 
 	RoomObject * parent;
 
+	glm::vec3 originalPos; // Due to the y-axis alignment thing
+
 	std::vector<Light *> lights;
 
 	RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader, Anchor_t _anchor = Anchor_t::GROUND);
