@@ -65,7 +65,7 @@
                      "outComponents":[  
                         {  
                            "componentTypes":[  
-                              "kitchen_shelf_content_one"
+                              "kitchen_shelf_content"
                            ],
                            "multiplier":1,
                            "outComponents":[  
@@ -80,7 +80,7 @@
                         },
                         {  
                            "componentTypes":[  
-                              "kitchen_shelf_content_two"
+                              "kitchen_shelf_content"
                            ],
                            "multiplier":1,
                            "outComponents":[  
@@ -95,7 +95,7 @@
                         },
                         {  
                            "componentTypes":[  
-                              "kitchen_shelf_content_three"
+                              "kitchen_shelf_content"
                            ],
                            "multiplier":1,
                            "outComponents":[  
