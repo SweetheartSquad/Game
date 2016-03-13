@@ -7,7 +7,10 @@
 #define UI_INVENTORY_GRID_SIZE_Y 3
 #define UI_INVENTORY_GRID_PADDING 0.02f
 
-class PD_UI_Inventory : public HorizontalLinearLayout{
+class PD_UI_DissCard;
+class Player;
+
+class PD_UI_Inventory : public NodeUI{
 private:
 	bool enabled;
 	bool gridDirty;
@@ -25,6 +28,8 @@ private:
 	
 	// scrollbar for grid
 	SliderController * scrollbar;
+
+	PD_UI_DissCard * playerCard;
 public:
 	// all of the currently held inventory items
 	std::vector<PD_Item *> items;
@@ -43,7 +48,7 @@ public:
 	// the number of rows that have been scrolled since the top of the grid
 	float gridOffset;
 
-	PD_UI_Inventory(BulletWorld * _world);
+	PD_UI_Inventory(BulletWorld * _world, Player * _player);
 
 	// add an item to the inventory
 	void pickupItem(PD_Item * _item);

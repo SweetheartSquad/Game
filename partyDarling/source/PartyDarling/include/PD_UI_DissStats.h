@@ -41,5 +41,4 @@ public:
 	void playIntro(PD_Character * _enemy);
 	void playOutro(float _wonXP);
 	void playChangeDissStat();
-	
 };
