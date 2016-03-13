@@ -231,6 +231,7 @@
                     "TOP"
                 ]
             },
+			"parentDependent": true,
             "mass": 30,
             "padding":0,
             "twist": false,
@@ -248,6 +249,7 @@
                     "TOP"
                 ]
             },
+			"parentDependent": true,
             "mass": 30,
             "padding":0,
             "twist": false,
