@@ -51,25 +51,39 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	createRigidBody(0);
 	
 	PD_Listing * listing = PD_Listing::listings[_labScenario];
-	AssetCharacter * c = nullptr;
+	AssetCharacter * c1, * c2 = nullptr;
 	auto it = _labScenario->assets["character"].begin();
 	if(it != _labScenario->assets["character"].end()){
-		c = dynamic_cast<AssetCharacter *>(it->second);
-		if(c->id == "0"){
+		c1 = dynamic_cast<AssetCharacter *>(it->second);
+		if(c1->id == "0"){
 			++it;
 			if(it != _labScenario->assets["character"].end()){
-				c = dynamic_cast<AssetCharacter *>(it->second);
+				c1 = dynamic_cast<AssetCharacter *>(it->second);
 			}else{
-				c = nullptr;
+				c1 = nullptr;
 			}
 		}
 	}
 
-	if(c != nullptr){
-		PD_Character * p = new PD_Character(_world, c, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+	if(c1 != nullptr){
+		PD_Character * p = new PD_Character(_world, c1, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
 		addComponent(p);
 		characters.push_back(p);
 		listing->addCharacter(p);
+
+		++it;
+		if(it != _labScenario->assets["character"].end()){
+			c2 = dynamic_cast<AssetCharacter *>(it->second);
+		}else{
+			c2 = nullptr;
+		}
+
+		if(c2 != nullptr){
+			PD_Character * p = new PD_Character(_world, c2, MeshFactory::getPlaneMesh(3.f), _characterShader, _emoteShader);
+			addComponent(p);
+			characters.push_back(p);
+			listing->addCharacter(p);
+		}
 	}
 	
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
