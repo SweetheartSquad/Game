@@ -91,11 +91,6 @@
             "type": "texture"
         },
         {
-            "id": 1228,
-            "src": "items/Lighter.png",
-            "type": "texture"
-        },
-        {
             "id": 1229,
             "src": "items/Beaker.png",
             "type": "texture"
@@ -148,6 +143,11 @@
         {
             "id": 1378,
             "src": "items/Book3.png",
+            "type": "texture"
+        },
+        {
+            "id": 1519,
+            "src": "items/Lighter.png",
             "type": "texture"
         }
     ]

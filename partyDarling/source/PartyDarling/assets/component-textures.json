@@ -4876,23 +4876,8 @@
             "type": "texture"
         },
         {
-            "id": 1185,
-            "src": "components/Thebe_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
             "id": 1186,
             "src": "components/Phoebe_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1187,
-            "src": "components/Thebe_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1188,
-            "src": "components/Thebe_Nose.png",
             "type": "texture"
         },
         {
@@ -4901,43 +4886,13 @@
             "type": "texture"
         },
         {
-            "id": 1190,
-            "src": "components/Thebe_Right_Eye.png",
-            "type": "texture"
-        },
-        {
             "id": 1191,
             "src": "components/Phoebe_Left_Pupil.png",
             "type": "texture"
         },
         {
-            "id": 1192,
-            "src": "components/Thebe_Left_Eye.png",
-            "type": "texture"
-        },
-        {
             "id": 1193,
             "src": "components/Phoebe_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1194,
-            "src": "components/Thebe_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1195,
-            "src": "components/Thebe_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1196,
-            "src": "components/Thebe_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1197,
-            "src": "components/Thebe_Right_Pupil.png",
             "type": "texture"
         },
         {
@@ -5711,51 +5666,6 @@
             "type": "texture"
         },
         {
-            "id": 1363,
-            "src": "components/Durham_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1364,
-            "src": "components/Durham_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1365,
-            "src": "components/Durham_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 1366,
-            "src": "components/Durham_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1367,
-            "src": "components/Durham_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1368,
-            "src": "components/Durham_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1369,
-            "src": "components/Durham_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1370,
-            "src": "components/Durham_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1371,
-            "src": "components/Durham_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 1372,
             "src": "components/Durham_Pelvis.png",
             "type": "texture"
@@ -6473,6 +6383,176 @@
         {
             "id": 1518,
             "src": "components/Goober_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1520,
+            "src": "components/Thebe_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1521,
+            "src": "components/Thebe_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1522,
+            "src": "components/Thebe_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1523,
+            "src": "components/Thebe_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1524,
+            "src": "components/Thebe_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1525,
+            "src": "components/Thebe_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1526,
+            "src": "components/Thebe_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1527,
+            "src": "components/Thebe_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1528,
+            "src": "components/Thebe_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1529,
+            "src": "components/Durham_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1530,
+            "src": "components/Durham_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1531,
+            "src": "components/Durham_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1532,
+            "src": "components/Durham_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1533,
+            "src": "components/Durham_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1534,
+            "src": "components/Durham_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1535,
+            "src": "components/Durham_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1536,
+            "src": "components/Durham_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1537,
+            "src": "components/Durham_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1538,
+            "src": "components/Bicker_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1539,
+            "src": "components/Bicker_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1540,
+            "src": "components/Bicker_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 1541,
+            "src": "components/Bicker_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1542,
+            "src": "components/Bicker_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1543,
+            "src": "components/Bicker_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1544,
+            "src": "components/Bicker_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1545,
+            "src": "components/Bicker_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1546,
+            "src": "components/Bicker_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1547,
+            "src": "components/Bicker_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1548,
+            "src": "components/Bicker_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1549,
+            "src": "components/Bicker_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1550,
+            "src": "components/Bicker_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1551,
+            "src": "components/Bicker_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1552,
+            "src": "components/Bicker_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1553,
+            "src": "components/Bicker_Right_Pupil.png",
             "type": "texture"
         }
     ]

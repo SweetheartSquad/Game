@@ -21,8 +21,8 @@
     },
     {
         "order": 6,
-        "src": "scenarios/Plot_6.json",
-        "type": 2
+        "src": "scenarios/Butler_6.json",
+        "type": 4
     },
     {
         "order": 0,
@@ -66,8 +66,8 @@
     },
     {
         "order": 6,
-        "src": "scenarios/Butler_6.json",
-        "type": 4
+        "src": "scenarios/Lab_6.json",
+        "type": 3
     },
     {
         "order": 3,
@@ -141,7 +141,17 @@
     },
     {
         "order": 0,
+        "src": "scenarios/dummy.json",
+        "type": 0
+    },
+    {
+        "order": 0,
         "src": "scenarios/hoo_boy.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Plot_6.json",
         "type": 0
     }
 ]

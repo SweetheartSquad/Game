@@ -1297,11 +1297,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Thebe_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Viatrix_LEG.json",
             "type": "LEG"
         },
@@ -1451,11 +1446,6 @@
             "type": "TORSO"
         },
         {
-            "random": true,
-            "src": "components/definitions/Durham_HEAD.json",
-            "type": "HEAD"
-        },
-        {
             "random": false,
             "src": "components/definitions/Durham_PELVIS.json",
             "type": "PELVIS"
@@ -1603,6 +1593,36 @@
         {
             "random": true,
             "src": "components/definitions/Goober_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Thebe_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Durham_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Bicker_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Bicker_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Bicker_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Bicker_HEAD.json",
             "type": "HEAD"
         }
     ]
