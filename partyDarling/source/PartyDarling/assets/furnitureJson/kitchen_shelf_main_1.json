@@ -2,7 +2,7 @@
     "connectors": [
         {
             "componentTypes": [
-                "kitchen_shelf_content_one"
+                "kitchen_shelf_content"
             ], 
             "out": [
                 {
@@ -26,7 +26,7 @@
         }, 
         {
             "componentTypes": [
-                "kitchen_shelf_content_two"
+                "kitchen_shelf_content"
             ], 
             "out": [
                 {
@@ -50,7 +50,7 @@
         }, 
         {
             "componentTypes": [
-                "kitchen_shelf_content_three"
+                "kitchen_shelf_content"
             ], 
             "out": [
                 {
