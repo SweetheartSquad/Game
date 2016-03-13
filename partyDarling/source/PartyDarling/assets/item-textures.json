@@ -84,6 +84,71 @@
             "id": 1152,
             "src": "items/BeakerStand.png",
             "type": "texture"
+        },
+        {
+            "id": 1227,
+            "src": "items/Juice.png",
+            "type": "texture"
+        },
+        {
+            "id": 1228,
+            "src": "items/Lighter.png",
+            "type": "texture"
+        },
+        {
+            "id": 1229,
+            "src": "items/Beaker.png",
+            "type": "texture"
+        },
+        {
+            "id": 1230,
+            "src": "items/Banana.png",
+            "type": "texture"
+        },
+        {
+            "id": 1231,
+            "src": "items/Cupcake.png",
+            "type": "texture"
+        },
+        {
+            "id": 1232,
+            "src": "items/BottledPop.png",
+            "type": "texture"
+        },
+        {
+            "id": 1233,
+            "src": "items/Icecream.png",
+            "type": "texture"
+        },
+        {
+            "id": 1234,
+            "src": "items/DogTreat.png",
+            "type": "texture"
+        },
+        {
+            "id": 1235,
+            "src": "items/Coffee.png",
+            "type": "texture"
+        },
+        {
+            "id": 1237,
+            "src": "items/BrokenVase.png",
+            "type": "texture"
+        },
+        {
+            "id": 1376,
+            "src": "items/Book1.png",
+            "type": "texture"
+        },
+        {
+            "id": 1377,
+            "src": "items/Book2.png",
+            "type": "texture"
+        },
+        {
+            "id": 1378,
+            "src": "items/Book3.png",
+            "type": "texture"
         }
     ]
 }
