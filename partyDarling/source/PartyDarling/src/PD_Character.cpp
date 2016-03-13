@@ -263,7 +263,6 @@ void CharacterLimbSolver::addComponent(CharacterComponent * _component, float _w
 	jointsLocal.back()->childTransform->addChild(_component);
 	addJointToChain(j);
 	components.push_back(_component);
-	setJointsVisible(true);
 }
 
 CharacterState::CharacterState(Json::Value _json) :
@@ -455,7 +454,6 @@ CharacterRenderer::~CharacterRenderer(){
 }
 
 void CharacterRenderer::setAnimation(std::string _name) {
-	/*
 	std::string selectedAnim = _name;
 	if(_name == "RANDOM"){
 		bool validAnimation = false;
@@ -483,7 +481,6 @@ void CharacterRenderer::setAnimation(std::string _name) {
 	if(selectedAnim == "DEAD") {
 		owner->disable();
 	}
-	*/
 }
 
 void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
