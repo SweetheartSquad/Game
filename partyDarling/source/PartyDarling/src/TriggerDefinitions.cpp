@@ -91,6 +91,40 @@ void PD_Scene_Main::setupConditions(){
 		return curVal == desiredValue;
 	};
 
+	(*PD_ResourceManager::conditionImplementations)["checkGlobalInt"] = [this](sweet::Event * _event){
+		// check an integer variable that has been set
+		// STRING name
+		// INT desiredValue
+		
+		std::string name = _event->getStringData("name");
+		int desiredValue = _event->getIntData("desiredValue", INT_MAX);
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || desiredValue == INT_MAX) {
+			ST_LOG_ERROR("Missing argument in condition checkInt");
+		}
+
+		int curVal = PD_Game::progressManager->getInt(name);
+		
+		return curVal == desiredValue;
+	};
+
+	(*PD_ResourceManager::conditionImplementations)["checkGlobalString"] = [this](sweet::Event * _event){
+		// check an integer variable that has been set
+		// STRING name
+		// STRING desiredValue
+		
+		std::string name = _event->getStringData("name");
+		std::string desiredValue = _event->getStringData("desiredValue", "NO_VALUE");
+		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
+
+		if(name == "" || desiredValue == "NO_VALUE") {
+			ST_LOG_ERROR("Missing argument in condition checkString");
+		}
+		std::string curVal = PD_Game::progressManager->getString(name);
+		return curVal == desiredValue;
+	};
+
 	(*PD_ResourceManager::conditionImplementations)["wonLastYellingContest"] = [this](sweet::Event * _event){
 		//checks if the last diss battle was won. If no diss battles have occurred than false is returned
 		return player->wonLastDissBattle;
@@ -140,6 +174,32 @@ void PD_Scene_Main::setupEventListeners(){
 			ST_LOG_ERROR("Missing argument in trigger setString");
 		}
 		scenario->variables->setStringData(name, value);
+	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("setGlobalInt", [](sweet::Event * _event){
+		// change/create a local int variable for a specific scenario
+		// STRING name 
+		// INT value
+		std::string name = _event->getStringData("name");
+		int value = _event->getIntData("value", INT_MAX);
+
+		if(name == "" || value == INT_MAX) {
+			ST_LOG_ERROR("Missing argument in trigger setInt");
+		}
+		PD_Game::progressManager->setInt(name, value);
+	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("setGlobalString", [](sweet::Event * _event){
+		// change/create a local string variable for a specific scenario
+		// STRING name 
+		// STRING value
+		std::string name = _event->getStringData("name");
+		std::string value = _event->getStringData("value", "NO_VALUE");
+	
+		if(name == "" || value == "NO_VALUE") {
+			ST_LOG_ERROR("Missing argument in trigger setString");
+		}
+		PD_Game::progressManager->setString(name, value);
 	});
 
 	// Called when going through a door

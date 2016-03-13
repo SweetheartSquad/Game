@@ -3,6 +3,7 @@
 #include <node/Node.h>
 #include <json/json.h>
 #include <NumberUtils.h>
+#include <EventManager.h>
 class Player;
 class PD_UI_DissBattle;
 
@@ -23,4 +24,10 @@ public:
 
 	void getNew();
 	Json::Value getCurrentScenarios();
+
+	void setInt(std::string _name, int _val);
+	void setString(std::string _name, std::string _val);
+	int getInt(std::string _name);
+	std::string getString(std::string _name);
+
 };

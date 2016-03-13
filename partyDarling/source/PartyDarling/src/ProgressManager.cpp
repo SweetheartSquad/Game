@@ -16,6 +16,22 @@ ProgressManager::ProgressManager() :
 {
 }
 
+void ProgressManager::setInt(std::string _name, int _val) {
+	scenarioFile["intVariables"][_name] = _val;
+}
+
+void ProgressManager::setString(std::string _name, std::string _val) {
+	scenarioFile["stringVariables"][_name] = _val;
+}
+
+int ProgressManager::getInt(std::string _name) {
+	return scenarioFile["intVariables"][_name].asInt();
+}
+
+std::string ProgressManager::getString(std::string _name) {
+	return scenarioFile["stringVariables"][_name].asString();
+}
+
 void ProgressManager::getNew(){
 	// seed the RNG with the current time to give us different results
 	sweet::NumberUtils::seed(time(nullptr));
