@@ -216,6 +216,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
+
+	uiItemGainLoss = new PD_UI_ItemGainLoss(uiLayer->world);
+	uiLayer->addChild(uiItemGainLoss);
+	uiItemGainLoss->setRationalWidth(1.f, uiLayer);
+	uiItemGainLoss->setRationalHeight(1.f, uiLayer);
+
+
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);

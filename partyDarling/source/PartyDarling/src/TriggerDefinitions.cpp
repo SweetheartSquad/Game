@@ -283,10 +283,12 @@ void PD_Scene_Main::setupEventListeners(){
 
 		if(prevOwnerHasItem){
 			if(newOwnerCharId == "0"){
+				uiItemGainLoss->gainItem(item);
 				uiInventory->pickupItem(item);
 			}else{
 				listing->characters[newOwnerCharId]->items.push_back(item->definition->id);
 				if (prevOwnerCharId == "0"){
+					uiItemGainLoss->loseItem(item);
 					uiInventory->removeItem(item);
 				}	
 			}

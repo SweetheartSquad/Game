@@ -17,6 +17,7 @@
 #include <PD_UI_Fade.h>
 #include <PD_UI_DissCard.h>
 #include <PD_UI_DissStats.h>
+#include <PD_UI_ItemGainLoss.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -71,8 +72,12 @@ public:
 	PD_UI_Bubble * uiBubble;
 	PD_UI_Dialogue * uiDialogue;
 	PD_UI_DissBattle * uiDissBattle;
+	PD_UI_DissStats * uiDissStats;
 	PD_UI_Map * uiMap;
 	PD_UI_Fade * uiFade;
+	PD_UI_ItemGainLoss * uiItemGainLoss;
+	
+
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * emoteShader;
 
@@ -149,6 +154,4 @@ public:
 	float carriedPropDistance;
 
 	PD_Character * dissEnemy;
-
-	PD_UI_DissStats * uiDissStats;
 };
