@@ -818,7 +818,6 @@ void PD_Scene_Main::addRoom(Room * _room){
 void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
 	tex->load();
-	tex->saveImageData("tokenTest.tga");
 	uiDissBattle->addLife(tex);
 
 	uiMessage->gainLifeToken(_name, tex);
@@ -1237,7 +1236,7 @@ Texture * PD_Scene_Main::getToken(){
 	// get texture size
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	sd.x = sd.y = glm::min(sd.x, sd.y);
-	sd /= 4;
+	sd /= 3;
 	glm::vec2 half = glm::vec2(sd)*0.5f;
 
 	// hide the UI
@@ -1249,6 +1248,8 @@ Texture * PD_Scene_Main::getToken(){
 		
 	// allocate enough space for our token and read the center of the newly drawn screen into it
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
+	res->allocate(sd.x, sd.y, 4);
+	auto tempData = res->data;
 	res->allocate(sd.x, sd.y, 4);
 	glReadPixels(game->viewPortWidth/2 - half.x, game->viewPortHeight/2 - half.y, sd.x, sd.y, GL_RGBA, GL_UNSIGNED_BYTE, res->data);
 
@@ -1264,6 +1265,13 @@ Texture * PD_Scene_Main::getToken(){
 			}
 		}
 	}
+
+	// flip the texture
+	for(signed long int y = 0; y < sd.y; ++y){
+		memcpy(&tempData[y*sd.x*4], &res->data[(sd.y-y-1)*sd.x*4], sd.x*4);
+	}
+	res->unloadImageData();
+	res->data = tempData;
 
 	// unhide the UIyel
 	uiLayer->setVisible(true);
