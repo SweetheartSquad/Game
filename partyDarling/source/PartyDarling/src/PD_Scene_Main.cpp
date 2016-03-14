@@ -165,8 +165,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		crosshairIndicator->background->mesh->replaceTextures(itemTex);
 		crosshairIndicator->setWidth(itemTex->width);
 		crosshairIndicator->setHeight(itemTex->height);
+		crosshairIndicator->autoResize();
 		crosshairIndicator->invalidateLayout();
-		// TODO: update the UI to indicate the selected item to the player
 	});
 
 	uiDialogue = new PD_UI_Dialogue(uiLayer->world, uiBubble);
@@ -1267,6 +1267,7 @@ void PD_Scene_Main::resetCrosshair() {
 	crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
 	crosshairIndicator->setWidth(16);
 	crosshairIndicator->setHeight(16);
+	crosshairIndicator->autoResize();
 	crosshairIndicator->invalidateLayout();
 }
 
