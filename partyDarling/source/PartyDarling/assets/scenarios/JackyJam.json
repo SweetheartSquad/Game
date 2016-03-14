@@ -1,1 +1,632 @@
-{"type":0,"order":0,"assets":[{"id":0,"name":"Player","states":[],"items":[],"type":"character","defaultState":-1,"strength":0,"sass":0,"insight":0,"defense":0,"visible":true,"enabled":true,"voice":"RANDOM","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":""},{"tags":{"not":[],"required":[],"preferred":[]},"src":""}]}]},{"id":1,"name":"JackyJam","states":[{"id":1,"name":"intro","convo":1,"animation":"RANDOM"},{"id":2,"name":"won","convo":5,"animation":"DEAD"},{"id":3,"name":"lost","convo":6,"animation":"RANDOM"}],"items":[],"type":"character","defaultState":1,"strength":1,"sass":5,"insight":0,"defense":1,"visible":true,"enabled":true,"voice":"RANDOM","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/ffd14b75-3c34-4f12-b536-72633eb65f7f.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/JackyJam_TORSO.json","components":[{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Jackyjam_HEAD.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Bexley_ARM.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Bexley_ARM.json"}]},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Bexley_LEG.json"},{"tags":{"not":[],"required":[],"preferred":[]},"src":"components/definitions/Bexley_LEG.json"}]}]},{"id":1,"name":"intro","dialogue":[{"text":["Yo!","My name is Jack -","And I'm here to say -","I like to diss -","In a major way!","Your face is ugly -","Your brain is small -","If you take me on -","You're gonna fall!","UH!"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":2,"label":"Oh yeah? I'll take you on!"},{"convoId":3,"label":"Well that was rude."}],"type":"conversation","settings":{"indentation":0,"order":0}},{"id":3,"name":"rude","dialogue":[{"text":["Polite-ness ain't -","JackyJam's forte -","Go cry to your momma -","If you don't wanna play!"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":1}},{"id":2,"name":"fight","dialogue":[{"text":["Word!"],"triggers":[{"type":"triggerYellingContest","args":{"opponent":{"value":1,"type":"CHARACTER","dependsOn":"NONE"},"playerInterjectInit":{"value":0,"type":"INT","dependsOn":"NONE"}},"id":11}],"conditions":[],"speaker":1,"name":"Dialogue 0"},{"text":["Oof!","Oh no!"],"triggers":[{"type":"goToConversation","args":{"conversation":{"value":4,"type":"CONVERSATION","dependsOn":"NONE"}},"id":19}],"conditions":[{"type":"wonLastYellingContest","args":{},"id":17}],"speaker":1,"name":"Dialogue 1"},{"text":["You thought you could -","Take down the best -","But you failed -","Like all the rest!","BAM!"],"triggers":[{"type":"changeDISSStat","args":{"stat":{"value":"sass","type":"STRING","dependsOn":"NONE"},"delta":{"value":-1,"type":"INT","dependsOn":"NONE"}},"id":2},{"type":"changeState","args":{"State":{"value":3,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":1,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":1,"name":"Dialogue 2"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":2}},{"id":4,"name":"won","dialogue":[{"text":["I thought I was -","The toughest dude -","But it turns out -","I was just being rude!","Dang...","I think... I think I gotta take a minute to lay down."],"triggers":[{"type":"changeDISSStat","args":{"stat":{"value":"sass","type":"STRING","dependsOn":"NONE"},"delta":{"value":2,"type":"INT","dependsOn":"NONE"}},"id":2},{"type":"changeState","args":{"State":{"value":2,"type":"CHARACTER_STATE","dependsOn":"Character"},"Character":{"value":1,"type":"CHARACTER","dependsOn":"NONE"}},"id":1}],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":3}},{"id":5,"name":"fought-won","dialogue":[{"text":["You've taught me a lot -","That ain't no joke -","Let's part my friend -","Before I choke!"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[],"type":"conversation","settings":{"indentation":0,"order":4}},{"id":6,"name":"fought-lost","dialogue":[{"text":["Back for more?","Now that's a mistake!","Beating you again -","Will be a piece of cake!"],"triggers":[],"conditions":[],"speaker":1,"name":"Dialogue 0"}],"options":[{"convoId":3,"label":"Geez, you don't have to rub it in."},{"convoId":3,"label":"Maybe some other time."}],"type":"conversation","settings":{"indentation":0,"order":5}},{"name":"JackyJam Room","id":1,"description":"room with jackyjam","furnitureTypes":"RANDOM","characters":[1],"tags":{"not":[],"required":[],"preferred":[]},"size":"MEDIUM","type":"room","locked":false,"empty":false,"items":[],"triggersOnce":[],"triggersMulti":[]}]}
+{  
+    "type":0,
+    "order":0,
+    "assets":[  
+        {  
+            "id":0,
+            "name":"Player",
+            "states":[  
+
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":-1,
+            "strength":0,
+            "sass":0,
+            "insight":0,
+            "defense":0,
+            "visible":true,
+            "enabled":true,
+            "voice":"RANDOM",
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":""
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":""
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":1,
+            "name":"JackyJam",
+            "states":[  
+                {  
+                    "id":1,
+                    "name":"intro",
+                    "convo":1,
+                    "animation":"RANDOM"
+                },
+                {  
+                    "id":2,
+                    "name":"won",
+                    "convo":5,
+                    "animation":"DEAD"
+                },
+                {  
+                    "id":3,
+                    "name":"lost",
+                    "convo":6,
+                    "animation":"RANDOM"
+                }
+            ],
+            "items":[  
+
+            ],
+            "type":"character",
+            "defaultState":1,
+            "strength":1,
+            "sass":5,
+            "insight":0,
+            "defense":1,
+            "visible":true,
+            "enabled":true,
+            "voice":"RANDOM",
+            "components":[  
+                {  
+                    "tags":{  
+                        "not":[  
+
+                        ],
+                        "required":[  
+
+                        ],
+                        "preferred":[  
+
+                        ]
+                    },
+                    "src":"components/definitions/ffd14b75-3c34-4f12-b536-72633eb65f7f.json",
+                    "components":[  
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/JackyJam_TORSO.json",
+                            "components":[  
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Jackyjam_HEAD.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Bexley_ARM.json"
+                                },
+                                {  
+                                    "tags":{  
+                                        "not":[  
+
+                                        ],
+                                        "required":[  
+
+                                        ],
+                                        "preferred":[  
+
+                                        ]
+                                    },
+                                    "src":"components/definitions/Bexley_ARM.json"
+                                }
+                            ]
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/Bexley_LEG.json"
+                        },
+                        {  
+                            "tags":{  
+                                "not":[  
+
+                                ],
+                                "required":[  
+
+                                ],
+                                "preferred":[  
+
+                                ]
+                            },
+                            "src":"components/definitions/Bexley_LEG.json"
+                        }
+                    ]
+                }
+            ]
+        },
+        {  
+            "id":1,
+            "name":"intro",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Yo!",
+                        "My name is Jack -",
+                        "And I'm here to say -",
+                        "I like to diss -",
+                        "In a major way!",
+                        "Your face is ugly -",
+                        "Your brain is small -",
+                        "If you take me on -",
+                        "You're gonna fall!",
+                        "UH!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":2,
+                    "label":"Oh yeah? I'll take you on!"
+                },
+                {  
+                    "convoId":3,
+                    "label":"Well that was rude."
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":0
+            }
+        },
+        {  
+            "id":3,
+            "name":"rude",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Polite-ness ain't -",
+                        "JackyJam's forte -",
+                        "Go cry to your momma -",
+                        "If you don't wanna play!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":1
+            }
+        },
+        {  
+            "id":2,
+            "name":"fight",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Word!"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"triggerYellingContest",
+                            "args":{  
+                                "opponent":{  
+                                    "value":1,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                },
+                                "playerInterjectInit":{  
+                                    "value":0,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":11
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                },
+                {
+                	"text":["..."],
+                	"triggers":[],
+                	"conditions":[],
+                	"speaker":1,
+                	"name":"Dialogue dwad"
+            	},
+                {  
+                    "text":[  
+                        "Oof!",
+                        "Oh no!"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"goToConversation",
+                            "args":{  
+                                "conversation":{  
+                                    "value":4,
+                                    "type":"CONVERSATION",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":19
+                        }
+                    ],
+                    "conditions":[  
+                        {  
+                            "type":"wonLastYellingContest",
+                            "args":{  
+
+                            },
+                            "id":17
+                        }
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 1"
+                },
+                {  
+                    "text":[  
+                        "You thought you could -",
+                        "Take down the best -",
+                        "But you failed -",
+                        "Like all the rest!",
+                        "BAM!"
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeDISSStat",
+                            "args":{  
+                                "stat":{  
+                                    "value":"sass",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "delta":{  
+                                    "value":-1,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":2
+                        },
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":3,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":1,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 2"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":2
+            }
+        },
+        {  
+            "id":4,
+            "name":"won",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "I thought I was -",
+                        "The toughest dude -",
+                        "But it turns out -",
+                        "I was just being rude!",
+                        "Dang...",
+                        "I think... I think I gotta take a minute to lay down."
+                    ],
+                    "triggers":[  
+                        {  
+                            "type":"changeDISSStat",
+                            "args":{  
+                                "stat":{  
+                                    "value":"sass",
+                                    "type":"STRING",
+                                    "dependsOn":"NONE"
+                                },
+                                "delta":{  
+                                    "value":2,
+                                    "type":"INT",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":2
+                        },
+                        {  
+                            "type":"changeState",
+                            "args":{  
+                                "State":{  
+                                    "value":2,
+                                    "type":"CHARACTER_STATE",
+                                    "dependsOn":"Character"
+                                },
+                                "Character":{  
+                                    "value":1,
+                                    "type":"CHARACTER",
+                                    "dependsOn":"NONE"
+                                }
+                            },
+                            "id":1
+                        }
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":3
+            }
+        },
+        {  
+            "id":5,
+            "name":"fought-won",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "You've taught me a lot -",
+                        "That ain't no joke -",
+                        "Let's part my friend -",
+                        "Before I choke!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":4
+            }
+        },
+        {  
+            "id":6,
+            "name":"fought-lost",
+            "dialogue":[  
+                {  
+                    "text":[  
+                        "Back for more?",
+                        "Now that's a mistake!",
+                        "Beating you again -",
+                        "Will be a piece of cake!"
+                    ],
+                    "triggers":[  
+
+                    ],
+                    "conditions":[  
+
+                    ],
+                    "speaker":1,
+                    "name":"Dialogue 0"
+                }
+            ],
+            "options":[  
+                {  
+                    "convoId":3,
+                    "label":"Geez, you don't have to rub it in."
+                },
+                {  
+                    "convoId":2,
+                    "label":"You're on!"
+                }
+            ],
+            "type":"conversation",
+            "settings":{  
+                "indentation":0,
+                "order":5
+            }
+        },
+        {  
+            "name":"JackyJam Room",
+            "id":1,
+            "description":"room with jackyjam",
+            "furnitureTypes":"RANDOM",
+            "characters":[  
+                1
+            ],
+            "tags":{  
+                "not":[  
+
+                ],
+                "required":[  
+
+                ],
+                "preferred":[  
+
+                ]
+            },
+            "size":"MEDIUM",
+            "type":"room",
+            "locked":false,
+            "empty":false,
+            "items":[  
+
+            ],
+            "triggersOnce":[  
+
+            ],
+            "triggersMulti":[  
+
+            ]
+        }
+    ]
+}
