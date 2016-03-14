@@ -41,7 +41,9 @@ PD_Game::PD_Game() :
 
 	progressManager = new ProgressManager();
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
-	PD_Game::progressManager->loadSave();
+	if(sweet::FileUtils::fileExists("data/save.json")){
+		PD_Game::progressManager->loadSave();
+	}
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 
 	playBGM();
