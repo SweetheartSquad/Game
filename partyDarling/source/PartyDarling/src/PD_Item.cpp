@@ -98,6 +98,8 @@ void PD_Item::triggerInteract(){
 			PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
 		}
 	}else{
-		PD_ResourceManager::scenario->eventManager->triggerEvent("itemNothingHappened");
+		if(definition->name != "Door"){
+			PD_ResourceManager::scenario->eventManager->triggerEvent("itemNothingHappened");
+		}
 	}
 }
