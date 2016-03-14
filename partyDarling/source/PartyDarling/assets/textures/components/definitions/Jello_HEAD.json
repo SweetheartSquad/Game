@@ -1,0 +1,203 @@
+{
+    "joints": {
+        "components": [
+            {
+                "components": [
+                    {
+                        "id": "Nose",
+                        "in": [
+                            521.154785,
+                            -398.02
+                        ],
+                        "out": [
+                            [
+                                521.154785,
+                                -398.02,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1736
+                    },
+                    {
+                        "components": [
+                            {
+                                "id": "Left Pupil",
+                                "in": [
+                                    338.81958,
+                                    -366.77
+                                ],
+                                "out": [
+                                    [
+                                        338.81958,
+                                        -366.77,
+                                        "ANY"
+                                    ]
+                                ],
+                                "texture": 1741
+                            }
+                        ],
+                        "id": "Left Eye",
+                        "in": [
+                            0.551237,
+                            0.45129
+                        ],
+                        "out": [
+                            [
+                                0.551237,
+                                0.45129,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1738
+                    },
+                    {
+                        "components": [
+                            {
+                                "id": "Right Pupil",
+                                "in": [
+                                    562.435303,
+                                    -353.02
+                                ],
+                                "out": [
+                                    [
+                                        562.435303,
+                                        -353.02,
+                                        "ANY"
+                                    ]
+                                ],
+                                "texture": 1742
+                            }
+                        ],
+                        "id": "Right Eye",
+                        "in": [
+                            0.456592,
+                            0.471452
+                        ],
+                        "out": [
+                            [
+                                0.456592,
+                                0.471452,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1737
+                    },
+                    {
+                        "id": "Left Eyebrow",
+                        "in": [
+                            0.487425,
+                            0.600937
+                        ],
+                        "out": [
+                            [
+                                0.487425,
+                                0.600937,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1740
+                    },
+                    {
+                        "id": "Right Eyebrow",
+                        "in": [
+                            0.456106,
+                            0.561875
+                        ],
+                        "out": [
+                            [
+                                0.456106,
+                                0.561875,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1739
+                    }
+                ],
+                "id": "Upper Jaw",
+                "in": [
+                    0.512601,
+                    0.039768
+                ],
+                "out": [
+                    [
+                        0.407017,
+                        0.153781,
+                        "ANY"
+                    ],
+                    [
+                        0.234551,
+                        0.207678,
+                        "ANY"
+                    ],
+                    [
+                        0.654937,
+                        0.234627,
+                        "ANY"
+                    ],
+                    [
+                        0.235857,
+                        0.300962,
+                        "ANY"
+                    ],
+                    [
+                        0.627834,
+                        0.32791,
+                        "ANY"
+                    ]
+                ],
+                "texture": 1735
+            }
+        ],
+        "id": "Lower Jaw",
+        "in": [
+            0.689388,
+            0.131148
+        ],
+        "out": [
+            [
+                0.60228,
+                0.429113,
+                "ANY"
+            ]
+        ],
+        "texture": 1734
+    },
+    "textures": [
+        {
+            "component": "Lower Jaw",
+            "id": 1734
+        },
+        {
+            "component": "Upper Jaw",
+            "id": 1735
+        },
+        {
+            "component": "Nose",
+            "id": 1736
+        },
+        {
+            "component": "Right Eye",
+            "id": 1737
+        },
+        {
+            "component": "Left Eye",
+            "id": 1738
+        },
+        {
+            "component": "Right Eyebrow",
+            "id": 1739
+        },
+        {
+            "component": "Left Eyebrow",
+            "id": 1740
+        },
+        {
+            "component": "Left Pupil",
+            "id": 1741
+        },
+        {
+            "component": "Right Pupil",
+            "id": 1742
+        }
+    ]
+}

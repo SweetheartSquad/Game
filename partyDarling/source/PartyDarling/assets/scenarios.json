@@ -101,11 +101,6 @@
     },
     {
         "order": 0,
-        "src": "scenarios/JackyJam.json",
-        "type": 0
-    },
-    {
-        "order": 0,
         "src": "scenarios/Leila_wants_a_cookie.json",
         "type": 0
     },
@@ -155,8 +150,18 @@
         "type": 0
     },
     {
-        "order": 6,
+        "order": 0,
         "src": "scenarios/Plot_6.json",
-        "type": 2
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Jokes_with_JonJon.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/JackyJam.json",
+        "type": 0
     }
 ]
