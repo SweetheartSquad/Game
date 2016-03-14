@@ -217,7 +217,7 @@ void PD_Scene_Main::setupEventListeners(){
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
 		
-		Timeout * t = new Timeout(1.f, [this, navigation](sweet::Event * _event){
+		Timeout * t = new Timeout(0.55f, [this, navigation](sweet::Event * _event){
 			navigate(navigation);
 
 			PD_ResourceManager::scenario->getAudio("doorClose")->sound->play();
