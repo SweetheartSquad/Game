@@ -1391,7 +1391,7 @@ void PD_Scene_Main::updateSelection(){
 			if(uiInventory->getSelected() != nullptr){
 				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
 					uiInventory->getSelected()->triggerInteract();
-					auto item = uiInventory->removeSelected();
+					PD_Item * item = uiInventory->removeSelected();
 					if(item->definition->consumable){
 						auto items = PD_Listing::listings[item->definition->scenario]->items;
 						items.erase(items.find(item->definition->id));
@@ -1402,25 +1402,10 @@ void PD_Scene_Main::updateSelection(){
 					resetCrosshair();
 
 				});
-				uiBubble->addOption("Drop " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
+				uiBubble->addOption("Nevermind.", [this](sweet::Event * _event){
 					// dropping an item
-					if(PD_Item * item = uiInventory->removeSelected()){
-						// put the item back into the scene
-						item->addToWorld();
-
-						// figure out where to put the item
-						glm::vec3 targetPos = activeCamera->getWorldPos() + activeCamera->forwardVectorRotated * 3.f;
-						targetPos.y = ITEM_POS_Y; // always put stuff on the ground
-						item->translatePhysical(targetPos, false);
-						// rotate the item to face the camera
-						item->rotatePhysical(activeCamera->yaw - 90,0,1,0, false);
-
-						currentRoom->addComponent(item);
-						currentRoom->items.push_back(item);
-
-						childTransform->addChild(item);
-					}
-
+					PD_Item * item = uiInventory->removeSelected();
+					uiInventory->pickupItem(item);
 					resetCrosshair();
 				});
 			}
