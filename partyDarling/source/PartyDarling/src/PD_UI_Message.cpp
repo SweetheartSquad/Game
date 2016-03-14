@@ -45,6 +45,11 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	text->setRationalWidth(1.f, textBubble);
 	text->horizontalAlignment = kCENTER;
 	text->verticalAlignment = kMIDDLE;
+
+	// Initial setup
+	image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
+	textBubble->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
+	textShader->setColor(1.f, 1.f, 1.f, 0.f);
 }
 
 PD_UI_Message::~PD_UI_Message(){

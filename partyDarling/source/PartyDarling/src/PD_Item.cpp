@@ -91,9 +91,13 @@ void PD_Item::triggerPickup(){
 	}
 }
 void PD_Item::triggerInteract(){
-	for(auto e : definition->effects){
-		sweet::Event * e2 = new sweet::Event(e);
-		e2->setStringData("scenario", definition->scenario->id);
-		PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
+	if(definition->effects.size() > 0){
+		for(auto e : definition->effects){
+			sweet::Event * e2 = new sweet::Event(e);
+			e2->setStringData("scenario", definition->scenario->id);
+			PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
+		}
+	}else{
+		PD_ResourceManager::scenario->eventManager->triggerEvent("itemNothingHappened");
 	}
 }

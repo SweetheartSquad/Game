@@ -266,6 +266,10 @@ void PD_Scene_Main::setupEventListeners(){
 		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
+	PD_ResourceManager::scenario->eventManager->addEventListener("itemNothingHappened", [this](sweet::Event * _event){
+		uiMessage->displayMessage("Nothing happened...");
+	});
+
 	PD_ResourceManager::scenario->eventManager->addEventListener("changeDISSStat", [this](sweet::Event * _event){
 		// Trigger
 		// Modifies the DISS stats of the player. The stat can be chose from Defense, Insight, Strength, Sass. Delta is the amount to change the stat by, and can be positive or negative.
@@ -300,7 +304,7 @@ void PD_Scene_Main::setupEventListeners(){
 	PD_ResourceManager::scenario->eventManager->addEventListener("addFriendToken", [this](sweet::Event * _event){
 		// Trigger
 		// Adds a friend token to the player
-		addLifeToken(_event->getStringData("name", "This Person"));
+		addLifeToken(uiDialogue->currentSpeaker ? uiDialogue->currentSpeaker->definition->name : "This Person");
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){

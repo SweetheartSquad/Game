@@ -861,6 +861,9 @@ void PD_Scene_Main::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_6)){
 		uiFade->fadeOut();
 	}
+	if(keyboard->keyJustDown(GLFW_KEY_7)){
+		uiMessage->displayMessage("Wow this is such an amazing game!!! :)");
+	}
 	if(keyboard->keyJustDown(GLFW_KEY_0)){
 		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
 	}
