@@ -264,7 +264,7 @@
       "id":"main-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":80,
+      "size":"6%",
       "antiAliased": false
     },
 	{
