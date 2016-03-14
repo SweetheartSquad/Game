@@ -101,6 +101,11 @@
     },
     {
         "order": 0,
+        "src": "scenarios/JackyJam.json",
+        "type": 0
+    },
+    {
+        "order": 0,
         "src": "scenarios/Leila_wants_a_cookie.json",
         "type": 0
     },
