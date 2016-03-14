@@ -17,7 +17,7 @@
 #include <PD_UI_Fade.h>
 #include <PD_UI_DissCard.h>
 #include <PD_UI_DissStats.h>
-#include <PD_UI_ItemGainLoss.h>
+#include <PD_UI_Message.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -75,7 +75,7 @@ public:
 	PD_UI_DissStats * uiDissStats;
 	PD_UI_Map * uiMap;
 	PD_UI_Fade * uiFade;
-	PD_UI_ItemGainLoss * uiItemGainLoss;
+	PD_UI_Message * uiMessage;
 	
 
 	ComponentShaderBase * characterShader;
@@ -126,7 +126,7 @@ public:
 
 	void setupEventListeners();
 	void setupConditions();
-	void addLifeToken();
+	void addLifeToken(std::string _name);
 
 	void updateSelection();
 	// randomly pick one main plot scenario and a few side plot scenarios

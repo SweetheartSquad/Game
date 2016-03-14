@@ -217,10 +217,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	});
 
 
-	uiItemGainLoss = new PD_UI_ItemGainLoss(uiLayer->world);
-	uiLayer->addChild(uiItemGainLoss);
-	uiItemGainLoss->setRationalWidth(1.f, uiLayer);
-	uiItemGainLoss->setRationalHeight(1.f, uiLayer);
+	uiMessage = new PD_UI_Message(uiLayer->world);
+	uiLayer->addChild(uiMessage);
+	uiMessage->setRationalWidth(1.f, uiLayer);
+	uiMessage->setRationalHeight(1.f, uiLayer);
 
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
@@ -809,11 +809,13 @@ void PD_Scene_Main::addRoom(Room * _room){
 }
 
 
-void PD_Scene_Main::addLifeToken() {
+void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
 	tex->load();
 	tex->saveImageData("tokenTest.tga");
 	uiDissBattle->addLife(tex);
+
+	uiMessage->gainLifeToken(_name, tex);
 }
 
 void PD_Scene_Main::update(Step * _step){
@@ -843,7 +845,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		addLifeToken();
+		addLifeToken("Some Person");
 	}
 	
 	if(keyboard->keyJustDown(GLFW_KEY_3)){

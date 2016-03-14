@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PD_UI_ItemGainLoss.h>
+#include <PD_UI_Message.h>
 #include <PD_ResourceManager.h>
 
 #include <PD_Item.h>
@@ -9,7 +9,7 @@
 
 #define UI_MESSAGE_DURATION 2.f
 
-PD_UI_ItemGainLoss::PD_UI_ItemGainLoss(BulletWorld * _world) :
+PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	VerticalLinearLayout(_world),
 	textShader(new ComponentShaderText(false))
 {
@@ -18,28 +18,36 @@ PD_UI_ItemGainLoss::PD_UI_ItemGainLoss(BulletWorld * _world) :
 	horizontalAlignment = kCENTER;
 	verticalAlignment = kMIDDLE;
 
-	HorizontalLinearLayout * container = new HorizontalLinearLayout(world);
-	addChild(container);
-	container->horizontalAlignment = kCENTER;
-	container->verticalAlignment = kMIDDLE;
-	container->setRationalHeight(0.2f, this);
-	container->setSquareWidth(1.f);
+	HorizontalLinearLayout * imageContainer = new HorizontalLinearLayout(_world);
+	addChild(imageContainer);
+	imageContainer->boxSizing = kCONTENT_BOX;
+	imageContainer->horizontalAlignment = kCENTER;
+	imageContainer->verticalAlignment = kMIDDLE;
+	imageContainer->setRationalHeight(0.2f, this);
+	imageContainer->setSquareWidth(1.f);
+	imageContainer->setMarginBottom(0.05f);
 
-	image = new NodeUI(world);
-	container->addChild(image);
-	image->setRationalHeight(1.f, container);
+	image = new NodeUI(_world);
+	imageContainer->addChild(image);
+	image->setRationalHeight(1.f, imageContainer);
 	image->setSquareWidth(1.f);
 	image->background->mesh->setScaleMode(GL_NEAREST);
 
-	text = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
-	addChild(text);
-	text->setRationalHeight(0.1f, this);
-	text->setRationalWidth(1.f, this);
-	text->horizontalAlignment = kCENTER;
+	textBubble = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("DISSCARD-BUBBLE"));
+	addChild(textBubble);
+	textBubble->setBorder(15);
+	textBubble->setRationalHeight(0.05f, this);
+	textBubble->setRationalWidth(0.3f, this);
 
+	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+	textBubble->addChild(text);
+	text->setRationalHeight(1.f, textBubble);
+	text->setRationalWidth(1.f, textBubble);
+	text->horizontalAlignment = kCENTER;
+	text->verticalAlignment = kMIDDLE;
 }
 
-PD_UI_ItemGainLoss::~PD_UI_ItemGainLoss(){
+PD_UI_Message::~PD_UI_Message(){
 	for(auto t : animationTimeouts){
 		t->stop();
 		delete t;
@@ -47,7 +55,7 @@ PD_UI_ItemGainLoss::~PD_UI_ItemGainLoss(){
 	animationTimeouts.clear();
 }
 
-void PD_UI_ItemGainLoss::gainItem(PD_Item * _item){
+void PD_UI_Message::gainItem(PD_Item * _item){
 	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
 		setVisible(false);
 	});
@@ -68,7 +76,7 @@ void PD_UI_ItemGainLoss::gainItem(PD_Item * _item){
 	animationTimeouts.push_back(t);
 }
 
-void PD_UI_ItemGainLoss::loseItem(PD_Item * _item){
+void PD_UI_Message::loseItem(PD_Item * _item){
 	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
 		setVisible(false);
 	});
@@ -89,7 +97,33 @@ void PD_UI_ItemGainLoss::loseItem(PD_Item * _item){
 	animationTimeouts.push_back(t);
 }
 
-void PD_UI_ItemGainLoss::displayMessage(std::string _message){
+void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
+	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
+		setVisible(false);
+	});
+	t->eventManager->addEventListener("start", [this, _name, _tex](sweet::Event * _event){
+		setVisible(true);
+
+		image->background->mesh->replaceTextures(_tex);
+
+		image->setRationalHeight(1.f, image->nodeUIParent);
+		image->setSquareWidth(1.f);
+		++_tex->referenceCount;
+
+		text->setText("Acquired " + _name + "'s Friendship");
+
+		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
+		textShader->setColor(1.f, 1.f, 1.f, 0.f);
+	});
+	t->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		animate(p);
+	});
+
+	animationTimeouts.push_back(t);
+}
+
+void PD_UI_Message::displayMessage(std::string _message){
 	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
 		setVisible(false);
 		image->setVisible(true);
@@ -108,7 +142,7 @@ void PD_UI_ItemGainLoss::displayMessage(std::string _message){
 	animationTimeouts.push_back(t);
 }
 
-void PD_UI_ItemGainLoss::setItemTexture(PD_Item * _item){
+void PD_UI_Message::setItemTexture(PD_Item * _item){
 	// make sure the item is displayed at the correct size
 	AssetTexture * assetTex = PD_ResourceManager::itemTextures->getTexture(_item->definition->texture);
 	assetTex->load();
@@ -122,7 +156,7 @@ void PD_UI_ItemGainLoss::setItemTexture(PD_Item * _item){
 	invalidateLayout();
 }
 
-void PD_UI_ItemGainLoss::animate(float _p){
+void PD_UI_Message::animate(float _p){
 	float a;
 	if(_p  <= 0.5f){
 		a = Easing::easeOutCubic(_p, 0.f, 1.f, 0.5f);
@@ -133,10 +167,11 @@ void PD_UI_ItemGainLoss::animate(float _p){
 	}
 
 	image->setBackgroundColour(1.f, 1.f, 1.f, a);
+	textBubble->setBackgroundColour(1.f, 1.f, 1.f, a);
 	textShader->setColor(1.f, 1.f, 1.f, a);
 }
 
-void PD_UI_ItemGainLoss::update(Step * _step){
+void PD_UI_Message::update(Step * _step){
 	if(animationTimeouts.size() > 0){
 		Timeout * t = animationTimeouts.front();
 		if(!t->active){

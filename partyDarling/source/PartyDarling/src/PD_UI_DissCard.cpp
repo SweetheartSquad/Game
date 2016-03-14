@@ -104,7 +104,8 @@ void PD_UI_DissCard::init(){
 		xpContainer->addChild(level);
 		level->setRationalWidth(0.25, xpContainer);
 		level->setRationalHeight(1.f, xpContainer);
-		level->horizontalAlignment = kCENTER;
+		level->setMarginLeft(0.05f);
+		level->horizontalAlignment = kLEFT;
 
 	}else{
 		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);

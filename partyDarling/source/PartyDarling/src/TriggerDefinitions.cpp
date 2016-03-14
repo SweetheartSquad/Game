@@ -300,7 +300,7 @@ void PD_Scene_Main::setupEventListeners(){
 	PD_ResourceManager::scenario->eventManager->addEventListener("addFriendToken", [this](sweet::Event * _event){
 		// Trigger
 		// Adds a friend token to the player
-		addLifeToken();
+		addLifeToken(_event->getStringData("name", "This Person"));
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("changerOwnership", [this](sweet::Event * _event){
@@ -343,12 +343,12 @@ void PD_Scene_Main::setupEventListeners(){
 
 		if(prevOwnerHasItem){
 			if(newOwnerCharId == "0"){
-				uiItemGainLoss->gainItem(item);
+				uiMessage->gainItem(item);
 				uiInventory->pickupItem(item);
 			}else{
 				listing->characters[newOwnerCharId]->items.push_back(item->definition->id);
 				if (prevOwnerCharId == "0"){
-					uiItemGainLoss->loseItem(item);
+					uiMessage->loseItem(item);
 					uiInventory->removeItem(item);
 				}	
 			}
