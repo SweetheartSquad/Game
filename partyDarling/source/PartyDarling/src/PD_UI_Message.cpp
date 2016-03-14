@@ -176,12 +176,20 @@ void PD_UI_Message::update(Step * _step){
 		Timeout * t = animationTimeouts.front();
 		if(!t->active){
 			t->start();
-		}
-
-		t->update(_step);
-		if(t->complete){
+			t = nullptr;
+		}else if(t->complete){
+			// Update the event manager with the complete event (in this case, it does the same thing as what should be done at progress = 1, which is hiding everything)
+			Step * s = new Step();
+			s->setDeltaTime(0.f);
+			t->update(s);
 			delete t;
 			animationTimeouts.erase(animationTimeouts.begin());
+			t = nullptr;
+		}
+
+		// only update if not starting or completing?
+		if(t != nullptr){
+			t->update(_step);
 		}
 	}
 	VerticalLinearLayout::update(_step);
