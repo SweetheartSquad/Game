@@ -9,10 +9,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	Scene_SlideShow(_game)
 {
 	// get the slides
-	Texture * tex;
-	std::stringstream s;
-	s << "assets/textures/introSlides/intermission_" << _plotPosition << ".png";
-	tex = new Texture(s.str(), false, true);
+	Texture * tex = new Texture("assets/textures/introSlides/intermission_" + std::to_string(_plotPosition) + ".png", false, true);
 	tex->load();
 	push(new Slide(tex));
 
