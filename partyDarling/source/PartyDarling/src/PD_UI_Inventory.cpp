@@ -58,7 +58,6 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 	gridLayout->background->mesh->setScaleMode(GL_NEAREST);
 	gridLayout->setRationalWidth(0.5f, layout);
 	gridLayout->setSquareHeight(1.f);
-	gridLayout->setPadding(UI_INVENTORY_GRID_PADDING);
 
 	// scrollwheel artificially triggers change event on scrollbar for grid
 	gridLayout->setMouseEnabled(true);

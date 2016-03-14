@@ -5,7 +5,7 @@
 
 #define UI_INVENTORY_GRID_SIZE_X 3
 #define UI_INVENTORY_GRID_SIZE_Y 3
-#define UI_INVENTORY_GRID_PADDING 0.02f
+#define UI_INVENTORY_GRID_PADDING 0.035f
 
 class PD_UI_DissCard;
 class Player;
