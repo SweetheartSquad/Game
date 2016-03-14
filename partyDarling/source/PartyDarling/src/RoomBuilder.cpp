@@ -164,7 +164,6 @@ Room * RoomBuilder::getRoom(){
 		unsigned long int pixelIncrement = 158;
 		room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 		room->tilemap->load();
-		room->tilemap->saveImageData("tilemap.tga");
 
 		createWalls();
 		sweet::Box boundingBox = room->mesh->calcBoundingBox();
