@@ -13,6 +13,7 @@
 #include <shader/ComponentShaderText.h>
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
+#include <ShaderComponentOutline.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -55,7 +56,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	trackSpeed(0.1f),
 	trackLeft(false),
 	trackRight(false),
-	toonShader(new ComponentShaderBase(false)),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
@@ -63,6 +63,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
+	toonShader(new ComponentShaderBase(false)),
+	itemShader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
 	emoteShader(new ComponentShaderBase(false)),
 	currentHoverTarget(nullptr),
@@ -92,9 +94,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
-	//toonShader->addComponent(new ShaderComponentDiffuse(toonShader));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	toonShader->compileShader();
+
+	itemShader->addComponent(new ShaderComponentMVP(itemShader));
+	itemShader->addComponent(new ShaderComponentOutline(itemShader, 0));
+	itemShader->compileShader();
 
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
@@ -607,7 +612,7 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 		// build the rooms in this scenario
 		for(auto rd : scenario->assets.at("room")){
 			g->showLoading((float)++progress/numRooms);
-			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
+			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, itemShader, characterShader, emoteShader).getRoom();
 			
 			// run the physics simulation for a few seconds to let things settle
 			/*Log::info("Letting the bodies hit the floor...");
@@ -778,6 +783,7 @@ PD_Scene_Main::~PD_Scene_Main(){
 
 	delete bulletWorld;
 	delete toonShader;
+	delete itemShader;
 	delete characterShader;
 	delete emoteShader;
 
