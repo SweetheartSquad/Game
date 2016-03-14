@@ -2,23 +2,26 @@
 	"escapeChar": "*",
 	"1": [
 		"Building the mansion",
-		"Paying the labourers",
-		"Tipping the labourers"
+		"Reorganizing the rooms",
+		"Tightening the screws",
+		"Polishing the windows"
 	],
 	"2": [
 		"Ensuring Feng Shui",
 		"Stapling the upholstery",
-		"Pre-staining the pillows"
+		"Staining the pillows",
+		"Picking out curtains"
 	],
 	"3": [
 		"Corralling the party-goers",
 		"Performing bizarre experiments",
-		"Googling conversation topics"
+		"Googling conversation topics",
+		"Adding that je-ne-sais-quoi"
 	],
 	"4": [
 		"Waiting for the bus",
-		"Missing the first bus",
-		"Missing the second bus",
-		"Showing up to the party late as usual"
+		"Missing the bus",
+		"Showing up to the party late",
+		"Having car troubles"
 	]
 }
