@@ -110,9 +110,10 @@ bool Edge::isInside(glm::vec2 _point, float _scale){
 	return false;
 }
 
-RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader):
+RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _itemShader, Shader * _characterShader, Shader * _emoteShader):
 	world(_world),
 	baseShader(_baseShader),
+	itemShader(_itemShader),
 	characterShader(_characterShader),
 	definition(_definition),
 	emoteShader(_emoteShader)
@@ -164,7 +165,6 @@ Room * RoomBuilder::getRoom(){
 		unsigned long int pixelIncrement = 158;
 		room->tilemap->configure(sweet::NumberUtils::randomInt(pixelIncrement, 255), pixelIncrement);
 		room->tilemap->load();
-		room->tilemap->saveImageData("tilemap.tga");
 
 		createWalls();
 		sweet::Box boundingBox = room->mesh->calcBoundingBox();
@@ -1113,7 +1113,7 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 		listing->addCharacter(c);
 		for(auto c : definition->getCharacters()) {
 			for(auto i : c->getItems()) {
-				PD_Item * item = new PD_Item(i, world, baseShader);
+				PD_Item * item = new PD_Item(i, world, itemShader);
 				listing->addItem(item);
 				world->world->removeRigidBody(item->body);
 			}
@@ -1161,7 +1161,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 		listing->addCharacter(c);
 		for(auto c : definition->getCharacters()) {
 			for(auto i : c->getItems()) {
-				PD_Item * item = new PD_Item(i, world, baseShader);
+				PD_Item * item = new PD_Item(i, world, itemShader);
 				listing->addItem(item);
 				world->world->removeRigidBody(item->body);
 			}
@@ -1287,7 +1287,7 @@ std::vector<PD_Item *> RoomBuilder::getItems(bool _random){
 		std::vector<AssetItem *> itemDefinitions = definition->getItems();
 
 		for(auto def : itemDefinitions){
-			items.push_back(new PD_Item(def, world, baseShader));
+			items.push_back(new PD_Item(def, world, itemShader));
 		}
 
 

@@ -13,6 +13,7 @@
 #include <shader/ComponentShaderText.h>
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
+#include <ShaderComponentOutline.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -55,7 +56,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	trackSpeed(0.1f),
 	trackLeft(false),
 	trackRight(false),
-	toonShader(new ComponentShaderBase(false)),
 	screenSurfaceShader(new Shader("assets/RenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
@@ -63,6 +63,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
 	selectedItem(nullptr),
+	toonShader(new ComponentShaderBase(false)),
+	itemShader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
 	emoteShader(new ComponentShaderBase(false)),
 	currentHoverTarget(nullptr),
@@ -92,9 +94,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
-	//toonShader->addComponent(new ShaderComponentDiffuse(toonShader));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	toonShader->compileShader();
+
+	itemShader->addComponent(new ShaderComponentMVP(itemShader));
+	itemShader->addComponent(new ShaderComponentOutline(itemShader, 0));
+	itemShader->compileShader();
 
 
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
@@ -607,7 +612,7 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 		// build the rooms in this scenario
 		for(auto rd : scenario->assets.at("room")){
 			g->showLoading((float)++progress/numRooms);
-			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, characterShader, emoteShader).getRoom();
+			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, itemShader, characterShader, emoteShader).getRoom();
 			
 			// run the physics simulation for a few seconds to let things settle
 			/*Log::info("Letting the bodies hit the floor...");
@@ -778,6 +783,7 @@ PD_Scene_Main::~PD_Scene_Main(){
 
 	delete bulletWorld;
 	delete toonShader;
+	delete itemShader;
 	delete characterShader;
 	delete emoteShader;
 
@@ -812,7 +818,6 @@ void PD_Scene_Main::addRoom(Room * _room){
 void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
 	tex->load();
-	tex->saveImageData("tokenTest.tga");
 	uiDissBattle->addLife(tex);
 
 	uiMessage->gainLifeToken(_name, tex);
@@ -1231,7 +1236,7 @@ Texture * PD_Scene_Main::getToken(){
 	// get texture size
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	sd.x = sd.y = glm::min(sd.x, sd.y);
-	sd /= 4;
+	sd /= 3;
 	glm::vec2 half = glm::vec2(sd)*0.5f;
 
 	// hide the UI
@@ -1243,6 +1248,8 @@ Texture * PD_Scene_Main::getToken(){
 		
 	// allocate enough space for our token and read the center of the newly drawn screen into it
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
+	res->allocate(sd.x, sd.y, 4);
+	auto tempData = res->data;
 	res->allocate(sd.x, sd.y, 4);
 	glReadPixels(game->viewPortWidth/2 - half.x, game->viewPortHeight/2 - half.y, sd.x, sd.y, GL_RGBA, GL_UNSIGNED_BYTE, res->data);
 
@@ -1258,6 +1265,13 @@ Texture * PD_Scene_Main::getToken(){
 			}
 		}
 	}
+
+	// flip the texture
+	for(signed long int y = 0; y < sd.y; ++y){
+		memcpy(&tempData[y*sd.x*4], &res->data[(sd.y-y-1)*sd.x*4], sd.x*4);
+	}
+	res->unloadImageData();
+	res->data = tempData;
 
 	// unhide the UIyel
 	uiLayer->setVisible(true);

@@ -171,8 +171,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	//livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
 	livesContainer->setRationalWidth(1.f, healthContainer);
 	livesContainer->setRationalHeight(0.5f, healthContainer);
-	livesContainer->boxSizing = kCONTENT_BOX;
-	livesContainer->setMarginBottom(0.5f);
 	livesContainer->horizontalAlignment = kLEFT;
 	livesContainer->verticalAlignment = kTOP;
 
@@ -713,7 +711,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 		l->boxSizing = kCONTENT_BOX;
 		l->setMarginLeft(5);
 		l->setMarginRight(5);
-		l->firstParent()->scale(1.f, -1.f, 1.f);
+		l->firstParent()->scale(1.f, 1.f, 1.f);
 		lives.push_back(l);
 	}
 

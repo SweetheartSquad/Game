@@ -18,6 +18,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 	tex->load();
 	mesh->pushTexture2D(tex->texture);
 	mesh->setScaleMode(GL_NEAREST);
+	mesh->uvEdgeMode = GL_CLAMP;
 	//meshTransform->translate(0, tex->texture->height, 0);
 	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
 	meshTransform->scale(ITEM_SCALE, ITEM_SCALE, 1);
@@ -98,6 +99,8 @@ void PD_Item::triggerInteract(){
 			PD_ResourceManager::scenario->eventManager->triggerEvent(e2);
 		}
 	}else{
-		PD_ResourceManager::scenario->eventManager->triggerEvent("itemNothingHappened");
+		if(definition->name != "Door"){
+			PD_ResourceManager::scenario->eventManager->triggerEvent("itemNothingHappened");
+		}
 	}
 }
