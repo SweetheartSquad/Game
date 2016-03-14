@@ -51,7 +51,6 @@ public:
 	bool trackLeft;
 	bool trackRight;
 
-	ComponentShaderBase * toonShader;
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
@@ -77,7 +76,9 @@ public:
 	PD_UI_Fade * uiFade;
 	PD_UI_Message * uiMessage;
 	
-
+	
+	ComponentShaderBase * toonShader;
+	ComponentShaderBase * itemShader;
 	ComponentShaderBase * characterShader;
 	ComponentShaderBase * emoteShader;
 

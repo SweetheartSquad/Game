@@ -181,7 +181,7 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveOut["stats"]["level"] = _player->level;
 	for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
 		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-		_uiDissBattle->lifeTokens[i]->saveImageData(fileName);
+		_uiDissBattle->lifeTokens[i]->saveImageData(fileName, false);
 		saveOut["lifeTokens"].append(fileName);
 	}
 

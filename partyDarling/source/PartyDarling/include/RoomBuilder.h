@@ -60,6 +60,7 @@ class PD_PropDefinition;
 class RoomBuilder{
 private:
 	Shader * baseShader;
+	Shader * itemShader;
 	Shader * characterShader;
 	Shader * emoteShader;
 
@@ -82,7 +83,7 @@ public:
 
 	std::vector<Edge *> edges;
 
-	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _characterShader, Shader * _emoteShader);
+	RoomBuilder(AssetRoom * const _definition, BulletWorld * _world, Shader * _baseShader, Shader * _itemShader, Shader * _characterShader, Shader * _emoteShader);
 	~RoomBuilder();
 
 	Room * getRoom();
