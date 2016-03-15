@@ -712,6 +712,12 @@
       "src": "UI/npc_bubble.png",
       "nineSliced": true
     },
+     {
+      "id": "MESSAGE-BUBBLE",
+      "type": "texture",
+      "src": "UI/message_bubble.png",
+      "nineSliced": true
+    },
     {
       "id": "DISSCARD-BUBBLE",
       "type": "texture",
