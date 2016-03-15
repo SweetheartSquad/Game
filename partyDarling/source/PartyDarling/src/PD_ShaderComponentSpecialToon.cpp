@@ -13,6 +13,6 @@ PD_ShaderComponentSpecialToon::PD_ShaderComponentSpecialToon(ComponentShaderBase
 std::string PD_ShaderComponentSpecialToon::getFragmentBodyString(){
 	std::stringstream res;
 	res << ShaderComponentToon::getFragmentBodyString() <<
-	"if(level == " << GL_UNIFORM_ID_TOON_LEVELS << "-1){toonMod *= luminance;}" << ENDL;
+		"if(level == " << GL_UNIFORM_ID_TOON_LEVELS << "-1){toonMod *= luminance;}" << ENDL;
 	return res.str();
 }

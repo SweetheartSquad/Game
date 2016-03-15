@@ -22,8 +22,7 @@ public:
 	std::string src;
 	TriMesh * const mesh;
 
-	std::map<std::vector<std::string>, std::vector<PD_FurnitureConnector>> connectors; 
-
+	std::map<std::vector<std::string>, std::vector<PD_FurnitureConnector>> connectors;
 
 	explicit PD_FurnitureComponent(Json::Value _jsonDef);
 	~PD_FurnitureComponent();

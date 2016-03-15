@@ -12,7 +12,7 @@ private:
 public:
 	PD_DissStats * dissStats;
 	bool showSlider;
-	
+
 	float * const experience;
 	std::string name;
 

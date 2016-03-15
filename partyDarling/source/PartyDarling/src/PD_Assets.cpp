@@ -6,17 +6,16 @@
 #include <scenario/Scenario.h>
 #include <PD_ResourceManager.h>
 
-
 //texture = new Texture("assets/SCENARIO_EDITOR_STUFF/components/"+texJson.get("name", "DEFAULT").asString(), true, false, texJson.get("useMipmaps", false).asBool());
 
 // character
 CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 	in(0,0),
 	texture("")
-{ 
+{
 	Json::Value componentJson, childComponentsJson;
 	// parse external component file
-	if(_json.isMember("src")){	
+	if(_json.isMember("src")){
 		if(_json["src"] == ""){
 			_json = PD_Character::genRandomComponents()["components"][0];
 		}
@@ -37,13 +36,10 @@ CharacterComponentDefinition::CharacterComponentDefinition(Json::Value _json) :
 		}else{
 			childComponentsJson = _json["components"];
 		}
-		
 	}else{
 		componentJson = _json;
 		childComponentsJson = componentJson["components"];
 	}
-
-	
 
 	in = glm::vec2(componentJson["in"].get(Json::Value::ArrayIndex(0), 0.5f).asFloat(), componentJson["in"].get(Json::Value::ArrayIndex(1), 0.5f).asFloat());
 
@@ -141,14 +137,14 @@ AssetItem::~AssetItem(){
 
 void AssetItem::load(){
 	if(!loaded){
-	//	texture->load();
+		//	texture->load();
 	}
 	Asset::load();
 }
 
 void AssetItem::unload(){
 	if(loaded){
-	//	texture->unload();
+		//	texture->unload();
 	}
 	Asset::unload();
 }
@@ -165,7 +161,6 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	locked(_json.get("locked", false).asBool()),
 	empty(_json.get("empty", false).asBool())
 {
-
 	std::string sizeString = "";
 	roomType = _json.get("furnitureTypes", "RANDOM").asString();
 
@@ -183,7 +178,7 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		size = kLARGE;
 	}
-	
+
 	for(auto c : _json["characters"]){
 		characters.push_back(c.asString());
 	}
@@ -191,11 +186,11 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 		items.push_back(i.asString());
 	}
 	for(auto t : _json["triggersOnce"]) {
-		triggersOnce.push_back(sweet::Event(t));	
+		triggersOnce.push_back(sweet::Event(t));
 		triggersOnce.back().setStringData("scenario", _scenario->id);
 	}
 	for(auto t : _json["triggersMulti"]) {
-		triggersMulti.push_back(sweet::Event(t));	
+		triggersMulti.push_back(sweet::Event(t));
 		triggersMulti.back().setStringData("scenario", _scenario->id);
 	}
 }

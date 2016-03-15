@@ -4,10 +4,10 @@
 #include <PD_Character.h>
 
 PD_CharacterAnimationSet::PD_CharacterAnimationSet(CharacterRenderer* _pr):
-	leftArm(new Animation<glm::vec2>(&_pr->solverArmL->target)), 
-	rightArm(new Animation<glm::vec2>(&_pr->solverArmR->target)), 
-	leftLeg(new Animation<glm::vec2>(&_pr->solverLegL->target)), 
-	rightLeg(new Animation<glm::vec2>(&_pr->solverLegR->target)), 
+	leftArm(new Animation<glm::vec2>(&_pr->solverArmL->target)),
+	rightArm(new Animation<glm::vec2>(&_pr->solverArmR->target)),
+	leftLeg(new Animation<glm::vec2>(&_pr->solverLegL->target)),
+	rightLeg(new Animation<glm::vec2>(&_pr->solverLegR->target)),
 	body(new Animation<glm::vec2>(&_pr->solverBod->target)),
 	translation(new Animation<glm::vec3>(&translationVec))
 {

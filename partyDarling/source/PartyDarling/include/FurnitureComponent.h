@@ -5,7 +5,6 @@
 #include <vector>
 
 class FurnitureComponent : public Node{
-
 public:
 
 	std::string name;
@@ -15,5 +14,4 @@ public:
 
 	FurnitureComponent();
 	~FurnitureComponent();
-
 };

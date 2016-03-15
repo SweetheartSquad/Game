@@ -46,7 +46,6 @@ private:
 	bool canInterject;
 
 	NodeUI * displayContainer;
-	
 
 	HorizontalLinearLayout * tutorialSpacebar;
 	HorizontalLinearLayout * tutorialArrows;
@@ -85,11 +84,11 @@ private:
 	UIGlyph * prevHighlightedPunctuation;
 	UIGlyph * highlightedPunctuation;
 	Sprite * punctuationHighlight;
-	
+
 	UIGlyph * highlightedWordStart;
 	UIGlyph * highlightedWordEnd;
 	Sprite * wordHighlight;
-	
+
 	NodeUI * enemyBubble;
 	TextArea * enemyBubbleText;
 
@@ -163,10 +162,10 @@ private:
 
 	float playerAttackMultiplier; // enemy defense, player strength
 	float enemyAttackMultiplier; // player defense, enemy strength
-	
+
 	float insightMultiplier; // player insight - enemy insight
 	float insightAlpha;
-	
+
 	float sassInsultMultiplier; // player sass - enemy sass
 	float sassInterjectMultiplier; // player sass - enemy sass
 
@@ -179,11 +178,11 @@ public:
 	std::vector<Texture *> lifeTokens;
 
 	TextArea * selectedGlyphText;
-	
+
 	float damage;
 
 	Keyboard * keyboard;
-	
+
 	PD_Character * enemy;
 
 	bool modeOffensive;
@@ -204,7 +203,7 @@ public:
 	void startNewFight(PD_Character * _enemy, bool _playerFirst = true);
 	void gameOver(bool _win);
 	void complete();
-	
+
 	void addLife(Texture * _tokenTexture);
 
 	void disable();
@@ -219,5 +218,4 @@ public:
 	void countButtonPresses(bool _isCorrect, bool _isOffensive);
 	void countInterjectAccuracy(float _pressTime);
 	void countInsultAccuracy(float _insultHitTime);
-
 };

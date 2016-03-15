@@ -27,7 +27,7 @@ public:
 
 	virtual void end() override;
 
-private : 
+private :
 
 	std::queue<std::wstring> speechBuffer;
 	Timeout * speechTimeout;

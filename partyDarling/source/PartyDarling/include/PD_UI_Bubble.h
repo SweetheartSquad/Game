@@ -26,7 +26,7 @@ public:
 	// the currently selected option
 	// currentOption == options.size() when nothing is selected
 	unsigned long int currentOption;
-	
+
 	PD_UI_Bubble(BulletWorld * _world);
 	~PD_UI_Bubble();
 
@@ -43,14 +43,14 @@ public:
 	void next();
 	// select the previous option
 	void prev();
-	
+
 	// re-order children so that the currently selected is the last child
 	// (this makes it so that it draws on top of the others when depth-testing is turned off)
 	void reorderChildren();
 
 	// updates the positions of the visible options
 	void placeOptions();
-	
+
 	virtual void update(Step * _step) override;
 
 	// clear out all existing options

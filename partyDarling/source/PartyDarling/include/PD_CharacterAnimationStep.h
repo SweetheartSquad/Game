@@ -7,7 +7,7 @@
 #include <node/Node.h>
 #include <Easing.h>
 
-class PD_CharacterAnimationStep : public Node {	
+class PD_CharacterAnimationStep : public Node {
 public:
 
 	std::string interpolation;

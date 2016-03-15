@@ -13,6 +13,4 @@ public:
 
 	PD_House();
 	~PD_House();
-
-
 };

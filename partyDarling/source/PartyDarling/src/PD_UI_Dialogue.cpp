@@ -19,13 +19,12 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	vl->setRationalWidth(1.f, this);
 	vl->setRationalHeight(1.f, this);
-	
+
 	vl->horizontalAlignment = kCENTER;
 	vl->verticalAlignment = kTOP;
 
-	
 	VerticalLinearLayout * vl2 = new VerticalLinearLayout(world);
-	
+
 	vl2->horizontalAlignment = kCENTER;
 	vl2->verticalAlignment = kMIDDLE;
 
@@ -43,7 +42,7 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	text->setRationalWidth(1.f, vl2);
 	text->setText("test");
 	background->setVisible(false);
-	
+
 	// disable and hide by default
 	setVisible(false);
 
@@ -78,10 +77,8 @@ void PD_UI_Dialogue::update(Step * _step){
 }
 
 bool PD_UI_Dialogue::sayNext(){
-	
-invalidateLayout();
-	
-	
+	invalidateLayout();
+
 	if(currentSpeaker != nullptr) {
 		currentSpeaker->pr->talking = false;
 	}
@@ -149,6 +146,6 @@ void PD_UI_Dialogue::end(){
 }
 
 void PD_UI_Dialogue::clearSpeechBuffer(){
-   std::queue<std::wstring> empty;
-   std::swap(speechBuffer, empty);
+	std::queue<std::wstring> empty;
+	std::swap(speechBuffer, empty);
 }

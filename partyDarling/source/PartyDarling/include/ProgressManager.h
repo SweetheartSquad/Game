@@ -30,5 +30,4 @@ public:
 	void setString(std::string _name, std::string _val);
 	int getInt(std::string _name);
 	std::string getString(std::string _name);
-
 };

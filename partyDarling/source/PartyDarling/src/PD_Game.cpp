@@ -35,7 +35,6 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
 	scenes["options"] = new PD_Scene_MenuOptions(this);
 

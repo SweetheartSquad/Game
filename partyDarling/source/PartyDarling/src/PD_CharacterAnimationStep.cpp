@@ -12,13 +12,12 @@ PD_CharacterAnimationStep::PD_CharacterAnimationStep(Json::Value _jsonDef) {
 	body = glm::vec2(_jsonDef["body"][0].asFloat(), _jsonDef["body"][1].asFloat());
 	if(_jsonDef.isMember("translation")) {
 		translation = glm::vec3(
-				_jsonDef["translation"][0].asFloat(),
-				_jsonDef["translation"][1].asFloat(),
-				_jsonDef["translation"][2].asFloat()
+			_jsonDef["translation"][0].asFloat(),
+			_jsonDef["translation"][1].asFloat(),
+			_jsonDef["translation"][2].asFloat()
 			);
 	}
 }
-
 
 PD_CharacterAnimationStep::PD_CharacterAnimationStep() :
 	interpolation("LINEAR"),

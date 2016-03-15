@@ -9,7 +9,7 @@ class PD_UI_Text : public TextArea {
 public:
 
 	PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderText * _textShader);
-	
+
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
 	void setTextColour(float _r, float _g, float _b);

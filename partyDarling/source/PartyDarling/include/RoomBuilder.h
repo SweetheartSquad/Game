@@ -66,7 +66,7 @@ private:
 
 	// the definition for this room
 	AssetRoom * const definition;
-	
+
 public:
 	static std::map<std::string, Texture *> floorTex;
 	static std::map<std::string, Texture *> ceilTex;
@@ -74,7 +74,7 @@ public:
 	unsigned long int thresh;
 
 	BulletWorld * world;
-	
+
 	std::vector<RoomObject *> boundaries;
 	std::vector<glm::vec3> tiles;
 

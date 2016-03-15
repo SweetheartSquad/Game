@@ -6,7 +6,7 @@
 class CharacterRenderer;
 
 class PD_CharacterAnimationSet : public NodeUpdatable{
-public:	
+public:
 
 	glm::vec3 translationVec;
 

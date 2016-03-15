@@ -39,7 +39,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(1,1,1,1);
 	addChild(vl);
-	
+
 	vl->setRationalHeight(1.f, this);
 	vl->setRationalWidth(1.f, this);
 
@@ -76,10 +76,10 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 		Transform * t = new Transform();
 		t->addChild(optionBubble, false);
 	}
-	
+
 	optionBubble->label->setText(_text);
 	options.push_back(optionBubble);
-	
+
 	optionBubble->eventManager->addEventListener("selected", _listener);
 
 	test->addChild(optionBubble->firstParent(), false);
@@ -131,7 +131,7 @@ void PD_UI_Bubble::update(Step * _step){
 			d = 0;
 		}
 
-		// interaction 
+		// interaction
 		if(enabled){
 			if(d > FLT_EPSILON){
 				next();
@@ -145,7 +145,7 @@ void PD_UI_Bubble::update(Step * _step){
 		// re-center the transform containing the bubbles
 		// TODO: only do this when the size has actually changed
 		test->translate(0, getHeight(true, true)*0.5f, 0, false);
-		
+
 		// interpolate the rotation of the options
 		float targetDispayOffset = options.size() > 0 ? ((float)currentOption / options.size() + (options.size() == 2 ? -0.2f : 0.05f)) : 0;
 		float delta = targetDispayOffset - displayOffset;

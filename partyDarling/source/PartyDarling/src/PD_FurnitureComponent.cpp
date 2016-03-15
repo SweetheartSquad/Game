@@ -8,14 +8,13 @@ PD_FurnitureComponent::PD_FurnitureComponent(Json::Value _jsonDef) :
 	type(_jsonDef.get("type", -1).asString()),
 	src(_jsonDef.get("src", "NO_SRC").asString()),
 	mesh(src != "NO_SRC" ? (Resource::loadMeshFromObj("assets/meshes/furniture/" + src, false).at(0)) : nullptr) // TODO: maybe don't do this until the first time it's loaded?
-{	
+{
 	for(auto jsonObj : _jsonDef["connectors"]) {
 		// create the component types key
 		std::vector<std::string> compTypes;
 		for(auto compType : jsonObj["componentTypes"]){
 			compTypes.push_back(compType.asString());
 		}
-		
 
 		// store the position, rotation, and scale
 		for(auto jnt : jsonObj["out"]){

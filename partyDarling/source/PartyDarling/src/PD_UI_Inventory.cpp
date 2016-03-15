@@ -47,7 +47,6 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 	layout->setRationalHeight(1.f, root);
 	layout->setSquareWidth(1.f);
 	layout->setMargin(0, 0.05f);
-	
 
 	// layout for grid rows
 	gridLayout = new VerticalLinearLayout(world);
@@ -128,7 +127,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 		layout->addChild(infoLayout);
 		//infoLayout->background->setVisible(true);
 		//infoLayout->setBackgroundColour(1,1,1,1);
-		
+
 		infoLayout->horizontalAlignment = kCENTER;
 		infoLayout->verticalAlignment = kMIDDLE;
 
@@ -162,9 +161,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 		itemDescription->setText("");
 		itemDescription->setRationalWidth(1.f, infoLayout);
 		itemDescription->verticalAlignment = kTOP;
-		
 	}
-	
+
 	HorizontalLinearLayout * cardContainer = new HorizontalLinearLayout(_world);
 	addChild(cardContainer);
 	cardContainer->horizontalAlignment = kLEFT;
@@ -181,7 +179,6 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 	playerCard->setRationalHeight(1.f, cardContainer);
 	playerCard->setSquareWidth(1.4f);
 	playerCard->firstParent()->rotate(15.f, 0.f, 0.f, 1.f, kOBJECT);
-
 
 	// disable and hide by default
 	disable();
@@ -297,7 +294,6 @@ void PD_UI_Inventory::update(Step * _step){
 
 	itemHovered = false;
 }
-
 
 void PD_UI_Inventory::refreshGrid(){
 	unsigned long int itemIdx = gridOffset * UI_INVENTORY_GRID_SIZE_X;

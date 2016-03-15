@@ -27,7 +27,7 @@ public:
 	std::string type;
 	float mass;
 	int max; // not unsigned
-	
+
 	float paddingFront;
 	float paddingBack;
 	float paddingLeft;
@@ -44,7 +44,7 @@ public:
 	int parentMax;
 
 	std::vector<Texture *> textures;
-	
+
 	bool twist;
 	bool flare;
 

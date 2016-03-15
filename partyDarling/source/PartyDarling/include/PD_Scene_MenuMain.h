@@ -10,7 +10,7 @@ class PD_UI_ConfirmNewGame;
 class PD_UI_Text;
 
 class PD_Scene_MenuMain: public Scene {
-public:		
+public:
 
 	Shader * screenSurfaceShader;
 	RenderSurface* screenSurface;

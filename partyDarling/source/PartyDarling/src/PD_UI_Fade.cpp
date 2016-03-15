@@ -18,7 +18,6 @@ PD_UI_Fade::PD_UI_Fade(BulletWorld * _world) :
 		setBackgroundColour(color.r, color.g, color.b, p);
 	});
 
-
 	fadeInTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		setBackgroundColour(color.r, color.g, color.b, 0);
 	});
@@ -27,13 +26,12 @@ PD_UI_Fade::PD_UI_Fade(BulletWorld * _world) :
 		p = Easing::easeInOutCubic(p, 0, 1, 1);
 		setBackgroundColour(color.r, color.g, color.b, 1.f-p);
 	});
-	
+
 	childTransform->addChild(fadeOutTimeout, false);
 	childTransform->addChild(fadeInTimeout, false);
 }
 
 PD_UI_Fade::~PD_UI_Fade(){
-
 }
 
 void PD_UI_Fade::fadeIn(glm::uvec3 _color, float _length){

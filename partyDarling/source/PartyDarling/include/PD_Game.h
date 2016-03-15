@@ -24,9 +24,7 @@ public:
 	// picks a random BGM track and plays it, replacing the current track
 	void playBGM();
 
-	
 	virtual void update(Step * _step) override;
-
 
 	void showLoading(float _percentage);
 };
