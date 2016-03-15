@@ -138,31 +138,6 @@
         "order": 0,
         "src": "scenarios/Julian_and_the_Jewellery.json",
         "type": 0
-    },/*
-    {
-        "order": 0,
-        "src": "scenarios/dummy.json",
-        "type": 0
-    },*/
-    {
-        "order": 0,
-        "src": "scenarios/hoo_boy.json",
-        "type": 0
-    },
-    {
-        "order": 0,
-        "src": "scenarios/Plot_6.json",
-        "type": 0
-    },/*
-    {
-        "order": 0,
-        "src": "scenarios/Jokes_with_JonJon.json",
-        "type": 0
-    },*/
-    {
-        "order": 0,
-        "src": "scenarios/JackyJam.json",
-        "type": 0
     },
     {
         "order": 0,
@@ -171,7 +146,42 @@
     },
     {
         "order": 0,
+        "src": "scenarios/hoo_boy.json",
+        "type": 0
+    },
+    {
+        "order": 6,
+        "src": "scenarios/Plot_6.json",
+        "type": 2
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Jokes_with_JonJon.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/JackyJam.json",
+        "type": 0
+    },
+    {
+        "order": 0,
         "src": "scenarios/Locke_the_Liar.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/The_Demon_Twins.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Love_From_the_Grave.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Bicker_and_Belch.json",
         "type": 0
     }
 ]

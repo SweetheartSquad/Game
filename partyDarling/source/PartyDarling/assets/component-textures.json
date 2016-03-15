@@ -1161,11 +1161,6 @@
             "type": "texture"
         },
         {
-            "id": 282,
-            "src": "components/Locke_Torso.png",
-            "type": "texture"
-        },
-        {
             "id": 283,
             "src": "components/South_Lower_Jaw.png",
             "type": "texture"
@@ -1238,11 +1233,6 @@
         {
             "id": 297,
             "src": "components/Locke_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 298,
-            "src": "components/Locke_Pelvis.png",
             "type": "texture"
         },
         {
@@ -3006,36 +2996,6 @@
             "type": "texture"
         },
         {
-            "id": 811,
-            "src": "components/Abigail_arm_Upper_Arm.png",
-            "type": "texture"
-        },
-        {
-            "id": 812,
-            "src": "components/Abigail_arm_Lower_Arm.png",
-            "type": "texture"
-        },
-        {
-            "id": 813,
-            "src": "components/Abigail_arm_Hand.png",
-            "type": "texture"
-        },
-        {
-            "id": 814,
-            "src": "components/Abigail_gunarm_Upper_Arm.png",
-            "type": "texture"
-        },
-        {
-            "id": 815,
-            "src": "components/Abigail_gunarm_Lower_Arm.png",
-            "type": "texture"
-        },
-        {
-            "id": 816,
-            "src": "components/Abigail_gunarm_Hand.png",
-            "type": "texture"
-        },
-        {
             "id": 817,
             "src": "components/Toby_Upper_Leg.png",
             "type": "texture"
@@ -3953,36 +3913,6 @@
         {
             "id": 1003,
             "src": "components/Ronda_Pelvis.png",
-            "type": "texture"
-        },
-        {
-            "id": 1008,
-            "src": "components/Wilbur_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1009,
-            "src": "components/Wilbur_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1010,
-            "src": "components/Wilbur_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1011,
-            "src": "components/Wilbur_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1012,
-            "src": "components/Wilbur_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1013,
-            "src": "components/Wilbur_Right_Pupil.png",
             "type": "texture"
         },
         {
@@ -6921,51 +6851,6 @@
             "type": "texture"
         },
         {
-            "id": 1671,
-            "src": "components/Head_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1672,
-            "src": "components/Head_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1673,
-            "src": "components/Head_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 1674,
-            "src": "components/Head_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1675,
-            "src": "components/Head_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1676,
-            "src": "components/Head_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1677,
-            "src": "components/Head_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1678,
-            "src": "components/Head_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1679,
-            "src": "components/Head_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 1680,
             "src": "components/Paige_Lower_Jaw.png",
             "type": "texture"
@@ -7431,11 +7316,6 @@
             "type": "texture"
         },
         {
-            "id": 1773,
-            "src": "components/PortraitOmar_Torso.png",
-            "type": "texture"
-        },
-        {
             "id": 1774,
             "src": "components/JackyJam_Upper_Arm.png",
             "type": "texture"
@@ -7778,6 +7658,216 @@
         {
             "id": 1853,
             "src": "components/Freddy_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1854,
+            "src": "components/Peony_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1855,
+            "src": "components/Peony_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1856,
+            "src": "components/Peony_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1857,
+            "src": "components/Peony_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1858,
+            "src": "components/Peony_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1859,
+            "src": "components/Peony_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1860,
+            "src": "components/Peony_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1861,
+            "src": "components/Peony_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1862,
+            "src": "components/Peony_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1863,
+            "src": "components/Wilbur_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1864,
+            "src": "components/Wilbur_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1865,
+            "src": "components/Wilbur_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 1867,
+            "src": "components/PortraitOmar_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1868,
+            "src": "components/Wilbur_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1869,
+            "src": "components/Wilbur_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1870,
+            "src": "components/Wilbur_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1871,
+            "src": "components/Wilbur_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1872,
+            "src": "components/Wilbur_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1873,
+            "src": "components/Wilbur_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1874,
+            "src": "components/Wilbur_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1875,
+            "src": "components/Wilbur_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1876,
+            "src": "components/Wilbur_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1877,
+            "src": "components/Wilbur_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1878,
+            "src": "components/Wilbur_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1879,
+            "src": "components/Remi_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1880,
+            "src": "components/Remi_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1881,
+            "src": "components/Remi_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1882,
+            "src": "components/Remi_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1883,
+            "src": "components/Remi_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1884,
+            "src": "components/Remi_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1885,
+            "src": "components/Remi_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1886,
+            "src": "components/Remi_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1887,
+            "src": "components/Remi_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1888,
+            "src": "components/Sadie_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1889,
+            "src": "components/Locke_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1890,
+            "src": "components/Locke_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1891,
+            "src": "components/Abilgail_Right_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1892,
+            "src": "components/Abilgail_Right_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1893,
+            "src": "components/Abilgail_Right_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1894,
+            "src": "components/Abigail_ArmLeft_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1895,
+            "src": "components/Abigail_ArmLeft_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1896,
+            "src": "components/Abigail_ArmLeft_Hand.png",
             "type": "texture"
         }
     ]
