@@ -64,8 +64,6 @@ PD_ResourceManager::PD_ResourceManager(){
 	componentTextures = new PD_Scenario("assets/component-textures.json");
 
 	resources.push_back(scenario);
-	resources.push_back(itemTextures);
-	resources.push_back(componentTextures);
 
 	// add door asset manually
 	for(unsigned long int i = 1; i <= 5; ++i){
@@ -245,6 +243,9 @@ PD_ResourceManager::~PD_ResourceManager(){
 		delete propDefinitions.back();
 		propDefinitions.pop_back();
 	}
+
+	delete itemTextures;
+	delete componentTextures;
 
 	destruct();
 }
