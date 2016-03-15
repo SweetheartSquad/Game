@@ -95,6 +95,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
+	if(PD_Game::progressManager->plotPosition == kEND){
+		toonShader->addComponent(new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
+	}
 	toonShader->compileShader();
 
 	itemShader->addComponent(new ShaderComponentMVP(itemShader));
@@ -125,16 +128,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	l->verticalAlignment = kMIDDLE;
 
 	crosshairIndicator = new NodeUI(uiLayer->world);
-	crosshairIndicator->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	crosshairIndicator->setWidth(16);
-	crosshairIndicator->setHeight(16);
-	crosshairIndicator->invalidateLayout();
 	for(auto & v : crosshairIndicator->background->mesh->vertices){
 		v.x -= 0.5f;
 		v.y -= 0.5f;
 	}crosshairIndicator->background->mesh->dirty = true;
 	crosshairIndicator->background->mesh->setScaleMode(GL_NEAREST);
 	uiLayer->addChild(l);
+	resetCrosshair();
 	l->addChild(crosshairIndicator);
 
 	uiFade = new PD_UI_Fade(uiLayer->world);
@@ -1282,8 +1282,8 @@ Texture * PD_Scene_Main::getToken(){
 void PD_Scene_Main::resetCrosshair() {
 	// replace the crosshair item texture with the actual crosshair texture
 	crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	crosshairIndicator->setWidth(16 * sweet::getDpi());
-	crosshairIndicator->setHeight(16 * sweet::getDpi());
+	crosshairIndicator->setWidth(16 * sweet::getWindowHeight()/1080.f);
+	crosshairIndicator->setHeight(16 * sweet::getWindowHeight()/1080.f);
 	crosshairIndicator->autoResize();
 	crosshairIndicator->invalidateLayout();
 }
