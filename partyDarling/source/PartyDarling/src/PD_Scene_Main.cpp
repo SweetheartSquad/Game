@@ -1322,6 +1322,7 @@ void PD_Scene_Main::updateSelection(){
 								item->body = nullptr;
 
 								// pickup the item
+								uiMessage->gainItem(item);
 								uiInventory->pickupItem(item);
 								currentRoom->removeItem(item);
 
