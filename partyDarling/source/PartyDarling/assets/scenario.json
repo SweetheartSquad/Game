@@ -251,34 +251,34 @@
       "id": "FONT",
       "type": "font",
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
-      "size": 40,
+      "size": "4%",
       "antiAliased": false
     },{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
-      "size": 32,
+      "size": "3.2%",
       "antiAliased": false
     },
     {
       "id":"main-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":"6%",
+      "size":"8%",
       "antiAliased": false
     },
 	{
       "id":"options-menu-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":60,
+      "size":"6%",
       "antiAliased": false
     },
     {
       "id":"options-menu-sub-font",
       "type":"font",
       "src":"DobkinPlain.ttf",
-      "size":40,
+      "size":"4%",
       "antiAliased": false
     },
 
