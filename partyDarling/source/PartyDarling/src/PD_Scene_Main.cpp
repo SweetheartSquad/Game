@@ -14,6 +14,7 @@
 #include <shader/ShaderComponentToon.h>
 #include <PD_ShaderComponentSpecialToon.h>
 #include <ShaderComponentOutline.h>
+#include <ShaderComponentVNoise.h>
 
 #include <NumberUtils.h>
 #include <StringUtils.h>
@@ -93,6 +94,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
+	if(PD_Game::progressManager->plotPosition == kEND){
+		toonShader->addComponent(new ShaderComponentVNoise(toonShader));
+	}
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	if(PD_Game::progressManager->plotPosition == kEND){
@@ -821,6 +825,13 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 }
 
 void PD_Scene_Main::update(Step * _step){
+	if(PD_Game::progressManager->plotPosition == kEND){
+		toonShader->bindShader();
+		toonShader->makeDirty();
+		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->timeLocation, sweet::lastTimestamp);
+		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->magLocation, sin(sweet::lastTimestamp)*0.02f);
+	}
+
 	// panning
 	if(panLeft){
 		player->playerCamera->yaw += panSpeed * _step->getDeltaTime();
