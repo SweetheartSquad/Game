@@ -191,15 +191,19 @@ void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _delta, float _p){
 
 	int newStat = _dissStat + _delta;
 	if(increase){
+		float s = Easing::easeOutElastic(_p, 0.f, 1.f, 1.f, -1, 4.f);
 		for(i; i > 0; --i){
 			if(_dissStat + i < 5){
-				stars[_idx][newStat - i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat - i]->nodeUIParent);
+				stars[_idx][newStat - i]->setRationalHeight(s, stars[_idx][newStat - i]->nodeUIParent);
+				stars[_idx][newStat - i]->autoResize();
 			}
 		}
 	}else{
+		float s =  Easing::easeInBack(_p, 1.f, -1.f, 1.f, 10.f);
 		for(i; i > 0; --i){
 			if(_dissStat - i >= 0){
-				stars[_idx][newStat + i - 1]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat + i - 1]->nodeUIParent);
+				stars[_idx][newStat + i - 1]->setRationalHeight(s, stars[_idx][newStat + i - 1]->nodeUIParent);
+				stars[_idx][newStat + i]->autoResize();
 			}
 		}
 	}

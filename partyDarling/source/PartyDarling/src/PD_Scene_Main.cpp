@@ -869,6 +869,19 @@ void PD_Scene_Main::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_0)){
 		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
 	}
+	
+	if(keyboard->keyJustDown(GLFW_KEY_P)){
+		sweet::Event * e = new sweet::Event("changeDISSStat");
+		e->setStringData("stat", "strength");
+		e->setIntData("delta", 1);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_L)){
+		sweet::Event * e = new sweet::Event("changeDISSStat");
+		e->setStringData("stat", "strength");
+		e->setIntData("delta", -1);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
+	}
 
 	// look up at current speaker's face during conversations
 	PD_Character * facing = nullptr;
