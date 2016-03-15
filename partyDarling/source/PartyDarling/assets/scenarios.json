@@ -138,12 +138,12 @@
         "order": 0,
         "src": "scenarios/Julian_and_the_Jewellery.json",
         "type": 0
-    },
+    },/*
     {
         "order": 0,
         "src": "scenarios/dummy.json",
         "type": 0
-    },
+    },*/
     {
         "order": 0,
         "src": "scenarios/hoo_boy.json",
@@ -153,15 +153,25 @@
         "order": 0,
         "src": "scenarios/Plot_6.json",
         "type": 0
-    },
+    },/*
     {
         "order": 0,
         "src": "scenarios/Jokes_with_JonJon.json",
         "type": 0
-    },
+    },*/
     {
         "order": 0,
         "src": "scenarios/JackyJam.json",
         "type": 0
-    }
+    }/*,
+    {
+        "order": 0,
+        "src": "scenarios/Sadie_is_sad.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Locke_the_Liar.json",
+        "type": 0
+    }*/
 ]
