@@ -76,7 +76,7 @@ void ProgressManager::getNew(){
 		}
 	}
 
-	// Sort the plot and lab defs 
+	// Sort the plot and lab defs
 	// Each should have five items - each with a different order going from 1 to 5
 	// The lab and plot defs mus line up with one another
 	std::sort(allPlotDefs.begin(), allPlotDefs.end(), [](Json::Value a, Json::Value b){
@@ -100,7 +100,7 @@ void ProgressManager::getNew(){
 		scenariosList.append(allPlotDefs[i]["src"].asString());
 
 		assert(scenariosList.size() > 0);
-		
+
 		// pick some random side scenarios
 		if (i + 1 != kBEGINNING && i + 1 < kEND){
 			unsigned long int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
@@ -115,7 +115,7 @@ void ProgressManager::getNew(){
 
 		// if we're in the middle, pick an omar scenario
 		if (i + 1 != kBEGINNING && i + 1 < kEND){
-			omarScenario = allOmarDefs.pop(true)["src"].asString(); 
+			omarScenario = allOmarDefs.pop(true)["src"].asString();
 			scenariosList.append(omarScenario);
 		}
 
@@ -125,10 +125,10 @@ void ProgressManager::getNew(){
 		if (i + 1 != kBEGINNING && i + 1 < kEND){
 			std::string omarPrefix = sweet::StringUtils::split(omarScenario, '_')[0];
 			for(auto s : allLabDefs) {
-				 if(s["src"].asString().find(omarPrefix) != std::string::npos) {
-					 scenariosList.append(s["src"]);
-					 break;
-				 }
+				if(s["src"].asString().find(omarPrefix) != std::string::npos) {
+					scenariosList.append(s["src"]);
+					break;
+				}
 			}
 		}else {
 			for(auto s : allLabDefs) {
@@ -150,7 +150,6 @@ void ProgressManager::getNew(){
 	sweet::NumberUtils::seed(0);
 }
 
-
 void ProgressManager::eraseSave() {
 	if(sweet::FileUtils::fileExists("data/save.json")){
 		// save a backup file
@@ -160,7 +159,7 @@ void ProgressManager::eraseSave() {
 		backupFile.open(backupFilename.str());
 		backupFile << sweet::FileUtils::readFile("data/save.json");
 		backupFile.close();
-		
+
 		// remove the existing file
 		std::remove("data/save.json");
 	}else{

@@ -21,7 +21,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	Scene(_game),
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
-	screenFBO(new StandardFrameBuffer(false)), 
+	screenFBO(new StandardFrameBuffer(false)),
 	textShader(new ComponentShaderText(false)),
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
@@ -135,7 +135,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	callNightText->setMarginBottom(0.05f);
 
 	callNightText->eventManager->addEventListener("click", [this](sweet::Event * _event){
-		game->exit();		
+		game->exit();
 	});
 
 	callNightText->horizontalAlignment = kCENTER;
@@ -163,7 +163,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	confirmNewGame->btnConfirm->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		// erase the existing save file
 		PD_Game::progressManager->eraseSave();
-		
+
 		// delete the existing game
 		auto it = game->scenes.find("game");
 		if(it != game->scenes.end()){
@@ -179,13 +179,12 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 		hideConfirmBox();
 	});
 
-	
 	confirmNewGame->btnCancel->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		hideConfirmBox();
 	});
 
 	hideConfirmBox();
-	
+
 	mainContainer->invalidateLayout();
 
 	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
@@ -195,7 +194,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 PD_Scene_MenuMain::~PD_Scene_MenuMain() {
 	deleteChildTransform();
 	delete uiLayer;
-	
+
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
@@ -223,7 +222,6 @@ void PD_Scene_MenuMain::hideConfirmBox(){
 }
 
 void PD_Scene_MenuMain::update(Step* _step) {
-
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
@@ -233,24 +231,22 @@ void PD_Scene_MenuMain::update(Step* _step) {
 
 void PD_Scene_MenuMain::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-	
 
 	FrameBufferInterface::pushFbo(screenFBO);
-	
+
 	_renderOptions->setClearColour(0,0,0,0);
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer->render(_matrixStack, _renderOptions);
-	
-	FrameBufferInterface::popFbo();
 
+	FrameBufferInterface::popFbo();
 
 	screenSurface->render(screenFBO->getTextureId());
 }
 
 void PD_Scene_MenuMain::load() {
-	Scene::load();	
+	Scene::load();
 	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
@@ -262,5 +258,5 @@ void PD_Scene_MenuMain::unload() {
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
-	Scene::unload();	
+	Scene::unload();
 }

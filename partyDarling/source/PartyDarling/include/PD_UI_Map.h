@@ -23,7 +23,6 @@ private:
 public:
 	PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 
-
 	// deletes the old map and constructs a new one based on the provided grid
 	void buildMap(std::map<std::pair<int, int>, Room *> _houseGrid);
 	// updates the grid with the current position

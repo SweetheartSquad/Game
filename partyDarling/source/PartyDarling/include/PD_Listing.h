@@ -15,7 +15,7 @@ public:
 	std::map<std::string, Room *> rooms;
 	Scenario * scenario;
 	//std::map<std::string, PD_Furniture *> furniture;
-	
+
 	static std::map<Scenario *, PD_Listing *> listings;
 	static std::map<std::string, PD_Listing *> listingsById;
 

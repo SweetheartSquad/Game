@@ -25,7 +25,7 @@ private:
 	// i.e. displays its texture, name, and description
 	// if _item == nullptr, clears the panel instead
 	void setInfoPanel(PD_Item * _item);
-	
+
 	// scrollbar for grid
 	SliderController * scrollbar;
 
@@ -37,7 +37,6 @@ public:
 	// the grid of UI elements used to display inventory items
 	// array access is [y][x]
 	NodeUI * grid[UI_INVENTORY_GRID_SIZE_Y][UI_INVENTORY_GRID_SIZE_X];
-
 
 	NodeUI * itemImage;
 	TextArea * itemDescription;
@@ -52,14 +51,14 @@ public:
 
 	// add an item to the inventory
 	void pickupItem(PD_Item * _item);
-	
+
 	// return the inventory item stored in grid[_x][_y]
 	PD_Item * getItem(unsigned long int _x, unsigned long int _y);
-	
+
 	// returns the item index for the grid cell with the provided coordinates
 	// i.e. _x + (_y+gridOffset) * UI_INVENTORY_GRID_SIZE_X
 	unsigned long int getItemIdx(unsigned long int _x, unsigned long int _y);
-	
+
 	// put _item in the player's "hands"
 	void selectItem(PD_Item * _item);
 
@@ -78,7 +77,6 @@ public:
 
 	// returns the currently selected item, or nullptr if nothing is selected
 	PD_Item * getSelected();
-
 
 	// hides the inventory and disables interaction
 	void disable();

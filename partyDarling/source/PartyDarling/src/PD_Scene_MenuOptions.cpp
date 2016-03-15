@@ -41,7 +41,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	subLayout->horizontalAlignment = kCENTER;
 	subLayout->verticalAlignment = kMIDDLE;
 	subLayout->setPadding(0.05f);
-	
+
 	PD_UI_Text * rsvp = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
 	rsvp->setText("RSVP");
 	rsvp->setMouseEnabled(true);
@@ -94,7 +94,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	subLayout->addChild(audioContainer);;
 
 	audioContainer->setPaddingTop(0.05f);
-	
+
 	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
 	subLayout->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 }

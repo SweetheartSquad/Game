@@ -9,7 +9,7 @@ PD_PhraseGenerator_Incidental::PD_PhraseGenerator_Incidental()
 	makeDatabases("assets/wordlists/incidental.json");
 }
 
-void PD_PhraseGenerator_Incidental::updateNames(PD_Character * _character){	
+void PD_PhraseGenerator_Incidental::updateNames(PD_Character * _character){
 	sweet::ShuffleVector<std::string> names;
 	for(auto l : PD_Listing::listingsById) {
 		for(auto c : l.second->characters) {

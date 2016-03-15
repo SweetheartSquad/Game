@@ -7,9 +7,6 @@
 #include <Animation.h>
 #include <json/json.h>
 
-
-
-
 #include <IkChain.h>
 #include <BulletWorld.h>
 #include <NodeBulletBody.h>
@@ -35,7 +32,7 @@ public:
 	glm::vec2 in;
 	std::vector<glm::vec2> out;
 	std::vector<CharacterComponent *> connections;
-	
+
 	bool flipped;
 
 	glm::vec2 getOut(unsigned long int _index);
@@ -107,7 +104,7 @@ public:
 		* forearmR,
 		* handL,
 		* handR,
-		
+
 		* legL,
 		* legR,
 		* forelegL,
@@ -136,7 +133,6 @@ public:
 
 	void setShader(Shader * _shader, bool _default) const;
 
-
 	// creates a parent-child relationship between two components
 	// uses one of the connection slots on _from
 	// if behind, _to moves backward; otherwise, _to moves forward
@@ -154,7 +150,7 @@ public:
 	sweet::ShuffleVector<std::string> incidentalLineNormal;
 
 	PD_DissStats * dissStats;
-	
+
 	// if false, you haven't had a diss battle with this character yet
 	// if true, you can't have a diss battle them again
 	bool dissedAt;
@@ -164,13 +160,13 @@ public:
 
 	// the character's current state
 	const CharacterState * state;
-	
+
 	// The room the character is in
 	Room * room;
 
 	AssetCharacter * const definition;
 
-	OpenAL_Sound * voice; 
+	OpenAL_Sound * voice;
 
 	std::vector<std::string> items;
 
@@ -188,7 +184,7 @@ public:
 	void show();
 	bool isEnabled() const;
 	bool isHidden() const;
-	
+
 	CharacterRenderer * pr;
 
 	static PD_Character * createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShder);

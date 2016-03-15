@@ -91,11 +91,11 @@ void PD_UI_DissCard::init(){
 		slider->setRationalHeight(0.5f, xpContainer);
 
 		slider->thumb->setVisible(false);
-	
+
 		slider->setBackgroundColour(1,1,1,1);
 		slider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-TRACK")->texture);
 		slider->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 		slider->fill->setBackgroundColour(1,1,1,1);
 		slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-FILL")->texture);
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
@@ -106,7 +106,6 @@ void PD_UI_DissCard::init(){
 		level->setRationalHeight(1.f, xpContainer);
 		level->setMarginLeft(0.05f);
 		level->horizontalAlignment = kLEFT;
-
 	}else{
 		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 		layout->addChild(label);
@@ -204,6 +203,6 @@ void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _delta, float _p){
 			}
 		}
 	}
-	
+
 	invalidateLayout();
 }

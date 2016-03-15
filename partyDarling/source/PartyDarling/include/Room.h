@@ -36,7 +36,7 @@ class Room: public BulletMeshEntity {
 public:
 	AssetRoom * const definition;
 	bool locked;
-	
+
 	enum Visibility{
 		kHIDDEN, // the player doesn't know this room exists
 		kSEEN, // the player has seen a door to this room, but hasn't been inside
@@ -45,7 +45,7 @@ public:
 
 	PD_TilemapGenerator * tilemap;
 	std::vector<RoomObject *> components;
-	
+
 	BulletMeshEntity * floor;
 	BulletMeshEntity * ceiling;
 	std::map<PD_Door::Door_t, PD_Door *> doors;
@@ -66,7 +66,6 @@ public:
 	void translatePhysical(glm::vec3 _v, bool _relative = false);
 
 	glm::vec3 getCenter() const;
-
 
 	// removes all of the rigid bodies associated with the room from the world
 	void removePhysics();

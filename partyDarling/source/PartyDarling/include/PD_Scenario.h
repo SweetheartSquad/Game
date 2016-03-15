@@ -9,7 +9,7 @@ enum ScenarioType {
 	kPLOT		= 2,
 	kLAB		= 3,
 	kINTRO		= 4
-}; 
+};
 
 enum ScenarioOrder {
 	kRANDOM        = 0,
@@ -22,7 +22,7 @@ enum ScenarioOrder {
 };
 
 class PD_Scenario : public Scenario {
-public:	
+public:
 	std::string   name;
 	std::string   description;
 	ScenarioType  scenarioType;
@@ -30,4 +30,3 @@ public:
 
 	explicit PD_Scenario(std::string _jsonSrc);
 };
-

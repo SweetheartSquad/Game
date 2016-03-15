@@ -66,7 +66,6 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 	layout->setRationalHeight(1.f, this);
 	layout->setRationalWidth(1.f, this);
 
-	
 	innerLayout = new VerticalLinearLayout(world);
 	layout->addChild(innerLayout);
 	innerLayout->horizontalAlignment = kCENTER;
@@ -76,11 +75,10 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 
 	innerLayout->background->setVisible(true);
 	innerLayout->setBackgroundColour(0,0,0,0.5);
-	
+
 	innerLayout->setRationalHeight(0.2f, this);
 	innerLayout->setSquareWidth(1.f);
 
-	
 	VerticalLinearLayout * innerLayout2 = new VerticalLinearLayout(world);
 	innerLayout->addChild(innerLayout2);
 	innerLayout2->horizontalAlignment = kRIGHT;
@@ -136,7 +134,6 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 			// cells without rooms are always ignored
 			cell.second->setVisible(false);
 		}else{
-
 			// hidden cells which are adjacent to the current cell become seen
 			if(
 				(
@@ -150,11 +147,11 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				&&
 				(glm::abs(cell.first.second - _currentPosition.y) == 1)
 				)
-			){
-				if(cell.second->room->visibility == Room::kHIDDEN){
-					cell.second->room->visibility = Room::kSEEN;
+				){
+					if(cell.second->room->visibility == Room::kHIDDEN){
+						cell.second->room->visibility = Room::kSEEN;
+					}
 				}
-			}
 
 			if(cell.first == k){
 				cell.second->childTransform->addChild(compass, false);

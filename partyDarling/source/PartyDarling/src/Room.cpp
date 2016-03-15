@@ -22,8 +22,6 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 {
 	mesh->setScaleMode(GL_NEAREST);
 	doors.clear();
-	
-	
 
 	// create floor/ceiling as static bullet planes
 	floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), _shader);

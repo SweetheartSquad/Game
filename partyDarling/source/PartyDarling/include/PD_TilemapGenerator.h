@@ -9,7 +9,6 @@ public:
 	unsigned long int max, pixelIncrement;
 	void configure(unsigned long int _max = 255, unsigned long int _pixelIncrement = 255);
 
-
 	PD_TilemapGenerator(unsigned long int _width, unsigned long int _height, bool _autorelease);
 
 	void generateTilemap();

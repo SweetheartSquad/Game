@@ -37,7 +37,7 @@ public:
 
 	PD_UI_DissStats(BulletWorld * _bulletWorld, Player * _player, Shader * _shader);
 	~PD_UI_DissStats();
-	
+
 	void playIntro(PD_Character * _enemy);
 	void playOutro(float _wonXP);
 	void playChangeDissStat();

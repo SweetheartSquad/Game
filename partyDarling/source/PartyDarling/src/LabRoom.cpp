@@ -21,7 +21,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doors.insert(std::make_pair(PD_Door::kSOUTH, doorSouth));
 	doors.insert(std::make_pair(PD_Door::kEAST, doorEast));
 	doors.insert(std::make_pair(PD_Door::kWEST, doorWest));
-	
+
 	for(auto d : doors){
 		//childTransform->addChild(d.second);
 		addComponent(d.second);
@@ -34,8 +34,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	doorSouth->translatePhysical(glm::vec3(0,0,22));
 	doorEast->translatePhysical(glm::vec3(22,0,0));
 	doorWest->translatePhysical(glm::vec3(-22,0,0));
-	
-	
+
 	std::vector<TriMesh *> meshes = PD_ResourceManager::scenario->getMesh("LAB-ROOM")->meshes;
 
 	for(auto m : meshes){
@@ -49,7 +48,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 
 	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
 	createRigidBody(0);
-	
+
 	PD_Listing * listing = PD_Listing::listings[_labScenario];
 	AssetCharacter * c1, * c2 = nullptr;
 	auto it = _labScenario->assets["character"].begin();
@@ -85,12 +84,12 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 			listing->addCharacter(p);
 		}
 	}
-	
+
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
-	
+
 	ceiling->setVisible(false);
 	floor->setVisible(false);
-	
+
 	topLight = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
 	lights.push_back(topLight);
 	childTransform->addChild(topLight);
@@ -108,7 +107,7 @@ void LabRoom::update(Step * _step){
 
 	float lRadius = 4;
 	float lOffset = 8;
-	
+
 	topLight->firstParent()->translate(glm::vec3(sin(_step->time)* lRadius, lOffset, cos(_step->time) * lRadius), false);
 	bottomLight->firstParent()->translate(glm::vec3(sin(_step->time+glm::pi<float>())* lRadius, -lOffset, cos(_step->time+glm::pi<float>()) * lRadius), false);
 

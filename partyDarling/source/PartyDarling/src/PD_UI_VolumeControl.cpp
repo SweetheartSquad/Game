@@ -19,7 +19,6 @@ PD_UI_VolumeControl::PD_UI_VolumeControl(BulletWorld * _world, Shader * _textSha
 }
 
 void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
-
 	VerticalLinearLayout * container = new VerticalLinearLayout(world);
 	addChild(container);
 	container->verticalAlignment = kMIDDLE;
@@ -29,10 +28,10 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 
 	TextLabel * label = new TextLabel(world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
 	SliderController * slider = new SliderController(world, _target, *_target, 0.f, 2.f);
-	
+
 	container->addChild(label);
 	container->addChild(slider);
-	
+
 	label->setText(_text);
 	label->setRationalWidth(1.f, container);
 	label->setRationalHeight(0.6f, container);
@@ -43,11 +42,11 @@ void PD_UI_VolumeControl::addSlider(std::string _text, float * _target){
 	slider->thumb->setBackgroundColour(1,1,1,1);
 	slider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-THUMB")->texture);
 	slider->thumb->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	slider->setBackgroundColour(1,1,1,1);
 	slider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
 	slider->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	slider->fill->setBackgroundColour(1,1,1,1);
 	slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
 	slider->fill->background->mesh->setScaleMode(GL_NEAREST);

@@ -31,5 +31,4 @@ public:
 	int getInsight();
 	int getStrength();
 	int getSass();
-	
 };

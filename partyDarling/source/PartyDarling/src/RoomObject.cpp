@@ -16,8 +16,8 @@ RoomObject::RoomObject(BulletWorld * _world, MeshInterface * _mesh, Shader * _sh
 	padding(0)
 {
 #ifdef _DEBUG
-	 QuadMesh * m = new QuadMesh(true, GL_LINE_STRIP);
-	 float _halfSize = 0.5f;
+	QuadMesh * m = new QuadMesh(true, GL_LINE_STRIP);
+	float _halfSize = 0.5f;
 	//Top
 	m->pushVert(Vertex(-_halfSize, _halfSize, _halfSize));
 	m->pushVert(Vertex(-_halfSize, _halfSize, -_halfSize));
@@ -130,10 +130,10 @@ void RoomObject::resetObject(){
 void RoomObject::billboard(glm::vec3 _playerPos){
 	glm::vec3 cPos = getPhysicsBodyCenter();
 	glm::vec3 d = glm::normalize(_playerPos - cPos);
-		
+
 	float a = glm::atan(d.x, d.z);
 	a = glm::degrees(a);
-		
+
 	float angleDif = (a - angle);
 	while(angleDif > 180){
 		angleDif -= 360;

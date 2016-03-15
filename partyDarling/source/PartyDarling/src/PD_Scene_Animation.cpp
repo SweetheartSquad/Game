@@ -12,8 +12,7 @@
 #include <shader/ShaderComponentTexture.h>
 #include <Keyboard.h>
 
-
-Keyframe::Keyframe(BulletWorld * _bulletWorld, PD_Character * _character) : 
+Keyframe::Keyframe(BulletWorld * _bulletWorld, PD_Character * _character) :
 	NodeUI(_bulletWorld),
 	character(_character)
 {
@@ -38,7 +37,7 @@ Effector::Effector(BulletWorld* _world, CharacterLimbSolver * _solver) : NodeUI(
 		if(active) {
 			setBackgroundColour(1, 0, 0);
 		}else {
-			setBackgroundColour(1, 1, 1);	
+			setBackgroundColour(1, 1, 1);
 		}
 	});
 }
@@ -46,7 +45,6 @@ Effector::Effector(BulletWorld* _world, CharacterLimbSolver * _solver) : NodeUI(
 void Effector::update(Step * _step) {
 	if(active) {
 		glm::uvec2 sd = sweet::getWindowDimensions();
-		
 	}
 	NodeUI::update(_step);
 }
@@ -59,7 +57,7 @@ void Effector::setPos(glm::vec3 _mpos, glm::vec3 _pos) {
 }
 
 PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
-	Scene(_game), 
+	Scene(_game),
 	characterShader(new ComponentShaderBase(false)),
 	baseShader(new ComponentShaderBase(false)),
 	uiLayer(new UILayer(0, 0, 0, 0)),
@@ -91,7 +89,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 
 	character = PD_Character::createRandomPD_Character(PD_ResourceManager::scenario, uiLayer->world, characterShader, baseShader);
 	uiLayer->childTransform->addChild(character);
-		
+
 	for(auto solver : character->pr->solvers) {
 		solver->setJointsVisible(true);
 	}
@@ -135,7 +133,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	uiLayer->complexHitTest = true;
 
 	character->pr->animate = false;
-	
+
 	loadFromTestFile();
 }
 
@@ -145,7 +143,6 @@ PD_Scene_Animation::~PD_Scene_Animation() {
 }
 
 void PD_Scene_Animation::update(Step * _step) {
-
 	updateEffectors();
 
 	if(keyboard->keyJustUp(GLFW_KEY_S) && keyboard->control) {
@@ -164,12 +161,10 @@ void PD_Scene_Animation::update(Step * _step) {
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_D)) {
-		character->pr->animate = !character->pr->animate; 
+		character->pr->animate = !character->pr->animate;
 	}
-	
 
 	if(keyboard->keyJustUp(GLFW_KEY_W)) {
-		
 		Keyframe * keyframe;
 
 		if(currentKeyFrame != nullptr){
@@ -177,7 +172,7 @@ void PD_Scene_Animation::update(Step * _step) {
 			keyframe = currentKeyFrame;
 		}else {
 			keyframe = new Keyframe(uiLayer->world, character);
-		}			
+		}
 
 		keyframe->step->leftArm = glm::vec2(
 			character->pr->solverArmL->target.x,
@@ -198,7 +193,7 @@ void PD_Scene_Animation::update(Step * _step) {
 		keyframe->step->body = glm::vec2(
 			character->pr->solverBod->target.x,
 			character->pr->solverBod->target.y);
-		
+
 		keyframe->eventManager->addEventListener("click", [this, keyframe](sweet::Event * _event){
 			if(currentKeyFrame != nullptr){
 				currentKeyFrame->setBackgroundColour(1.f, 0.f, 0.f);
@@ -235,17 +230,14 @@ void PD_Scene_Animation::render(sweet::MatrixStack * _matrixStack, RenderOptions
 }
 
 void PD_Scene_Animation::load() {
-
 	Scene::load();
 }
 
 void PD_Scene_Animation::unload() {
-
 	Scene::unload();
 }
 
 void PD_Scene_Animation::updateEffectors() const {
-	
 	glm::uvec2 sd = sweet::getWindowDimensions();
 
 	glm::vec3 mPos = uiLayer->mouseIndicator->firstParent()->getTranslationVector();
@@ -259,7 +251,6 @@ void PD_Scene_Animation::updateEffectors() const {
 }
 
 void PD_Scene_Animation::writeToFile() const {
-
 	PD_CharacterAnimationStep * lastStep = new PD_CharacterAnimationStep();
 
 	float lenAL = character->pr->solverArmL->getChainLength();
@@ -301,15 +292,15 @@ void PD_Scene_Animation::loadFromTestFile() {
 	std::string json = sweet::FileUtils::readFile("assets/animations/test.json");
 	if(json == "") {
 		json = "[]";
-	}	
+	}
 	Json::Reader reader;
 	Json::Value animStep;
 	bool parsingSuccessful = reader.parse( json, animStep );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
-	}else{					
+	}else{
 		for(auto step : animStep) {
-			testSteps.push_back(PD_CharacterAnimationStep(step));	
+			testSteps.push_back(PD_CharacterAnimationStep(step));
 		}
 	}
 	character->pr->setAnimation(testSteps);

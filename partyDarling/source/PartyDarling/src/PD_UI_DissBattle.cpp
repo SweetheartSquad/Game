@@ -34,7 +34,6 @@ InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _
 	hitTime(_hitTime),
 	iteration(_iteration)
 {
-
 }
 
 PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader) :
@@ -162,7 +161,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 		wordHighlight->mesh->vertices.at(i).red = 0.820f;
 		wordHighlight->mesh->vertices.at(i).green = 0.722f;
 		wordHighlight->mesh->vertices.at(i).blue = 0.851f;
-
 	}
 	wordHighlight->setVisible(false);
 
@@ -174,7 +172,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	livesContainer->horizontalAlignment = kLEFT;
 	livesContainer->verticalAlignment = kTOP;
 
-
 	// healthbar
 	confidenceSlider = new SliderControlled(_bulletWorld, &confidence, 0, 100.f);
 	healthContainer->addChild(confidenceSlider);
@@ -182,20 +179,19 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	//confidenceSlider->fill->setBackgroundColour(0, 1.f, 0);
 	confidenceSlider->setRationalWidth(0.7f, healthContainer);
 	confidenceSlider->setRationalHeight(0.5f, healthContainer);
-	
+
 	//confidenceSlider->thumb->background->meshTransform->scale(2);
 	confidenceSlider->thumb->setBackgroundColour(1,1,1,1);
 	confidenceSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-THUMB-HAPPY")->texture);
 	confidenceSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	confidenceSlider->setBackgroundColour(1,1,1,1);
 	confidenceSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-TRACK")->texture);
 	confidenceSlider->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	confidenceSlider->fill->setBackgroundColour(1,1,1,1);
 	confidenceSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-FILL")->texture);
 	confidenceSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
-	
 
 	/*selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 0.9);
 	//addChild(selectedGlyphText);
@@ -224,7 +220,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	enemyBubbleBubble->setPadding(0.05f);
 	enemyBubbleBubble->setScaleMode(GL_NEAREST);
 	//enemyBubbleBubble->setBackgroundColour(0.f, 1.f, 0.f, 0.5f);
-	
+
 	NodeUI * enemyBubbleTextContainer = new NodeUI(_bulletWorld);
 	enemyBubbleBubble->addChild(enemyBubbleTextContainer);
 	enemyBubbleTextContainer->setRationalWidth(1.f, enemyBubbleBubble);
@@ -245,8 +241,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	enemyBubbleText->verticalAlignment = kMIDDLE;
 	enemyBubbleText->background->setVisible(false);
 	enemyBubbleText->setBackgroundColour(1, 1, 1, 0.5);
-	
-	
+
 	NodeUI * enemyBubbleTail = new NodeUI(_bulletWorld);
 	enemyBubble->addChild(enemyBubbleTail);
 	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-DEFENSE-BUBBLE-TAIL")->texture);
@@ -258,7 +253,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	//enemyBubbleTail->setBackgroundColour(1.f, 0, 0, 0.5f);
 	enemyBubbleTail->background->mesh->setScaleMode(GL_NEAREST);
 
-
 	playerBubble = new NodeUI(_bulletWorld);
 	gameContainer->addChild(playerBubble);
 	playerBubble->setRationalWidth(1.f, gameContainer);
@@ -269,7 +263,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubble->setBackgroundColour(1, 0, 0, 0.5f);
 	playerBubble->setMarginRight(0.05f);
 	playerBubble->setMarginLeft(0.4f);
-	
+
 	playerTimerSlider = new SliderControlled(_bulletWorld, &playerAnswerTimer, 0, playerAnswerTimerLength, true, true);
 	playerBubble->addChild(playerTimerSlider);
 	playerTimerSlider->boxSizing = kCONTENT_BOX;
@@ -319,7 +313,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	playerBubbleOptions = new HorizontalLinearLayout(_bulletWorld);
 	playerBubbleLayout->addChild(playerBubbleOptions);
-	
+
 	playerBubbleOptions->setRationalWidth(0.4f, playerBubbleLayout);
 	playerBubbleOptions->setRationalHeight(1.f, playerBubbleLayout);
 
@@ -408,7 +402,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 		interjectBubble->mesh->vertices.at(i).y += 0.5f;
 	}
 	childTransform->addChild(interjectBubble);
-	
+
 	tutorialSpacebar = new HorizontalLinearLayout(_bulletWorld);
 	gameContainer->addChild(tutorialSpacebar);
 	tutorialSpacebar->setRationalWidth(1.f, gameContainer);
@@ -448,7 +442,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	eventManager->addEventListener("wordspoken", [this](sweet::Event * _event){
 		// Stuff!!!
-		
 	});
 
 	// Init sound vectors
@@ -474,7 +467,7 @@ PD_UI_DissBattle::~PD_UI_DissBattle(){
 
 	delete optionOneShader;
 	delete optionTwoShader;
-	
+
 	if(enemyCursor->firstParent()->parents.size() == 0){
 		childTransform->addChild(enemyCursor->firstParent(), false);
 	}
@@ -492,7 +485,7 @@ void PD_UI_DissBattle::update(Step * _step){
 				}
 			}else{
 				if (canInterject && (keyboard->keyJustDown(GLFW_KEY_SPACE) || mouse->leftJustPressed())){
- 					interject();
+					interject();
 				}
 			}
 
@@ -521,7 +514,7 @@ void PD_UI_DissBattle::update(Step * _step){
 						interjectBubble->meshTransform->scale(s, s, 1, false);
 					}
 				}
-			
+
 				// update enemy turn
 				if(!interjected){
 					// INTERJECT
@@ -533,7 +526,7 @@ void PD_UI_DissBattle::update(Step * _step){
 
 						glm::vec3 screenPos1 = screenPos;
 						glm::vec3 screenPos2 = glm::vec3(screenPos.x + w, screenPos.y, screenPos.z);
-			
+
 						cursorDelayDuration += _step->getDeltaTime();
 
 						if(cursorDelayDuration < cursorDelayLength){
@@ -581,7 +574,6 @@ void PD_UI_DissBattle::update(Step * _step){
 								setEnemyText();
 							}
 						}
-			
 					}
 
 					// Punctuation Highlight
@@ -590,7 +582,7 @@ void PD_UI_DissBattle::update(Step * _step){
 						// text label
 						glm::mat4 mm = highlightedPunctuation->nodeUIParent->firstParent()->getModelMatrix();
 						pos = glm::vec3(mm* glm::vec4(pos, 1));
-					
+
 						punctuationHighlight->childTransform->translate(pos, false);
 					}
 
@@ -600,11 +592,10 @@ void PD_UI_DissBattle::update(Step * _step){
 						// text label
 						glm::mat4 mm = highlightedWordStart->nodeUIParent->firstParent()->getModelMatrix();
 						pos = glm::vec3(mm* glm::vec4(pos, 1));
-			
+
 						wordHighlight->childTransform->translate(pos, false);
 					}
 				}
-
 			}else{
 				enemy->pr->talking = false;
 				// update compliment bubble
@@ -628,7 +619,7 @@ void PD_UI_DissBattle::update(Step * _step){
 							countInsultAccuracy(-1);
 							incrementConfidence(-damage);
 							PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
-							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();	
+							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();
 							setUIMode(false);
 						}else{
 							playerAnswerTimer += _step->getDeltaTime();
@@ -641,7 +632,7 @@ void PD_UI_DissBattle::update(Step * _step){
 								incrementConfidence(damage);
 								setPlayerText();
 								playerInsultSpeedMultiplier -= (1.f - MIN_OFFENSE_SPEED_MULTIPLIER) / NUM_OFFENSE_SPEED_CHANGES;
-								
+
 								playerAnswerTimerLength = basePlayerAnswerTimerLength *  sassInsultMultiplier * playerInsultSpeedMultiplier;
 								playerQuestionTimerLength = basePlayerQuestionTimerLength * playerInsultSpeedMultiplier;
 								playerTimerSlider->setValueMax(playerAnswerTimerLength);
@@ -651,7 +642,6 @@ void PD_UI_DissBattle::update(Step * _step){
 								incrementConfidence(-damage);
 								setUIMode(false);
 							}
-							
 						}else{
 							playerResultTimer += _step->getDeltaTime();
 						}
@@ -668,7 +658,7 @@ void PD_UI_DissBattle::update(Step * _step){
 			}
 		}else{
 			gameOverDuration += _step->getDeltaTime();
-		
+
 			if(gameOverDuration >= gameOverLength){
 				complete();
 			}else{
@@ -719,7 +709,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 
 	playerAttackMultiplier = sweet::NumberUtils::map((player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
 	enemyAttackMultiplier = sweet::NumberUtils::map((enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
-	
+
 	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
 	if(insightMultiplier > 0){
 		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.25f);
@@ -741,10 +731,9 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 		gameContainer->setVisible(true);
 		childTransform->addChild(enemyCursor->firstParent(), false);
 		interjectBubble->setVisible(true);
-		
+
 		win = false;
 		isGameOver = false;
-		
 	}
 	isComplete = false;
 
@@ -763,7 +752,6 @@ void PD_UI_DissBattle::gameOver(bool _win){
 	win = _win;
 	enemy->dissedAt = true;
 	enemy->wonDissBattle = !win;
-
 
 	gameContainer->setVisible(false);
 	childTransform->removeChild(enemyCursor->firstParent());
@@ -794,7 +782,6 @@ void PD_UI_DissBattle::gameOver(bool _win){
 		file.close();
 	}
 
-
 	// interject statistics
 	{
 		std::stringstream filename;
@@ -819,22 +806,21 @@ void PD_UI_DissBattle::gameOver(bool _win){
 			}else{
 				expectedDiff = std::abs(targetTime - i.hitTime);
 				expected = "NEXT";
-			
 			}
 
 			file << i.iteration
-				 << ";" << i.character
-				 << ";" << i.padding
-				 << ";" << i.hitTime
-				 << ";" << targetTime
-				 << ";" << (targetTime - i.hitTime)
-				 << ";" << (i.hitTime)
-				 << ";" << expected
-				 << ";" << (expectedDiff / i.padding)*100 << "%" << std::endl;
+				<< ";" << i.character
+				<< ";" << i.padding
+				<< ";" << i.hitTime
+				<< ";" << targetTime
+				<< ";" << (targetTime - i.hitTime)
+				<< ";" << (i.hitTime)
+				<< ";" << expected
+				<< ";" << (expectedDiff / i.padding)*100 << "%" << std::endl;
 		}
 		file.close();
 	}
-	
+
 	// insult statistics
 	{
 		std::stringstream filename;
@@ -862,11 +848,10 @@ void PD_UI_DissBattle::complete(){
 }
 
 void PD_UI_DissBattle::addLife(Texture * _tokenTexture){
-	
 	// create a duplicate token with a cross through it
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
 	tex->allocate(_tokenTexture->width, _tokenTexture->height, _tokenTexture->channels);
-	
+
 	for(signed long int y = 0; y < tex->height; ++y){
 		for(signed long int x = 0; x < tex->width; ++x){
 			if(glm::abs(x-y) < tex->width/10 || glm::abs(tex->width - x-y) < tex->width/10){
@@ -912,13 +897,13 @@ void PD_UI_DissBattle::interject(){
 	bool isPunctuation = false;
 	if(glyphs.size() > 0 && glyphIdx < glyphs.size()){
 		UIGlyph * g = glyphs.at(glyphIdx);
-	
+
 		switch (g->character){
-			case L'.':
-			case L'?':
-			case L'!':
-			case L',':
-				isPunctuation = true;
+		case L'.':
+		case L'?':
+		case L'!':
+		case L',':
+			isPunctuation = true;
 		}
 	}else{
 		isPunctuation = true;
@@ -965,7 +950,7 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 	enemyCursor->setVisible(!_isOffensive);
 
 	playerBubble->setVisible(_isOffensive);
-	
+
 	tutorialSpacebar->setVisible(!_isOffensive);
 	tutorialArrows->setVisible(_isOffensive);
 
@@ -1003,7 +988,7 @@ void PD_UI_DissBattle::setEnemyText(){
 	if(glyphs.size() > 0){
 		cursorDelayLength = glyphs.at(0)->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 	}
-	
+
 	interjectTimer = 0;
 	prevHighlightedPunctuation = nullptr;
 	highlightedPunctuation = findFirstPunctuation();
@@ -1021,7 +1006,7 @@ void PD_UI_DissBattle::setPlayerText(){
 	insultGenerator.makeInsults();
 	// set the insult prompt
 	playerBubbleText->setText(insultGenerator.playerInsult);
-	
+
 	// randomize which of the two options
 	// presented to the user is effective
 	bool btn1E = sweet::NumberUtils::randomBool();
@@ -1031,25 +1016,25 @@ void PD_UI_DissBattle::setPlayerText(){
 
 	pBubbleBtn1->label->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
 	pBubbleBtn2->label->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
-	
+
 	// Apply insight effect
 	if(insightMultiplier > 0){
 		// Highlight correct choice
 		if(pBubbleBtn1->isEffective) {
 			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
+			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
 		}else {
-			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);	
-			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
+			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
 		}
 	}else{
 		// Highlight wrong choice
 		if(pBubbleBtn2->isEffective) {
 			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);	
+			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
 		}else {
-			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);	
-			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);	
+			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
 		}
 	}
 
@@ -1058,7 +1043,7 @@ void PD_UI_DissBattle::setPlayerText(){
 	playerAnswerTimer = 0;
 	playerResultTimer = 0;
 	playerResult = false;
-	
+
 	playerBubbleOptions->setVisible(false);
 	playerTimerSlider->setVisible(false);
 
@@ -1068,9 +1053,9 @@ void PD_UI_DissBattle::setPlayerText(){
 void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 	if(!_isEffective) {
-		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();	
+		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();
 	}else {
-		PD_ResourceManager::scenario->getAudio(SUCCEED_INSULT)->sound->play();	
+		PD_ResourceManager::scenario->getAudio(SUCCEED_INSULT)->sound->play();
 		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
 		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-COMPLIMENT" + std::to_string(randComp))->texture);
 		complimentBubbleTimer = 0.f;
@@ -1101,12 +1086,12 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
-		 // Factor in enemy's defense
+		// Factor in enemy's defense
 		_value *= playerAttackMultiplier;
 	}else {
 		_value *= enemyAttackMultiplier;
 	}
-	
+
 	sweet::Event * e = new sweet::Event("confidence");
 	e->setFloatData("value", _value);
 	eventManager->triggerEvent(e);
@@ -1174,7 +1159,7 @@ void PD_UI_DissBattle::highlightNextWord(int _startIdx){
 				highlightedWordEnd = glyphs.at(i);
 				wordHighlight->childTransform->scale(w, h, 1.f, false);
 				wordHighlight->setVisible(true);
-				
+
 				sweet::Event * e = new sweet::Event("wordspoken");
 				e->setIntData("length", length);
 				eventManager->triggerEvent(e);
@@ -1184,17 +1169,15 @@ void PD_UI_DissBattle::highlightNextWord(int _startIdx){
 		}
 	}
 	wordHighlight->setVisible(false);
-	
 }
 
 bool PD_UI_DissBattle::isPunctuation(UIGlyph * _glyph){
-
 	switch (_glyph->character){
-		case L'.':
-		case L'?':
-		case L'!':
-		case L',':
-			return true;
+	case L'.':
+	case L'?':
+	case L'!':
+	case L',':
+		return true;
 	}
 
 	return false;
@@ -1221,7 +1204,7 @@ void PD_UI_DissBattle::countInterjectAccuracy(float _pressTime){
 	if(highlightedPunctuation != nullptr){
 		float punctuationTimeStart = 0, punctuationMeasureFromTime = 0;
 		float padding = 0;
-		
+
 		if(prevHighlightedPunctuation != nullptr){
 			for(auto glyph : glyphs){
 				float glyphTime = glyph->getWidth() / baseGlyphWidth * baseCursorDelayLength;
@@ -1233,7 +1216,7 @@ void PD_UI_DissBattle::countInterjectAccuracy(float _pressTime){
 				}
 			}
 		}
-		
+
 		for(auto glyph : glyphs){
 			float glyphTime = glyph->getWidth() / baseGlyphWidth * baseCursorDelayLength;
 			if(glyph != highlightedPunctuation){
@@ -1249,8 +1232,6 @@ void PD_UI_DissBattle::countInterjectAccuracy(float _pressTime){
 
 		interjectTimes.push_back(InterjectAccuracy(highlightedPunctuation->character, padding, targetTime, (_pressTime-punctuationMeasureFromTime), iteration));
 	}
-
-	
 }
 
 void PD_UI_DissBattle::countInsultAccuracy(float _hitTime){

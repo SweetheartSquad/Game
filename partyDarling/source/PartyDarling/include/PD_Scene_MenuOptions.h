@@ -7,7 +7,7 @@
 #include <shader/ComponentShaderText.h>
 
 class PD_Scene_MenuOptions : public Scene {
-	public:		
+public:
 
 	ComponentShaderText * textShader;
 

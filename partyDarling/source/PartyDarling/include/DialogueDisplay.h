@@ -11,7 +11,7 @@ class DialogueDisplay : public ConversationIterator, public NodeUI{
 public:
 	DialogueDisplay(BulletWorld * _world, Font * _font, Shader * _textShader, float _width, float _height);
 	~DialogueDisplay();
-	
+
 	LinearLayout * vlayout;
 	//LinearLayout * hlayout;
 	LinearLayout * optionslayout;
@@ -23,7 +23,6 @@ public:
 	std::vector<NodeUI *> options;
 	Font * font;
 	Shader * textShader;
-
 
 	virtual void update(Step * _step) override;
 

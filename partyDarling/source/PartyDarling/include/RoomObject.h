@@ -18,7 +18,7 @@ enum class PD_Side {
 	kLEFT	= 4,
 	kBOTTOM	= 5,
 	kNONE	= 6
-}; 
+};
 
 struct PD_ParentDef{
 	std::string parent;

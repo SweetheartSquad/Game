@@ -21,7 +21,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	// build the furniture
 	PD_BuildResult buildResult = _def->components.at(0)->build();
 	lights = buildResult.lights;
-	
+
 	// get a texture for the furniture type
 	Texture * tex = sweet::NumberUtils::randomItem(_def->textures);
 	tex->load();
@@ -32,7 +32,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	mesh->insertVertices(*buildResult.mesh);
 	// delete the temporary mesh
 	delete buildResult.mesh;
-	
+
 	meshTransform->scale(FURNITURE_SCALE, FURNITURE_SCALE, FURNITURE_SCALE);
 	freezeTransformation();
 
@@ -50,11 +50,11 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	float lowerFlareVal = sweet::NumberUtils::randomFloat(0.f,0.4f);
 	float upperFlareVal = sweet::NumberUtils::randomFloat(0.f,(1.f - (0.5f+lowerFlareVal)));
 	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
-		
+
 	if(_def->twist){
 		MeshDeformation::twist(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	}
-		//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
+	//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	if(_def->flare){
 		MeshDeformation::flare(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	}
@@ -82,14 +82,14 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		setColliderAsBoundingBox();
 	}
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
-	
+
 	// position bottom on ground
 	realign(); // update the current position from creation
 	translatePhysical(glm::vec3(0, childTransform->getTranslationVector().y - boundingBox.y, 0.f), false); // false false false
 	realign();
 
 	originalPos = childTransform->getTranslationVector();
-	
+
 	// properly size and position the bounding box based on mesh origin and padding
 	boundingBox.x = -boundingBox.width * (0.5f + _def->paddingLeft);;
 	boundingBox.y = -childTransform->getTranslationVector().y;
@@ -97,7 +97,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 
 	boundingBox.width *= 1.f + _def->paddingLeft + _def->paddingRight;
 	boundingBox.depth *= 1.f + _def->paddingFront + _def->paddingBack;
-	
+
 #ifdef _DEBUG
 	for(auto &v :  boundingBoxMesh->mesh->vertices){
 		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);

@@ -47,8 +47,8 @@ PD_House * PD_HouseGenerator::getHouse(){
 	/*Json::Value bundles = PD_HouseGenerator::bundleScenarios(json);
 
 	for(Json::ArrayIndex i = 0; i < json.size(); ++i){
-		RoomBuilder * rb = new RoomBuilder(json[i], world, nullptr, nullptr);
-		house->rooms.push_back(rb->getRoom());
+	RoomBuilder * rb = new RoomBuilder(json[i], world, nullptr, nullptr);
+	house->rooms.push_back(rb->getRoom());
 	}*/
 
 	return house;
@@ -60,7 +60,6 @@ Json::Value PD_HouseGenerator::bundleScenarios(Json::Value _scenarios){
 	Json::Value rooms = new Json::Value();
 
 	for(Json::ArrayIndex i = 0; i < _scenarios.size(); ++i){
-		
 	}
 
 	return bundles;

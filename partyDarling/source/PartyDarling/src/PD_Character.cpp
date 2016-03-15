@@ -17,6 +17,7 @@
 #include <sweet/Input.h>
 #include <PD_Listing.h>
 #include <PD_DissStats.h>
+#include <PD_Game.h>
 
 unsigned long int PD_Character::numRandomCharacters = 0;
 
@@ -68,7 +69,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	meshTransform->setVisible(false);
 
 	childTransform->addChild(pr)->scale(CHARACTER_SCALE);
-	
+
 	translatePhysical(glm::vec3(0, boundingBox.height * 0.5f, 0.f), false);
 	realign();
 
@@ -138,7 +139,7 @@ void PD_Character::update(Step * _step){
 
 PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 	Json::Value charDef = genRandomComponents();
-	
+
 	std::string id = "RANDOM_CHARACTER_" + std::to_string(++numRandomCharacters);
 
 	charDef["name"]         = sweet::NumberUtils::randomItem(PD_ResourceManager::characterNames);
@@ -156,6 +157,11 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 
 	PD_Character * p = new PD_Character(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
+	p->dissStats->incrementDefense(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+	p->dissStats->incrementInsight(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+	p->dissStats->incrementStrength(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+	p->dissStats->incrementSass(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+
 	if(PD_Listing::listings.find(_scenario) != PD_Listing::listings.end()){
 		PD_Listing::listings[_scenario]->characters[id] = p;
 	}
@@ -169,11 +175,11 @@ Json::Value PD_Character::genRandomComponents(){
 	pelvis["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["PELVIS"]);
 	Json::Value arm;
 	arm["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["ARM"]);
-	Json::Value leg;	
+	Json::Value leg;
 	leg["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["LEG"]);
-	Json::Value torso;  
+	Json::Value torso;
 	torso["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["TORSO"]);
-	Json::Value head;  
+	Json::Value head;
 	head["src"] = sweet::NumberUtils::randomItem(PD_ResourceManager::characterDefinitions["HEAD"]);
 
 	torso ["components"].append(head);
@@ -213,7 +219,6 @@ bool PD_Character::isEnabled() const {
 	return enabled;
 }
 
-
 CharacterComponent::CharacterComponent(CharacterComponentDefinition * const _definition, Shader * _shader, Texture * _paletteTex, bool _flipped) :
 	Sprite(_shader),
 	flipped(_flipped)
@@ -225,7 +230,7 @@ CharacterComponent::CharacterComponent(CharacterComponentDefinition * const _def
 	// apply palette + texture
 	mesh->pushTexture2D(_paletteTex);
 	mesh->pushTexture2D(tex->texture);
-	
+
 	in = _definition->in;
 	out = _definition->out;
 	// handle flipping
@@ -236,7 +241,7 @@ CharacterComponent::CharacterComponent(CharacterComponentDefinition * const _def
 			o.x = 1 - o.x;
 		}
 	}
-	
+
 	// multiply percentage coordinates by width/height to corresponding to specific texture
 	in.x *= tex->texture->width;
 	in.y *= tex->texture->height;
@@ -244,7 +249,7 @@ CharacterComponent::CharacterComponent(CharacterComponentDefinition * const _def
 		o.x *= tex->texture->width;
 		o.y *= tex->texture->height;
 	}
-	
+
 	// scale and translate the mesh into position
 	meshTransform->scale(tex->texture->width, tex->texture->height, 1);
 	meshTransform->translate(tex->texture->width*0.5f -in.x, tex->texture->height*0.5f -in.y, 0, false);
@@ -289,7 +294,7 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	++paletteTex->referenceCount;
 	paletteTex->generateRandomTable();
 	paletteTex->load();
-	
+
 	CharacterComponentDefinition
 		* pelvisDef			= &_definition->root,
 		* torsoDef			= &pelvisDef->components.at(0),
@@ -310,14 +315,13 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 		* forearmRDef		= &armRDef->components.at(0),
 		* handLDef			= &forearmLDef->components.at(0),
 		* handRDef			= &forearmRDef->components.at(0),
-		
+
 		* legLDef			= &pelvisDef->components.at(2),
 		* legRDef			= &pelvisDef->components.at(1),
 		* forelegLDef		= &legLDef->components.at(0),
 		* forelegRDef		= &legRDef->components.at(0),
 		* footLDef			= &forelegLDef->components.at(0),
 		* footRDef			= &forelegRDef->components.at(0);
-
 
 	pelvis = new CharacterComponent(pelvisDef, _shader, paletteTex, false);
 
@@ -345,7 +349,7 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	legR = new CharacterComponent(legRDef, _shader, paletteTex, true);
 	forelegR = new CharacterComponent(forelegRDef, _shader, paletteTex, true);
 	footR = new CharacterComponent(footRDef, _shader, paletteTex, true);
-					
+
 	legL = new CharacterComponent(legLDef, _shader, paletteTex, false);
 	forelegL = new CharacterComponent(forelegLDef, _shader, paletteTex, false);
 	footL = new CharacterComponent(footLDef, _shader, paletteTex, false);
@@ -361,22 +365,22 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	solverArmR->addComponent(forearmR);
 	connect(forearmR, handR);
 	//solverArmR->addComponent(handR);
-	
+
 	solverArmL->addComponent(armL);
 	solverArmL->addComponent(forearmL);
 	connect(forearmL, handL);
 	//solverArmL->addComponent(handL);
-	
+
 	solverLegR->addComponent(legR);
 	solverLegR->addComponent(forelegR);
 	connect(forelegR, footR);
 	//solverLegR->addComponent(footR);
-	
+
 	solverLegL->addComponent(legL);
 	solverLegL->addComponent(forelegL);
 	connect(forelegL, footL);
 	//solverLegL->addComponent(footL);
-	
+
 	solverBod->addComponent(pelvis);
 	solverBod->addComponent(torso);
 	connect(torso, jaw);
@@ -393,7 +397,6 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	connect(head, eyebrowL);
 	connect(head, eyebrowR);
 
-	
 	// attach the arms/legs to the spine
 	solverBod->jointsLocal.at(1)->addJoint(solverArmR);
 	solverBod->jointsLocal.at(1)->addJoint(solverArmL);
@@ -401,21 +404,20 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	solverBod->jointsLocal.at(0)->addJoint(solverLegL, true);
 	childTransform->addChild(solverBod, false);
 
-	
 	solvers.push_back(solverBod);
 	solvers.push_back(solverArmR);
 	solvers.push_back(solverArmL);
 	solvers.push_back(solverLegR);
 	solvers.push_back(solverLegL);
 	currentSolver = solvers.front();
-	
+
 	// pre-initialize the effectors to a T-pose type thing
 	solverArmR->target = glm::vec2(-solverArmR->getChainLength(), 0);
 	solverArmL->target = glm::vec2(solverArmL->getChainLength(), 0);
 	solverLegR->target = glm::vec2(0, -solverLegR->getChainLength());
 	solverLegL->target = glm::vec2(0, -solverLegL->getChainLength());
 	solverBod->target = glm::vec2(0, solverBod->getChainLength());
-	
+
 	// talking thing
 	talkHeight = head->parents.at(0)->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
@@ -480,7 +482,7 @@ void CharacterRenderer::setAnimation(std::string _name) {
 void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _steps) {
 	delete currentAnimation;
 	currentAnimation = new PD_CharacterAnimationSet(this);
-	
+
 	for(auto step : _steps) {
 		currentAnimation->leftArm->tweens.push_back(new Tween<glm::vec2>(step.time, step.leftArm * solverArmL->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->rightArm->tweens.push_back(new Tween<glm::vec2>(step.time, step.rightArm * solverArmR->getChainLength(), Easing::getTypeByName(step.interpolation)));
@@ -488,7 +490,7 @@ void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _ste
 		currentAnimation->rightLeg->tweens.push_back(new Tween<glm::vec2>(step.time, step.rightLeg * solverLegR->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->body->tweens.push_back(new Tween<glm::vec2>(step.time, step.body * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
 		currentAnimation->translation->tweens.push_back(new Tween<glm::vec3>(step.time, step.translation  * solverBod->getChainLength(), Easing::getTypeByName(step.interpolation)));
-	}	
+	}
 
 	if(_steps.size() > 0) {
 		solverArmL->target = glm::vec2();
@@ -515,7 +517,7 @@ void CharacterRenderer::setEmote(std::string _id, float _duration) {
 	float height = b.height/CHARACTER_SCALE;
 	float width  = b.width/CHARACTER_SCALE;
 	emote->firstParent()->translate(width * eDef->offset.x, height * eDef->offset.y, 0.f, false);
-	
+
 	if(_duration > 0.f){
 		emoteTimeout = new Timeout(_duration, [this](sweet::Event * _event){
 			setEmoteNone();
@@ -542,7 +544,7 @@ void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 	torso->setShader(_shader, _default);
 	jaw->setShader(_shader, _default);
 	head->setShader(_shader, _default);
-	
+
 	nose->setShader(_shader, _default);
 	eyebrowL->setShader(_shader, _default);
 	eyebrowR->setShader(_shader, _default);
@@ -584,7 +586,7 @@ void CharacterRenderer::update(Step * _step){
 			childTransform->translate(currentAnimation->translationVec, false);
 		}
 	}
-	
+
 	glm::vec3 v = head->firstParent()->getTranslationVector();
 	if(talking){
 		// talking

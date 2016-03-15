@@ -1,10 +1,10 @@
-#pragma once 
+#pragma once
 
 #include "shader/ShaderComponent.h"
 
 /******************************************************************************
 *
-* Adds Texture support to the shader that this component is added to 
+* Adds Texture support to the shader that this component is added to
 *
 * In order for textures to appear they must be added to rendered Mesh's texture vector
 *
@@ -17,7 +17,7 @@ private:
 	unsigned long int numTextures;
 public:
 	float  alphaDiscardThreshold;
-	
+
 	// if _alphaDiscardThreshold is > 0, pixels which have an alpha of less than _alphaDiscardThreshold will be discarded in the fragment shader
 	ShaderComponentOutline(ComponentShaderBase * _shader, float _alphaDiscardThreshold = -1);
 	~ShaderComponentOutline() override;

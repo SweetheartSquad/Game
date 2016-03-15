@@ -34,7 +34,7 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	Scene(_game),
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
-	screenFBO(new StandardFrameBuffer(false)), 
+	screenFBO(new StandardFrameBuffer(false)),
 	textShader(new ComponentShaderText(false)),
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font),
@@ -56,22 +56,22 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 	loadingMessage = new TextLabel(uiLayer->world, menuFont, textShader);
 	layout->addChild(loadingMessage);
 	loadingMessage->setMarginBottom(15);
-	
+
 	// slider
 	loadingSlider = new SliderControlled(uiLayer->world, &loadingPercent, 0, 1);
 	layout->addChild(loadingSlider);
 	loadingSlider->setRationalWidth(0.5f, layout);
 	loadingSlider->setPixelHeight(25);
-	
+
 	loadingSlider->thumb->background->meshTransform->scale(4)->translate(glm::vec3(-1,0,0));
 	loadingSlider->thumb->setBackgroundColour(1,1,1,1);
 	loadingSlider->thumb->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-THUMB")->texture);
 	loadingSlider->thumb->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	loadingSlider->setBackgroundColour(1,1,1,1);
 	loadingSlider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-TRACK")->texture);
 	loadingSlider->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 	loadingSlider->fill->setBackgroundColour(1,1,1,1);
 	loadingSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SLIDER-FILL")->texture);
 	loadingSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
@@ -88,7 +88,7 @@ PD_Scene_LoadingScreen::PD_Scene_LoadingScreen(Game * _game) :
 PD_Scene_LoadingScreen::~PD_Scene_LoadingScreen() {
 	deleteChildTransform();
 	delete uiLayer;
-	
+
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
@@ -96,7 +96,6 @@ PD_Scene_LoadingScreen::~PD_Scene_LoadingScreen() {
 }
 
 void PD_Scene_LoadingScreen::update(Step* _step) {
-
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
@@ -106,24 +105,22 @@ void PD_Scene_LoadingScreen::update(Step* _step) {
 
 void PD_Scene_LoadingScreen::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-	
 
 	FrameBufferInterface::pushFbo(screenFBO);
-	
+
 	_renderOptions->setClearColour(1,0,1,1);
 	_renderOptions->clear();
 
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer->render(_matrixStack, _renderOptions);
-	
-	FrameBufferInterface::popFbo();
 
+	FrameBufferInterface::popFbo();
 
 	screenSurface->render(screenFBO->getTextureId());
 }
 
 void PD_Scene_LoadingScreen::load() {
-	Scene::load();	
+	Scene::load();
 	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
@@ -135,7 +132,7 @@ void PD_Scene_LoadingScreen::unload() {
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
-	Scene::unload();	
+	Scene::unload();
 }
 
 void PD_Scene_LoadingScreen::updateProgress(float _progress){

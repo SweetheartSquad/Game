@@ -101,7 +101,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	itemShader->addComponent(new ShaderComponentOutline(itemShader, 0));
 	itemShader->compileShader();
 
-
 	characterShader->addComponent(new ShaderComponentMVP(characterShader));
 	characterShader->addComponent(new PD_ShaderComponentSpecialToon(characterShader, toonRamp, true));
 	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
@@ -138,18 +137,16 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(l);
 	l->addChild(crosshairIndicator);
 
-
 	uiFade = new PD_UI_Fade(uiLayer->world);
 	uiLayer->addChild(uiFade);
 	uiFade->setRationalHeight(1.f, uiLayer);
 	uiFade->setRationalWidth(1.f, uiLayer);
-	
+
 	uiMap = new PD_UI_Map(uiLayer->world, PD_ResourceManager::scenario->getFont("FONT")->font, uiBubble->textShader);
 	uiLayer->addChild(uiMap);
 	uiMap->setRationalHeight(1.f, uiLayer);
 	uiMap->setRationalWidth(1.f, uiLayer);
 	uiMap->enable();
-	
 
 	uiBubble->setRationalWidth(1.f, uiLayer);
 	uiBubble->setRationalHeight(0.25f, uiLayer);
@@ -186,7 +183,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			updateSelection();
 		}
 	});
-	
+
 	// add the player to the scene
 	childTransform->addChild(player);
 	cameras.push_back(player->playerCamera);
@@ -194,7 +191,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	childTransform->addChild(player->playerCamera);
 	player->playerCamera->firstParent()->translate(0, 5, 0);
 
-	
 	uiLayer->addChild(uiDissBattle);
 	uiDissBattle->setRationalHeight(1.f, uiLayer);
 	uiDissBattle->setRationalWidth(1.f, uiLayer);
@@ -221,12 +217,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-
 	uiMessage = new PD_UI_Message(uiLayer->world);
 	uiLayer->addChild(uiMessage);
 	uiMessage->setRationalWidth(1.f, uiLayer);
 	uiMessage->setRationalHeight(1.f, uiLayer);
-
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
@@ -284,7 +278,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissStats->eventManager->addEventListener("introComplete", [this](sweet::Event * _event){
 		uiDissBattle->startNewFight(dissEnemy, playerStartsDissBattle);
 	});
-	
+
 	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
@@ -305,7 +299,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	_game->showLoading(1.f);
 }
 
-
 void PD_Scene_Main::pickScenarios(){
 	for(auto scenarioDef : PD_Game::progressManager->currentScenarios["scenarios"]) {
 		activeScenarios.push_back(new PD_Scenario("assets/" + scenarioDef.asString()));
@@ -320,12 +313,11 @@ void PD_Scene_Main::pickScenarios(){
 	for(auto s : activeScenarios){
 		PD_ResourceManager::scenario->eventManager->addChildManager(s->eventManager);
 		s->conditionImplementations = PD_ResourceManager::conditionImplementations;
-		
+
 		// create a listing for this scenario
 		PD_Listing * listing = new PD_Listing(s);
 	}
 
-	
 	// pop the last two scenarios off of the file (they're the intro and lab scenario for this run)
 	labScenario = activeScenarios.back();
 	activeScenarios.pop_back();
@@ -350,8 +342,6 @@ void PD_Scene_Main::bundleScenarios(){
 	// find matching assets in scenarios and merge them
 	// TODO: all of this
 }
-
-
 
 void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	IntroRoom * introRoom = dynamic_cast<IntroRoom *>(_rooms.back());
@@ -399,7 +389,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			allCells[std::make_pair(x,y)] = true;
 		}
 	}
-	// flag a bunch of cells as used immediately (the grid is big enough for at least numRooms*4) 
+	// flag a bunch of cells as used immediately (the grid is big enough for at least numRooms*4)
 	// since we aren't attaching rooms to them, these cells will just be ignored during placement and end up as holes
 	// make sure to leave the edge cells open so that we don't block off the entrance and provide a path to anywhere in the grid
 	// also make sure to save a list of these cells so that we can force through them if needed
@@ -410,7 +400,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			possibleBlockedCellPositions.push(glm::ivec2(x,y));
 		}
 	}
-	
+
 	sweet::ShuffleVector<glm::ivec2> openCells;
 
 	// place the starting room in the starting position
@@ -434,7 +424,6 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}
 	}
 
-
 	// place the cells adjacent to the starting position into the list of open cells
 	openCells.push(getAdjacentCells(currentHousePosition, allCells, houseSize));
 
@@ -455,7 +444,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			Log::error("House position already used.");
 		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
-		
+
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
@@ -477,7 +466,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 			Log::error("House position already used.");
 		}
 		houseGrid[std::make_pair(cell.x, cell.y)] = room;
-		
+
 		openCells.push(getAdjacentCells(cell, allCells, houseSize));
 		openCells.clearAvailable();
 	}
@@ -498,8 +487,6 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 	}
 	houseGrid[std::make_pair(cell.x, cell.y)] = labRoom;
 
-
-	
 	// loop through all of the rooms and remove doors which don't lead anywhere
 	// and save the door positions while we're at it
 	float doorSpacing = 1.5f; // how far in front of the door the player is placed when entering
@@ -510,7 +497,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		PD_Door::Door_t side;
 		btVector3 p;
 		Room * room = c.second;
-		
+
 		side = PD_Door::kEAST;
 
 		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
@@ -523,7 +510,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}else{
 			room->doors.at(side)->room = it->second;
 		}
-		
+
 		side = PD_Door::kWEST;
 		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
 		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(doorSpacing,0,0);
@@ -535,7 +522,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}else{
 			room->doors.at(side)->room = it->second;
 		}
-		
+
 		side = PD_Door::kNORTH;
 		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
 		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(0,0,doorSpacing);
@@ -547,7 +534,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 		}else{
 			room->doors.at(side)->room = it->second;
 		}
-		
+
 		side = PD_Door::kSOUTH;
 		p = room->doors.at(side)->body->getWorldTransform().getOrigin();
 		room->doorPositions[side] = glm::vec3(p.x(), p.y(), p.z()) + glm::vec3(0,0,-doorSpacing);
@@ -567,7 +554,7 @@ void PD_Scene_Main::placeRooms(std::vector<Room *> _rooms){
 
 std::vector<glm::ivec2> PD_Scene_Main::getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize){
 	std::vector<glm::ivec2> res;
-		
+
 	glm::ivec2 temp = _pos + glm::ivec2(-1,0);
 	if(temp.x >= 0 && _cells.at(std::make_pair(temp.x, temp.y))){
 		res.push_back(temp);
@@ -608,12 +595,11 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	// build all of the rooms contained in the selected scenarios
 	unsigned long int progress = 0;
 	for(auto scenario : activeScenarios){
-
 		// build the rooms in this scenario
 		for(auto rd : scenario->assets.at("room")){
 			g->showLoading((float)++progress/numRooms);
 			Room * room = RoomBuilder(dynamic_cast<AssetRoom *>(rd.second), bulletWorld, toonShader, itemShader, characterShader, emoteShader).getRoom();
-			
+
 			// run the physics simulation for a few seconds to let things settle
 			/*Log::info("Letting the bodies hit the floor...");
 			Step s;
@@ -623,16 +609,15 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 			//bulletWorld->update(&s);
 			//bulletWorld->maxSubSteps = i;
 			for (unsigned long int i = 0; i<10; ++i){
-				for(auto c : room->components){
-					c->body->activate(true);
-				}
-				bulletWorld->update(&s);
+			for(auto c : room->components){
+			c->body->activate(true);
+			}
+			bulletWorld->update(&s);
 			}
 			Log::info("The bodies have finished hitting the floor.");*/
 
 			// remove the physics bodies (we'll put them back in as needed)
 			room->removePhysics();
-
 
 			// save the room for later access
 			PD_Listing::listings.at(room->definition->scenario)->addRoom(room);
@@ -642,11 +627,15 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 		}
 	}
 
-
 	// construct static rooms (into room, lab room)
 	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, labScenario));
 	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, introScenario));
 
+	for(auto r : res) {
+		for(auto o : r->components) {
+			o->unload();
+		}
+	}
 
 	return res;
 }
@@ -661,6 +650,12 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy, bool _playerStarts)
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// transition
+	if(currentRoom != nullptr){
+		for(auto o : currentRoom->components) {
+			o->unload();
+		}
+	}
+
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 	checkForGlError(false);
@@ -676,12 +671,11 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	transition = 0.f;
 	transitionTarget = 1.f;
 	player->enable();
-	
+
 	// clear out the old room's stuff
 	if(currentRoom != nullptr){
 		removeRoom(currentRoom);
 	}
-
 
 	// update position within house
 	if(_relative){
@@ -700,7 +694,6 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// put the room into the scene/physics world
 	addRoom(currentRoom);
 
-
 	PD_Door::Door_t doorToEnter;
 	if(_relative){
 		if(glm::abs(_movement.x) > glm::abs(_movement.y)){
@@ -714,7 +707,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 			// vertical
 			if(_movement.y < 0){
 				doorToEnter = PD_Door::kNORTH;
-			}else{	
+			}else{
 				doorToEnter = PD_Door::kSOUTH;
 			}
 		}
@@ -743,15 +736,19 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 
 	lights.clear();
 	lights.push_back(playerLight);
-	
+
 	for(unsigned long int i = 0; i < currentRoom->lights.size(); ++i) {
 		currentRoom->lights[i]->lastPos = glm::vec3(99999);
 		lights.push_back(currentRoom->lights[i]);
 	}
-	
+
 	// update map with new position
 	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+
+	for(auto o : currentRoom->components) {
+		o->load();
+	}
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
@@ -766,11 +763,11 @@ PD_Scene_Main::~PD_Scene_Main(){
 
 	deleteChildTransform();
 	delete uiLayer;
-	
+
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
-	
+
 	// add the intro/lab scenarios back to the active list so they get deleted too
 	activeScenarios.push_back(introScenario);
 	activeScenarios.push_back(labScenario);
@@ -793,8 +790,6 @@ PD_Scene_Main::~PD_Scene_Main(){
 	PD_ResourceManager::componentTextures->unload();
 }
 
-
-
 void PD_Scene_Main::removeRoom(Room * _room){
 	for(unsigned int i = 0; i < _room->components.size(); ++i){
 		childTransform->removeChild(_room->components.at(i)->firstParent());
@@ -816,7 +811,6 @@ void PD_Scene_Main::addRoom(Room * _room){
 		}
 	}
 }
-
 
 void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
@@ -855,14 +849,14 @@ void PD_Scene_Main::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
 		addLifeToken("Some Person");
 	}
-	
+
 	if(keyboard->keyJustDown(GLFW_KEY_3)){
 		uiFade->fadeIn(glm::uvec3(255,255,255));
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_4)){
 		uiFade->fadeIn();
 	}
-	
+
 	if(keyboard->keyJustDown(GLFW_KEY_5)){
 		uiFade->fadeOut(glm::uvec3(255,255,255));
 	}
@@ -875,7 +869,6 @@ void PD_Scene_Main::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_0)){
 		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
 	}
-
 
 	// look up at current speaker's face during conversations
 	PD_Character * facing = nullptr;
@@ -890,12 +883,12 @@ void PD_Scene_Main::update(Step * _step){
 	if(facing != nullptr){
 		glm::vec3 headPos = facing->pr->head->childTransform->getWorldPos();
 		glm::vec3 d = glm::normalize(headPos - camPos);
-		
+
 		float pitch = glm::degrees(glm::atan(d.y, sqrt((d.x * d.x) + (d.z * d.z))));
 		float yaw = glm::degrees(glm::atan(d.x, d.z)) - 90;
 		float pDif = pitch - player->playerCamera->pitch;
 		float yDif = yaw - player->playerCamera->yaw;
-			
+
 		while(pDif > 180){
 			pDif -= 360;
 		}while(pDif < -180){
@@ -914,7 +907,6 @@ void PD_Scene_Main::update(Step * _step){
 		}
 	}
 
-
 	// party lights!
 	float a = playerLight->getAttenuation();
 	float newa = fmod(_step->time, 142.f/300.f)*0.01f + 0.01f;
@@ -930,7 +922,6 @@ void PD_Scene_Main::update(Step * _step){
 		4);
 	toonRamp->bufferData();
 	playerLight->setIntensities(playerLight->getIntensities() + (glm::vec3(lightIntensity) - playerLight->getIntensities() * 0.1f));
-
 
 	// screen surface update
 	screenSurfaceShader->bindShader();
@@ -956,8 +947,6 @@ void PD_Scene_Main::update(Step * _step){
 		glUniform3f(test, wipeColour.r/255.f, wipeColour.g/255.f, wipeColour.b/255.f);
 		checkForGlError(false);
 	}
-
-
 
 	PD_ResourceManager::scenario->eventManager->update(_step);
 
@@ -1030,7 +1019,7 @@ void PD_Scene_Main::update(Step * _step){
 			}
 		}
 	}
-	
+
 	// tracking
 	if(keyboard->keyDown(GLFW_KEY_T)){
 		if(keyboard->keyJustDown(GLFW_KEY_LEFT)){
@@ -1091,7 +1080,6 @@ void PD_Scene_Main::update(Step * _step){
 	// mouse interaction with world objects
 	updateSelection();
 
-
 	// prop carrying release and carry
 	if(mouse->leftJustReleased()){
 		if(carriedProp != nullptr){
@@ -1111,7 +1099,7 @@ void PD_Scene_Main::update(Step * _step){
 			carriedProp->applyLinearImpulseToCenter(d/carriedProp->body->getInvMass());
 		}
 	}
-	
+
 	// inventory toggle
 	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
 		if(keyboard->keyJustDown(GLFW_KEY_TAB)){
@@ -1128,7 +1116,7 @@ void PD_Scene_Main::update(Step * _step){
 			}
 		}
 	}
-	
+
 	// map toggle
 	if(keyboard->keyJustDown(GLFW_KEY_M)){
 		if(uiMap->isEnabled()){
@@ -1137,7 +1125,6 @@ void PD_Scene_Main::update(Step * _step){
 			uiMap->enable();
 		}
 	}
-
 
 	// map compass update
 	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
@@ -1184,7 +1171,6 @@ void PD_Scene_Main::update(Step * _step){
 		}
 	}
 
-	
 	if(keyboard->keyDown(GLFW_KEY_UP)){
 		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * 0.03f);
 	}if(keyboard->keyDown(GLFW_KEY_DOWN)){
@@ -1204,23 +1190,21 @@ void PD_Scene_Main::update(Step * _step){
 
 void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-		
 
 	FrameBufferInterface::pushFbo(screenFBO);
 
 	_renderOptions->setClearColour(0,0,0,0);
 	_renderOptions->clear();
 	Scene::render(_matrixStack, _renderOptions);
-	
-	FrameBufferInterface::popFbo();
 
+	FrameBufferInterface::popFbo();
 
 	screenSurface->render(screenFBO->getTextureId());
 	uiLayer->render(_matrixStack, _renderOptions);
 }
 
 void PD_Scene_Main::load(){
-	Scene::load();	
+	Scene::load();
 	uiLayer->load();
 	screenSurface->load();
 	screenSurfaceShader->load();
@@ -1232,7 +1216,7 @@ void PD_Scene_Main::unload(){
 	screenSurface->unload();
 	screenSurfaceShader->unload();
 	screenFBO->unload();
-	Scene::unload();	
+	Scene::unload();
 }
 
 Texture * PD_Scene_Main::getToken(){
@@ -1248,7 +1232,7 @@ Texture * PD_Scene_Main::getToken(){
 	//re-draw the current frame (swap the buffers a second time to avoid this render actually being visible)
 	game->draw(this);
 	glfwSwapBuffers(sweet::currentContext);
-		
+
 	// allocate enough space for our token and read the center of the newly drawn screen into it
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
 	res->allocate(sd.x, sd.y, 4);
@@ -1285,8 +1269,8 @@ Texture * PD_Scene_Main::getToken(){
 void PD_Scene_Main::resetCrosshair() {
 	// replace the crosshair item texture with the actual crosshair texture
 	crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	crosshairIndicator->setWidth(16);
-	crosshairIndicator->setHeight(16);
+	crosshairIndicator->setWidth(16 * sweet::getDpi());
+	crosshairIndicator->setHeight(16 * sweet::getDpi());
 	crosshairIndicator->autoResize();
 	crosshairIndicator->invalidateLayout();
 }
@@ -1296,7 +1280,7 @@ void PD_Scene_Main::updateSelection(){
 		NodeBulletBody * lastHoverTarget = currentHoverTarget;
 		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
 		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
-		
+
 		if(me != nullptr && uiInventory->getSelected() == nullptr){
 			PD_Item * item = dynamic_cast<PD_Item *>(me);
 			if(item != nullptr){
@@ -1378,11 +1362,11 @@ void PD_Scene_Main::updateSelection(){
 						}
 						// if we have an item, also add the "use on" option
 						/*if(uiInventory->getSelected() != nullptr){
-							uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
-								uiBubble->clear();
-								player->disable();
-								// TODO: pass in the character that's interacting with the item here
-							});
+						uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name + " on " + person->definition->name, [this](sweet::Event * _event){
+						uiBubble->clear();
+						player->disable();
+						// TODO: pass in the character that's interacting with the item here
+						});
 						}*/
 					}
 				}else{
@@ -1400,7 +1384,7 @@ void PD_Scene_Main::updateSelection(){
 			}
 			/*NodeUI * ui = dynamic_cast<NodeUI *>(me);
 			if(ui != nullptr){
-				ui->setUpdateState(true);
+			ui->setUpdateState(true);
 			}*/
 
 			currentHoverTarget = me;
@@ -1422,7 +1406,6 @@ void PD_Scene_Main::updateSelection(){
 						uiInventory->pickupItem(item);
 					}
 					resetCrosshair();
-
 				});
 				uiBubble->addOption("Nevermind.", [this](sweet::Event * _event){
 					// dropping an item

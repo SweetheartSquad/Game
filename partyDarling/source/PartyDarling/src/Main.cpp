@@ -13,10 +13,10 @@
 #include <PD_Game.h>
 
 #ifdef _DEBUG
-	// memory leak debugging
-	#define _CRTDBG_MAP_ALLOC
-	#include <stdlib.h>
-	#include <crtdbg.h>
+// memory leak debugging
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #endif
 
 #ifdef _DEBUG
@@ -24,7 +24,7 @@ int main(void){
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
 #else
-int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){	
+int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 #endif
 
 	Log::THROW_ON_ERROR = true;
@@ -53,7 +53,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	while (game->isRunning){
 		game->performGameLoop();
 	}
-	
+
 	// memory deallocation
 	delete game;
 	game = nullptr;
@@ -68,7 +68,6 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	}
 #endif
 
-	
 #ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);
 #endif

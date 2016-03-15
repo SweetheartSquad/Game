@@ -45,7 +45,7 @@ PD_PropDefinition::PD_PropDefinition(Json::Value _jsonDef) :
 		delete m;
 	}
 	mesh->setScaleMode(GL_NEAREST);
-	
+
 	// get the texture for the prop
 	Texture * tex = new Texture("assets/textures/props/" + src + ".png", false, true, true);
 	mesh->pushTexture2D(tex);

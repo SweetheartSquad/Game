@@ -10,10 +10,10 @@ PD_FurnitureComponentDefinition::PD_FurnitureComponentDefinition(Json::Value _js
 	required(_jsonDef.get("required", true).asBool()),
 	multiplier(_jsonDef.get("multiplier", 1).asInt()),
 	scale(_jsonDef.isMember("scale") ? glm::vec3(
-		_jsonDef["scale"].get(Json::Value::ArrayIndex(0), 1.f).asFloat(),
-		_jsonDef["scale"].get(Json::Value::ArrayIndex(1), 1.f).asFloat(),
-		_jsonDef["scale"].get(Json::Value::ArrayIndex(2), 1.f).asFloat())
-		: glm::vec3(1)
+	_jsonDef["scale"].get(Json::Value::ArrayIndex(0), 1.f).asFloat(),
+	_jsonDef["scale"].get(Json::Value::ArrayIndex(1), 1.f).asFloat(),
+	_jsonDef["scale"].get(Json::Value::ArrayIndex(2), 1.f).asFloat())
+	: glm::vec3(1)
 	)
 {
 	for(auto type : _jsonDef["componentTypes"]){
@@ -33,7 +33,7 @@ PD_FurnitureComponentDefinition::~PD_FurnitureComponentDefinition(){
 
 PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 	_scale *= scale;
-	
+
 	PD_BuildResult res;
 	// Get a component for the component type - ex : Leg, Seat, Etc
 	std::string type = componentTypes.at(sweet::NumberUtils::randomInt(0, componentTypes.size()-1));
@@ -63,20 +63,18 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 		res.lights.push_back(light);
 		res.lightParents.push_back(t);
 	}
-	
+
 	/*btConvexHullShape * shape = new btConvexHullShape();
 	for (unsigned long int i = 0; i < res.mesh->vertices.size(); i++){
-		btVector3 v = btVector3(res.mesh->vertices[i].x * 0.15f, res.mesh->vertices[i].y * 0.15f, res.mesh->vertices[i].z * 0.15f);
-		static_cast<btConvexHullShape *>(shape)->addPoint(v);
+	btVector3 v = btVector3(res.mesh->vertices[i].x * 0.15f, res.mesh->vertices[i].y * 0.15f, res.mesh->vertices[i].z * 0.15f);
+	static_cast<btConvexHullShape *>(shape)->addPoint(v);
 	}
 	btTransform local;
 	local.setIdentity();
 	//local.setOrigin(btVector3(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f) * btVector3(scale.x, scale.y, scale.z) * -0.15f);
 	res.collider->addChildShape(local, shape);*/
 
-
 	for(auto outComponent : outComponents){
-	
 		// we always build the child components which are required
 		// but randomize whether we build non-required components
 		if(outComponent->required || sweet::NumberUtils::randomBool()){
@@ -87,7 +85,7 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 				res.lights.insert(res.lights.end(), componentBuildResult.lights.begin(), componentBuildResult.lights.end());
 				res.lightParents.insert(res.lightParents.end(), componentBuildResult.lightParents.begin(), componentBuildResult.lightParents.end());
 			}
-			
+
 			assert(outComponent->multiplier <= component->connectors[outComponent->componentTypes].size());
 
 			for(unsigned long int i = 0; i < outComponent->multiplier; ++i){
@@ -106,15 +104,14 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 					component->connectors[outComponent->componentTypes].at(i).position.y * _scale.y,
 					component->connectors[outComponent->componentTypes].at(i).position.z * _scale.z));
 				/*s->setLocalScaling(btVector3(_scale.x,
-											 _scale.y,
-											 _scale.z));*/
+				_scale.y,
+				_scale.z));*/
 				childShapeTransform.setRotation(btQuaternion(
 					component->connectors[outComponent->componentTypes].at(i).rotation.x,
 					component->connectors[outComponent->componentTypes].at(i).rotation.y,
 					component->connectors[outComponent->componentTypes].at(i).rotation.z));
 				res.collider->addChildShape(childShapeTransform, s);
-				
-				
+
 				// translate and scale the temporary mesh to match this components definition
 				Transform t;
 				t.translate(component->connectors[outComponent->componentTypes].at(i).position);
@@ -136,7 +133,6 @@ PD_BuildResult PD_FurnitureComponentDefinition::build(glm::vec3 _scale){
 
 				// transfer the temporary mesh verts
 				res.mesh->insertVertices(*duplicateTempMesh);
-				
 
 				// get rid of the individual temporary mesh
 				delete duplicateTempMesh;

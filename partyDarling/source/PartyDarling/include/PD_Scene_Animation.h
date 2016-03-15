@@ -13,9 +13,8 @@ public:
 
 	PD_CharacterAnimationStep * step;
 	PD_Character * character;
-	
-	explicit Keyframe(BulletWorld * _world, PD_Character * _character);
 
+	explicit Keyframe(BulletWorld * _world, PD_Character * _character);
 };
 
 class Effector : public NodeUI {
@@ -27,7 +26,6 @@ public:
 	explicit Effector(BulletWorld * _world, CharacterLimbSolver * _solver);
 	void update(Step * _step) override;
 	void setPos(glm::vec3 _mpos, glm::vec3 _pos);
-
 };
 
 class PD_Scene_Animation : public Scene {
@@ -57,7 +55,7 @@ public:
 
 	explicit PD_Scene_Animation(Game * _game);
 	~PD_Scene_Animation();
-	
+
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
@@ -68,5 +66,3 @@ public:
 	void writeToFile() const;
 	void loadFromTestFile();
 };
-
-

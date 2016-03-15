@@ -47,7 +47,7 @@ public:
 	static std::map<std::string, std::vector<std::string>> roomTypes;
 	static std::vector<std::string> roomTypesKeys;
 	static std::vector<OpenAL_Sound *> voices;
-	
+
 	PD_ResourceManager();
 	~PD_ResourceManager();
 };
