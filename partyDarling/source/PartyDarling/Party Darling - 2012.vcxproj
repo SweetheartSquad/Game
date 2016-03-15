@@ -72,6 +72,7 @@
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
     <ClCompile Include="src\ShaderComponentOutline.cpp" />
+    <ClCompile Include="src\ShaderComponentVNoise.cpp" />
     <ClCompile Include="src\TriggerDefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +134,7 @@
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
     <ClInclude Include="include\ShaderComponentOutline.h" />
+    <ClInclude Include="include\ShaderComponentVNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Party Darling - 2012.rc" />
