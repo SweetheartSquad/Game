@@ -804,6 +804,9 @@ PD_Scene_Main::~PD_Scene_Main(){
 	delete emoteShader;
 
 	delete toonRamp;
+
+	PD_ResourceManager::itemTextures->unload();
+	PD_ResourceManager::componentTextures->unload();
 }
 
 
