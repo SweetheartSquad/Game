@@ -168,10 +168,10 @@
         "order": 0,
         "src": "scenarios/Sadie_is_sad.json",
         "type": 0
-    }/*,
+    },
     {
         "order": 0,
         "src": "scenarios/Locke_the_Liar.json",
         "type": 0
-    }*/
+    }
 ]
