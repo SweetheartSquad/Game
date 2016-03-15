@@ -95,6 +95,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
+	if(PD_Game::progressManager->plotPosition == kEND){
+		toonShader->addComponent(new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
+	}
 	toonShader->compileShader();
 
 	itemShader->addComponent(new ShaderComponentMVP(itemShader));
