@@ -647,6 +647,11 @@ std::vector<Room *> PD_Scene_Main::buildRooms(){
 	res.push_back(new LabRoom(bulletWorld, toonShader, characterShader, emoteShader, labScenario));
 	res.push_back(new IntroRoom(bulletWorld, toonShader, characterShader, emoteShader, introScenario));
 
+	for(auto r : res) {
+		for(auto o : r->components) {
+			o->unload();
+		}
+	}
 
 	return res;
 }
@@ -661,6 +666,12 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy, bool _playerStarts)
 
 void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// transition
+	if(currentRoom != nullptr){
+		for(auto o : currentRoom->components) {
+			o->unload();
+		}
+	}
+
 	screenSurfaceShader->bindShader();
 	GLint test = glGetUniformLocation(screenSurfaceShader->getProgramId(), "reverse");
 	checkForGlError(false);
@@ -752,6 +763,11 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// update map with new position
 	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
+
+	for(auto o : currentRoom->components) {
+		o->load();
+	}
+
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
