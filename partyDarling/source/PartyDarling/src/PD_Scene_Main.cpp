@@ -1269,8 +1269,8 @@ Texture * PD_Scene_Main::getToken(){
 void PD_Scene_Main::resetCrosshair() {
 	// replace the crosshair item texture with the actual crosshair texture
 	crosshairIndicator->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("CROSSHAIR")->texture);
-	crosshairIndicator->setWidth(16);
-	crosshairIndicator->setHeight(16);
+	crosshairIndicator->setWidth(16 * sweet::getDpi());
+	crosshairIndicator->setHeight(16 * sweet::getDpi());
 	crosshairIndicator->autoResize();
 	crosshairIndicator->invalidateLayout();
 }
