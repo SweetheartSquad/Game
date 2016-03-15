@@ -110,6 +110,16 @@ bool Edge::isInside(glm::vec2 _point, float _scale){
 	return false;
 }
 
+
+
+
+
+std::map<std::string, Texture *> RoomBuilder::floorTex;
+std::map<std::string, Texture *> RoomBuilder::ceilTex;
+std::map<std::string, Texture *> RoomBuilder::wallTex;
+
+
+
 RoomBuilder::RoomBuilder(AssetRoom * _definition, BulletWorld * _world, Shader * _baseShader, Shader * _itemShader, Shader * _characterShader, Shader * _emoteShader):
 	world(_world),
 	baseShader(_baseShader),
@@ -1349,8 +1359,18 @@ Texture * RoomBuilder::getFloorTex(){
 	// grab a random floor texture
 	std::stringstream ss;
 	ss << "assets/textures/room/floor/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	
+	// look for an existing texture with the specified id
+	auto t = floorTex.find(ss.str());
+	if(t != floorTex.end()){
+		return t->second;
+	}
+
+	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
+	++res->referenceCount;
+	floorTex[ss.str()] = res;
 	return res;
 #endif
 }
@@ -1362,8 +1382,18 @@ Texture * RoomBuilder::getCeilTex(){
 	// grab a random floor texture
 	std::stringstream ss;
 	ss << "assets/textures/room/ceiling/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	
+	// look for an existing texture with the specified id
+	auto t = ceilTex.find(ss.str());
+	if(t != ceilTex.end()){
+		return t->second;
+	}
+	
+	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
+	++res->referenceCount;
+	ceilTex[ss.str()] = res;
 	return res;
 #endif
 }
@@ -1375,8 +1405,18 @@ Texture * RoomBuilder::getWallTex(){
 	// grab a random floor texture
 	std::stringstream ss;
 	ss << "assets/textures/room/walls/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	
+	// look for an existing texture with the specified id
+	auto t = wallTex.find(ss.str());
+	if(t != wallTex.end()){
+		return t->second;
+	}
+	
+	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
+	++res->referenceCount;
+	wallTex[ss.str()] = res;
 	return res;
 #endif
 }

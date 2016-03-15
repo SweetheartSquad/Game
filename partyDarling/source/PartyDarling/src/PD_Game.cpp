@@ -53,6 +53,14 @@ PD_Game::~PD_Game(){
 	if(bgmTrack != nullptr){
 		bgmTrack->decrementAndDelete();
 	}
+
+	for(auto t : RoomBuilder::wallTex){
+		t.second->decrementAndDelete();
+	}for(auto t : RoomBuilder::ceilTex){
+		t.second->decrementAndDelete();
+	}for(auto t : RoomBuilder::floorTex){
+		t.second->decrementAndDelete();
+	}
 }
 
 void PD_Game::update(Step * _step){
