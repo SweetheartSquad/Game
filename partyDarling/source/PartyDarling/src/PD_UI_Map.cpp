@@ -183,6 +183,6 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 	}
 }
 
-void PD_UI_Map::updateCompass(float _angle) const {
+void PD_UI_Map::updateCompass(float _angle){
 	compass->background->childTransform->setOrientation(glm::angleAxis(_angle, glm::vec3(0,0,1)));
 }
