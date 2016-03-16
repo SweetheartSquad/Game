@@ -165,8 +165,8 @@ void PD_UI_Bubble::update(Step * _step){
 		for(unsigned long int i = 0; i < options.size(); ++i){
 			options.at(i)->label->setText(options.at(i)->label->getText(false));
 		}
-	}
 #endif
+	}
 	NodeUI::update(_step);
 }
 
