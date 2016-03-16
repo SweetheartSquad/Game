@@ -180,6 +180,8 @@ public:
 	TextArea * selectedGlyphText;
 
 	float damage;
+	
+	float comboMultipier;
 
 	Keyboard * keyboard;
 
