@@ -30,10 +30,11 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 }
 
 PD_UI_DissCard::~PD_UI_DissCard(){
+	delete textShader;
 }
 
 void PD_UI_DissCard::init(){
-	textShader = new ComponentShaderText(true);
+	textShader = new ComponentShaderText(false);
 	textShader->setColor(113/255.f, 71/255.f, 16/255.f);
 
 	setBorder(25);

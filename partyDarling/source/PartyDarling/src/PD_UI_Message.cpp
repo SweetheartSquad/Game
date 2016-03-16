@@ -58,6 +58,7 @@ PD_UI_Message::~PD_UI_Message(){
 		delete t;
 	}
 	animationTimeouts.clear();
+	delete textShader;
 }
 
 void PD_UI_Message::gainItem(PD_Item * _item){
