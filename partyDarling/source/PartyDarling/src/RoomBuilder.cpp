@@ -1175,16 +1175,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
-	for(auto c : characters){
-		listing->addCharacter(c);
-		for(auto c : definition->getCharacters()) {
-			for(auto i : c->getItems()) {
-				PD_Item * item = new PD_Item(i, world, itemShader);
-				listing->addItem(item);
-				world->world->removeRigidBody(item->body);
-			}
-		}
-	}for(auto i : items){
+	for(auto i : items){
 		listing->addItem(i);
 	}
 
