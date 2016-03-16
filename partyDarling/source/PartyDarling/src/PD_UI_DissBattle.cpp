@@ -758,7 +758,7 @@ void PD_UI_DissBattle::gameOver(bool _win){
 	interjectBubble->setVisible(false);
 
 	prevXP = player->experience;
-	if(_win && player->level < MAX_DISS_LEVEL){
+	if(_win){
 		wonXP = 100.f / (player->level + 1);
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
