@@ -719,8 +719,21 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 
 	confidence = 50.f;
 
-	playerAttackMultiplier = sweet::NumberUtils::map((player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
-	enemyAttackMultiplier = sweet::NumberUtils::map((enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL, -1.f, 1.f, 0.5f, 1.5f); // 0.5 to 1.5
+	// Player's attack: increased if strength outweights enemy's defence, and lowered otherwise
+	playerAttackMultiplier = (player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL;
+	if(playerAttackMultiplier > 0){
+		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, 1.f, 1.f, 5.f);
+	}else{
+		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, -1.f, 1.f, 0.5f);
+	}
+
+	// Enemy's attack: increased if strength outweights player's defence, and lowered otherwise
+	enemyAttackMultiplier = (enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL;
+	if(enemyAttackMultiplier > 0){
+		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, 1.f, 1.f, 2.5f);
+	}else{
+		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, -1.f, 1.f, 0.25f);
+	}
 
 	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
 	if(insightMultiplier > 0){
