@@ -20,6 +20,8 @@ private:
 	std::map<std::pair<int, int>, MapCell *> grid;
 
 	bool enabled;
+
+	bool adjacent(std::pair<int, int> _cell, glm::ivec2 _housePosition);
 public:
 	PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 

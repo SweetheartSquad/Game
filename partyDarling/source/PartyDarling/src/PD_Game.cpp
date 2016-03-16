@@ -60,6 +60,8 @@ PD_Game::~PD_Game(){
 	}for(auto t : RoomBuilder::floorTex){
 		t.second->decrementAndDelete();
 	}
+
+	delete progressManager;
 }
 
 void PD_Game::update(Step * _step){

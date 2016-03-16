@@ -749,7 +749,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// update map with new position
 	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
-
+	
 	for(auto o : currentRoom->components) {
 		o->load();
 	}
