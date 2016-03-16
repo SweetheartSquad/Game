@@ -753,6 +753,10 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	for(auto o : currentRoom->components) {
 		o->load();
 	}
+
+	for(auto s : Shader::allShaders){
+		s->load();
+	}
 }
 
 PD_Scene_Main::~PD_Scene_Main(){
