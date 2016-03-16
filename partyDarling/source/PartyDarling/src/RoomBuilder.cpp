@@ -38,6 +38,7 @@
 #include <PD_PhraseGenerator_Incidental.h>
 
 //#define RG_DEBUG
+//#define RG_DETAILED_LOG
 
 Edge::Edge(glm::vec2 _p1, glm::vec2 _p2, glm::vec2 _normal) :
 	p1(_p1),
@@ -156,9 +157,11 @@ Room * RoomBuilder::getRoom(){
 	do{
 		success = true;
 		++numAttempts;
+#ifdef RG_DETAILED_LOG
 		std::stringstream s;
 		s << "ATTEMPT " << numAttempts;
 		Log::info(s.str());
+#endif
 
 		fullL = l * ROOM_TILE;
 		fullW = ROOM_TILE * w;
@@ -195,6 +198,7 @@ Room * RoomBuilder::getRoom(){
 		// place doors before anything else
 		if(placeDoors()){
 			for(auto obj : objects){
+#ifdef RG_DETAILED_LOG
 				std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 				std::stringstream s1;
 				s1 << "\nAttempting to place OBJECT: " << name;
@@ -202,12 +206,17 @@ Room * RoomBuilder::getRoom(){
 				std::stringstream s;
 				s << "Total Placed Objects: " << placedObjects.size();
 				Log::info(s.str());
+#endif
 				if(!search(obj)){
+#ifdef RG_DETAILED_LOG
 					Log::warn("Search FAILED; room object not placed.");
+#endif
 					success = false;
 					break;
 				}else{
+#ifdef RG_DETAILED_LOG
 					Log::info("Search SUCCEEDED.");
+#endif
 #ifdef RG_DEBUG
 					if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
 						obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
@@ -223,8 +232,9 @@ Room * RoomBuilder::getRoom(){
 			if(numAttempts > MAX_ROOMBUILDER_ATTEMPTS){
 				Log::error("Max attempts reached, failed to build room");
 			}
-
+#ifdef RG_DETAILED_LOG
 			Log::warn("INCREASING ROOM SIZE.");
+#endif
 			// unload walls, increase size
 			room->world->world->removeRigidBody(room->body);
 			delete room->body;
@@ -273,6 +283,7 @@ Room * RoomBuilder::getRoom(){
 	objects = getRandomObjects();
 
 	for(auto obj : objects){
+#ifdef RG_DETAILED_LOG
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 		std::stringstream s1;
 		s1 << "\nAttempting to place OBJECT: " << name;
@@ -280,9 +291,11 @@ Room * RoomBuilder::getRoom(){
 		std::stringstream s;
 		s << "Total Placed Objects: " << placedObjects.size();
 		Log::info(s.str());
+#endif
 		if(!search(obj)){
+#ifdef RG_DETAILED_LOG
 			Log::warn("Search FAILED; room object not placed.");
-
+#endif
 			// make sure we remove the object from the item or character list if it's there
 			if(PD_Character * c = dynamic_cast<PD_Character *>(obj)){
 				PD_Listing::listings[c->definition->scenario]->characters.erase(c->definition->id);
@@ -302,7 +315,9 @@ Room * RoomBuilder::getRoom(){
 			}
 			delete obj;
 		}else{
+#ifdef RG_DETAILED_LOG
 			Log::info("Search SUCCEEDED.");
+#endif
 #ifdef RG_DEBUG
 			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
 				obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
@@ -317,8 +332,8 @@ Room * RoomBuilder::getRoom(){
 	std::vector<PD_Prop *> props = getProps();
 	objects.insert(objects.begin(), props.begin(), props.end());
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{ return (i->parentTypes.size() < j->parentTypes.size());});
-	int cntBlah = objects.size();
 	for(auto obj : objects){
+#ifdef RG_DETAILED_LOG
 		std::string name = (obj->mesh->textures.size() > 0 ? obj->mesh->textures.at(0)->src : std::string(" noTex"));
 		std::stringstream s1;
 		s1 << "\nAttempting to place OBJECT: " << name;
@@ -326,12 +341,16 @@ Room * RoomBuilder::getRoom(){
 		std::stringstream s;
 		s << "Total Placed Objects: " << placedObjects.size();
 		Log::info(s.str());
+#endif
 		if(!search(obj)){
+#ifdef RG_DETAILED_LOG
 			Log::warn("Search FAILED; room object not placed.");
+#endif
 			delete obj;
-			--cntBlah;
 		}else{
+#ifdef RG_DETAILED_LOG
 			Log::info("Search SUCCEEDED.");
+#endif
 #ifdef RG_DEBUG
 			if(obj->parent != nullptr && obj->parent->mesh->textures.size() > 0){
 				obj->mesh->pushTexture2D(obj->parent->mesh->textures.at(0));
@@ -339,9 +358,6 @@ Room * RoomBuilder::getRoom(){
 #endif
 		}
 	}
-	std::stringstream sBlah;
-	sBlah << "TOTAL PROPS: " << objects.size() << " PLACED: " << cntBlah;
-	Log::info(sBlah.str());
 
 	// copy lights from any placed objects into the rooms lights
 	for(auto obj : placedObjects) {
@@ -609,32 +625,40 @@ bool RoomBuilder::search(RoomObject * _child){
 					}
 				}
 				if(!validSide) {
+#ifdef RG_DETAILED_LOG
 					Log::warn("Not valid side.");
+#endif
 					continue;
 				}
-
+#ifdef RG_DETAILED_LOG
 				Log::info("Side found.");
+#endif
 				// if the object can be placed without collision
 				if(arrange(_child, parent, side, slot)){
 					addObjectToLists(_child);
+#ifdef RG_DETAILED_LOG
 					Log::info("Parenting and placing object.");
+#endif
 					return true;
 				}
 			}
+#ifdef RG_DETAILED_LOG
 			Log::warn("No sides availalble.");
+#endif
 		}
 	}
+#ifdef RG_DETAILED_LOG
 	Log::warn("NO PARENT found.");
-
+#endif
 	if(_child->anchor != Anchor_t::WALL && !_child->parentDependent){
 		float angle = _child->billboarded ? 0.f : sweet::NumberUtils::randomFloat(-180.f, 180.f);
 		glm::quat orient = glm::quat(glm::angleAxis(angle, glm::vec3(0.f, 1.f, 0.f)));
 
 		// Look for space in room (20 tries)
 		for(unsigned int i = 0; i < tiles.size(); ++i){
+#ifdef RG_DETAILED_LOG
 			Log::info("Tile selected");
-
-			Log::info("Position found.");
+#endif
 			// Validate bounding box is inside room
 			if(canPlaceObject(_child, tiles.at(i), orient)){
 				room->addComponent(_child);
@@ -649,10 +673,6 @@ bool RoomBuilder::search(RoomObject * _child){
 }
 
 bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _side, PD_Slot * _slot){
-	std::stringstream s;
-	s << "side: " << int(_side);
-	Log::info(s.str());
-
 	glm::vec3 pos = _parent->childTransform->getTranslationVector();
 	pos.y = 0;
 	glm::quat orient = _parent->childTransform->getOrientationQuat();
@@ -691,7 +711,9 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	// check length of side
 	if(!_slot->overflow && childDimensions.x > _slot->length - _slot->spaceFilled){
+#ifdef RG_DETAILED_LOG
 		Log::warn("Not enough SPACE along side.");
+#endif
 		return false;
 	}
 
@@ -797,7 +819,6 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	// check for collision/inside room
 
 	if(!canPlaceObject(_child, pos, orient, _parent)){
-		Log::warn("Collided");
 		if(centered){
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
@@ -877,9 +898,11 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 
 		// Check if object intersects o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.0001f)){
+#ifdef RG_DETAILED_LOG
 			std::stringstream s;
 			s << "Can't place due to COLLISION with: " << o->type << " address: " << o;
 			Log::warn(s.str());
+#endif
 
 			_obj->translatePhysical(-_pos);
 			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
@@ -1195,7 +1218,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	return objects;
 }
 
-std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random) const {
+std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random) {
 	std::vector<PD_Character*> characters;
 
 	if(!_random){
