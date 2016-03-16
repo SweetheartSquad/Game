@@ -718,6 +718,8 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	}
 
 	confidence = 50.f;
+	playerComboMultipier = 1.f;
+	enemyComboMultipier = 1.f;
 
 	// Player's attack: increased if strength outweights enemy's defence, and lowered otherwise
 	playerAttackMultiplier = (player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL;
