@@ -32,6 +32,7 @@ PD_CharacterAnimationSet::~PD_CharacterAnimationSet() {
 	delete leftLeg;
 	delete rightLeg;
 	delete body;
+	delete translation;
 }
 
 void PD_CharacterAnimationSet::update(Step* _step) {
