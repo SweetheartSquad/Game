@@ -42,7 +42,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	visibleMesh->addChild(new MeshEntity(meshDetail, _toonShader), false);
 	childTransform->addChild(visibleMesh);
 
-	colliderMesh = new TriMesh(true);
+	colliderMesh = new TriMesh(false);
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
 
 	PD_Listing * listing = PD_Listing::listings[_introScenario];
@@ -82,6 +82,10 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 		visibleMesh->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
 		lights.push_back(light);
 	}
+}
+
+IntroRoom::~IntroRoom(){
+	delete colliderMesh;
 }
 
 void IntroRoom::setEdge(PD_Door::Door_t _edge){
