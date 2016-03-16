@@ -18,7 +18,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 {
 	background->setVisible(false);
 
-	ComponentShaderText * textShader = new ComponentShaderText(true);
+	textShader = new ComponentShaderText(false);
 	textShader->setColor(86/255.f, 137/255.f, 135/255.f, 1.f);
 
 	HorizontalLinearLayout * backpackContainer = new HorizontalLinearLayout(_world);
@@ -182,6 +182,10 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 
 	// disable and hide by default
 	disable();
+}
+
+PD_UI_Inventory::~PD_UI_Inventory(){
+	delete textShader;
 }
 
 void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
