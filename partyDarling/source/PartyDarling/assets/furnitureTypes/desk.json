@@ -55,7 +55,7 @@
             "parents":{
             },
 			"twist": false,
-            "flare": false,
+            "flare": true,
 			"paddingFront": 0.2,
 			"paddingLeft": 0.5,
 			"paddingRight": 0.5,
