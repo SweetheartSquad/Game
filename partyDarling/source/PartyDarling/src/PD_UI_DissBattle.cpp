@@ -712,7 +712,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 
 	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
 	if(insightMultiplier > 0){
-		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.25f);
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.5f);
 	}else{
 		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, -1.f, 1.f, 0.25f);
 	}
@@ -1030,10 +1030,10 @@ void PD_UI_DissBattle::setPlayerText(){
 		}
 	}else if(insightMultiplier < 0){
 		optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-		optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+		optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
 	}else{
 		optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
-		optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
+		optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
 	}
 	
 
