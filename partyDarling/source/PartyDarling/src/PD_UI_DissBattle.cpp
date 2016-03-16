@@ -18,6 +18,7 @@
 #include <TextureUtils.h>
 #include <PD_DissStats.h>
 
+#define PLAYER_TEXT_WIDTH 0.5f
 #define FAIL_INSULT	"glassBreak"
 #define SUCCEED_INSULT	"ohhh"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
@@ -306,7 +307,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleText = new TextArea(world, _font, _textShader);
 	playerBubbleText->setWrapMode(kWORD);
 	playerBubbleLayout->addChild(playerBubbleText);
-	playerBubbleText->setRationalWidth(0.6f, playerBubbleLayout);
+	playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleLayout);
 	playerBubbleText->setRationalHeight(1.0f, playerBubbleLayout);
 	playerBubbleText->horizontalAlignment = kCENTER;
 	playerBubbleText->verticalAlignment = kMIDDLE;
@@ -316,7 +317,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleOptions = new HorizontalLinearLayout(_bulletWorld);
 	playerBubbleLayout->addChild(playerBubbleOptions);
 
-	playerBubbleOptions->setRationalWidth(0.4f, playerBubbleLayout);
+	playerBubbleOptions->setRationalWidth(0.5f, playerBubbleLayout);
 	playerBubbleOptions->setRationalHeight(1.f, playerBubbleLayout);
 
 	playerBubbleOptions->setBackgroundColour(0, 1.f, 0, 0.5f);
@@ -1007,6 +1008,7 @@ void PD_UI_DissBattle::setEnemyText(){
 void PD_UI_DissBattle::setPlayerText(){
 	if(playerResult){
 		playerBubbleLayout->addChild(playerBubbleOptions);
+		playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleText->nodeUIParent);
 		playerBubble->invalidateLayout();
 	}
 
@@ -1075,6 +1077,7 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 
 	playerBubbleText->setText(text);
 	playerBubbleLayout->removeChild(playerBubbleOptions);
+	playerBubbleText->setRationalWidth(1.f, playerBubbleText->nodeUIParent);
 	playerBubble->invalidateLayout();
 
 	playerResult = true;
