@@ -1195,7 +1195,7 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	return objects;
 }
 
-std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random) const {
+std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random){
 	std::vector<PD_Character*> characters;
 
 	if(!_random){
