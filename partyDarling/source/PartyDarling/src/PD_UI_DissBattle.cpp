@@ -712,7 +712,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 
 	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
 	if(insightMultiplier > 0){
-		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.25f);
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.5f);
 	}else{
 		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, -1.f, 1.f, 0.25f);
 	}
@@ -1017,26 +1017,25 @@ void PD_UI_DissBattle::setPlayerText(){
 	pBubbleBtn1->label->setText(btn1E ? insultGenerator.playerBadChoice : insultGenerator.playerGoodChoice);
 	pBubbleBtn2->label->setText(btn1E ? insultGenerator.playerGoodChoice : insultGenerator.playerBadChoice);
 
+	
 	// Apply insight effect
 	if(insightMultiplier > 0){
 		// Highlight correct choice
 		if(pBubbleBtn1->isEffective) {
-			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
-		}else {
-			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+			optionOneShader->setColor(insightAlpha, 1.f, insightAlpha, 1.f);
 			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
+		}else {
+			optionTwoShader->setColor(insightAlpha, 1.f, insightAlpha, 1.f);
+			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
 		}
+	}else if(insightMultiplier < 0){
+		optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
+		optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
 	}else{
-		// Highlight wrong choice
-		if(pBubbleBtn2->isEffective) {
-			optionTwoShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-			optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
-		}else {
-			optionOneShader->setColor(1.f, 1.f, 1.f, insightAlpha);
-			optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
-		}
+		optionOneShader->setColor(1.f, 1.f, 1.f, 1.f);
+		optionTwoShader->setColor(1.f, 1.f, 1.f, 1.f);
 	}
+	
 
 	// Reset timer
 	playerQuestionTimer = 0;

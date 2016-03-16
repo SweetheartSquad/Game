@@ -22,7 +22,7 @@ Player::Player(BulletWorld * _bulletWorld) :
 	// collider
 	mass(1.f),
 	experience(0),
-	level(1),
+	level(0),
 	dissStats(new PD_DissStats()),
 	wonLastDissBattle(false)
 {
