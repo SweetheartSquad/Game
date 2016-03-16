@@ -730,8 +730,12 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	}
 
 	float sassMultiplier = (player->dissStats->getSass() - enemy->dissStats->getSass()) / MAX_DISS_LEVEL; // -1 to 1
-	sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.25f, 2.f); // 0.25 to 2
-	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.75f, 1.5f); // 0.75 to 1.5
+	if(sassMultiplier > 0){
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, 1.f, 1.f, 2.f);
+	}else{
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.25f);
+	}
+	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.5f, 1.5f); // 0.75 to 1.5
 
 	if(isGameOver){
 		// Reset layout
