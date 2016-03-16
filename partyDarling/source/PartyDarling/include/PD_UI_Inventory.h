@@ -14,6 +14,7 @@ class PD_UI_Inventory : public NodeUI{
 private:
 	bool enabled;
 	bool gridDirty;
+	ComponentShaderText * textShader;
 
 	// the currenty selected item
 	// nullptr if nothing is selected
@@ -48,6 +49,7 @@ public:
 	float gridOffset;
 
 	PD_UI_Inventory(BulletWorld * _world, Player * _player);
+	~PD_UI_Inventory();
 
 	// add an item to the inventory
 	void pickupItem(PD_Item * _item);
