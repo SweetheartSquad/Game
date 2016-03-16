@@ -1,12 +1,6 @@
 {
   "assets": [
     //Testing Stuff
-    {
-    	"id":"spritesheet",
-    	"src":"spritesheet.png",
-    	"type":"texture"
-    },
-
     // bgm
     {
       "id": "BGM1",
