@@ -871,6 +871,26 @@
         {
             "id": 210, 
             "src": "furnitureJson/kitchen_shelf_content_3_2.json"
+        }, 
+        {
+            "id": 211, 
+            "src": "furnitureJson/fireplace_base_1.json"
+        }, 
+        {
+            "id": 212, 
+            "src": "furnitureJson/fireplace_front_1.json"
+        }, 
+        {
+            "id": 213, 
+            "src": "furnitureJson/fireplace_chimney_1.json"
+        }, 
+        {
+            "id": 214, 
+            "src": "furnitureJson/fireplace_logstand_1.json"
+        }, 
+        {
+            "id": 215, 
+            "src": "furnitureJson/fireplace_content_1.json"
         }
     ], 
     "furniture": [
@@ -942,6 +962,9 @@
         }, 
         {
             "src": "furnitureTypes/towel_rack.json"
+        }, 
+        {
+            "src": "furnitureTypes/fireplace.json"
         }
     ]
 }

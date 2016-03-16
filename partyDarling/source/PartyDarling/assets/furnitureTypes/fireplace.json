@@ -1,0 +1,52 @@
+{
+    "components": [
+        {
+            "componentTypes": ["fireplace_base"], 
+            "multiplier": 1, 
+            "required": true,
+			"scale": [1, 1, 1],
+            "outComponents": [
+                {
+                    "componentTypes": ["fireplace_chimney"], 
+                    "multiplier": 1,
+                    "required": true,
+                    "scale": [1.0,1.0,1.0]
+                },
+				{
+                    "componentTypes": ["fireplace_logstand"], 
+                    "multiplier": 1,
+					"outComponents": [
+						{
+							"componentTypes": ["fireplace_content"], 
+							"multiplier": 1,
+							"required": false,
+							"scale": [1.0,1.0,1.0]
+						}
+					],
+                    "required": true,
+                    "scale": [1.0,1.0,1.0]
+                },
+				{
+                    "componentTypes": ["fireplace_front"], 
+                    "multiplier": 1,
+                    "required": false,
+                    "scale": [1.0,1.0,1.0]
+                }
+				
+            ]
+        }
+    ], 
+    "type": "fireplace",
+	"mass": 0,
+    "roomTypes" : ["KITCHEN", "LIVING_ROOM","BEDROOM","OFFICE"],
+    "detailedCollider": true,
+	"parentDependent": true,
+    "parents":{"wall":["FRONT"]},
+    "paddingLeft": 0.5,
+	"paddingRight": 0.5,
+    "twist": false,
+    "flare": false,
+    "numTextures": 2,
+	"parentMax": 1,
+	"max":1
+}

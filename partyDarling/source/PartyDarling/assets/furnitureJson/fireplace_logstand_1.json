@@ -1,0 +1,31 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "fireplace_content"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.8126516342163086, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 214, 
+    "src": "fireplace_logstand_1.obj", 
+    "type": "fireplace_logstand"
+}
