@@ -5,6 +5,7 @@ class Scenario;
 class IntroRoom : public Room{
 public:
 	IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _characterShader, Shader * _emoteShader, Scenario * _introScenario);
+	~IntroRoom();
 
 	Transform * visibleMesh;
 	TriMesh * colliderMesh;

@@ -9,6 +9,7 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 	NodeUI_NineSliced(_world, _tex)
 {
 	label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
+	label->wrapMode = kTRUNCATE;
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	setBorder(label->font->getLineHeight());
 	setHeight(label->font->getLineHeight()*2.5f);
@@ -78,6 +79,8 @@ void PD_UI_Bubble::addOption(std::string _text, sweet::EventManager::Listener _l
 	}
 
 	optionBubble->label->setText(_text);
+	optionBubble->label->setPixelWidth(optionBubble->getWidth(true, true));
+
 	options.push_back(optionBubble);
 
 	optionBubble->eventManager->addEventListener("selected", _listener);
@@ -96,7 +99,6 @@ void PD_UI_Bubble::selectCurrent(){
 
 void PD_UI_Bubble::placeOptions(){
 	float verticalSpacing = options.back()->label->font->getLineHeight()* (options.size() == 2 ? 1.f : 2.f);
-	float bubbleWidth = 500;
 	for(unsigned long int i = 0; i < options.size(); ++i){
 		float offset = (float)(i) / options.size();
 		offset -= displayOffset;
@@ -108,6 +110,7 @@ void PD_UI_Bubble::placeOptions(){
 		options.at(i)->marginRight.setRationalSize(w*0.25f+0.1f, &this->width);
 		options.at(i)->setMeasuredWidths();
 		options.at(i)->invalidateLayout();
+		options.at(i)->label->setRationalWidth(0.95f, options.at(i));
 
 		if(i == currentOption){
 			options.at(i)->setBackgroundColour(1,1,1, 1);
@@ -158,7 +161,12 @@ void PD_UI_Bubble::update(Step * _step){
 		if(childrenUpdated){
 			reorderChildren();
 		}
+#ifndef _DEBUG
+		for(unsigned long int i = 0; i < options.size(); ++i){
+			options.at(i)->label->setText(options.at(i)->label->getText(false));
+		}
 	}
+#endif
 	NodeUI::update(_step);
 }
 

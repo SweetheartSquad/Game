@@ -18,6 +18,7 @@
 #include <TextureUtils.h>
 #include <PD_DissStats.h>
 
+#define PLAYER_TEXT_WIDTH 0.5f
 #define FAIL_INSULT	"glassBreak"
 #define SUCCEED_INSULT	"ohhh"
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
@@ -306,7 +307,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleText = new TextArea(world, _font, _textShader);
 	playerBubbleText->setWrapMode(kWORD);
 	playerBubbleLayout->addChild(playerBubbleText);
-	playerBubbleText->setRationalWidth(0.6f, playerBubbleLayout);
+	playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleLayout);
 	playerBubbleText->setRationalHeight(1.0f, playerBubbleLayout);
 	playerBubbleText->horizontalAlignment = kCENTER;
 	playerBubbleText->verticalAlignment = kMIDDLE;
@@ -316,7 +317,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleOptions = new HorizontalLinearLayout(_bulletWorld);
 	playerBubbleLayout->addChild(playerBubbleOptions);
 
-	playerBubbleOptions->setRationalWidth(0.4f, playerBubbleLayout);
+	playerBubbleOptions->setRationalWidth(0.5f, playerBubbleLayout);
 	playerBubbleOptions->setRationalHeight(1.f, playerBubbleLayout);
 
 	playerBubbleOptions->setBackgroundColour(0, 1.f, 0, 0.5f);
@@ -324,11 +325,12 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleOptions->horizontalAlignment = kCENTER;
 	playerBubbleOptions->verticalAlignment = kMIDDLE;
 
+	Texture * arrowsTex = PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-ARROWS")->texture;
 	NodeUI * playerArrows = new NodeUI(_bulletWorld);
 	playerBubbleOptions->addChild(playerArrows);
-	playerArrows->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-ARROWS")->texture);
-	playerArrows->setRationalHeight(0.4f, playerBubbleOptions);
-	playerArrows->setSquareWidth(0.8f);
+	playerArrows->background->mesh->pushTexture2D(arrowsTex);
+	playerArrows->setRationalWidth(0.2f, playerBubbleOptions);
+	playerArrows->setSquareHeight((float)arrowsTex->height/arrowsTex->width);
 	playerArrows->background->mesh->setScaleMode(GL_NEAREST);
 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
@@ -336,12 +338,13 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	buttonLayout->setRationalWidth(0.8f, playerBubbleOptions);
 	buttonLayout->setRationalHeight(0.5f, playerBubbleOptions);
 	buttonLayout->verticalAlignment = kMIDDLE;
+	buttonLayout->setPaddingLeft(0.05f);
 
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, optionOneShader);
 	buttonLayout->addChild(pBubbleBtn1);
 	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn1->setRationalHeight(0.75f, buttonLayout);
-	pBubbleBtn1->setPadding(0.1f);
+	pBubbleBtn1->setPadding(0.f, 0.1f);
 	pBubbleBtn1->label->setMarginTop(0.1f);
 	pBubbleBtn1->setMouseEnabled(false);
 
@@ -349,7 +352,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	buttonLayout->addChild(pBubbleBtn2);
 	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
 	pBubbleBtn2->setRationalHeight(0.75f, buttonLayout);
-	pBubbleBtn2->setPadding(0.1f);
+	pBubbleBtn2->setPadding(0.f, 0.1f);
 	pBubbleBtn2->label->setMarginTop(0.1f);
 	pBubbleBtn2->setMouseEnabled(false);
 
@@ -420,24 +423,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	tutorialSpacebarImage->setSquareWidth(1.f);
 	tutorialSpacebarImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-SPACEBAR")->texture);
 	tutorialSpacebarImage->background->mesh->setScaleMode(GL_NEAREST);
-
-	tutorialArrows = new HorizontalLinearLayout(_bulletWorld);
-	gameContainer->addChild(tutorialArrows);
-	tutorialArrows->setRationalWidth(0.5f, gameContainer);
-	tutorialArrows->setRationalHeight(1.f, gameContainer);
-	tutorialArrows->setMarginTop(0.3f);
-	tutorialArrows->verticalAlignment = kMIDDLE;
-	tutorialArrows->horizontalAlignment = kCENTER;
-	tutorialArrows->setMarginLeft(0.3f);
-	tutorialArrows->setVisible(false);
-	/*
-	NodeUI * tutorialArrowsImage = new NodeUI(_bulletWorld);
-	tutorialArrows->addChild(tutorialArrowsImage);
-	tutorialArrowsImage->setRationalWidth(1.f, tutorialArrows);
-	tutorialArrowsImage->setSquareHeight(1.f);
-	tutorialArrowsImage->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-ARROWS")->texture);
-	tutorialArrowsImage->background->mesh->setScaleMode(GL_NEAREST);
-	*/
 
 	// disable and hide by default
 	disable();
@@ -718,6 +703,8 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	}
 
 	confidence = 50.f;
+	playerComboMultipier = 1.f;
+	enemyComboMultipier = 1.f;
 
 	// Player's attack: increased if strength outweights enemy's defence, and lowered otherwise
 	playerAttackMultiplier = (player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL;
@@ -974,7 +961,6 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 	playerBubble->setVisible(_isOffensive);
 
 	tutorialSpacebar->setVisible(!_isOffensive);
-	tutorialArrows->setVisible(_isOffensive);
 
 	if (!_isOffensive){
 		setEnemyText();
@@ -1022,6 +1008,7 @@ void PD_UI_DissBattle::setEnemyText(){
 void PD_UI_DissBattle::setPlayerText(){
 	if(playerResult){
 		playerBubbleLayout->addChild(playerBubbleOptions);
+		playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleText->nodeUIParent);
 		playerBubble->invalidateLayout();
 	}
 
@@ -1090,6 +1077,7 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 
 	playerBubbleText->setText(text);
 	playerBubbleLayout->removeChild(playerBubbleOptions);
+	playerBubbleText->setRationalWidth(1.f, playerBubbleText->nodeUIParent);
 	playerBubble->invalidateLayout();
 
 	playerResult = true;

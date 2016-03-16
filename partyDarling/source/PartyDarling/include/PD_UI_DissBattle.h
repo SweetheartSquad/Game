@@ -48,7 +48,6 @@ private:
 	NodeUI * displayContainer;
 
 	HorizontalLinearLayout * tutorialSpacebar;
-	HorizontalLinearLayout * tutorialArrows;
 
 	VerticalLinearLayout * healthContainer;
 	NodeUI * gameContainer;
