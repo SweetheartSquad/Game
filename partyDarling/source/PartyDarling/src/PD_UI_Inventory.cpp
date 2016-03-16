@@ -186,6 +186,10 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 
 PD_UI_Inventory::~PD_UI_Inventory(){
 	delete textShader;
+
+	for(auto i : items){
+		delete i;
+	}
 }
 
 void PD_UI_Inventory::setInfoPanel(PD_Item * _item){

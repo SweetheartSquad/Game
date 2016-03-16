@@ -1,0 +1,79 @@
+{
+    "connectors": [
+        {
+            "componentTypes": [
+                "fireplace_chimney"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        11.641855239868164, 
+                        -3.200385093688965
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "fireplace_logstand"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }, 
+        {
+            "componentTypes": [
+                "fireplace_front"
+            ], 
+            "out": [
+                {
+                    "position": [
+                        0.0, 
+                        0.0, 
+                        3.2003848552703857
+                    ], 
+                    "rotation": [
+                        0.0, 
+                        0.0, 
+                        0.0
+                    ], 
+                    "scale": [
+                        1.0, 
+                        1.0, 
+                        1.0
+                    ]
+                }
+            ]
+        }
+    ], 
+    "id": 211, 
+    "src": "fireplace_base_1.obj", 
+    "type": "fireplace_base"
+}
