@@ -101,6 +101,11 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 
 PD_Character::~PD_Character(){
 	delete dissStats;
+	
+	// deal with any items which the character is holding because they aren't actually in the scene
+	for(auto i : items){
+		delete PD_Listing::listings[definition->scenario]->items[i];
+	}
 }
 
 void PD_Character::setShader(Shader * _shader, bool _configureDefault){
@@ -136,6 +141,28 @@ void PD_Character::update(Step * _step){
 
 	RoomObject::update(_step);
 }
+
+
+void PD_Character::load(){
+	if(!loaded){
+		// deal with any items which the character is holding because they aren't actually in the scene
+		for(auto i : items){
+			PD_Listing::listings[definition->scenario]->items[i]->load();
+		}
+	}
+	RoomObject::load();
+}
+
+void PD_Character::unload(){
+	if(loaded){
+		// deal with any items which the character is holding because they aren't actually in the scene
+		for(auto i : items){
+			PD_Listing::listings[definition->scenario]->items[i]->unload();
+		}
+	}
+	RoomObject::unload();
+}
+
 
 PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, BulletWorld * _world, Shader * _shader, Shader * _emoticonShader) {
 	Json::Value charDef = genRandomComponents();

@@ -177,6 +177,8 @@ public:
 
 	virtual void setShader(Shader * _shader, bool _default) override;
 	virtual void update(Step * _step) override;
+	virtual void load() override;
+	virtual void unload() override;
 
 	void disable();
 	void enable();
@@ -184,6 +186,7 @@ public:
 	void show();
 	bool isEnabled() const;
 	bool isHidden() const;
+
 
 	CharacterRenderer * pr;
 
