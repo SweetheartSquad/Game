@@ -37,7 +37,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	addChild(textBubble);
 	textBubble->setBorder(15);
 	textBubble->setRationalHeight(0.05f, this);
-	textBubble->setRationalWidth(0.3f, this);
+	textBubble->setRationalWidth(0.5f, this);
 
 	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 	textBubble->addChild(text);
