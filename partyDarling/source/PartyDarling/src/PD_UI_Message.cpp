@@ -185,9 +185,9 @@ void PD_UI_Message::update(Step * _step){
 			t = nullptr;
 		}else if(t->complete){
 			// Update the event manager with the complete event (in this case, it does the same thing as what should be done at progress = 1, which is hiding everything)
-			Step * s = new Step();
-			s->setDeltaTime(0.f);
-			t->update(s);
+			Step s;
+			s.setDeltaTime(0.f);
+			t->update(&s);
 			delete t;
 			animationTimeouts.erase(animationTimeouts.begin());
 			t = nullptr;

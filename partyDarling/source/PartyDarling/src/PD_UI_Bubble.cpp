@@ -9,6 +9,7 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 	NodeUI_NineSliced(_world, _tex)
 {
 	label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, _textShader);
+	label->wrapMode = kTRUNCATE;
 	VerticalLinearLayout * vl = new VerticalLinearLayout(world);
 	setBorder(label->font->getLineHeight());
 	setHeight(label->font->getLineHeight()*2.5f);
