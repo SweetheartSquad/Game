@@ -1066,11 +1066,6 @@
             "type": "texture"
         },
         {
-            "id": 263,
-            "src": "components/Dmitri_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
             "id": 264,
             "src": "components/Eloise_Pelvis.png",
             "type": "texture"
@@ -1078,11 +1073,6 @@
         {
             "id": 265,
             "src": "components/Eloise_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 266,
-            "src": "components/Dmitri_Upper_Jaw.png",
             "type": "texture"
         },
         {
@@ -1096,48 +1086,13 @@
             "type": "texture"
         },
         {
-            "id": 269,
-            "src": "components/Dmitri_Nose.png",
-            "type": "texture"
-        },
-        {
             "id": 270,
             "src": "components/Eloise_Left_Pupil.png",
             "type": "texture"
         },
         {
-            "id": 271,
-            "src": "components/Dmitri_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 272,
-            "src": "components/Dmitri_Left_Eye.png",
-            "type": "texture"
-        },
-        {
             "id": 273,
             "src": "components/Eloise_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 274,
-            "src": "components/Dmitri_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 275,
-            "src": "components/Dmitri_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 276,
-            "src": "components/Dmitri_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 277,
-            "src": "components/Dmitri_Right_Pupil.png",
             "type": "texture"
         },
         {
@@ -4881,53 +4836,8 @@
             "type": "texture"
         },
         {
-            "id": 1217,
-            "src": "components/Drusilla_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1218,
-            "src": "components/Drusilla_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1219,
-            "src": "components/Drusilla_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 1220,
-            "src": "components/Drusilla_Right_Eye.png",
-            "type": "texture"
-        },
-        {
             "id": 1221,
             "src": "components/Drusilla_Pelvis.png",
-            "type": "texture"
-        },
-        {
-            "id": 1222,
-            "src": "components/Drusilla_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1223,
-            "src": "components/Drusilla_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1224,
-            "src": "components/Drusilla_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1225,
-            "src": "components/Drusilla_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1226,
-            "src": "components/Drusilla_Right_Pupil.png",
             "type": "texture"
         },
         {
@@ -6446,51 +6356,6 @@
             "type": "texture"
         },
         {
-            "id": 1581,
-            "src": "components/Kurt_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1582,
-            "src": "components/Kurt_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1583,
-            "src": "components/Kurt_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 1584,
-            "src": "components/Kurt_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1585,
-            "src": "components/Kurt_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1586,
-            "src": "components/Kurt_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1587,
-            "src": "components/Kurt_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1588,
-            "src": "components/Kurt_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1589,
-            "src": "components/Kurt_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 1590,
             "src": "components/Nova_Lower_Jaw.png",
             "type": "texture"
@@ -7868,6 +7733,231 @@
         {
             "id": 1896,
             "src": "components/Abigail_ArmLeft_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1897,
+            "src": "components/Ffloyd_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1898,
+            "src": "components/Ffloyd_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1899,
+            "src": "components/Ffloyd_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1900,
+            "src": "components/Ffloyd_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1901,
+            "src": "components/Ffloyd_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1902,
+            "src": "components/Ffloyd_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1903,
+            "src": "components/Ffloyd_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1904,
+            "src": "components/Ffloyd_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1905,
+            "src": "components/Ffloyd_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1906,
+            "src": "components/Kurt_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1907,
+            "src": "components/Kurt_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1908,
+            "src": "components/Kurt_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1909,
+            "src": "components/Kurt_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1910,
+            "src": "components/Kurt_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1911,
+            "src": "components/Kurt_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1912,
+            "src": "components/Kurt_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1913,
+            "src": "components/Kurt_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1914,
+            "src": "components/Kurt_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1915,
+            "src": "components/Kingsley_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1916,
+            "src": "components/Kingsley_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1917,
+            "src": "components/Kingsley_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1918,
+            "src": "components/Kingsley_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1919,
+            "src": "components/Kingsley_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1920,
+            "src": "components/Kingsley_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1921,
+            "src": "components/Kingsley_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1922,
+            "src": "components/Kingsley_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1923,
+            "src": "components/Kingsley_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1924,
+            "src": "components/Dmitri_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1925,
+            "src": "components/Dmitri_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1926,
+            "src": "components/Dmitri_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1927,
+            "src": "components/Dmitri_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1928,
+            "src": "components/Dmitri_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1929,
+            "src": "components/Dmitri_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1930,
+            "src": "components/Dmitri_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1931,
+            "src": "components/Dmitri_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1932,
+            "src": "components/Dmitri_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1933,
+            "src": "components/Drusilla_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1934,
+            "src": "components/Drusilla_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1935,
+            "src": "components/Drusilla_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1936,
+            "src": "components/Drusilla_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1937,
+            "src": "components/Drusilla_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1938,
+            "src": "components/Drusilla_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1939,
+            "src": "components/Drusilla_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1940,
+            "src": "components/Drusilla_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1941,
+            "src": "components/Drusilla_Right_Pupil.png",
             "type": "texture"
         }
     ]

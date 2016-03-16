@@ -331,11 +331,6 @@
             "type": "HEAD"
         },
         {
-            "random": false,
-            "src": "components/definitions/Dmitri_HEAD.json",
-            "type": "HEAD"
-        },
-        {
             "random": true,
             "src": "components/definitions/Eloise_PELVIS.json",
             "type": "PELVIS"
@@ -1281,11 +1276,6 @@
             "type": "TORSO"
         },
         {
-            "random": false,
-            "src": "components/definitions/Drusilla_HEAD.json",
-            "type": "HEAD"
-        },
-        {
             "random": true,
             "src": "components/definitions/Drusilla_PELVIS.json",
             "type": "PELVIS"
@@ -1603,11 +1593,6 @@
         {
             "random": true,
             "src": "components/definitions/Xeflorp_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
-            "src": "components/definitions/Kurt_HEAD.json",
             "type": "HEAD"
         },
         {
@@ -1939,6 +1924,31 @@
             "random": true,
             "src": "components/definitions/Abigail_ArmLeft_ARM.json",
             "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Ffloyd_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kurt_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Kingsley_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Dmitri_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Drusilla_HEAD.json",
+            "type": "HEAD"
         }
     ]
 }

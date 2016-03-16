@@ -171,12 +171,7 @@
     },
     {
         "order": 0,
-        "src": "scenarios/The_Demon_Twins.json",
-        "type": 0
-    },
-    {
-        "order": 0,
-        "src": "scenarios/Love_From_the_Grave.json",
+        "src": "scenarios/My_Love_From_the_Grave.json",
         "type": 0
     },
     {
