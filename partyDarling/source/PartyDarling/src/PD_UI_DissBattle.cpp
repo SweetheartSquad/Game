@@ -90,7 +90,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	punctuationCnt(-1),
 	interjectTimer(0),
 	damage(10.f),
-	comboMultipier(1.f),
+	playerComboMultipier(1.f),
+	enemyComboMultipier(1.f),
 	keyboard(&Keyboard::getInstance()),
 	enemy(nullptr),
 	modeOffensive(true),
@@ -619,7 +620,7 @@ void PD_UI_DissBattle::update(Step * _step){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							// Reset multipier for failed insult damage
-							comboMultipier = 1.f;
+							playerComboMultipier = 1.f;
 							incrementConfidence(-damage);
 							PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();
@@ -632,7 +633,12 @@ void PD_UI_DissBattle::update(Step * _step){
 						// Increment player result timer
 						if(playerResultTimer >= playerResultTimerLength){
 							if (playerResultEffective){
-								// next insult
+								// Insult Success!
+								// Reset enemy combo multipier if first insult was effective
+								if(enemyComboMultipier > 1.f){
+									enemyComboMultipier = 1.f;
+								}
+								// Get next insult
 								incrementConfidence(damage);
 								setPlayerText();
 								playerInsultSpeedMultiplier -= (1.f - MIN_OFFENSE_SPEED_MULTIPLIER) / NUM_OFFENSE_SPEED_CHANGES;
@@ -642,9 +648,9 @@ void PD_UI_DissBattle::update(Step * _step){
 								playerTimerSlider->setValueMax(playerAnswerTimerLength);
 							}
 							else{
-								//fail
+								//Insult Failed
 								// Reset multipier for failed insult
-								comboMultipier = 1.f;
+								playerComboMultipier = 1.f;
 								incrementConfidence(-damage);
 								setUIMode(false);
 							}
@@ -926,14 +932,6 @@ void PD_UI_DissBattle::interject(){
 	interjectBubble->meshTransform->scale(0, 0, 0, false);
 	interjectBubble->setVisible(true);
 
-	if(isPunctuation){
-		// Reset combo multiplier for interjection damage (not multiplied)
-		comboMultipier = 1.f;
-	}
-
-	// Add/Remove confidence
-	incrementConfidence(isPunctuation ? damage : -damage);
-
 	// Trigger interject event
 	sweet::Event * e = new sweet::Event("interject");
 	e->setIntData("success", isPunctuation);
@@ -975,8 +973,6 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 		playerTimerSlider->setValueMax(playerAnswerTimerLength);
 		setPlayerText();
 	}
-
-	comboMultipier = 1.f;
 
 	sweet::Event * e = new sweet::Event("changeturn");
 	e->setIntData("isPlayerTurn", _isOffensive);
@@ -1097,14 +1093,13 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 
 void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
-	_value *= comboMultipier;
-	++comboMultipier;
-
 	if(_value > 0) {
 		// Factor in enemy's defense
-		_value *= playerAttackMultiplier;
+		_value *= playerAttackMultiplier;// * playerComboMultipier;
+		++playerComboMultipier;
 	}else {
-		_value *= enemyAttackMultiplier;
+		_value *= enemyAttackMultiplier * enemyComboMultipier;
+		++enemyComboMultipier;
 	}
 
 	sweet::Event * e = new sweet::Event("confidence");

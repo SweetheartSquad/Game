@@ -181,7 +181,8 @@ public:
 
 	float damage;
 	
-	float comboMultipier;
+	float playerComboMultipier;
+	float enemyComboMultipier;
 
 	Keyboard * keyboard;
 
