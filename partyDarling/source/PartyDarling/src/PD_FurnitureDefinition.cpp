@@ -40,7 +40,7 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 	flare(_jsonDef.get("flare", true).asBool())
 {
 	for(auto outCompJson : _jsonDef["components"]) {
-		components.push_back(new PD_FurnitureComponentDefinition(outCompJson));								
+		components.push_back(new PD_FurnitureComponentDefinition(outCompJson));
 	}
 	for(auto parent : _jsonDef["parents"].getMemberNames()) {
 		PD_ParentDef def;
@@ -68,7 +68,6 @@ PD_FurnitureDefinition::PD_FurnitureDefinition(Json::Value _jsonDef) :
 		Texture * tex = new Texture(ss.str(), false, false, true);
 		textures.push_back(tex);
 	}
-	
 }
 
 PD_FurnitureDefinition::~PD_FurnitureDefinition(){

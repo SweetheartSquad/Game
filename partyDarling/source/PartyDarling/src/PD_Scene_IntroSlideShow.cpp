@@ -46,7 +46,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->load();
-	
+
 	VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(vl);
 	vl->setRationalWidth(1.f, uiLayer);

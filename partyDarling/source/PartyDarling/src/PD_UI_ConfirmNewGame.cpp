@@ -9,7 +9,7 @@ PD_UI_ConfirmNewGame::PD_UI_ConfirmNewGame(BulletWorld * _world, ComponentShader
 	VerticalLinearLayout(_world)
 {
 	verticalAlignment = kMIDDLE;
-	
+
 	TextArea * text = new TextArea(_world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, _textShader);
 	addChild(text);
 	text->setWrapMode(kWORD);
@@ -49,7 +49,7 @@ PD_UI_ConfirmNewGame::PD_UI_ConfirmNewGame(BulletWorld * _world, ComponentShader
 	btnCancel->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
 	btnCancel->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
 	//optionsText->setMarginTop(0.05f);
-	
+
 	invalidateLayout();
 }
 

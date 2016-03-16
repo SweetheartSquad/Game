@@ -24,7 +24,6 @@
 #include <Colour.h>
 #include <LabRoom.h>
 
-
 #include <PD_Character.h>
 #include <PD_PhraseGenerator_Incidental.h>
 #include "PD_Scenario.h"
@@ -65,7 +64,7 @@ public:
 
 	BulletWorld * bulletWorld;
 	BulletDebugDrawer * debugDrawer;
-	
+
 	PD_UI_Inventory * uiInventory;
 	PD_Item * selectedItem;
 	PD_UI_Bubble * uiBubble;
@@ -75,8 +74,7 @@ public:
 	PD_UI_Map * uiMap;
 	PD_UI_Fade * uiFade;
 	PD_UI_Message * uiMessage;
-	
-	
+
 	ComponentShaderBase * toonShader;
 	ComponentShaderBase * itemShader;
 	ComponentShaderBase * characterShader;
@@ -92,7 +90,7 @@ public:
 	glm::vec3 lightStart;
 	glm::vec3 lightEnd;
 	float lightIntensity;
-	
+
 	// how much the screen has transitioned in
 	// i.e. 0 is completely out, 1 is normal
 	float transition;
@@ -104,10 +102,9 @@ public:
 	PD_Scene_Main(PD_Game * _game);
 	~PD_Scene_Main();
 
-
 	// the room which the player is currently in
 	Room * currentRoom;
-	
+
 	// Moves to a new room
 	// if _relative is true, currentHousePosition += _movement
 	// if _relative is false, currentHousePosition = _movement
@@ -123,7 +120,6 @@ public:
 	Scenario * introScenario;
 	Scenario * labScenario;
 	std::vector<Scenario *> activeScenarios;
-
 
 	void setupEventListeners();
 	void setupConditions();
@@ -142,7 +138,6 @@ public:
 	std::vector<glm::ivec2> getAdjacentCells(glm::ivec2 _pos, std::map<std::pair<int,int>, bool> &_cells, int _maxSize);
 	// trigger a diss battle with another character
 	void triggerDissBattle(PD_Character * _enemy, bool _playerStarts);
-
 
 	// creates a texture which contains whatever is currently rendered, placed into a circle with a pink border
 	Texture * getToken();

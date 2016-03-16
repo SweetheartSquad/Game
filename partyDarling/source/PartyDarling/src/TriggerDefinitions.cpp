@@ -9,7 +9,6 @@
 #include <PD_UI_Text.h>
 
 void PD_Scene_Main::setupConditions(){
-	
 	(*PD_ResourceManager::conditionImplementations)["checkState"] = [this](sweet::Event * _event){
 		//Check if the character is in a certain state.
 		// CHARACTER character
@@ -61,7 +60,7 @@ void PD_Scene_Main::setupConditions(){
 		// check an integer variable that has been set
 		// STRING name
 		// INT desiredValue
-		
+
 		std::string name = _event->getStringData("name");
 		int desiredValue = _event->getIntData("desiredValue", INT_MAX);
 		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
@@ -71,7 +70,7 @@ void PD_Scene_Main::setupConditions(){
 		}
 
 		int curVal = scenario->variables->getIntData(name, INT_MAX);
-		
+
 		return curVal == desiredValue;
 	};
 
@@ -79,7 +78,7 @@ void PD_Scene_Main::setupConditions(){
 		// check an integer variable that has been set
 		// STRING name
 		// STRING desiredValue
-		
+
 		std::string name = _event->getStringData("name");
 		std::string desiredValue = _event->getStringData("desiredValue", "NO_VALUE");
 		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
@@ -95,7 +94,7 @@ void PD_Scene_Main::setupConditions(){
 		// check an integer variable that has been set
 		// STRING name
 		// INT desiredValue
-		
+
 		std::string name = _event->getStringData("name");
 		int desiredValue = _event->getIntData("desiredValue", INT_MAX);
 		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
@@ -105,7 +104,7 @@ void PD_Scene_Main::setupConditions(){
 		}
 
 		int curVal = PD_Game::progressManager->getInt(name);
-		
+
 		return curVal == desiredValue;
 	};
 
@@ -113,7 +112,7 @@ void PD_Scene_Main::setupConditions(){
 		// check an integer variable that has been set
 		// STRING name
 		// STRING desiredValue
-		
+
 		std::string name = _event->getStringData("name");
 		std::string desiredValue = _event->getStringData("desiredValue", "NO_VALUE");
 		Scenario * scenario = PD_Listing::listingsById[_event->getStringData("scenario")]->scenario;
@@ -132,7 +131,6 @@ void PD_Scene_Main::setupConditions(){
 }
 
 void PD_Scene_Main::setupEventListeners(){
-	
 	PD_ResourceManager::scenario->eventManager->addEventListener("changeState", [](sweet::Event * _event){
 		std::string characterName = _event->getStringData("Character");
 		std::string stateName = _event->getStringData("State");
@@ -150,7 +148,7 @@ void PD_Scene_Main::setupEventListeners(){
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("setInt", [](sweet::Event * _event){
 		// change/create a local int variable for a specific scenario
-		// STRING name 
+		// STRING name
 		// INT value
 		std::string name = _event->getStringData("name");
 		int value = _event->getIntData("value", INT_MAX);
@@ -164,7 +162,7 @@ void PD_Scene_Main::setupEventListeners(){
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("setString", [](sweet::Event * _event){
 		// change/create a local string variable for a specific scenario
-		// STRING name 
+		// STRING name
 		// STRING value
 		std::string name = _event->getStringData("name");
 		std::string value = _event->getStringData("value", "NO_VALUE");
@@ -178,7 +176,7 @@ void PD_Scene_Main::setupEventListeners(){
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("setGlobalInt", [](sweet::Event * _event){
 		// change/create a local int variable for a specific scenario
-		// STRING name 
+		// STRING name
 		// INT value
 		std::string name = _event->getStringData("name");
 		int value = _event->getIntData("value", INT_MAX);
@@ -191,11 +189,11 @@ void PD_Scene_Main::setupEventListeners(){
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("setGlobalString", [](sweet::Event * _event){
 		// change/create a local string variable for a specific scenario
-		// STRING name 
+		// STRING name
 		// STRING value
 		std::string name = _event->getStringData("name");
 		std::string value = _event->getStringData("value", "NO_VALUE");
-	
+
 		if(name == "" || value == "NO_VALUE") {
 			ST_LOG_ERROR("Missing argument in trigger setString");
 		}
@@ -205,18 +203,17 @@ void PD_Scene_Main::setupEventListeners(){
 	// Called when going through a door
 	PD_ResourceManager::scenario->eventManager->addEventListener("navigate", [this](sweet::Event * _event){
 		glm::ivec2 navigation(_event->getIntData("x"), _event->getIntData("y"));
-		
+
 		PD_ResourceManager::scenario->getAudio("doorOpen")->sound->play();
 		player->disable();
 		uiBubble->disable();
-		
-		
+
 		transition = 0.f;
 		transitionTarget = 1.f;
 
 		screenSurfaceShader->bindShader();
 		wipeColour = Colour::getRandomFromHsvMean(glm::ivec3(300, 67, 61), glm::ivec3(30, 25, 25));
-		
+
 		Timeout * t = new Timeout(0.55f, [this, navigation](sweet::Event * _event){
 			navigate(navigation);
 
@@ -240,26 +237,24 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 	});
 
-	
 	// fades
 	PD_ResourceManager::scenario->eventManager->addEventListener("fadeIn", [this](sweet::Event * _event){
 		uiFade->fadeIn(glm::uvec3(
 			_event->getIntData("r"),
 			_event->getIntData("g"),
 			_event->getIntData("b")
-		),
-		_event->getIntData("length") / 1000.f);
+			),
+			_event->getIntData("length") / 1000.f);
 	});
 	PD_ResourceManager::scenario->eventManager->addEventListener("fadeOut", [this](sweet::Event * _event){
 		uiFade->fadeOut(glm::uvec3(
 			_event->getIntData("r"),
 			_event->getIntData("g"),
 			_event->getIntData("b")
-		),
-		_event->getIntData("length") / 1000.f);
+			),
+			_event->getIntData("length") / 1000.f);
 	});
 
-	
 	PD_ResourceManager::scenario->eventManager->addEventListener("locked", [this](sweet::Event * _event){
 		// Triggered when the player tries to open a locked door
 		uiBubble->options.front()->label->setText("This door is locked.");
@@ -286,20 +281,19 @@ void PD_Scene_Main::setupEventListeners(){
 
 		std::transform(stat.begin(), stat.end(), stat.begin(), ::tolower);
 		if(stat == "strength") {
-			player->dissStats->incrementDefense(delta);	
+			player->dissStats->incrementDefense(delta);
 		}else if(stat == "defense") {
-			player->dissStats->incrementDefense(delta);		
+			player->dissStats->incrementDefense(delta);
 		}else if(stat == "insight") {
-			player->dissStats->incrementInsight(delta);		
+			player->dissStats->incrementInsight(delta);
 		}else if(stat == "sass") {
-			player->dissStats->incrementSass(delta);		
+			player->dissStats->incrementSass(delta);
 		}else {
 			ST_LOG_ERROR_V("Invalid argument provided for argument 'stat' in trigger changeDISSStat");
 		}
 
 		uiDissStats->playChangeDissStat();
 	});
-
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("addFriendToken", [this](sweet::Event * _event){
 		// Trigger
@@ -323,7 +317,7 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 		auto listing = PD_Listing::listingsById[scenarioId];
 		PD_Item * item = listing->items[itemId];
-		
+
 		if(newOwnerCharId == prevOwnerCharId) {
 			ST_LOG_ERROR_V("Invalid arguments is trigger changeOwnership - owner == prevOwner");
 		}
@@ -354,7 +348,7 @@ void PD_Scene_Main::setupEventListeners(){
 				if (prevOwnerCharId == "0"){
 					uiMessage->loseItem(item);
 					uiInventory->removeItem(item);
-				}	
+				}
 			}
 			if(prevOwnerCharId != "0"){
 				for(unsigned long int i = 0; i < listing->characters[prevOwnerCharId]->items.size(); ++i) {
@@ -374,7 +368,7 @@ void PD_Scene_Main::setupEventListeners(){
 		std::string emote = _event->getStringData("emote");
 		float duration = _event->getFloatData("duration", 9999);
 		std::string scenario = _event->getStringData("scenario");
-		
+
 		if(charId == "" || emote == "" || abs(duration - 9999) <= FLT_EPSILON) {
 			ST_LOG_ERROR_V("Missing field in trigger emote");
 		}
@@ -407,9 +401,9 @@ void PD_Scene_Main::setupEventListeners(){
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
-		// Launch a diss battle with the selected character. 
+		// Launch a diss battle with the selected character.
 		// playerInterjectInit is a boolean. If true, the player interjects first, if fasle, the player insults first.
-		
+
 		// CHARACTER oponent = character the player is fighting
 		// INT(BOOLEAN) playerInterjectInit = true = player interects first, false = player insults first
 		std::string opponent = _event->getStringData("opponent");
@@ -419,9 +413,9 @@ void PD_Scene_Main::setupEventListeners(){
 		if(opponent == "") {
 			ST_LOG_ERROR_V("Missing field on trigger triggerDissBattle");
 		}
-		
+
 		// TODO - Configure addtional data once the diss battle is set up for it
-		
+
 		PD_Character * enemy = PD_Listing::listingsById[scenario]->characters[opponent];
 		uiDialogue->setVisible(false);
 		uiBubble->disable();
@@ -449,7 +443,7 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
-		
+
 		if(visible == 1) {
 			person->show();
 
@@ -488,7 +482,7 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 
 		PD_Character * person = PD_Listing::listingsById[scenario]->characters[character];
-		
+
 		if(visible == 1) {
 			person->enable();
 		}else {
@@ -498,18 +492,18 @@ void PD_Scene_Main::setupEventListeners(){
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("goToNextLevel", [this](sweet::Event * _event){
 		uiDialogue->setVisible(false);
-		uiBubble->disable();		
+		uiBubble->disable();
 		if(PD_Game::progressManager->plotPosition != kEPILOGUE){
 			++PD_Game::progressManager->plotPosition;
-			// Make sure to save the game 
+			// Make sure to save the game
 			PD_Game::progressManager->save(player, uiDissBattle);
 			game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(game, PD_Game::progressManager->plotPosition);
-			game->switchScene("intermission", true);	
+			game->switchScene("intermission", true);
 		}else {
 			PD_Game::progressManager->eraseSave();
 			PD_Game::progressManager->plotPosition = kBEGINNING;
 			dynamic_cast<PD_Scene_MenuMain *>(game->scenes.at("menu"))->continueText->disable();
- 			game->switchScene("menu", true);
+			game->switchScene("menu", true);
 		}
 	});
 

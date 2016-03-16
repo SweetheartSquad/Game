@@ -91,11 +91,11 @@ void PD_UI_DissCard::init(){
 		slider->setRationalHeight(0.5f, xpContainer);
 
 		slider->thumb->setVisible(false);
-	
+
 		slider->setBackgroundColour(1,1,1,1);
 		slider->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-TRACK")->texture);
 		slider->background->mesh->setScaleMode(GL_NEAREST);
-	
+
 		slider->fill->setBackgroundColour(1,1,1,1);
 		slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-FILL")->texture);
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
@@ -106,7 +106,6 @@ void PD_UI_DissCard::init(){
 		level->setRationalHeight(1.f, xpContainer);
 		level->setMarginLeft(0.05f);
 		level->horizontalAlignment = kLEFT;
-
 	}else{
 		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 		layout->addChild(label);
@@ -192,18 +191,22 @@ void PD_UI_DissCard::animateStar(int _idx, int _dissStat, int _delta, float _p){
 
 	int newStat = _dissStat + _delta;
 	if(increase){
+		float s = Easing::easeOutElastic(_p, 0.f, 1.f, 1.f, -1, 4.f);
 		for(i; i > 0; --i){
 			if(_dissStat + i < 5){
-				stars[_idx][newStat - i]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat - i]->nodeUIParent);
+				stars[_idx][newStat - i]->setRationalHeight(s, stars[_idx][newStat - i]->nodeUIParent);
+				stars[_idx][newStat - i]->autoResize();
 			}
 		}
 	}else{
+		float s =  Easing::easeInBack(_p, 1.f, -1.f, 1.f, 10.f);
 		for(i; i > 0; --i){
 			if(_dissStat - i >= 0){
-				stars[_idx][newStat + i - 1]->setRationalHeight(increase ? _p : 1 - _p, stars[_idx][newStat + i - 1]->nodeUIParent);
+				stars[_idx][newStat + i - 1]->setRationalHeight(s, stars[_idx][newStat + i - 1]->nodeUIParent);
+				stars[_idx][newStat + i]->autoResize();
 			}
 		}
 	}
-	
+
 	invalidateLayout();
 }

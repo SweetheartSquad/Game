@@ -33,7 +33,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	image->setSquareWidth(1.f);
 	image->background->mesh->setScaleMode(GL_NEAREST);
 
-	textBubble = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("DISSCARD-BUBBLE"));
+	textBubble = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	addChild(textBubble);
 	textBubble->setBorder(15);
 	textBubble->setRationalHeight(0.05f, this);
@@ -41,7 +41,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 
 	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 	textBubble->addChild(text);
-	text->setRationalHeight(1.f, textBubble);
+	text->setHeight(text->font->getLineHeight() * 1.1f);
 	text->setRationalWidth(1.f, textBubble);
 	text->horizontalAlignment = kCENTER;
 	text->verticalAlignment = kMIDDLE;

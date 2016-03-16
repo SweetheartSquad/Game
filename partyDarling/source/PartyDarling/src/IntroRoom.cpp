@@ -21,16 +21,16 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	doors.insert(std::make_pair(PD_Door::kSOUTH, doorSouth));
 	doors.insert(std::make_pair(PD_Door::kEAST, doorEast));
 	doors.insert(std::make_pair(PD_Door::kWEST, doorWest));
-	
+
 	for(auto d : doors){
 		//childTransform->addChild(d.second);
 		addComponent(d.second);
 	}
-	
+
 	doorEast->rotatePhysical(-90, 0, 1, 0);
 	doorWest->rotatePhysical(90, 0, 1, 0);
 	doorSouth->rotatePhysical(180, 0, 1, 0);
-	
+
 	TriMesh * meshFlats = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(0);
 	TriMesh * meshDetail = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(1);
 	meshFlats->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-FLATS")->texture);
@@ -44,7 +44,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 
 	colliderMesh = new TriMesh(true);
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
-	
+
 	PD_Listing * listing = PD_Listing::listings[_introScenario];
 	AssetCharacter * c = nullptr;
 	auto it = _introScenario->assets["character"].begin();
@@ -68,7 +68,7 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	}
 
 	ceiling->translatePhysical(glm::vec3(0, ROOM_HEIGHT * ROOM_TILE, 0), false);
-	
+
 	ceiling->setVisible(false);
 	floor->setVisible(false);
 
@@ -120,9 +120,8 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 		doors[PD_Door::kWEST]->translatePhysical(glm::vec3(backward,0,0));
 		angle = -90;
 		break;
-
 	}
-	
+
 	if(angle != 0){
 		t.rotate(angle, 0, 1, 0, kOBJECT);
 		visibleMesh->firstParent()->rotate(angle, 0, 1, 0, kOBJECT);

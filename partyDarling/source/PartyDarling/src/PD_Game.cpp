@@ -35,7 +35,6 @@ PD_Game::PD_Game() :
 {
 	printFPS = false;
 
-
 	scenes["loadingScreen"] = new PD_Scene_LoadingScreen(this);
 	scenes["options"] = new PD_Scene_MenuOptions(this);
 
@@ -53,6 +52,16 @@ PD_Game::~PD_Game(){
 	if(bgmTrack != nullptr){
 		bgmTrack->decrementAndDelete();
 	}
+
+	for(auto t : RoomBuilder::wallTex){
+		t.second->decrementAndDelete();
+	}for(auto t : RoomBuilder::ceilTex){
+		t.second->decrementAndDelete();
+	}for(auto t : RoomBuilder::floorTex){
+		t.second->decrementAndDelete();
+	}
+
+	delete progressManager;
 }
 
 void PD_Game::update(Step * _step){

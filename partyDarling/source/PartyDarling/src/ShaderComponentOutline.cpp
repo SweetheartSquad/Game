@@ -1,4 +1,4 @@
-#pragma 
+#pragma
 
 #include "ShaderComponentOutline.h"
 #include "shader/ShaderVariables.h"
@@ -28,9 +28,9 @@ std::string ShaderComponentOutline::getVertexVariablesString(){
 }
 
 std::string ShaderComponentOutline::getFragmentVariablesString(){
-	return 
-		DEFINE + SHADER_COMPONENT_TEXTURE + ENDL + 
-		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_TEXTURES) + "]" + SEMI_ENDL + 
+	return
+		DEFINE + SHADER_COMPONENT_TEXTURE + ENDL +
+		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_TEXTURES) + "]" + SEMI_ENDL +
 		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + SEMI_ENDL;
 }
 
@@ -39,37 +39,37 @@ std::string ShaderComponentOutline::getVertexBodyString(){
 }
 
 std::string ShaderComponentOutline::getFragmentBodyString(){
-    std::stringstream res;
-    res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
-		
+	std::stringstream res;
+	res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
+
 	res << "vec4 textureTemp;" << ENDL;
 	res << "vec4 textureRes;" << ENDL;
 	for (unsigned long int i = 0; i < MAX_TEXTURES; ++i){
-        res << "\tif (" + GL_UNIFORM_ID_NUM_TEXTURES + " > " << i << "){" << ENDL;
-            if(i == 0){
-                res << "\t\ttextureTemp = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
-            }
-            else{
-                res << "\t\ttextureTemp = mix(textureRes, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0)" << SEMI_ENDL;
-            }
-            res << "\t\ttextureRes.rgba = textureTemp.rgba" << SEMI_ENDL;
-			res << "if(textureRes.a <= 0){" << ENDL;
-            res << "\t\ttextureRes.rgb = vec3(1)" << SEMI_ENDL;
-			for(signed long int x = -1; x <= 1; x += 2){
-				for(signed long int y = -1; y <= 1; y += 2){
-					res << "\t\ttextureRes.a = max(textureRes.a, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << " + vec2(" << x*0.01f << "," << y*0.01f << ")).a)" << SEMI_ENDL;
-				}
+		res << "\tif (" + GL_UNIFORM_ID_NUM_TEXTURES + " > " << i << "){" << ENDL;
+		if(i == 0){
+			res << "\t\ttextureTemp = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
+		}
+		else{
+			res << "\t\ttextureTemp = mix(textureRes, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0)" << SEMI_ENDL;
+		}
+		res << "\t\ttextureRes.rgba = textureTemp.rgba" << SEMI_ENDL;
+		res << "if(textureRes.a <= 0){" << ENDL;
+		res << "\t\ttextureRes.rgb = vec3(1)" << SEMI_ENDL;
+		for(signed long int x = -1; x <= 1; x += 2){
+			for(signed long int y = -1; y <= 1; y += 2){
+				res << "\t\ttextureRes.a = max(textureRes.a, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << " + vec2(" << x*0.01f << "," << y*0.01f << ")).a)" << SEMI_ENDL;
 			}
-			res << "}" << ENDL;
-        res << "\t}" << ENDL;
-    }
-	
+		}
+		res << "}" << ENDL;
+		res << "\t}" << ENDL;
+	}
+
 	res << "modFrag *= textureRes" << SEMI_ENDL;
 	res << "}" << ENDL;
 	if(alphaDiscardThreshold >= 0){
 		res << "if(modFrag.a <= " << alphaDiscardThreshold << "){discard;}" << ENDL;
 	}
-    return res.str();
+	return res.str();
 }
 
 std::string ShaderComponentOutline::getOutColorMod(){
@@ -121,12 +121,12 @@ void ShaderComponentOutline::configureUniforms(sweet::MatrixStack* _matrixStack,
 
 	/*SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	//Setup the texture for the current animation
-	if(spriteMesh != nullptr){	
-		if(spriteMesh->animatedTexture != nullptr){
-			glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
-			glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
-			glUniform1i(texSamLoc, numTextures + 1);
-			glUniform1i(texNumLoc, numTextures + 1);
-		}
+	if(spriteMesh != nullptr){
+	if(spriteMesh->animatedTexture != nullptr){
+	glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
+	glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
+	glUniform1i(texSamLoc, numTextures + 1);
+	glUniform1i(texNumLoc, numTextures + 1);
+	}
 	}*/
 }

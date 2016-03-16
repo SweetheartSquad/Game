@@ -64,8 +64,6 @@ PD_ResourceManager::PD_ResourceManager(){
 	componentTextures = new PD_Scenario("assets/component-textures.json");
 
 	resources.push_back(scenario);
-	resources.push_back(itemTextures);
-	resources.push_back(componentTextures);
 
 	// add door asset manually
 	for(unsigned long int i = 1; i <= 5; ++i){
@@ -151,10 +149,10 @@ PD_ResourceManager::PD_ResourceManager(){
 				parsingSuccessful = reader.parse( jsonLoaded, animStep );
 				if(!parsingSuccessful){
 					Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
-				}else{					
+				}else{
 					std::vector<PD_CharacterAnimationStep> steps;
 					for(auto step : animStep) {
-						steps.push_back(PD_CharacterAnimationStep(step));	
+						steps.push_back(PD_CharacterAnimationStep(step));
 					}
 					AnimationDef def;
 					def.steps = steps;
@@ -192,6 +190,8 @@ PD_ResourceManager::PD_ResourceManager(){
 			}
 		}
 	}
+	/*
+	Uncomment if we want to actually use emotes
 	{
 		Json::Value root;
 		Json::Reader reader;
@@ -206,8 +206,8 @@ PD_ResourceManager::PD_ResourceManager(){
 				SpriteSheet * spriteSheet = new SpriteSheet(tex);
 				SpriteSheetAnimation * mainAnim = new SpriteSheetAnimation(emote["secondsPerFrame"].asFloat());
 				mainAnim->pushFramesInRange(
-					0, emote["frames"].asInt() - 1, 
-					emote["frameWidth"].asInt(), 
+					0, emote["frames"].asInt() - 1,
+					emote["frameWidth"].asInt(),
 					emote["frameHeight"].asInt(),
 					tex->width, tex->height);
 				spriteSheet->addAnimation("main", mainAnim);
@@ -218,7 +218,7 @@ PD_ResourceManager::PD_ResourceManager(){
 			}
 		}
 	}
-
+	*/
 	for(unsigned long int i = 1; i < 37; ++i) {
 		voices.push_back(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
 	}
@@ -228,7 +228,7 @@ PD_ResourceManager::PD_ResourceManager(){
 
 PD_ResourceManager::~PD_ResourceManager(){
 	unload();
-	
+
 	for(auto e : emotes){
 		delete e.second;
 	}
@@ -245,6 +245,9 @@ PD_ResourceManager::~PD_ResourceManager(){
 		delete propDefinitions.back();
 		propDefinitions.pop_back();
 	}
+
+	delete itemTextures;
+	delete componentTextures;
 
 	destruct();
 }

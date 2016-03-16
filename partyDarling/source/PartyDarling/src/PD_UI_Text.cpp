@@ -20,12 +20,12 @@ PD_UI_Text::PD_UI_Text(BulletWorld* _bulletWorld, Font* _font, ComponentShaderTe
 	eventManager->addEventListener("mouseup", [this](sweet::Event * _event){
 		curTextColour = overColour;
 	});
-	
+
 	eventManager->addEventListener("mousein", [this](sweet::Event * _event){
 		curTextColour = overColour;
 		PD_ResourceManager::scenario->getAudio("hover")->sound->play();
 	});
-	
+
 	eventManager->addEventListener("mouseout", [this](sweet::Event * _event){
 		curTextColour = textColour;
 	});
@@ -75,10 +75,9 @@ bool PD_UI_Text::isEnabled(){
 }
 
 void PD_UI_Text::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	
 	glm::vec4 curCol = static_cast<ComponentShaderText *>(textShader)->textComponent->getColor();
 
-	bool textColourDirty = abs(curCol.x - curTextColour.x) >= FLT_EPSILON ||  
+	bool textColourDirty = abs(curCol.x - curTextColour.x) >= FLT_EPSILON ||
 		abs(curCol.y - curTextColour.y) >= FLT_EPSILON ||
 		abs(curCol.z - curTextColour.z) >= FLT_EPSILON ||
 		abs(curCol.a - enabled ? 1.f : 0.5f >= FLT_EPSILON);
@@ -86,7 +85,7 @@ void PD_UI_Text::render(sweet::MatrixStack* _matrixStack, RenderOptions* _render
 	if(textColourDirty){
 		static_cast<ComponentShaderText*>(textShader)->setColor(curTextColour.r, curTextColour.g, curTextColour.b, enabled ? 1.f : 0.5f);
 	}
-	
+
 	TextArea::render(_matrixStack,  _renderOptions);
 
 	if(textColourDirty){

@@ -41,7 +41,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
 		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
 		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
-	}	
+	}
 #endif
 }
 
@@ -49,7 +49,7 @@ bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
 	// convert the world space position to object space by multiplying by the inverse model matrix
 	// NOTE: since textures are 2D we discard the z and w after the matrix transformation
 	glm::vec2 t(glm::inverse(childTransform->getCumulativeModelMatrix()) * glm::vec4(_position, 1));
-	
+
 	// convert to UV coordinates by normalizing within the mesh's bounding box
 	// NOTE: if the UVs have been altered from the standard plane setup, this won't work
 	const sweet::Box box = mesh->calcBoundingBox();
@@ -66,7 +66,7 @@ bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){
 	// account for errors
 	t.x = std::min(mesh->textures.at(0)->width-1.f, std::max(0.f, t.x));
 	t.y = std::min(mesh->textures.at(0)->height-1.f, std::max(0.f, t.y));
-	
+
 	// return true if the pixel at the calculated coordinate is opaque (i.e. the alpha channel is 0xFF)
 	return sweet::TextureUtils::getPixel(mesh->textures.at(0), t.x, t.y, 3) == 255;
 }
@@ -78,7 +78,7 @@ bool PD_Item::actuallyHovered(glm::vec3 _position){
 	return true;
 }
 
-void PD_Item::addToWorld(){	
+void PD_Item::addToWorld(){
 	setColliderAsBoundingBox();
 	createRigidBody(0);
 	body->setAngularFactor(btVector3(1,1,1)); // prevent from rotating the physics body at all

@@ -2,7 +2,7 @@
 
 #include <sweet/UI.h>
 
-#define MAX_DISS_LEVEL 5
+#define MAX_DISS_LEVEL 5.f
 
 class Player;
 class PD_Character;
@@ -31,5 +31,4 @@ public:
 	int getInsight();
 	int getStrength();
 	int getSass();
-	
 };

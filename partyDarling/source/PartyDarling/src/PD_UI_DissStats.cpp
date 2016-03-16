@@ -30,7 +30,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	dissBattleCards->setMarginLeft(0.3f);
 	dissBattleCards->horizontalAlignment = kCENTER;
 	dissBattleCards->verticalAlignment = kMIDDLE;
-	
+
 	playerCard = new PD_UI_DissCard(_bulletWorld, player);
 	dissBattleCards->addChild(playerCard);
 	playerCard->setRationalHeight(0.3f, dissBattleCards);
@@ -112,8 +112,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 
 	dissBattleXPGainTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		if(player->experience >= 100){
-
-			PD_ResourceManager::scenario->getAudio("LEVEL_UP")->sound->play();	
+			PD_ResourceManager::scenario->getAudio("LEVEL_UP")->sound->play();
 
 			// LEVEL UP
 			player->dissStats->setLastStats(); // so we get accurate increments
@@ -123,8 +122,9 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			player->dissStats->incrementSass();
 			player->dissStats->incrementStrength();
 			playerCard->updateStats(false);
-			playerCard->animateNewStats(FLT_EPSILON);
-			playerCard->autoResize();
+			playerCard->animateNewStats(0.f);
+			invalidateLayout();
+			autoResize();
 			++player->level;
 			playerCard->setLevel(player->level);
 
@@ -132,18 +132,17 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			levelUp->setRationalHeight(0.f, levelUpContainer);
 			levelUp->setSquareWidth(1.f);
 			invalidateLayout();
-			
+
 			dissBattleLevelUpTimeout->restart();
 		}else{
 			// NORMAL
 			dissBattleXPPause->restart();
 		}
-		
 	});
 
 	dissBattleXPGainTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		
+
 		player->experience = prevXP + p * wonXP;
 	});
 	childTransform->addChild(dissBattleXPGainTimeout, false);
@@ -183,13 +182,12 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			float statP = LEVEL_UP_DURATION * p / CHANGE_STAT_DURATION;
 			playerCard->animateNewStats(statP);
 		}
-		
 
 		invalidateLayout();
 	});
 	childTransform->addChild(dissBattleLevelUpTimeout, false);
 
-	dissBattleChangeStatTimeout = new Timeout(2.f, [this](sweet::Event * _event){
+	dissBattleChangeStatTimeout = new Timeout(1.5f, [this](sweet::Event * _event){
 		// end and this
 		enemyCard->setVisible(true);
 		vs->setVisible(true);
@@ -201,8 +199,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	dissBattleChangeStatTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
 
-		if(2.f * p <= CHANGE_STAT_DURATION){
-			float statP = 2.f * p / CHANGE_STAT_DURATION;
+		if(1.5f * p <= CHANGE_STAT_DURATION){
+			float statP = 1.5f * p / CHANGE_STAT_DURATION;
 			playerCard->animateNewStats(statP);
 		}
 	});
@@ -220,7 +218,7 @@ void PD_UI_DissStats::playIntro(PD_Character * _enemy){
 	playerCard->setVisible(false);
 	vs->setVisible(false);
 	enemyCard->setVisible(false);
-	
+
 	playerCard->childTransform->translate(glm::vec3(-playerCard->getWidth(true,false)*0.5f, -playerCard->getHeight(true,false)*0.5f, 0), false);
 	vs->childTransform->translate(glm::vec3(-vs->getWidth(true,false)*0.5f, -vs->getHeight(true,false)*0.5f, 0), false);
 	enemyCard->childTransform->translate(glm::vec3(-enemyCard->getWidth(true,false)*0.5f, -enemyCard->getHeight(true,false)*0.5f, 0), false);
@@ -242,7 +240,6 @@ void PD_UI_DissStats::playChangeDissStat(){
 	vs->setVisible(false);
 	playerCard->updateStats(false);
 	playerCard->animateNewStats(0.f);
-	playerCard->autoResize();
 
 	dissBattleChangeStatTimeout->restart();
 }

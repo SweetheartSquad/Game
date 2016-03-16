@@ -351,11 +351,6 @@
             "type": "LEG"
         },
         {
-            "random": false,
-            "src": "components/definitions/Locke_TORSO.json",
-            "type": "TORSO"
-        },
-        {
             "random": true,
             "src": "components/definitions/South_HEAD.json",
             "type": "HEAD"
@@ -369,11 +364,6 @@
             "random": true,
             "src": "components/definitions/Locke_HEAD.json",
             "type": "HEAD"
-        },
-        {
-            "random": true,
-            "src": "components/definitions/Locke_PELVIS.json",
-            "type": "PELVIS"
         },
         {
             "random": false,
@@ -886,16 +876,6 @@
             "type": "HEAD"
         },
         {
-            "random": false,
-            "src": "components/definitions/Abigail_arm_ARM.json",
-            "type": "ARM"
-        },
-        {
-            "random": false,
-            "src": "components/definitions/Abigail_gunarm_ARM.json",
-            "type": "ARM"
-        },
-        {
             "random": true,
             "src": "components/definitions/Toby_LEG.json",
             "type": "LEG"
@@ -1084,11 +1064,6 @@
             "random": true,
             "src": "components/definitions/Ronda_PELVIS.json",
             "type": "PELVIS"
-        },
-        {
-            "random": true,
-            "src": "components/definitions/Wilbur_HEAD.json",
-            "type": "HEAD"
         },
         {
             "random": true,
@@ -1677,11 +1652,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/Head_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Paige_HEAD.json",
             "type": "HEAD"
         },
@@ -1754,11 +1724,6 @@
             "random": false,
             "src": "components/definitions/EmptyPelvis_PELVIS.json",
             "type": "PELVIS"
-        },
-        {
-            "random": false,
-            "src": "components/definitions/PortraitOmar_TORSO.json",
-            "type": "TORSO"
         },
         {
             "random": true,
@@ -1914,6 +1879,66 @@
             "random": false,
             "src": "components/definitions/Freddy_PELVIS.json",
             "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Peony_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Wilbur_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/PortraitOmar_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Wilbur_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Wilbur_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Wilbur_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Remi_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Sadie_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Locke_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Locke_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Abilgail_Right_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Abigail_ArmLeft_ARM.json",
+            "type": "ARM"
         }
     ]
 }
