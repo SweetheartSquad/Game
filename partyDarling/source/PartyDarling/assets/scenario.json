@@ -676,25 +676,73 @@
     {
       "id": "MAPCELL",
       "type": "texture",
-      "src": "UI/mapCell.png",
+      "src": "UI/map/mapCell.png",
       "generateMipmaps":false
     },
     {
       "id": "MAPCELL-UNENTERED",
       "type": "texture",
-      "src": "UI/mapCell -unentered.png",
+      "src": "UI/map/mapCell -unentered.png",
       "generateMipmaps":false
     },
     {
       "id": "MAPCELL-LOCKED",
       "type": "texture",
-      "src": "UI/mapCell -locked.png",
+      "src": "UI/map/mapCell -locked.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-B",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-b.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-T",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-t.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-R",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-r.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-L",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-l.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-BR",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-br.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-BL",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-bl.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-TL",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-tl.png",
+      "generateMipmaps":false
+    },
+    {
+      "id": "MAPCELL-BORDER-TR",
+      "type": "texture",
+      "src": "UI/map/mapCell -border-tr.png",
       "generateMipmaps":false
     },
     {
       "id": "COMPASS",
       "type": "texture",
-      "src": "UI/compass.png",
+      "src": "UI/map/compass.png",
       "generateMipmaps":false
     },
 
