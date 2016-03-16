@@ -41,7 +41,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 
 	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 	textBubble->addChild(text);
-	text->setHeight(text->font->getLineHeight() * 1.1f);
+	text->setHeight(text->font->getLineHeight() * 1.2f);
 	text->setRationalWidth(1.f, textBubble);
 	text->horizontalAlignment = kCENTER;
 	text->verticalAlignment = kMIDDLE;
@@ -64,6 +64,8 @@ PD_UI_Message::~PD_UI_Message(){
 void PD_UI_Message::gainItem(PD_Item * _item){
 	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
 		setVisible(false);
+		image->setSquareWidth(1.f);
+		invalidateLayout();
 	});
 	t->eventManager->addEventListener("start", [this, _item](sweet::Event * _event){
 		setVisible(true);
@@ -85,6 +87,8 @@ void PD_UI_Message::gainItem(PD_Item * _item){
 void PD_UI_Message::loseItem(PD_Item * _item){
 	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
 		setVisible(false);
+		image->setSquareWidth(1.f);
+		invalidateLayout();
 	});
 	t->eventManager->addEventListener("start", [this, _item](sweet::Event * _event){
 		setVisible(true);
@@ -112,8 +116,9 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 
 		image->background->mesh->replaceTextures(_tex);
 
-		image->setRationalHeight(1.f, image->nodeUIParent);
 		image->setSquareWidth(1.f);
+		invalidateLayout();
+
 		++_tex->referenceCount;
 
 		text->setText("Acquired " + _name + "'s Friendship");
@@ -156,7 +161,6 @@ void PD_UI_Message::setItemTexture(PD_Item * _item){
 
 	image->background->mesh->replaceTextures(tex);
 
-	image->setRationalHeight(1.f, image->nodeUIParent);
 	image->setSquareWidth((float)tex->width/tex->height);
 
 	invalidateLayout();
