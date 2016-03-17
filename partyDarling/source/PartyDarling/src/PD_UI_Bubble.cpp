@@ -108,15 +108,18 @@ void PD_UI_Bubble::placeOptions(){
 		options.at(i)->firstParent()->translate(0, glm::sin(offset)*verticalSpacing, 0, false);
 		options.at(i)->marginLeft.setRationalSize(w*0.25f+0.1f, &this->width);
 		options.at(i)->marginRight.setRationalSize(w*0.25f+0.1f, &this->width);
-		options.at(i)->setMeasuredWidths();
-		options.at(i)->invalidateLayout();
-		options.at(i)->label->setRationalWidth(0.95f, options.at(i));
 
 		if(i == currentOption){
 			options.at(i)->setBackgroundColour(1,1,1, 1);
+			options.at(i)->childTransform->scale(1.f, false);
 		}else{
 			options.at(i)->setBackgroundColour(1.25,1.25,1.25, 1);
+			options.at(i)->childTransform->scale(0.95f, false);
 		}
+
+		options.at(i)->setMeasuredWidths();
+		options.at(i)->invalidateLayout();
+		options.at(i)->label->setRationalWidth(0.95f, options.at(i));
 	}
 }
 
@@ -129,6 +132,13 @@ void PD_UI_Bubble::update(Step * _step){
 		Mouse & mouse = Mouse::getInstance();
 		Keyboard & keyboard = Keyboard::getInstance();
 		float d = mouse.getMouseWheelDelta();
+
+		if(glm::abs(d) <= FLT_EPSILON){
+			if(mouse.rightJustPressed()){
+				d = 1;
+			}
+		}
+
 		// if there's only one option, override and say we aren't scrolling
 		if(options.size() < 2){
 			d = 0;
