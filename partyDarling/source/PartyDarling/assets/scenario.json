@@ -250,6 +250,12 @@
       "src":"voices/voice-36.ogg",
       "category":"voice"
     },
+    {
+      "id":"voice37",
+      "type":"audio",
+      "src":"voices/voice-37.ogg",
+      "category":"voice"
+    },
 
 
     // fonts
