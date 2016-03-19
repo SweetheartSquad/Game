@@ -175,6 +175,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 
 	// Diss Card
 	playerCard = new PD_UI_DissCard(_world, _player);
+	playerCard->setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*1.5f);
 	cardContainer->addChild(playerCard);
 	playerCard->setRationalHeight(1.f, cardContainer);
 	playerCard->setSquareWidth(1.4f);

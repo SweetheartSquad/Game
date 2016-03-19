@@ -37,7 +37,7 @@ void PD_UI_DissCard::init(){
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(113/255.f, 71/255.f, 16/255.f);
 
-	setBorder(25);
+	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*1.5f);
 	setScaleMode(GL_NEAREST);
 	VerticalLinearLayout * layout = new VerticalLinearLayout(world);
 	c->addChild(layout);

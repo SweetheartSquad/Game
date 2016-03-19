@@ -34,15 +34,16 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	image->background->mesh->setScaleMode(GL_NEAREST);
 
 	textBubble = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
+	textBubble->setScaleMode(GL_NEAREST);
 	addChild(textBubble);
-	textBubble->setBorder(15);
-	textBubble->setRationalHeight(0.05f, this);
+	textBubble->setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
+	textBubble->setPixelHeight(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 2.5f);
 	textBubble->setRationalWidth(0.5f, this);
 
 	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 	textBubble->addChild(text);
-	text->setHeight(text->font->getLineHeight() * 1.2f);
 	text->setRationalWidth(1.f, textBubble);
+	text->setRationalHeight(1.f, textBubble);
 	text->horizontalAlignment = kCENTER;
 	text->verticalAlignment = kMIDDLE;
 

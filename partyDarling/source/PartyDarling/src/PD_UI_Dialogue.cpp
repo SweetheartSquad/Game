@@ -31,7 +31,7 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	addChild(vl);
 	vl->addChild(textBubble);
 	textBubble->setMargin(15,15,0,15);
-	textBubble->setBorder(15);
+	textBubble->setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
 	textBubble->setRationalWidth(0.9f, vl);
 	textBubble->setRationalHeight(0.25f, vl);
 	textBubble->addChild(vl2);
