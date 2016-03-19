@@ -64,6 +64,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 }
 
 PD_Scene_IntermissionSlideshow::~PD_Scene_IntermissionSlideshow(){
+	delete textShader;
 }
 
 void PD_Scene_IntermissionSlideshow::update(Step * _step){
