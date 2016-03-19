@@ -5,7 +5,7 @@
     "I hate *name*... I want to go home.",
     "Did you hear what *name* did last night? *interjection*...",
     "I'm *emphasis* tired. I might head home.",
-    "*name* is such a mess. They should just go home.",
+    "Ugh, *name* is such a mess. They should just go home.",
     "This party is so cool!",
     "I'm not having a great time.",
     "Don't tell *name*, but I think they're *adjective*.",
@@ -13,11 +13,11 @@
     "I just saw *name*... they're so *adjective* tonight!",
     "Did you know that *fact*? *interjection*...",
     "I read online somewhere that *fakeFacts*... wonder if it's true.",
-    "*name* just told me that *fact*. Cool!",
+    "Hey, *name* just told me that *fact*. Cool!",
     "I'm bored.",
     "Good to meet you.",
     "I heard that *name* is *emphasis* *adjective*.",
-    "*name* told me that *fakeFacts*, but I don't think it's true.",
+    "Hey, *name* told me that *fakeFacts*, but I don't think it's true.",
     "I don't really like *name*."
   ],
 
@@ -39,6 +39,21 @@
     "You're mean...",
     "Nice banter, dude. Respect."
   ],
+
+
+  "friend":[
+    "friend",
+    "buddy",
+    "pal",
+    "bud"
+  ],
+
+  "some-":[
+    " guy",
+    " girl",
+    "one",
+    "body"  
+],
 
 
 
