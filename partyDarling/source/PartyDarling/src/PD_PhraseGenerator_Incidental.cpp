@@ -21,8 +21,10 @@ void PD_PhraseGenerator_Incidental::updateNames(PD_Character * _character){
 			}
 		}
 	}
-	// omar should always be an option though
+	// omar should always be an option, along with a few non-specific names
 	names.push("Omar Clean");
+	names.push("some*some-*");
+	names.push("a *friend* of mine");
 
 	terms["name"] = names;
 }
