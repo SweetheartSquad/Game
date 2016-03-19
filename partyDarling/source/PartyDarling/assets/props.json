@@ -415,6 +415,44 @@
             "padding": 0.1,
             "twist": false,
             "flare": false 
+        },
+		{
+            "id": "plunger", 
+            "src": "plunger", 
+            "roomTypes" : ["BATHROOM"],
+            "parentDependent": false,
+            "parents":{
+                "toilet":[
+                    "LEFT",
+					"RIGHT"
+                ],
+				"wall":[
+					"FRONT"
+				]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
+        },
+		{
+            "id": "toiletcleaner", 
+            "src": "toiletcleaner", 
+            "roomTypes" : ["BATHROOM"],
+            "parentDependent": false,
+            "parents":{
+                "toilet":[
+                    "LEFT",
+					"RIGHT"
+                ],
+				"wall":[
+					"FRONT"
+				]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }
