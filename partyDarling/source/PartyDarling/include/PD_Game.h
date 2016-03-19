@@ -8,7 +8,7 @@ class AutoDrums;
 
 class PD_Game : public Game{
 private:
-	static std::vector<unsigned long int> bgmTrackIdx;
+	static sweet::ShuffleVector<unsigned long int> bgmTrackIdx;
 	static bool staticInit();
 	static bool staticInitialized;
 public:

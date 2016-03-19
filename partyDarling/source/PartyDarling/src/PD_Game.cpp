@@ -15,15 +15,15 @@
 #include <PD_Scene_MenuOptions.h>
 #include <RoomBuilder.h>
 
-std::vector<unsigned long> PD_Game::bgmTrackIdx;
+sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
 OpenAL_Sound * PD_Game::bgmTrack = nullptr;
 ProgressManager * PD_Game::progressManager = nullptr;
 bool PD_Game::firstRun = true;
 
 bool PD_Game::staticInit(){
-	bgmTrackIdx.push_back(1);
-	bgmTrackIdx.push_back(2);
-	bgmTrackIdx.push_back(3);
+	for(unsigned long int i = 1; i <= 5; ++i){
+		bgmTrackIdx.push(i);
+	}
 	return true;
 }
 bool PD_Game::staticInitialized = staticInit();
@@ -82,7 +82,7 @@ void PD_Game::playBGM(){
 		bgmTrack->decrementAndDelete();
 	}
 	std::stringstream ss;
-	ss << "BGM" << sweet::NumberUtils::randomItem(bgmTrackIdx);
+	ss << "BGM" << bgmTrackIdx.pop();
 
 	bgmTrack = PD_ResourceManager::scenario->getAudio(ss.str())->sound;
 	++bgmTrack->referenceCount;

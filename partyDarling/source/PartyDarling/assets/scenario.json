@@ -20,6 +20,18 @@
       "src": "bgm/03_Crows.ogg",
       "category": "music"
     },
+    {
+      "id": "BGM4",
+      "type": "audio",
+      "src": "bgm/04_Wallpaper.ogg",
+      "category": "music"
+    },
+    {
+      "id": "BGM5",
+      "type": "audio",
+      "src": "bgm/05_Feet.ogg",
+      "category": "music"
+    },
 
     //Voices
     {
