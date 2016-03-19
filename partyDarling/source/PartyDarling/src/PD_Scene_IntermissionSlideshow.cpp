@@ -19,6 +19,44 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 		_game->switchScene("game", true);
 	});
 
+
+
+	
+
+	textShader = new ComponentShaderText(false);
+
+	textShader->setColor(1.f, 1.f, 1.f);
+	textShader->load();
+
+	VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
+	uiLayer->addChild(vl);
+	vl->setRationalWidth(1.f, uiLayer);
+	vl->setAutoresizeHeight();
+	vl->verticalAlignment = kMIDDLE;
+	vl->horizontalAlignment = kRIGHT;
+
+	TextLabel * skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
+	vl->addChild(skip);
+	skip->setBackgroundColour(0.5f, 0, 0);
+	skip->setRationalWidth(0.25f, vl);
+	skip->setHeight(PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font->getLineHeight()*2.f);
+	skip->verticalAlignment = kMIDDLE;
+	skip->horizontalAlignment = kCENTER;
+	skip->setText("continue");
+	skip->eventManager->addEventListener("click", [this](sweet::Event * _event){
+		eventManager->triggerEvent("overflow");
+	});
+	skip->setVisible(false);
+
+	Timeout * t = new Timeout(1.f, [skip](sweet::Event * _event){
+		skip->setVisible(true);
+		skip->setMouseEnabled(true);
+	});
+	t->start();
+	childTransform->addChild(t, false);
+
+
+
 	uiLayer->invalidateLayout();
 
 	// advance to the first slide
@@ -29,10 +67,5 @@ PD_Scene_IntermissionSlideshow::~PD_Scene_IntermissionSlideshow(){
 }
 
 void PD_Scene_IntermissionSlideshow::update(Step * _step){
-	if(mouse->leftJustPressed()){
-		changeSlide(true);
-	}if(mouse->rightJustPressed()){
-		changeSlide(false);
-	}
 	Scene_SlideShow::update(_step);
 }

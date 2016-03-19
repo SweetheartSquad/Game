@@ -5,6 +5,8 @@
 class ComponentShaderText;
 
 class PD_Scene_IntermissionSlideshow : public Scene_SlideShow{
+private:
+	ComponentShaderText * textShader;
 public:
 	PD_Scene_IntermissionSlideshow(Game * _game, int _plotPosition = 1);
 	~PD_Scene_IntermissionSlideshow();
