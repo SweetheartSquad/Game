@@ -138,6 +138,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 		infoLayout->addChild(itemName);
 		itemName->setText("");
 		itemName->setRationalWidth(1.f, infoLayout);
+		itemName->setPixelHeight(2.5f * PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
 		itemName->horizontalAlignment = kCENTER;
 
 		HorizontalLinearLayout * itemImageLayout = new HorizontalLinearLayout(world);
@@ -149,8 +150,8 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 
 		itemImage = new NodeUI(world);
 		itemImageLayout->addChild(itemImage);
-		itemImage->setRationalWidth(1.f, itemImageLayout);
-		itemImage->setRationalHeight(1.f, itemImageLayout);
+		itemImage->setRationalWidth(0.9f, itemImageLayout);
+		itemImage->setSquareHeight(1.f);
 		itemImage->setBackgroundColour(1,1,1,1);
 		itemImage->background->mesh->setScaleMode(GL_NEAREST);
 		itemImage->setVisible(false);
@@ -206,10 +207,10 @@ void PD_UI_Inventory::setInfoPanel(PD_Item * _item){
 
 		// make sure the item is displayed at the correct size
 		if(itemTex->width > itemTex->height){
-			itemImage->setRationalWidth(1.f, itemImage->nodeUIParent);
+			itemImage->setRationalWidth(0.9f, itemImage->nodeUIParent);
 			itemImage->setSquareHeight((float)itemTex->height/itemTex->width);
 		}else{
-			itemImage->setRationalHeight(1.f, itemImage->nodeUIParent);
+			itemImage->setRationalHeight(0.9f, itemImage->nodeUIParent);
 			itemImage->setSquareWidth((float)itemTex->width/itemTex->height);
 		}
 
