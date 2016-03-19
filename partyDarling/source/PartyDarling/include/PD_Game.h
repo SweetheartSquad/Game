@@ -20,6 +20,7 @@ public:
 	static ProgressManager * progressManager;
 
 	static OpenAL_Sound * bgmTrack;
+	static bool firstRun;
 
 	// picks a random BGM track and plays it, replacing the current track
 	void playBGM();

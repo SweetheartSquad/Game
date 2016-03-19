@@ -18,6 +18,7 @@
 std::vector<unsigned long> PD_Game::bgmTrackIdx;
 OpenAL_Sound * PD_Game::bgmTrack = nullptr;
 ProgressManager * PD_Game::progressManager = nullptr;
+bool PD_Game::firstRun = true;
 
 bool PD_Game::staticInit(){
 	bgmTrackIdx.push_back(1);

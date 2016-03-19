@@ -301,6 +301,15 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
+
+	if(PD_Game::progressManager->plotPosition != 1){
+		if(!PD_Game::firstRun){
+			uiMessage->displayMessage("Game saved.");
+		}else{
+			PD_Game::firstRun = false;
+			uiMessage->displayMessage("Game loaded.");
+		}
+	}
 }
 
 void PD_Scene_Main::pickScenarios(){
