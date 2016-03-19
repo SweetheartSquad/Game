@@ -13,6 +13,7 @@
 #include <AutoMusic.h>
 #include <RenderOptions.h>
 #include <PD_Scene_MenuOptions.h>
+#include <RoomBuilder.h>
 
 std::vector<unsigned long> PD_Game::bgmTrackIdx;
 OpenAL_Sound * PD_Game::bgmTrack = nullptr;

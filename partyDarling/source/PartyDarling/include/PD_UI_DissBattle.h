@@ -5,8 +5,8 @@
 #include <OpenALSound.h>
 #include <NumberUtils.h>
 #include <shader/ComponentShaderText.h>
-#include "PD_House.h"
 #include "Player.h"
+#include "PD_Character.h"
 
 class Shader;
 class PD_InsultButton;
