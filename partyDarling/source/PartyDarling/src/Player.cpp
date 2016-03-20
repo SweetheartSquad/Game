@@ -53,10 +53,12 @@ Player::~Player(){
 void Player::update(Step * _step){
 	joystickManager->update(_step);
 	
-	glm::vec2 mouseMove(0);
-	mouseMove.y += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightY) * -50.f;
-	mouseMove.x += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightX) * 50.f;
-	mouse.translate(mouseMove);
+	if(joystickManager->joysticks[0] != nullptr){
+		glm::vec2 mouseMove(0);
+		mouseMove.y += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightY) * -50.f;
+		mouseMove.x += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightX) * 50.f;
+		mouse.translate(mouseMove);
+	}
 
 	shakeTimeout->update(_step);
 	BulletFirstPersonController::update(_step);
@@ -86,17 +88,10 @@ glm::vec3 Player::calculateInputs(Step * _step){
 		res += right;
 	}
 	
-	res -= forward * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY);
-	res += right * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftX);
-	/*if(joystick != nullptr){
-	movement += forward * -joystick->getAxis(joystick->axisLeftY);
-	movement += right * joystick->getAxis(joystick->axisLeftX);
-
-	// move camera by directly moving mouse
-	float x2 = joystick->getAxis(joystick->axisRightX)*100;
-	float y2 = -joystick->getAxis(joystick->axisRightY)*100;
-	mouse->translate(glm::vec2(x2, y2));
-	}*/
+	if(joystickManager->joysticks[0] != nullptr){
+		res -= forward * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY);
+		res += right * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftX);
+	}
 
 	// clamp the results in case we're using multiple inputs
 	res.x = glm::max(-1.f, glm::min(1.f, res.x));
@@ -115,49 +110,116 @@ glm::vec3 Player::calculateInputs(Step * _step){
 }
 
 bool Player::wantsToJump(){
-	return keyboard.keyJustDown(GLFW_KEY_SPACE) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_SPACE);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+	}
+	return res;
 }
 
 bool Player::wantsToSprint(){
-	return keyboard.keyDown(GLFW_KEY_LEFT_SHIFT) || keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+	bool res = false;
+	res |= keyboard.keyDown(GLFW_KEY_LEFT_SHIFT);
+	res |= keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+	}
+	return res;
 }
 
 bool Player::wantsToInteract(){
-	return mouse.leftJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonDown);
+	bool res = false;
+	res |= mouse.leftJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
 }
 bool Player::wantsToStopInteracting(){
-	return mouse.leftJustReleased() || joystickManager->joysticks[0]->buttonJustUp(joystickManager->joysticks[0]->faceButtonDown);
+	bool res = false;
+	res |= mouse.leftJustReleased();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustUp(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
 }
 bool Player::wantsToKeepInteracting(){
-	return mouse.leftDown() || joystickManager->joysticks[0]->buttonDown(joystickManager->joysticks[0]->faceButtonDown);
+	bool res = false;
+	res |= mouse.leftDown();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonDown(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
 }
 
 
 bool Player::wantsToQuit(){
-	return keyboard.keyJustDown(GLFW_KEY_ESCAPE) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonRight);
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_ESCAPE);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonRight);
+	}
+	return res;
 }
 
 bool Player::wantsToMap(){
-	return keyboard.keyJustDown(GLFW_KEY_M) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonLeft);
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_M);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonLeft);
+	}
+	return res;
 }
 
 bool Player::wantsToInventory(){
-	return keyboard.keyJustDown(GLFW_KEY_TAB) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_TAB);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
+	}
+	return res;
 }
 
 bool Player::wantsNextBubble(){
-	return mouse.getMouseWheelDelta() > FLT_EPSILON || mouse.rightJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonLeft);
+	bool res = false;
+	res |= mouse.getMouseWheelDelta() > FLT_EPSILON;
+	res |= mouse.rightJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonLeft);
+	}
+	return res;
 }
 bool Player::wantsPrevBubble(){
-	return mouse.getMouseWheelDelta() < -FLT_EPSILON;
+	bool res = false;
+	res |= mouse.getMouseWheelDelta() < -FLT_EPSILON;
+	return res;
 }
 
 bool Player::wantsToInsultUp(){
-	return keyboard.keyJustDown(GLFW_KEY_UP) || keyboard.keyJustDown(GLFW_KEY_W) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY) < -FLT_EPSILON;
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_UP);
+	res |= keyboard.keyJustDown(GLFW_KEY_W);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) < -FLT_EPSILON;
+	}
+	return res;
 }
 bool Player::wantsToInsultDown(){
-	return keyboard.keyJustDown(GLFW_KEY_DOWN) || keyboard.keyJustDown(GLFW_KEY_S) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY) > FLT_EPSILON;
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_DOWN);
+	res |= keyboard.keyJustDown(GLFW_KEY_S);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+	}
+	return res;
 }
 bool Player::wantsToInterject(){
-	return keyboard.keyJustDown(GLFW_KEY_SPACE) || mouse.leftJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_SPACE);
+	res |= mouse.leftJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+	}
+	return res;
 }
