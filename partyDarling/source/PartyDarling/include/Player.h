@@ -1,6 +1,9 @@
 #pragma once
 
 #include <BulletFirstPersonController.h>
+#include <JoystickManager.h>
+#include <Joystick.h>
+#include <Joystick.h>
 class Room;
 class Timeout;
 class PD_DissStats;
@@ -9,6 +12,7 @@ class Player : public virtual BulletFirstPersonController{
 public:
 	float shakeIntensity;
 	Timeout * shakeTimeout;
+	JoystickManager * joystickManager;
 
 	// base player speed
 	float playerSpeed;
@@ -30,4 +34,21 @@ public:
 	glm::vec3 calculateInputs(Step * _step) override;
 
 	virtual void update(Step * _step) override;
+
+
+	bool wantsToJump();
+	bool wantsToSprint();
+	bool wantsToInteract();
+	bool wantsToStopInteracting();
+	bool wantsToKeepInteracting();
+	bool wantsToQuit();
+	bool wantsToMap();
+	bool wantsToInventory();
+
+	bool wantsNextBubble();
+	bool wantsPrevBubble();
+
+	bool wantsToInterject();
+	bool wantsToInsultUp();
+	bool wantsToInsultDown();
 };

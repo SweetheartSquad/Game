@@ -24,7 +24,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	experience(0),
 	level(0),
 	dissStats(new PD_DissStats()),
-	wonLastDissBattle(false)
+	wonLastDissBattle(false),
+	joystickManager(new JoystickManager())
 {
 	// override sounds
 	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;
@@ -46,9 +47,17 @@ Player::Player(BulletWorld * _bulletWorld) :
 Player::~Player(){
 	delete shakeTimeout;
 	delete dissStats;
+	delete joystickManager;
 }
 
 void Player::update(Step * _step){
+	joystickManager->update(_step);
+	
+	glm::vec2 mouseMove(0);
+	mouseMove.y += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightY) * -50.f;
+	mouseMove.x += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightX) * 50.f;
+	mouse.translate(mouseMove);
+
 	shakeTimeout->update(_step);
 	BulletFirstPersonController::update(_step);
 }
@@ -76,6 +85,9 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	}if (keyboard.keyDown(GLFW_KEY_D) || keyboard.keyDown(GLFW_KEY_RIGHT)){
 		res += right;
 	}
+	
+	res -= forward * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY);
+	res += right * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftX);
 	/*if(joystick != nullptr){
 	movement += forward * -joystick->getAxis(joystick->axisLeftY);
 	movement += right * joystick->getAxis(joystick->axisLeftX);
@@ -91,13 +103,61 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	res.z = glm::max(-1.f, glm::min(1.f, res.z));
 
 	//sprinting
-	isSprinting = keyboard.keyDown(GLFW_KEY_LEFT_SHIFT) || keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT);
+	isSprinting = wantsToSprint();
 
 	// jumping
 	if(isGrounded){
-		if (keyboard.keyJustDown(GLFW_KEY_SPACE)){
+		if (wantsToJump()){
 			res.y = 1.f;
 		}
 	}
 	return res;
+}
+
+bool Player::wantsToJump(){
+	return keyboard.keyJustDown(GLFW_KEY_SPACE) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+}
+
+bool Player::wantsToSprint(){
+	return keyboard.keyDown(GLFW_KEY_LEFT_SHIFT) || keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+}
+
+bool Player::wantsToInteract(){
+	return mouse.leftJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonDown);
+}
+bool Player::wantsToStopInteracting(){
+	return mouse.leftJustReleased() || joystickManager->joysticks[0]->buttonJustUp(joystickManager->joysticks[0]->faceButtonDown);
+}
+bool Player::wantsToKeepInteracting(){
+	return mouse.leftDown() || joystickManager->joysticks[0]->buttonDown(joystickManager->joysticks[0]->faceButtonDown);
+}
+
+
+bool Player::wantsToQuit(){
+	return keyboard.keyJustDown(GLFW_KEY_ESCAPE) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonRight);
+}
+
+bool Player::wantsToMap(){
+	return keyboard.keyJustDown(GLFW_KEY_M) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonLeft);
+}
+
+bool Player::wantsToInventory(){
+	return keyboard.keyJustDown(GLFW_KEY_TAB) || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
+}
+
+bool Player::wantsNextBubble(){
+	return mouse.getMouseWheelDelta() > FLT_EPSILON || mouse.rightJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonLeft);
+}
+bool Player::wantsPrevBubble(){
+	return mouse.getMouseWheelDelta() < -FLT_EPSILON;
+}
+
+bool Player::wantsToInsultUp(){
+	return keyboard.keyJustDown(GLFW_KEY_UP) || keyboard.keyJustDown(GLFW_KEY_W) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY) < -FLT_EPSILON;
+}
+bool Player::wantsToInsultDown(){
+	return keyboard.keyJustDown(GLFW_KEY_DOWN) || keyboard.keyJustDown(GLFW_KEY_S) || joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY) > FLT_EPSILON;
+}
+bool Player::wantsToInterject(){
+	return keyboard.keyJustDown(GLFW_KEY_SPACE) || mouse.leftJustPressed() || joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
 }

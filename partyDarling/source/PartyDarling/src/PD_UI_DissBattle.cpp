@@ -4,7 +4,6 @@
 #include <PD_InsultButton.h>
 
 #include <Scene.h>
-#include <Keyboard.h>
 #include <GLFW\glfw3.h>
 #include <Easing.h>
 #include <Sprite.h>
@@ -464,14 +463,13 @@ void PD_UI_DissBattle::update(Step * _step){
 	if(isEnabled()){
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
-				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
+				if(player->wantsToInsultUp()){
 					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
-				}
-				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
+				}else if(player->wantsToInsultDown()){
 					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
-				if (canInterject && (keyboard->keyJustDown(GLFW_KEY_SPACE) || mouse->leftJustPressed())){
+				if (canInterject && player->wantsToInterject()){
 					interject();
 				}
 			}

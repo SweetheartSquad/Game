@@ -85,7 +85,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	_game->showLoading(0);
 
 	player = new Player(bulletWorld);
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
 	// Load the save file
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
@@ -996,12 +996,8 @@ void PD_Scene_Main::update(Step * _step){
 
 	bulletWorld->update(_step);
 
-	if(keyboard->keyJustDown(GLFW_KEY_ESCAPE)){
+	if(player->wantsToQuit()){
 		game->switchScene("menu", false);
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_R)){
-		PD_ResourceManager::scenario->eventManager->triggerEvent("reset");
 	}
 
 	// navigation testing
@@ -1133,14 +1129,14 @@ void PD_Scene_Main::update(Step * _step){
 	updateSelection();
 
 	// prop carrying release and carry
-	if(mouse->leftJustReleased()){
+	if(player->wantsToStopInteracting()){
 		if(carriedProp != nullptr){
 			carriedProp->body->setDamping(0,0);
 			carriedProp->body->setGravity(bulletWorld->world->getGravity());
 		}
 		carriedProp = nullptr;
 		carriedPropDistance = 0;
-	}else if(mouse->leftDown()){
+	}else if(player->wantsToKeepInteracting()){
 		if(carriedProp != nullptr){
 			glm::vec3 targetPos = camPos + player->playerCamera->forwardVectorRotated * carriedPropDistance;
 			glm::vec3 d = (targetPos - carriedProp->meshTransform->getWorldPos()) * 0.5f;
@@ -1154,7 +1150,7 @@ void PD_Scene_Main::update(Step * _step){
 
 	// inventory toggle
 	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
-		if(keyboard->keyJustDown(GLFW_KEY_TAB)){
+		if(player->wantsToInventory()){
 			if(uiInventory->isVisible()){
 				uiBubble->enable();
 				uiInventory->disable();
@@ -1170,7 +1166,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	// map toggle
-	if(keyboard->keyJustDown(GLFW_KEY_M)){
+	if(player->wantsToMap()){
 		if(uiMap->isEnabled()){
 			uiMap->disable();
 		}else{
@@ -1198,14 +1194,12 @@ void PD_Scene_Main::update(Step * _step){
 		uiBubble->addOption("test", nullptr);
 	}
 
-	// debug controls
+	// get new BGM track
 	if(keyboard->keyJustDown(GLFW_KEY_P)){
 		dynamic_cast<PD_Game*>(game)->playBGM();
 	}
 
-	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		cycleCamera();
-	}
+	// toggle debug draw
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		Transform::drawTransforms = !Transform::drawTransforms;
 		if(debugDrawer != nullptr){
@@ -1221,16 +1215,6 @@ void PD_Scene_Main::update(Step * _step){
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
-	}
-
-	if(keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * 0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * -0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * -0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * 0.03f);
 	}
 
 	Scene::update(_step);
@@ -1425,7 +1409,7 @@ void PD_Scene_Main::updateSelection(){
 					// prop carrying selection
 					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
 					if(prop != nullptr){
-						if(mouse->leftJustPressed()){
+						if(player->wantsToInteract()){
 							carriedProp = prop;
 							carriedPropDistance = glm::distance(player->playerCamera->childTransform->getWorldPos(), carriedProp->meshTransform->getWorldPos());
 							carriedProp->body->setDamping(0.8f,0.5f);
