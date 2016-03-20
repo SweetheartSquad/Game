@@ -167,7 +167,7 @@ private:
 
 	float sassInsultMultiplier; // player sass - enemy sass
 	float sassInterjectMultiplier; // player sass - enemy sass
-
+	std::vector<OpenAL_Sound *> succeedInsultSounds;
 public:
 	float prevXP;
 	float wonXP;
