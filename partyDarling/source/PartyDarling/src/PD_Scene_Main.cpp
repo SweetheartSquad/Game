@@ -94,9 +94,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
-	if(PD_Game::progressManager->plotPosition == kEND){
 		toonShader->addComponent(new ShaderComponentVNoise(toonShader));
-	}
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	if(PD_Game::progressManager->plotPosition == kEND){
@@ -838,12 +836,21 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 }
 
 void PD_Scene_Main::update(Step * _step){
+	toonShader->bindShader();
+	toonShader->makeDirty();
+	ShaderComponentVNoise * vNoise = dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1));
 	if(PD_Game::progressManager->plotPosition == kEND){
-		toonShader->bindShader();
-		toonShader->makeDirty();
-		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->timeLocation, sweet::lastTimestamp);
-		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->magLocation, sin(sweet::lastTimestamp)*0.02f);
+		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 0.05f);
+	}else if(PD_Game::progressManager->plotPosition == kBEGINNING || PD_Game::progressManager->plotPosition == kEPILOGUE){
+		vNoise->setMag(0,0, 0);
+	}else if(sweet::NumberUtils::randomFloat() > sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.9999, 0.99)){
+		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 1.f);
+	}else{
+		vNoise->setMag(0,0, sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05));
 	}
+	glUniform1f(vNoise->timeLocation, sweet::lastTimestamp);
+	glUniform1f(vNoise->mag1Location, vNoise->mag1);
+	glUniform1f(vNoise->mag2Location, vNoise->mag2);
 
 	// panning
 	if(panLeft){

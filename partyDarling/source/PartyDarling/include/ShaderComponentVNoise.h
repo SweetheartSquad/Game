@@ -5,7 +5,10 @@
 class ShaderComponentVNoise : public ShaderComponent{
 public:
 	GLint timeLocation;
-	GLint magLocation;
+	GLint mag1Location;
+	GLint mag2Location;
+
+	float mag1, mag2;
 
 	ShaderComponentVNoise(ComponentShaderBase * _shader);
 	~ShaderComponentVNoise();
@@ -18,4 +21,6 @@ public:
 	void load() override;
 	void unload() override;
 	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+
+	void setMag(float _mag1, float _mag2, float _interpolation);
 };
