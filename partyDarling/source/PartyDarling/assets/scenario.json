@@ -39,9 +39,9 @@
       	"category": "music"
     },
     {
-    	"id": "ENDING",
+    	"id": "BGM_END",
     	"type": "audio",
-      	"src": "end/CrawkSpace.ogg",
+      	"src": "end/CrawlSpace.ogg",
       	"category": "music"
     },
 
