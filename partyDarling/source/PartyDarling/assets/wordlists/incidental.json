@@ -115,7 +115,7 @@
   "fakeFacts": [
     "*fakeNames* invented the *nouns*",
     "someone called *fakeNames* has the world's biggest *bodyParts*",
-    "*animals*s have *adjectives* *bodyParts*"
+    "*animals*s have *adjectives* *bodyParts*s"
   ],
   "fakeNames": [
     "*firstNames* *lastNames*"
