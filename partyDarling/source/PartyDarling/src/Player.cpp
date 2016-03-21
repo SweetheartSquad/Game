@@ -223,3 +223,12 @@ bool Player::wantsToInterject(){
 	}
 	return res;
 }
+bool Player::interjecting(){
+	bool res = false;
+	res |= keyboard.keyDown(GLFW_KEY_SPACE);
+	res |= mouse.leftDown();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonDown(joystickManager->joysticks[0]->faceButtonRight);
+	}
+	return res;
+}

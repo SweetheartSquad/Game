@@ -47,8 +47,9 @@ public:
 
 	bool wantsNextBubble();
 	bool wantsPrevBubble();
-
+	
 	bool wantsToInterject();
+	bool interjecting();
 	bool wantsToInsultUp();
 	bool wantsToInsultDown();
 };
