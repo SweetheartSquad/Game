@@ -301,13 +301,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	_game->showLoading(1.f);
 	
 
-
-	// if we're on the ending run, swap the background music for a normal track
-	// if we're on the epilogue, swap the background music for a normal track
-	if(PD_Game::progressManager->plotPosition == kEND || PD_Game::progressManager->plotPosition == kEPILOGUE){
+	
+	// if this is the first time we've entered the game since the application started, swap the menu music for BGM
+	// if we're on the ending run, swap BGM for the weird track
+	// if we're on the epilogue, swap the weird track for BGM
+	if(PD_Game::firstRun || PD_Game::progressManager->plotPosition == kEND || PD_Game::progressManager->plotPosition == kEPILOGUE){
 		_game->playBGM();
 	}
-
 
 	// if we're on the first run, don't show a message
 	// if this is the first time we've entered the game since the application started, show a "loaded" message
@@ -318,7 +318,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}else{
 			uiMessage->displayMessage("Game loaded.");
 			PD_Game::firstRun = false;
-			_game->playBGM();
 		}
 	}
 	PD_Game::firstRun = false;
