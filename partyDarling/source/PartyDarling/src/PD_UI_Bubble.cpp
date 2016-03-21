@@ -128,9 +128,9 @@ void PD_UI_Bubble::update(Step * _step){
 	if(enabled && options.size() > 0){
 		// interaction
 		if(enabled){
-			if(player->wantsNextBubble()){
+			if(player->wantsNextBubble() && options.size() > 1){
 				next();
-			}else if(player->wantsPrevBubble()){
+			}else if(player->wantsPrevBubble() && options.size() > 1){
 				prev();
 			}else if(player->wantsToInteract()){
 				selectCurrent();
