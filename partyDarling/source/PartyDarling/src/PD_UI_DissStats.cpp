@@ -164,10 +164,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.1f){
-			player->experience = 100 * (1-p/0.1f);
-		}
-
 		float size;
 		if(p <= 0.5f){
 			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);
