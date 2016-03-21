@@ -299,20 +299,28 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
+	
 
+	bool firstRun = PD_Game::firstRun;
+	PD_Game::firstRun = false;
 
+	// if this is the first time we've entered the game since the application started, swap the menu music for BGM
+	// if we're on the ending run, swap BGM for the weird track
+	// if we're on the epilogue, swap the weird track for BGM
+	if(firstRun || PD_Game::progressManager->plotPosition == kEND || PD_Game::progressManager->plotPosition == kEPILOGUE){
+		_game->playBGM();
+	}
 
 	// if we're on the first run, don't show a message
 	// if this is the first time we've entered the game since the application started, show a "loaded" message
 	// any other time, show a "saved" message
 	if(PD_Game::progressManager->plotPosition != 1){
-		if(!PD_Game::firstRun){
+		if(!firstRun){
 			uiMessage->displayMessage("Game saved.");
 		}else{
 			uiMessage->displayMessage("Game loaded.");
 		}
 	}
-	PD_Game::firstRun = false;
 }
 
 void PD_Scene_Main::pickScenarios(){

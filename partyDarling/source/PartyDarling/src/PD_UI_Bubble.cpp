@@ -111,10 +111,10 @@ void PD_UI_Bubble::placeOptions(){
 
 		if(i == currentOption){
 			options.at(i)->setBackgroundColour(1,1,1, 1);
-			options.at(i)->childTransform->scale(1.f, false);
+			//options.at(i)->childTransform->scale(1.f, false);
 		}else{
 			options.at(i)->setBackgroundColour(1.25,1.25,1.25, 1);
-			options.at(i)->childTransform->scale(0.95f, false);
+			//options.at(i)->childTransform->scale(0.95f, false);
 		}
 
 		options.at(i)->setMeasuredWidths();
@@ -128,9 +128,9 @@ void PD_UI_Bubble::update(Step * _step){
 	if(enabled && options.size() > 0){
 		// interaction
 		if(enabled){
-			if(player->wantsNextBubble()){
+			if(player->wantsNextBubble() && options.size() > 1){
 				next();
-			}else if(player->wantsPrevBubble()){
+			}else if(player->wantsPrevBubble() && options.size() > 1){
 				prev();
 			}else if(player->wantsToInteract()){
 				selectCurrent();

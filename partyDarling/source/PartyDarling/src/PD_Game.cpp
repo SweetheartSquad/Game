@@ -67,7 +67,7 @@ PD_Game::~PD_Game(){
 }
 
 void PD_Game::update(Step * _step){
-	if(bgmTrack != nullptr){
+	if(bgmTrack != nullptr && currentSceneKey == "game"){
 		bgmTrack->update(_step);
 		if(bgmTrack->source->state != AL_PLAYING){
 			playBGM();
@@ -81,10 +81,16 @@ void PD_Game::playBGM(){
 		bgmTrack->stop();
 		bgmTrack->decrementAndDelete();
 	}
-	std::stringstream ss;
-	ss << "BGM" << bgmTrackIdx.pop();
+	std::string newTrack;
+	if(firstRun){
+		newTrack = "BGM_MENU";
+	}else if(progressManager->plotPosition == kEND){
+		newTrack = "BGM_END";
+	}else{
+		newTrack = "BGM" + std::to_string(bgmTrackIdx.pop());
+	}
 
-	bgmTrack = PD_ResourceManager::scenario->getAudio(ss.str())->sound;
+	bgmTrack = PD_ResourceManager::scenario->getAudio(newTrack)->sound;
 	++bgmTrack->referenceCount;
 	bgmTrack->play(false);
 }

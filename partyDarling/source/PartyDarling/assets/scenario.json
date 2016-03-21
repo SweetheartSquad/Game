@@ -33,9 +33,15 @@
       "category": "music"
     },
     {
-    	"id": "MAIN_MENU",
+    	"id": "BGM_MENU",
     	"type": "audio",
       	"src": "menu/DoorMat.ogg",
+      	"category": "music"
+    },
+    {
+    	"id": "BGM_END",
+    	"type": "audio",
+      	"src": "end/CrawlSpace.ogg",
       	"category": "music"
     },
 
