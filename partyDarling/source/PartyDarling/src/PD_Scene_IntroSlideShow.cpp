@@ -6,9 +6,11 @@
 #include <PD_Game.h>
 #include <sweet/UI.h>
 #include <sweet/Input.h>
+#include <Timeout.h>
 
 PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
-	Scene_SlideShow(_game)
+	Scene_SlideShow(_game),
+	isForwads(true)
 {
 	// get the slides
 	Texture * tex;
@@ -70,6 +72,22 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 
 	// advance to the first slide
 	changeSlide(true);
+
+	changeSlideTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		changeSlide(isForwads);
+	});
+	childTransform->addChild(changeSlideTimeout, false);
+
+	eventManager->addEventListener("changeSlide", [this](sweet::Event * _event){
+		isForwads = _event->getIntData("isForwards");
+		int idx = getCurrentIndex();
+		if(idx > 0 && idx < 3){
+			std::stringstream s;
+			s << "idx: " << idx;
+			Log::info(s.str());
+			changeSlideTimeout->restart();
+		}
+	});
 }
 
 PD_Scene_IntroSlideShow::~PD_Scene_IntroSlideShow(){
@@ -77,10 +95,12 @@ PD_Scene_IntroSlideShow::~PD_Scene_IntroSlideShow(){
 }
 
 void PD_Scene_IntroSlideShow::update(Step * _step){
-	if(mouse->leftJustPressed()){
-		changeSlide(true);
-	}if(mouse->rightJustPressed()){
-		changeSlide(false);
+	if(getCurrentIndex() == 0 || getCurrentIndex() >= 3){
+		if(mouse->leftJustPressed()){
+			changeSlide(true);
+		}if(mouse->rightJustPressed()){
+			changeSlide(false);
+		}
 	}
 	Scene_SlideShow::update(_step);
 }
