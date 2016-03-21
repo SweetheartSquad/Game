@@ -140,9 +140,9 @@ public:
 
 	// the rooms size category
 	enum Size_t{
-		kSMALL,
-		kMEDIUM,
-		kLARGE
+		kSMALL  = 1,
+		kMEDIUM = 2,
+		kLARGE  = 3
 	} size;
 
 	// whether entry to the room is blocked at creation
