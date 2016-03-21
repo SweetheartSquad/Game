@@ -299,7 +299,14 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
+	
 
+
+	// if we're on the ending run, swap the background music for a normal track
+	// if we're on the epilogue, swap the background music for a normal track
+	if(PD_Game::progressManager->plotPosition == kEND || PD_Game::progressManager->plotPosition == kEPILOGUE){
+		_game->playBGM();
+	}
 
 
 	// if we're on the first run, don't show a message
@@ -310,6 +317,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			uiMessage->displayMessage("Game saved.");
 		}else{
 			uiMessage->displayMessage("Game loaded.");
+			PD_Game::firstRun = false;
+			_game->playBGM();
 		}
 	}
 	PD_Game::firstRun = false;
