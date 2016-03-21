@@ -476,6 +476,12 @@
     "category": "sfx"
   },
   {
+    "id": "DISS-BATTLE-INTRO-BELL",
+    "type": "audio",
+    "src": "bell.ogg",
+    "category": "sfx"
+  },
+  {
     "id": "LEVEL_UP",
     "type": "audio",
     "src": "level_up.ogg",
