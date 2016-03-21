@@ -417,7 +417,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	tutorialSpacebar->setMarginLeft(0.6f);
 	tutorialSpacebar->setVisible(false);
 
-	NodeUI * tutorialSpacebarImage = new NodeUI(_bulletWorld);
+	tutorialSpacebarImage = new NodeUI(_bulletWorld);
 	tutorialSpacebar->addChild(tutorialSpacebarImage);
 	tutorialSpacebarImage->setRationalHeight(1.f, tutorialSpacebar);
 	tutorialSpacebarImage->setSquareWidth(1.f);
@@ -476,6 +476,12 @@ void PD_UI_DissBattle::update(Step * _step){
 			}else{
 				if (canInterject && player->wantsToInterject()){
 					interject();
+				}
+
+				if(player->interjecting()){
+					tutorialSpacebarImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-SPACEBAR-PRESSED")->texture);
+				}else{
+					tutorialSpacebarImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-TUTORIAL-SPACEBAR")->texture);
 				}
 			}
 

@@ -32,6 +32,12 @@
       "src": "bgm/05_Feet.ogg",
       "category": "music"
     },
+    {
+    	"id": "MAIN_MENU",
+    	"type": "audio",
+      	"src": "menu/DoorMat.ogg",
+      	"category": "music"
+    },
 
     //Voices
     {
@@ -541,12 +547,18 @@
     "src": "ohhh_7.ogg",
     "category": "sfx"
   },
-	{
-		"id": "DISS-TUTORIAL-SPACEBAR",
-		"type": "texture",
-		"src": "UI/yelling contest/tutorialSpacebar.png",
+  {
+    "id": "DISS-TUTORIAL-SPACEBAR",
+    "type": "texture",
+    "src": "UI/yelling contest/tutorialSpacebar.png",
     "generateMipmaps": false
-	},
+  },
+  {
+    "id": "DISS-TUTORIAL-SPACEBAR-PRESSED",
+    "type": "texture",
+    "src": "UI/yelling contest/tutorialSpacebar -pressed.png",
+    "generateMipmaps": false
+  },
 	{
 		"id": "DISS-TUTORIAL-ARROWS",
 		"type": "texture",

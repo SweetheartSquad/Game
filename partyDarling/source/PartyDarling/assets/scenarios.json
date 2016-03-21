@@ -178,5 +178,10 @@
         "order": 0,
         "src": "scenarios/Bicker_and_Belch.json",
         "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Wilbur_the_Shutterbug.json",
+        "type": 0
     }
 ]

@@ -1342,11 +1342,6 @@
         },
         {
             "random": true,
-            "src": "components/definitions/TarnGolfman_HEAD.json",
-            "type": "HEAD"
-        },
-        {
-            "random": true,
             "src": "components/definitions/Norton_HEAD.json",
             "type": "HEAD"
         },
@@ -1948,6 +1943,11 @@
         {
             "random": false,
             "src": "components/definitions/Drusilla_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/TarnGolfman_HEAD.json",
             "type": "HEAD"
         }
     ]

@@ -154,6 +154,11 @@
             "id": 1866,
             "src": "items/ScienceNote.png",
             "type": "texture"
+        },
+        {
+            "id": 1951,
+            "src": "items/Beaker2.png",
+            "type": "texture"
         }
     ]
 }
