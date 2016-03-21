@@ -518,4 +518,8 @@ void PD_Scene_Main::setupEventListeners(){
 		uiDialogue->sayNext();
 		uiBubble->enable();
 	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("displayMessage", [this](sweet::Event * _event){
+		uiMessage->displayMessage(_event->getStringData("message"));
+	});
 }
