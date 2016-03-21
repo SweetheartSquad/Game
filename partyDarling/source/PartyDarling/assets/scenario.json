@@ -32,6 +32,12 @@
       "src": "bgm/05_Feet.ogg",
       "category": "music"
     },
+    {
+    	"id": "MAIN_MENU",
+    	"type": "audio",
+      	"src": "menu/DoorMat.ogg",
+      	"category": "music"
+    },
 
     //Voices
     {

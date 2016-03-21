@@ -5211,51 +5211,6 @@
             "type": "texture"
         },
         {
-            "id": 1312,
-            "src": "components/TarnGolfman_Lower_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1313,
-            "src": "components/TarnGolfman_Upper_Jaw.png",
-            "type": "texture"
-        },
-        {
-            "id": 1314,
-            "src": "components/TarnGolfman_Nose.png",
-            "type": "texture"
-        },
-        {
-            "id": 1315,
-            "src": "components/TarnGolfman_Right_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1316,
-            "src": "components/TarnGolfman_Left_Eye.png",
-            "type": "texture"
-        },
-        {
-            "id": 1317,
-            "src": "components/TarnGolfman_Right_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1318,
-            "src": "components/TarnGolfman_Left_Eyebrow.png",
-            "type": "texture"
-        },
-        {
-            "id": 1319,
-            "src": "components/TarnGolfman_Left_Pupil.png",
-            "type": "texture"
-        },
-        {
-            "id": 1320,
-            "src": "components/TarnGolfman_Right_Pupil.png",
-            "type": "texture"
-        },
-        {
             "id": 1330,
             "src": "components/Norton_Lower_Jaw.png",
             "type": "texture"
@@ -7958,6 +7913,51 @@
         {
             "id": 1941,
             "src": "components/Drusilla_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1942,
+            "src": "components/TarnGolfman_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1943,
+            "src": "components/TarnGolfman_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1944,
+            "src": "components/TarnGolfman_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1945,
+            "src": "components/TarnGolfman_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1946,
+            "src": "components/TarnGolfman_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1947,
+            "src": "components/TarnGolfman_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1948,
+            "src": "components/TarnGolfman_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1949,
+            "src": "components/TarnGolfman_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1950,
+            "src": "components/TarnGolfman_Right_Pupil.png",
             "type": "texture"
         }
     ]
