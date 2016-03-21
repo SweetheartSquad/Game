@@ -5,6 +5,8 @@
 
 #include <NineSlicing.h>
 
+class Player;
+
 class Bubble : public NodeUI_NineSliced{
 public:
 	TextLabel * label;
@@ -17,6 +19,7 @@ private:
 	float displayOffset;
 	bool childrenUpdated;
 	bool enabled;
+	Player * player;
 public:
 	Texture_NineSliced * bubbleTex;
 	ComponentShaderText * textShader;
@@ -27,7 +30,7 @@ public:
 	// currentOption == options.size() when nothing is selected
 	unsigned long int currentOption;
 
-	PD_UI_Bubble(BulletWorld * _world);
+	PD_UI_Bubble(BulletWorld * _world, Player * _player);
 	~PD_UI_Bubble();
 
 	VerticalLinearLayout * vl;

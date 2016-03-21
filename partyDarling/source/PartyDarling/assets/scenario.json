@@ -476,6 +476,12 @@
     "category": "sfx"
   },
   {
+    "id": "DISS-BATTLE-INTRO-BELL",
+    "type": "audio",
+    "src": "bell.ogg",
+    "category": "sfx"
+  },
+  {
     "id": "LEVEL_UP",
     "type": "audio",
     "src": "level_up.ogg",
@@ -494,9 +500,45 @@
     "category": "sfx"
   },
   {
-    "id": "ohhh",
+    "id": "ohhh_1",
     "type": "audio",
-    "src": "ohhh.ogg",
+    "src": "ohhh_1.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_2",
+    "type": "audio",
+    "src": "ohhh_2.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_3",
+    "type": "audio",
+    "src": "ohhh_3.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_4",
+    "type": "audio",
+    "src": "ohhh_4.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_5",
+    "type": "audio",
+    "src": "ohhh_5.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_6",
+    "type": "audio",
+    "src": "ohhh_6.ogg",
+    "category": "sfx"
+  },
+    {
+    "id": "ohhh_7",
+    "type": "audio",
+    "src": "ohhh_7.ogg",
     "category": "sfx"
   },
 	{

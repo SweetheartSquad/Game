@@ -24,7 +24,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	experience(0),
 	level(0),
 	dissStats(new PD_DissStats()),
-	wonLastDissBattle(false)
+	wonLastDissBattle(false),
+	joystickManager(new JoystickManager())
 {
 	// override sounds
 	footSteps = PD_ResourceManager::scenario->getAudio("PLAYER_FOOTSTEP")->sound;
@@ -46,9 +47,19 @@ Player::Player(BulletWorld * _bulletWorld) :
 Player::~Player(){
 	delete shakeTimeout;
 	delete dissStats;
+	delete joystickManager;
 }
 
 void Player::update(Step * _step){
+	joystickManager->update(_step);
+	
+	if(joystickManager->joysticks[0] != nullptr){
+		glm::vec2 mouseMove(0);
+		mouseMove.y += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightY) * -50.f;
+		mouseMove.x += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightX) * 50.f;
+		mouse.translate(mouseMove);
+	}
+
 	shakeTimeout->update(_step);
 	BulletFirstPersonController::update(_step);
 }
@@ -76,28 +87,139 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	}if (keyboard.keyDown(GLFW_KEY_D) || keyboard.keyDown(GLFW_KEY_RIGHT)){
 		res += right;
 	}
-	/*if(joystick != nullptr){
-	movement += forward * -joystick->getAxis(joystick->axisLeftY);
-	movement += right * joystick->getAxis(joystick->axisLeftX);
-
-	// move camera by directly moving mouse
-	float x2 = joystick->getAxis(joystick->axisRightX)*100;
-	float y2 = -joystick->getAxis(joystick->axisRightY)*100;
-	mouse->translate(glm::vec2(x2, y2));
-	}*/
+	
+	if(joystickManager->joysticks[0] != nullptr){
+		res -= forward * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY);
+		res += right * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftX);
+	}
 
 	// clamp the results in case we're using multiple inputs
 	res.x = glm::max(-1.f, glm::min(1.f, res.x));
 	res.z = glm::max(-1.f, glm::min(1.f, res.z));
 
 	//sprinting
-	isSprinting = keyboard.keyDown(GLFW_KEY_LEFT_SHIFT) || keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT);
+	isSprinting = wantsToSprint();
 
 	// jumping
 	if(isGrounded){
-		if (keyboard.keyJustDown(GLFW_KEY_SPACE)){
+		if (wantsToJump()){
 			res.y = 1.f;
 		}
+	}
+	return res;
+}
+
+bool Player::wantsToJump(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_SPACE);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
+	}
+	return res;
+}
+
+bool Player::wantsToSprint(){
+	bool res = false;
+	res |= keyboard.keyDown(GLFW_KEY_LEFT_SHIFT);
+	res |= keyboard.keyDown(GLFW_KEY_RIGHT_SHIFT);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+	}
+	return res;
+}
+
+bool Player::wantsToInteract(){
+	bool res = false;
+	res |= mouse.leftJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
+}
+bool Player::wantsToStopInteracting(){
+	bool res = false;
+	res |= mouse.leftJustReleased();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustUp(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
+}
+bool Player::wantsToKeepInteracting(){
+	bool res = false;
+	res |= mouse.leftDown();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonDown(joystickManager->joysticks[0]->faceButtonDown);
+	}
+	return res;
+}
+
+
+bool Player::wantsToQuit(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_ESCAPE);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonRight);
+	}
+	return res;
+}
+
+bool Player::wantsToMap(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_M);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->centerButtonLeft);
+	}
+	return res;
+}
+
+bool Player::wantsToInventory(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_TAB);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
+	}
+	return res;
+}
+
+bool Player::wantsNextBubble(){
+	bool res = false;
+	res |= mouse.getMouseWheelDelta() > FLT_EPSILON;
+	res |= mouse.rightJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonLeft);
+	}
+	return res;
+}
+bool Player::wantsPrevBubble(){
+	bool res = false;
+	res |= mouse.getMouseWheelDelta() < -FLT_EPSILON;
+	return res;
+}
+
+bool Player::wantsToInsultUp(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_UP);
+	res |= keyboard.keyJustDown(GLFW_KEY_W);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) < -FLT_EPSILON;
+	}
+	return res;
+}
+bool Player::wantsToInsultDown(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_DOWN);
+	res |= keyboard.keyJustDown(GLFW_KEY_S);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisTriggers) > FLT_EPSILON;
+	}
+	return res;
+}
+bool Player::wantsToInterject(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_SPACE);
+	res |= mouse.leftJustPressed();
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonRight);
 	}
 	return res;
 }

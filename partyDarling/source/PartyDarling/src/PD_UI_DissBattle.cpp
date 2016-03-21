@@ -4,7 +4,6 @@
 #include <PD_InsultButton.h>
 
 #include <Scene.h>
-#include <Keyboard.h>
 #include <GLFW\glfw3.h>
 #include <Easing.h>
 #include <Sprite.h>
@@ -20,7 +19,8 @@
 
 #define PLAYER_TEXT_WIDTH 0.5f
 #define FAIL_INSULT	"glassBreak"
-#define SUCCEED_INSULT	"ohhh"
+#define SUCCEED_INSULT	"ohhh_"
+#define NUM_SUCCEED_INSULT	7
 #define PASSED_INSULT_TIME_LIMIT "glassBreak"
 #define INTERJECT "recordScratch"
 #define NUM_COMPLIMENTS 6
@@ -436,6 +436,10 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 		missInterjectSounds.push_back(PD_ResourceManager::scenario->getAudio("slap" + std::to_string(i))->sound);
 	}
 
+	for(unsigned long int i = 1; i < NUM_SUCCEED_INSULT; ++i) {
+		succeedInsultSounds.push_back(PD_ResourceManager::scenario->getAudio(SUCCEED_INSULT + std::to_string(i))->sound);
+	}
+	
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
 }
 
@@ -464,14 +468,13 @@ void PD_UI_DissBattle::update(Step * _step){
 	if(isEnabled()){
 		if(!isGameOver){
 			if(modeOffensive && playerQuestionTimer >= playerQuestionTimerLength && !playerResult){
-				if(keyboard->keyJustDown(GLFW_KEY_UP) || keyboard->keyJustDown(GLFW_KEY_W)){
+				if(player->wantsToInsultUp()){
 					insult(pBubbleBtn1->isEffective, pBubbleBtn1->label->getText(false));
-				}
-				if(keyboard->keyJustDown(GLFW_KEY_DOWN) || keyboard->keyJustDown(GLFW_KEY_S)){
+				}else if(player->wantsToInsultDown()){
 					insult(pBubbleBtn2->isEffective, pBubbleBtn2->label->getText(false));
 				}
 			}else{
-				if (canInterject && (keyboard->keyJustDown(GLFW_KEY_SPACE) || mouse->leftJustPressed())){
+				if (canInterject && player->wantsToInterject()){
 					interject();
 				}
 			}
@@ -1067,7 +1070,7 @@ void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
 	if(!_isEffective) {
 		PD_ResourceManager::scenario->getAudio(FAIL_INSULT)->sound->play();
 	}else {
-		PD_ResourceManager::scenario->getAudio(SUCCEED_INSULT)->sound->play();
+		sweet::NumberUtils::randomItem(succeedInsultSounds)->play();
 		int randComp = sweet::NumberUtils::randomInt(1, NUM_COMPLIMENTS);
 		complimentBubble->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-COMPLIMENT" + std::to_string(randComp))->texture);
 		complimentBubbleTimer = 0.f;

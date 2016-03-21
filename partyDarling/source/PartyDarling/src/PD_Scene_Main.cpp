@@ -85,7 +85,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	_game->showLoading(0);
 
 	player = new Player(bulletWorld);
-	uiBubble = new PD_UI_Bubble(uiLayer->world);
+	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
 	// Load the save file
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
@@ -94,9 +94,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
-	if(PD_Game::progressManager->plotPosition == kEND){
 		toonShader->addComponent(new ShaderComponentVNoise(toonShader));
-	}
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
 	if(PD_Game::progressManager->plotPosition == kEND){
@@ -302,14 +300,19 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
 
+
+
+	// if we're on the first run, don't show a message
+	// if this is the first time we've entered the game since the application started, show a "loaded" message
+	// any other time, show a "saved" message
 	if(PD_Game::progressManager->plotPosition != 1){
 		if(!PD_Game::firstRun){
 			uiMessage->displayMessage("Game saved.");
 		}else{
-			PD_Game::firstRun = false;
 			uiMessage->displayMessage("Game loaded.");
 		}
 	}
+	PD_Game::firstRun = false;
 }
 
 void PD_Scene_Main::pickScenarios(){
@@ -838,12 +841,21 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 }
 
 void PD_Scene_Main::update(Step * _step){
+	toonShader->bindShader();
+	toonShader->makeDirty();
+	ShaderComponentVNoise * vNoise = dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1));
 	if(PD_Game::progressManager->plotPosition == kEND){
-		toonShader->bindShader();
-		toonShader->makeDirty();
-		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->timeLocation, sweet::lastTimestamp);
-		glUniform1f(dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1))->magLocation, sin(sweet::lastTimestamp)*0.02f);
+		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 0.05f);
+	}else if(PD_Game::progressManager->plotPosition == kBEGINNING || PD_Game::progressManager->plotPosition == kEPILOGUE){
+		vNoise->setMag(0,0, 0);
+	}else if(sweet::NumberUtils::randomFloat() > sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.9999, 0.99)){
+		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 1.f);
+	}else{
+		vNoise->setMag(0,0, sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05));
 	}
+	glUniform1f(vNoise->timeLocation, sweet::lastTimestamp);
+	glUniform1f(vNoise->mag1Location, vNoise->mag1);
+	glUniform1f(vNoise->mag2Location, vNoise->mag2);
 
 	// panning
 	if(panLeft){
@@ -989,12 +1001,8 @@ void PD_Scene_Main::update(Step * _step){
 
 	bulletWorld->update(_step);
 
-	if(keyboard->keyJustDown(GLFW_KEY_ESCAPE)){
+	if(player->wantsToQuit()){
 		game->switchScene("menu", false);
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_R)){
-		PD_ResourceManager::scenario->eventManager->triggerEvent("reset");
 	}
 
 	// navigation testing
@@ -1126,14 +1134,14 @@ void PD_Scene_Main::update(Step * _step){
 	updateSelection();
 
 	// prop carrying release and carry
-	if(mouse->leftJustReleased()){
+	if(player->wantsToStopInteracting()){
 		if(carriedProp != nullptr){
 			carriedProp->body->setDamping(0,0);
 			carriedProp->body->setGravity(bulletWorld->world->getGravity());
 		}
 		carriedProp = nullptr;
 		carriedPropDistance = 0;
-	}else if(mouse->leftDown()){
+	}else if(player->wantsToKeepInteracting()){
 		if(carriedProp != nullptr){
 			glm::vec3 targetPos = camPos + player->playerCamera->forwardVectorRotated * carriedPropDistance;
 			glm::vec3 d = (targetPos - carriedProp->meshTransform->getWorldPos()) * 0.5f;
@@ -1147,7 +1155,7 @@ void PD_Scene_Main::update(Step * _step){
 
 	// inventory toggle
 	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
-		if(keyboard->keyJustDown(GLFW_KEY_TAB)){
+		if(player->wantsToInventory()){
 			if(uiInventory->isVisible()){
 				uiBubble->enable();
 				uiInventory->disable();
@@ -1163,7 +1171,7 @@ void PD_Scene_Main::update(Step * _step){
 	}
 
 	// map toggle
-	if(keyboard->keyJustDown(GLFW_KEY_M)){
+	if(player->wantsToMap()){
 		if(uiMap->isEnabled()){
 			uiMap->disable();
 		}else{
@@ -1191,14 +1199,12 @@ void PD_Scene_Main::update(Step * _step){
 		uiBubble->addOption("test", nullptr);
 	}
 
-	// debug controls
+	// get new BGM track
 	if(keyboard->keyJustDown(GLFW_KEY_P)){
 		dynamic_cast<PD_Game*>(game)->playBGM();
 	}
 
-	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		cycleCamera();
-	}
+	// toggle debug draw
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		Transform::drawTransforms = !Transform::drawTransforms;
 		if(debugDrawer != nullptr){
@@ -1214,16 +1220,6 @@ void PD_Scene_Main::update(Step * _step){
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
-	}
-
-	if(keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * 0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->firstParent()->translate(activeCamera->forwardVectorRotated * -0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * -0.03f);
-	}if(keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->firstParent()->translate(activeCamera->rightVectorRotated * 0.03f);
 	}
 
 	Scene::update(_step);
@@ -1418,7 +1414,7 @@ void PD_Scene_Main::updateSelection(){
 					// prop carrying selection
 					PD_Prop * prop = dynamic_cast<PD_Prop*>(me);
 					if(prop != nullptr){
-						if(mouse->leftJustPressed()){
+						if(player->wantsToInteract()){
 							carriedProp = prop;
 							carriedPropDistance = glm::distance(player->playerCamera->childTransform->getWorldPos(), carriedProp->meshTransform->getWorldPos());
 							carriedProp->body->setDamping(0.8f,0.5f);

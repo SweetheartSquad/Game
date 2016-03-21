@@ -97,7 +97,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 				playerCard->setVisible(true);
 				vs->setVisible(true);
 				enemyCard->setVisible(true);
-				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO-BELL")->sound->play();
 			}
 		}else{
 			playerCard->firstParent()->scale(1, false);
