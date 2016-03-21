@@ -7,7 +7,7 @@ PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _t
 	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUTTON")),
 	isEffective(false)
 {
-	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*2.f);
+	setBorder(_font->getLineHeight() * 0.7f);
 	label = new TextLabel(world, _font, _textShader);
 	label->horizontalAlignment = kCENTER;
 	label->verticalAlignment = kMIDDLE;
