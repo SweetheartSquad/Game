@@ -189,6 +189,24 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
+
+
+	fadeNode = new NodeUI(uiLayer->world);
+	fadeNode->setBackgroundColour(0,0,0,1);
+	fadeNode->setRationalHeight(1.f, uiLayer);
+	fadeNode->setRationalWidth(1.f, uiLayer);
+	uiLayer->addChild(fadeNode);
+
+	fadeTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		fadeNode->setBackgroundColour(0,0,0, 0.f);
+	});
+	fadeTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		fadeNode->setBackgroundColour(0,0,0, 1.f - p);
+	});
+
+	fadeTimeout->start();
+	childTransform->addChild(fadeTimeout, false);
 }
 
 PD_Scene_MenuMain::~PD_Scene_MenuMain() {

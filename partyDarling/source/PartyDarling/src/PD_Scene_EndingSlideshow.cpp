@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PD_Scene_EndingSlideshow.h>
+#include <PD_Scene_MenuMain.h>
 #include <PD_ResourceManager.h>
 
 #include <PD_Scene_Main.h>
@@ -32,6 +33,8 @@ PD_Scene_EndingSlideshow::PD_Scene_EndingSlideshow(Game * _game) :
 	Timeout * t = new Timeout(2.f, [this, numSlides, t](sweet::Event * _event){
 		slideDisplay->setBackgroundColour(1,1,1, 0);
 		if(curSlide >= numSlides){
+			dynamic_cast<PD_Scene_MenuMain *>(game->scenes["menu"])->fadeTimeout->restart();	
+			dynamic_cast<PD_Scene_MenuMain *>(game->scenes["menu"])->fadeNode->setBackgroundColour(0,0,0,1);
 			game->switchScene("menu", true);
 		}else{
 			slideDisplay->background->mesh->replaceTextures(slides.at(curSlide));

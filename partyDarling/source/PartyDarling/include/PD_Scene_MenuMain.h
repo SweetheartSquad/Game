@@ -8,10 +8,12 @@
 class ComponentShaderText;
 class PD_UI_ConfirmNewGame;
 class PD_UI_Text;
+class Timeout;
 
 class PD_Scene_MenuMain: public Scene {
 public:
-
+	Timeout * fadeTimeout;
+	NodeUI * fadeNode;
 	Shader * screenSurfaceShader;
 	RenderSurface* screenSurface;
 	StandardFrameBuffer* screenFBO;
