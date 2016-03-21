@@ -9,6 +9,5 @@ class PD_PropDefinition;
 
 class PD_Prop : public RoomObject{
 public:
-	std::string type;
 	PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * _shader, Anchor_t _anchor = GROUND);
 };

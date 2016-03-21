@@ -57,6 +57,7 @@ public:
 	std::map<PD_Side, PD_Slot *> emptySlots;
 
 	RoomObject * parent;
+	std::vector<RoomObject *> children; // all children (for parentMax)
 
 	glm::vec3 originalPos; // Due to the y-axis alignment thing
 
