@@ -38,6 +38,12 @@
       	"src": "menu/DoorMat.ogg",
       	"category": "music"
     },
+    {
+    	"id": "ENDING",
+    	"type": "audio",
+      	"src": "end/CrawkSpace.ogg",
+      	"category": "music"
+    },
 
     //Voices
     {
