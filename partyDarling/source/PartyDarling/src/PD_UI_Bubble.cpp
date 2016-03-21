@@ -2,8 +2,7 @@
 
 #include <PD_UI_Bubble.h>
 #include <PD_ResourceManager.h>
-#include <Mouse.h>
-#include <Keyboard.h>
+#include <Player.h>
 
 Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textShader) :
 	NodeUI_NineSliced(_world, _tex)
@@ -29,13 +28,14 @@ Bubble::Bubble(BulletWorld * _world, Texture_NineSliced * _tex, Shader * _textSh
 	setBackgroundColour(1.25,1.25,1.25, 1);
 }
 
-PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world) :
+PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world, Player * _player) :
 	NodeUI(_world),
 	currentOption(0),
 	vl(new VerticalLinearLayout(world)),
 	displayOffset(0),
 	childrenUpdated(false),
-	enabled(true)
+	enabled(true),
+	player(_player)
 {
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(1,1,1,1);
@@ -126,31 +126,13 @@ void PD_UI_Bubble::placeOptions(){
 void PD_UI_Bubble::update(Step * _step){
 	// don't bother with interaction and layout stuff if it's hidden or there aren't any options right now
 	if(enabled && options.size() > 0){
-		// use the mouse to determine interactions
-		// if we're scrolling, then we either call "next" or "prev" based on the direction of the scroll
-		// if we're not scrolling, we can click the current option
-		Mouse & mouse = Mouse::getInstance();
-		Keyboard & keyboard = Keyboard::getInstance();
-		float d = mouse.getMouseWheelDelta();
-
-		if(glm::abs(d) <= FLT_EPSILON){
-			if(mouse.rightJustPressed()){
-				d = 1;
-			}
-		}
-
-		// if there's only one option, override and say we aren't scrolling
-		if(options.size() < 2){
-			d = 0;
-		}
-
 		// interaction
 		if(enabled){
-			if(d > FLT_EPSILON){
+			if(player->wantsNextBubble()){
 				next();
-			}else if(d < -FLT_EPSILON){
+			}else if(player->wantsPrevBubble()){
 				prev();
-			}else if(mouse.leftJustPressed()){
+			}else if(player->wantsToInteract()){
 				selectCurrent();
 			}
 		}

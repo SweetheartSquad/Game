@@ -97,7 +97,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 				playerCard->setVisible(true);
 				vs->setVisible(true);
 				enemyCard->setVisible(true);
-				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO")->sound->play();
+				PD_ResourceManager::scenario->getAudio("DISS-BATTLE-INTRO-BELL")->sound->play();
 			}
 		}else{
 			playerCard->firstParent()->scale(1, false);
@@ -131,8 +131,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			levelUpContainer->setVisible(true);
 			levelUp->setRationalHeight(0.f, levelUpContainer);
 			levelUp->setSquareWidth(1.f);
-			invalidateLayout();
 
+			player->experience = prevXP + wonXP - 100.f; // recalculate xp for new level
 			dissBattleLevelUpTimeout->restart();
 		}else{
 			// NORMAL
@@ -156,7 +156,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
 		levelUpContainer->setVisible(false);
-		player->experience = 0.f; // just in case
 		setVisible(false);
 
 		dissEnemy = nullptr;
@@ -165,10 +164,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	});
 	dissBattleLevelUpTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		if(p <= 0.1f){
-			player->experience = 100 * (1-p/0.1f);
-		}
-
 		float size;
 		if(p <= 0.5f){
 			size = Easing::easeOutBounce(p * LEVEL_UP_DURATION, 0, 1, LEVEL_UP_DURATION * 0.5f);

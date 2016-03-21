@@ -10,7 +10,10 @@
 ShaderComponentVNoise::ShaderComponentVNoise(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
 	timeLocation(-1),
-	magLocation(-1)/*,
+	mag1Location(-1),
+	mag2Location(-1),
+	mag1(0),
+	mag2(0)/*,
 	modelUniformLocation(-1),
 	viewUniformLocation(-1),
 	projectionUniformLocation(-1),
@@ -25,7 +28,8 @@ std::string ShaderComponentVNoise::getVertexVariablesString() {
 	//http://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
 	return
 	"uniform float time = 0;"
-	"uniform float magnitude = 0;"
+	"uniform float magnitude1 = 0;"
+	"uniform float magnitude2 = 0;"
 	"float rand(vec2 co){"
 		"return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);"
 	"}" + SEMI_ENDL;
@@ -37,8 +41,8 @@ std::string ShaderComponentVNoise::getFragmentVariablesString() {
 
 std::string ShaderComponentVNoise::getVertexBodyString() {
 	return 
-		TAB + "fragUV += (0.02-magnitude) * vec2(rand(vec2(aVertexUVs.x, time)), rand(vec2(aVertexUVs.y, time)))" + SEMI_ENDL +
-		TAB + "gl_Position += magnitude * vec4(rand(vec2(aVertexPosition.x, time)), rand(vec2(aVertexPosition.y, time)), rand(vec2(aVertexPosition.z, time)), 0)" + SEMI_ENDL;
+		TAB + "fragUV += magnitude2 * vec2(rand(vec2(aVertexUVs.x, time)), rand(vec2(aVertexUVs.y, time)))" + SEMI_ENDL +
+		TAB + "gl_Position += magnitude1 * vec4(rand(vec2(aVertexPosition.x, time)), rand(vec2(aVertexPosition.y, time)), rand(vec2(aVertexPosition.z, time)), 0)" + SEMI_ENDL;
 }
 
 std::string ShaderComponentVNoise::getFragmentBodyString() {
@@ -53,13 +57,17 @@ std::string ShaderComponentVNoise::getOutColorMod() {
 void ShaderComponentVNoise::load() {
 	if(!loaded){
 		timeLocation = glGetUniformLocation(shader->getProgramId(), "time");
-		magLocation = glGetUniformLocation(shader->getProgramId(), "magnitude");
+		mag1Location = glGetUniformLocation(shader->getProgramId(), "magnitude1");
+		mag2Location = glGetUniformLocation(shader->getProgramId(), "magnitude2");
 	}
 	ShaderComponent::load();
 }
 
 void ShaderComponentVNoise::unload() {
 	if(loaded){
+		timeLocation = -1;
+		mag1Location = -1; 
+		mag2Location = -1;
 	}
 	ShaderComponent::unload();
 }
@@ -78,4 +86,9 @@ void ShaderComponentVNoise::configureUniforms(sweet::MatrixStack* _matrixStack, 
 
 	m = _matrixStack->getMVP();
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &(*m)[0][0]);*/
+}
+
+void ShaderComponentVNoise::setMag(float _mag1, float _mag2, float _interpolation){
+	mag1 += (_mag1 - mag1) * _interpolation;
+	mag2 += (_mag2 - mag2) * _interpolation;
 }

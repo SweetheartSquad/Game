@@ -546,10 +546,10 @@ bool RoomBuilder::search(RoomObject * _child){
 			bool validParent = false;
 			for(auto &type : parentTypes) {
 				if(type == o->type) {
-					// just top for now
-					if(_child->type != "" && _child->parentMax > 0 && o->emptySlots.find(PD_Side::kTOP) != o->emptySlots.end()){
+					// search all children
+					if(_child->type != "" && _child->parentMax > 0 && o->children.size() > 0){
 						int count = 0;
-						for(auto c : o->emptySlots.at(PD_Side::kTOP)->children){
+						for(auto c : o->children){
 							if(c->type == _child->type){
 								++count;
 							}
@@ -839,6 +839,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	*/
 
 	_slot->children.push_back(_child);
+	_parent->children.push_back(_child);
 
 	// adjust remaining slot space
 	_slot->spaceFilled += abs(childDimensions.x);
@@ -1171,7 +1172,6 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 	std::vector<PD_Character *> characters = getCharacters(true);
 	std::vector<PD_Item *> items = getItems(true);
 	std::vector<PD_Furniture *> furniture = getFurniture();
-	//std::vector<PD_Prop *> props = getProps();
 
 	PD_Listing * listing = PD_Listing::listings.at(definition->scenario);
 
@@ -1319,23 +1319,112 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 		std::string type = it->first;
 		std::vector<PD_Furniture *> furniture = it->second;
 
-		if(PD_ResourceManager::furniturePropDefinitions.at(type).size() > 0){
-			// Per number of this type, select a prop def!
-			// Assume we are only putting props on TOP side
-			for(auto f : furniture){
-				if(f->emptySlots.find(PD_Side::kTOP) != f->emptySlots.end()){
-					float spaceFilled = 0;
-					PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
+		// Per number of this type, select a prop def!
+		for(auto f : furniture){
+			std::map<PD_PropDefinition *, int> definitions; // prop definition, count
+			for(auto d : PD_ResourceManager::furniturePropDefinitions.at(f->type)){
+				definitions.insert(std::make_pair(d, 0));
+			}
+			
+			// Group props by side they can be parented to
+			std::vector<PD_PropDefinition *> top;
+			std::vector<PD_PropDefinition *> left;
+			std::vector<PD_PropDefinition *> right;
+			typedef std::map<PD_PropDefinition *, int>::iterator it_type;
+			for(it_type iterator = definitions.begin(); iterator != definitions.end(); iterator++) {
+				PD_PropDefinition * p = iterator->first;
+				iterator->second = 0;
 
-					while(spaceFilled <  slot->length){
-						props.push_back(new PD_Prop(world, sweet::NumberUtils::randomItem(PD_ResourceManager::furniturePropDefinitions.at(type)), baseShader, GROUND));
-						spaceFilled += props.back()->boundingBox.width;
+				for(auto parent : p->parents){
+					if(parent.parent == f->type){
+						for(auto s : parent.sides){
+							switch(s){
+							case PD_Side::kTOP:
+								top.push_back(p);
+								break;
+							case PD_Side::kLEFT:
+								left.push_back(p);
+								break;
+							case PD_Side::kRIGHT:
+								right.push_back(p);
+								break;
+							default:
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			if(f->emptySlots.find(PD_Side::kTOP) != f->emptySlots.end() && top.size() > 0){
+				float spaceFilled = 0;
+				PD_Slot * slot = f->emptySlots.at(PD_Side::kTOP);
+				while(spaceFilled <  slot->length && top.size() > 0){
+					int idx = sweet::NumberUtils::randomInt(0, top.size() - 1);
+					PD_PropDefinition * def = top.at(idx);
+					props.push_back(new PD_Prop(world, def, baseShader, GROUND));
+					spaceFilled += props.back()->boundingBox.width;
+					// increase count
+					definitions.at(def) += 1;
+					if(definitions.at(def) >= def->max){
+						//remove from top, left, and right
+						for(int i = 0; i < right.size(); ++i){
+							if(right.at(i) == def){
+								right.erase(right.begin() + i);
+								break;
+							}
+						}
+						for(int i = 0; i < left.size(); ++i){
+							if(left.at(i) == def){
+								left.erase(left.begin() + i);
+								break;
+							}
+						}
+						top.erase(top.begin() + idx);
+					}
+				}
+			}
+			if(f->emptySlots.find(PD_Side::kLEFT) != f->emptySlots.end() && left.size() > 0){
+				float spaceFilled = 0;
+				PD_Slot * slot = f->emptySlots.at(PD_Side::kLEFT);
+				while(spaceFilled <  slot->length && left.size() > 0){
+					int idx = sweet::NumberUtils::randomInt(0, left.size() - 1);
+					PD_PropDefinition * def = left.at(idx);
+					props.push_back(new PD_Prop(world, def, baseShader, GROUND));
+					spaceFilled += props.back()->boundingBox.width;
+
+					definitions.at(def) += 1;
+					if(definitions.at(def) >= def->max){
+						// remove from left and right
+						for(int i = 0; i < right.size(); ++i){
+							if(right.at(i) == def){
+								right.erase(right.begin() + i);
+								break;
+							}
+						}
+						left.erase(left.begin() + idx);
+					}
+				}
+			}
+			if(f->emptySlots.find(PD_Side::kRIGHT) != f->emptySlots.end() && right.size() > 0){
+				float spaceFilled = 0;
+				PD_Slot * slot = f->emptySlots.at(PD_Side::kRIGHT);
+				while(spaceFilled <  slot->length && right.size() > 0){
+					int idx = sweet::NumberUtils::randomInt(0, right.size() - 1);
+					PD_PropDefinition * def = right.at(idx);
+					props.push_back(new PD_Prop(world, right.at(idx), baseShader, GROUND));
+					spaceFilled += props.back()->boundingBox.width;
+
+					definitions.at(def) += 1;
+					if(definitions.at(def) >= def->max){
+						// remove from right
+						right.erase(right.begin() + idx);
 					}
 				}
 			}
 		}
 	}
-
+	
 	// Random
 	if(PD_ResourceManager::independentPropDefinitions.size() > 0){
 		unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.01f);

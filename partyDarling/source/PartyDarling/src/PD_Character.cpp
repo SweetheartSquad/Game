@@ -526,6 +526,15 @@ void CharacterRenderer::setAnimation(std::vector<PD_CharacterAnimationStep> _ste
 		solverLegR->target = glm::vec2();
 		solverBod->target  = glm::vec2();
 	}
+
+	Step s;
+	s.deltaTime = sweet::NumberUtils::randomFloat(0, 10);
+	currentAnimation->leftArm->update(&s);
+	currentAnimation->rightArm->update(&s);
+	currentAnimation->leftLeg->update(&s);
+	currentAnimation->rightLeg->update(&s);
+	currentAnimation->body->update(&s);
+	currentAnimation->translation->update(&s);
 }
 
 void CharacterRenderer::setEmote(std::string _id, float _duration) {
