@@ -184,10 +184,12 @@ PD_Character * PD_Character::createRandomPD_Character(Scenario * _scenario, Bull
 
 	PD_Character * p = new PD_Character(_world, newChar, MeshFactory::getPlaneMesh(3.f), _shader, _emoticonShader);
 
-	p->dissStats->incrementDefense(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
-	p->dissStats->incrementInsight(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
-	p->dissStats->incrementStrength(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
-	p->dissStats->incrementSass(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+	if(PD_Game::progressManager != nullptr){
+		p->dissStats->incrementDefense(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+		p->dissStats->incrementInsight(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+		p->dissStats->incrementStrength(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+		p->dissStats->incrementSass(sweet::NumberUtils::randomInt(0, PD_Game::progressManager->plotPosition));
+	}
 
 	if(PD_Listing::listings.find(_scenario) != PD_Listing::listings.end()){
 		PD_Listing::listings[_scenario]->characters[id] = p;
