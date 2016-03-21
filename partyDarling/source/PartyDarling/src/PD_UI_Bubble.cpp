@@ -111,10 +111,10 @@ void PD_UI_Bubble::placeOptions(){
 
 		if(i == currentOption){
 			options.at(i)->setBackgroundColour(1,1,1, 1);
-			options.at(i)->childTransform->scale(1.f, false);
+			//options.at(i)->childTransform->scale(1.f, false);
 		}else{
 			options.at(i)->setBackgroundColour(1.25,1.25,1.25, 1);
-			options.at(i)->childTransform->scale(0.95f, false);
+			//options.at(i)->childTransform->scale(0.95f, false);
 		}
 
 		options.at(i)->setMeasuredWidths();
