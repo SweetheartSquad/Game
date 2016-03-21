@@ -58,8 +58,10 @@
             "type": "toilet",
 			"mass": 0,
             "roomTypes" : ["BATHROOM","LABORATORY"],
-            "sides" : {
-                },
+           "sides" : {
+				"LEFT":"RIGHT",
+				"RIGHT":"LEFT"
+			},
 			"parentDependent": true,
             "parents":{
                 "wall":[
@@ -69,8 +71,6 @@
 			"twist": false,
             "flare": false,
 			"paddingFront": 0.2,
-			"paddingLeft": 0.5,
-			"paddingRight": 0.5,
 			"paddingBack": 0.2,
 			"max": 1
 
