@@ -164,15 +164,21 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 		itemDescription->verticalAlignment = kTOP;
 	}
 
+	HorizontalLinearLayout * dissContainer = new HorizontalLinearLayout(_world);
+	addChild(dissContainer);
+	dissContainer->horizontalAlignment = kCENTER;
+	dissContainer->verticalAlignment = kMIDDLE;
+	dissContainer->setRationalWidth(1.f, this);
+	dissContainer->setRationalHeight(1.f, this);
+	dissContainer->setMarginBottom(0.65f);
+	dissContainer->setMarginTop(0.1f);
+
 	HorizontalLinearLayout * cardContainer = new HorizontalLinearLayout(_world);
-	addChild(cardContainer);
+	dissContainer->addChild(cardContainer);
 	cardContainer->horizontalAlignment = kLEFT;
-	cardContainer->verticalAlignment = kMIDDLE;
-	cardContainer->setRationalWidth(0.9f, this);
-	cardContainer->setRationalHeight(1.f, this);
-	cardContainer->setMarginTop(0.1f);
-	cardContainer->setMarginBottom(0.65f);
-	cardContainer->setMarginLeft(0.1f);
+	cardContainer->verticalAlignment = kTOP;
+	cardContainer->setRationalWidth(1.f, root); // yes, root
+	cardContainer->setRationalHeight(1.f, dissContainer);
 
 	// Diss Card
 	playerCard = new PD_UI_DissCard(_world, _player);
@@ -182,6 +188,16 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 	playerCard->setSquareWidth(1.4f);
 	playerCard->firstParent()->rotate(15.f, 0.f, 0.f, 1.f, kOBJECT);
 
+	// Friendship tokens
+	lives = new HorizontalLinearLayout(_world);
+	cardContainer->addChild(lives);
+	//livesContainer->setBackgroundColour(0.5f, 1.f, 0.5f);
+	lives->setRationalWidth(1.f, cardContainer);
+	lives->setRationalHeight(0.5f, cardContainer);
+	lives->horizontalAlignment = kLEFT;
+	lives->verticalAlignment = kBOTTOM;
+
+	dissContainer->marginRight.setRationalSize(0.7f, &playerCard->width);
 	// disable and hide by default
 	disable();
 }
@@ -342,6 +358,21 @@ void PD_UI_Inventory::refreshGrid(){
 
 	// clear the flag
 	gridDirty = false;
+}
+
+void PD_UI_Inventory::addFriendshipToken(Texture * _tex){
+	NodeUI * l = new NodeUI(world);
+	lives->addChild(l);
+	l->background->mesh->pushTexture2D(_tex);
+	l->background->mesh->setScaleMode(GL_NEAREST);
+	l->setRationalHeight(1.f, lives);
+	l->setSquareWidth(1.f);
+	l->boxSizing = kCONTENT_BOX;
+	l->setMarginLeft(5);
+	l->setMarginRight(5);
+	l->firstParent()->scale(1.f, 1.f, 1.f);
+
+	++_tex->referenceCount;
 }
 
 void PD_UI_Inventory::enable(){

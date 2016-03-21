@@ -836,7 +836,7 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
 	tex->load();
 	uiDissBattle->addLife(tex);
-
+	uiInventory->addFriendshipToken(tex);
 	uiMessage->gainLifeToken(_name, tex);
 }
 
