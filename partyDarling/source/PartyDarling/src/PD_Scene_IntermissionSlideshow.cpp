@@ -35,7 +35,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	vl->verticalAlignment = kMIDDLE;
 	vl->horizontalAlignment = kRIGHT;
 
-	TextLabel * skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
+	skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
 	vl->addChild(skip);
 	skip->setBackgroundColour(0.5f, 0, 0);
 	skip->setRationalWidth(0.25f, vl);
@@ -48,7 +48,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	});
 	skip->setVisible(false);
 
-	Timeout * t = new Timeout(1.f, [skip](sweet::Event * _event){
+	Timeout * t = new Timeout(1.f, [this](sweet::Event * _event){
 		skip->setVisible(true);
 		skip->setMouseEnabled(true);
 	});
@@ -69,4 +69,10 @@ PD_Scene_IntermissionSlideshow::~PD_Scene_IntermissionSlideshow(){
 
 void PD_Scene_IntermissionSlideshow::update(Step * _step){
 	Scene_SlideShow::update(_step);
+
+	if(skip->isVisible()){
+		if(mouse->leftJustPressed()){
+			eventManager->triggerEvent("overflow");
+		}
+	}
 }
