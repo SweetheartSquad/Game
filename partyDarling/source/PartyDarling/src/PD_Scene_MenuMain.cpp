@@ -163,6 +163,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	confirmNewGame->btnConfirm->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		// erase the existing save file
 		PD_Game::progressManager->eraseSave();
+		PD_Game::progressManager->loadSave(nullptr, nullptr);
 
 		// delete the existing game
 		auto it = game->scenes.find("game");

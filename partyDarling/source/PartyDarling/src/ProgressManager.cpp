@@ -172,16 +172,27 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveOut["plotPosition"] = (int)plotPosition;
 	saveOut["variables"] = variables;
 	saveOut["stats"] = Json::Value();
-	saveOut["stats"]["strength"] = _player->dissStats->getStrength();
-	saveOut["stats"]["sass"] = _player->dissStats->getSass();
-	saveOut["stats"]["defense"] = _player->dissStats->getDefense();
-	saveOut["stats"]["insight"] = _player->dissStats->getInsight();
-	saveOut["stats"]["experience"] = _player->experience;
-	saveOut["stats"]["level"] = _player->level;
-	for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
-		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-		_uiDissBattle->lifeTokens[i]->saveImageData(fileName, false);
-		saveOut["lifeTokens"].append(fileName);
+	if(_player != nullptr){
+		saveOut["stats"]["strength"] = _player->dissStats->getStrength();
+		saveOut["stats"]["sass"] = _player->dissStats->getSass();
+		saveOut["stats"]["defense"] = _player->dissStats->getDefense();
+		saveOut["stats"]["insight"] = _player->dissStats->getInsight();
+		saveOut["stats"]["experience"] = _player->experience;
+		saveOut["stats"]["level"] = _player->level;
+	}else{
+		saveOut["stats"]["strength"] = 0;
+		saveOut["stats"]["sass"] = 0;
+		saveOut["stats"]["defense"] = 0;
+		saveOut["stats"]["insight"] = 0;
+		saveOut["stats"]["experience"] = 0;
+		saveOut["stats"]["level"] = 0;
+	}
+	if(_uiDissBattle != nullptr){
+		for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			_uiDissBattle->lifeTokens[i]->saveImageData(fileName, false);
+			saveOut["lifeTokens"].append(fileName);
+		}
 	}
 
 	saveOut["progress"] = scenarioFile;
@@ -193,12 +204,10 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 }
 
 void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
-	if(_player != nullptr && _uiDissBattle != nullptr){
-		if(!sweet::FileUtils::fileExists("data/save.json")){
-			// if a save file doesn't exist, create a new one, save it immediately, then load that instead
-			getNew();
-			save(_player, _uiDissBattle);
-		}
+	if(!sweet::FileUtils::fileExists("data/save.json")){
+		// if a save file doesn't exist, create a new one, save it immediately, then load that instead
+		getNew();
+		save(_player, _uiDissBattle);
 	}
 
 	// load the previous save file properties into the appropriate objects
