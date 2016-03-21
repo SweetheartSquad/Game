@@ -131,8 +131,8 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			levelUpContainer->setVisible(true);
 			levelUp->setRationalHeight(0.f, levelUpContainer);
 			levelUp->setSquareWidth(1.f);
-			invalidateLayout();
 
+			player->experience = prevXP + wonXP - 100.f; // recalculate xp for new level
 			dissBattleLevelUpTimeout->restart();
 		}else{
 			// NORMAL
@@ -156,7 +156,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	dissBattleLevelUpTimeout = new Timeout(LEVEL_UP_DURATION, [this](sweet::Event * _event){
 		// end and this
 		levelUpContainer->setVisible(false);
-		player->experience = 0.f; // just in case
 		setVisible(false);
 
 		dissEnemy = nullptr;

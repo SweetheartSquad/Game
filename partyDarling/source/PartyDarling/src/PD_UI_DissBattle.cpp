@@ -778,7 +778,13 @@ void PD_UI_DissBattle::gameOver(bool _win){
 
 	prevXP = player->experience;
 	if(_win){
-		wonXP = 100.f / (player->level + 1);
+		int sumP = player->dissStats->getDefense() + player->dissStats->getInsight() + player->dissStats->getStrength() + player->dissStats->getSass();
+		int sumE = enemy->dissStats->getDefense() + enemy->dissStats->getInsight() + enemy->dissStats->getStrength() + enemy->dissStats->getSass();
+		float res = sumE - sumP / 4.f;
+		if(res < 0){
+			res = 0.f;
+		}
+		wonXP = 100.f / ((player->level + 1) * 5) * res; 
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
 		wonXP = 0.f;
