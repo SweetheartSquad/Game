@@ -3,6 +3,7 @@
 #include <PD_Scene_Main.h>
 #include <PD_Scene_MenuMain.h>
 #include <PD_Scene_IntermissionSlideshow.h>
+#include <PD_Scene_EndingSlideshow.h>
 #include <PD_ResourceManager.h>
 #include <Player.h>
 #include <PD_DissStats.h>
@@ -503,7 +504,10 @@ void PD_Scene_Main::setupEventListeners(){
 			PD_Game::progressManager->eraseSave();
 			PD_Game::progressManager->plotPosition = kBEGINNING;
 			dynamic_cast<PD_Scene_MenuMain *>(game->scenes.at("menu"))->continueText->disable();
-			game->switchScene("menu", true);
+
+			game->scenes["ending"] = new PD_Scene_EndingSlideshow(game);
+
+			game->switchScene("ending", true);
 		}
 	});
 
