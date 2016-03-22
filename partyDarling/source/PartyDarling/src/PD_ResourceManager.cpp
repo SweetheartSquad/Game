@@ -26,7 +26,7 @@ std::map<std::string, std::vector<PD_PropDefinition *>> PD_ResourceManager::furn
 std::vector<PD_PropDefinition *> PD_ResourceManager::independentPropDefinitions;
 std::map<std::string, std::vector<std::string>> PD_ResourceManager::roomTypes;
 std::vector<std::string> PD_ResourceManager::roomTypesKeys;
-std::vector<OpenAL_Sound *> PD_ResourceManager::voices;
+std::map<std::string, OpenAL_Sound *> PD_ResourceManager::voices;
 
 PD_ResourceManager::PD_ResourceManager(){
 	// register custom asset types
@@ -220,7 +220,7 @@ PD_ResourceManager::PD_ResourceManager(){
 	}
 	*/
 	for(unsigned long int i = 1; i <= 37; ++i) {
-		voices.push_back(PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound);
+		voices[std::to_string(i)] = PD_ResourceManager::scenario->getAudio("voice" + std::to_string(i))->sound;
 	}
 
 	load();

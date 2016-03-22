@@ -18,6 +18,7 @@ public:
 	PD_UI_Tasklist(BulletWorld * _world);
 	~PD_UI_Tasklist();
 
+	void updateTask(std::string _scenario, int _id, std::string _text, bool _complete);
 	void addTask(std::string _scenario, int _id, std::string _text);
 	void removeTask(std::string _scenario, int _id);
 

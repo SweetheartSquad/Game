@@ -31,9 +31,43 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 
 	layout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
 	//layout->background->setVisible(true);
+
+	setVisible(false);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
+}
+
+void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _text, bool _complete){
+	auto it = tasks.find(_scenario);
+	
+	// if the scenario has no tasks, this one must not exist yet, so make it and return early
+	if(it == tasks.end()){
+		if(!_complete){
+			// if the task would have been removed, we don't need to add it
+			addTask(_scenario, _id, _text);
+		}
+		return;
+	}
+
+	auto it2 = it->second.find(_id);
+	
+	// if the scenario has no task with the given id, make it and return early
+	if(it2 == it->second.end()){
+		if(!_complete){
+			// if the task would have been removed, we don't need to add it
+			addTask(_scenario, _id, _text);
+		}
+		return;
+	}
+
+	// update the task text
+	it2->second->setText(_text);
+
+	// if we're supposed to remove the task, do that last so that the text is up-to-date
+	if(_complete){
+		removeTask(_scenario, _id);
+	}
 }
 
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){

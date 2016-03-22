@@ -180,6 +180,14 @@ bool Player::wantsToInventory(){
 	}
 	return res;
 }
+bool Player::wantsToTaskList(){
+	bool res = false;
+	res |= keyboard.keyJustDown(GLFW_KEY_TAB);
+	if(joystickManager->joysticks[0] != nullptr){
+		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
+	}
+	return res;
+}
 
 bool Player::wantsNextBubble(){
 	bool res = false;

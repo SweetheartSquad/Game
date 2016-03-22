@@ -46,7 +46,7 @@ public:
 	static std::vector<PD_PropDefinition *> independentPropDefinitions;
 	static std::map<std::string, std::vector<std::string>> roomTypes;
 	static std::vector<std::string> roomTypesKeys;
-	static std::vector<OpenAL_Sound *> voices;
+	static std::map<std::string, OpenAL_Sound *> voices;
 
 	PD_ResourceManager();
 	~PD_ResourceManager();
