@@ -11,7 +11,7 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 {
 	background->mesh->setScaleMode(GL_NEAREST);
 	boxSizing = kCONTENT_BOX;
-	setBackgroundColour(0,0,0, 0.75f);
+	setBackgroundColour(1,1,1, 0.75f);
 }
 
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
