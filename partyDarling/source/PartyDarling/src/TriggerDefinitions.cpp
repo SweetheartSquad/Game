@@ -520,7 +520,7 @@ void PD_Scene_Main::setupEventListeners(){
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("displayMessage", [this](sweet::Event * _event){
-		uiMessage->displayMessage(_event->getStringData("message"));
+		uiMessage->displayMessage(_event->getStringData("text"));
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("updateTaskList", [this](sweet::Event * _event){
