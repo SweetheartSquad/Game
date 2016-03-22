@@ -779,6 +779,12 @@
       "generateMipmaps":false
     },
     {
+      "id": "MAPCELL-UNLOCKED",
+      "type": "texture",
+      "src": "UI/map/mapCell -unlocked.png",
+      "generateMipmaps":false
+    },
+    {
       "id": "MAPCELL-BORDER-B",
       "type": "texture",
       "src": "UI/map/mapCell -border-b.png",
