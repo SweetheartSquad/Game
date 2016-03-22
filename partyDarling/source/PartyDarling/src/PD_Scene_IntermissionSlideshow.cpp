@@ -37,12 +37,12 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 
 	skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
 	vl->addChild(skip);
-	skip->setBackgroundColour(0.5f, 0, 0);
-	skip->setRationalWidth(0.25f, vl);
+	//skip->setBackgroundColour(0.5f, 0, 0);
+	skip->setRationalWidth(1.f, vl);
 	skip->setHeight(PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font->getLineHeight()*2.f);
 	skip->verticalAlignment = kMIDDLE;
 	skip->horizontalAlignment = kCENTER;
-	skip->setText("continue");
+	skip->setText("Click anywhere to Continue...");
 	skip->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		eventManager->triggerEvent("overflow");
 	});
