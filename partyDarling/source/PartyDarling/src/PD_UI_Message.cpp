@@ -138,7 +138,9 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 }
 
 void PD_UI_Message::displayMessage(std::string _message){
-	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
+	int lengthMultiplier =  ceil(_message.size() / 40.f);
+
+	Timeout * t = new Timeout(UI_MESSAGE_DURATION * lengthMultiplier, [this](sweet::Event * _event){
 		setVisible(false);
 		image->setVisible(true);
 	});
