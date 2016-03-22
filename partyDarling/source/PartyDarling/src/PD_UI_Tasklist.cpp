@@ -29,7 +29,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	layout->verticalAlignment = kTOP;
 	layout->setRationalWidth(1.f, this);
 	layout->setRationalHeight(1.f, this);
-	layout->setMargin(0.f, 0.75f, 0.05f, 0.05f);
+	layout->setMargin(0.f, 0.66f, 0.05f, 0.05f);
 	layout->marginLeft.setRationalSize(1.f, &layout->marginTop);
 
 	icon = new NodeUI(_world);
@@ -91,6 +91,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 
 	// update the task text
 	it2->second->setText(_text);
+	invalidateLayout();
 
 	// if we're supposed to remove the task, do that last so that the text is up-to-date
 	if(_complete){
