@@ -109,7 +109,10 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
 		TextArea * text = new TextArea(world, font, textShader);
 		text->setWrapMode(kWORD);
+		text->verticalAlignment = kMIDDLE;
 		text->setText(_text);
+		text->setBackgroundColour(0.5, 0.5, 0.5, 0.5);
+		text->background->setVisible(true);
 		journalLayout->addChild(text);
 		text->setRationalWidth(1.f, journalLayout);
 		text->setHeight(font->getLineHeight() * 3.f);
