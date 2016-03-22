@@ -224,6 +224,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiMessage->setRationalWidth(1.f, uiLayer);
 	uiMessage->setRationalHeight(1.f, uiLayer);
 
+	uiTasklist = new PD_UI_Tasklist(uiLayer->world);
+	uiLayer->addChild(uiTasklist);
+	uiTasklist->setRationalWidth(1.f, uiLayer);
+	uiTasklist->setRationalHeight(1.f, uiLayer);
+
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
@@ -1228,6 +1233,13 @@ void PD_Scene_Main::update(Step * _step){
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
+	}
+
+	// tasks
+	if(keyboard->keyJustDown(GLFW_KEY_I)){
+		std::stringstream s;
+		s << "Complete Task " << ++uiTasklist->testID;
+		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
 	}
 
 	Scene::update(_step);

@@ -18,6 +18,7 @@
 #include <PD_UI_DissCard.h>
 #include <PD_UI_DissStats.h>
 #include <PD_UI_Message.h>
+#include <PD_UI_Tasklist.h>
 #include <PD_Game.h>
 #include <Player.h>
 
@@ -74,6 +75,7 @@ public:
 	PD_UI_Map * uiMap;
 	PD_UI_Fade * uiFade;
 	PD_UI_Message * uiMessage;
+	PD_UI_Tasklist * uiTasklist;
 
 	ComponentShaderBase * toonShader;
 	ComponentShaderBase * itemShader;
