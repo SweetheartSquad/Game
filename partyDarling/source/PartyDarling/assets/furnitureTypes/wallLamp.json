@@ -43,6 +43,7 @@
 			"paddingBack": 0,
 			 "numTextures":2,
 			 "detailedCollider": false,
+			 "parentMax": 1,
 			"max": 2
 
         }
