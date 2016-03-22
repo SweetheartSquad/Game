@@ -87,9 +87,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
+	uiInventory = new PD_UI_Inventory(uiLayer->world, player);
 	// Load the save file
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
-	PD_Game::progressManager->loadSave(player, uiDissBattle);
+	PD_Game::progressManager->loadSave(player, uiDissBattle, uiInventory);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
@@ -154,7 +155,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world, player);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
