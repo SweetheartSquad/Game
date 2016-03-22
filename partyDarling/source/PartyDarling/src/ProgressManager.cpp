@@ -6,6 +6,7 @@
 #include <Log.h>
 #include <PD_Scenario.h>
 #include <PD_UI_DissBattle.h>
+#include <PD_UI_Inventory.h>
 #include <PD_DissStats.h>
 #include <Player.h>
 #include <ctime>
@@ -203,7 +204,7 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveFile.close();
 }
 
-void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
+void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle, PD_UI_Inventory * const _uiInventory) {
 	if(!sweet::FileUtils::fileExists("data/save.json")){
 		// if a save file doesn't exist, create a new one, save it immediately, then load that instead
 		getNew();
@@ -226,11 +227,16 @@ void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const 
 		_player->experience = root["stats"]["experience"].asInt();
 		_player->level = root["stats"]["level"].asInt();
 	}
-	if(_uiDissBattle != nullptr){
+	if(_uiDissBattle != nullptr || _uiInventory != nullptr){
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
-			_uiDissBattle->addLife(texture);
+			if(_uiDissBattle != nullptr){
+				_uiDissBattle->addLife(texture);
+			}
+			if(_uiInventory != nullptr){
+				_uiInventory->addFriendshipToken(texture);
+			}
 		}
 	}
 
