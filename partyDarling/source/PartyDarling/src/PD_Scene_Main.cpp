@@ -330,8 +330,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}
 	}
 
-	if(PD_Game::progressManager->plotPosition == kEND){
-		uiTasklist->addTask(activeScenarios.at(0)->id, 0, "Things have gotten more... different. I should find Goodsee.");
+	if(PD_Game::progressManager->plotPosition == kBEGINNING){
+		uiTasklist->updateTask(activeScenarios.at(0)->id, 0, "I should look for Omar and find out what's going on.", false);
+	}else if(PD_Game::progressManager->plotPosition == kEND){
+		uiTasklist->updateTask(activeScenarios.at(0)->id, 0, "Things have gotten more... different. I should find Goodsee.", false);
 	}
 }
 
