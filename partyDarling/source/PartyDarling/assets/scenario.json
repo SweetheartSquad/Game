@@ -277,7 +277,8 @@
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
       "size": "4%",
       "antiAliased": false
-    },{
+    },
+	{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
@@ -303,6 +304,20 @@
       "type":"font",
       "src":"DobkinPlain.ttf",
       "size":"4%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKLIST-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "3%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKCOUNT-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "2%",
       "antiAliased": false
     },
 
@@ -818,6 +833,25 @@
       "generateMipmaps":false
     },
 
+	// JOURNAL
+	{
+      "id": "JOURNAL-CLOSED",
+      "type": "texture",
+      "src": "UI/journalClosed.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-OPEN",
+      "type": "texture",
+      "src": "UI/journalOpen.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-NEW",
+      "type": "texture",
+      "src": "UI/journalNew.png",
+      "generateMipmaps":false
+    },
 
     // BUBBLES
     {
