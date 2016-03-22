@@ -391,6 +391,8 @@ void PD_Scene_Main::setupEventListeners(){
 
 		// update the map to get rid of the locked icon for the room
 		uiMap->updateMap(currentHousePosition);
+
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
@@ -399,6 +401,8 @@ void PD_Scene_Main::setupEventListeners(){
 
 		// update the map to get rid of the locked icon for the room
 		uiMap->updateMap(currentHousePosition);
+
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
