@@ -160,6 +160,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiInventory->setRationalWidth(1.f, uiLayer);
 	uiInventory->eventManager->addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->disable();
+		uiTasklist->setVisible(true);
 		uiBubble->enable();
 		uiLayer->removeMouseIndicator();
 		player->enable();
