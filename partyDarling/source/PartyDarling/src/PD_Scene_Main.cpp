@@ -329,6 +329,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			uiMessage->displayMessage("Game loaded.");
 		}
 	}
+
+	if(PD_Game::progressManager->plotPosition == kEND){
+		uiTasklist->addTask(activeScenarios.at(0)->id, 0, "Things have gotten more... different. I should find Goodsee.");
+	}
 }
 
 void PD_Scene_Main::pickScenarios(){
