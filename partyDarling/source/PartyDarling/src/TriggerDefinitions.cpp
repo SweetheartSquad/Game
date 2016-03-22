@@ -522,4 +522,12 @@ void PD_Scene_Main::setupEventListeners(){
 	PD_ResourceManager::scenario->eventManager->addEventListener("displayMessage", [this](sweet::Event * _event){
 		uiMessage->displayMessage(_event->getStringData("message"));
 	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("updateTaskList", [this](sweet::Event * _event){
+		std::string scenario = _event->getStringData("scenario");
+		std::string msg = _event->getStringData("message");
+		int id = _event->getIntData("id");
+		bool complete = _event->getIntData("complete") != 0;
+		uiTasklist->updateTask(scenario, id, msg, complete);
+	});
 }

@@ -44,6 +44,7 @@ public:
 	bool wantsToQuit();
 	bool wantsToMap();
 	bool wantsToInventory();
+	bool wantsToTaskList();
 
 	bool wantsNextBubble();
 	bool wantsPrevBubble();

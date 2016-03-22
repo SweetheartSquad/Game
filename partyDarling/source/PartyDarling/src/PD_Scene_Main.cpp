@@ -1166,8 +1166,8 @@ void PD_Scene_Main::update(Step * _step){
 		}
 	}
 
-	// inventory toggle
 	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
+		// inventory toggle
 		if(player->wantsToInventory()){
 			if(uiInventory->isVisible()){
 				uiBubble->enable();
@@ -1179,6 +1179,15 @@ void PD_Scene_Main::update(Step * _step){
 				uiInventory->enable();
 				uiLayer->addMouseIndicator();
 				player->disable();
+			}
+		}
+
+		// task list toggle
+		if(player->wantsToTaskList()){
+			if(uiTasklist->isVisible()){
+				uiTasklist->setVisible(false);
+			}else{
+				uiTasklist->setVisible(true);
 			}
 		}
 	}
