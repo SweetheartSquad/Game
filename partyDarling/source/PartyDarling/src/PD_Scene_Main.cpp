@@ -184,6 +184,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
+
+		uiTasklist->setVisible(true);
 	});
 
 	// add the player to the scene
@@ -289,6 +291,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
+			uiTasklist->setVisible(true);
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
@@ -678,6 +681,7 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy, bool _playerStarts)
 	dissEnemy = _enemy;
 	uiBubble->clear();
 	player->disable();
+	uiTasklist->setVisible(false);
 	uiDissStats->playIntro(dissEnemy);
 }
 
@@ -1177,21 +1181,23 @@ void PD_Scene_Main::update(Step * _step){
 				uiBubble->enable();
 				uiInventory->disable();
 				uiLayer->removeMouseIndicator();
+				uiTasklist->setVisible(true);
 				player->enable();
 			}else{
 				uiBubble->disable();
 				uiInventory->enable();
 				uiLayer->addMouseIndicator();
+				uiTasklist->setVisible(false);
 				player->disable();
 			}
 		}
 
 		// task list toggle
 		if(player->wantsToTaskList()){
-			if(uiTasklist->isVisible()){
-				uiTasklist->setVisible(false);
+			if(uiTasklist->isExpanded()){
+				uiTasklist->collapse();
 			}else{
-				uiTasklist->setVisible(true);
+				uiTasklist->expand();
 			}
 		}
 	}
@@ -1427,6 +1433,8 @@ void PD_Scene_Main::updateSelection(){
 								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
 								player->disable();
 							}
+
+							uiTasklist->setVisible(false);
 						});
 						if(!person->dissedAt){
 							uiBubble->addOption("Diss " + person->definition->name, [this, person](sweet::Event * _event){
