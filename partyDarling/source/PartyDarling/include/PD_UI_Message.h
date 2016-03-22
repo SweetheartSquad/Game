@@ -9,7 +9,7 @@ class PD_UI_Message : public VerticalLinearLayout{
 private:
 	NodeUI_NineSliced * textBubble;
 	NodeUI * image;
-	TextLabel * text;
+	TextArea * text;
 	ComponentShaderText * textShader;
 
 	std::vector<Timeout *> animationTimeouts;

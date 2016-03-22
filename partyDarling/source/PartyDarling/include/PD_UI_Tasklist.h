@@ -10,7 +10,7 @@ private:
 	ComponentShaderText * textShader;
 
 	int numTasks;
-	std::map<std::string, std::map<int, TextLabel *>> tasks;
+	std::map<std::string, std::map<int, TextArea *>> tasks;
 
 	Texture * texOpen;
 	Texture * texClosed;

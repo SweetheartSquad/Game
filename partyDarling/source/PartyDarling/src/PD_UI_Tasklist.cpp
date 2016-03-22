@@ -29,7 +29,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	layout->verticalAlignment = kTOP;
 	layout->setRationalWidth(1.f, this);
 	layout->setRationalHeight(1.f, this);
-	layout->setMargin(0.f, 0.6f, 0.05f, 0.05f);
+	layout->setMargin(0.f, 0.75f, 0.05f, 0.05f);
 	layout->marginLeft.setRationalSize(1.f, &layout->marginTop);
 
 	icon = new NodeUI(_world);
@@ -67,7 +67,8 @@ PD_UI_Tasklist::~PD_UI_Tasklist(){
 
 void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _text, bool _complete){
 	auto it = tasks.find(_scenario);
-	
+	_text = "- " + _text;
+
 	// if the scenario has no tasks, this one must not exist yet, so make it and return early
 	if(it == tasks.end()){
 		if(!_complete){
@@ -100,16 +101,18 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 
 	if(tasks.find(_scenario) == tasks.end()){
-		std::map<int, TextLabel *> m;
+		std::map<int, TextArea *> m;
 		tasks.insert(std::make_pair(_scenario, m));
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
-		TextLabel * text = new TextLabel(world, font, textShader);
+		TextArea * text = new TextArea(world, font, textShader);
+		text->setWrapMode(kWORD);
 		text->setText(_text);
 		journalLayout->addChild(text);
 		text->setRationalWidth(1.f, journalLayout);
-		text->setHeight(font->getLineHeight() * 1.2f);
+		text->setHeight(font->getLineHeight() * 3.f);
+		//text->setAutoresizeHeight();
 
 		tasks.at(_scenario).insert(std::make_pair(_id, text));
 
@@ -129,8 +132,11 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 	if(tasks.find(_scenario) != tasks.end()){
 		auto sTasks = tasks.at(_scenario);
 		if(sTasks.find(_id) != sTasks.end()){
-			TextLabel * text = tasks.at(_scenario).at(_id);
+			TextArea * text = tasks.at(_scenario).at(_id);
 			journalLayout->removeChild(text);
+
+			incrementCount(-1);
+			invalidateLayout();
 
 			sTasks.erase(_id);
 			if(sTasks.size() == 0){
@@ -138,8 +144,6 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 			}
 		}
 	}
-	incrementCount(-1);
-	invalidateLayout();
 }
 
 void PD_UI_Tasklist::update(Step * _step){
