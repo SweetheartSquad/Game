@@ -1438,6 +1438,7 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 		for(auto t : def->roomTypes){
 			if(t == definition->roomType){
 				independentProps.push_back(def);
+				break;
 			}
 		}
 	}
