@@ -316,7 +316,13 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	// if this is the first time we've entered the game since the application started, swap the menu music for BGM
 	// if we're on the ending run, swap BGM for the weird track
 	// if we're on the epilogue, swap the weird track for BGM
-	if(firstRun || PD_Game::progressManager->plotPosition == kEND || PD_Game::progressManager->plotPosition == kEPILOGUE){
+	if(
+		(PD_Game::progressManager->plotPosition == kEND && _game->bgmTrack != PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
+		||
+		(_game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_MENU")->sound)
+		||
+		(PD_Game::progressManager->plotPosition != kEND && _game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
+		){
 		_game->playBGM();
 	}
 
