@@ -1433,10 +1433,18 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 	}
 	
 	// Random
-	if(PD_ResourceManager::independentPropDefinitions.size() > 0){
+	std::vector<PD_PropDefinition *> independentProps;
+	for(auto def : PD_ResourceManager::independentPropDefinitions){
+		for(auto t : def->roomTypes){
+			if(t == definition->roomType){
+				independentProps.push_back(def);
+			}
+		}
+	}
+	if(independentProps.size() > 0){
 		unsigned long int n = sweet::NumberUtils::randomInt(0, room->tilemap->width * room->tilemap->height * 0.01f);
 		for(unsigned int i = 0; i < n; ++i){
-			props.push_back(new PD_Prop(world, sweet::NumberUtils::randomItem(PD_ResourceManager::independentPropDefinitions), baseShader, GROUND));
+			props.push_back(new PD_Prop(world, sweet::NumberUtils::randomItem(independentProps), baseShader, GROUND));
 		}
 	}
 
