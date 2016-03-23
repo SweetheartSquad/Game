@@ -10,12 +10,15 @@
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	NodeUI(_world),
 	textShader(new ComponentShaderText(false)),
+	crossedTextShader(new ComponentShaderText(false)),
 	font(PD_ResourceManager::scenario->getFont("TASKLIST-FONT")->font),
+	crossedFont(PD_ResourceManager::scenario->getFont("TASKLIST-FONT-CROSSED")->font),
 	unseenTask(false),
 	numTasks(0),
 	testID(0)
 {
-	textShader->setColor(1.f, 1.f, 1.f);
+	textShader->setColor(0.8f, 0.8f, 0.f);
+	crossedTextShader->setColor(0.5f, 0.5f, 0.5f);
 
 	background->setVisible(false);
 
@@ -107,6 +110,9 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
+		ComponentShaderText * shader = new ComponentShaderText(false);
+		shader->setColor(1.f, 1.f, 1.f);
+
 		TextArea * text = new TextArea(world, font, textShader);
 		text->setWrapMode(kWORD);
 		text->verticalAlignment = kMIDDLE;
@@ -137,8 +143,17 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 		auto sTasks = tasks.at(_scenario);
 		if(sTasks.find(_id) != sTasks.end()){
 			TextArea * text = tasks.at(_scenario).at(_id);
-			journalLayout->removeChild(text);
-			delete text;
+			//journalLayout->removeChild(text);
+			//delete text;
+
+			// Strikeout!!!!!!!!!
+			/*ComponentShaderText * shader = dynamic_cast<ComponentShaderText *>(text->textShader);
+			if(shader != nullptr){
+				shader->setColor(1.f, 1.f, 1.f, 0.5f);
+			}*/
+
+			text->setShader(crossedTextShader, true);
+			text->setFont(crossedFont, true);
 
 			incrementCount(-1);
 			invalidateLayout();

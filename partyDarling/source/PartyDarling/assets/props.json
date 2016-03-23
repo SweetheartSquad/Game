@@ -534,7 +534,8 @@
             "mass": 15,
             "padding": 0.1,
             "twist": false,
-            "flare": false 
+            "flare": false,
+			"parentMax": 1
         }
     ]
 }

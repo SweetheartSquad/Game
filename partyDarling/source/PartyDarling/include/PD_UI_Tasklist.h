@@ -7,7 +7,9 @@ class PD_Scenario;
 class PD_UI_Tasklist : public NodeUI{
 private:
 	Font * font;
+	Font * crossedFont;
 	ComponentShaderText * textShader;
+	ComponentShaderText * crossedTextShader;
 
 	int numTasks;
 	std::map<std::string, std::map<int, TextArea *>> tasks;
