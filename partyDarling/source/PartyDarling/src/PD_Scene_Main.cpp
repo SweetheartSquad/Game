@@ -80,7 +80,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedPropDistance(0),
 	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f)),
 	dissEnemy(nullptr),
-	playerStartsDissBattle(true)
+	playerStartsDissBattle(true),
+	distortV(1),
+	distortS(1)
 {
 	_game->showLoading(0);
 
@@ -95,12 +97,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
-		toonShader->addComponent(new ShaderComponentVNoise(toonShader));
+	toonShader->addComponent(vNoise = new ShaderComponentVNoise(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
-	if(PD_Game::progressManager->plotPosition == kEND){
-		toonShader->addComponent(new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
-	}
+	toonShader->addComponent(hsvDistort = new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
 	toonShader->compileShader();
 
 	itemShader->addComponent(new ShaderComponentMVP(itemShader));
@@ -112,7 +112,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
-	characterShader->addComponent(new ShaderComponentHsv(characterShader, 0, 1, 1.5f));
+	characterShader->addComponent(new ShaderComponentHsv(characterShader, 0, distortS, distortV));
 	characterShader->compileShader();
 
 	emoteShader->addComponent(new ShaderComponentMVP(emoteShader));
@@ -867,16 +867,26 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 void PD_Scene_Main::update(Step * _step){
 	toonShader->bindShader();
 	toonShader->makeDirty();
-	ShaderComponentVNoise * vNoise = dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1));
-	if(PD_Game::progressManager->plotPosition == kEND){
+	if(PD_Game::progressManager->plotPosition == kEND || (PD_Game::progressManager->plotPosition == kEPILOGUE && PD_Game::progressManager->variables["stringVariables"].get("ending", "NOT_SET").asString() == "portrait")){
 		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 0.05f);
+		distortS = 0.25f;
+		distortV = 1.25f;
 	}else if(PD_Game::progressManager->plotPosition == kBEGINNING || PD_Game::progressManager->plotPosition == kEPILOGUE){
 		vNoise->setMag(0,0, 0);
+		distortS = 1.f;
+		distortV = 1.f;
 	}else if(sweet::NumberUtils::randomFloat() > sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.9999, 0.99)){
 		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 1.f);
+		distortS = 0.25f;
+		distortV = 1.25f;
 	}else{
-		vNoise->setMag(0,0, sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05));
+		float d = sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05);
+		vNoise->setMag(0,0, d);
+		distortS += (1.f - distortS) * d;
+		distortV += (1.f - distortV) * d;
 	}
+	hsvDistort->setSaturation(distortS);
+	hsvDistort->setValue(distortV);
 	glUniform1f(vNoise->timeLocation, sweet::lastTimestamp);
 	glUniform1f(vNoise->mag1Location, vNoise->mag1);
 	glUniform1f(vNoise->mag2Location, vNoise->mag2);

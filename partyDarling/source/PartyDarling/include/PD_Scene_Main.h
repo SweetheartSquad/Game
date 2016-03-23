@@ -33,6 +33,9 @@ class PointLight;
 class RampTexture;
 class PD_Prop;
 
+class ShaderComponentVNoise;
+class ShaderComponentHsv;
+
 class PD_Scene_Main : public Scene{
 private:
 	// removes _room from the scene/physics
@@ -42,6 +45,12 @@ private:
 
 	LabRoom * labRoom;
 	bool playerStartsDissBattle;
+
+	float distortV;
+	float distortS;
+
+	ShaderComponentVNoise * vNoise;
+	ShaderComponentHsv * hsvDistort;
 public:
 	float panSpeed;
 	bool panLeft;
