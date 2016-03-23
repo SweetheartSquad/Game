@@ -21,7 +21,7 @@ ProgressManager * PD_Game::progressManager = nullptr;
 bool PD_Game::firstRun = true;
 
 bool PD_Game::staticInit(){
-	for(unsigned long int i = 1; i <= 5; ++i){
+	for(unsigned long int i = 1; i <= 6; ++i){
 		bgmTrackIdx.push(i);
 	}
 	return true;
