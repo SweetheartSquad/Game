@@ -21,6 +21,8 @@
 
 #ifdef _DEBUG
 int main(void){
+	_CrtSetDbgFlag(_CRTDBG_CHECK_ALWAYS_DF);
+
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
 #else
