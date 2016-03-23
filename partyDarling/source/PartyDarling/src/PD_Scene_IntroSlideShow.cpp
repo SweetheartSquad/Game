@@ -28,47 +28,21 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	push(new Slide(tex, 0, PD_ResourceManager::scenario->getAudio("PAPER-OUT-ENVELOPE")->sound));
 	tex = new Texture("assets/textures/introSlides/6.png", false, true);
 	tex->load();
-	push(new Slide(tex));
+	push(new Slide(tex, 0.75f));
 	tex = new Texture("assets/textures/introSlides/7.png", false, true);
 	tex->load();
-	push(new Slide(tex));
-	for(unsigned long int i = 1; i <= 7; ++i){
+	push(new Slide(tex, 0.75f));
+	/*for(unsigned long int i = 1; i <= 7; ++i){
 		tex = new Texture("assets/textures/introSlides/tut-0"+std::to_string(i)+".png", false, true);
 		tex->load();
 		push(new Slide(tex));
-	}
+	}*/
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
 		_game->scenes["intermission"] = new PD_Scene_IntermissionSlideshow(dynamic_cast<PD_Game*>(_game), PD_Game::progressManager->plotPosition);
 		_game->switchScene("intermission", true);
 	});
-
-	textShader = new ComponentShaderText(false);
-
-	textShader->setColor(1.f, 1.f, 1.f);
-	textShader->load();
-
-	VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
-	uiLayer->addChild(vl);
-	vl->setRationalWidth(1.f, uiLayer);
-	vl->setAutoresizeHeight();
-	vl->verticalAlignment = kMIDDLE;
-	vl->horizontalAlignment = kRIGHT;
-
-	TextLabel * skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
-	vl->addChild(skip);
-	skip->setMouseEnabled(true);
-	skip->setBackgroundColour(0.5f, 0, 0);
-	skip->setRationalWidth(0.25f, vl);
-	skip->setHeight(PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font->getLineHeight()*2.f);
-	skip->verticalAlignment = kMIDDLE;
-	skip->horizontalAlignment = kCENTER;
-	skip->setText("skip");
-	skip->eventManager->addEventListener("click", [this](sweet::Event * _event){
-		eventManager->triggerEvent("overflow");
-	});
-	uiLayer->invalidateLayout();
 
 	// advance to the first slide
 	changeSlide(true);
@@ -91,7 +65,6 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 }
 
 PD_Scene_IntroSlideShow::~PD_Scene_IntroSlideShow(){
-	delete textShader;
 }
 
 void PD_Scene_IntroSlideShow::update(Step * _step){
