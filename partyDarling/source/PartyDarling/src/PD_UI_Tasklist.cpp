@@ -37,7 +37,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	icon->background->mesh->pushTexture2D(texOpen);
 	icon->background->mesh->setScaleMode(GL_NEAREST);
 	icon->setHeight(0.05f);
-	icon->setSquareWidth(1.f);
+	icon->setSquareWidth(190.f/74.f);
 
 	count = new TextLabel(_world, PD_ResourceManager::scenario->getFont("TASKCOUNT-FONT")->font, textShader);
 	count->boxSizing = kCONTENT_BOX;
