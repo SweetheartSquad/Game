@@ -6,6 +6,7 @@
 #include <EventManager.h>
 class Player;
 class PD_UI_DissBattle;
+class PD_UI_Inventory;
 
 class ProgressManager : public Node{
 public:
@@ -20,7 +21,7 @@ public:
 	ProgressManager();
 
 	void save(const Player * const _player, PD_UI_DissBattle * const _uiDissBattle);
-	void loadSave(Player * const _player = nullptr, PD_UI_DissBattle * const _uiDissBattle = nullptr);
+	void loadSave(Player * const _player = nullptr, PD_UI_DissBattle * const _uiDissBattle = nullptr, PD_UI_Inventory * const _uiInventory = nullptr);
 	void eraseSave();
 
 	void getNew();

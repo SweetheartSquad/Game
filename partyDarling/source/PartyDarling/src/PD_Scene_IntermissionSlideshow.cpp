@@ -8,10 +8,10 @@
 PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int _plotPosition) :
 	Scene_SlideShow(_game)
 {
-	// get the slides
-	Texture * tex = new Texture("assets/textures/introSlides/intermission_" + std::to_string(_plotPosition) + ".png", false, true);
-	tex->load();
-	push(new Slide(tex));
+	push(new Slide(PD_ResourceManager::scenario->getTexture("INTERMISSION_"+std::to_string(_plotPosition))->texture));
+	
+	slideNew->background->mesh->setScaleMode(GL_NEAREST);
+	slideOld->background->mesh->setScaleMode(GL_NEAREST);
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
@@ -37,12 +37,12 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 
 	skip = new TextLabel(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font, textShader);
 	vl->addChild(skip);
-	skip->setBackgroundColour(0.5f, 0, 0);
-	skip->setRationalWidth(0.25f, vl);
+	//skip->setBackgroundColour(0.5f, 0, 0);
+	skip->setRationalWidth(1.f, vl);
 	skip->setHeight(PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font->getLineHeight()*2.f);
 	skip->verticalAlignment = kMIDDLE;
 	skip->horizontalAlignment = kCENTER;
-	skip->setText("continue");
+	skip->setText("Click anywhere to Continue...");
 	skip->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		eventManager->triggerEvent("overflow");
 	});

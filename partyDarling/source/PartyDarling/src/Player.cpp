@@ -182,7 +182,7 @@ bool Player::wantsToInventory(){
 }
 bool Player::wantsToTaskList(){
 	bool res = false;
-	res |= keyboard.keyJustDown(GLFW_KEY_TAB);
+	res |= keyboard.keyJustDown(GLFW_KEY_J);
 	if(joystickManager->joysticks[0] != nullptr){
 		res |= joystickManager->joysticks[0]->buttonJustDown(joystickManager->joysticks[0]->faceButtonUp);
 	}

@@ -1224,9 +1224,16 @@ std::vector<PD_Character *> RoomBuilder::getCharacters(bool _random) {
 		if(definition->empty) {
 			return characters;
 		}
-		auto randPD_Character = PD_Character::createRandomPD_Character(definition->scenario, world, characterShader, emoteShader);
-		randPD_Character->room = room;
-		characters.push_back(randPD_Character);
+
+		int minCharacters = definition->size == 3 ? 2 : 0;
+		int maxCharacters = 2 * (definition->size);
+		int numCharacters = sweet::NumberUtils::randomInt(minCharacters, maxCharacters);
+
+		for(unsigned long int i = 0; i < numCharacters; ++i){
+			auto randPD_Character = PD_Character::createRandomPD_Character(definition->scenario, world, characterShader, emoteShader);
+			randPD_Character->room = room;
+			characters.push_back(randPD_Character);
+		}
 	}
 	// Random
 	//unsigned long int n = sweet::NumberUtils::randomInt(0, 10);

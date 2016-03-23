@@ -277,7 +277,8 @@
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
       "size": "4%",
       "antiAliased": false
-    },{
+    },
+	{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
@@ -303,6 +304,20 @@
       "type":"font",
       "src":"DobkinPlain.ttf",
       "size":"4%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKLIST-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "2.5%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKCOUNT-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "2%",
       "antiAliased": false
     },
 
@@ -451,6 +466,39 @@
       "id":"loading-background",
       "type":"texture",
       "src":"UI/menu/loading.png",
+      "generateMipmaps": false
+    },
+
+
+    {
+      "id":"INTERMISSION_1",
+      "type":"texture",
+      "src":"introSlides/intermission_1.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_2",
+      "type":"texture",
+      "src":"introSlides/intermission_2.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_3",
+      "type":"texture",
+      "src":"introSlides/intermission_3.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_4",
+      "type":"texture",
+      "src":"introSlides/intermission_4.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_5",
+      "type":"texture",
+      "src":"introSlides/intermission_5.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_6",
+      "type":"texture",
+      "src":"introSlides/intermission_6.png",
       "generateMipmaps": false
     },
 
@@ -764,6 +812,12 @@
       "generateMipmaps":false
     },
     {
+      "id": "MAPCELL-UNLOCKED",
+      "type": "texture",
+      "src": "UI/map/mapCell -unlocked.png",
+      "generateMipmaps":false
+    },
+    {
       "id": "MAPCELL-BORDER-B",
       "type": "texture",
       "src": "UI/map/mapCell -border-b.png",
@@ -818,6 +872,25 @@
       "generateMipmaps":false
     },
 
+	// JOURNAL
+	{
+      "id": "JOURNAL-CLOSED",
+      "type": "texture",
+      "src": "UI/journalClosed.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-OPEN",
+      "type": "texture",
+      "src": "UI/journalOpen.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-NEW",
+      "type": "texture",
+      "src": "UI/journalNew.png",
+      "generateMipmaps":false
+    },
 
     // BUBBLES
     {

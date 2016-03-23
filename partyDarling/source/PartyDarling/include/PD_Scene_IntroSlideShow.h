@@ -7,7 +7,6 @@ class Timeout;
 
 class PD_Scene_IntroSlideShow : public Scene_SlideShow{
 private:
-	ComponentShaderText * textShader;
 	Timeout * changeSlideTimeout;
 	bool isForwads;
 public:
