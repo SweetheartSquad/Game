@@ -138,6 +138,7 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 		if(sTasks.find(_id) != sTasks.end()){
 			TextArea * text = tasks.at(_scenario).at(_id);
 			journalLayout->removeChild(text);
+			delete text;
 
 			incrementCount(-1);
 			invalidateLayout();
