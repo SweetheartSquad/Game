@@ -487,6 +487,26 @@
             "padding": 0.1,
             "twist": false,
             "flare": false 
+        },
+        	{
+            "id": "tissuebox", 
+            "src": "tissuebox", 
+            "roomTypes" : ["KITCHEN","LIVING_ROOM", "BEDROOM", "OFFICE"],
+            "parentDependent": true,
+            "parents":{
+            	"table":[
+                    "TOP"
+                ],
+				"sideTable":[
+                    "TOP"
+                ],
+                "desk":[
+                    "TOP"]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }
