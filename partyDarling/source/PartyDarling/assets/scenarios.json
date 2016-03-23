@@ -156,11 +156,6 @@
     },
     {
         "order": 0,
-        "src": "scenarios/Jokes_with_JonJon.json",
-        "type": 0
-    },
-    {
-        "order": 0,
         "src": "scenarios/JackyJam.json",
         "type": 0
     },
@@ -182,6 +177,11 @@
     {
         "order": 0,
         "src": "scenarios/Wilbur_the_Shutterbug.json",
+        "type": 0
+    },
+    {
+        "order": 0,
+        "src": "scenarios/Durham_In_the_Doldrums.json",
         "type": 0
     }
 ]
