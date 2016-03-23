@@ -862,15 +862,15 @@
         }, 
         {
             "id": 208, 
-            "src": "furnitureJson/kitchen_shelf_content_1_2.json"
+            "src": "furnitureJson/kitchen_shelf_content_1_3.json"
         }, 
         {
             "id": 209, 
-            "src": "furnitureJson/kitchen_shelf_content_2_2.json"
+            "src": "furnitureJson/kitchen_shelf_content_2_3.json"
         }, 
         {
             "id": 210, 
-            "src": "furnitureJson/kitchen_shelf_content_3_2.json"
+            "src": "furnitureJson/kitchen_shelf_content_3_3.json"
         }, 
         {
             "id": 211, 
@@ -891,6 +891,78 @@
         {
             "id": 215, 
             "src": "furnitureJson/fireplace_content_1.json"
+        }, 
+        {
+            "id": 216, 
+            "src": "furnitureJson/kitchen_shelf_content_4.json"
+        }, 
+        {
+            "id": 217, 
+            "src": "furnitureJson/kitchen_shelf_content_4_2.json"
+        }, 
+        {
+            "id": 218, 
+            "src": "furnitureJson/kitchen_shelf_content_4_3.json"
+        }, 
+        {
+            "id": 219, 
+            "src": "furnitureJson/kitchen_shelf_content_1_5.json"
+        }, 
+        {
+            "id": 220, 
+            "src": "furnitureJson/kitchen_shelf_content_2_5.json"
+        }, 
+        {
+            "id": 221, 
+            "src": "furnitureJson/kitchen_shelf_content_3_5.json"
+        }, 
+        {
+            "id": 222, 
+            "src": "furnitureJson/kitchen_shelf_content_1_6.json"
+        }, 
+        {
+            "id": 223, 
+            "src": "furnitureJson/kitchen_shelf_content_2_6.json"
+        }, 
+        {
+            "id": 224, 
+            "src": "furnitureJson/kitchen_shelf_content_3_6.json"
+        }, 
+        {
+            "id": 225, 
+            "src": "furnitureJson/mask_top_4.json"
+        }, 
+        {
+            "id": 226, 
+            "src": "furnitureJson/mask_bottom_4.json"
+        }, 
+        {
+            "id": 227, 
+            "src": "furnitureJson/mask_bottom_5.json"
+        }, 
+        {
+            "id": 228, 
+            "src": "furnitureJson/kitchen_shelf_content_7.json"
+        }, 
+        {
+            "id": 229, 
+            "src": "furnitureJson/kitchen_shelf_content_2_7.json"
+        }, 
+        {
+            "id": 230, 
+            "src": "furnitureJson/kitchen_shelf_content_3_7.json"
+        }, 
+        {
+            "id": 231, 
+            "src": "furnitureJson/kitchen_shelf_content_8.json"
+        }, 
+        {
+            "id": 232, 
+            "src": "furnitureJson/kitchen_shelf_content_2_8.json"
+        }, 
+        {
+            "id": 233, 
+            "src": "furnitureJson/kitchen_shelf_content_3_8.json"
         }
     ], 
     "furniture": [

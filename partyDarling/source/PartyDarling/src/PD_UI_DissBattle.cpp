@@ -1115,8 +1115,8 @@ void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
 		// Factor in enemy's defense
-		_value *= playerAttackMultiplier;// * playerComboMultipier;
-		++playerComboMultipier;
+		_value *= playerAttackMultiplier * playerComboMultipier;
+		playerComboMultipier += 0.5f;
 	}else {
 		_value *= enemyAttackMultiplier * enemyComboMultipier;
 		++enemyComboMultipier;

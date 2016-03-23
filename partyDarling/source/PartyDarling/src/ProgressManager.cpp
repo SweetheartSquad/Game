@@ -6,6 +6,7 @@
 #include <Log.h>
 #include <PD_Scenario.h>
 #include <PD_UI_DissBattle.h>
+#include <PD_UI_Inventory.h>
 #include <PD_DissStats.h>
 #include <Player.h>
 #include <ctime>
@@ -103,7 +104,7 @@ void ProgressManager::getNew(){
 
 		// pick some random side scenarios
 		if (i + 1 != kBEGINNING && i + 1 < kEND){
-			unsigned long int numSidePlots = sweet::NumberUtils::randomInt(3, 5);
+			unsigned long int numSidePlots = sweet::NumberUtils::randomInt(2, 4);
 			for(unsigned long int j = 0; j < numSidePlots; ++j) {
 				if (allSideDefs.size() > 0){
 					scenariosList.append(allSideDefs.pop(true)["src"].asString());
@@ -172,16 +173,27 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveOut["plotPosition"] = (int)plotPosition;
 	saveOut["variables"] = variables;
 	saveOut["stats"] = Json::Value();
-	saveOut["stats"]["strength"] = _player->dissStats->getStrength();
-	saveOut["stats"]["sass"] = _player->dissStats->getSass();
-	saveOut["stats"]["defense"] = _player->dissStats->getDefense();
-	saveOut["stats"]["insight"] = _player->dissStats->getInsight();
-	saveOut["stats"]["experience"] = _player->experience;
-	saveOut["stats"]["level"] = _player->level;
-	for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
-		std::string fileName = "life_token_" + std::to_string(i) + ".tga";
-		_uiDissBattle->lifeTokens[i]->saveImageData(fileName, false);
-		saveOut["lifeTokens"].append(fileName);
+	if(_player != nullptr){
+		saveOut["stats"]["strength"] = _player->dissStats->getStrength();
+		saveOut["stats"]["sass"] = _player->dissStats->getSass();
+		saveOut["stats"]["defense"] = _player->dissStats->getDefense();
+		saveOut["stats"]["insight"] = _player->dissStats->getInsight();
+		saveOut["stats"]["experience"] = _player->experience;
+		saveOut["stats"]["level"] = _player->level;
+	}else{
+		saveOut["stats"]["strength"] = 0;
+		saveOut["stats"]["sass"] = 0;
+		saveOut["stats"]["defense"] = 0;
+		saveOut["stats"]["insight"] = 0;
+		saveOut["stats"]["experience"] = 0;
+		saveOut["stats"]["level"] = 0;
+	}
+	if(_uiDissBattle != nullptr){
+		for(unsigned long int i = 0; i < _uiDissBattle->lifeTokens.size(); ++i) {
+			std::string fileName = "life_token_" + std::to_string(i) + ".tga";
+			_uiDissBattle->lifeTokens[i]->saveImageData(fileName, false);
+			saveOut["lifeTokens"].append(fileName);
+		}
 	}
 
 	saveOut["progress"] = scenarioFile;
@@ -192,13 +204,11 @@ void ProgressManager::save(const Player * const _player, PD_UI_DissBattle * cons
 	saveFile.close();
 }
 
-void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle) {
-	if(_player != nullptr && _uiDissBattle != nullptr){
-		if(!sweet::FileUtils::fileExists("data/save.json")){
-			// if a save file doesn't exist, create a new one, save it immediately, then load that instead
-			getNew();
-			save(_player, _uiDissBattle);
-		}
+void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const _uiDissBattle, PD_UI_Inventory * const _uiInventory) {
+	if(!sweet::FileUtils::fileExists("data/save.json")){
+		// if a save file doesn't exist, create a new one, save it immediately, then load that instead
+		getNew();
+		save(_player, _uiDissBattle);
 	}
 
 	// load the previous save file properties into the appropriate objects
@@ -217,11 +227,16 @@ void ProgressManager::loadSave(Player * const _player, PD_UI_DissBattle * const 
 		_player->experience = root["stats"]["experience"].asInt();
 		_player->level = root["stats"]["level"].asInt();
 	}
-	if(_uiDissBattle != nullptr){
+	if(_uiDissBattle != nullptr || _uiInventory != nullptr){
 		for(auto tex : root["lifeTokens"]) {
 			Texture * texture = new Texture("data/images/" + tex.asString(), true, true);
 			texture->load();
-			_uiDissBattle->addLife(texture);
+			if(_uiDissBattle != nullptr){
+				_uiDissBattle->addLife(texture);
+			}
+			if(_uiInventory != nullptr){
+				_uiInventory->addFriendshipToken(texture);
+			}
 		}
 	}
 

@@ -30,6 +30,7 @@ private:
 	// scrollbar for grid
 	SliderController * scrollbar;
 
+	HorizontalLinearLayout * lives;
 	PD_UI_DissCard * playerCard;
 public:
 	// all of the currently held inventory items
@@ -79,6 +80,9 @@ public:
 
 	// returns the currently selected item, or nullptr if nothing is selected
 	PD_Item * getSelected();
+
+	// adds friendship token to ui
+	void addFriendshipToken(Texture * _tex);
 
 	// hides the inventory and disables interaction
 	void disable();

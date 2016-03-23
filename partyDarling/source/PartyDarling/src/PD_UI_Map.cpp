@@ -11,7 +11,7 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 {
 	background->mesh->setScaleMode(GL_NEAREST);
 	boxSizing = kCONTENT_BOX;
-	setBackgroundColour(0,0,0, 0.75f);
+	setBackgroundColour(1,1,1, 0.75f);
 }
 
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
@@ -185,7 +185,7 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				break;
 			case Room::kSEEN:
 				cell.second->setBackgroundColour(1,1,1, 1);
-				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : "MAPCELL-UNENTERED")->texture);
+				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : (cell.second->room->definition->locked ? "MAPCELL-UNLOCKED" : "MAPCELL-UNENTERED"))->texture);
 				break;
 			case Room::kENTERED:
 				cell.second->setBackgroundColour(1,1,1, 1);

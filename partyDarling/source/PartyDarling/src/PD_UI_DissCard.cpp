@@ -37,11 +37,22 @@ void PD_UI_DissCard::init(){
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(113/255.f, 71/255.f, 16/255.f);
 
-	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*1.5f);
+	float borderSize = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*1.5f;
+	setBorder(borderSize);
 	setScaleMode(GL_NEAREST);
+
+	HorizontalLinearLayout * container = new HorizontalLinearLayout(world);
+ 	addChild(container);
+	container->horizontalAlignment = kCENTER;
+	container->verticalAlignment = kMIDDLE;
+	container->setRationalWidth(1.f, this);
+	container->setRationalHeight(1.f, this);
+	container->background->setVisible(false);
+	container->setPadding(borderSize * 0.5f);
+
 	VerticalLinearLayout * layout = new VerticalLinearLayout(world);
-	c->addChild(layout);
-	layout->setRationalHeight(1.f, c);
+	container->addChild(layout);
+	layout->setRationalHeight(1.f, container);
 	layout->setSquareWidth(7.f/5.f);
 	layout->setBackgroundColour(1,1,1,1);
 	layout->background->setVisible(true);

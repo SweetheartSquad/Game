@@ -37,13 +37,15 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	textBubble->setScaleMode(GL_NEAREST);
 	addChild(textBubble);
 	textBubble->setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
-	textBubble->setPixelHeight(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 2.5f);
+	textBubble->setPixelHeight(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 3.f);
 	textBubble->setRationalWidth(0.5f, this);
 
-	text = new TextLabel(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+	text = new TextArea(_world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 	textBubble->addChild(text);
+	text->setWrapMode(kWORD);
 	text->setRationalWidth(1.f, textBubble);
 	text->setRationalHeight(1.f, textBubble);
+	text->setPadding(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 	text->horizontalAlignment = kCENTER;
 	text->verticalAlignment = kMIDDLE;
 
@@ -136,7 +138,9 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 }
 
 void PD_UI_Message::displayMessage(std::string _message){
-	Timeout * t = new Timeout(UI_MESSAGE_DURATION, [this](sweet::Event * _event){
+	int lengthMultiplier =  ceil(_message.size() / 40.f);
+
+	Timeout * t = new Timeout(UI_MESSAGE_DURATION * lengthMultiplier, [this](sweet::Event * _event){
 		setVisible(false);
 		image->setVisible(true);
 	});

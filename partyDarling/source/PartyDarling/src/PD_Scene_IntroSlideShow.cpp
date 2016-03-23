@@ -73,7 +73,7 @@ PD_Scene_IntroSlideShow::PD_Scene_IntroSlideShow(Game * _game) :
 	// advance to the first slide
 	changeSlide(true);
 
-	changeSlideTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+	changeSlideTimeout = new Timeout(0.25f, [this](sweet::Event * _event){
 		changeSlide(isForwads);
 	});
 	childTransform->addChild(changeSlideTimeout, false);

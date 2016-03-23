@@ -391,6 +391,8 @@ void PD_Scene_Main::setupEventListeners(){
 
 		// update the map to get rid of the locked icon for the room
 		uiMap->updateMap(currentHousePosition);
+
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("unlockLab", [this](sweet::Event * _event){
@@ -399,6 +401,8 @@ void PD_Scene_Main::setupEventListeners(){
 
 		// update the map to get rid of the locked icon for the room
 		uiMap->updateMap(currentHousePosition);
+
+		PD_ResourceManager::scenario->getAudio("doorLocked")->sound->play();
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("triggerYellingContest", [this](sweet::Event * _event){
@@ -520,6 +524,14 @@ void PD_Scene_Main::setupEventListeners(){
 	});
 
 	PD_ResourceManager::scenario->eventManager->addEventListener("displayMessage", [this](sweet::Event * _event){
-		uiMessage->displayMessage(_event->getStringData("message"));
+		uiMessage->displayMessage(_event->getStringData("text"));
+	});
+
+	PD_ResourceManager::scenario->eventManager->addEventListener("updateTaskList", [this](sweet::Event * _event){
+		std::string scenario = _event->getStringData("scenario");
+		std::string msg = _event->getStringData("message");
+		int id = _event->getIntData("id");
+		bool complete = _event->getIntData("complete") != 0;
+		uiTasklist->updateTask(scenario, id, msg, complete);
 	});
 }

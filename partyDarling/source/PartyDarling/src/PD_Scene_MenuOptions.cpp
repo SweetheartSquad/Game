@@ -42,16 +42,16 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	subLayout->verticalAlignment = kMIDDLE;
 	subLayout->setPadding(0.05f);
 
-	PD_UI_Text * rsvp = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
-	rsvp->setText("RSVP");
-	rsvp->setMouseEnabled(true);
-	rsvp->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
-	rsvp->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
-	rsvp->setRationalWidth(1.0f, subLayout);
-	rsvp->setRationalHeight(0.15f, subLayout);
-	rsvp->horizontalAlignment = kCENTER;
-	rsvp->verticalAlignment = kMIDDLE;
-	rsvp->eventManager->addEventListener("click", [this](sweet::Event * _event){
+	PD_UI_Text * backButton = new PD_UI_Text(uiLayer->world, PD_ResourceManager::scenario->getFont("options-menu-font")->font, textShader);
+	backButton->setText("Back");
+	backButton->setMouseEnabled(true);
+	backButton->setDownColour(147.f/255.f, 25.f/255.f, 45.f/255.f);
+	backButton->setOverColour(188.f/255.f, 60.f/255.f, 61.f/255.f);
+	backButton->setRationalWidth(1.0f, subLayout);
+	backButton->setRationalHeight(0.15f, subLayout);
+	backButton->horizontalAlignment = kCENTER;
+	backButton->verticalAlignment = kMIDDLE;
+	backButton->eventManager->addEventListener("click", [this](sweet::Event * _event){
 		game->switchScene("menu", false);
 	});
 
@@ -89,7 +89,7 @@ PD_Scene_MenuOptions::PD_Scene_MenuOptions(Game* _game) :
 	volumeControl->setRationalWidth(0.6f, audioContainer);
 	volumeControl->setRationalHeight(1.f, audioContainer);
 
-	subLayout->addChild(rsvp);
+	subLayout->addChild(backButton);
 	subLayout->addChild(howToPlay);
 	subLayout->addChild(audioContainer);;
 

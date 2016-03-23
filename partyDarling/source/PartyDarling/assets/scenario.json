@@ -277,7 +277,8 @@
       "src": "Borders Divide, But Hearts Shall Conquer.ttf",
       "size": "4%",
       "antiAliased": false
-    },{
+    },
+	{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",
@@ -303,6 +304,20 @@
       "type":"font",
       "src":"DobkinPlain.ttf",
       "size":"4%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKLIST-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "2.5%",
+      "antiAliased": false
+    },
+	{
+      "id": "TASKCOUNT-FONT",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "2%",
       "antiAliased": false
     },
 
@@ -764,6 +779,12 @@
       "generateMipmaps":false
     },
     {
+      "id": "MAPCELL-UNLOCKED",
+      "type": "texture",
+      "src": "UI/map/mapCell -unlocked.png",
+      "generateMipmaps":false
+    },
+    {
       "id": "MAPCELL-BORDER-B",
       "type": "texture",
       "src": "UI/map/mapCell -border-b.png",
@@ -818,6 +839,25 @@
       "generateMipmaps":false
     },
 
+	// JOURNAL
+	{
+      "id": "JOURNAL-CLOSED",
+      "type": "texture",
+      "src": "UI/journalClosed.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-OPEN",
+      "type": "texture",
+      "src": "UI/journalOpen.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-NEW",
+      "type": "texture",
+      "src": "UI/journalNew.png",
+      "generateMipmaps":false
+    },
 
     // BUBBLES
     {

@@ -230,11 +230,18 @@ void PD_UI_DissStats::playOutro(float _wonXP){
 }
 
 void PD_UI_DissStats::playChangeDissStat(){
-	setVisible(true);
-	enemyCard->setVisible(false);
-	vs->setVisible(false);
 	playerCard->updateStats(false);
-	playerCard->animateNewStats(0.f);
 
-	dissBattleChangeStatTimeout->restart();
+	if(playerCard->increments[0] != 0 || playerCard->increments[1] != 0 || playerCard->increments[2] != 0 || playerCard->increments[3] != 0){
+		setVisible(true);
+		enemyCard->setVisible(false);
+		vs->setVisible(false);
+	
+		playerCard->animateNewStats(0.f);
+
+		dissBattleChangeStatTimeout->restart();
+	}else{
+		playerCard->updateStats();
+	}
+	
 }

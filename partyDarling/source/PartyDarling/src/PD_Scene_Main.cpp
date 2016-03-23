@@ -80,26 +80,27 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	carriedPropDistance(0),
 	wipeColour(glm::ivec3(125/255.f,200/255.f,50/255.f)),
 	dissEnemy(nullptr),
-	playerStartsDissBattle(true)
+	playerStartsDissBattle(true),
+	distortV(1),
+	distortS(1)
 {
 	_game->showLoading(0);
 
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
+	uiInventory = new PD_UI_Inventory(uiLayer->world, player);
 	// Load the save file
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
-	PD_Game::progressManager->loadSave(player, uiDissBattle);
+	PD_Game::progressManager->loadSave(player, uiDissBattle, uiInventory);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
-		toonShader->addComponent(new ShaderComponentVNoise(toonShader));
+	toonShader->addComponent(vNoise = new ShaderComponentVNoise(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
 	toonShader->addComponent(new ShaderComponentTexture(toonShader, 0));
-	if(PD_Game::progressManager->plotPosition == kEND){
-		toonShader->addComponent(new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
-	}
+	toonShader->addComponent(hsvDistort = new ShaderComponentHsv(toonShader, 0, 0.1f, 1.5f));
 	toonShader->compileShader();
 
 	itemShader->addComponent(new ShaderComponentMVP(itemShader));
@@ -111,7 +112,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	//characterShader->addComponent(new ShaderComponentDiffuse(characterShader));
 	characterShader->addComponent(new ShaderComponentIndexedTexture(characterShader));
 	characterShader->addComponent(new ShaderComponentDepthOffset(characterShader));
-	characterShader->addComponent(new ShaderComponentHsv(characterShader, 0, 1, 1.5f));
+	characterShader->addComponent(new ShaderComponentHsv(characterShader, 0, distortS, distortV));
 	characterShader->compileShader();
 
 	emoteShader->addComponent(new ShaderComponentMVP(emoteShader));
@@ -154,12 +155,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiBubble->setRationalHeight(0.25f, uiLayer);
 	uiLayer->addChild(uiBubble);
 
-	uiInventory = new PD_UI_Inventory(uiLayer->world, player);
 	uiLayer->addChild(uiInventory);
 	uiInventory->setRationalHeight(1.f, uiLayer);
 	uiInventory->setRationalWidth(1.f, uiLayer);
 	uiInventory->eventManager->addEventListener("itemSelected", [this](sweet::Event * _event){
 		uiInventory->disable();
+		uiTasklist->setVisible(true);
 		uiBubble->enable();
 		uiLayer->removeMouseIndicator();
 		player->enable();
@@ -184,6 +185,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
+
+		uiTasklist->setVisible(true);
 	});
 
 	// add the player to the scene
@@ -223,6 +226,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer->addChild(uiMessage);
 	uiMessage->setRationalWidth(1.f, uiLayer);
 	uiMessage->setRationalHeight(1.f, uiLayer);
+
+	uiTasklist = new PD_UI_Tasklist(uiLayer->world);
+	uiLayer->addChild(uiTasklist);
+	uiTasklist->setRationalWidth(1.f, uiLayer);
+	uiTasklist->setRationalHeight(1.f, uiLayer);
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
@@ -284,6 +292,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
 		if(!uiDialogue->hadNextDialogue){
 			player->enable();
+			uiTasklist->setVisible(true);
 			currentHoverTarget = nullptr;
 			updateSelection();
 		}
@@ -320,6 +329,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		}else{
 			uiMessage->displayMessage("Game loaded.");
 		}
+	}
+
+	if(PD_Game::progressManager->plotPosition == kBEGINNING){
+		uiTasklist->updateTask(activeScenarios.at(0)->id, 0, "I should look for Omar and find out what's going on.", false);
+	}else if(PD_Game::progressManager->plotPosition == kEND){
+		uiTasklist->updateTask(activeScenarios.at(0)->id, 0, "Things have gotten more... different. I should find Goodsee.", false);
 	}
 }
 
@@ -669,6 +684,7 @@ void PD_Scene_Main::triggerDissBattle(PD_Character * _enemy, bool _playerStarts)
 	dissEnemy = _enemy;
 	uiBubble->clear();
 	player->disable();
+	uiTasklist->setVisible(false);
 	uiDissStats->playIntro(dissEnemy);
 }
 
@@ -844,23 +860,33 @@ void PD_Scene_Main::addLifeToken(std::string _name) {
 	Texture * tex = getToken();
 	tex->load();
 	uiDissBattle->addLife(tex);
-
+	uiInventory->addFriendshipToken(tex);
 	uiMessage->gainLifeToken(_name, tex);
 }
 
 void PD_Scene_Main::update(Step * _step){
 	toonShader->bindShader();
 	toonShader->makeDirty();
-	ShaderComponentVNoise * vNoise = dynamic_cast<ShaderComponentVNoise *>(toonShader->getComponentAt(1));
-	if(PD_Game::progressManager->plotPosition == kEND){
+	if(PD_Game::progressManager->plotPosition == kEND || (PD_Game::progressManager->plotPosition == kEPILOGUE && PD_Game::progressManager->variables["stringVariables"].get("ending", "NOT_SET").asString() == "portrait")){
 		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 0.05f);
+		distortS = 0.25f;
+		distortV = 1.25f;
 	}else if(PD_Game::progressManager->plotPosition == kBEGINNING || PD_Game::progressManager->plotPosition == kEPILOGUE){
 		vNoise->setMag(0,0, 0);
+		distortS = 1.f;
+		distortV = 1.f;
 	}else if(sweet::NumberUtils::randomFloat() > sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.9999, 0.99)){
 		vNoise->setMag(sin(sweet::lastTimestamp)*0.02f, 0.02 - sin(sweet::lastTimestamp)*0.02f, 1.f);
+		distortS = 0.25f;
+		distortV = 1.25f;
 	}else{
-		vNoise->setMag(0,0, sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05));
+		float d = sweet::NumberUtils::map(PD_Game::progressManager->plotPosition, 2, 4, 0.25, 0.05);
+		vNoise->setMag(0,0, d);
+		distortS += (1.f - distortS) * d;
+		distortV += (1.f - distortV) * d;
 	}
+	hsvDistort->setSaturation(distortS);
+	hsvDistort->setValue(distortV);
 	glUniform1f(vNoise->timeLocation, sweet::lastTimestamp);
 	glUniform1f(vNoise->mag1Location, vNoise->mag1);
 	glUniform1f(vNoise->mag2Location, vNoise->mag2);
@@ -1161,19 +1187,30 @@ void PD_Scene_Main::update(Step * _step){
 		}
 	}
 
-	// inventory toggle
 	if(!uiDialogue->isVisible() && !uiDissBattle->isVisible() && !uiDissStats->isVisible()){
+		// inventory toggle
 		if(player->wantsToInventory()){
 			if(uiInventory->isVisible()){
 				uiBubble->enable();
 				uiInventory->disable();
 				uiLayer->removeMouseIndicator();
+				uiTasklist->setVisible(true);
 				player->enable();
 			}else{
 				uiBubble->disable();
 				uiInventory->enable();
 				uiLayer->addMouseIndicator();
+				uiTasklist->setVisible(false);
 				player->disable();
+			}
+		}
+
+		// task list toggle
+		if(player->wantsToTaskList()){
+			if(uiTasklist->isExpanded()){
+				uiTasklist->collapse();
+			}else{
+				uiTasklist->expand();
 			}
 		}
 	}
@@ -1228,6 +1265,13 @@ void PD_Scene_Main::update(Step * _step){
 			bulletWorld->world->setDebugDrawer(debugDrawer);
 			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
 		}
+	}
+
+	// tasks
+	if(keyboard->keyJustDown(GLFW_KEY_I)){
+		std::stringstream s;
+		s << "The quick brown fox jumps over the lazy dog wos omg lol wheeeeeee " << ++uiTasklist->testID;
+		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
 	}
 
 	Scene::update(_step);
@@ -1402,6 +1446,8 @@ void PD_Scene_Main::updateSelection(){
 								uiDialogue->startEvent(person->definition->scenario->getConversation(c)->conversation, false);
 								player->disable();
 							}
+
+							uiTasklist->setVisible(false);
 						});
 						if(!person->dissedAt){
 							uiBubble->addOption("Diss " + person->definition->name, [this, person](sweet::Event * _event){

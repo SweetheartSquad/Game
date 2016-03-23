@@ -57,7 +57,7 @@
             ], 
             "type": "toilet",
 			"mass": 0,
-            "roomTypes" : ["BATHROOM","LABORATORY"],
+            "roomTypes" : ["BATHROOM"],
            "sides" : {
 				"LEFT":"RIGHT",
 				"RIGHT":"LEFT"
