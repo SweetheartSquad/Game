@@ -471,6 +471,39 @@
 
 
     {
+      "id":"INTERMISSION_1",
+      "type":"texture",
+      "src":"introSlides/intermission_1.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_2",
+      "type":"texture",
+      "src":"introSlides/intermission_2.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_3",
+      "type":"texture",
+      "src":"introSlides/intermission_3.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_4",
+      "type":"texture",
+      "src":"introSlides/intermission_4.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_5",
+      "type":"texture",
+      "src":"introSlides/intermission_5.png",
+      "generateMipmaps": false
+    },{
+      "id":"INTERMISSION_6",
+      "type":"texture",
+      "src":"introSlides/intermission_6.png",
+      "generateMipmaps": false
+    },
+
+
+    {
       "id": "CROSSHAIR",
       "type": "texture",
       "src": "UI/crosshair.png"

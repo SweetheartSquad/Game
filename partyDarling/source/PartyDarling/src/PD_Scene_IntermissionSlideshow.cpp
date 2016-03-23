@@ -8,10 +8,10 @@
 PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int _plotPosition) :
 	Scene_SlideShow(_game)
 {
-	// get the slides
-	Texture * tex = new Texture("assets/textures/introSlides/intermission_" + std::to_string(_plotPosition) + ".png", false, true);
-	tex->load();
-	push(new Slide(tex));
+	push(new Slide(PD_ResourceManager::scenario->getTexture("INTERMISSION_"+std::to_string(_plotPosition))->texture));
+	
+	slideNew->background->mesh->setScaleMode(GL_NEAREST);
+	slideOld->background->mesh->setScaleMode(GL_NEAREST);
 
 	// setup the trigger for moving on to the game after the slides are done
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
