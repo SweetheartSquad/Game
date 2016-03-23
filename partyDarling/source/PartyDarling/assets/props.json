@@ -521,6 +521,20 @@
             "padding": 0.1,
             "twist": false,
             "flare": false 
+        },
+        {
+            "id": "laptop", 
+            "src": "laptop", 
+            "roomTypes" : ["OFFICE"],
+            "parentDependent": true,
+            "parents":{
+                "desk":[
+                    "TOP"]
+            },
+            "mass": 15,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }
