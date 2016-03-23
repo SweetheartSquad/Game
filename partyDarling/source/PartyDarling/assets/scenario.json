@@ -319,6 +319,13 @@
       "size": "2.5%",
       "antiAliased": false
     },
+    {
+      "id": "TASKLIST-FONT-CROSSED",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer -crossed.ttf",
+      "size": "2.5%",
+      "antiAliased": false
+    },
 	{
       "id": "TASKCOUNT-FONT",
       "type": "font",
