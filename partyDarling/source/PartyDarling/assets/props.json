@@ -453,6 +453,20 @@
             "padding": 0.1,
             "twist": false,
             "flare": false 
+        },
+        	{
+            "id": "pencil", 
+            "src": "pencil", 
+            "roomTypes" : ["OFFICE"],
+            "parentDependent": true,
+            "parents":{
+                "desk":[
+                    "TOP"]
+            },
+            "mass": 5,
+            "padding": 0.1,
+            "twist": false,
+            "flare": false 
         }
     ]
 }
