@@ -63,7 +63,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer(new UILayer(0,0,0,0)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
-	selectedItem(nullptr),
 	toonShader(new ComponentShaderBase(false)),
 	itemShader(new ComponentShaderBase(false)),
 	characterShader(new ComponentShaderBase(false)),
@@ -166,12 +165,21 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->enable();
 
 		// replace the crosshair texture with the item texture
-		Texture * itemTex = uiInventory->getSelected()->mesh->textures.at(0);
+		/*Texture * itemTex = uiInventory->getSelected()->mesh->textures.at(0);
 		crosshairIndicator->background->mesh->replaceTextures(itemTex);
 		crosshairIndicator->setWidth(itemTex->width);
 		crosshairIndicator->setHeight(itemTex->height);
 		crosshairIndicator->autoResize();
-		crosshairIndicator->invalidateLayout();
+		crosshairIndicator->invalidateLayout();*/
+		uiInventory->getSelected()->triggerInteract();
+		PD_Item * item = uiInventory->removeSelected();
+		if(item->definition->consumable){
+			auto items = PD_Listing::listings[item->definition->scenario]->items;
+			items.erase(items.find(item->definition->id));
+			delete item;
+		}else{
+			uiInventory->pickupItem(item);
+		}
 	});
 
 	uiDialogue = new PD_UI_Dialogue(uiLayer->world, uiBubble);
@@ -1491,30 +1499,8 @@ void PD_Scene_Main::updateSelection(){
 			currentHoverTarget = me;
 		}else{
 			currentHoverTarget = nullptr;
-		}
-		if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr || selectedItem != uiInventory->getSelected()){
+		}if((lastHoverTarget != currentHoverTarget) && currentHoverTarget == nullptr){
 			uiBubble->clear();
-			selectedItem = uiInventory->getSelected();
-			if(uiInventory->getSelected() != nullptr){
-				uiBubble->addOption("Use " + uiInventory->getSelected()->definition->name, [this](sweet::Event * _event){
-					uiInventory->getSelected()->triggerInteract();
-					PD_Item * item = uiInventory->removeSelected();
-					if(item->definition->consumable){
-						auto items = PD_Listing::listings[item->definition->scenario]->items;
-						items.erase(items.find(item->definition->id));
-						delete item;
-					}else{
-						uiInventory->pickupItem(item);
-					}
-					resetCrosshair();
-				});
-				uiBubble->addOption("Nevermind.", [this](sweet::Event * _event){
-					// dropping an item
-					PD_Item * item = uiInventory->removeSelected();
-					uiInventory->pickupItem(item);
-					resetCrosshair();
-				});
-			}
 		}
 	}
 }
