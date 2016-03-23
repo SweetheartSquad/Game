@@ -33,6 +33,12 @@
       "category": "music"
     },
     {
+      "id": "BGM5",
+      "type": "audio",
+      "src": "bgm/06_DumbWaiter.ogg",
+      "category": "music"
+    },
+    {
     	"id": "BGM_MENU",
     	"type": "audio",
       	"src": "menu/DoorMat.ogg",
