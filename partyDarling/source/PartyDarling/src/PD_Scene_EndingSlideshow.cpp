@@ -30,7 +30,7 @@ PD_Scene_EndingSlideshow::PD_Scene_EndingSlideshow(Game * _game) :
 
 
 
-	Timeout * t = new Timeout(2.f, [this, numSlides, t](sweet::Event * _event){
+	Timeout * t = new Timeout(4.f, [this, numSlides, t](sweet::Event * _event){
 		slideDisplay->setBackgroundColour(1,1,1, 0);
 		if(curSlide >= numSlides){
 			dynamic_cast<PD_Scene_MenuMain *>(game->scenes["menu"])->fadeTimeout->restart();	
