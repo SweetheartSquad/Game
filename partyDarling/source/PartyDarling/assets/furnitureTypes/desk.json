@@ -50,7 +50,8 @@
 			"mass": 100,
             "roomTypes" : ["OFFICE"],
             "sides" : {
-				"BACK":"FRONT"
+				"BACK":"FRONT",
+				"TOP":"BOTTOM"
                 },
 			"parentDependent": false,
             "parents":{
