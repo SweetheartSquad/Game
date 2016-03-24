@@ -1949,6 +1949,26 @@
             "random": true,
             "src": "components/definitions/TarnGolfman_HEAD.json",
             "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Norm_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Norm_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Nprm_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Norm_TORSO.json",
+            "type": "TORSO"
         }
     ]
 }

@@ -7959,6 +7959,46 @@
             "id": 1950,
             "src": "components/TarnGolfman_Right_Pupil.png",
             "type": "texture"
+        },
+        {
+            "id": 1952,
+            "src": "components/Norm_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1953,
+            "src": "components/Norm_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1954,
+            "src": "components/Norm_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 1955,
+            "src": "components/Norm_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1956,
+            "src": "components/Norm_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1957,
+            "src": "components/Norm_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1958,
+            "src": "components/Nprm_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1959,
+            "src": "components/Norm_Torso.png",
+            "type": "texture"
         }
     ]
 }
