@@ -338,12 +338,12 @@
     {
       "id": "hover",
       "type": "audio",
-      "src": "open_envelope.ogg",
+      "src": "click.ogg",
       "category": "sfx"
     },{
       "id": "click",
       "type": "audio",
-      "src": "paper_out_envelope.ogg",
+      "src": "open_envelope.ogg",
       "category": "sfx"
     }
 
