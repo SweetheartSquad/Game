@@ -963,6 +963,14 @@
         {
             "id": 233, 
             "src": "furnitureJson/kitchen_shelf_content_3_8.json"
+        }, 
+        {
+            "id": 234, 
+            "src": "furnitureJson/bedframe_4.json"
+        }, 
+        {
+            "id": 235, 
+            "src": "furnitureJson/sink_faucet_2.json"
         }
     ], 
     "furniture": [
