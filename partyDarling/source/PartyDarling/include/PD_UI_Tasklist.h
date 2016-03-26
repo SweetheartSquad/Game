@@ -2,7 +2,20 @@
 
 #include <sweet/UI.h>
 
+class Timeout;
 class PD_Scenario;
+
+class PD_UI_Task : public NodeUI{
+public:
+	VerticalLinearLayout * checkBox;
+	NodeUI * checkMark;
+	TextArea * text;
+
+	Timeout * checkTimeout;
+
+	PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader);
+	~PD_UI_Task();
+};
 
 class PD_UI_Tasklist : public NodeUI{
 private:
@@ -12,7 +25,7 @@ private:
 	ComponentShaderText * crossedTextShader;
 
 	int numTasks;
-	std::map<std::string, std::map<int, TextArea *>> tasks;
+	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
 
 	Texture * texOpen;
 	Texture * texClosed;

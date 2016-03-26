@@ -5,7 +5,66 @@
 
 #include <PD_Scenario.h>
 #include <TextLabel.h>
+#include <Timeout.h>
 #include <Easing.h>
+
+PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader):
+	NodeUI(_world)
+{
+	setBackgroundColour(0.5, 0.5, 0.5, 0.5);
+	background->setVisible(true);
+
+	VerticalLinearLayout * checkContainer = checkBox = new VerticalLinearLayout(world);
+	addChild(checkContainer);
+	checkContainer->verticalAlignment = kMIDDLE;
+	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.8f);
+	checkContainer->setRationalHeight(1.f, this);
+
+	checkBox = new VerticalLinearLayout(world);
+	checkBox->horizontalAlignment = kCENTER;
+	checkBox->verticalAlignment = kMIDDLE;
+	checkContainer->addChild(checkBox);
+	checkBox->setRationalWidth(1.f, checkContainer);
+	checkBox->setSquareHeight(1.f);
+	checkBox->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-CHECK-BOX")->texture);
+	checkBox->background->mesh->setScaleMode(GL_NEAREST);
+	checkBox->setBackgroundColour(1.f, 1.f, 1.f, 1.f);
+	checkBox->background->setVisible(true);
+
+	checkMark = new NodeUI(world);
+	checkBox->addChild(checkMark);
+	checkMark->setRationalWidth(0.f, checkBox);
+	checkMark->setSquareHeight(1.f);
+	checkMark->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-CHECK-MARK")->texture);
+	checkMark->background->mesh->setScaleMode(GL_NEAREST);
+	checkMark->setVisible(false);
+	
+	text = new TextArea(world, _font, _textShader);
+	text->setWrapMode(kWORD);
+	text->verticalAlignment = kMIDDLE;
+	addChild(text);
+	text->setRationalWidth(1.f, this);
+	text->setRationalHeight(1.f, this);
+	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
+
+	checkTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		checkMark->setRationalWidth(1.f, checkMark->nodeUIParent);
+	});
+	checkTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		checkMark->setVisible(true);
+	});
+	checkTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		p = Easing::easeOutElastic(p, 0.f, 1.f, checkTimeout->targetSeconds, -1, 4.f);
+		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
+		invalidateLayout();
+	});
+	childTransform->addChild(checkTimeout, false);\
+}
+
+PD_UI_Task::~PD_UI_Task(){
+
+}
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	NodeUI(_world),
@@ -70,7 +129,6 @@ PD_UI_Tasklist::~PD_UI_Tasklist(){
 
 void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _text, bool _complete){
 	auto it = tasks.find(_scenario);
-	_text = "- " + _text;
 
 	// if the scenario has no tasks, this one must not exist yet, so make it and return early
 	if(it == tasks.end()){
@@ -93,7 +151,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 	}
 
 	// update the task text
-	it2->second->setText(_text);
+	it2->second->text->setText(_text);
 	invalidateLayout();
 
 	// if we're supposed to remove the task, do that last so that the text is up-to-date
@@ -105,26 +163,18 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 
 	if(tasks.find(_scenario) == tasks.end()){
-		std::map<int, TextArea *> m;
+		std::map<int, PD_UI_Task *> m;
 		tasks.insert(std::make_pair(_scenario, m));
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
-		ComponentShaderText * shader = new ComponentShaderText(false);
-		shader->setColor(1.f, 1.f, 1.f);
+		PD_UI_Task * task = new PD_UI_Task(world, font, textShader);
+		task->setRationalWidth(1.f, journalLayout);
+		task->setHeight(font->getLineHeight() * 3.f);
+		journalLayout->addChild(task);
+		task->text->setText(_text);
 
-		TextArea * text = new TextArea(world, font, textShader);
-		text->setWrapMode(kWORD);
-		text->verticalAlignment = kMIDDLE;
-		text->setText(_text);
-		text->setBackgroundColour(0.5, 0.5, 0.5, 0.5);
-		text->background->setVisible(true);
-		journalLayout->addChild(text);
-		text->setRationalWidth(1.f, journalLayout);
-		text->setHeight(font->getLineHeight() * 3.f);
-		//text->setAutoresizeHeight();
-
-		tasks.at(_scenario).insert(std::make_pair(_id, text));
+		tasks.at(_scenario).insert(std::make_pair(_id, task));
 
 		// add indicator if task list is collapsed
 		if(!journalLayout->isVisible()){
@@ -142,15 +192,9 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 	if(tasks.find(_scenario) != tasks.end()){
 		auto sTasks = tasks.at(_scenario);
 		if(sTasks.find(_id) != sTasks.end()){
-			TextArea * text = tasks.at(_scenario).at(_id);
+			TextArea * text = tasks.at(_scenario).at(_id)->text;
 			//journalLayout->removeChild(text);
 			//delete text;
-
-			// Strikeout!!!!!!!!!
-			/*ComponentShaderText * shader = dynamic_cast<ComponentShaderText *>(text->textShader);
-			if(shader != nullptr){
-				shader->setColor(1.f, 1.f, 1.f, 0.5f);
-			}*/
 
 			text->setShader(crossedTextShader, true);
 			text->setFont(crossedFont, true);
@@ -158,16 +202,20 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 			incrementCount(-1);
 			invalidateLayout();
 
+			tasks.at(_scenario).at(_id)->checkTimeout->restart();
+			/*
 			sTasks.erase(_id);
 			if(sTasks.size() == 0){
 				tasks.erase(_scenario);
-			}
+			}*/
 		}
 	}
 }
 
 void PD_UI_Tasklist::update(Step * _step){
-	NodeUI::update(_step);
+	if(isVisible()){
+		NodeUI::update(_step);
+	}
 }
 
 void PD_UI_Tasklist::incrementCount(int _increment){
