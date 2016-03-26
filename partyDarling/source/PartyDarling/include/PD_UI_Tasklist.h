@@ -11,9 +11,12 @@ public:
 	NodeUI * checkMark;
 	TextArea * text;
 
+	ComponentShaderText * textShader;
+
+	Timeout * addTimeout;
 	Timeout * checkTimeout;
 
-	PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader);
+	PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 	~PD_UI_Task();
 };
 
