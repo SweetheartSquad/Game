@@ -904,6 +904,18 @@
       "src": "UI/journalNew.png",
       "generateMipmaps":false
     },
+	{
+      "id": "JOURNAL-CHECK-BOX",
+      "type": "texture",
+      "src": "UI/checkBox.png",
+      "generateMipmaps":false
+    },
+	{
+      "id": "JOURNAL-CHECK-MARK",
+      "type": "texture",
+      "src": "UI/checkMark.png",
+      "generateMipmaps":false
+    },
 
     // BUBBLES
     {
