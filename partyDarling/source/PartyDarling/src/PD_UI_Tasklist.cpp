@@ -8,8 +8,9 @@
 #include <Timeout.h>
 #include <Easing.h>
 
-PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader):
-	NodeUI(_world)
+PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
+	NodeUI(_world),
+	textShader(_textShader)
 {
 	setBackgroundColour(0.5, 0.5, 0.5, 0.5);
 	background->setVisible(true);
@@ -46,6 +47,16 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader)
 	text->setRationalWidth(1.f, this);
 	text->setRationalHeight(1.f, this);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
+
+	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
+	});
+	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
+		float p = _event->getFloatData("progress");
+		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
+		invalidateLayout();
+	});
+	childTransform->addChild(addTimeout, false);
 
 	checkTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		checkMark->setRationalWidth(1.f, checkMark->nodeUIParent);
@@ -120,6 +131,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	journalLayout->verticalAlignment = kTOP;
 	journalLayout->setRationalWidth(1.f, layout);
 	journalLayout->setRationalHeight(0.95f, layout);
+	journalLayout->setMarginTop(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 	journalLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
 	journalLayout->background->setVisible(false);
 }
@@ -153,6 +165,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 	// update the task text
 	it2->second->text->setText(_text);
 	invalidateLayout();
+	it2->second->addTimeout->restart();
 
 	// if we're supposed to remove the task, do that last so that the text is up-to-date
 	if(_complete){
@@ -168,7 +181,10 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
-		PD_UI_Task * task = new PD_UI_Task(world, font, textShader);
+		ComponentShaderText * shader = new ComponentShaderText(false);
+		shader->setColor(0.8f, 0.8f, 0.f, 0.f);
+
+		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
 		task->setRationalWidth(1.f, journalLayout);
 		task->setHeight(font->getLineHeight() * 3.f);
 		journalLayout->addChild(task);
@@ -180,6 +196,8 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		if(!journalLayout->isVisible()){
 			icon->background->mesh->replaceTextures(texNew);
 		}
+
+		task->addTimeout->restart();
 
 		incrementCount(1);
 		invalidateLayout();
