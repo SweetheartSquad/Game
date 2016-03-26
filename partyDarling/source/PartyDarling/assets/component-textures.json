@@ -7976,28 +7976,108 @@
             "type": "texture"
         },
         {
-            "id": 1955,
+            "id": 1960,
+            "src": "components/Norm_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1961,
+            "src": "components/Norm_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1962,
             "src": "components/Norm_Upper_Arm.png",
             "type": "texture"
         },
         {
-            "id": 1956,
+            "id": 1963,
             "src": "components/Norm_Lower_Arm.png",
             "type": "texture"
         },
         {
-            "id": 1957,
+            "id": 1964,
             "src": "components/Norm_Hand.png",
             "type": "texture"
         },
         {
-            "id": 1958,
-            "src": "components/Nprm_Torso.png",
+            "id": 1965,
+            "src": "components/Somnothan_Upper_Leg.png",
             "type": "texture"
         },
         {
-            "id": 1959,
-            "src": "components/Norm_Torso.png",
+            "id": 1966,
+            "src": "components/Somnothan_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1967,
+            "src": "components/Somnothan_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 1968,
+            "src": "components/Somnothan_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1969,
+            "src": "components/Somnothan_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1970,
+            "src": "components/Minnefred_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1971,
+            "src": "components/Minnefred_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1972,
+            "src": "components/Minnefred_Foot.png",
+            "type": "texture"
+        },
+        {
+            "id": 1973,
+            "src": "components/Minnefred_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1974,
+            "src": "components/Minnefred_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1975,
+            "src": "components/Minnefred_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1976,
+            "src": "components/Minnefred_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1977,
+            "src": "components/Minnefred_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1978,
+            "src": "components/Broham_Upper_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1979,
+            "src": "components/Broham_Lower_Leg.png",
+            "type": "texture"
+        },
+        {
+            "id": 1980,
+            "src": "components/Broham_Foot.png",
             "type": "texture"
         }
     ]

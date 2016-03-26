@@ -1957,18 +1957,58 @@
         },
         {
             "random": true,
+            "src": "components/definitions/Norm_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Norm_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
             "src": "components/definitions/Norm_ARM.json",
             "type": "ARM"
         },
         {
             "random": true,
-            "src": "components/definitions/Nprm_TORSO.json",
+            "src": "components/definitions/Somnothan_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Somnothan_TORSO.json",
             "type": "TORSO"
         },
         {
             "random": true,
-            "src": "components/definitions/Norm_TORSO.json",
+            "src": "components/definitions/Somnothan_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Minnefred_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Minnefred_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Minnefred_TORSO.json",
             "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Minnefred_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Broham_LEG.json",
+            "type": "LEG"
         }
     ]
 }
