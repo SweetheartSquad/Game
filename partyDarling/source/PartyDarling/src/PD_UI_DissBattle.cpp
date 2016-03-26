@@ -786,11 +786,13 @@ void PD_UI_DissBattle::gameOver(bool _win){
 	if(_win){
 		int sumP = player->dissStats->getDefense() + player->dissStats->getInsight() + player->dissStats->getStrength() + player->dissStats->getSass();
 		int sumE = enemy->dissStats->getDefense() + enemy->dissStats->getInsight() + enemy->dissStats->getStrength() + enemy->dissStats->getSass();
-		float res = sumE - sumP / 4.f;
+		float res = (sumE - sumP) / 40.f;
 		if(res < 0){
 			res = 0.f;
 		}
-		wonXP = 100.f / ((player->level + 1) * 5) * res; 
+		float xpMultipier = sweet::NumberUtils::map(res, 0.f, 1.f, 1.f, 4.f);
+
+		wonXP = 100.f / ((player->level + 1) * 4) * xpMultipier; 
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
 		wonXP = 0.f;

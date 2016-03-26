@@ -59,7 +59,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, Shader * _textShader)
 		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
 		invalidateLayout();
 	});
-	childTransform->addChild(checkTimeout, false);\
+	childTransform->addChild(checkTimeout, false);
 }
 
 PD_UI_Task::~PD_UI_Task(){

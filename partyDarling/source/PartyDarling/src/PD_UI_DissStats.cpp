@@ -132,7 +132,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			levelUp->setRationalHeight(0.f, levelUpContainer);
 			levelUp->setSquareWidth(1.f);
 
-			player->experience = prevXP + wonXP - 100.f; // recalculate xp for new level
+			player->experience = ((prevXP + wonXP - 100.f) * player->level)/ player->level + 1; // recalculate xp for new level
 			dissBattleLevelUpTimeout->restart();
 		}else{
 			// NORMAL
