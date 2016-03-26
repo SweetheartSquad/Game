@@ -1,0 +1,65 @@
+{
+    "joints": {
+        "components": [
+            {
+                "components": [
+                    {
+                        "id": "Foot",
+                        "in": [
+                            0.476404,
+                            0.959531
+                        ],
+                        "out": [
+                            [
+                                0.450587,
+                                0.035052,
+                                "ANY"
+                            ]
+                        ],
+                        "texture": 1972
+                    }
+                ],
+                "id": "Lower Leg",
+                "in": [
+                    0.551246,
+                    0.99708
+                ],
+                "out": [
+                    [
+                        0.555315,
+                        0.062882,
+                        "ANY"
+                    ]
+                ],
+                "texture": 1971
+            }
+        ],
+        "id": "Upper Leg",
+        "in": [
+            0.532415,
+            0.938575
+        ],
+        "out": [
+            [
+                0.461498,
+                0.082613,
+                "ANY"
+            ]
+        ],
+        "texture": 1970
+    },
+    "textures": [
+        {
+            "component": "Upper Leg",
+            "id": 1970
+        },
+        {
+            "component": "Lower Leg",
+            "id": 1971
+        },
+        {
+            "component": "Foot",
+            "id": 1972
+        }
+    ]
+}
