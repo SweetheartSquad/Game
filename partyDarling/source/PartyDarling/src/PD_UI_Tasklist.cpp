@@ -12,20 +12,21 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	NodeUI(_world),
 	textShader(_textShader)
 {
-	setBackgroundColour(0.5, 0.5, 0.5, 0.5);
+	setBackgroundColour(0.97f, 0.91f, 0.78f, 0.5f);
 	background->setVisible(true);
 
 	VerticalLinearLayout * checkContainer = checkBox = new VerticalLinearLayout(world);
 	addChild(checkContainer);
+	checkContainer->horizontalAlignment = kCENTER;
 	checkContainer->verticalAlignment = kMIDDLE;
-	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.8f);
+	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
 	checkContainer->setRationalHeight(1.f, this);
 
 	checkBox = new VerticalLinearLayout(world);
 	checkBox->horizontalAlignment = kCENTER;
 	checkBox->verticalAlignment = kMIDDLE;
 	checkContainer->addChild(checkBox);
-	checkBox->setRationalWidth(1.f, checkContainer);
+	checkBox->setRationalWidth(0.75f, checkContainer);
 	checkBox->setSquareHeight(1.f);
 	checkBox->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-CHECK-BOX")->texture);
 	checkBox->background->mesh->setScaleMode(GL_NEAREST);
@@ -87,7 +88,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	numTasks(0),
 	testID(0)
 {
-	textShader->setColor(0.8f, 0.8f, 0.f);
+	textShader->setColor(1.f, 1.f, 1.f);
 	crossedTextShader->setColor(0.5f, 0.5f, 0.5f);
 
 	background->setVisible(false);
@@ -182,7 +183,8 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
 		ComponentShaderText * shader = new ComponentShaderText(false);
-		shader->setColor(0.8f, 0.8f, 0.f, 0.f);
+		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
+		shader->setColor(0.f, 0.f, 0.f, 0.f);
 
 		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
 		task->setRationalWidth(1.f, journalLayout);

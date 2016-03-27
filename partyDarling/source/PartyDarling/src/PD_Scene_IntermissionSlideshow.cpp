@@ -39,7 +39,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	vl->addChild(skip);
 	//skip->setBackgroundColour(0.5f, 0, 0);
 	skip->setRationalWidth(1.f, vl);
-	skip->setHeight(PD_ResourceManager::scenario->getFont("options-menu-sub-font")->font->getLineHeight()*2.f);
+	skip->setRationalHeight(0.5f, uiLayer);
 	skip->verticalAlignment = kMIDDLE;
 	skip->horizontalAlignment = kCENTER;
 	skip->setText("Click anywhere to Continue...");
