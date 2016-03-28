@@ -8079,6 +8079,121 @@
             "id": 1980,
             "src": "components/Broham_Foot.png",
             "type": "texture"
+        },
+        {
+            "id": 1981,
+            "src": "components/Broham_Upper_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1982,
+            "src": "components/Broham_Lower_Arm.png",
+            "type": "texture"
+        },
+        {
+            "id": 1983,
+            "src": "components/Broham_Hand.png",
+            "type": "texture"
+        },
+        {
+            "id": 1984,
+            "src": "components/Broham_Torso.png",
+            "type": "texture"
+        },
+        {
+            "id": 1985,
+            "src": "components/Broham_Pelvis.png",
+            "type": "texture"
+        },
+        {
+            "id": 1986,
+            "src": "components/Broham_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1987,
+            "src": "components/Broham_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1988,
+            "src": "components/Broham_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1989,
+            "src": "components/Broham_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1990,
+            "src": "components/Broham_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1991,
+            "src": "components/Broham_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1992,
+            "src": "components/Broham_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 1993,
+            "src": "components/Broham_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1994,
+            "src": "components/Broham_Right_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 1995,
+            "src": "components/BigBoBob_Lower_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1996,
+            "src": "components/BigBoBob_Upper_Jaw.png",
+            "type": "texture"
+        },
+        {
+            "id": 1997,
+            "src": "components/BigBoBob_Nose.png",
+            "type": "texture"
+        },
+        {
+            "id": 1998,
+            "src": "components/BigBoBob_Right_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 1999,
+            "src": "components/BigBoBob_Left_Eye.png",
+            "type": "texture"
+        },
+        {
+            "id": 2000,
+            "src": "components/BigBoBob_Right_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 2001,
+            "src": "components/BigBoBob_Left_Eyebrow.png",
+            "type": "texture"
+        },
+        {
+            "id": 2002,
+            "src": "components/BigBoBob_Left_Pupil.png",
+            "type": "texture"
+        },
+        {
+            "id": 2003,
+            "src": "components/BigBoBob_Right_Pupil.png",
+            "type": "texture"
         }
     ]
 }

@@ -65,15 +65,7 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	resources = nullptr;
 
 	sweet::destruct();
-#ifdef _DEBUG
-	if(Node::nodeCounting){
-		std::cout << "Final node count: " << Node::nodes.size() << std::endl;
-
-		for(auto n : Node::nodes){
-			std::cout << typeid(*n).name() << " " << n << std::endl;
-		}
-	}
-#endif
+	sweet::printNodes();
 
 #ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);

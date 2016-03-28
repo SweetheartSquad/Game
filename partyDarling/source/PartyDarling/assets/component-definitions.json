@@ -2009,6 +2009,31 @@
             "random": true,
             "src": "components/definitions/Broham_LEG.json",
             "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Broham_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Broham_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Broham_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Broham_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/BigBoBob_HEAD.json",
+            "type": "HEAD"
         }
     ]
 }
