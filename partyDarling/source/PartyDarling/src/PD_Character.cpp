@@ -447,7 +447,7 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	solverBod->target = glm::vec2(0, solverBod->getChainLength());
 
 	// talking thing
-	talkHeight = head->parents.at(0)->getTranslationVector().y;
+	talkHeight = head->firstParent()->getTranslationVector().y;
 	talk = new Animation<float>(&talkHeight);
 	talk->tweens.push_back(new Tween<float>(0.075, head->mesh->textures.at(1)->height*0.2, Easing::kEASE_IN_OUT_CIRC));
 	talk->tweens.push_back(new Tween<float>(0.075, -head->mesh->textures.at(1)->height*0.2, Easing::kEASE_IN_OUT_CIRC));
