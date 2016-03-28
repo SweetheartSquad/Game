@@ -12,7 +12,8 @@
 
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
 	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("TASK-BG")),
-	textShader(_textShader)
+	textShader(_textShader),
+	isAnimating(false)
 {
 	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	setScaleMode(GL_NEAREST);
@@ -61,9 +62,13 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 		eventManager->triggerEvent("taskAnimationComplete");
+		isAnimating = false;
 	});
 	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		eventManager->triggerEvent("taskAnimationStart");
+		if(!isAnimating){ // In case restart happens before complete event
+			isAnimating = true;
+			eventManager->triggerEvent("taskAnimationStart");
+		}
 	});
 
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
@@ -89,6 +94,15 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 }
 
 PD_UI_Task::~PD_UI_Task(){
+}
+
+void PD_UI_Task::setTextShader(ComponentShaderText * _textShader, bool _deleteOldShader){
+	text->setShader(_textShader, true);
+	
+	if(_deleteOldShader){
+		delete textShader;
+	}
+	textShader = _textShader;
 }
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
@@ -264,22 +278,15 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 	if(tasks.find(_scenario) != tasks.end()){
 		auto sTasks = tasks.at(_scenario);
 		if(sTasks.find(_id) != sTasks.end()){
-			TextArea * text = tasks.at(_scenario).at(_id)->text;
-			//taskLayout->removeChild(text);
-			//delete text;
+			PD_UI_Task * task = tasks.at(_scenario).at(_id);
 
-			text->setShader(crossedTextShader, true);
-			text->setFont(crossedFont, true);
+			task->setTextShader(crossedTextShader, true);
+			task->text->setFont(crossedFont, true);
 
 			incrementCount(-1);
 			invalidateLayout();
 
-			tasks.at(_scenario).at(_id)->checkTimeout->restart();
-			/*
-			sTasks.erase(_id);
-			if(sTasks.size() == 0){
-				tasks.erase(_scenario);
-			}*/
+			task->checkTimeout->restart();
 		}
 	}
 }

@@ -6,6 +6,8 @@ class Timeout;
 class PD_Scenario;
 
 class PD_UI_Task : public NodeUI_NineSliced{
+private:
+	bool isAnimating;
 public:
 	VerticalLinearLayout * checkBox;
 	NodeUI * checkMark;
@@ -18,6 +20,8 @@ public:
 
 	PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 	~PD_UI_Task();
+
+	void setTextShader(ComponentShaderText * _textShader, bool _deleteOldShader);
 };
 
 class PD_UI_Tasklist : public NodeUI{
