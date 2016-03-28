@@ -916,6 +916,12 @@
       "src": "UI/checkMark.png",
       "generateMipmaps":false
     },
+	{
+      "id": "TASK-BG",
+      "type": "texture",
+      "src": "UI/taskBG.png",
+	  "nineSliced": true
+    },
 
     // BUBBLES
     {

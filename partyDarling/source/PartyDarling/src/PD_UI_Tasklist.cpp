@@ -8,19 +8,28 @@
 #include <Timeout.h>
 #include <Easing.h>
 
+#define TASKLIST_OPACITY 0.7f
+
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
-	NodeUI(_world),
+	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("TASK-BG")),
 	textShader(_textShader)
 {
-	setBackgroundColour(0.97f, 0.91f, 0.78f, 0.5f);
-	background->setVisible(true);
+	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	setScaleMode(GL_NEAREST);
+	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
+
+	NodeUI * container = new NodeUI(_world);
+	addChild(container);
+	container->setRationalWidth(1.f, this);
+	container->setRationalHeight(1.f, this);
+	container->background->setVisible(false);
 
 	VerticalLinearLayout * checkContainer = checkBox = new VerticalLinearLayout(world);
-	addChild(checkContainer);
+	container->addChild(checkContainer);
 	checkContainer->horizontalAlignment = kCENTER;
 	checkContainer->verticalAlignment = kMIDDLE;
 	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
-	checkContainer->setRationalHeight(1.f, this);
+	checkContainer->setRationalHeight(1.f, container);
 
 	checkBox = new VerticalLinearLayout(world);
 	checkBox->horizontalAlignment = kCENTER;
@@ -44,9 +53,9 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text = new TextArea(world, _font, _textShader);
 	text->setWrapMode(kWORD);
 	text->verticalAlignment = kMIDDLE;
-	addChild(text);
-	text->setRationalWidth(1.f, this);
-	text->setRationalHeight(1.f, this);
+	container->addChild(text);
+	text->setRationalWidth(1.f, container);
+	text->setRationalHeight(1.f, container);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
 
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
@@ -94,7 +103,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	playingAnimations(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
-	crossedTextShader->setColor(0.5f, 0.5f, 0.5f);
+	crossedTextShader->setColor(0.f, 0.f, 0.f);
 
 	setRenderMode(kTEXTURE);
 	background->setVisible(false);
@@ -114,10 +123,12 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 
 	icon = new NodeUI(_world);
 	layout->addChild(icon);
+	icon->boxSizing = kCONTENT_BOX;
 	icon->background->mesh->pushTexture2D(texOpen);
 	icon->background->mesh->setScaleMode(GL_NEAREST);
 	icon->setHeight(0.05f);
 	icon->setSquareWidth(190.f/74.f);
+	icon->setMarginBottom(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 
 	count = new TextLabel(_world, PD_ResourceManager::scenario->getFont("TASKCOUNT-FONT")->font, textShader);
 	count->boxSizing = kCONTENT_BOX;
@@ -138,9 +149,31 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	journalLayout->verticalAlignment = kTOP;
 	journalLayout->setRationalWidth(1.f, layout);
 	journalLayout->setRationalHeight(0.95f, layout);
-	journalLayout->setMarginTop(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
-	journalLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
-	journalLayout->background->setVisible(false);
+
+	float lineHeight = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight();
+	
+	NodeUI_NineSliced * top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
+	journalLayout->addChild(top);
+	top->setRationalWidth(1.f, journalLayout);
+	top->setHeight(lineHeight * 0.5f);
+	top->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, 0.f, lineHeight * 0.5f);
+	top->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+
+	taskLayout = new VerticalLinearLayout(_world);
+	journalLayout->addChild(taskLayout);
+	taskLayout->horizontalAlignment = kLEFT;
+	taskLayout->verticalAlignment = kTOP;
+	taskLayout->setRationalWidth(1.f, journalLayout);
+	taskLayout->setAutoresizeHeight();
+	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
+	taskLayout->background->setVisible(false);
+
+	NodeUI_NineSliced * bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
+	journalLayout->addChild(bottom);
+	bottom->setRationalWidth(1.f, journalLayout);
+	bottom->setHeight(lineHeight * 0.5);
+	bottom->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, lineHeight * 0.5f, 0.f);
+	bottom->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
@@ -190,12 +223,12 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
 		ComponentShaderText * shader = new ComponentShaderText(false);
 		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
-		shader->setColor(0.f, 0.f, 0.f, 0.f);
+		shader->setColor(1.f, 1.f, 1.f, 0.f);
 
 		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
-		task->setRationalWidth(1.f, journalLayout);
+		task->setRationalWidth(1.f, taskLayout);
 		task->setHeight(font->getLineHeight() * 3.f);
-		journalLayout->addChild(task);
+		taskLayout->addChild(task);
 		task->text->setText(_text);
 
 		task->eventManager->addEventListener("taskAnimationStart", [this](sweet::Event * _event){
@@ -232,7 +265,7 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 		auto sTasks = tasks.at(_scenario);
 		if(sTasks.find(_id) != sTasks.end()){
 			TextArea * text = tasks.at(_scenario).at(_id)->text;
-			//journalLayout->removeChild(text);
+			//taskLayout->removeChild(text);
 			//delete text;
 
 			text->setShader(crossedTextShader, true);
