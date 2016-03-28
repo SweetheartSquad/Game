@@ -83,6 +83,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	distortV(1),
 	distortS(1)
 {
+	// save whether we're on our first run since the application started, and update the flag for external use
+	bool firstRun = PD_Game::firstRun;
+	PD_Game::firstRun = false;
+
+
 	_game->showLoading(0);
 
 	player = new Player(bulletWorld);
@@ -317,22 +322,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
 	
+	_game->playBGM();
 
-	bool firstRun = PD_Game::firstRun;
-	PD_Game::firstRun = false;
-
-	// if this is the first time we've entered the game since the application started, swap the menu music for BGM
-	// if we're on the ending run, swap BGM for the weird track
-	// if we're on the epilogue, swap the weird track for BGM
-	if(
-		(PD_Game::progressManager->plotPosition == kEND && _game->bgmTrack != PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
-		||
-		(_game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_MENU")->sound)
-		||
-		(PD_Game::progressManager->plotPosition != kEND && _game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
-		){
-		_game->playBGM();
-	}
+	
 
 	// if we're on the first run, don't show a message
 	// if this is the first time we've entered the game since the application started, show a "loaded" message

@@ -93,9 +93,13 @@ void PD_Game::playBGM(){
 	bgmTrack = PD_ResourceManager::scenario->getAudio(newTrack)->sound;
 	++bgmTrack->referenceCount;
 	bgmTrack->play(false);
+	bgmTrack->setGain(1.f);
 }
 
 void PD_Game::showLoading(float _percentage){
+	if(bgmTrack != nullptr){
+		bgmTrack->setGain(1.f - _percentage);
+	}
 	PD_Scene_LoadingScreen * s = dynamic_cast<PD_Scene_LoadingScreen *>(scenes["loadingScreen"]);
 	s->updateProgress(_percentage);
 	s->update(nullptr);
