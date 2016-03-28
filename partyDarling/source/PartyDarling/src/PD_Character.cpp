@@ -143,21 +143,17 @@ void PD_Character::update(Step * _step){
 
 
 void PD_Character::load(){
-	if(!loaded){
-		// deal with any items which the character is holding because they aren't actually in the scene
-		for(auto i : items){
-			PD_Listing::listings[definition->scenario]->items[i]->load();
-		}
+	// deal with any items which the character is holding because they aren't actually in the scene
+	for(auto i : items){
+		PD_Listing::listings[definition->scenario]->items[i]->load();
 	}
 	RoomObject::load();
 }
 
 void PD_Character::unload(){
-	if(loaded){
-		// deal with any items which the character is holding because they aren't actually in the scene
-		for(auto i : items){
-			PD_Listing::listings[definition->scenario]->items[i]->unload();
-		}
+	// deal with any items which the character is holding because they aren't actually in the scene
+	for(auto i : items){
+		PD_Listing::listings[definition->scenario]->items[i]->unload();
 	}
 	RoomObject::unload();
 }
