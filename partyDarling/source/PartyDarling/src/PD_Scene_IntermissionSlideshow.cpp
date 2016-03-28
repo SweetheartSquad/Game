@@ -23,10 +23,11 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 
 	
 
-	textShader = new ComponentShaderText(false);
+	textShader = new ComponentShaderText(true);
 
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->load();
+	++textShader->referenceCount;
 
 	VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(vl);
@@ -64,7 +65,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 }
 
 PD_Scene_IntermissionSlideshow::~PD_Scene_IntermissionSlideshow(){
-	delete textShader;
+	textShader->decrementAndDelete();
 }
 
 void PD_Scene_IntermissionSlideshow::update(Step * _step){
