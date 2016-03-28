@@ -103,8 +103,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	insightAlpha(1.f),
 	sassInsultMultiplier(1.f),
 	sassInterjectMultiplier(1.f),
-	optionOneShader(new ComponentShaderText(false)),
-	optionTwoShader(new ComponentShaderText(false))
+	optionOneShader(new ComponentShaderText(true)),
+	optionTwoShader(new ComponentShaderText(true))
 {
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
@@ -441,6 +441,9 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	}
 	
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
+
+	++optionOneShader->referenceCount;
+	++optionTwoShader->referenceCount;
 }
 
 PD_UI_DissBattle::~PD_UI_DissBattle(){
@@ -456,8 +459,8 @@ PD_UI_DissBattle::~PD_UI_DissBattle(){
 	playerBubbleLayout->removeChild(playerBubbleOptions, false);
 	playerBubbleLayout->addChild(playerBubbleOptions, false);
 
-	delete optionOneShader;
-	delete optionTwoShader;
+	optionOneShader->decrementAndDelete();
+	optionTwoShader->decrementAndDelete();
 
 	if(enemyCursor->firstParent()->parents.size() == 0){
 		childTransform->addChild(enemyCursor->firstParent(), false);
