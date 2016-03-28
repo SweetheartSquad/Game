@@ -40,7 +40,6 @@ PD_UI_Dialogue::PD_UI_Dialogue(BulletWorld * _world, PD_UI_Bubble * _uiBubble) :
 	vl2->addChild(text);
 	vl2->setPadding(0.03f, 0.f);
 	text->setRationalWidth(1.f, vl2);
-	text->setText("test");
 	text->verticalAlignment = kMIDDLE;
 	background->setVisible(false);
 
