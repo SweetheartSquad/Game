@@ -29,7 +29,7 @@ bool PD_Game::staticInit(){
 bool PD_Game::staticInitialized = staticInit();
 
 void PD_Game::addSplashes(){
-	//Game::addSplashes(); // add default splashes
+	Game::addSplashes(); // add default splashes
 }
 
 PD_Game::PD_Game() :
