@@ -83,7 +83,7 @@ PD_Scene_Animation::PD_Scene_Animation(Game* _game) :
 	childTransform->addChild(debugCam);
 	debugCam->farClip = 1000.f;
 	debugCam->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	debugCam->parents.at(0)->translate(0.f, 1.5f, 2.f);
+	debugCam->firstParent()->translate(0.f, 1.5f, 2.f);
 	debugCam->yaw = 90.0f;
 	activeCamera = debugCam;
 

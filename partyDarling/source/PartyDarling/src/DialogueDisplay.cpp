@@ -109,7 +109,7 @@ bool DialogueDisplay::sayNext(){
 	o->setText(ss.str());
 	options.push_back(o);
 	optionslayout->addChild(o);
-	//o->parents.at(0)->scale(50,50,1);
+	//o->firstParent()->scale(50,50,1);
 
 	std::vector<Trigger *> optionResult = ask->options.at(i)->triggers;
 	o->onClickFunction = [this, optionResult]() {

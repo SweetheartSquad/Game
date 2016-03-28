@@ -63,10 +63,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiLayer(new UILayer(0,0,0,0)),
 	bulletWorld(new BulletWorld()),
 	debugDrawer(nullptr),
-	toonShader(new ComponentShaderBase(false)),
-	itemShader(new ComponentShaderBase(false)),
-	characterShader(new ComponentShaderBase(false)),
-	emoteShader(new ComponentShaderBase(false)),
+	toonShader(new ComponentShaderBase(true)),
+	itemShader(new ComponentShaderBase(true)),
+	characterShader(new ComponentShaderBase(true)),
+	emoteShader(new ComponentShaderBase(true)),
 	currentHoverTarget(nullptr),
 	lightStart(0.3f),
 	lightEnd(1.f),
@@ -83,6 +83,11 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	distortV(1),
 	distortS(1)
 {
+	// save whether we're on our first run since the application started, and update the flag for external use
+	bool firstRun = PD_Game::firstRun;
+	PD_Game::firstRun = false;
+
+
 	_game->showLoading(0);
 
 	player = new Player(bulletWorld);
@@ -94,7 +99,7 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	PD_Game::progressManager->loadSave(player, uiDissBattle, uiInventory);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 
-	toonRamp = new RampTexture(lightStart, lightEnd, 4, false);
+	toonRamp = new RampTexture(lightStart, lightEnd, 4, true);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
 	toonShader->addComponent(vNoise = new ShaderComponentVNoise(toonShader));
 	toonShader->addComponent(new PD_ShaderComponentSpecialToon(toonShader, toonRamp, true));
@@ -118,6 +123,12 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	emoteShader->addComponent(new ShaderComponentTexture(emoteShader));
 	emoteShader->addComponent(new ShaderComponentDepthOffset(emoteShader));
 	emoteShader->compileShader();
+
+	++toonShader->referenceCount;
+	++itemShader->referenceCount;
+	++characterShader->referenceCount;
+	++emoteShader->referenceCount;
+
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
@@ -317,22 +328,9 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
 	
+	_game->playBGM();
 
-	bool firstRun = PD_Game::firstRun;
-	PD_Game::firstRun = false;
-
-	// if this is the first time we've entered the game since the application started, swap the menu music for BGM
-	// if we're on the ending run, swap BGM for the weird track
-	// if we're on the epilogue, swap the weird track for BGM
-	if(
-		(PD_Game::progressManager->plotPosition == kEND && _game->bgmTrack != PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
-		||
-		(_game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_MENU")->sound)
-		||
-		(PD_Game::progressManager->plotPosition != kEND && _game->bgmTrack == PD_ResourceManager::scenario->getAudio("BGM_END")->sound)
-		){
-		_game->playBGM();
-	}
+	
 
 	// if we're on the first run, don't show a message
 	// if this is the first time we've entered the game since the application started, show a "loaded" message
@@ -837,15 +835,14 @@ PD_Scene_Main::~PD_Scene_Main(){
 	}
 
 	delete bulletWorld;
-	delete toonShader;
-	delete itemShader;
-	delete characterShader;
-	delete emoteShader;
-
-	delete toonRamp;
 
 	PD_ResourceManager::itemTextures->unload();
 	PD_ResourceManager::componentTextures->unload();
+
+	toonShader->decrementAndDelete();
+	itemShader->decrementAndDelete();
+	characterShader->decrementAndDelete();
+	emoteShader->decrementAndDelete();
 }
 
 void PD_Scene_Main::removeRoom(Room * _room){

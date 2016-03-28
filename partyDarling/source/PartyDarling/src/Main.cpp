@@ -42,7 +42,9 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 
 	//sweet::NumberUtils::seed(time(nullptr)); // NOTE: this is no longer needed; you can set the seed with "rngSeed" in config.json. If you want a time-based seed, use a seed of -1
 	//OpenAL_Sound::masterGain = 0;
-	//Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
+#ifdef _DEBUG
+	Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
+#endif
 
 	// initialize resources
 	PD_ResourceManager * resources = new PD_ResourceManager();
@@ -60,13 +62,16 @@ int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	delete game;
 	game = nullptr;
 	delete resources;
+	resources = nullptr;
 
 	sweet::destruct();
 #ifdef _DEBUG
-	std::cout << "Final node count: " << Node::nodes.size() << std::endl;
+	if(Node::nodeCounting){
+		std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 
-	for(auto n : Node::nodes){
-		std::cout << typeid(*n).name() << " " << n << std::endl;
+		for(auto n : Node::nodes){
+			std::cout << typeid(*n).name() << " " << n << std::endl;
+		}
 	}
 #endif
 

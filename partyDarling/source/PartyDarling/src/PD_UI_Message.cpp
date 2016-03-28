@@ -11,7 +11,7 @@
 
 PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	VerticalLinearLayout(_world),
-	textShader(new ComponentShaderText(false))
+	textShader(new ComponentShaderText(true))
 {
 	setVisible(false);
 	// Pickup/Remove Item Animaiton
@@ -53,6 +53,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
 	textBubble->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
 	textShader->setColor(1.f, 1.f, 1.f, 0.f);
+	++textShader->referenceCount;
 }
 
 PD_UI_Message::~PD_UI_Message(){
@@ -61,7 +62,7 @@ PD_UI_Message::~PD_UI_Message(){
 		delete t;
 	}
 	animationTimeouts.clear();
-	delete textShader;
+	textShader->decrementAndDelete();
 }
 
 void PD_UI_Message::gainItem(PD_Item * _item){
