@@ -1281,7 +1281,7 @@ void PD_Scene_Main::update(Step * _step){
 	// tasks
 	if(keyboard->keyJustDown(GLFW_KEY_I)){
 		std::stringstream s;
-		s << "The quick brown fox jumps over the lazy dog wos omg lol wheeeeeee " << ++uiTasklist->testID;
+		s << "The quick brown fox jumps over the lazy dog along with five boxing wizards wow omg lol wheeeeeee " << ++uiTasklist->testID;
 		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
 	}
 

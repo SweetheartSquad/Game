@@ -5,7 +5,7 @@
 class Timeout;
 class PD_Scenario;
 
-class PD_UI_Task : public NodeUI{
+class PD_UI_Task : public NodeUI_NineSliced{
 public:
 	VerticalLinearLayout * checkBox;
 	NodeUI * checkMark;
@@ -37,6 +37,7 @@ private:
 	Texture * texNew;
 
 	VerticalLinearLayout * journalLayout;
+	VerticalLinearLayout * taskLayout;
 	NodeUI * icon;
 	TextLabel * count;
 
