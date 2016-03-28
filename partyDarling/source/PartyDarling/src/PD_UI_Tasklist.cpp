@@ -51,7 +51,12 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
+		eventManager->triggerEvent("taskAnimationComplete");
 	});
+	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		eventManager->triggerEvent("taskAnimationStart");
+	});
+
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
@@ -75,7 +80,6 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 }
 
 PD_UI_Task::~PD_UI_Task(){
-
 }
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
@@ -86,11 +90,13 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedFont(PD_ResourceManager::scenario->getFont("TASKLIST-FONT-CROSSED")->font),
 	unseenTask(false),
 	numTasks(0),
-	testID(0)
+	testID(0),
+	playingAnimations(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
 	crossedTextShader->setColor(0.5f, 0.5f, 0.5f);
 
+	setRenderMode(kTEXTURE);
 	background->setVisible(false);
 
 	texOpen = PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture;
@@ -191,6 +197,19 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		task->setHeight(font->getLineHeight() * 3.f);
 		journalLayout->addChild(task);
 		task->text->setText(_text);
+
+		task->eventManager->addEventListener("taskAnimationStart", [this](sweet::Event * _event){
+			if(playingAnimations == 0){
+				setRenderMode(kENTITIES);
+			}
+			++playingAnimations;
+		});
+		task->eventManager->addEventListener("taskAnimationComplete", [this](sweet::Event * _event){
+			--playingAnimations;
+			if(playingAnimations == 0){
+				setRenderMode(kTEXTURE);
+			}
+		});
 
 		tasks.at(_scenario).insert(std::make_pair(_id, task));
 

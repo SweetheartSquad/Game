@@ -30,6 +30,8 @@ private:
 	int numTasks;
 	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
 
+	unsigned long int playingAnimations;
+
 	Texture * texOpen;
 	Texture * texClosed;
 	Texture * texNew;
