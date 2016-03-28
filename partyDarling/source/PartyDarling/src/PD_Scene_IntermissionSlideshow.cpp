@@ -27,7 +27,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->load();
-	++textShader->referenceCount;
+	textShader->incrementReferenceCount();
 
 	VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
 	uiLayer->addChild(vl);

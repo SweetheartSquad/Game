@@ -36,7 +36,7 @@ PD_UI_DissCard::~PD_UI_DissCard(){
 void PD_UI_DissCard::init(){
 	textShader = new ComponentShaderText(true);
 	textShader->setColor(113/255.f, 71/255.f, 16/255.f);
-	++textShader->referenceCount;
+	textShader->incrementReferenceCount();
 
 	float borderSize = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight()*1.5f;
 	setBorder(borderSize);

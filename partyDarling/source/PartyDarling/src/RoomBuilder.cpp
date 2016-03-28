@@ -1469,7 +1469,7 @@ Texture * RoomBuilder::getFloorTex(){
 	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
-	++res->referenceCount;
+	res->incrementReferenceCount();
 	floorTex[ss.str()] = res;
 	return res;
 #endif
@@ -1492,7 +1492,7 @@ Texture * RoomBuilder::getCeilTex(){
 	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
-	++res->referenceCount;
+	res->incrementReferenceCount();
 	ceilTex[ss.str()] = res;
 	return res;
 #endif
@@ -1515,7 +1515,7 @@ Texture * RoomBuilder::getWallTex(){
 	// create one if it doesn't already exist
 	Texture * res = new Texture(ss.str(), false, true, true);
 	res->load();
-	++res->referenceCount;
+	res->incrementReferenceCount();
 	wallTex[ss.str()] = res;
 	return res;
 #endif

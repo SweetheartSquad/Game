@@ -59,7 +59,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->setRationalHeight(1.f, container);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
 
-	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+	addTimeout = new Timeout(0.f, [this](sweet::Event * _event){
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 		eventManager->triggerEvent("taskAnimationComplete");
 		isAnimating = false;
@@ -78,7 +78,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	});
 	childTransform->addChild(addTimeout, false);
 
-	checkTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+	checkTimeout = new Timeout(0.25f, [this](sweet::Event * _event){
 		checkMark->setRationalWidth(1.f, checkMark->nodeUIParent);
 	});
 	checkTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){

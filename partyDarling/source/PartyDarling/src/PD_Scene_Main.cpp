@@ -124,10 +124,10 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	emoteShader->addComponent(new ShaderComponentDepthOffset(emoteShader));
 	emoteShader->compileShader();
 
-	++toonShader->referenceCount;
-	++itemShader->referenceCount;
-	++characterShader->referenceCount;
-	++emoteShader->referenceCount;
+	toonShader->incrementReferenceCount();
+	itemShader->incrementReferenceCount();
+	characterShader->incrementReferenceCount();
+	emoteShader->incrementReferenceCount();
 
 
 	glm::uvec2 sd = sweet::getWindowDimensions();

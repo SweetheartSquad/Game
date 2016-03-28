@@ -53,7 +53,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world, Player * _player) :
 	childTransform->addChild(test, false);
 
 	bubbleTex = PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUBBLE");
-	++bubbleTex->referenceCount;
+	bubbleTex->incrementReferenceCount();
 }
 
 PD_UI_Bubble::~PD_UI_Bubble(){

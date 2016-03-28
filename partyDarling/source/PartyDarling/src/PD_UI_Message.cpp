@@ -53,7 +53,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
 	textBubble->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
 	textShader->setColor(1.f, 1.f, 1.f, 0.f);
-	++textShader->referenceCount;
+	textShader->incrementReferenceCount();
 }
 
 PD_UI_Message::~PD_UI_Message(){
@@ -123,7 +123,7 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 		image->setSquareWidth(1.f);
 		invalidateLayout();
 
-		++_tex->referenceCount;
+		_tex->incrementReferenceCount();
 
 		text->setText("Acquired " + _name + "'s Friendship");
 

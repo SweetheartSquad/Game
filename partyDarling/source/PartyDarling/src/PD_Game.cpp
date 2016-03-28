@@ -91,7 +91,7 @@ void PD_Game::playBGM(){
 	}
 
 	bgmTrack = PD_ResourceManager::scenario->getAudio(newTrack)->sound;
-	++bgmTrack->referenceCount;
+	bgmTrack->incrementReferenceCount();
 	bgmTrack->play(false);
 	bgmTrack->setGain(1.f);
 }

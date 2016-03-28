@@ -442,8 +442,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	
 	PD_ResourceManager::scenario->getAudio(TIMER)->sound->setGain(3);
 
-	++optionOneShader->referenceCount;
-	++optionTwoShader->referenceCount;
+	optionOneShader->incrementReferenceCount();
+	optionTwoShader->incrementReferenceCount();
 }
 
 PD_UI_DissBattle::~PD_UI_DissBattle(){
@@ -908,8 +908,8 @@ void PD_UI_DissBattle::addLife(Texture * _tokenTexture){
 	lifeTokens.push_back(_tokenTexture);
 	lifeTokensCrossed.push_back(tex);
 
-	++tex->referenceCount;
-	++_tokenTexture->referenceCount;
+	tex->incrementReferenceCount();
+	_tokenTexture->incrementReferenceCount();
 }
 
 void PD_UI_DissBattle::disable(){

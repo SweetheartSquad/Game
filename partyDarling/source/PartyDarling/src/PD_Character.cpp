@@ -315,7 +315,7 @@ CharacterRenderer::CharacterRenderer(BulletWorld * _world, AssetCharacter * cons
 	talk(nullptr),
 	owner(nullptr)
 {
-	++paletteTex->referenceCount;
+	paletteTex->incrementReferenceCount();
 	paletteTex->generateRandomTable();
 	paletteTex->load();
 
