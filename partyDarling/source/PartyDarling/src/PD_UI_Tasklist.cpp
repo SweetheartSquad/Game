@@ -166,12 +166,13 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 
 	float lineHeight = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight();
 	
-	NodeUI_NineSliced * top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
+	top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(top);
 	top->setRationalWidth(1.f, journalLayout);
 	top->setHeight(lineHeight * 0.5f);
 	top->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, 0.f, lineHeight * 0.5f);
 	top->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	top->setVisible(false);
 
 	taskLayout = new VerticalLinearLayout(_world);
 	journalLayout->addChild(taskLayout);
@@ -182,12 +183,13 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
 	taskLayout->background->setVisible(false);
 
-	NodeUI_NineSliced * bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
+	bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(bottom);
 	bottom->setRationalWidth(1.f, journalLayout);
 	bottom->setHeight(lineHeight * 0.5);
 	bottom->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, lineHeight * 0.5f, 0.f);
 	bottom->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	bottom->setVisible(false);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
@@ -228,6 +230,10 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 }
 
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
+	if(numTasks == 0){
+		top->setVisible(true);
+		bottom->setVisible(true);
+	}
 
 	if(tasks.find(_scenario) == tasks.end()){
 		std::map<int, PD_UI_Task *> m;

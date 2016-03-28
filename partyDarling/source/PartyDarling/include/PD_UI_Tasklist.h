@@ -31,6 +31,9 @@ private:
 	ComponentShaderText * textShader;
 	ComponentShaderText * crossedTextShader;
 
+	NodeUI_NineSliced * top;
+	NodeUI_NineSliced * bottom;
+
 	int numTasks;
 	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
 
