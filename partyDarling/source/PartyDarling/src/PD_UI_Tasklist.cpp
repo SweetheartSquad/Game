@@ -107,8 +107,8 @@ void PD_UI_Task::setTextShader(ComponentShaderText * _textShader, bool _deleteOl
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	NodeUI(_world),
-	textShader(new ComponentShaderText(false)),
-	crossedTextShader(new ComponentShaderText(false)),
+	textShader(new ComponentShaderText(true)),
+	crossedTextShader(new ComponentShaderText(true)),
 	font(PD_ResourceManager::scenario->getFont("TASKLIST-FONT")->font),
 	crossedFont(PD_ResourceManager::scenario->getFont("TASKLIST-FONT-CROSSED")->font),
 	unseenTask(false),
@@ -117,8 +117,10 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	playingAnimations(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
+	textShader->incrementReferenceCount();
 	textShader->name = "PD_UI_Tasklist text shader (normal)";
 	crossedTextShader->setColor(0.f, 0.f, 0.f);
+	crossedTextShader->incrementReferenceCount();
 	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
 
 	setRenderMode(kTEXTURE);
@@ -195,6 +197,8 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
+	textShader->decrementAndDelete();
+	crossedTextShader->decrementAndDelete();
 }
 
 void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _text, bool _complete){
