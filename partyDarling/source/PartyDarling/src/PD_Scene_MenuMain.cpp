@@ -60,7 +60,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
-	joinPartyText->setRationalWidth(1.f, textContainer);
+	joinPartyText->setRationalWidth(0.25f, textContainer);
 	joinPartyText->setRationalHeight(0.2f, textContainer);
 	joinPartyText->setMarginTop(0.05f);
 	joinPartyText->setMarginBottom(0.05f);
@@ -88,7 +88,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(continueText);
-	continueText->setRationalWidth(1.f, textContainer);
+	continueText->setRationalWidth(0.3f, textContainer);
 	continueText->setRationalHeight(0.2f, textContainer);
 	continueText->setMarginTop(0.05f);
 	continueText->setMarginBottom(0.05f);
@@ -113,7 +113,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(optionsText);
-	optionsText->setRationalWidth(1.f, textContainer);
+	optionsText->setRationalWidth(0.15f, textContainer);
 	optionsText->setRationalHeight(0.2f, textContainer);
 	optionsText->setMarginTop(0.05f);
 	optionsText->setMarginBottom(0.05f);
@@ -130,7 +130,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(callNightText);
-	callNightText->setRationalWidth(1.f, textContainer);
+	callNightText->setRationalWidth(0.25f, textContainer);
 	callNightText->setRationalHeight(0.2f, textContainer);
 	callNightText->setMarginTop(0.05f);
 	callNightText->setMarginBottom(0.05f);
@@ -292,6 +292,17 @@ void PD_Scene_MenuMain::hideConfirmBox(){
 }
 
 void PD_Scene_MenuMain::update(Step* _step) {
+	// toggle debug draw
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
+		if(Transform::drawTransforms){
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+		}else{
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}
+	}
+
+
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();

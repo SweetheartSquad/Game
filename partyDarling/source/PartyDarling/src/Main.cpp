@@ -26,7 +26,7 @@ int main(void){
 	_CrtMemState s1;
 	_CrtMemCheckpoint( &s1 );
 #else
-int WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
+int __stdcall WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 #endif
 
 	Log::THROW_ON_ERROR = true;
