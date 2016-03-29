@@ -491,7 +491,7 @@
       "id":"DONATE-BUTT",
       "type":"texture",
       "src":"UI/menu/donateButt.png",
-      "generateMipmaps": true
+      "generateMipmaps": false
     },
 
 

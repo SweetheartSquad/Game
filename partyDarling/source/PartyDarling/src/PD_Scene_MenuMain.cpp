@@ -193,7 +193,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 
 
-	// itch.io button
+	// team and donate buttons
 	{
 		VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
 		uiLayer->addChild(vl);
@@ -201,7 +201,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 		vl->setRationalWidth(1.f, uiLayer);
 		vl->verticalAlignment = kBOTTOM;
 		vl->horizontalAlignment = kRIGHT;
-		vl->setMarginRight(0.05f);
+		vl->setMarginRight(0.01f);
 		vl->marginBottom.setRationalSize(1.f, &vl->marginRight);
 
 		NodeUI * sweetButt = new NodeUI(uiLayer->world);
@@ -224,8 +224,9 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 		NodeUI * donateButt = new NodeUI(uiLayer->world);
 		donateButt->width.setRationalSize(1.f, &sweetButt->width);
-		donateButt->setSquareHeight(1.f);
+		donateButt->setSquareHeight(0.5f);
 		vl->addChild(donateButt);
+		donateButt->background->mesh->setScaleMode(GL_NEAREST);
 		donateButt->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DONATE-BUTT")->texture);
 		donateButt->setMouseEnabled(true);
 		donateButt->eventManager->addEventListener("click", [](sweet::Event * _event){
