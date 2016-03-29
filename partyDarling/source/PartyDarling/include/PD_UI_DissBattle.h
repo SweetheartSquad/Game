@@ -139,7 +139,7 @@ private:
 	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
-	float baseCusrorPunctDelayLength;
+	float baseCursorPunctDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
 	float baseGlyphWidth;
@@ -204,8 +204,8 @@ public:
 
 	float damage;
 	
-	float playerComboMultipier;
-	float enemyComboMultipier;
+	float playerComboMultiplier;
+	float enemyComboMultiplier;
 
 	Keyboard * keyboard;
 

@@ -100,7 +100,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	interjectBubbleTimer(0.f),
 	shader(_shader),
 	baseCursorDelayLength(0.05f),
-	baseCusrorPunctDelayLength(0.15f),
+	baseCursorPunctDelayLength(0.15f),
 	cursorDelayLength(0.f),
 	cursorDelayDuration(0.f),
 	baseGlyphWidth(_font->getGlyphAdvance('m').x),
@@ -118,8 +118,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	punctuationCnt(-1),
 	interjectTimer(0),
 	damage(10.f),
-	playerComboMultipier(1.f),
-	enemyComboMultipier(1.f),
+	playerComboMultiplier(1.f),
+	enemyComboMultiplier(1.f),
 	keyboard(&Keyboard::getInstance()),
 	enemy(nullptr),
 	modeOffensive(true),
@@ -578,7 +578,7 @@ void PD_UI_DissBattle::update(Step * _step){
 
 							if(glyphIdx < glyphs.size()){
 								// set cursor delay for this glyph
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength * (1.f + (sassInterjectMultiplier - 1.f) * 0.5f) : baseCusrorPunctDelayLength * sassInterjectMultiplier);
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength * (1.f + (sassInterjectMultiplier - 1.f) * 0.5f) : baseCursorPunctDelayLength * sassInterjectMultiplier);
 								
 								// play sound
 								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
@@ -636,7 +636,7 @@ void PD_UI_DissBattle::update(Step * _step){
 							// Out of time, enemy's turn!
 							countInsultAccuracy(-1);
 							// Reset multipier for failed insult damage
-							playerComboMultipier = 1.f;
+							playerComboMultiplier = 1.f;
 							incrementConfidence(-damage);
 							PD_ResourceManager::scenario->getAudio(TIMER)->sound->stop();
 							PD_ResourceManager::scenario->getAudio(PASSED_INSULT_TIME_LIMIT)->sound->play();
@@ -651,8 +651,8 @@ void PD_UI_DissBattle::update(Step * _step){
 							if (playerResultEffective){
 								// Insult Success!
 								// Reset enemy combo multipier if first insult was effective
-								if(enemyComboMultipier > 1.f){
-									enemyComboMultipier = 1.f;
+								if(enemyComboMultiplier > 1.f){
+									enemyComboMultiplier = 1.f;
 								}
 								// Get next insult
 								incrementConfidence(damage);
@@ -666,7 +666,7 @@ void PD_UI_DissBattle::update(Step * _step){
 							else{
 								//Insult Failed
 								// Reset multipier for failed insult
-								playerComboMultipier = 1.f;
+								playerComboMultiplier = 1.f;
 								incrementConfidence(-damage);
 								setUIMode(false);
 							}
@@ -734,8 +734,8 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	}
 
 	confidence = 50.f;
-	playerComboMultipier = 1.f;
-	enemyComboMultipier = 1.f;
+	playerComboMultiplier = 1.f;
+	enemyComboMultiplier = 1.f;
 
 	setupDissValues();
 
@@ -1149,11 +1149,11 @@ void PD_UI_DissBattle::incrementConfidence(float _value){
 	// Value > 0 means the player is attacking
 	if(_value > 0) {
 		// Factor in enemy's defense
-		_value *= playerAttackMultiplier * playerComboMultipier;
-		playerComboMultipier += playerComboIncrement;
+		_value *= playerAttackMultiplier * playerComboMultiplier;
+		playerComboMultiplier += playerComboIncrement;
 	}else {
-		_value *= enemyAttackMultiplier * enemyComboMultipier;
-		enemyComboMultipier += enemyComboIncrement;
+		_value *= enemyAttackMultiplier * enemyComboMultiplier;
+		enemyComboMultiplier += enemyComboIncrement;
 	}
 
 	sweet::Event * e = new sweet::Event("confidence");
