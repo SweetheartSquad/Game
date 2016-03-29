@@ -47,7 +47,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	basePlayerQuestionTimerLength(1.f),
 	playerQuestionTimerLength(basePlayerQuestionTimerLength),
 	playerQuestionTimer(0),
-	basePlayerAnswerTimerLength(1.5f),
+	basePlayerAnswerTimerLength(1.25f),
 	playerAnswerTimerLength(basePlayerAnswerTimerLength),
 	playerAnswerTimer(0),
 	playerResult(false),
@@ -109,7 +109,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	verticalAlignment = kTOP;
 	horizontalAlignment = kCENTER;
 	background->setVisible(false);
-	//setMarginTop(0.1f);
 
 	float borderSize = sweet::getWindowHeight() * 0.1f / 2.f;
 
@@ -195,13 +194,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	confidenceSlider->fill->setBackgroundColour(1,1,1,1);
 	confidenceSlider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-SLIDER-FILL")->texture);
 	confidenceSlider->fill->background->mesh->setScaleMode(GL_NEAREST);
-
-	/*selectedGlyphText = new TextArea(_bulletWorld, _font, _textShader, 0.9);
-	//addChild(selectedGlyphText);
-	selectedGlyphText->setBackgroundColour(0, 0, 1.f);
-	selectedGlyphText->setWidth(50.f);
-	selectedGlyphText->setRationalHeight(0.05f);
-	selectedGlyphText->horizontalAlignment = kCENTER;*/
 
 	enemyBubble = new NodeUI(_bulletWorld);
 	gameContainer->addChild(enemyBubble);
@@ -558,11 +550,7 @@ void PD_UI_DissBattle::update(Step * _step){
 							if(glyphIdx < glyphs.size()){
 								// set cursor delay for this glyph
 								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength * sassInterjectMultiplier);
-								/*
-								std::wstringstream s;
-								s << glyphs.at(glyphIdx)->character;
-								selectedGlyphText->setText(s.str());
-								*/
+								
 								// play sound
 								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
 									auto sound = enemy->voice;
@@ -747,7 +735,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	if(sassMultiplier > 0){
 		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, 1.f, 1.f, 2.f);
 	}else{
-		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.25f);
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.1f);
 	}
 	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.5f, 1.5f); // 0.75 to 1.5
 

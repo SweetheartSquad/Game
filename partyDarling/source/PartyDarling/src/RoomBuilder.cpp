@@ -1457,7 +1457,7 @@ Texture * RoomBuilder::getFloorTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/floor/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	ss << "assets/textures/room/floor/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, NUM_ROOM_TEXTURES)) << ".png";
 
 	// look for an existing texture with the specified id
 	auto t = floorTex.find(ss.str());
@@ -1480,7 +1480,7 @@ Texture * RoomBuilder::getCeilTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/ceiling/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	ss << "assets/textures/room/ceiling/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, NUM_ROOM_TEXTURES)) << ".png";
 
 	// look for an existing texture with the specified id
 	auto t = ceilTex.find(ss.str());
@@ -1503,7 +1503,7 @@ Texture * RoomBuilder::getWallTex(){
 #else
 	// grab a random floor texture
 	std::stringstream ss;
-	ss << "assets/textures/room/walls/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, 3)) << ".png";
+	ss << "assets/textures/room/walls/" << room->definition->roomType << "_" << std::to_string(sweet::NumberUtils::randomInt(1, NUM_ROOM_TEXTURES)) << ".png";
 
 	// look for an existing texture with the specified id
 	auto t = wallTex.find(ss.str());
