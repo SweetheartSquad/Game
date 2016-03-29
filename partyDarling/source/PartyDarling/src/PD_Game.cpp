@@ -48,6 +48,7 @@ PD_Game::PD_Game() :
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 
 	playBGM();
+	bgmTrack->stop();
 }
 
 PD_Game::~PD_Game(){
