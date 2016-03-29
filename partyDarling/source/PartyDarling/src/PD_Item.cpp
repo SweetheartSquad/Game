@@ -34,7 +34,7 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 
 	originalPos = childTransform->getTranslationVector();
 
-	boundingBox.depth = boundingBox.width*0.1f;
+	boundingBox.depth = boundingBox.width; // because they billboard
 	boundingBox.z = -boundingBox.depth * 0.5;
 
 #ifdef _DEBUG
