@@ -1,0 +1,25 @@
+{
+	// format: multiplier: [posMin, posMax, negMin, negMax] (pos = player has higher stats, neg = player has lower stats)
+	"statMultipliers": {
+		"pos":{
+			"playerAttack": [1.0, 5.0],
+			"enemyAttack": [1.0, 2.5],
+			"insight": [0.0, 1.0],
+			"insightAlpha": [1.0, 0.5],
+			"sassInsult": [1.0, 2.0],
+			"sassInterject": [0.5, 1.5]
+		},
+		"neg":{
+			"playerAttack": [1.0, 0.5],
+			"enemyAttack": [1.0, 0.25],
+			"insight": [0.0, 1.0],
+			"insightAlpha": [1.0, 0.25],
+			"sassInsult": [1.0, 0.25],
+			"sassInterject": [0.5, 1.5]
+		}
+	},
+	"comboMultipliers":{
+		"player": 0.5,
+		"enemy": 1.0
+	}
+}

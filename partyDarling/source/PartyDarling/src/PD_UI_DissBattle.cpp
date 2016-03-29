@@ -37,6 +37,33 @@ InterjectAccuracy::InterjectAccuracy(wchar_t _character, float _padding, float _
 {
 }
 
+DissBattleValues::DissBattleValues(){
+	Json::Value root;
+	Json::Reader reader;
+	std::string jsonLoaded = sweet::FileUtils::readFile("assets/stats.json");
+	bool parsingSuccessful = reader.parse( jsonLoaded, root );
+	if(!parsingSuccessful){
+		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages());
+	}else{
+		
+		for(unsigned long int i = 0; i < 4; ++i){
+			std::string posOrNeg = i < 2 ? "pos" : "neg";
+			int j = i < 2 ? i : (i-2);
+			playerAttackMultiplier[i] = root["statMultipliers"][posOrNeg]["playerAttack"].get(j, 1).asFloat();
+			enemyAttackMultiplier[i] = root["statMultipliers"][posOrNeg]["enemyAttack"].get(j, 1).asFloat();
+			insightMultiplier[i] = root["statMultipliers"][posOrNeg]["insight"].get(j, 1).asFloat();
+			insightAlpha[i] = root["statMultipliers"][posOrNeg]["insightAlpha"].get(j, 1).asFloat();
+			sassInsultMultiplier[i] = root["statMultipliers"][posOrNeg]["sassInsult"].get(j, 1).asFloat();
+			sassInterjectMultiplier[i] = root["statMultipliers"][posOrNeg]["sassInterject"].get(j, 1).asFloat();
+		}
+
+		// combo increments
+		playerComboIncrement = root["comboMultipliers"].get("player", 1.f).asFloat();
+		enemyComboIncrement = root["comboMultipliers"].get("enemy", 1.f).asFloat();
+	}
+}
+
+
 PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, Font * _font, Shader * _textShader, Shader * _shader) :
 	VerticalLinearLayout(_bulletWorld),
 	iteration(0),
@@ -103,6 +130,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	insightAlpha(1.f),
 	sassInsultMultiplier(1.f),
 	sassInterjectMultiplier(1.f),
+	playerComboIncrement(0),
+	enemyComboIncrement(0),
 	optionOneShader(new ComponentShaderText(true)),
 	optionTwoShader(new ComponentShaderText(true))
 {
@@ -708,36 +737,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	playerComboMultipier = 1.f;
 	enemyComboMultipier = 1.f;
 
-	// Player's attack: increased if strength outweights enemy's defence, and lowered otherwise
-	playerAttackMultiplier = (player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL;
-	if(playerAttackMultiplier > 0){
-		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, 1.f, 1.f, 5.f);
-	}else{
-		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, -1.f, 1.f, 0.5f);
-	}
-
-	// Enemy's attack: increased if strength outweights player's defence, and lowered otherwise
-	enemyAttackMultiplier = (enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL;
-	if(enemyAttackMultiplier > 0){
-		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, 1.f, 1.f, 2.5f);
-	}else{
-		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, -1.f, 1.f, 0.25f);
-	}
-
-	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
-	if(insightMultiplier > 0){
-		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, 1.f, 0.5f);
-	}else{
-		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, -1.f, 1.f, 0.25f);
-	}
-
-	float sassMultiplier = (player->dissStats->getSass() - enemy->dissStats->getSass()) / MAX_DISS_LEVEL; // -1 to 1
-	if(sassMultiplier > 0){
-		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, 1.f, 1.f, 2.f);
-	}else{
-		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.25f);
-	}
-	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.5f, 1.5f); // 0.75 to 1.5
+	setupDissValues();
 
 	if(isGameOver){
 		// Reset layout
@@ -759,6 +759,45 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	interjectBubble->setVisible(false);
 	setUIMode(_playerFirst);
 	enable();
+}
+
+void PD_UI_DissBattle::setupDissValues(){
+	// read diss values
+	DissBattleValues dissValues;
+
+	// Player's attack: increased if strength outweights enemy's defence, and lowered otherwise
+	playerAttackMultiplier = (player->dissStats->getStrength() - enemy->dissStats->getDefense()) / MAX_DISS_LEVEL;
+	if(playerAttackMultiplier > 0){
+		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, 1.f, dissValues.playerAttackMultiplier[0], dissValues.playerAttackMultiplier[1]);
+	}else{
+		playerAttackMultiplier = sweet::NumberUtils::map(playerAttackMultiplier, 0.f, -1.f, dissValues.playerAttackMultiplier[2], dissValues.playerAttackMultiplier[3]);
+	}
+
+	// Enemy's attack: increased if strength outweights player's defence, and lowered otherwise
+	enemyAttackMultiplier = (enemy->dissStats->getStrength() - player->dissStats->getDefense()) / MAX_DISS_LEVEL;
+	if(enemyAttackMultiplier > 0){
+		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, 1.f, dissValues.enemyAttackMultiplier[0], dissValues.enemyAttackMultiplier[1]);
+	}else{
+		enemyAttackMultiplier = sweet::NumberUtils::map(enemyAttackMultiplier, 0.f, -1.f, dissValues.enemyAttackMultiplier[2], dissValues.enemyAttackMultiplier[3]);
+	}
+
+	insightMultiplier = (player->dissStats->getInsight() - enemy->dissStats->getInsight()) / MAX_DISS_LEVEL; // -1 to 1
+	if(insightMultiplier > 0){
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, 1.f, dissValues.insightAlpha[0], dissValues.insightAlpha[1]);
+	}else{
+		insightAlpha = sweet::NumberUtils::map(insightMultiplier, 0.f, -1.f, dissValues.insightAlpha[2], dissValues.insightAlpha[3]);
+	}
+
+	float sassMultiplier = (player->dissStats->getSass() - enemy->dissStats->getSass()) / MAX_DISS_LEVEL; // -1 to 1
+	if(sassMultiplier > 0){
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, 1.f, dissValues.sassInsultMultiplier[0], dissValues.sassInsultMultiplier[1]);
+		sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, dissValues.sassInterjectMultiplier[0], dissValues.sassInterjectMultiplier[1]); // 0.75 to 1.5
+	}else{
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, dissValues.sassInsultMultiplier[2], dissValues.sassInsultMultiplier[3]);
+		sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, dissValues.sassInterjectMultiplier[2], dissValues.sassInterjectMultiplier[3]); // 0.75 to 1.5
+	}
+	playerComboIncrement = dissValues.playerComboIncrement;
+	enemyComboIncrement = dissValues.enemyComboIncrement;
 }
 
 void PD_UI_DissBattle::gameOver(bool _win){
@@ -1111,10 +1150,10 @@ void PD_UI_DissBattle::incrementConfidence(float _value){
 	if(_value > 0) {
 		// Factor in enemy's defense
 		_value *= playerAttackMultiplier * playerComboMultipier;
-		playerComboMultipier += 0.5f;
+		playerComboMultipier += playerComboIncrement;
 	}else {
 		_value *= enemyAttackMultiplier * enemyComboMultipier;
-		++enemyComboMultipier;
+		enemyComboMultipier += enemyComboIncrement;
 	}
 
 	sweet::Event * e = new sweet::Event("confidence");
