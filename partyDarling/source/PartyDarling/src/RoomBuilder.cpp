@@ -818,8 +818,17 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	pos += sidePos;
 
 	// check for collision/inside room
+	bool canPlace = canPlaceObject(_child, pos, orient, _parent);
+	if(canPlace && centered){
+		for(auto c : _slot->children){
+			if(!canPlaceObject(c, glm::vec3(), glm::quat(), _parent)){
+				canPlace = false;
+				break;
+			}
+		}
+	}
 
-	if(!canPlaceObject(_child, pos, orient, _parent)){
+	if(!canPlace){
 		if(centered){
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
