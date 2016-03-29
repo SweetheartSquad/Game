@@ -804,6 +804,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		moveChildren *= childDimensions.x * 0.5f;
 		moveChildren = glm::rotate(orient, moveChildren);
 
+		// Shift children
 		for(auto c : _slot->children){
 			c->translatePhysical(moveChildren);
 			c->moveChildren(moveChildren);
@@ -819,17 +820,24 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	// check for collision/inside room
 	bool canPlace = canPlaceObject(_child, pos, orient, _parent);
+	
 	if(canPlace && centered){
 		for(auto c : _slot->children){
-			if(!canPlaceObject(c, glm::vec3(), glm::quat(), _parent)){
+			if(collisionCheck(c, _parent)){
 				canPlace = false;
+				// This sucks (but it's the only way...)
+				_child->translatePhysical(-pos);
+				_child->rotatePhysical(-orient);
+				_child->realign();
+				_child->meshTransform->makeCumulativeModelMatrixDirty();
 				break;
 			}
 		}
 	}
-
+	
 	if(!canPlace){
 		if(centered){
+			// Shift children back
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
 				c->moveChildren(-moveChildren);
@@ -837,6 +845,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				c->meshTransform->makeCumulativeModelMatrixDirty();
 			}
 		}
+		// undo side aligning rotation
 		_child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
@@ -884,19 +893,30 @@ bool RoomBuilder::oppositeSides(PD_Side _side1, PD_Side _side2){
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent){
-	glm::mat4 mmPrev = _obj->meshTransform->getCumulativeModelMatrix();
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
-	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 
-	float angle = glm::angle(_orientation);
-	glm::vec3 axis = glm::axis(_orientation);
-	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
+	_obj->rotatePhysical(_orientation);
 	_obj->translatePhysical(_pos);
 	_obj->realign();
 	_obj->meshTransform->makeCumulativeModelMatrixDirty();
+	
+	// Check if object intersects o
+	if(collisionCheck(_obj, _parent)){
+		_obj->translatePhysical(-_pos);
+		_obj->rotatePhysical(-_orientation);
+		_obj->realign();
+		_obj->meshTransform->makeCumulativeModelMatrixDirty();
+		return false;
+	}
+
+	return true;
+}
+
+bool RoomBuilder::collisionCheck(RoomObject * _obj, RoomObject * _parent){
+	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
 
 	// Check for collision with other objects in room
@@ -911,19 +931,13 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.0001f)){
 #ifdef RG_DETAILED_LOG
 			std::stringstream s;
-			s << "Can't place due to COLLISION with: " << o->type << " address: " << o;
+			s << "COLLISION with: " << o->type << " address: " << o;
 			Log::warn(s.str());
 #endif
-
-			_obj->translatePhysical(-_pos);
-			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
-			_obj->realign();
-			_obj->meshTransform->makeCumulativeModelMatrixDirty();
-			return false;
+			return true;
 		}
 	}
-
-	return true;
+	return false;
 }
 
 std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB){
