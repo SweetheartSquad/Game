@@ -54,6 +54,7 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	textBubble->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
 	textShader->setColor(1.f, 1.f, 1.f, 0.f);
 	textShader->incrementReferenceCount();
+	textShader->name = "PD_UI_Message text shader";
 }
 
 PD_UI_Message::~PD_UI_Message(){

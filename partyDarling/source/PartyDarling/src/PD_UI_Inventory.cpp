@@ -20,6 +20,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(86/255.f, 137/255.f, 135/255.f, 1.f);
+	textShader->name = "PD_UI_Inventory text shader";
 
 	HorizontalLinearLayout * backpackContainer = new HorizontalLinearLayout(_world);
 	addChild(backpackContainer);

@@ -444,6 +444,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	optionOneShader->incrementReferenceCount();
 	optionTwoShader->incrementReferenceCount();
+	optionOneShader->name = "PD_UI_DissBattle text shader (option one)";
+	optionTwoShader->name = "PD_UI_DissBattle text shader (option two)";
 }
 
 PD_UI_DissBattle::~PD_UI_DissBattle(){

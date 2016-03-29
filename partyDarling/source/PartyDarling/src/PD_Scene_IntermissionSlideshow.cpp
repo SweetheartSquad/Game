@@ -24,6 +24,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	
 
 	textShader = new ComponentShaderText(true);
+	textShader->name = "PD_Scene_IntermissionSlideshow text shader";
 
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->load();

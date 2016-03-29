@@ -43,6 +43,8 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
 	}
 #endif
+
+	name = "PD_Item " + definition->name;
 }
 
 bool PD_Item::checkPixelPerfectCollision(glm::vec3 _position){

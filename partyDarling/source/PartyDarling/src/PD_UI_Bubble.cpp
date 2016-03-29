@@ -39,6 +39,7 @@ PD_UI_Bubble::PD_UI_Bubble(BulletWorld * _world, Player * _player) :
 {
 	textShader = new ComponentShaderText(false);
 	textShader->setColor(1,1,1,1);
+	textShader->name = "PD_UI_Bubble text shader";
 	addChild(vl);
 
 	vl->setRationalHeight(1.f, this);

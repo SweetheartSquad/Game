@@ -117,7 +117,9 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	playingAnimations(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
+	textShader->name = "PD_UI_Tasklist text shader (normal)";
 	crossedTextShader->setColor(0.f, 0.f, 0.f);
+	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
 
 	setRenderMode(kTEXTURE);
 	background->setVisible(false);
@@ -242,6 +244,7 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
 		ComponentShaderText * shader = new ComponentShaderText(false);
+		shader->name = "individual task text shader";
 		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
 		shader->setColor(1.f, 1.f, 1.f, 0.f);
 
