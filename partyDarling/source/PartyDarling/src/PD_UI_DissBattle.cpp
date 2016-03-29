@@ -549,7 +549,7 @@ void PD_UI_DissBattle::update(Step * _step){
 
 							if(glyphIdx < glyphs.size()){
 								// set cursor delay for this glyph
-								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength : baseCusrorPunctDelayLength * sassInterjectMultiplier);
+								cursorDelayLength = glyphs.at(glyphIdx)->getWidth() / baseGlyphWidth * (glyphs.at(glyphIdx) != highlightedPunctuation ? baseCursorDelayLength * (1.f + (sassInterjectMultiplier - 1.f) * 0.5f) : baseCusrorPunctDelayLength * sassInterjectMultiplier);
 								
 								// play sound
 								if(glyphIdx == 1 || glyphs.at(glyphIdx - 1)->character == ' '){
@@ -735,7 +735,7 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	if(sassMultiplier > 0){
 		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, 1.f, 1.f, 2.f);
 	}else{
-		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.1f);
+		sassInsultMultiplier = sweet::NumberUtils::map(sassMultiplier, 0.f, -1.f, 1.f, 0.25f);
 	}
 	sassInterjectMultiplier = sweet::NumberUtils::map(sassMultiplier, -1.f, 1.f, 0.5f, 1.5f); // 0.75 to 1.5
 
