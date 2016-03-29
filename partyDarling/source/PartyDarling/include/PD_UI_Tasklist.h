@@ -21,7 +21,7 @@ public:
 	PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader);
 	~PD_UI_Task();
 
-	void setTextShader(ComponentShaderText * _textShader, bool _deleteOldShader);
+	void setTextShader(ComponentShaderText * _textShader);
 };
 
 class PD_UI_Tasklist : public NodeUI{

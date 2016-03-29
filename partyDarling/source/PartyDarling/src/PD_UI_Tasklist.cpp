@@ -96,12 +96,8 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 PD_UI_Task::~PD_UI_Task(){
 }
 
-void PD_UI_Task::setTextShader(ComponentShaderText * _textShader, bool _deleteOldShader){
+void PD_UI_Task::setTextShader(ComponentShaderText * _textShader){
 	text->setShader(_textShader, true);
-	
-	if(_deleteOldShader){
-		delete textShader;
-	}
 	textShader = _textShader;
 }
 
@@ -247,7 +243,7 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
-		ComponentShaderText * shader = new ComponentShaderText(false);
+		ComponentShaderText * shader = new ComponentShaderText(true);
 		shader->name = "individual task text shader";
 		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
 		shader->setColor(1.f, 1.f, 1.f, 0.f);
@@ -293,7 +289,7 @@ void PD_UI_Tasklist::removeTask(std::string _scenario, int _id){
 		if(sTasks.find(_id) != sTasks.end()){
 			PD_UI_Task * task = tasks.at(_scenario).at(_id);
 
-			task->setTextShader(crossedTextShader, true);
+			task->setTextShader(crossedTextShader);
 			task->text->setFont(crossedFont, true);
 
 			incrementCount(-1);
