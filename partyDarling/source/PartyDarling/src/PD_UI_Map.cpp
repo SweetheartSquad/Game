@@ -5,6 +5,12 @@
 #include <PD_Assets.h>
 #include <PD_ResourceManager.h>
 
+#include <ShaderComponentMap.h>
+#include <shader/ShaderComponentMVP.h>
+#include <shader/ShaderComponentTint.h>
+#include <shader/ShaderComponentAlpha.h>
+#include <shader/ShaderComponentDepthOffset.h>
+
 MapCell::MapCell(BulletWorld * _world, Room * _room) :
 	NodeUI(_world),
 	room(_room)
@@ -17,8 +23,17 @@ MapCell::MapCell(BulletWorld * _world, Room * _room) :
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
 	NodeUI(_world),
 	enabled(true),
-	layout(nullptr)
+	layout(nullptr),
+	mapCellShader(new ComponentShaderBase(true))
 {
+	mapCellShader->addComponent(new ShaderComponentMVP(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentMap(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentTint(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentAlpha(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentDepthOffset(mapCellShader));
+	mapCellShader->compileShader();
+	mapCellShader->name = "Map Cell Shader";
+
 	background->setVisible(false);
 
 	compass = new NodeUI(world);
@@ -34,6 +49,10 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 	compass->background->mesh->dirty = true;
 	childTransform->addChild(compass, false);
 	compass->nodeUIParent = this;
+}
+
+PD_UI_Map::~PD_UI_Map(){
+	mapCellShader->decrementAndDelete();
 }
 
 void PD_UI_Map::disable(){
@@ -106,6 +125,7 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 		
 		for(int x = x1-1; x < glm::min(x2, x1+size)+2; ++x){
 			MapCell * cell = new MapCell(world, nullptr);
+			cell->background->setShader(mapCellShader, true);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
 			cell->setRationalHeight(1.f, hl);

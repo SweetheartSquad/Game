@@ -72,6 +72,7 @@
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
+    <ClCompile Include="src\ShaderComponentMap.cpp" />
     <ClCompile Include="src\ShaderComponentOutline.cpp" />
     <ClCompile Include="src\ShaderComponentVNoise.cpp" />
     <ClCompile Include="src\TriggerDefinitions.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
+    <ClInclude Include="include\ShaderComponentMap.h" />
     <ClInclude Include="include\ShaderComponentOutline.h" />
     <ClInclude Include="include\ShaderComponentVNoise.h" />
   </ItemGroup>
