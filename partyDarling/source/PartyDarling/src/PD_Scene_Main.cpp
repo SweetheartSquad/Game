@@ -1485,6 +1485,9 @@ void PD_Scene_Main::updateSelection(){
 							carriedProp->body->setDamping(0.8f,0.5f);
 							carriedProp->body->setGravity(btVector3(0,0,0));
 						}
+					}else{
+						// it isn't one of the valid targets
+						me = nullptr;
 					}
 				}
 			}
