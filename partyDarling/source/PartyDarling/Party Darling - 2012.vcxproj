@@ -95,6 +95,7 @@
     <ClInclude Include="include\PD_InsultButton.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
+    <ClInclude Include="include\PD_Masks.h" />
     <ClInclude Include="include\PD_Palette.h" />
     <ClInclude Include="include\PD_PhraseGenerator_Incidental.h" />
     <ClInclude Include="include\PD_PhraseGenerator_Insults.h" />

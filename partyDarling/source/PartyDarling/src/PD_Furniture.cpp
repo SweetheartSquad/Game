@@ -5,12 +5,13 @@
 #include <PD_FurnitureComponent.h>
 #include <PD_FurnitureComponentDefinition.h>
 #include <PD_ResourceManager.h>
+#include <PD_Slot.h>
+#include <PD_Masks.h>
 
 #include <shader/Shader.h>
 #include <NumberUtils.h>
 #include <Easing.h>
 #include <MeshDeformation.h>
-#include <PD_Slot.h>
 
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
@@ -81,7 +82,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		delete buildResult.collider;
 		setColliderAsBoundingBox();
 	}
-	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE, kENVIRONMENT);
 
 	// position bottom on ground
 	realign(); // update the current position from creation

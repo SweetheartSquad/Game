@@ -24,6 +24,7 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <PD_Furniture.h>
+#include <PD_Masks.h>
 
 #include <Sprite.h>
 #include <Texture.h>
@@ -1013,7 +1014,7 @@ void RoomBuilder::createWalls(){
 	// convert the room's mesh (which is made of quads) into a TriMesh so that we can use it as a bullet collider
 	TriMesh tm(dynamic_cast<QuadMesh *>(room->mesh), false);
 	room->setColliderAsMesh(&tm, false);
-	room->createRigidBody(0);
+	room->createRigidBody(0, kENVIRONMENT);
 #ifdef RG_DEBUG
 	room->meshTransform->setVisible(false);
 #endif
@@ -1054,7 +1055,7 @@ void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
 	// Create wall object as a static mesh, and then rotate and translate the bullet collider
 	RoomObject * wall = new RoomObject(world, wallMesh, baseShader);
 	wall->setColliderAsBoundingBox();
-	wall->createRigidBody(0);
+	wall->createRigidBody(0, kENVIRONMENT);
 	wall->rotatePhysical(angle, axis.x, axis.y, axis.z);
 	wall->translatePhysical(glm::vec3(posX, 0.f, posZ));
 	wall->realign();

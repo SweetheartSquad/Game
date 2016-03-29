@@ -17,6 +17,7 @@
 #include <sweet/Input.h>
 #include <PD_Listing.h>
 #include <PD_DissStats.h>
+#include <PD_Masks.h>
 #include <PD_Game.h>
 
 unsigned long int PD_Character::numRandomCharacters = 0;
@@ -64,7 +65,7 @@ PD_Character::PD_Character(BulletWorld * _world, AssetCharacter * const _definit
 	boundingBoxMesh->mesh->dirty = true;
 #endif
 
-	createRigidBody(5);
+	createRigidBody(5, kPD_CHARACTER);
 	body->setAngularFactor(btVector3(0,0,0)); // prevent from rotating the physics body at all
 	meshTransform->setVisible(false);
 

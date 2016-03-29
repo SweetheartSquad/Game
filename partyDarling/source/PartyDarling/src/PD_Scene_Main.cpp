@@ -46,6 +46,7 @@
 
 #include <PD_Scene_MenuMain.h>
 #include <PD_UI_Text.h>
+#include <PD_Masks.h>
 
 #define MAX_SIDE_SCENARIOS 5
 
@@ -1382,13 +1383,44 @@ void PD_Scene_Main::resetCrosshair() {
 void PD_Scene_Main::updateSelection(){
 	if(player->isEnabled()){
 		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		btCollisionWorld::ClosestRayResultCallback rayCallback(btVector3(0,0,0),btVector3(0,0,0));
-		NodeBulletBody * me = bulletWorld->raycast(activeCamera, 4, &rayCallback);
+		
+
+
+
+		NodeBulletBody * me = nullptr;
+		btVector3 hitpoint;
+
+		glm::vec3 pos = activeCamera->childTransform->getWorldPos();
+		btVector3 start(pos.x, pos.y, pos.z);
+		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
+		btVector3 end = start + dir*4;
+		btCollisionWorld::AllHitsRayResultCallback rayCallback(start, end);
+		bulletWorld->world->rayTest(start, end, rayCallback);
+
+		if(rayCallback.hasHit()){
+			for(unsigned long int i = 0; i < rayCallback.m_collisionObjects.size(); ++i){
+				NodeBulletBody * t = static_cast<NodeBulletBody *>(rayCallback.m_collisionObjects.at(i)->getUserPointer());
+				if(t->collisionMask | kPD_INTERACTIVE != 0){
+					me = t;
+					hitpoint = rayCallback.m_hitPointWorld.at(i);
+					break;
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
 
 		if(me != nullptr && uiInventory->getSelected() == nullptr){
 			PD_Item * item = dynamic_cast<PD_Item *>(me);
 			if(item != nullptr){
-				if(item->actuallyHovered(glm::vec3(rayCallback.m_hitPointWorld.getX(), rayCallback.m_hitPointWorld.getY(), rayCallback.m_hitPointWorld.getZ()))){
+				if(item->actuallyHovered(glm::vec3(hitpoint.getX(), hitpoint.getY(), hitpoint.getZ()))){
 					// hover over item
 					if(item != currentHoverTarget){
 						// if we aren't already looking at the item,
