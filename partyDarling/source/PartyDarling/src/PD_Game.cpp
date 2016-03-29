@@ -67,7 +67,7 @@ PD_Game::~PD_Game(){
 }
 
 void PD_Game::update(Step * _step){
-	if(bgmTrack != nullptr && currentSceneKey == "game"){
+	if(bgmTrack != nullptr && (currentSceneKey == "game" || currentSceneKey == "menu")){
 		bgmTrack->update(_step);
 		if(bgmTrack->source->state != AL_PLAYING){
 			playBGM();
