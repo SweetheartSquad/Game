@@ -20,6 +20,9 @@ PD_Door::PD_Door(BulletWorld * _world, Shader * _shader, Door_t _side, unsigned 
 	boundingBox.width *= 1.f + DOOR_PADDING * 2.f;
 	boundingBox.x = -(boundingBox.width * 0.5f);
 
+	boundingBox.depth = boundingBox.width * 0.1f;
+	boundingBox.z = -boundingBox.depth * 0.5;
+
 #ifdef _DEBUG
 	boundingBoxMesh->meshTransform->scale(1.f + DOOR_PADDING * 2.f, 1, 1);
 #endif
