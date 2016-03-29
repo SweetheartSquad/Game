@@ -5,6 +5,7 @@
 #include <PD_ResourceManager.h>
 #include <PD_Assets.h>
 #include <PD_Character.h>
+#include <PD_Masks.h>
 #include <MeshFactory.h>
 
 #include <PointLight.h>
@@ -143,7 +144,7 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 
 	colliderMesh->applyTransformation(&t);
 	setColliderAsMesh(colliderMesh, false);
-	createRigidBody(0);
+	createRigidBody(0, kENVIRONMENT);
 
 	removePhysics();
 }

@@ -10,9 +10,10 @@
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <PD_DissStats.h>
+#include <PD_Masks.h>
 
 Player::Player(BulletWorld * _bulletWorld) :
-	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f),
+	BulletFirstPersonController(_bulletWorld, 0.25f, 1.5f, 1.f, kPLAYER),
 	NodeBulletBody(_bulletWorld),
 	shakeIntensity(0.3f),
 	// speed

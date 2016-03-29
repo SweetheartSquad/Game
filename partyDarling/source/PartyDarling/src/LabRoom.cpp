@@ -5,6 +5,7 @@
 #include <PD_ResourceManager.h>
 #include <PD_Assets.h>
 #include <PD_Character.h>
+#include <PD_Masks.h>
 #include <MeshFactory.h>
 
 #include <PointLight.h>
@@ -47,7 +48,7 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 	meshes.at(meshes.size()-3)->replaceTextures(PD_ResourceManager::scenario->getTexture("LAB-ROOM-FLOATERS")->texture);
 
 	setColliderAsMesh(PD_ResourceManager::scenario->getMesh("LAB-ROOM-COLLIDER")->meshes.at(0), false);
-	createRigidBody(0);
+	createRigidBody(0, kENVIRONMENT);
 
 	PD_Listing * listing = PD_Listing::listings[_labScenario];
 	AssetCharacter * c1, * c2 = nullptr;

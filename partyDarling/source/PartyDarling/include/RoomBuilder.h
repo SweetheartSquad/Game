@@ -11,6 +11,7 @@
 // world space units per pixel inthe tilemap
 #define ROOM_TILE 5
 #define MAX_ROOMBUILDER_ATTEMPTS 50
+#define NUM_ROOM_TEXTURES 4
 
 enum RoomLayout_t{
 	kRECT,

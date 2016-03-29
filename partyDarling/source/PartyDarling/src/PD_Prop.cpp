@@ -3,6 +3,7 @@
 #include <PD_Prop.h>
 #include <PD_PropDefinition.h>
 #include <PD_Furniture.h>
+#include <PD_Masks.h>
 
 #include <Resource.h>
 #include <Easing.h>
@@ -42,7 +43,7 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	boundingBox = mesh->calcBoundingBox();
 
 	setColliderAsBoundingBox();
-	createRigidBody(_def->mass * FURNITURE_MASS_SCALE );
+	createRigidBody(_def->mass * FURNITURE_MASS_SCALE, kPD_PROP);
 
 	type = _def->type;
 	parentDependent = _def->parentDependent;

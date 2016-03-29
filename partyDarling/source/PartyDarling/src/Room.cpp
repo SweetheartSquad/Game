@@ -5,13 +5,14 @@
 
 #include <MeshInterface.h>
 #include <BulletMeshEntity.h>
-
 #include <Sprite.h>
 #include <Texture.h>
 #include <RoomObject.h>
 #include <RoomBuilder.h>
-#include <PD_TilemapGenerator.h>
 #include <MeshFactory.h>
+
+#include <PD_TilemapGenerator.h>
+#include <PD_Masks.h>
 
 Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition) :
 	BulletMeshEntity(_world, new QuadMesh(true), _shader),
@@ -26,7 +27,7 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 	// create floor/ceiling as static bullet planes
 	floor = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), _shader);
 	floor->setColliderAsStaticPlane(0, 1, 0, 0);
-	floor->createRigidBody(0);
+	floor->createRigidBody(0, kENVIRONMENT);
 	floor->body->setFriction(1);
 	childTransform->addChild(floor);
 	floor->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
@@ -35,7 +36,7 @@ Room::Room(BulletWorld * _world, Shader * _shader, AssetRoom * const _definition
 
 	ceiling = new BulletMeshEntity(world, MeshFactory::getPlaneMesh(), _shader);
 	ceiling->setColliderAsStaticPlane(0, -1, 0, 0);
-	ceiling->createRigidBody(0);
+	ceiling->createRigidBody(0, kENVIRONMENT);
 	ceiling->body->setFriction(1);
 	childTransform->addChild(ceiling);
 	ceiling->meshTransform->rotate(-90, 1, 0, 0, kOBJECT);
