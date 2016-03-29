@@ -32,6 +32,7 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 	mapCellShader->addComponent(new ShaderComponentAlpha(mapCellShader));
 	mapCellShader->addComponent(new ShaderComponentDepthOffset(mapCellShader));
 	mapCellShader->compileShader();
+	mapCellShader->incrementReferenceCount();
 	mapCellShader->name = "Map Cell Shader";
 
 	background->setVisible(false);
