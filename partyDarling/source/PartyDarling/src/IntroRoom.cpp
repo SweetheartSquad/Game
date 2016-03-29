@@ -31,16 +31,22 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	doorWest->rotatePhysical(90, 0, 1, 0);
 	doorSouth->rotatePhysical(180, 0, 1, 0);
 
-	TriMesh * meshFlats = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(0);
-	TriMesh * meshDetail = PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(1);
+	TriMesh * meshFlats = new TriMesh(true);
+	meshFlats->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(0));
+	TriMesh * meshDetail = new TriMesh(true);
+	meshDetail->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM")->meshes.at(1));
 	meshFlats->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-FLATS")->texture);
 	meshFlats->setScaleMode(GL_NEAREST);
 	meshDetail->pushTexture2D(PD_ResourceManager::scenario->getTexture("INTRO-ROOM-DETAIL")->texture);
 	meshDetail->setScaleMode(GL_NEAREST);
-	visibleMesh = new Transform();
-	visibleMesh->addChild(new MeshEntity(meshFlats, _toonShader), false);
-	visibleMesh->addChild(new MeshEntity(meshDetail, _toonShader), false);
-	childTransform->addChild(visibleMesh);
+	
+	visibleMeshFlats = new MeshEntity(meshFlats, _toonShader);
+	visibleMeshDetail = new MeshEntity(meshDetail, _toonShader);
+	childTransform->addChild(visibleMeshFlats, false);
+	childTransform->addChild(visibleMeshDetail, false);
+
+	lightsContainer = new Transform();
+	childTransform->addChild(lightsContainer, true);
 
 	colliderMesh = new TriMesh(false);
 	colliderMesh->insertVertices(*PD_ResourceManager::scenario->getMesh("INTRO-ROOM-COLLIDER")->meshes.at(0));
@@ -75,11 +81,11 @@ IntroRoom::IntroRoom(BulletWorld * _world, Shader * _toonShader, Shader * _chara
 	// lights
 	{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
+		lightsContainer->addChild(light)->translate(glm::vec3(-5.19, 1.508, 7.874));
 		lights.push_back(light);
 	}{
 		PointLight * light = new PointLight(glm::vec3(4.0f), 0.0f, 0.099f, -1);
-		visibleMesh->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
+		lightsContainer->addChild(light)->translate(glm::vec3(4.703, 1.508, 5.587));
 		lights.push_back(light);
 	}
 }
@@ -128,7 +134,11 @@ void IntroRoom::setEdge(PD_Door::Door_t _edge){
 
 	if(angle != 0){
 		t.rotate(angle, 0, 1, 0, kOBJECT);
-		visibleMesh->firstParent()->rotate(angle, 0, 1, 0, kOBJECT);
+		visibleMeshFlats->childTransform->rotate(angle, 0, 1, 0, kOBJECT);
+		visibleMeshDetail->childTransform->rotate(angle, 0, 1, 0, kOBJECT);
+		lightsContainer->firstParent()->rotate(angle, 0, 1, 0, kOBJECT);
+		visibleMeshFlats->freezeTransformation();
+		visibleMeshDetail->freezeTransformation();
 	}
 
 	colliderMesh->applyTransformation(&t);
