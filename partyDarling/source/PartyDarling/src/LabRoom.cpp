@@ -83,6 +83,9 @@ LabRoom::LabRoom(BulletWorld * _world, Shader * _toonShader, Shader * _character
 			addComponent(p);
 			characters.push_back(p);
 			listing->addCharacter(p);
+
+			// move the character out of the way so they don't block Omar's collider
+			p->translatePhysical(glm::vec3(10,0,10));
 		}
 	}
 

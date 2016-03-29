@@ -459,6 +459,7 @@ void PD_Scene_Main::setupEventListeners(){
 				glm::vec3 v = player->playerCamera->forwardVectorRotated;
 				v.y = 0;
 				v = glm::normalize(v);
+				person->translatePhysical(glm::vec3(-10, 0, -10));
 				person->translatePhysical(player->getWorldPos() - v*8.f);
 				v = person->getPhysicsBodyCenter();
 				if(glm::abs(v.x) < glm::abs(v.z)){
