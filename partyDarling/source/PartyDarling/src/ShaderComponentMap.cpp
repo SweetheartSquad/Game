@@ -40,17 +40,18 @@ std::string ShaderComponentMap::getVertexBodyString(){
 
 std::string ShaderComponentMap::getFragmentBodyString(){
 	std::stringstream res;
-	res << "vec4 textureRes;" << ENDL;
 	res << "if (" + GL_UNIFORM_ID_NUM_TEXTURES + " > 0){" << ENDL;
-		res << "\t\ttextureRes = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[0], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
-	res << "}" << SEMI_ENDL;
-	res << "if (" + GL_UNIFORM_ID_NUM_TEXTURES + " > 1){" << ENDL;
-		res << "\t\ttextureRes *= vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[1], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
+	res << "vec4 textureRes;" << ENDL;
+	res << TAB << "textureRes = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[0], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
+
+	res << "if (" + GL_UNIFORM_ID_NUM_TEXTURES + " > 1 && textureRes.a >= 0.99){" << ENDL;
+	res << TAB << "textureRes *= vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[1], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
 	res << "}" << SEMI_ENDL;
 	res << "modFrag *= textureRes" << SEMI_ENDL;
 	if(alphaDiscardThreshold >= 0){
 		res << "if(modFrag.a <= " << alphaDiscardThreshold << "){discard;}" << ENDL;
 	}
+	res << "}" << SEMI_ENDL;
 	return res.str();
 }
 
