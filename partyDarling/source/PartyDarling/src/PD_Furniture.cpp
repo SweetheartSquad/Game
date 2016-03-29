@@ -53,7 +53,7 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
 
 	if(_def->twist){
-		MeshDeformation::twist(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
+		MeshDeformation::twist(mesh, -upperFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	}
 	//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	if(_def->flare){
