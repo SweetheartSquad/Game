@@ -826,8 +826,12 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 			if(collisionCheck(c, _parent)){
 				canPlace = false;
 				// This sucks (but it's the only way...)
+				float angle = glm::angle(orient);
+				glm::vec3 axis = glm::axis(orient);
+				
 				_child->translatePhysical(-pos);
-				_child->rotatePhysical(-orient);
+				_child->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+				//_child->rotatePhysical(-orient);
 				_child->realign();
 				_child->meshTransform->makeCumulativeModelMatrixDirty();
 				break;
@@ -898,7 +902,10 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
 
-	_obj->rotatePhysical(_orientation);
+	float angle = glm::angle(_orientation);
+	glm::vec3 axis = glm::axis(_orientation);
+	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
+	//_obj->rotatePhysical(_orientation);
 	_obj->translatePhysical(_pos);
 	_obj->realign();
 	_obj->meshTransform->makeCumulativeModelMatrixDirty();
@@ -906,7 +913,7 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 	// Check if object intersects o
 	if(collisionCheck(_obj, _parent)){
 		_obj->translatePhysical(-_pos);
-		_obj->rotatePhysical(-_orientation);
+		_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
 		_obj->realign();
 		_obj->meshTransform->makeCumulativeModelMatrixDirty();
 		return false;
