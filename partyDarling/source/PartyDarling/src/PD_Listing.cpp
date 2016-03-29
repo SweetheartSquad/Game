@@ -17,12 +17,15 @@ PD_Listing::~PD_Listing(){
 }
 
 void PD_Listing::addCharacter(PD_Character * _person){
+	assert(characters.count(_person->definition->id) == 0);
 	characters[_person->definition->id] = _person;
 }
 void PD_Listing::addItem(PD_Item * _item){
+	assert(items.count(_item->definition->id) == 0);
 	items[_item->definition->id] = _item;
 }
 void PD_Listing::addRoom(Room * _room){
+	assert(rooms.count(_room->definition->id) == 0);
 	rooms[_room->definition->id] = _room;
 }
 
