@@ -292,6 +292,17 @@ void PD_Scene_MenuMain::hideConfirmBox(){
 }
 
 void PD_Scene_MenuMain::update(Step* _step) {
+	// toggle debug draw
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
+		if(Transform::drawTransforms){
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+		}else{
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}
+	}
+
+
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
