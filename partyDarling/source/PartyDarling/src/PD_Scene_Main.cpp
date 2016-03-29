@@ -45,6 +45,7 @@
 #include <PD_DissStats.h>
 
 #include <PD_Scene_MenuMain.h>
+#include <PD_InteractionRayCallback.h>
 #include <PD_UI_Text.h>
 #include <PD_Masks.h>
 
@@ -1394,16 +1395,16 @@ void PD_Scene_Main::updateSelection(){
 		btVector3 start(pos.x, pos.y, pos.z);
 		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
 		btVector3 end = start + dir*4;
-		btCollisionWorld::AllHitsRayResultCallback rayCallback(start, end);
+		PD_InteractionRayCallback rayCallback(start, end, player->body);
 		bulletWorld->world->rayTest(start, end, rayCallback);
 
 		if(rayCallback.hasHit()){
+			float d = FLT_MAX;
 			for(unsigned long int i = 0; i < rayCallback.m_collisionObjects.size(); ++i){
-				NodeBulletBody * t = static_cast<NodeBulletBody *>(rayCallback.m_collisionObjects.at(i)->getUserPointer());
-				if(t->collisionMask | kPD_INTERACTIVE != 0){
-					me = t;
+				if(rayCallback.m_hitFractions.at(i) < d){
+					d = rayCallback.m_hitFractions.at(i);
+					me = static_cast<NodeBulletBody *>(rayCallback.m_collisionObjects.at(i)->getUserPointer());
 					hitpoint = rayCallback.m_hitPointWorld.at(i);
-					break;
 				}
 			}
 		}

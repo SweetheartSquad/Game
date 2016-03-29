@@ -31,6 +31,7 @@
     <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
+    <ClCompile Include="src\PD_InteractionRayCallback.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
+    <ClInclude Include="include\PD_InteractionRayCallback.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Masks.h" />
