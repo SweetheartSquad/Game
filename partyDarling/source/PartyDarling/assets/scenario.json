@@ -481,6 +481,20 @@
       "src":"UI/menu/loading.png",
       "generateMipmaps": false
     },
+    {
+      "id":"SWEET-BUTT",
+      "type":"texture",
+      "src":"UI/menu/sweetButt.png",
+      "generateMipmaps": true
+    },
+    {
+      "id":"DONATE-BUTT",
+      "type":"texture",
+      "src":"UI/menu/donateButt.png",
+      "generateMipmaps": true
+    },
+
+
 
 
     {

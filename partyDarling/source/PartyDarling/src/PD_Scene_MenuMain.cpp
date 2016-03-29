@@ -22,10 +22,13 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, false)),
 	screenSurface(new RenderSurface(screenSurfaceShader, false)),
 	screenFBO(new StandardFrameBuffer(false)),
-	textShader(new ComponentShaderText(false)),
+	textShader(new ComponentShaderText(true)),
 	uiLayer(new UILayer(0,0,0,0)),
 	menuFont(PD_ResourceManager::scenario->getFont("main-menu-font")->font)
 {
+	textShader->incrementReferenceCount();
+	textShader->name = "PD_Scene_MenuMain text shader";
+
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
 
@@ -43,7 +46,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	mainContainer->background->mesh->setScaleMode(GL_NEAREST);
 	mainContainer->setRationalWidth(1.f, uiLayer);
 	mainContainer->setRationalHeight(1.f, uiLayer);
-	mainContainer->setVisible(true);
 	mainContainer->setPaddingTop(0.45f);
 	mainContainer->setBackgroundColour(1, 1, 1, 1);
 
@@ -54,7 +56,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	textContainer->verticalAlignment = kMIDDLE;
 	textContainer->setRationalWidth(1.f, mainContainer);
 	textContainer->setRationalHeight(1.f, mainContainer);
-	textContainer->setVisible(true);
 	textContainer->setMarginTop(0.13f);
 
 	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
@@ -192,6 +193,54 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 
 
+	// itch.io button
+	{
+		VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
+		uiLayer->addChild(vl);
+		vl->setRationalHeight(1.f, uiLayer);
+		vl->setRationalWidth(1.f, uiLayer);
+		vl->verticalAlignment = kBOTTOM;
+		vl->horizontalAlignment = kRIGHT;
+		vl->setMarginRight(0.05f);
+		vl->marginBottom.setRationalSize(1.f, &vl->marginRight);
+
+		NodeUI * sweetButt = new NodeUI(uiLayer->world);
+		sweetButt->setPixelHeight(sweet::getDpi());
+		sweetButt->setSquareWidth(1.f);
+		vl->addChild(sweetButt);
+		sweetButt->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("SWEET-BUTT")->texture);
+		sweetButt->setMouseEnabled(true);
+		sweetButt->eventManager->addEventListener("click", [](sweet::Event * _event){
+			ShellExecute(HWND(nullptr), L"open", L"http://www.sweetheartsquad.com", L"", L"", SW_SHOWNORMAL);
+		});
+
+		
+		sweetButt->eventManager->addEventListener("mousein", [sweetButt](sweet::Event * _event){
+			sweetButt->setBackgroundColour(1.25, 1.25, 1.25);
+		});
+		sweetButt->eventManager->addEventListener("mouseout", [sweetButt](sweet::Event * _event){
+			sweetButt->setBackgroundColour(1, 1, 1);
+		});
+
+		NodeUI * donateButt = new NodeUI(uiLayer->world);
+		donateButt->width.setRationalSize(1.f, &sweetButt->width);
+		donateButt->setSquareHeight(1.f);
+		vl->addChild(donateButt);
+		donateButt->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DONATE-BUTT")->texture);
+		donateButt->setMouseEnabled(true);
+		donateButt->eventManager->addEventListener("click", [](sweet::Event * _event){
+			ShellExecute(HWND(nullptr), L"open", L"https://sweetheartsquad.itch.io/party-darling-test-build/purchase", L"", L"", SW_SHOWNORMAL);
+		});
+		donateButt->eventManager->addEventListener("mousein", [donateButt](sweet::Event * _event){
+			donateButt->setBackgroundColour(1.25, 1.25, 1.25);
+		});
+		donateButt->eventManager->addEventListener("mouseout", [donateButt](sweet::Event * _event){
+			donateButt->setBackgroundColour(1, 1, 1);
+		});
+	}
+
+
+
 	fadeNode = new NodeUI(uiLayer->world);
 	fadeNode->setBackgroundColour(0,0,0,1);
 	fadeNode->setRationalHeight(1.f, uiLayer);
@@ -213,11 +262,12 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 PD_Scene_MenuMain::~PD_Scene_MenuMain() {
 	deleteChildTransform();
 	delete uiLayer;
-
+	
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
-	delete textShader;
+
+	textShader->decrementAndDelete();
 }
 
 void PD_Scene_MenuMain::showConfirmBox(){
