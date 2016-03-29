@@ -1130,12 +1130,10 @@ std::vector<RoomObject *> RoomBuilder::getSpecifiedObjects(){
 
 	for(auto c : room->characters){
 		listing->addCharacter(c);
-		for(auto c : definition->getCharacters()) {
-			for(auto i : c->getItems()) {
-				PD_Item * item = new PD_Item(i, world, itemShader);
-				listing->addItem(item);
-				world->world->removeRigidBody(item->body);
-			}
+		for(auto i : c->definition->getItems()) {
+			PD_Item * item = new PD_Item(i, world, itemShader);
+			listing->addItem(item);
+			world->world->removeRigidBody(item->body);
 		}
 	}
 	for(auto i : room->items){
