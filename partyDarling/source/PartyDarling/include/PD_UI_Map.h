@@ -7,8 +7,10 @@
 
 class MapCell : public NodeUI{
 public:
+	MeshInterface * mapBg;
+	MeshInterface * mapOver;
 	Room * room;
-	MapCell(BulletWorld * _world, Room * _room);
+	MapCell(BulletWorld * _world, Shader * _mapShader, Room * _room);
 };
 
 class PD_UI_Map : public NodeUI{

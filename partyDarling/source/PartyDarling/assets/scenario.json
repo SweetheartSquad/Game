@@ -821,6 +821,12 @@
 
     // MAP
     {
+      "id": "MAPBG",
+      "type": "texture",
+      "src": "UI/map/mapCell -bg.png",
+      "generateMipmaps":false
+    },
+    {
       "id": "MAPCELL",
       "type": "texture",
       "src": "UI/map/mapCell.png",
