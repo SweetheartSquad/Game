@@ -17,7 +17,9 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 {
 	setRenderMode(kTEXTURE);
 
-	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	background->setVisible(false);
+	///setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	setAlpha(TASKLIST_OPACITY);
 	setScaleMode(GL_NEAREST);
 	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 
@@ -33,6 +35,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	checkContainer->verticalAlignment = kMIDDLE;
 	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
 	checkContainer->setRationalHeight(1.f, container);
+	checkContainer->background->setVisible(false);
 
 	checkBox = new VerticalLinearLayout(world);
 	checkBox->horizontalAlignment = kCENTER;
@@ -60,6 +63,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->setRationalWidth(1.f, container);
 	text->setRationalHeight(1.f, container);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
+	text->background->setVisible(false);
 
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
@@ -72,7 +76,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 			eventManager->triggerEvent("taskAnimationStart");
 			textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 			setAlpha(0.f);
-			invalidateLayout();
+			//invalidateLayout();
 		}
 	});
 
@@ -94,7 +98,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 		float p = _event->getFloatData("progress");
 		p = Easing::easeOutElastic(p, 0.f, 1.f, checkTimeout->targetSeconds, -1, 4.f);
 		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
-		invalidateLayout();
+		//invalidateLayout();
 	});
 	childTransform->addChild(checkTimeout, false);
 }
@@ -125,7 +129,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedTextShader->incrementReferenceCount();
 	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
 
-	setRenderMode(kTEXTURE);
+	//setRenderMode(kTEXTURE);
 	background->setVisible(false);
 
 	texOpen = PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture;
@@ -180,14 +184,16 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	top->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	top->setVisible(false);
 
+	top->background->setVisible(false);
+
 	taskLayout = new VerticalLinearLayout(_world);
 	journalLayout->addChild(taskLayout);
 	taskLayout->horizontalAlignment = kLEFT;
 	taskLayout->verticalAlignment = kTOP;
 	taskLayout->setRationalWidth(1.f, journalLayout);
 	taskLayout->setAutoresizeHeight();
-	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
-	taskLayout->background->setVisible(false);
+	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 1.f);
+	taskLayout->background->setVisible(true);
 
 	bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(bottom);
@@ -196,6 +202,8 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	bottom->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, lineHeight * 0.5f, 0.f);
 	bottom->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	bottom->setVisible(false);
+
+	bottom->background->setVisible(false);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
