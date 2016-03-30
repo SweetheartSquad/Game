@@ -19,6 +19,7 @@
 			"mass": 80,
             "roomTypes" : ["KITCHEN","LABORATORY"],
             "detailedCollider": false,
+			"parentDependent": true,
             "parents":{"wall":["FRONT"]},
             "twist": false,
             "flare": true,

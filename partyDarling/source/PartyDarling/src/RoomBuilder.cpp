@@ -1218,6 +1218,10 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	// sort by parent priority
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->name == "wallLamp" || j->name == "wallLamp"){
+			return i->name == "wallLamp";
+		}
+
 		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
 			return i->parentTypes.size() < j->parentTypes.size();
 		}
@@ -1283,13 +1287,15 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Get list of furniture types compatible for this room
 	std::vector<PD_FurnitureDefinition *> definitions;
 	std::vector<int> count;
-	if(definition->roomType == "NO_TYPE"){
-		for(auto def : PD_ResourceManager::furnitureDefinitions){
-			definitions.push_back(def);
-			count.push_back(0);
-		}
-	}else{
-		for(auto def : PD_ResourceManager::furnitureDefinitions){
+	
+	for(auto def : PD_ResourceManager::furnitureDefinitions){
+		if(def->type == "wallLamp"){
+			// get lights
+			for(unsigned int i = 0; i < room->definition->numWallLights; ++i){
+				auto furn = new PD_Furniture(world, def, baseShader, GROUND);
+				furniture.push_back(furn);
+			}
+		}else{
 			for(std::string type : def->roomTypes){
 				if(type == room->definition->roomType){
 					definitions.push_back(def);
@@ -1318,8 +1324,6 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 				}
 			}
 		}
-	}else{
-		int blah = 0;
 	}
 
 	return furniture;

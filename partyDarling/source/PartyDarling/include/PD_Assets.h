@@ -145,6 +145,9 @@ public:
 		kLARGE  = 3
 	} size;
 
+	// max wall lights
+	unsigned int numWallLights;
+
 	// whether entry to the room is blocked at creation
 	bool locked;
 	// Whether the room can have characters or not
