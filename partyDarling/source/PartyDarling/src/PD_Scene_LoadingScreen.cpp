@@ -104,7 +104,7 @@ void PD_Scene_LoadingScreen::update(Step* _step) {
 }
 
 void PD_Scene_LoadingScreen::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height);
 
 	FrameBufferInterface::pushFbo(screenFBO);
 

@@ -11,9 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Party Darling - 2012.aps" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="include\PD_Door.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
     <ClCompile Include="src\IntroRoom.cpp" />
@@ -140,9 +137,6 @@
     <ClInclude Include="include\ShaderComponentMap.h" />
     <ClInclude Include="include\ShaderComponentOutline.h" />
     <ClInclude Include="include\ShaderComponentVNoise.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Party Darling - 2012.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>

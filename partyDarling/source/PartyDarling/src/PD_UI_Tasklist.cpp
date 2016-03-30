@@ -15,6 +15,8 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	textShader(_textShader),
 	isAnimating(false)
 {
+	setRenderMode(kTEXTURE);
+
 	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	setScaleMode(GL_NEAREST);
 	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
@@ -50,7 +52,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	checkMark->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-CHECK-MARK")->texture);
 	checkMark->background->mesh->setScaleMode(GL_NEAREST);
 	checkMark->setVisible(false);
-	
+
 	text = new TextArea(world, _font, _textShader);
 	text->setWrapMode(kWORD);
 	text->verticalAlignment = kMIDDLE;
@@ -59,7 +61,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->setRationalHeight(1.f, container);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
 
-	addTimeout = new Timeout(0.f, [this](sweet::Event * _event){
+	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 		eventManager->triggerEvent("taskAnimationComplete");
 		isAnimating = false;
@@ -68,13 +70,17 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 		if(!isAnimating){ // In case restart happens before complete event
 			isAnimating = true;
 			eventManager->triggerEvent("taskAnimationStart");
+			textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
+			setAlpha(0.f);
+			invalidateLayout();
 		}
 	});
 
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
-		invalidateLayout();
+		//textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
+		setAlpha(p);
+		//invalidateLayout();
 	});
 	childTransform->addChild(addTimeout, false);
 
@@ -165,7 +171,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	journalLayout->setRationalHeight(0.95f, layout);
 
 	float lineHeight = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight();
-	
+
 	top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(top);
 	top->setRationalWidth(1.f, journalLayout);
@@ -210,7 +216,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 	}
 
 	auto it2 = it->second.find(_id);
-	
+
 	// if the scenario has no task with the given id, make it and return early
 	if(it2 == it->second.end()){
 		if(!_complete){

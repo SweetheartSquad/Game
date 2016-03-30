@@ -192,8 +192,8 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 
-
 	// team and donate buttons
+	// itch.io button
 	{
 		VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
 		uiLayer->addChild(vl);
@@ -214,7 +214,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 			ShellExecute(HWND(nullptr), L"open", L"http://www.sweetheartsquad.com", L"", L"", SW_SHOWNORMAL);
 		});
 
-		
 		sweetButt->eventManager->addEventListener("mousein", [sweetButt](sweet::Event * _event){
 			sweetButt->setBackgroundColour(1.25, 1.25, 1.25);
 		});
@@ -240,8 +239,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 		});
 	}
 
-
-
 	fadeNode = new NodeUI(uiLayer->world);
 	fadeNode->setBackgroundColour(0,0,0,1);
 	fadeNode->setRationalHeight(1.f, uiLayer);
@@ -263,7 +260,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 PD_Scene_MenuMain::~PD_Scene_MenuMain() {
 	deleteChildTransform();
 	delete uiLayer;
-	
+
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
@@ -302,7 +299,6 @@ void PD_Scene_MenuMain::update(Step* _step) {
 		}
 	}
 
-
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
@@ -311,7 +307,7 @@ void PD_Scene_MenuMain::update(Step* _step) {
 }
 
 void PD_Scene_MenuMain::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height);
 
 	FrameBufferInterface::pushFbo(screenFBO);
 
