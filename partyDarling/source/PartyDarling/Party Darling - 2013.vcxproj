@@ -13,8 +13,8 @@
   <ItemGroup>
     <ClCompile Include="include\PD_Door.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
+    <ClCompile Include="src\FirstRoom.cpp" />
     <ClCompile Include="src\IntroRoom.cpp" />
-    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\LabRoom.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\PD_Assets.cpp" />
@@ -28,9 +28,8 @@
     <ClCompile Include="src\PD_FurnitureDefinition.cpp" />
     <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
-    <ClCompile Include="src\PD_House.cpp" />
-    <ClCompile Include="src\PD_HouseGenerator.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
+    <ClCompile Include="src\PD_InteractionRayCallback.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />
@@ -41,10 +40,13 @@
     <ClCompile Include="src\PD_ResourceManager.cpp" />
     <ClCompile Include="src\PD_Scenario.cpp" />
     <ClCompile Include="src\PD_Scene_Animation.cpp" />
+    <ClCompile Include="src\PD_Scene_EndingSlideshow.cpp" />
+    <ClCompile Include="src\PD_Scene_InstructionsSlideShow.cpp" />
+    <ClCompile Include="src\PD_Scene_IntermissionSlideshow.cpp" />
     <ClCompile Include="src\PD_Scene_IntroSlideShow.cpp" />
     <ClCompile Include="src\PD_Scene_LoadingScreen.cpp" />
     <ClCompile Include="src\PD_Scene_Main.cpp" />
-    <ClCompile Include="src\PD_Scene_MainMenu.cpp" />
+    <ClCompile Include="src\PD_Scene_MenuMain.cpp" />
     <ClCompile Include="src\PD_Scene_MenuOptions.cpp" />
     <ClCompile Include="src\PD_ShaderComponentSpecialToon.cpp" />
     <ClCompile Include="src\PD_Slot.cpp" />
@@ -54,22 +56,30 @@
     <ClCompile Include="src\PD_UI_Dialogue.cpp" />
     <ClCompile Include="src\PD_UI_DissCard.cpp" />
     <ClCompile Include="src\PD_DissStats.cpp" />
+    <ClCompile Include="src\PD_UI_DissStats.cpp" />
     <ClCompile Include="src\PD_UI_Fade.cpp" />
     <ClCompile Include="src\PD_UI_Inventory.cpp" />
     <ClCompile Include="src\PD_UI_Map.cpp" />
+    <ClCompile Include="src\PD_UI_Message.cpp" />
+    <ClCompile Include="src\PD_UI_Tasklist.cpp" />
     <ClCompile Include="src\PD_UI_Text.cpp" />
     <ClCompile Include="src\PD_UI_VolumeControl.cpp" />
     <ClCompile Include="src\PD_UI_DissBattle.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\ProgressManager.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
+    <ClCompile Include="src\ShaderComponentMap.cpp" />
+    <ClCompile Include="src\ShaderComponentOutline.cpp" />
+    <ClCompile Include="src\ShaderComponentVNoise.cpp" />
+    <ClCompile Include="src\TriggerDefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DialogueDisplay.h" />
+    <ClInclude Include="include\FirstRoom.h" />
     <ClInclude Include="include\FurnitureComponent.h" />
     <ClInclude Include="include\IntroRoom.h" />
-    <ClInclude Include="include\Item.h" />
     <ClInclude Include="include\LabRoom.h" />
     <ClInclude Include="include\PD_Assets.h" />
     <ClInclude Include="include\PD_Button.h" />
@@ -83,11 +93,11 @@
     <ClInclude Include="include\PD_FurnitureDefinition.h" />
     <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
-    <ClInclude Include="include\PD_House.h" />
-    <ClInclude Include="include\PD_HouseGenerator.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
+    <ClInclude Include="include\PD_InteractionRayCallback.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
+    <ClInclude Include="include\PD_Masks.h" />
     <ClInclude Include="include\PD_Palette.h" />
     <ClInclude Include="include\PD_PhraseGenerator_Incidental.h" />
     <ClInclude Include="include\PD_PhraseGenerator_Insults.h" />
@@ -96,10 +106,13 @@
     <ClInclude Include="include\PD_ResourceManager.h" />
     <ClInclude Include="include\PD_Scenario.h" />
     <ClInclude Include="include\PD_Scene_Animation.h" />
+    <ClInclude Include="include\PD_Scene_EndingSlideshow.h" />
+    <ClInclude Include="include\PD_Scene_InstructionsSlideShow.h" />
+    <ClInclude Include="include\PD_Scene_IntermissionSlideshow.h" />
     <ClInclude Include="include\PD_Scene_IntroSlideShow.h" />
     <ClInclude Include="include\PD_Scene_LoadingScreen.h" />
     <ClInclude Include="include\PD_Scene_Main.h" />
-    <ClInclude Include="include\PD_Scene_MainMenu.h" />
+    <ClInclude Include="include\PD_Scene_MenuMain.h" />
     <ClInclude Include="include\PD_Scene_MenuOptions.h" />
     <ClInclude Include="include\PD_ShaderComponentSpecialToon.h" />
     <ClInclude Include="include\PD_Slot.h" />
@@ -109,16 +122,23 @@
     <ClInclude Include="include\PD_UI_Dialogue.h" />
     <ClInclude Include="include\PD_UI_DissCard.h" />
     <ClInclude Include="include\PD_DissStats.h" />
+    <ClInclude Include="include\PD_UI_DissStats.h" />
     <ClInclude Include="include\PD_UI_Fade.h" />
     <ClInclude Include="include\PD_UI_Inventory.h" />
     <ClInclude Include="include\PD_UI_Map.h" />
+    <ClInclude Include="include\PD_UI_Message.h" />
+    <ClInclude Include="include\PD_UI_Tasklist.h" />
     <ClInclude Include="include\PD_UI_Text.h" />
     <ClInclude Include="include\PD_UI_VolumeControl.h" />
     <ClInclude Include="include\PD_UI_DissBattle.h" />
     <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\ProgressManager.h" />
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
+    <ClInclude Include="include\ShaderComponentMap.h" />
+    <ClInclude Include="include\ShaderComponentOutline.h" />
+    <ClInclude Include="include\ShaderComponentVNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Party Darling - 2013.aps" />

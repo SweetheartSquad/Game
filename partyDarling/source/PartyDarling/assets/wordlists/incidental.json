@@ -12,15 +12,41 @@
     "I heard *name* say that *name* is *adjective*! *interjection*...",
     "I just saw *name*... they're so *adjective* tonight!",
     "Did you know that *fact*? *interjection*...",
-    "I read online somewhere that *fakeFacts*... wonder if it's true.",
     "Hey, *name* just told me that *fact*. Cool!",
     "I'm bored.",
     "Good to meet you.",
     "I heard that *name* is *emphasis* *adjective*.",
     "Hey, *name* told me that *fakeFacts*, but I don't think it's true.",
-    "I don't really like *name*."
+    "I don't really like *name*.",
+    "Cool party, huh?",
+    "I heard that Omar Clean *rumours*.",
+    "Someone said Omar Clean *rumours*. *interjection*...",
+    "Did you hear that Omar Clean *rumours*?",
+    "Omar Clean *rumours*... at least that's what I've heard.",
+    "I can't believe Omar Clean *rumours*!"
   ],
 
+  "rumours": [
+    "is actually just a ghost who haunts this house",
+    "is some college kid who made a bunch of money on the stock market",
+    "is just some fancy hipster with attitude to spare",
+    "once stole a chunk out of a pyramid and sold it to his grandmother",
+    "got arrested in Dublin for fencing stolen paintings",
+    "made all his money robbing banks",
+    "once hot-wired a car using only pipe cleaners and a cloth handkerchief",
+    "invented e-commerce",
+    "crowdfunded the building of this mansion",
+    "sews all his own clothes by hand",
+    "ghostwrites 25% of all tabloid magazines",
+    "once broke up with someone by telegram",
+    "is really just a sentient robot pretending to be human",
+    "builds all his own appliances",
+    "knits scarves for the local shelter",
+    "owns over thirty museums in Europe",
+    "bought a small island in the South Pacific",
+    "has adopted over fifty children",
+    "killed a man using only a record sleeve"
+  ],
 
   "gloats":[
     "*interjection*! That's what you get for dissing me!",
