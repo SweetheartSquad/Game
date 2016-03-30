@@ -89,8 +89,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bool firstRun = PD_Game::firstRun;
 	PD_Game::firstRun = false;
 
-	_game->showLoading(0);
-
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
@@ -99,6 +97,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	PD_Game::progressManager->loadSave(player, uiDissBattle, uiInventory);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+
+	_game->showLoading(0);
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, true);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
