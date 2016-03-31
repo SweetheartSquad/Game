@@ -60,7 +60,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	joinPartyText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(joinPartyText);
-	joinPartyText->setRationalWidth(1.f, textContainer);
+	joinPartyText->setRationalWidth(0.25f, textContainer);
 	joinPartyText->setRationalHeight(0.2f, textContainer);
 	joinPartyText->setMarginTop(0.05f);
 	joinPartyText->setMarginBottom(0.05f);
@@ -88,7 +88,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	continueText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(continueText);
-	continueText->setRationalWidth(1.f, textContainer);
+	continueText->setRationalWidth(0.3f, textContainer);
 	continueText->setRationalHeight(0.2f, textContainer);
 	continueText->setMarginTop(0.05f);
 	continueText->setMarginBottom(0.05f);
@@ -113,7 +113,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	optionsText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(optionsText);
-	optionsText->setRationalWidth(1.f, textContainer);
+	optionsText->setRationalWidth(0.15f, textContainer);
 	optionsText->setRationalHeight(0.2f, textContainer);
 	optionsText->setMarginTop(0.05f);
 	optionsText->setMarginBottom(0.05f);
@@ -130,7 +130,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 	callNightText = new PD_UI_Text(uiLayer->world, menuFont, textShader);
 	textContainer->addChild(callNightText);
-	callNightText->setRationalWidth(1.f, textContainer);
+	callNightText->setRationalWidth(0.25f, textContainer);
 	callNightText->setRationalHeight(0.2f, textContainer);
 	callNightText->setMarginTop(0.05f);
 	callNightText->setMarginBottom(0.05f);
@@ -192,7 +192,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 	float a = glm::degrees(atan((0.236 * uiLayer->getHeight()) / (0.871 * uiLayer->getWidth())));
 	textContainer->firstParent()->rotate(a, 0, 0, 1, kOBJECT);
 
-
+	// team and donate buttons
 	// itch.io button
 	{
 		VerticalLinearLayout * vl = new VerticalLinearLayout(uiLayer->world);
@@ -201,7 +201,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 		vl->setRationalWidth(1.f, uiLayer);
 		vl->verticalAlignment = kBOTTOM;
 		vl->horizontalAlignment = kRIGHT;
-		vl->setMarginRight(0.05f);
+		vl->setMarginRight(0.01f);
 		vl->marginBottom.setRationalSize(1.f, &vl->marginRight);
 
 		NodeUI * sweetButt = new NodeUI(uiLayer->world);
@@ -214,7 +214,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 			ShellExecute(HWND(nullptr), L"open", L"http://www.sweetheartsquad.com", L"", L"", SW_SHOWNORMAL);
 		});
 
-		
 		sweetButt->eventManager->addEventListener("mousein", [sweetButt](sweet::Event * _event){
 			sweetButt->setBackgroundColour(1.25, 1.25, 1.25);
 		});
@@ -224,8 +223,9 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 
 		NodeUI * donateButt = new NodeUI(uiLayer->world);
 		donateButt->width.setRationalSize(1.f, &sweetButt->width);
-		donateButt->setSquareHeight(1.f);
+		donateButt->setSquareHeight(0.5f);
 		vl->addChild(donateButt);
+		donateButt->background->mesh->setScaleMode(GL_NEAREST);
 		donateButt->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DONATE-BUTT")->texture);
 		donateButt->setMouseEnabled(true);
 		donateButt->eventManager->addEventListener("click", [](sweet::Event * _event){
@@ -238,8 +238,6 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 			donateButt->setBackgroundColour(1, 1, 1);
 		});
 	}
-
-
 
 	fadeNode = new NodeUI(uiLayer->world);
 	fadeNode->setBackgroundColour(0,0,0,1);
@@ -262,7 +260,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 PD_Scene_MenuMain::~PD_Scene_MenuMain() {
 	deleteChildTransform();
 	delete uiLayer;
-	
+
 	delete screenSurface;
 	delete screenSurfaceShader;
 	delete screenFBO;
@@ -291,6 +289,16 @@ void PD_Scene_MenuMain::hideConfirmBox(){
 }
 
 void PD_Scene_MenuMain::update(Step* _step) {
+	// toggle debug draw
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
+		if(Transform::drawTransforms){
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+		}else{
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}
+	}
+
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
@@ -299,7 +307,7 @@ void PD_Scene_MenuMain::update(Step* _step) {
 }
 
 void PD_Scene_MenuMain::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height);
 
 	FrameBufferInterface::pushFbo(screenFBO);
 

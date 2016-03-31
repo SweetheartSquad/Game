@@ -12,10 +12,11 @@
 
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
 	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("TASK-BG")),
-	textShader(_textShader),
-	isAnimating(false)
+	textShader(_textShader)
 {
+	setRenderMode(kTEXTURE);
 	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	setAlpha(0.f);
 	setScaleMode(GL_NEAREST);
 	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 
@@ -31,6 +32,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	checkContainer->verticalAlignment = kMIDDLE;
 	checkContainer->setWidth(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight());
 	checkContainer->setRationalHeight(1.f, container);
+	checkContainer->background->setVisible(false);
 
 	checkBox = new VerticalLinearLayout(world);
 	checkBox->horizontalAlignment = kCENTER;
@@ -50,7 +52,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	checkMark->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-CHECK-MARK")->texture);
 	checkMark->background->mesh->setScaleMode(GL_NEAREST);
 	checkMark->setVisible(false);
-	
+
 	text = new TextArea(world, _font, _textShader);
 	text->setWrapMode(kWORD);
 	text->verticalAlignment = kMIDDLE;
@@ -58,23 +60,18 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->setRationalWidth(1.f, container);
 	text->setRationalHeight(1.f, container);
 	text->marginLeft.setRationalSize(1.f, &checkContainer->width);
+	text->background->setVisible(false);
 
-	addTimeout = new Timeout(0.f, [this](sweet::Event * _event){
-		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
-		eventManager->triggerEvent("taskAnimationComplete");
-		isAnimating = false;
+	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
+		setAlpha(1.f);
 	});
 	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		if(!isAnimating){ // In case restart happens before complete event
-			isAnimating = true;
-			eventManager->triggerEvent("taskAnimationStart");
-		}
+		setAlpha(0.f);
 	});
 
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
-		invalidateLayout();
+		setAlpha(p);
 	});
 	childTransform->addChild(addTimeout, false);
 
@@ -88,7 +85,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 		float p = _event->getFloatData("progress");
 		p = Easing::easeOutElastic(p, 0.f, 1.f, checkTimeout->targetSeconds, -1, 4.f);
 		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
-		invalidateLayout();
+		//invalidateLayout();
 	});
 	childTransform->addChild(checkTimeout, false);
 }
@@ -109,8 +106,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedFont(PD_ResourceManager::scenario->getFont("TASKLIST-FONT-CROSSED")->font),
 	unseenTask(false),
 	numTasks(0),
-	testID(0),
-	playingAnimations(0)
+	testID(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->incrementReferenceCount();
@@ -119,7 +115,6 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedTextShader->incrementReferenceCount();
 	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
 
-	setRenderMode(kTEXTURE);
 	background->setVisible(false);
 
 	texOpen = PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture;
@@ -165,7 +160,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	journalLayout->setRationalHeight(0.95f, layout);
 
 	float lineHeight = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight();
-	
+
 	top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(top);
 	top->setRationalWidth(1.f, journalLayout);
@@ -174,14 +169,16 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	top->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	top->setVisible(false);
 
+	top->background->setVisible(false);
+
 	taskLayout = new VerticalLinearLayout(_world);
 	journalLayout->addChild(taskLayout);
 	taskLayout->horizontalAlignment = kLEFT;
 	taskLayout->verticalAlignment = kTOP;
 	taskLayout->setRationalWidth(1.f, journalLayout);
 	taskLayout->setAutoresizeHeight();
-	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 0.5f);
-	taskLayout->background->setVisible(false);
+	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 1.f);
+	taskLayout->background->setVisible(true);
 
 	bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	journalLayout->addChild(bottom);
@@ -190,6 +187,8 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	bottom->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, lineHeight * 0.5f, 0.f);
 	bottom->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	bottom->setVisible(false);
+
+	bottom->background->setVisible(false);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
@@ -210,7 +209,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 	}
 
 	auto it2 = it->second.find(_id);
-	
+
 	// if the scenario has no task with the given id, make it and return early
 	if(it2 == it->second.end()){
 		if(!_complete){
@@ -246,26 +245,13 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		ComponentShaderText * shader = new ComponentShaderText(true);
 		shader->name = "individual task text shader";
 		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
-		shader->setColor(1.f, 1.f, 1.f, 0.f);
+		shader->setColor(1.f, 1.f, 1.f, 1.f);
 
 		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
 		task->setRationalWidth(1.f, taskLayout);
 		task->setHeight(font->getLineHeight() * 3.f);
 		taskLayout->addChild(task);
 		task->text->setText(_text);
-
-		task->eventManager->addEventListener("taskAnimationStart", [this](sweet::Event * _event){
-			if(playingAnimations == 0){
-				setRenderMode(kENTITIES);
-			}
-			++playingAnimations;
-		});
-		task->eventManager->addEventListener("taskAnimationComplete", [this](sweet::Event * _event){
-			--playingAnimations;
-			if(playingAnimations == 0){
-				setRenderMode(kTEXTURE);
-			}
-		});
 
 		tasks.at(_scenario).insert(std::make_pair(_id, task));
 

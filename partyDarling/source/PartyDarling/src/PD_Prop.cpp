@@ -25,7 +25,7 @@ PD_Prop::PD_Prop(BulletWorld * _bulletWorld, PD_PropDefinition * _def, Shader * 
 	float lowerBoundVal = sweet::NumberUtils::randomFloat(0.2f,0.3f);
 
 	if(_def->twist){
-		MeshDeformation::twist(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
+		MeshDeformation::twist(mesh, -upperFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	}
 	//MeshDeformation::bend(mesh, lowerFlareVal, upperFlareVal, lowerBoundVal, Easing::kLINEAR);
 	if(_def->flare){

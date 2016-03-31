@@ -173,10 +173,13 @@ AssetRoom::AssetRoom(Json::Value _json, Scenario * const _scenario) :
 
 	if(sizeString == "SMALL"){
 		size = kSMALL;
+		numWallLights = 2;
 	}else if(sizeString == "MEDIUM"){
 		size = kMEDIUM;
+		numWallLights = 2;
 	}else{
 		size = kLARGE;
+		numWallLights = 4;
 	}
 
 	for(auto c : _json["characters"]){

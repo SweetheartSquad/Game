@@ -43,6 +43,8 @@ Player::Player(BulletWorld * _bulletWorld) :
 	});
 
 	enable();
+
+	joystickManager->reconnect();
 };
 
 Player::~Player(){
@@ -53,7 +55,7 @@ Player::~Player(){
 
 void Player::update(Step * _step){
 	joystickManager->update(_step);
-	
+
 	if(joystickManager->joysticks[0] != nullptr){
 		glm::vec2 mouseMove(0);
 		mouseMove.y += joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisRightY) * -50.f;
@@ -88,7 +90,7 @@ glm::vec3 Player::calculateInputs(Step * _step){
 	}if (keyboard.keyDown(GLFW_KEY_D) || keyboard.keyDown(GLFW_KEY_RIGHT)){
 		res += right;
 	}
-	
+
 	if(joystickManager->joysticks[0] != nullptr){
 		res -= forward * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftY);
 		res += right * joystickManager->joysticks[0]->getAxis(joystickManager->joysticks[0]->axisLeftX);
@@ -153,7 +155,6 @@ bool Player::wantsToKeepInteracting(){
 	}
 	return res;
 }
-
 
 bool Player::wantsToQuit(){
 	bool res = false;

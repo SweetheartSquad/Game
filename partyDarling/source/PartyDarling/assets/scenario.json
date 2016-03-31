@@ -491,7 +491,7 @@
       "id":"DONATE-BUTT",
       "type":"texture",
       "src":"UI/menu/donateButt.png",
-      "generateMipmaps": true
+      "generateMipmaps": false
     },
 
 
@@ -820,6 +820,12 @@
 
 
     // MAP
+    {
+      "id": "MAPBG",
+      "type": "texture",
+      "src": "UI/map/mapCell -bg.png",
+      "generateMipmaps":false
+    },
     {
       "id": "MAPCELL",
       "type": "texture",

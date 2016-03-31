@@ -11,9 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Party Darling - 2012.aps" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="include\PD_Door.cpp" />
     <ClCompile Include="src\DialogueDisplay.cpp" />
     <ClCompile Include="src\IntroRoom.cpp" />
@@ -31,6 +28,7 @@
     <ClCompile Include="src\PD_FurnitureParser.cpp" />
     <ClCompile Include="src\PD_Game.cpp" />
     <ClCompile Include="src\PD_InsultButton.cpp" />
+    <ClCompile Include="src\PD_InteractionRayCallback.cpp" />
     <ClCompile Include="src\PD_Item.cpp" />
     <ClCompile Include="src\PD_Listing.cpp" />
     <ClCompile Include="src\PD_Palette.cpp" />
@@ -71,6 +69,7 @@
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\RoomBuilder.cpp" />
     <ClCompile Include="src\RoomObject.cpp" />
+    <ClCompile Include="src\ShaderComponentMap.cpp" />
     <ClCompile Include="src\ShaderComponentOutline.cpp" />
     <ClCompile Include="src\ShaderComponentVNoise.cpp" />
     <ClCompile Include="src\TriggerDefinitions.cpp" />
@@ -93,6 +92,7 @@
     <ClInclude Include="include\PD_FurnitureParser.h" />
     <ClInclude Include="include\PD_Game.h" />
     <ClInclude Include="include\PD_InsultButton.h" />
+    <ClInclude Include="include\PD_InteractionRayCallback.h" />
     <ClInclude Include="include\PD_Item.h" />
     <ClInclude Include="include\PD_Listing.h" />
     <ClInclude Include="include\PD_Masks.h" />
@@ -134,11 +134,9 @@
     <ClInclude Include="include\Room.h" />
     <ClInclude Include="include\RoomBuilder.h" />
     <ClInclude Include="include\RoomObject.h" />
+    <ClInclude Include="include\ShaderComponentMap.h" />
     <ClInclude Include="include\ShaderComponentOutline.h" />
     <ClInclude Include="include\ShaderComponentVNoise.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Party Darling - 2012.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>

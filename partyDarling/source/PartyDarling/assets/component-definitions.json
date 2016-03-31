@@ -1941,11 +1941,6 @@
             "type": "HEAD"
         },
         {
-            "random": false,
-            "src": "components/definitions/Drusilla_HEAD.json",
-            "type": "HEAD"
-        },
-        {
             "random": true,
             "src": "components/definitions/TarnGolfman_HEAD.json",
             "type": "HEAD"
@@ -2027,13 +2022,98 @@
         },
         {
             "random": true,
+            "src": "components/definitions/BigBoBob_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
             "src": "components/definitions/Broham_HEAD.json",
             "type": "HEAD"
         },
         {
             "random": true,
-            "src": "components/definitions/BigBoBob_HEAD.json",
+            "src": "components/definitions/Eustace_HEAD.json",
             "type": "HEAD"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Drusilla_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Eustace_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Eustace_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Eustace_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Eustace_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/OlSamTwoLegs_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/OlSamTwoLegs_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/OlSamTwoLegs_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/OlSamTwoLegs_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/OlSamTwoLegs_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Margarine_LEG.json",
+            "type": "LEG"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Margarine_ARM.json",
+            "type": "ARM"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Margarine_TORSO.json",
+            "type": "TORSO"
+        },
+        {
+            "random": false,
+            "src": "components/definitions/Margarine_PELVIS.json",
+            "type": "PELVIS"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Margarine_HEAD.json",
+            "type": "HEAD"
+        },
+        {
+            "random": true,
+            "src": "components/definitions/Boris_LEG.json",
+            "type": "LEG"
         }
     ]
 }

@@ -376,6 +376,9 @@ Room * RoomBuilder::getRoom(){
 #endif
 	}
 
+	// Get wall texture
+	room->mesh->replaceTextures(getWallTex());
+
 	room->floor->meshTransform->scale(-fullL-1, fullW+1, 1.f);
 	room->floor->translatePhysical(room->getCenter(), false);
 #ifndef RG_DEBUG
@@ -804,6 +807,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 		moveChildren *= childDimensions.x * 0.5f;
 		moveChildren = glm::rotate(orient, moveChildren);
 
+		// Shift children
 		for(auto c : _slot->children){
 			c->translatePhysical(moveChildren);
 			c->moveChildren(moveChildren);
@@ -818,9 +822,29 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 	pos += sidePos;
 
 	// check for collision/inside room
-
-	if(!canPlaceObject(_child, pos, orient, _parent)){
+	bool canPlace = canPlaceObject(_child, pos, orient, _parent);
+	
+	if(canPlace && centered){
+		for(auto c : _slot->children){
+			if(collisionCheck(c, _parent)){
+				canPlace = false;
+				// This sucks (but it's the only way...)
+				float angle = glm::angle(orient);
+				glm::vec3 axis = glm::axis(orient);
+				
+				_child->translatePhysical(-pos);
+				_child->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+				//_child->rotatePhysical(-orient);
+				_child->realign();
+				_child->meshTransform->makeCumulativeModelMatrixDirty();
+				break;
+			}
+		}
+	}
+	
+	if(!canPlace){
 		if(centered){
+			// Shift children back
 			for(auto c : _slot->children){
 				c->translatePhysical(-moveChildren);
 				c->moveChildren(-moveChildren);
@@ -828,6 +852,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				c->meshTransform->makeCumulativeModelMatrixDirty();
 			}
 		}
+		// undo side aligning rotation
 		_child->rotatePhysical(-angle, 0, 1.f, 0);
 		return false;
 	}
@@ -875,19 +900,33 @@ bool RoomBuilder::oppositeSides(PD_Side _side1, PD_Side _side2){
 }
 
 bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent){
-	glm::mat4 mmPrev = _obj->meshTransform->getCumulativeModelMatrix();
 	// Get object (A's)  model matrix
 	// For each object B placed in the room: get B's model matrix and transform A's vertices into B's coordinate space
 	// Create bounding box from transformed coordinates relative to B, then check for bounding box intersection
 	std::string tex = (_obj->mesh->textures.size() > 0 ? _obj->mesh->textures.at(0)->src : "");
-	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 
 	float angle = glm::angle(_orientation);
 	glm::vec3 axis = glm::axis(_orientation);
 	_obj->rotatePhysical(angle, axis.x, axis.y, axis.z);
+	//_obj->rotatePhysical(_orientation);
 	_obj->translatePhysical(_pos);
 	_obj->realign();
 	_obj->meshTransform->makeCumulativeModelMatrixDirty();
+	
+	// Check if object intersects o
+	if(collisionCheck(_obj, _parent)){
+		_obj->translatePhysical(-_pos);
+		_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
+		_obj->realign();
+		_obj->meshTransform->makeCumulativeModelMatrixDirty();
+		return false;
+	}
+
+	return true;
+}
+
+bool RoomBuilder::collisionCheck(RoomObject * _obj, RoomObject * _parent){
+	std::vector<glm::vec3> verts = _obj->boundingBox.getVertices();
 	glm::mat4 mm = _obj->meshTransform->getCumulativeModelMatrix();
 
 	// Check for collision with other objects in room
@@ -902,19 +941,13 @@ bool RoomBuilder::canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _o
 		if(o->boundingBox.intersects(getLocalBoundingBoxVertices(verts, mm, oMM), 0.0001f)){
 #ifdef RG_DETAILED_LOG
 			std::stringstream s;
-			s << "Can't place due to COLLISION with: " << o->type << " address: " << o;
+			s << "COLLISION with: " << o->type << " address: " << o;
 			Log::warn(s.str());
 #endif
-
-			_obj->translatePhysical(-_pos);
-			_obj->rotatePhysical(-angle, axis.x, axis.y, axis.z);
-			_obj->realign();
-			_obj->meshTransform->makeCumulativeModelMatrixDirty();
-			return false;
+			return true;
 		}
 	}
-
-	return true;
+	return false;
 }
 
 std::vector<glm::vec3> RoomBuilder::getLocalBoundingBoxVertices(std::vector<glm::vec3> _verts, glm::mat4 _mmA, glm::mat4 _mmB){
@@ -1018,9 +1051,6 @@ void RoomBuilder::createWalls(){
 #ifdef RG_DEBUG
 	room->meshTransform->setVisible(false);
 #endif
-
-	// Get wall texture
-	room->mesh->pushTexture2D(getWallTex());
 }
 
 void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){
@@ -1188,6 +1218,10 @@ std::vector<RoomObject *> RoomBuilder::getRandomObjects(){
 
 	// sort by parent priority
 	std::sort(objects.begin(), objects.end(), [](RoomObject * i, RoomObject * j) -> bool{
+		if(i->name == "wallLamp" || j->name == "wallLamp"){
+			return i->name == "wallLamp";
+		}
+
 		if(i->parentTypes.size() == 0 || j->parentTypes.size() == 0){
 			return i->parentTypes.size() < j->parentTypes.size();
 		}
@@ -1253,13 +1287,15 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 	// Get list of furniture types compatible for this room
 	std::vector<PD_FurnitureDefinition *> definitions;
 	std::vector<int> count;
-	if(definition->roomType == "NO_TYPE"){
-		for(auto def : PD_ResourceManager::furnitureDefinitions){
-			definitions.push_back(def);
-			count.push_back(0);
-		}
-	}else{
-		for(auto def : PD_ResourceManager::furnitureDefinitions){
+	
+	for(auto def : PD_ResourceManager::furnitureDefinitions){
+		if(def->type == "wallLamp"){
+			// get lights
+			for(unsigned int i = 0; i < room->definition->numWallLights; ++i){
+				auto furn = new PD_Furniture(world, def, baseShader, GROUND);
+				furniture.push_back(furn);
+			}
+		}else{
 			for(std::string type : def->roomTypes){
 				if(type == room->definition->roomType){
 					definitions.push_back(def);
@@ -1288,8 +1324,6 @@ std::vector<PD_Furniture *> RoomBuilder::getFurniture(){
 				}
 			}
 		}
-	}else{
-		int blah = 0;
 	}
 
 	return furniture;

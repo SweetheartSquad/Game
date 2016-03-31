@@ -7,7 +7,6 @@ class PD_Scenario;
 
 class PD_UI_Task : public NodeUI_NineSliced{
 private:
-	bool isAnimating;
 public:
 	VerticalLinearLayout * checkBox;
 	NodeUI * checkMark;
@@ -36,8 +35,6 @@ private:
 
 	int numTasks;
 	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
-
-	unsigned long int playingAnimations;
 
 	Texture * texOpen;
 	Texture * texClosed;

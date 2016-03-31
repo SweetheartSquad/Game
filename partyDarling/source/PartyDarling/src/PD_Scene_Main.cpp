@@ -45,6 +45,7 @@
 #include <PD_DissStats.h>
 
 #include <PD_Scene_MenuMain.h>
+#include <PD_InteractionRayCallback.h>
 #include <PD_UI_Text.h>
 #include <PD_Masks.h>
 
@@ -88,9 +89,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	bool firstRun = PD_Game::firstRun;
 	PD_Game::firstRun = false;
 
-
-	_game->showLoading(0);
-
 	player = new Player(bulletWorld);
 	uiBubble = new PD_UI_Bubble(uiLayer->world, player);
 	uiDissBattle = new PD_UI_DissBattle(uiLayer->world, player, PD_ResourceManager::scenario->getFont("FIGHT-FONT")->font, uiBubble->textShader, uiLayer->shader);
@@ -99,6 +97,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	Log::warn("before RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	PD_Game::progressManager->loadSave(player, uiDissBattle, uiInventory);
 	Log::warn("start RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
+
+	_game->showLoading(0);
 
 	toonRamp = new RampTexture(lightStart, lightEnd, 4, true);
 	toonShader->addComponent(new ShaderComponentMVP(toonShader));
@@ -129,7 +129,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	itemShader->incrementReferenceCount();
 	characterShader->incrementReferenceCount();
 	emoteShader->incrementReferenceCount();
-
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0,sd.x,0,sd.y);
@@ -328,10 +327,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
-	
-	_game->playBGM();
 
-	
+	_game->playBGM();
 
 	// if we're on the first run, don't show a message
 	// if this is the first time we've entered the game since the application started, show a "loaded" message
@@ -798,7 +795,7 @@ void PD_Scene_Main::navigate(glm::ivec2 _movement, bool _relative){
 	// update map with new position
 	uiMap->updateMap(currentHousePosition);
 	Log::info("Navigated to room \"" + currentRoom->definition->name + "\"");
-	
+
 	for(auto o : currentRoom->components) {
 		o->load();
 	}
@@ -951,7 +948,7 @@ void PD_Scene_Main::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_0)){
 		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
 	}
-	
+
 	if(keyboard->keyJustDown(GLFW_KEY_P)){
 		sweet::Event * e = new sweet::Event("changeDISSStat");
 		e->setStringData("stat", "strength");
@@ -1294,7 +1291,7 @@ void PD_Scene_Main::update(Step * _step){
 }
 
 void PD_Scene_Main::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height);
 
 	FrameBufferInterface::pushFbo(screenFBO);
 
@@ -1343,7 +1340,9 @@ Texture * PD_Scene_Main::getToken(){
 	res->allocate(sd.x, sd.y, 4);
 	auto tempData = res->data;
 	res->allocate(sd.x, sd.y, 4);
-	glReadPixels(game->viewPortWidth/2 - half.x, game->viewPortHeight/2 - half.y, sd.x, sd.y, GL_RGBA, GL_UNSIGNED_BYTE, res->data);
+	int width, height;
+	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
+	glReadPixels(width/2 - half.x, height/2 - half.y, sd.x, sd.y, GL_RGBA, GL_UNSIGNED_BYTE, res->data);
 
 	// carve out a circle and add a border
 	for(signed long int y = 0; y < sd.y; ++y){
@@ -1383,9 +1382,6 @@ void PD_Scene_Main::resetCrosshair() {
 void PD_Scene_Main::updateSelection(){
 	if(player->isEnabled()){
 		NodeBulletBody * lastHoverTarget = currentHoverTarget;
-		
-
-
 
 		NodeBulletBody * me = nullptr;
 		btVector3 hitpoint;
@@ -1394,28 +1390,19 @@ void PD_Scene_Main::updateSelection(){
 		btVector3 start(pos.x, pos.y, pos.z);
 		btVector3 dir(activeCamera->forwardVectorRotated.x, activeCamera->forwardVectorRotated.y, activeCamera->forwardVectorRotated.z);
 		btVector3 end = start + dir*4;
-		btCollisionWorld::AllHitsRayResultCallback rayCallback(start, end);
+		PD_InteractionRayCallback rayCallback(start, end, player->body);
 		bulletWorld->world->rayTest(start, end, rayCallback);
 
 		if(rayCallback.hasHit()){
+			float d = FLT_MAX;
 			for(unsigned long int i = 0; i < rayCallback.m_collisionObjects.size(); ++i){
-				NodeBulletBody * t = static_cast<NodeBulletBody *>(rayCallback.m_collisionObjects.at(i)->getUserPointer());
-				if(t->collisionMask | kPD_INTERACTIVE != 0){
-					me = t;
+				if(rayCallback.m_hitFractions.at(i) < d){
+					d = rayCallback.m_hitFractions.at(i);
+					me = static_cast<NodeBulletBody *>(rayCallback.m_collisionObjects.at(i)->getUserPointer());
 					hitpoint = rayCallback.m_hitPointWorld.at(i);
-					break;
 				}
 			}
 		}
-
-
-
-
-
-
-
-
-
 
 		if(me != nullptr && uiInventory->getSelected() == nullptr){
 			PD_Item * item = dynamic_cast<PD_Item *>(me);

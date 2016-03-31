@@ -5,20 +5,52 @@
 #include <PD_Assets.h>
 #include <PD_ResourceManager.h>
 
-MapCell::MapCell(BulletWorld * _world, Room * _room) :
+#include <MeshFactory.h>
+#include <ShaderComponentMap.h>
+#include <shader/ShaderComponentMVP.h>
+#include <shader/ShaderComponentTint.h>
+#include <shader/ShaderComponentAlpha.h>
+#include <shader/ShaderComponentDepthOffset.h>
+
+MapCell::MapCell(BulletWorld * _world, Shader * _mapShader, Room * _room) :
 	NodeUI(_world),
 	room(_room)
 {
-	background->mesh->setScaleMode(GL_NEAREST);
-	boxSizing = kCONTENT_BOX;
-	setBackgroundColour(1,1,1, 0.75f);
+	background->mesh->setVisible(false);
+
+	NodeUI * cellBg = new NodeUI(world);
+	addChild(cellBg);
+	cellBg->setRationalHeight(1.f, this);
+	cellBg->setRationalWidth(1.f, this);
+	mapBg = cellBg->background->mesh;
+	mapBg->setScaleMode(GL_NEAREST);
+	mapBg->pushTexture2D(PD_ResourceManager::scenario->getTexture("MAPBG")->texture);
+
+	NodeUI * cellOver = new NodeUI(world);
+	cellOver->background->setShader(_mapShader, true);
+	addChild(cellOver);
+	cellOver->setRationalHeight(1.f, this);
+	cellOver->setRationalWidth(1.f, this);
+	mapOver = cellOver->background->mesh;
+	mapOver->setScaleMode(GL_NEAREST);
+	mapOver->setVisible(false);
 }
 
 PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader) :
 	NodeUI(_world),
 	enabled(true),
-	layout(nullptr)
+	layout(nullptr),
+	mapCellShader(new ComponentShaderBase(true))
 {
+	mapCellShader->addComponent(new ShaderComponentMVP(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentMap(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentTint(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentAlpha(mapCellShader));
+	mapCellShader->addComponent(new ShaderComponentDepthOffset(mapCellShader));
+	mapCellShader->compileShader();
+	mapCellShader->incrementReferenceCount();
+	mapCellShader->name = "Map Cell Shader";
+
 	background->setVisible(false);
 
 	compass = new NodeUI(world);
@@ -34,6 +66,10 @@ PD_UI_Map::PD_UI_Map(BulletWorld * _world, Font * _font, ComponentShaderText * _
 	compass->background->mesh->dirty = true;
 	childTransform->addChild(compass, false);
 	compass->nodeUIParent = this;
+}
+
+PD_UI_Map::~PD_UI_Map(){
+	mapCellShader->decrementAndDelete();
 }
 
 void PD_UI_Map::disable(){
@@ -105,12 +141,11 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 		hl->horizontalAlignment = innerLayout2->horizontalAlignment;
 		
 		for(int x = x1-1; x < glm::min(x2, x1+size)+2; ++x){
-			MapCell * cell = new MapCell(world, nullptr);
+			MapCell * cell = new MapCell(world, mapCellShader, nullptr);
 			grid[std::make_pair(x, y)] = cell;
 			hl->addChild(cell);
 			cell->setRationalHeight(1.f, hl);
 			cell->setSquareWidth(1.f);
-			cell->boxSizing = kCONTENT_BOX;
 			if(x < x1 || y < y1 || x > x2 || y > y2){
 				// border cell
 				std::stringstream ss;
@@ -125,8 +160,9 @@ void PD_UI_Map::buildMap(std::map<std::pair<int, int>, Room *> _houseGrid){
 				}else if(x > x2){
 					ss << "L";
 				}
-				cell->setBackgroundColour(1,1,1, 1);
-				cell->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture(ss.str())->texture);
+				cell->mapBg->setVisible(false);
+				cell->mapOver->setVisible(true);
+				cell->mapOver->pushTexture2D(PD_ResourceManager::scenario->getTexture(ss.str())->texture);
 			}
 		}
 	}
@@ -185,11 +221,16 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 				break;
 			case Room::kSEEN:
 				cell.second->setBackgroundColour(1,1,1, 1);
-				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : (cell.second->room->definition->locked ? "MAPCELL-UNLOCKED" : "MAPCELL-UNENTERED"))->texture);
+				cell.second->mapOver->replaceTextures(PD_ResourceManager::scenario->getTexture(cell.second->room->locked ? "MAPCELL-LOCKED" : (cell.second->room->definition->locked ? "MAPCELL-UNLOCKED" : "MAPCELL-UNENTERED"))->texture);
+				cell.second->mapOver->setVisible(true);
 				break;
 			case Room::kENTERED:
 				cell.second->setBackgroundColour(1,1,1, 1);
-				cell.second->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
+				cell.second->mapOver->replaceTextures(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
+				if(cell.second->room->mesh->textures.size() > 0){
+					cell.second->mapOver->pushTexture2D(cell.second->room->mesh->textures.back());
+				}
+				cell.second->mapOver->setVisible(true);
 				break;
 			}
 		}

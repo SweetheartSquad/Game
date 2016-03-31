@@ -14,6 +14,25 @@ class Keyboard;
 class Sprite;
 class ComponentShaderText;
 
+struct DissBattleValues{
+
+	// Stats multipliers
+	float playerAttackMultiplier[4]; // enemy defense, player strength
+	float enemyAttackMultiplier[4]; // player defense, enemy strength
+	
+	float insightMultiplier[4]; // player insight - enemy insight
+	float insightAlpha[4];
+	
+	float sassInsultMultiplier[4]; // player sass - enemy sass
+	float sassInterjectMultiplier[4]; // player sass - enemy sass
+
+	// combo increments
+	float playerComboIncrement;
+	float enemyComboIncrement;
+
+	DissBattleValues();
+};
+
 class InterjectAccuracy {
 public:
 	wchar_t character;
@@ -120,7 +139,7 @@ private:
 	ComponentShaderText * optionTwoShader;
 
 	float baseCursorDelayLength;
-	float baseCusrorPunctDelayLength;
+	float baseCursorPunctDelayLength;
 	float cursorDelayLength;
 	float cursorDelayDuration;
 	float baseGlyphWidth;
@@ -157,18 +176,22 @@ private:
 	//Sounds
 	std::vector<OpenAL_Sound *> missInterjectSounds;
 	Player * player;
+	std::vector<OpenAL_Sound *> succeedInsultSounds;
 
 	// Stats multipliers
-
 	float playerAttackMultiplier; // enemy defense, player strength
 	float enemyAttackMultiplier; // player defense, enemy strength
-
+	
 	float insightMultiplier; // player insight - enemy insight
 	float insightAlpha;
-
+	
 	float sassInsultMultiplier; // player sass - enemy sass
 	float sassInterjectMultiplier; // player sass - enemy sass
-	std::vector<OpenAL_Sound *> succeedInsultSounds;
+
+	float playerComboIncrement;
+	float enemyComboIncrement;
+
+	void setupDissValues();
 public:
 	float prevXP;
 	float wonXP;
@@ -181,8 +204,8 @@ public:
 
 	float damage;
 	
-	float playerComboMultipier;
-	float enemyComboMultipier;
+	float playerComboMultiplier;
+	float enemyComboMultiplier;
 
 	Keyboard * keyboard;
 

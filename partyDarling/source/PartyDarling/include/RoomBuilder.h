@@ -13,12 +13,6 @@
 #define MAX_ROOMBUILDER_ATTEMPTS 50
 #define NUM_ROOM_TEXTURES 4
 
-enum RoomLayout_t{
-	kRECT,
-	kT,
-	kL
-};
-
 enum RoomObject_t{
 	CHARACTER,
 	FURNITURE,
@@ -102,6 +96,7 @@ public:
 	bool arrange(RoomObject * child, RoomObject * parent, PD_Side side, PD_Slot * slot);
 	bool oppositeSides(PD_Side _side1, PD_Side _side2);
 	bool canPlaceObject(RoomObject * _obj, glm::vec3 _pos, glm::quat _orientation, RoomObject * _parent = nullptr);
+	bool collisionCheck(RoomObject * _obj, RoomObject * _parent = nullptr);
 	void addObjectToLists(RoomObject * _obj);
 	bool canBeParent(RoomObject * _obj);
 

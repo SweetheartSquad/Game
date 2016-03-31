@@ -13,6 +13,8 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	VerticalLinearLayout(_world),
 	textShader(new ComponentShaderText(true))
 {
+	setRenderMode(kTEXTURE);
+
 	setVisible(false);
 	// Pickup/Remove Item Animaiton
 	horizontalAlignment = kCENTER;
@@ -50,9 +52,9 @@ PD_UI_Message::PD_UI_Message(BulletWorld * _world) :
 	text->verticalAlignment = kMIDDLE;
 
 	// Initial setup
-	image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
-	textBubble->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
-	textShader->setColor(1.f, 1.f, 1.f, 0.f);
+
+	setAlpha(0.f);
+	textShader->setColor(1.f, 1.f, 1.f, 1.f);
 	textShader->incrementReferenceCount();
 	textShader->name = "PD_UI_Message text shader";
 }
@@ -78,8 +80,7 @@ void PD_UI_Message::gainItem(PD_Item * _item){
 		setItemTexture(_item);
 		text->setText("Acquired " + _item->definition->name);
 
-		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
-		textShader->setColor(1.f, 1.f, 1.f, 0.f);
+		setAlpha(0.f);
 	});
 	t->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
@@ -101,8 +102,7 @@ void PD_UI_Message::loseItem(PD_Item * _item){
 		setItemTexture(_item);
 		text->setText("Gave " + _item->definition->name);
 
-		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
-		textShader->setColor(1.f, 1.f, 1.f, 0.f);
+		setAlpha(0.f);
 	});
 	t->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
@@ -128,8 +128,7 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 
 		text->setText("Acquired " + _name + "'s Friendship");
 
-		image->setBackgroundColour(1.f, 1.f, 1.f, 0.f);
-		textShader->setColor(1.f, 1.f, 1.f, 0.f);
+		setAlpha(0.f);
 	});
 	t->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
@@ -150,7 +149,7 @@ void PD_UI_Message::displayMessage(std::string _message){
 		setVisible(true);
 		image->setVisible(false);
 		text->setText(_message);
-		textShader->setColor(1.f, 1.f, 1.f, 0.f);
+		setAlpha(0.f);
 	});
 	t->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
@@ -182,10 +181,7 @@ void PD_UI_Message::animate(float _p){
 	}else{
 		a = Easing::easeInCubic(_p - 0.8f, 1.f, -1.f, 0.2f);
 	}
-
-	image->setBackgroundColour(1.f, 1.f, 1.f, a);
-	textBubble->setBackgroundColour(1.f, 1.f, 1.f, a);
-	textShader->setColor(1.f, 1.f, 1.f, a);
+	setAlpha(a);
 }
 
 void PD_UI_Message::update(Step * _step){
