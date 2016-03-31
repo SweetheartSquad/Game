@@ -13,12 +13,6 @@
 #define MAX_ROOMBUILDER_ATTEMPTS 50
 #define NUM_ROOM_TEXTURES 4
 
-enum RoomLayout_t{
-	kRECT,
-	kT,
-	kL
-};
-
 enum RoomObject_t{
 	CHARACTER,
 	FURNITURE,

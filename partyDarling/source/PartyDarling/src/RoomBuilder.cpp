@@ -376,6 +376,9 @@ Room * RoomBuilder::getRoom(){
 #endif
 	}
 
+	// Get wall texture
+	room->mesh->replaceTextures(getWallTex());
+
 	room->floor->meshTransform->scale(-fullL-1, fullW+1, 1.f);
 	room->floor->translatePhysical(room->getCenter(), false);
 #ifndef RG_DEBUG
@@ -1048,9 +1051,6 @@ void RoomBuilder::createWalls(){
 #ifdef RG_DEBUG
 	room->meshTransform->setVisible(false);
 #endif
-
-	// Get wall texture
-	room->mesh->pushTexture2D(getWallTex());
 }
 
 void RoomBuilder::addWall(float width, glm::vec2 pos, float angle){

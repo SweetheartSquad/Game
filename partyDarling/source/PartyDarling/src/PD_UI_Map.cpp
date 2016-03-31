@@ -227,8 +227,8 @@ void PD_UI_Map::updateMap(glm::ivec2 _currentPosition){
 			case Room::kENTERED:
 				cell.second->setBackgroundColour(1,1,1, 1);
 				cell.second->mapOver->replaceTextures(PD_ResourceManager::scenario->getTexture("MAPCELL")->texture);
-				if(cell.second->room->floor->mesh->textures.size() > 0){
-					cell.second->mapOver->pushTexture2D(cell.second->room->floor->mesh->textures.at(0));
+				if(cell.second->room->mesh->textures.size() > 0){
+					cell.second->mapOver->pushTexture2D(cell.second->room->mesh->textures.back());
 				}
 				cell.second->mapOver->setVisible(true);
 				break;

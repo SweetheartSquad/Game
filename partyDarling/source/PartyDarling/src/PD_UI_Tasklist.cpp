@@ -66,7 +66,6 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->background->setVisible(false);
 
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 		eventManager->triggerEvent("taskAnimationComplete");
 		isAnimating = false;
 	});
@@ -74,7 +73,6 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 		if(!isAnimating){ // In case restart happens before complete event
 			isAnimating = true;
 			eventManager->triggerEvent("taskAnimationStart");
-			textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, 1.f);
 			setAlpha(0.f);
 			//invalidateLayout();
 		}
@@ -82,7 +80,6 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
-		//textShader->setColor(textShader->getColor().r, textShader->getColor().g, textShader->getColor().b, p);
 		setAlpha(p);
 		//invalidateLayout();
 	});
@@ -260,7 +257,7 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		ComponentShaderText * shader = new ComponentShaderText(true);
 		shader->name = "individual task text shader";
 		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
-		shader->setColor(1.f, 1.f, 1.f, 0.f);
+		shader->setColor(1.f, 1.f, 1.f, 1.f);
 
 		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
 		task->setRationalWidth(1.f, taskLayout);
