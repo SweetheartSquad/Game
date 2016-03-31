@@ -5,7 +5,7 @@
 class Timeout;
 class PD_Scenario;
 
-class PD_UI_Task : public NodeUI_NineSliced{
+class PD_UI_Task : public NodeUI{
 private:
 public:
 	VerticalLinearLayout * checkBox;
@@ -30,9 +30,6 @@ private:
 	ComponentShaderText * textShader;
 	ComponentShaderText * crossedTextShader;
 
-	NodeUI_NineSliced * top;
-	NodeUI_NineSliced * bottom;
-
 	int numTasks;
 	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
 
@@ -40,13 +37,14 @@ private:
 	Texture * texClosed;
 	Texture * texNew;
 
-	VerticalLinearLayout * journalLayout;
-	VerticalLinearLayout * taskLayout;
+	
 	NodeUI * icon;
 	TextLabel * count;
 
 	bool unseenTask;
 public:
+	NodeUI_NineSliced * journalLayout;
+	VerticalLinearLayout * taskLayout;
 	int testID;
 
 	PD_UI_Tasklist(BulletWorld * _world);

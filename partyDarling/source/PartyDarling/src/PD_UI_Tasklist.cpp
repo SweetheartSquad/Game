@@ -11,14 +11,12 @@
 #define TASKLIST_OPACITY 0.7f
 
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
-	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("TASK-BG")),
+	NodeUI(_world),
 	textShader(_textShader)
 {
 	setRenderMode(kTEXTURE);
-	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	background->setVisible(false);
 	setAlpha(0.f);
-	setScaleMode(GL_NEAREST);
-	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 
 	NodeUI * container = new NodeUI(_world);
 	addChild(container);
@@ -65,7 +63,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		setAlpha(1.f);
 	});
-	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){;
 		setAlpha(0.f);
 	});
 
@@ -85,7 +83,6 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 		float p = _event->getFloatData("progress");
 		p = Easing::easeOutElastic(p, 0.f, 1.f, checkTimeout->targetSeconds, -1, 4.f);
 		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
-		//invalidateLayout();
 	});
 	childTransform->addChild(checkTimeout, false);
 }
@@ -137,7 +134,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	icon->background->mesh->setScaleMode(GL_NEAREST);
 	icon->setHeight(0.05f);
 	icon->setSquareWidth(190.f/74.f);
-	icon->setMarginBottom(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
+	icon->setMarginBottom(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f + 0.05f); // for now
 
 	count = new TextLabel(_world, PD_ResourceManager::scenario->getFont("TASKCOUNT-FONT")->font, textShader);
 	count->boxSizing = kCONTENT_BOX;
@@ -152,43 +149,26 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	count->background->setVisible(true);
 	count->setVisible(false);
 
-	journalLayout = new VerticalLinearLayout(_world);
+	journalLayout = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	layout->addChild(journalLayout);
-	journalLayout->horizontalAlignment = kLEFT;
-	journalLayout->verticalAlignment = kTOP;
+	journalLayout->setScaleMode(GL_NEAREST);
+	journalLayout->setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 	journalLayout->setRationalWidth(1.f, layout);
-	journalLayout->setRationalHeight(0.95f, layout);
+	journalLayout->setAutoresizeHeight();
+	journalLayout->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 
 	float lineHeight = PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight();
 
-	top = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
-	journalLayout->addChild(top);
-	top->setRationalWidth(1.f, journalLayout);
-	top->setHeight(lineHeight * 0.5f);
-	top->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, 0.f, lineHeight * 0.5f);
-	top->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
-	top->setVisible(false);
-
-	top->background->setVisible(false);
-
 	taskLayout = new VerticalLinearLayout(_world);
+	taskLayout->boxSizing = kCONTENT_BOX;
 	journalLayout->addChild(taskLayout);
 	taskLayout->horizontalAlignment = kLEFT;
 	taskLayout->verticalAlignment = kTOP;
 	taskLayout->setRationalWidth(1.f, journalLayout);
 	taskLayout->setAutoresizeHeight();
-	taskLayout->setBackgroundColour(0.5f, 0.5f, 0.5f, 1.f);
-	taskLayout->background->setVisible(true);
+	taskLayout->setPadding(0.f, lineHeight * 0.5f);
 
-	bottom = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
-	journalLayout->addChild(bottom);
-	bottom->setRationalWidth(1.f, journalLayout);
-	bottom->setHeight(lineHeight * 0.5);
-	bottom->setBorder(lineHeight * 0.5f, lineHeight * 0.5f, lineHeight * 0.5f, 0.f);
-	bottom->setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
-	bottom->setVisible(false);
-
-	bottom->background->setVisible(false);
+	journalLayout->setVisible(false);
 }
 
 PD_UI_Tasklist::~PD_UI_Tasklist(){
@@ -232,8 +212,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	if(numTasks == 0){
-		top->setVisible(true);
-		bottom->setVisible(true);
+		journalLayout->setVisible(true);
 	}
 
 	if(tasks.find(_scenario) == tasks.end()){
@@ -252,6 +231,12 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		task->setHeight(font->getLineHeight() * 3.f);
 		taskLayout->addChild(task);
 		task->text->setText(_text);
+
+		task->addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
+			std::stringstream s;
+			s << "journalLayout: " << journalLayout << " taskLayout: " << taskLayout->height.getSize();
+			Log::info(s.str());
+		});
 
 		tasks.at(_scenario).insert(std::make_pair(_id, task));
 
