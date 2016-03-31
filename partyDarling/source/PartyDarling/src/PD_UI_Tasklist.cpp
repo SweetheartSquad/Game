@@ -12,13 +12,11 @@
 
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
 	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("TASK-BG")),
-	textShader(_textShader),
-	isAnimating(false)
+	textShader(_textShader)
 {
 	setRenderMode(kTEXTURE);
 
 	background->setVisible(false);
-	///setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
 	setAlpha(TASKLIST_OPACITY);
 	setScaleMode(GL_NEAREST);
 	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
@@ -66,22 +64,15 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	text->background->setVisible(false);
 
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
-		eventManager->triggerEvent("taskAnimationComplete");
-		isAnimating = false;
+		setAlpha(1.f);
 	});
 	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
-		if(!isAnimating){ // In case restart happens before complete event
-			isAnimating = true;
-			eventManager->triggerEvent("taskAnimationStart");
-			setAlpha(0.f);
-			//invalidateLayout();
-		}
+		setAlpha(0.f);
 	});
 
 	addTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
 		setAlpha(p);
-		//invalidateLayout();
 	});
 	childTransform->addChild(addTimeout, false);
 
@@ -116,8 +107,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedFont(PD_ResourceManager::scenario->getFont("TASKLIST-FONT-CROSSED")->font),
 	unseenTask(false),
 	numTasks(0),
-	testID(0),
-	playingAnimations(0)
+	testID(0)
 {
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->incrementReferenceCount();
@@ -264,19 +254,6 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		task->setHeight(font->getLineHeight() * 3.f);
 		taskLayout->addChild(task);
 		task->text->setText(_text);
-
-		task->eventManager->addEventListener("taskAnimationStart", [this](sweet::Event * _event){
-			if(playingAnimations == 0){
-				setRenderMode(kENTITIES);
-			}
-			++playingAnimations;
-		});
-		task->eventManager->addEventListener("taskAnimationComplete", [this](sweet::Event * _event){
-			--playingAnimations;
-			if(playingAnimations == 0){
-				setRenderMode(kTEXTURE);
-			}
-		});
 
 		tasks.at(_scenario).insert(std::make_pair(_id, task));
 
