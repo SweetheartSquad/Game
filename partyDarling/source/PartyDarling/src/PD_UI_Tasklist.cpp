@@ -15,9 +15,8 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	textShader(_textShader)
 {
 	setRenderMode(kTEXTURE);
-
-	background->setVisible(false);
-	setAlpha(TASKLIST_OPACITY);
+	setBackgroundColour(1.f, 1.f, 1.f, TASKLIST_OPACITY);
+	setAlpha(0.f);
 	setScaleMode(GL_NEAREST);
 	setBorder(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f);
 
@@ -116,7 +115,6 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	crossedTextShader->incrementReferenceCount();
 	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
 
-	//setRenderMode(kTEXTURE);
 	background->setVisible(false);
 
 	texOpen = PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture;
