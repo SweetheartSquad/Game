@@ -251,6 +251,8 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 	uiTasklist->setRationalWidth(1.f, uiLayer);
 	uiTasklist->setRationalHeight(1.f, uiLayer);
 
+	uiTasklist->autoResize();
+
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
 	playerLight->firstParent()->translate(0.f, 1.f, 0.f);
@@ -1281,6 +1283,11 @@ void PD_Scene_Main::update(Step * _step){
 		std::stringstream s;
 		s << "The quick brown fox jumps over the lazy dog along with five boxing wizards wow omg lol wheeeeeee " << ++uiTasklist->testID;
 		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_H)){
+		std::stringstream s;
+		s << "journalLayout: " << uiTasklist->journalLayout << " taskLayout: " << uiTasklist->taskLayout->height.getSize();
+		Log::info(s.str());
 	}
 
 	Scene::update(_step);

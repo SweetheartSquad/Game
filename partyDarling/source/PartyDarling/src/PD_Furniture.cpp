@@ -12,6 +12,7 @@
 #include <NumberUtils.h>
 #include <Easing.h>
 #include <MeshDeformation.h>
+#include <MeshFactory.h>
 
 PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * _def, Shader * _shader, Anchor_t _anchor) :
 	RoomObject(_bulletWorld, new TriMesh(true), _shader, _anchor)
@@ -73,14 +74,29 @@ PD_Furniture::PD_Furniture(BulletWorld * _bulletWorld, PD_FurnitureDefinition * 
 		l->firstParent()->removeChild(l);
 		delete buildResult.lightParents.at(i);
 		meshTransform->addChild(l)->translate(w);
+
+		MeshEntity * m = new MeshEntity(MeshFactory::getCubeMesh(boundingBox.width * 0.25f), shader);
+		for(auto &v : m->mesh->vertices){
+			v.red = 1.f;
+			v.blue = 1.f;
+			v.green = 0.f;
+		}
+		l->childTransform->addChild(m);
 	}
 
 	// create the bullet stuff
 	if(_def->detailedCollider){
 		shape = buildResult.collider;
 	}else{
+		btVector3 o = buildResult.collider->getChildTransform(0).getOrigin();
+		glm::vec3 oldPos = glm::vec3(o.x(), o.y(), o.z());
+
 		delete buildResult.collider;
 		setColliderAsBoundingBox();
+
+		for(auto l : lights){
+
+		}
 	}
 	createRigidBody(_def->mass * FURNITURE_MASS_SCALE, kENVIRONMENT);
 

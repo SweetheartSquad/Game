@@ -8,11 +8,18 @@ PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _t
 	isEffective(false)
 {
 	setBorder(_font->getLineHeight() * 0.7f);
+
+	VerticalLinearLayout * layout = new VerticalLinearLayout(_world);
+	addChild(layout);
+	layout->setRationalWidth(1.f, layout->nodeUIParent);
+	layout->setRationalHeight(1.f, layout->nodeUIParent);
+	layout->horizontalAlignment = kCENTER;
+	layout->verticalAlignment = kMIDDLE;
+
 	label = new TextLabel(world, _font, _textShader);
+	layout->addChild(label);
+	label->setRationalWidth(1.f, this);
+	label->setPixelHeight(_font->getLineHeight());
 	label->horizontalAlignment = kCENTER;
 	label->verticalAlignment = kMIDDLE;
-	label->setRationalWidth(1.f, this);
-	label->setRationalHeight(1.f, this);
-
-	addChild(label);
 }

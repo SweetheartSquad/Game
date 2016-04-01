@@ -118,23 +118,22 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	texClosed = PD_ResourceManager::scenario->getTexture("JOURNAL-CLOSED")->texture;
 	texNew = PD_ResourceManager::scenario->getTexture("JOURNAL-NEW")->texture;
 
-	VerticalLinearLayout * layout = new VerticalLinearLayout(_world);
-	addChild(layout);
-	layout->horizontalAlignment = kLEFT;
-	layout->verticalAlignment = kTOP;
-	layout->setRationalWidth(1.f, this);
-	layout->setRationalHeight(1.f, this);
-	layout->setMargin(0.f, 0.66f, 0.05f, 0.05f);
-	layout->marginLeft.setRationalSize(1.f, &layout->marginTop);
+	NodeUI * container = new NodeUI(_world);
+	addChild(container);
+	container->setRationalWidth(1.f, this);
+	container->setRationalHeight(1.f, this);
+	container->setMargin(0.f, 0.66f, 0.05f, 0.05f);
+	container->marginLeft.setRationalSize(1.f, &container->marginTop);
+	container->background->setVisible(false);
 
 	icon = new NodeUI(_world);
-	layout->addChild(icon);
 	icon->boxSizing = kCONTENT_BOX;
+	container->addChild(icon);
 	icon->background->mesh->pushTexture2D(texOpen);
 	icon->background->mesh->setScaleMode(GL_NEAREST);
 	icon->setHeight(0.05f);
 	icon->setSquareWidth(190.f/74.f);
-	icon->setMarginBottom(PD_ResourceManager::scenario->getFont("FONT")->font->getLineHeight() * 0.5f + 0.05f); // for now
+	icon->setMarginBottom(0.95f);
 
 	count = new TextLabel(_world, PD_ResourceManager::scenario->getFont("TASKCOUNT-FONT")->font, textShader);
 	count->boxSizing = kCONTENT_BOX;
@@ -148,6 +147,13 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	count->setBackgroundColour(1.f, 0.f, 0.f);
 	count->background->setVisible(true);
 	count->setVisible(false);
+
+	VerticalLinearLayout * layout = new VerticalLinearLayout(_world);
+	container->addChild(layout);
+	layout->horizontalAlignment = kLEFT;
+	layout->verticalAlignment = kTOP;
+	layout->setRationalWidth(1.f, container);
+	layout->setRationalHeight(0.95f, container);
 
 	journalLayout = new NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("MESSAGE-BUBBLE"));
 	layout->addChild(journalLayout);

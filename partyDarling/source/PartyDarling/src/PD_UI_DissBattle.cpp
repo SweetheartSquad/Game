@@ -271,7 +271,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	enemyBubbleTail->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-DEFENSE-BUBBLE-TAIL")->texture);
 	enemyBubbleTail->setRationalWidth(1.f, enemyBubble);
 	enemyBubbleTail->setRationalHeight(1.f, enemyBubble);
-	enemyBubbleTail->setMarginRight(0.78f);
+	enemyBubbleTail->setMarginRight(0.835f);
 	enemyBubbleTail->setMarginTop(0.3f);
 	enemyBubbleTail->setMarginBottom(0.3f);
 	//enemyBubbleTail->setBackgroundColour(1.f, 0, 0, 0.5f);
@@ -340,7 +340,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	playerBubbleOptions->setRationalWidth(0.5f, playerBubbleLayout);
 	playerBubbleOptions->setRationalHeight(1.f, playerBubbleLayout);
-
 	playerBubbleOptions->setBackgroundColour(0, 1.f, 0, 0.5f);
 	playerBubbleOptions->background->setVisible(false);
 	playerBubbleOptions->horizontalAlignment = kCENTER;
@@ -357,24 +356,25 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	VerticalLinearLayout * buttonLayout = new VerticalLinearLayout(_bulletWorld);
 	playerBubbleOptions->addChild(buttonLayout);
 	buttonLayout->setRationalWidth(0.8f, playerBubbleOptions);
-	buttonLayout->setRationalHeight(0.5f, playerBubbleOptions);
+	buttonLayout->setRationalHeight(0.75f, playerBubbleOptions);
 	buttonLayout->verticalAlignment = kMIDDLE;
 	buttonLayout->setPaddingLeft(0.05f);
+	buttonLayout->setBackgroundColour(1.f, 0, 0, 0.5f);
 
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, optionOneShader);
 	buttonLayout->addChild(pBubbleBtn1);
 	pBubbleBtn1->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn1->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn1->setRationalHeight(0.5f, buttonLayout);
 	pBubbleBtn1->setPadding(0.f, 0.1f);
-	pBubbleBtn1->label->setMarginTop(0.1f);
+	pBubbleBtn1->setMarginBottom(0.1f);
 	pBubbleBtn1->setMouseEnabled(false);
 
 	pBubbleBtn2 = new PD_InsultButton(_bulletWorld, _font, optionTwoShader);
 	buttonLayout->addChild(pBubbleBtn2);
 	pBubbleBtn2->setRationalWidth(1.f, buttonLayout);
-	pBubbleBtn2->setRationalHeight(0.75f, buttonLayout);
+	pBubbleBtn2->setRationalHeight(0.5f, buttonLayout);
 	pBubbleBtn2->setPadding(0.f, 0.1f);
-	pBubbleBtn2->label->setMarginTop(0.1f);
+	pBubbleBtn2->setMarginTop(0.1f);
 	pBubbleBtn2->setMouseEnabled(false);
 
 	NodeUI * playerBubbleTail = new NodeUI(_bulletWorld);
