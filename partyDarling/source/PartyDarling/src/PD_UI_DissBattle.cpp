@@ -359,7 +359,6 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	buttonLayout->setRationalHeight(0.75f, playerBubbleOptions);
 	buttonLayout->verticalAlignment = kMIDDLE;
 	buttonLayout->setPaddingLeft(0.05f);
-	buttonLayout->setBackgroundColour(1.f, 0, 0, 0.5f);
 
 	pBubbleBtn1 = new PD_InsultButton(_bulletWorld, _font, optionOneShader);
 	buttonLayout->addChild(pBubbleBtn1);

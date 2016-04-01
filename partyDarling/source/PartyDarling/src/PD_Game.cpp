@@ -13,7 +13,6 @@
 #include <AutoMusic.h>
 #include <RenderOptions.h>
 #include <PD_Scene_MenuOptions.h>
-#include <PD_Scene_Test.h>
 #include <RoomBuilder.h>
 
 sweet::ShuffleVector<unsigned long> PD_Game::bgmTrackIdx;
