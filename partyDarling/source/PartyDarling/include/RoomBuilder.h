@@ -6,10 +6,8 @@
 #include <NumberUtils.h>
 #include <PD_Listing.h>
 
-#define ROOM_HEIGHT 1
 #define DEFAULT_ROOM_LENGTH 15
 // world space units per pixel inthe tilemap
-#define ROOM_TILE 5
 #define MAX_ROOMBUILDER_ATTEMPTS 50
 #define NUM_ROOM_TEXTURES 4
 

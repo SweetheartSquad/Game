@@ -23,8 +23,16 @@ PD_Door::PD_Door(BulletWorld * _world, Shader * _shader, Door_t _side, unsigned 
 	boundingBox.depth = boundingBox.width * 0.1f;
 	boundingBox.z = -boundingBox.depth * 0.5;
 
+	// Front padding
+	boundingBox.depth += ROOM_TILE;
+
 #ifdef _DEBUG
-	boundingBoxMesh->meshTransform->scale(1.f + DOOR_PADDING * 2.f, 1, 1);
+	for(auto &v :  boundingBoxMesh->mesh->vertices){
+		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
+		v.y = boundingBox.y + (v.y > 0 ? boundingBox.height: 0);
+		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
+	}
+	boundingBoxMesh->mesh->dirty = true;
 #endif
 }
 

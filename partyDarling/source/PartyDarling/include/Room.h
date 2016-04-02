@@ -9,6 +9,8 @@
 #include <PD_Door.h>
 
 #define ROOM_SIZE_MAX 12
+#define ROOM_HEIGHT 1
+#define ROOM_TILE 5
 
 enum Room_t{
 	BEDROOM,

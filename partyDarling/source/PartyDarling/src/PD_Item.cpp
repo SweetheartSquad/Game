@@ -40,9 +40,10 @@ PD_Item::PD_Item(const AssetItem * const _definition, BulletWorld * _world, Shad
 #ifdef _DEBUG
 	for(auto &v :  boundingBoxMesh->mesh->vertices){
 		v.x = boundingBox.x + (v.x > 0 ? boundingBox.width : 0);
-		v.y = 0 + (v.y > 0 ? boundingBox.height: 0);
+		v.y = boundingBox.y + (v.y > 0 ? boundingBox.height: 0);
 		v.z = boundingBox.z + (v.z > 0 ? boundingBox.depth : 0);
 	}
+	boundingBoxMesh->mesh->dirty = true;
 #endif
 
 	name = "PD_Item " + definition->name;
