@@ -392,6 +392,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	gameOverContainer->verticalAlignment = kMIDDLE;
 	gameOverContainer->setRationalHeight(1.f, displayContainer);
 	gameOverContainer->setRationalWidth(1.f, displayContainer);
+	gameOverContainer->setPadding(0.f, 0.1f);
 	gameOverContainer->setVisible(false);
 
 	gameOverImage = new NodeUI(_bulletWorld);
@@ -691,7 +692,6 @@ void PD_UI_DissBattle::update(Step * _step){
 			}else{
 				float size = 0.5f + (gameOverDuration / (2 * gameOverLength));
 				gameOverImage->setRationalHeight(size, gameOverContainer);
-				gameOverImage->setSquareWidth(1.f);
 				gameOverContainer->invalidateLayout();
 			}
 		}
@@ -741,7 +741,6 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	if(isGameOver){
 		// Reset layout
 		gameOverImage->setRationalHeight(0.5f, gameOverContainer);
-		gameOverImage->setSquareWidth(1.f);
 		gameOverContainer->setVisible(false);
 		gameOverDuration = 0;
 
