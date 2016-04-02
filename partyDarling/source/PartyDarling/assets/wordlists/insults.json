@@ -109,13 +109,13 @@
         	"trashy",
         	"goofy",
         	"childish",
-        	"punchable",
         	"saggy",
         	"boring",
         	"crude",
         	"slimy",
         	"nasty",
-        	"worthless"
+        	"worthless",
+        	"sloppy"
 	],
 
 	"goodAdj": [
@@ -130,7 +130,6 @@
 		"pretty",
         	"good",
 	        "lovable",
-        	"qualified",
         	"talented",
         	"exceptional",
         	"sweet",
