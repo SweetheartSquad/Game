@@ -491,12 +491,9 @@
         	{
             "id": "tissuebox", 
             "src": "tissuebox", 
-            "roomTypes" : ["KITCHEN","LIVING_ROOM", "BEDROOM", "OFFICE"],
+            "roomTypes" : ["LIVING_ROOM", "BEDROOM", "OFFICE"],
             "parentDependent": true,
             "parents":{
-            	"table":[
-                    "TOP"
-                ],
 				"sideTable":[
                     "TOP"
                 ],

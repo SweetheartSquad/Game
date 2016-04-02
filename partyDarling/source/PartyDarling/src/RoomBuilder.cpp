@@ -823,7 +823,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	// check for collision/inside room
 	bool canPlace = canPlaceObject(_child, pos, orient, _parent);
-	
+	/*
 	if(canPlace && centered){
 		for(auto c : _slot->children){
 			if(collisionCheck(c, _parent)){
@@ -840,7 +840,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				break;
 			}
 		}
-	}
+	}*/
 	
 	if(!canPlace){
 		if(centered){
@@ -1365,7 +1365,7 @@ std::vector<PD_Prop *> RoomBuilder::getProps(){
 			for(auto d : PD_ResourceManager::furniturePropDefinitions.at(f->type)){
 				definitions.insert(std::make_pair(d, 0));
 			}
-			
+
 			// Group props by side they can be parented to
 			std::vector<PD_PropDefinition *> top;
 			std::vector<PD_PropDefinition *> left;
