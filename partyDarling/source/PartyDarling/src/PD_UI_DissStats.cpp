@@ -54,6 +54,7 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 	levelUpContainer->setRationalHeight(1.f, this);
 	levelUpContainer->horizontalAlignment = kCENTER;
 	levelUpContainer->verticalAlignment = kMIDDLE;
+	levelUpContainer->setPadding(0.f, 0.2f);
 	levelUpContainer->setVisible(false);
 
 	levelUp = new NodeUI(_bulletWorld);
