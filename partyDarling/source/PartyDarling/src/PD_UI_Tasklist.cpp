@@ -63,7 +63,7 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	addTimeout = new Timeout(1.f, [this](sweet::Event * _event){
 		setAlpha(1.f);
 	});
-	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){;
+	addTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
 		setAlpha(0.f);
 	});
 
@@ -73,16 +73,22 @@ PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText *
 	});
 	childTransform->addChild(addTimeout, false);
 
-	checkTimeout = new Timeout(0.f, [this](sweet::Event * _event){
+	checkTimeout = new Timeout(0.5f, [this](sweet::Event * _event){
 		checkMark->setRationalWidth(1.f, checkMark->nodeUIParent);
+		invalidateLayout();
+		invalidateRenderFrame();
 	});
 	checkTimeout->eventManager->addEventListener("start", [this](sweet::Event * _event){
 		checkMark->setVisible(true);
+		invalidateLayout();
+		invalidateRenderFrame();
 	});
 	checkTimeout->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
 		p = Easing::easeOutElastic(p, 0.f, 1.f, checkTimeout->targetSeconds, -1, 4.f);
 		checkMark->setRationalWidth(p, checkMark->nodeUIParent);
+		invalidateLayout();
+		invalidateRenderFrame();
 	});
 	childTransform->addChild(checkTimeout, false);
 }
