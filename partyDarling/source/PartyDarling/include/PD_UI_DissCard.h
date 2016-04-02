@@ -14,6 +14,7 @@ public:
 	bool showSlider;
 
 	float * const experience;
+	float * const level;
 	std::string name;
 
 	ComponentShaderText * textShader;
@@ -21,7 +22,7 @@ public:
 	TextLabel * label;
 
 	SliderControlled * slider;
-	TextLabel * level;
+	TextLabelControlled * levelLabel;
 
 	int increments[4]; // for animating last star(s)
 
@@ -30,7 +31,6 @@ public:
 	~PD_UI_DissCard();
 
 	void updateStats(bool _hideLostStats = true);
-	void setLevel(int _level);
 	void setEnemy(PD_Character * _enemy);
 	void animateNewStats(float _p);
 	void animateStar(int _idx, int _dissStat, int _delta, float _p);

@@ -126,7 +126,6 @@ PD_UI_DissStats::PD_UI_DissStats(BulletWorld* _bulletWorld, Player * _player, Sh
 			invalidateLayout();
 			autoResize();
 			++player->level;
-			playerCard->setLevel(player->level);
 
 			levelUpContainer->setVisible(true);
 			levelUp->setRationalHeight(0.f, levelUpContainer);

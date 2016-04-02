@@ -24,7 +24,7 @@ public:
 	float maxSpeed;
 
 	float experience;
-	int level;
+	float level;
 
 	PD_DissStats * dissStats;
 	bool wonLastDissBattle;

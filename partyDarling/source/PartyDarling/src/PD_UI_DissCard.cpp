@@ -12,10 +12,10 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world, Player * _player) :
 	dissStats(_player->dissStats),
 	showSlider(true),
 	name("Player"),
-	experience(&_player->experience) // TODO: tie this to player experience
+	experience(&_player->experience),
+	level(&_player->level)
 {
 	init();
-	setLevel(_player->level);
 }
 PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 	NodeUI_NineSliced(_world, dynamic_cast<Texture_NineSliced *>(PD_ResourceManager::scenario->getTexture("DISSCARD-BUBBLE")->texture)),
@@ -23,8 +23,9 @@ PD_UI_DissCard::PD_UI_DissCard(BulletWorld * _world) :
 	showSlider(false),
 	name(""),
 	experience(nullptr),
+	level(nullptr),
 	slider(nullptr),
-	level(nullptr)
+	levelLabel(nullptr)
 {
 	init();
 }
@@ -114,12 +115,13 @@ void PD_UI_DissCard::init(){
 		slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-FILL")->texture);
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
 
-		level = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
-		xpContainer->addChild(level);
-		level->setRationalWidth(0.25, xpContainer);
-		level->setRationalHeight(1.f, xpContainer);
-		level->setMarginLeft(0.05f);
-		level->horizontalAlignment = kLEFT;
+		levelLabel = new TextLabelControlled(level, 0, 5, world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		xpContainer->addChild(levelLabel);
+		levelLabel->prefix = "Lvl. ";
+		levelLabel->setRationalWidth(0.25, xpContainer);
+		levelLabel->setRationalHeight(1.f, xpContainer);
+		levelLabel->setMarginLeft(0.05f);
+		levelLabel->horizontalAlignment = kLEFT;
 	}else{
 		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
 		layout->addChild(label);
@@ -164,14 +166,6 @@ void PD_UI_DissCard::updateStats(bool _hideLostStats){
 		}for(unsigned long int x = 0; x < 5; ++x){
 			stars[3][x]->setVisible(false);
 		}
-	}
-}
-
-void PD_UI_DissCard::setLevel(int _level){
-	if(level != nullptr){
-		std::stringstream s;
-		s << "Lvl. " << _level;
-		level->setText(s.str());
 	}
 }
 
