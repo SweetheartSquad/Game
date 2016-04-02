@@ -1339,6 +1339,7 @@ Texture * PD_Scene_Main::getToken(){
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
 	res->allocate(sd.x, sd.y, 4);
 	auto tempData = res->data;
+	res->data = nullptr;
 	res->allocate(sd.x, sd.y, 4);
 	int width, height;
 	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
