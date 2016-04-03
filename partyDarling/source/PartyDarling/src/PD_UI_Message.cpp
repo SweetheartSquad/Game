@@ -124,8 +124,6 @@ void PD_UI_Message::gainLifeToken(std::string _name, Texture * _tex){
 		image->setSquareWidth(1.f);
 		invalidateLayout();
 
-		_tex->incrementReferenceCount();
-
 		text->setText("Acquired " + _name + "'s Friendship");
 
 		setAlpha(0.f);
@@ -162,8 +160,9 @@ void PD_UI_Message::displayMessage(std::string _message){
 void PD_UI_Message::setItemTexture(PD_Item * _item){
 	// make sure the item is displayed at the correct size
 	AssetTexture * assetTex = PD_ResourceManager::itemTextures->getTexture(_item->definition->texture);
-	assetTex->load();
+
 	Texture * tex = assetTex->texture;
+	tex->load();
 
 	image->background->mesh->replaceTextures(tex);
 

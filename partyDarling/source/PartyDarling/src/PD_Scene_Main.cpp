@@ -1364,6 +1364,7 @@ Texture * PD_Scene_Main::getToken(){
 
 	// allocate enough space for our token and read the center of the newly drawn screen into it
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
+	res->name = "Life Token";
 	res->allocate(sd.x, sd.y, 4);
 	auto tempData = res->data;
 	res->data = nullptr;

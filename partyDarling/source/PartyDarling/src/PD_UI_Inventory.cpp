@@ -372,8 +372,6 @@ void PD_UI_Inventory::addFriendshipToken(Texture * _tex){
 	l->setMarginLeft(5);
 	l->setMarginRight(5);
 	l->firstParent()->scale(1.f, 1.f, 1.f);
-
-	_tex->incrementReferenceCount();
 }
 
 void PD_UI_Inventory::enable(){

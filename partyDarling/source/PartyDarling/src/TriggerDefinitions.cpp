@@ -318,6 +318,7 @@ void PD_Scene_Main::setupEventListeners(){
 		}
 		auto listing = PD_Listing::listingsById[scenarioId];
 		PD_Item * item = listing->items[itemId];
+		item->load();
 
 		if(newOwnerCharId == prevOwnerCharId) {
 			ST_LOG_ERROR_V("Invalid arguments is trigger changeOwnership - owner == prevOwner");

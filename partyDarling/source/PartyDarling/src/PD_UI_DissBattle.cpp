@@ -913,6 +913,7 @@ void PD_UI_DissBattle::complete(){
 void PD_UI_DissBattle::addLife(Texture * _tokenTexture){
 	// create a duplicate token with a cross through it
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
+	tex->name = "Life Token Crossed";
 	tex->allocate(_tokenTexture->width, _tokenTexture->height, _tokenTexture->channels);
 
 	for(signed long int y = 0; y < tex->height; ++y){
