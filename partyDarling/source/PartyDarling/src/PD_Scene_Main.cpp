@@ -1331,9 +1331,36 @@ Texture * PD_Scene_Main::getToken(){
 	// hide the UI
 	uiLayer->setVisible(false);
 
+	PD_Character * facing = nullptr;
+	if(uiDialogue->isVisible()){
+		if(uiDialogue->currentSpeaker != nullptr){
+			facing = uiDialogue->currentSpeaker;
+		}
+	}else if(uiDissBattle->isVisible() || (uiDissStats->dissEnemy && uiDissStats->isVisible())){
+		facing = dissEnemy;
+	}
+
+
+	// make sure the camera is in the right place
+	glm::vec3 d(0);
+	glm::vec3 camPos = activeCamera->childTransform->getWorldPos();
+	if(facing != nullptr){
+		glm::vec3 headPos = facing->pr->head->childTransform->getWorldPos();
+		d = headPos - (activeCamera->forwardVectorRotated * 3.f) - camPos;
+		activeCamera->firstParent()->translate(d);
+		activeCamera->update(nullptr);
+	}
+
+
 	//re-draw the current frame (swap the buffers a second time to avoid this render actually being visible)
 	game->draw(this);
 	glfwSwapBuffers(sweet::currentContext);
+
+	// put the camera back
+	if(facing != nullptr){
+		activeCamera->firstParent()->translate(-d);
+		activeCamera->update(nullptr);
+	}
 
 	// allocate enough space for our token and read the center of the newly drawn screen into it
 	ProgrammaticTexture * res = new ProgrammaticTexture(nullptr, true);
