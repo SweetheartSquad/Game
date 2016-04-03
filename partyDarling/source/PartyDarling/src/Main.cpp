@@ -32,19 +32,7 @@ int __stdcall WinMain(HINSTANCE inst, HINSTANCE prev, LPSTR cmd, int show){
 	Log::THROW_ON_ERROR = true;
 
 	// initialize S-Tengine2
-	sweet::initialize("Party, Darling? -Beta "
-#ifdef _DEBUG
-		"Debug"
-#else
-		"Release"
-#endif
-		" Build");
-
-	//sweet::NumberUtils::seed(time(nullptr)); // NOTE: this is no longer needed; you can set the seed with "rngSeed" in config.json. If you want a time-based seed, use a seed of -1
-	//OpenAL_Sound::masterGain = 0;
-#ifdef _DEBUG
-	Node::nodeCounting = true; // uncomment this if you're checking for memory leaks and stuff (it's really slow so don't do it if you don't need it)
-#endif
+	sweet::initialize();
 
 	// initialize resources
 	PD_ResourceManager * resources = new PD_ResourceManager();
