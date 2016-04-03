@@ -222,6 +222,7 @@
                     "TOP"
                 ]
             },
+			"parentDependent": true,
             "mass": 50,
             "padding":0,
             "twist": true,
