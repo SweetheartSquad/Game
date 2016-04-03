@@ -233,12 +233,7 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 	}
 
 	if(tasks.at(_scenario).find(_id) == tasks.at(_scenario).end()){
-		ComponentShaderText * shader = new ComponentShaderText(true);
-		shader->name = "individual task text shader";
-		//shader->setColor(0.98f, 0.74f, 0.42f, 0.f);
-		shader->setColor(1.f, 1.f, 1.f, 1.f);
-
-		PD_UI_Task * task = new PD_UI_Task(world, font, shader);
+		PD_UI_Task * task = new PD_UI_Task(world, font, textShader);
 		task->setRationalWidth(1.f, taskLayout);
 		task->setHeight(font->getLineHeight() * 3.f);
 		taskLayout->addChild(task);
