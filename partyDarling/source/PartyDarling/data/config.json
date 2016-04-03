@@ -1,0 +1,20 @@
+{
+	"fps" : 60,
+	"fullscreen" : false,
+	/*"resolution": {
+		"x": 1920,
+		"y": 1080
+	},*/
+	"rngSeed": 0,
+	"monitor": 0,
+	"title": "Party, Darling?",
+	"useLibOVR": false,
+	"nodeCounting": false,
+	"gain":{
+		"master": 1,
+		"music": 1,
+		"voice": 1,
+		"sfx": 1,
+		"other": 1
+	}
+}
