@@ -823,7 +823,7 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 
 	// check for collision/inside room
 	bool canPlace = canPlaceObject(_child, pos, orient, _parent);
-	/*
+	
 	if(canPlace && centered){
 		for(auto c : _slot->children){
 			if(collisionCheck(c, _parent)){
@@ -834,13 +834,12 @@ bool RoomBuilder::arrange(RoomObject * _child, RoomObject * _parent, PD_Side _si
 				
 				_child->translatePhysical(-pos);
 				_child->rotatePhysical(-angle, axis.x, axis.y, axis.z);
-				//_child->rotatePhysical(-orient);
 				_child->realign();
 				_child->meshTransform->makeCumulativeModelMatrixDirty();
 				break;
 			}
 		}
-	}*/
+	}
 	
 	if(!canPlace){
 		if(centered){
@@ -931,7 +930,7 @@ bool RoomBuilder::collisionCheck(RoomObject * _obj, RoomObject * _parent){
 
 	// Check for collision with other objects in room
 	for(auto o : placedObjects){
-		if(_parent != nullptr && o == _parent){
+		if((_parent != nullptr && o == _parent) || o == _obj){
 			continue;
 		}
 
