@@ -303,17 +303,17 @@ void PD_UI_Tasklist::incrementCount(int _increment){
 }
 
 void PD_UI_Tasklist::expand(){
-	journalLayout->setVisible(true);
-	icon->background->mesh->replaceTextures(texOpen);
-	count->setVisible(false);
+	icon->setVisible(true);
+	journalLayout->setVisible(numTasks > 0);
+	//count->setVisible(false);
 }
 
 void PD_UI_Tasklist::collapse(){
+	icon->setVisible(false);
 	journalLayout->setVisible(false);
-	icon->background->mesh->replaceTextures(texClosed);
-	count->setVisible(numTasks > 0);
+	//count->setVisible(numTasks > 0);
 }
 
 bool PD_UI_Tasklist::isExpanded(){
-	return journalLayout->isVisible();
+	return icon->isVisible();
 }
