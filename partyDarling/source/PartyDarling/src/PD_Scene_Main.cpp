@@ -1507,7 +1507,7 @@ void PD_Scene_Main::updateSelection(){
 
 							uiTasklist->setVisible(false);
 						});
-						if(!person->dissedAt){
+						if(!person->dissedAt || person->wonDissBattle){
 							uiBubble->addOption("Diss " + person->definition->name, [this, person](sweet::Event * _event){
 								triggerDissBattle(person, true);
 								// TODO: pass in the character that's fighting here
