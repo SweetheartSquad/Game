@@ -12,8 +12,6 @@ public:
 	NodeUI * checkMark;
 	TextArea * text;
 
-	ComponentShaderText * textShader;
-
 	Timeout * addTimeout;
 	Timeout * checkTimeout;
 

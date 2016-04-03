@@ -11,8 +11,7 @@
 #define TASKLIST_OPACITY 0.7f
 
 PD_UI_Task::PD_UI_Task(BulletWorld * _world, Font * _font, ComponentShaderText * _textShader):
-	NodeUI(_world),
-	textShader(_textShader)
+	NodeUI(_world)
 {
 	setRenderMode(kTEXTURE);
 	background->setVisible(false);
@@ -98,7 +97,6 @@ PD_UI_Task::~PD_UI_Task(){
 
 void PD_UI_Task::setTextShader(ComponentShaderText * _textShader){
 	text->setShader(_textShader, true);
-	textShader = _textShader;
 }
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :

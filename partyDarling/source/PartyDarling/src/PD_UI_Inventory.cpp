@@ -18,9 +18,10 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 {
 	background->setVisible(false);
 
-	textShader = new ComponentShaderText(false);
+	textShader = new ComponentShaderText(true);
 	textShader->setColor(86/255.f, 137/255.f, 135/255.f, 1.f);
 	textShader->name = "PD_UI_Inventory text shader";
+	textShader->incrementReferenceCount();
 
 	HorizontalLinearLayout * backpackContainer = new HorizontalLinearLayout(_world);
 	addChild(backpackContainer);
@@ -204,7 +205,7 @@ PD_UI_Inventory::PD_UI_Inventory(BulletWorld * _world, Player * _player) :
 }
 
 PD_UI_Inventory::~PD_UI_Inventory(){
-	delete textShader;
+	textShader->decrementAndDelete();
 
 	for(auto i : items){
 		delete i;
