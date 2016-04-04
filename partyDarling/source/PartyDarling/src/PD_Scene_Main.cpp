@@ -1045,6 +1045,7 @@ void PD_Scene_Main::update(Step * _step){
 	bulletWorld->update(_step);
 
 	if(player->wantsToQuit()){
+		sweet::setCursorMode(GLFW_CURSOR_HIDDEN);
 		game->switchScene("menu", false);
 	}
 

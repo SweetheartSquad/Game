@@ -49,6 +49,8 @@ PD_Game::PD_Game() :
 
 	playBGM();
 	bgmTrack->stop();
+
+	sweet::setCursorMode(GLFW_CURSOR_HIDDEN);
 }
 
 PD_Game::~PD_Game(){

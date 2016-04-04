@@ -17,6 +17,7 @@ PD_Scene_IntermissionSlideshow::PD_Scene_IntermissionSlideshow(Game * _game, int
 	eventManager->addEventListener("overflow", [_game](sweet::Event * _event){
 		_game->scenes["game"] = new PD_Scene_Main(dynamic_cast<PD_Game*>(_game));
 		_game->switchScene("game", true);
+		sweet::setCursorMode(GLFW_CURSOR_DISABLED);
 	});
 
 

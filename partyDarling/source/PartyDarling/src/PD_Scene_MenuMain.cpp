@@ -108,6 +108,8 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 			game->switchScene("intermission", false);
 		}else{
 			game->switchScene("game", false);
+			sweet::setCursorMode(GLFW_CURSOR_DISABLED);
+			dynamic_cast<PD_Scene_Main *>(game->scenes["game"])->player->playerCameraController->alignMouse();
 		}
 	});
 
