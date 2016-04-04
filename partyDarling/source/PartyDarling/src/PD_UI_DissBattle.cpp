@@ -836,9 +836,9 @@ void PD_UI_DissBattle::gameOver(bool _win){
 		if(res < 0){
 			res = 0.f;
 		}
-		float xpMultipier = sweet::NumberUtils::map(res, 0.f, 1.f, 1.f, 4.f);
+		float xpMultipier = sweet::NumberUtils::map(res, 0.f, 1.f, 1.f, 3.f);
 
-		wonXP = 100.f / ((player->level + 1) * 4) * xpMultipier; 
+		wonXP = 100.f / ((player->level + 1) * 3.f) * xpMultipier; 
 		gameOverImage->background->mesh->replaceTextures(PD_ResourceManager::scenario->getTexture("DISS-BATTLE-WIN")->texture);
 	}else{
 		wonXP = 0.f;
