@@ -399,6 +399,10 @@ void PD_UI_Inventory::disable(){
 	}
 	gridLayout->setMouseEnabled(false);
 	scrollbar->setMouseEnabled(false);
+
+	// clear out the item description
+	itemHovered = false;
+	setInfoPanel(nullptr);
 }
 
 bool PD_UI_Inventory::isEnabled(){
