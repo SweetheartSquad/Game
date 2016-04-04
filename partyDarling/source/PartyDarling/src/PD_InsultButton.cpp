@@ -7,6 +7,7 @@ PD_InsultButton::PD_InsultButton(BulletWorld * _world, Font * _font, Shader * _t
 	NodeUI_NineSliced(_world, PD_ResourceManager::scenario->getNineSlicedTexture("PLAYER-BUTTON")),
 	isEffective(false)
 {
+	setRenderMode(kTEXTURE);
 	setBorder(_font->getLineHeight() * 0.7f);
 
 	VerticalLinearLayout * layout = new VerticalLinearLayout(_world);

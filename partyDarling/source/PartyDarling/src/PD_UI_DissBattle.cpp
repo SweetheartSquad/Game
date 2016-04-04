@@ -257,6 +257,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	enemyBubbleTextContainer->uiElements->addChild(punctuationHighlight);
 
 	enemyBubbleText = new TextArea(world, _font, _textShader);
+	enemyBubbleText->setRenderMode(kTEXTURE);
 	enemyBubbleTextContainer->addChild(enemyBubbleText);
 	enemyBubbleText->setWrapMode(kWORD);
 	enemyBubbleText->setRationalWidth(1.f, enemyBubbleTextContainer);
@@ -326,6 +327,7 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	playerBubbleLayout->setBackgroundColour(1, 1, 1, 0.5f);
 
 	playerBubbleText = new TextArea(world, _font, _textShader);
+	playerBubbleText->setRenderMode(kTEXTURE);
 	playerBubbleText->setWrapMode(kWORD);
 	playerBubbleLayout->addChild(playerBubbleText);
 	playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleLayout);
@@ -467,6 +469,15 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 	optionTwoShader->incrementReferenceCount();
 	optionOneShader->name = "PD_UI_DissBattle text shader (option one)";
 	optionTwoShader->name = "PD_UI_DissBattle text shader (option two)";
+
+
+	eventManager->addEventListener("fightStarted", [this](sweet::Event * _event){
+		if(modeOffensive){
+			playerBubbleText->invalidateLayout();
+		}else{
+			enemyBubbleText->invalidateLayout();
+		}
+	});
 }
 
 PD_UI_DissBattle::~PD_UI_DissBattle(){
@@ -690,9 +701,12 @@ void PD_UI_DissBattle::update(Step * _step){
 			if(gameOverDuration >= gameOverLength){
 				complete();
 			}else{
-				float size = 0.5f + (gameOverDuration / (2 * gameOverLength));
-				gameOverImage->setRationalHeight(size, gameOverContainer);
-				gameOverContainer->invalidateLayout();
+				float p = gameOverDuration / gameOverLength;
+				if(p < 0.75f){
+					float size = Easing::easeOutElastic(p, 0.5f, 0.5f, gameOverLength * 0.75f);
+					gameOverImage->setRationalHeight(size, gameOverContainer);
+					gameOverContainer->invalidateLayout();
+				}
 			}
 		}
 
@@ -757,6 +771,8 @@ void PD_UI_DissBattle::startNewFight(PD_Character * _enemy, bool _playerFirst){
 	interjectBubble->setVisible(false);
 	setUIMode(_playerFirst);
 	enable();
+
+	eventManager->triggerEvent("fightStarted");
 }
 
 void PD_UI_DissBattle::setupDissValues(){
@@ -1054,10 +1070,11 @@ void PD_UI_DissBattle::setEnemyText(){
 	highlightedPunctuation = findFirstPunctuation();
 	highlightNextWord();
 
-	invalidateLayout();
+	enemyBubbleText->invalidateLayout();
 }
 
 void PD_UI_DissBattle::setPlayerText(){
+
 	if(playerResult){
 		playerBubbleLayout->addChild(playerBubbleOptions);
 		playerBubbleText->setRationalWidth(PLAYER_TEXT_WIDTH, playerBubbleText->nodeUIParent);
@@ -1107,7 +1124,7 @@ void PD_UI_DissBattle::setPlayerText(){
 	playerBubbleOptions->setVisible(false);
 	playerTimerSlider->setVisible(false);
 
-	invalidateLayout();
+	playerBubbleText->invalidateLayout();
 }
 
 void PD_UI_DissBattle::insult(bool _isEffective, std::wstring _word){
