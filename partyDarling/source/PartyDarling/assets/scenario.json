@@ -285,6 +285,13 @@
       "antiAliased": false
     },
 	{
+      "id": "FONT-SMALL",
+      "type": "font",
+      "src": "Borders Divide, But Hearts Shall Conquer.ttf",
+      "size": "3%",
+      "antiAliased": false
+    },
+	{
       "id": "FIGHT-FONT",
       "type": "font",
       "src": "fight-font.ttf",

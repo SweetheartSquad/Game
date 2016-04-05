@@ -47,7 +47,7 @@ void PD_UI_DissCard::init(){
 	HorizontalLinearLayout * container = new HorizontalLinearLayout(world);
  	addChild(container);
 	container->horizontalAlignment = kCENTER;
-	container->verticalAlignment = kMIDDLE;
+	container->verticalAlignment = kTOP;
 	container->setRationalWidth(1.f, this);
 	container->setRationalHeight(1.f, this);
 	container->background->setVisible(false);
@@ -55,8 +55,10 @@ void PD_UI_DissCard::init(){
 
 	VerticalLinearLayout * layout = new VerticalLinearLayout(world);
 	container->addChild(layout);
+	layout->verticalAlignment = kTOP;
 	layout->setRationalHeight(1.f, container);
 	layout->setSquareWidth(7.f/5.f);
+	layout->setPaddingTop(0.05f);
 	layout->setBackgroundColour(1,1,1,1);
 	layout->background->setVisible(true);
 	layout->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-BG")->texture);
@@ -89,14 +91,16 @@ void PD_UI_DissCard::init(){
 	// show earned stars and hide unearned stars
 	updateStats();
 
+	Font * font = PD_ResourceManager::scenario->getFont("FONT")->font;
+
 	// exp slider
 	if(showSlider){
 		HorizontalLinearLayout * xpContainer = new HorizontalLinearLayout(world);
 		layout->addChild(xpContainer);
 		xpContainer->setRationalWidth(1.f, layout);
-		xpContainer->setRationalHeight(0.1f, layout);
-		xpContainer->horizontalAlignment = kCENTER;
-		xpContainer->verticalAlignment = kMIDDLE;
+		xpContainer->setHeight(font->getLineHeight());
+		xpContainer->horizontalAlignment = kLEFT;
+		xpContainer->verticalAlignment = kBOTTOM;
 
 		slider = new SliderControlled(world, experience, 0.f, 100.f);
 		//slider->boxSizing = kCONTENT_BOX;
@@ -115,21 +119,35 @@ void PD_UI_DissCard::init(){
 		slider->fill->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DISSCARD-FILL")->texture);
 		slider->fill->background->mesh->setScaleMode(GL_NEAREST);
 
-		levelLabel = new TextLabelControlled(level, 0, 5, world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
+		levelLabel = new TextLabelControlled(level, 0, 5, world, font, textShader);
+		levelLabel->setRenderMode(kTEXTURE);
 		xpContainer->addChild(levelLabel);
 		levelLabel->prefix = "Lvl. ";
-		levelLabel->setRationalWidth(0.25, xpContainer);
+		levelLabel->setRationalWidth(0.35, xpContainer);
 		levelLabel->setRationalHeight(1.f, xpContainer);
 		levelLabel->setMarginLeft(0.05f);
 		levelLabel->horizontalAlignment = kLEFT;
+		//levelLabel->setBackgroundColour(1.f, 0.f, 0.f, 0.5f);
+		//levelLabel->background->setVisible(true);
 	}else{
-		label = new TextLabel(world, PD_ResourceManager::scenario->getFont("FONT")->font, textShader);
-		layout->addChild(label);
+		NodeUI * labelContainer = new NodeUI(world);
+		labelContainer->setRenderMode(kTEXTURE);
+		layout->addChild(labelContainer);
+		labelContainer->setRationalWidth(1.f, layout);
+		labelContainer->setHeight(font->getLineHeight());
+		labelContainer->paddingTop.setRationalSize(0.25f, &labelContainer->height);
+		labelContainer->setBackgroundColour(1.f, 1.f, 1.f, 0.5f);
+		labelContainer->background->setVisible(false);
+
+		label = new TextLabel(world, font, textShader);
+		labelContainer->addChild(label);
 		label->boxSizing = kCONTENT_BOX;
-		label->marginTop.setRationalSize(0.05f, &layout->height);
-		label->setRationalWidth(0.75f, layout);
-		label->setSquareHeight(1.f/10.f);
+		label->setRationalWidth(1.f, labelContainer);
+		label->setRationalHeight(1.f, labelContainer);
+		label->setMarginBottom(0.25f);
 		label->setText(name);
+		//label->setBackgroundColour(0.f, 0.f, 1.f, 0.5f);
+		//label->background->setVisible(true);
 	}
 
 	invalidateLayout();
