@@ -1,15 +1,8 @@
 #pragma once
 
 #include <Sweet.h>
-#include <node\Node.h>
-#include <typeinfo>
-#include <Texture.h>
-#include <Game.h>
-#include <PD_ResourceManager.h>
-#include <Log.h>
-#include <ctime>
-#include <NumberUtils.h>
 
+#include <PD_ResourceManager.h>
 #include <PD_Game.h>
 
 #ifdef _DEBUG
