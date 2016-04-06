@@ -900,22 +900,6 @@ void PD_Scene_Main::update(Step * _step){
 	glUniform1f(vNoise->mag1Location, vNoise->mag1);
 	glUniform1f(vNoise->mag2Location, vNoise->mag2);
 
-	// panning
-	if(panLeft){
-		player->playerCamera->yaw += panSpeed * _step->getDeltaTime();
-	}
-	if(panRight){
-		player->playerCamera->yaw -= panSpeed * _step->getDeltaTime();
-	}
-
-	// tracking
-	if(trackLeft){
-		player->translatePhysical((player->playerCamera->rightVectorRotated) * -trackSpeed);
-	}
-	if(trackRight){
-		player->translatePhysical((player->playerCamera->rightVectorRotated) * trackSpeed);
-	}
-
 	// billboarding
 	glm::vec3 camPos = player->playerCamera->childTransform->getWorldPos();
 	for(auto & c : currentRoom->characters){
@@ -923,43 +907,6 @@ void PD_Scene_Main::update(Step * _step){
 	}
 	for(auto & c : currentRoom->items){
 		c->billboard(camPos);
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_1)){
-		addLifeToken("Some Person");
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_3)){
-		uiFade->fadeIn(glm::uvec3(255,255,255));
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_4)){
-		uiFade->fadeIn();
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_5)){
-		uiFade->fadeOut(glm::uvec3(255,255,255));
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_6)){
-		uiFade->fadeOut();
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_7)){
-		uiMessage->displayMessage("Wow this is such an amazing game!!! :)");
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_0)){
-		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_P)){
-		sweet::Event * e = new sweet::Event("changeDISSStat");
-		e->setStringData("stat", "strength");
-		e->setIntData("delta", 1);
-		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_L)){
-		sweet::Event * e = new sweet::Event("changeDISSStat");
-		e->setStringData("stat", "strength");
-		e->setIntData("delta", -1);
-		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
 	}
 
 	// look up at current speaker's face during conversations
@@ -1047,6 +994,62 @@ void PD_Scene_Main::update(Step * _step){
 	if(player->wantsToQuit()){
 		sweet::setCursorMode(GLFW_CURSOR_HIDDEN);
 		game->switchScene("menu", false);
+	}
+
+
+#ifdef DEBUG_CONTROLS
+
+	// panning
+	if(panLeft){
+		player->playerCamera->yaw += panSpeed * _step->getDeltaTime();
+	}
+	if(panRight){
+		player->playerCamera->yaw -= panSpeed * _step->getDeltaTime();
+	}
+
+	// tracking
+	if(trackLeft){
+		player->translatePhysical((player->playerCamera->rightVectorRotated) * -trackSpeed);
+	}
+	if(trackRight){
+		player->translatePhysical((player->playerCamera->rightVectorRotated) * trackSpeed);
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_1)){
+		addLifeToken("Some Person");
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_3)){
+		uiFade->fadeIn(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_4)){
+		uiFade->fadeIn();
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_5)){
+		uiFade->fadeOut(glm::uvec3(255,255,255));
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_6)){
+		uiFade->fadeOut();
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_7)){
+		uiMessage->displayMessage("Wow this is such an amazing game!!! :)");
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_0)){
+		PD_ResourceManager::scenario->eventManager->triggerEvent("goToNextLevel");
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_P)){
+		sweet::Event * e = new sweet::Event("changeDISSStat");
+		e->setStringData("stat", "strength");
+		e->setIntData("delta", 1);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_L)){
+		sweet::Event * e = new sweet::Event("changeDISSStat");
+		e->setStringData("stat", "strength");
+		e->setIntData("delta", -1);
+		PD_ResourceManager::scenario->eventManager->triggerEvent(e);
 	}
 
 	// navigation testing
@@ -1168,11 +1171,56 @@ void PD_Scene_Main::update(Step * _step){
 		uiDissBattle->eventManager->triggerEvent("interject");
 	}
 
+	// screen shader reload
 	if(keyboard->keyJustDown(GLFW_KEY_L)){
 		screenSurfaceShader->unload();
 		screenSurfaceShader->loadFromFile(screenSurfaceShader->vertSource, screenSurfaceShader->fragSource);
 		screenSurfaceShader->load();
 	}
+
+	// save test
+	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
+		PD_Game::progressManager->save(player, uiDissBattle);
+	}
+	// bubble testing controls
+	if(keyboard->keyJustDown(GLFW_KEY_V)){
+		uiBubble->next();
+	}if(keyboard->keyJustDown(GLFW_KEY_B)){
+		uiBubble->prev();
+	}if(keyboard->keyJustDown(GLFW_KEY_N)){
+		uiBubble->addOption("test", nullptr);
+	}
+
+	// get new BGM track
+	if(keyboard->keyJustDown(GLFW_KEY_P)){
+		dynamic_cast<PD_Game*>(game)->playBGM();
+	}
+
+	// toggle debug draw
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		Transform::drawTransforms = !Transform::drawTransforms;
+		if(debugDrawer != nullptr){
+			bulletWorld->world->setDebugDrawer(nullptr);
+			childTransform->removeChild(debugDrawer);
+			delete debugDrawer;
+			debugDrawer = nullptr;
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
+		}else{
+			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
+			childTransform->addChild(debugDrawer, false);
+			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+			bulletWorld->world->setDebugDrawer(debugDrawer);
+			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+		}
+	}
+
+	// tasks
+	if(keyboard->keyJustDown(GLFW_KEY_I)){
+		std::stringstream s;
+		s << "The quick brown fox jumps over the lazy dog along with five boxing wizards wow omg lol wheeeeeee " << ++uiTasklist->testID;
+		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
+	}
+#endif
 
 	// mouse interaction with world objects
 	updateSelection();
@@ -1237,52 +1285,6 @@ void PD_Scene_Main::update(Step * _step){
 	// map compass update
 	uiMap->updateCompass(-glm::degrees(atan2(activeCamera->forwardVectorRotated.z, activeCamera->forwardVectorRotated.x)) + 90.f);
 
-#ifdef _DEBUG
-
-	if(keyboard->keyJustUp(GLFW_KEY_W) && keyboard->control) {
-		PD_Game::progressManager->save(player, uiDissBattle);
-	}
-
-#endif
-
-	// bubble testing controls
-	if(keyboard->keyJustDown(GLFW_KEY_V)){
-		uiBubble->next();
-	}if(keyboard->keyJustDown(GLFW_KEY_B)){
-		uiBubble->prev();
-	}if(keyboard->keyJustDown(GLFW_KEY_N)){
-		uiBubble->addOption("test", nullptr);
-	}
-
-	// get new BGM track
-	if(keyboard->keyJustDown(GLFW_KEY_P)){
-		dynamic_cast<PD_Game*>(game)->playBGM();
-	}
-
-	// toggle debug draw
-	if(keyboard->keyJustUp(GLFW_KEY_2)){
-		Transform::drawTransforms = !Transform::drawTransforms;
-		if(debugDrawer != nullptr){
-			bulletWorld->world->setDebugDrawer(nullptr);
-			childTransform->removeChild(debugDrawer);
-			delete debugDrawer;
-			debugDrawer = nullptr;
-			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
-		}else{
-			debugDrawer = new BulletDebugDrawer(bulletWorld->world);
-			childTransform->addChild(debugDrawer, false);
-			debugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
-			bulletWorld->world->setDebugDrawer(debugDrawer);
-			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
-		}
-	}
-
-	// tasks
-	if(keyboard->keyJustDown(GLFW_KEY_I)){
-		std::stringstream s;
-		s << "The quick brown fox jumps over the lazy dog along with five boxing wizards wow omg lol wheeeeeee " << ++uiTasklist->testID;
-		uiTasklist->addTask(activeScenarios.front()->id, uiTasklist->testID, s.str());
-	}
 
 	Scene::update(_step);
 

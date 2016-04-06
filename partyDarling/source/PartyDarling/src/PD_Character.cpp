@@ -605,10 +605,12 @@ void CharacterRenderer::setShader(Shader * _shader, bool _default) const {
 }
 
 void CharacterRenderer::update(Step * _step){
+#ifdef DEBUG_CONTROLS
 	if(Keyboard::getInstance().keyJustDown(GLFW_KEY_Y)){
 		paletteTex->generateRandomTable();
 		paletteTex->bufferData();
 	}
+#endif
 
 	if(emoteTimeout != nullptr) {
 		emoteTimeout->update(_step);

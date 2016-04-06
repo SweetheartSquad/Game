@@ -291,6 +291,7 @@ void PD_Scene_MenuMain::hideConfirmBox(){
 }
 
 void PD_Scene_MenuMain::update(Step* _step) {
+#ifdef DEBUG_CONTROLS
 	// toggle debug draw
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		Transform::drawTransforms = !Transform::drawTransforms;
@@ -300,6 +301,7 @@ void PD_Scene_MenuMain::update(Step* _step) {
 			uiLayer->bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 		}
 	}
+#endif
 
 	Scene::update(_step);
 
