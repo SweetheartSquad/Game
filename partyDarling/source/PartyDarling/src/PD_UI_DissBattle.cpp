@@ -531,7 +531,6 @@ void PD_UI_DissBattle::update(Step * _step){
 						interjectBubble->setVisible(false);
 						if(interjected){
 							// Switch to player turn
-							interjected = false;
 							setUIMode(true);
 						}
 					}else{
@@ -1031,6 +1030,7 @@ void PD_UI_DissBattle::setUIMode(bool _isOffensive){
 	tutorialSpacebar->setVisible(!_isOffensive);
 
 	if (!_isOffensive){
+		interjected = false;
 		setEnemyText();
 	}
 	else{
