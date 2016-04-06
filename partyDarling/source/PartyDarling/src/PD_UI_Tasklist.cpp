@@ -96,7 +96,7 @@ PD_UI_Task::~PD_UI_Task(){
 }
 
 void PD_UI_Task::setTextShader(ComponentShaderText * _textShader){
-	text->setShader(_textShader, true);
+	text->setShader(_textShader);
 }
 
 PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
@@ -112,6 +112,7 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	textShader->setColor(1.f, 1.f, 1.f);
 	textShader->incrementReferenceCount();
 	textShader->name = "PD_UI_Tasklist text shader (normal)";
+
 	crossedTextShader->setColor(0.f, 0.f, 0.f);
 	crossedTextShader->incrementReferenceCount();
 	crossedTextShader->name = "PD_UI_Tasklist text shader (crossed)";
