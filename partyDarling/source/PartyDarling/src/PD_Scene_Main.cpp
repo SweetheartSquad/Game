@@ -241,15 +241,42 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->shakeTimeout->restart();
 	});
 
-	uiMessage = new PD_UI_Message(uiLayer->world);
-	uiLayer->addChild(uiMessage);
-	uiMessage->setRationalWidth(1.f, uiLayer);
-	uiMessage->setRationalHeight(1.f, uiLayer);
+	uiDissStats = new PD_UI_DissStats(uiLayer->world, player, uiLayer->shader);
+	uiDissStats->setRationalWidth(1.f, uiLayer);
+	uiDissStats->setRationalHeight(1.f, uiLayer);
+	uiDissStats->setVisible(false);
+	uiLayer->addChild(uiDissStats);
 
+	uiDissStats->eventManager->addEventListener("introComplete", [this](sweet::Event * _event){
+		uiDissBattle->startNewFight(dissEnemy, playerStartsDissBattle);
+	});
+
+	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
+		if(!uiDialogue->hadNextDialogue){
+			player->enable();
+			uiTasklist->setVisible(true);
+			currentHoverTarget = nullptr;
+			updateSelection();
+		}
+	});
+
+	uiDissStats->eventManager->addEventListener("changeDissStatComplete", [this](sweet::Event * _event){
+		if(!uiDialogue->hadNextDialogue){
+			player->enable();
+			currentHoverTarget = nullptr;
+			updateSelection();
+		}
+	});
+	
 	uiTasklist = new PD_UI_Tasklist(uiLayer->world);
 	uiLayer->addChild(uiTasklist);
 	uiTasklist->setRationalWidth(1.f, uiLayer);
 	uiTasklist->setRationalHeight(1.f, uiLayer);
+	
+	uiMessage = new PD_UI_Message(uiLayer->world);
+	uiLayer->addChild(uiMessage);
+	uiMessage->setRationalWidth(1.f, uiLayer);
+	uiMessage->setRationalHeight(1.f, uiLayer);
 
 	playerLight = new PointLight(glm::vec3(lightIntensity), 0.0f, 0.003f, -1);
 	player->playerCamera->childTransform->addChild(playerLight);
@@ -297,33 +324,6 @@ PD_Scene_Main::PD_Scene_Main(PD_Game * _game) :
 		player->playerCamera->yaw += 180;
 		navigate(glm::ivec2(0,-1));
 	}
-
-	uiDissStats = new PD_UI_DissStats(uiLayer->world, player, uiLayer->shader);
-	uiDissStats->setRationalWidth(1.f, uiLayer);
-	uiDissStats->setRationalHeight(1.f, uiLayer);
-	uiDissStats->setVisible(false);
-	uiLayer->addChild(uiDissStats);
-
-	uiDissStats->eventManager->addEventListener("introComplete", [this](sweet::Event * _event){
-		uiDissBattle->startNewFight(dissEnemy, playerStartsDissBattle);
-	});
-
-	uiDissStats->eventManager->addEventListener("outroComplete", [this](sweet::Event * _event){
-		if(!uiDialogue->hadNextDialogue){
-			player->enable();
-			uiTasklist->setVisible(true);
-			currentHoverTarget = nullptr;
-			updateSelection();
-		}
-	});
-
-	uiDissStats->eventManager->addEventListener("changeDissStatComplete", [this](sweet::Event * _event){
-		if(!uiDialogue->hadNextDialogue){
-			player->enable();
-			currentHoverTarget = nullptr;
-			updateSelection();
-		}
-	});
 
 	Log::warn("end RNG:\t" + std::to_string(sweet::NumberUtils::numRandCalls));
 	_game->showLoading(1.f);
