@@ -247,8 +247,8 @@ PD_UI_DissBattle::PD_UI_DissBattle(BulletWorld* _bulletWorld, Player * _player, 
 
 	NodeUI * enemyBubbleTextContainer = new NodeUI(_bulletWorld);
 	enemyBubbleBubble->addChild(enemyBubbleTextContainer);
-	enemyBubbleTextContainer->setRationalWidth(1.f, enemyBubbleBubble);
-	enemyBubbleTextContainer->setRationalHeight(1.f, enemyBubbleBubble);
+	enemyBubbleTextContainer->setRationalWidth(1.f, enemyBubbleTextContainer->nodeUIParent);
+	enemyBubbleTextContainer->setRationalHeight(1.f, enemyBubbleTextContainer->nodeUIParent);
 	enemyBubbleTextContainer->setBackgroundColour(1.f,0, 0, 0.5);
 	enemyBubbleTextContainer->background->setVisible(false);
 	enemyBubbleTextContainer->setPadding(0.05f);
