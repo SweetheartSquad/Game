@@ -914,21 +914,9 @@
 
 	// JOURNAL
 	{
-      "id": "JOURNAL-CLOSED",
-      "type": "texture",
-      "src": "UI/journalClosed.png",
-      "generateMipmaps":false
-    },
-	{
       "id": "JOURNAL-OPEN",
       "type": "texture",
       "src": "UI/journalOpen.png",
-      "generateMipmaps":false
-    },
-	{
-      "id": "JOURNAL-NEW",
-      "type": "texture",
-      "src": "UI/journalNew.png",
       "generateMipmaps":false
     },
 	{
@@ -942,12 +930,6 @@
       "type": "texture",
       "src": "UI/checkMark.png",
       "generateMipmaps":false
-    },
-	{
-      "id": "TASK-BG",
-      "type": "texture",
-      "src": "UI/taskBG.png",
-	  "nineSliced": true
     },
 
     // BUBBLES

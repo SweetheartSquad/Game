@@ -30,14 +30,8 @@ private:
 
 	int numTasks;
 	std::map<std::string, std::map<int, PD_UI_Task *>> tasks;
-
-	Texture * texOpen;
-	Texture * texClosed;
-	Texture * texNew;
-
 	
 	NodeUI * icon;
-	TextLabel * count;
 
 	bool unseenTask;
 public:

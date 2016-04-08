@@ -119,10 +119,6 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 
 	background->setVisible(false);
 
-	texOpen = PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture;
-	texClosed = PD_ResourceManager::scenario->getTexture("JOURNAL-CLOSED")->texture;
-	texNew = PD_ResourceManager::scenario->getTexture("JOURNAL-NEW")->texture;
-
 	NodeUI * container = new NodeUI(_world);
 	addChild(container);
 	container->setRationalWidth(1.f, this);
@@ -134,24 +130,11 @@ PD_UI_Tasklist::PD_UI_Tasklist(BulletWorld * _world) :
 	icon = new NodeUI(_world);
 	icon->boxSizing = kCONTENT_BOX;
 	container->addChild(icon);
-	icon->background->mesh->pushTexture2D(texOpen);
+	icon->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("JOURNAL-OPEN")->texture);
 	icon->background->mesh->setScaleMode(GL_NEAREST);
 	icon->setHeight(0.05f);
 	icon->setSquareWidth(190.f/74.f);
 	icon->setMarginBottom(0.95f);
-
-	count = new TextLabel(_world, PD_ResourceManager::scenario->getFont("TASKCOUNT-FONT")->font, textShader);
-	count->boxSizing = kCONTENT_BOX;
-	icon->addChild(count);
-	count->horizontalAlignment = kCENTER;
-	count->verticalAlignment = kMIDDLE;
-	count->setHeight(font->getLineHeight() * 1.2);
-	count->setSquareWidth(1.f);
-	count->setMarginBottom(0.75f);
-	count->setMarginLeft(0.75f);
-	count->setBackgroundColour(1.f, 0.f, 0.f);
-	count->background->setVisible(true);
-	count->setVisible(false);
 
 	VerticalLinearLayout * layout = new VerticalLinearLayout(_world);
 	container->addChild(layout);
@@ -222,7 +205,7 @@ void PD_UI_Tasklist::updateTask(std::string _scenario, int _id, std::string _tex
 }
 
 void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
-	if(numTasks == 0){
+	if(numTasks == 0 && icon->isVisible()){
 		journalLayout->setVisible(true);
 	}
 
@@ -245,11 +228,6 @@ void PD_UI_Tasklist::addTask(std::string _scenario, int _id, std::string _text){
 		});
 
 		tasks.at(_scenario).insert(std::make_pair(_id, task));
-
-		// add indicator if task list is collapsed
-		if(!journalLayout->isVisible()){
-			icon->background->mesh->replaceTextures(texNew);
-		}
 
 		task->addTimeout->restart();
 
@@ -285,15 +263,6 @@ void PD_UI_Tasklist::update(Step * _step){
 
 void PD_UI_Tasklist::incrementCount(int _increment){
 	numTasks += _increment;
-
-	if(numTasks > 0){
-		count->setVisible(!journalLayout->isVisible());
-		std::stringstream s;
-		s << numTasks;
-		count->setText(s.str());
-	}else{
-		count->setVisible(false);
-	}
 }
 
 void PD_UI_Tasklist::expand(){
