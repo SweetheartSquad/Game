@@ -231,7 +231,7 @@ PD_Scene_MenuMain::PD_Scene_MenuMain(Game * _game) :
 		donateButt->background->mesh->pushTexture2D(PD_ResourceManager::scenario->getTexture("DONATE-BUTT")->texture);
 		donateButt->setMouseEnabled(true);
 		donateButt->eventManager->addEventListener("click", [](sweet::Event * _event){
-			ShellExecute(HWND(nullptr), L"open", L"https://sweetheartsquad.itch.io/party-darling-test-build/purchase", L"", L"", SW_SHOWNORMAL);
+			ShellExecute(HWND(nullptr), L"open", L"https://sweetheartsquad.itch.io/party-darling/purchase", L"", L"", SW_SHOWNORMAL);
 		});
 		donateButt->eventManager->addEventListener("mousein", [donateButt](sweet::Event * _event){
 			donateButt->setBackgroundColour(1.25, 1.25, 1.25);
